@@ -62,7 +62,7 @@ function useTimeline(mode: TimelineFetchMode) {
 	 */
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: State.items.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	function onRefresh() {

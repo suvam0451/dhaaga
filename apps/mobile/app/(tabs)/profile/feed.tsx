@@ -1,8 +1,12 @@
 import { useLocalSearchParams } from 'expo-router';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { useAppDb } from '../../../hooks/utility/global-state-extractors';
-import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
-import { PostTimelinePresenter } from '../../../features/timelines/presenters/PostTimelinePresenter';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppDb,
+} from '#/hooks/utility/global-state-extractors';
+import WithAutoHideTopNavBar from '#/components/containers/WithAutoHideTopNavBar';
+import { PostTimelinePresenter } from '#/features/timelines/presenters/PostTimelinePresenter';
 import { useEffect, useState } from 'react';
 import {
 	PostTimelineStateAction,
@@ -10,11 +14,14 @@ import {
 	usePostTimelineState,
 	usePostTimelineDispatch,
 } from '@dhaaga/core';
-import useTimelineQuery from '../../../features/timelines/api/useTimelineQuery';
+import { feedUnifiedQueryOptions } from '@dhaaga/react';
+import { useQuery } from '@tanstack/react-query';
 
 function DataView() {
 	const [Refreshing, setRefreshing] = useState(false);
 	const { db } = useAppDb();
+	const { client, driver, server } = useAppApiClient();
+	const { acct } = useAppAcct();
 
 	const params = useLocalSearchParams();
 	const id: string = params['uri'] as string;
@@ -42,12 +49,14 @@ function DataView() {
 		});
 	}, [db, id]);
 
-	const { fetchStatus, data, status, refetch } = useTimelineQuery({
-		type: State.feedType,
-		query: State.query,
-		opts: State.opts,
-		maxId: State.appliedMaxId,
-	});
+	const { fetchStatus, data, status, refetch } = useQuery(
+		feedUnifiedQueryOptions(client, driver, server, acct.identifier, {
+			type: State.feedType,
+			query: State.query,
+			opts: State.opts,
+			maxId: State.appliedMaxId,
+		}),
+	);
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
@@ -68,7 +77,7 @@ function DataView() {
 	 */
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: State.items.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	function onRefresh() {

@@ -44,22 +44,17 @@ export async function InvokeBskyFunction_Improved<T>(
 	agent: any,
 	params: Object,
 	headers?: Object,
-): ApiAsyncResult<T> {
-	try {
-		const data = params
-			? headers
-				? await fn.call(agent, params, headers)
-				: await fn.call(agent, params)
-			: headers
-				? fn.call(agent, headers)
-				: fn.call(agent);
-		if (!data.success) {
-			console.log('[WARN]: atproto agent returned failure', name);
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
-		return Ok(data.data);
-	} catch (e) {
-		console.log('[WARN]: atproto agent failed request', name, e);
-		return Err(ApiErrorCode.UNKNOWN_ERROR);
+): Promise<T> {
+	const data = params
+		? headers
+			? await fn.call(agent, params, headers)
+			: await fn.call(agent, params)
+		: headers
+			? fn.call(agent, headers)
+			: fn.call(agent);
+	if (!data.success) {
+		console.log('[WARN]: atproto agent returned failure', name);
+		throw new Error(ApiErrorCode.UNKNOWN_ERROR);
 	}
+	return data.data;
 }

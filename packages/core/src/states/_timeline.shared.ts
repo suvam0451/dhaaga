@@ -12,8 +12,8 @@ export type TimelineReducerBaseState<T> = {
 	isEol: boolean;
 
 	// track cursors
-	minId: string | null;
-	maxId: string | null;
+	minId?: string | null;
+	maxId?: string | null;
 
 	opts: { limit: number; q?: string };
 
@@ -28,7 +28,7 @@ export type TimelineReducerBaseState<T> = {
 	 * Updating this value will result in
 	 * fetching the next set of data
 	 */
-	appliedMaxId: string | null;
+	appliedMaxId?: string | null;
 };
 
 export const timelineReducerBaseDefaults: TimelineReducerBaseState<unknown> = {

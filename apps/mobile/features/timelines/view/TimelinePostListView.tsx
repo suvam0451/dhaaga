@@ -1,12 +1,13 @@
-import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
-import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
+import { RefreshControl, StyleSheet, View } from 'react-native';
+import TimelinesHeader from '#/components/shared/topnavbar/fragments/TopNavbarTimelineStack';
 import type { PostObjectType } from '@dhaaga/bridge';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
-import { appDimensions } from '../../../styles/dimensions';
-import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
-import StatusItem from '../../../components/common/status/StatusItem';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
+import { appDimensions } from '#/styles/dimensions';
+import WithAppStatusItemContext from '#/hooks/ap-proto/useAppStatusItem';
+import StatusItem from '#/components/common/status/StatusItem';
+import Animated from 'react-native-reanimated';
+import useAutoHideTopNavOnScroll from '#/hooks/anim/useAutoHideTopNavOnScroll';
 
 type TimelinePostListViewProps = {
 	items: PostObjectType[];
@@ -26,13 +27,15 @@ function TimelinePostListView({
 	refreshing,
 }: TimelinePostListViewProps) {
 	const { theme } = useAppTheme();
-	/**
-	 * Composite Hook Collection
-	 */
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: numItems,
-		updateQueryCache: loadMore,
-	});
+
+	function onEndReached() {
+		if (numItems > 0 && !fetching && !refreshing) {
+			console.log('loading more...');
+			loadMore();
+		}
+	}
+	const { scrollHandler, animatedStyle } =
+		useAutoHideTopNavOnScroll(onEndReached);
 
 	return (
 		<View
@@ -43,7 +46,7 @@ function TimelinePostListView({
 				},
 			]}
 		>
-			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
+			<Animated.View style={[styles.header, animatedStyle]}>
 				<TimelinesHeader />
 			</Animated.View>
 
@@ -55,7 +58,7 @@ function TimelinePostListView({
 							<StatusItem />
 						</WithAppStatusItemContext>
 					)}
-					onScroll={onScroll}
+					onScroll={scrollHandler}
 					contentContainerStyle={{
 						paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
 					}}

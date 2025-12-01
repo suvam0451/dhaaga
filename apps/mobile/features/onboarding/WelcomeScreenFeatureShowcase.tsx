@@ -6,6 +6,7 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import MailArt from '#/components/svgs/Mail';
 import PartyPopperArt from '#/components/svgs/PartyPopper';
 import BearRoadSign from '#/components/svgs/BearRoadSign';
@@ -96,9 +97,8 @@ function WelcomeScreenFeatureShowcase() {
 		})
 		.onEnd((event) => {
 			end.current = event;
-			ranOnJs();
-		})
-		.runOnJS(true);
+			scheduleOnRN(ranOnJs);
+		});
 
 	return (
 		<GestureDetector gesture={fling}>

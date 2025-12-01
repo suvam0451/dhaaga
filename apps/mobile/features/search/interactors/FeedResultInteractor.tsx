@@ -68,7 +68,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	 */
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: feedState.items.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	if (isFetched && feedState.items.length === 0)

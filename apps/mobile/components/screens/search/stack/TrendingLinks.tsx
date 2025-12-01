@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 function TrendingLinksStack() {
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
-		updateQueryCache: () => {},
+		loadNextPage: () => {},
 	});
 
 	return (

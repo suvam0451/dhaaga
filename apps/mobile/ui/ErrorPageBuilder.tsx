@@ -42,7 +42,6 @@ function ErrorPageBuilder({
 				>
 					{errorDescription}
 				</AppText.Normal>
-
 				{children}
 			</View>
 		</>

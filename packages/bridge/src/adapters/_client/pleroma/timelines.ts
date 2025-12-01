@@ -8,7 +8,6 @@ import { CasingUtil } from '../../../utils/casing.js';
 import FetchWrapper from '../../../custom-clients/custom-fetch.js';
 import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
-import { Err, Ok } from '../../../utils/index.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
@@ -33,9 +32,9 @@ export class PleromaTimelinesRouter
 			const data = await this.client.client.getHomeTimeline(
 				CasingUtil.snakeCaseKeys(query),
 			);
-			return Ok(data.data);
+			return data.data;
 		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 
@@ -46,12 +45,12 @@ export class PleromaTimelinesRouter
 			const data = await this.client.client.getLocalTimeline(
 				CasingUtil.snakeCaseKeys(query),
 			);
-			return Ok(data.data);
+			return data.data;
 		} else {
 			const data = await this.client.client.getPublicTimeline(
 				CasingUtil.snakeCaseKeys(query),
 			);
-			return Ok(data.data);
+			return data.data;
 		}
 	}
 
@@ -64,8 +63,8 @@ export class PleromaTimelinesRouter
 				queries: CasingUtil.snakeCaseKeys(query),
 			},
 		);
-		if (error) return Err(error.code);
-		return Ok(CasingUtil.camelCaseKeys(_data));
+		if (error) throw new Error(error.code);
+		return CasingUtil.camelCaseKeys(_data);
 	}
 
 	async list(
@@ -76,7 +75,7 @@ export class PleromaTimelinesRouter
 			q,
 			CasingUtil.snakeCaseKeys(query),
 		);
-		return Ok(data.data);
+		return data.data;
 	}
 
 	async hashtag(
@@ -87,6 +86,6 @@ export class PleromaTimelinesRouter
 			q,
 			CasingUtil.snakeCaseKeys(query),
 		);
-		return Ok(data.data);
+		return data.data;
 	}
 }

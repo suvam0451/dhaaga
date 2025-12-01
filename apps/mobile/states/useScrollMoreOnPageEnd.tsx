@@ -3,7 +3,7 @@ import NavigationService from '../services/navigation.service';
 
 type Props = {
 	itemCount?: number;
-	updateQueryCache?: () => void;
+	loadNextPage?: () => void;
 };
 
 /**
@@ -11,14 +11,14 @@ type Props = {
  * other utility hooks in it
  */
 function useScrollMoreOnPageEnd(
-	{ itemCount = 1, updateQueryCache = () => {} }: Props = {
+	{ itemCount = 1, loadNextPage = () => {} }: Props = {
 		itemCount: 1,
-		updateQueryCache: () => {},
+		loadNextPage: () => {},
 	},
 ) {
 	function onPageEndReached() {
 		if (itemCount > 0) {
-			updateQueryCache();
+			loadNextPage();
 		}
 	}
 

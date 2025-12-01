@@ -1,9 +1,9 @@
 import {
-	runOnJS,
 	useAnimatedStyle,
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 import { useEffect } from 'react';
 import { Dimensions } from 'react-native';
 import { useAppBottomSheet } from '../../../../hooks/utility/global-state-extractors';
@@ -18,7 +18,7 @@ function useAnimatedHeight() {
 		if (!visible) {
 			startAnimation();
 			height.value = withTiming(0, { duration: 100 }, () => {
-				runOnJS(endAnimation)();
+				scheduleOnRN(endAnimation);
 			});
 		} else {
 			let _target;
@@ -56,7 +56,7 @@ function useAnimatedHeight() {
 					// overshootClamping: false,
 				},
 				() => {
-					runOnJS(endAnimation)();
+					scheduleOnRN(endAnimation);
 				},
 			);
 		}
