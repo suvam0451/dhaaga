@@ -6,6 +6,9 @@ import { AppText } from '../../lib/Text';
 import { appDimensions } from '../../../styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { Ionicons } from '@expo/vector-icons';
+import Dropdown from '#/components/shared/topnavbar/Dropdown';
+import { useState } from 'react';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -63,34 +66,68 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 		[APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS]: 'My Accounts',
 	};
 
+	const [DropdownOpen, setDropdownOpen] = useState(false);
+
+	function toggleDropdown() {
+		setDropdownOpen((o) => !o);
+	}
 	return (
 		<View style={[styles.container]}>
-			<View style={{ flexGrow: 1 }}>
-				<AppText.H1>{navbarLabel[type]}</AppText.H1>
-			</View>
 			<View style={{ flexDirection: 'row' }}>
-				{menuItems.map(({ iconId, disabled, onPress }, i) => (
+				<View style={{ flexGrow: 1 }}>
 					<Pressable
-						key={i}
 						style={{
-							padding: appDimensions.topNavbar.padding,
-							marginLeft: appDimensions.topNavbar.marginLeft,
+							flexDirection: 'row',
+							alignItems: 'center',
+							position: 'relative',
+							// zIndex: 99,
 						}}
-						onPress={onPress}
+						onPress={toggleDropdown}
 					>
-						<AppIcon
-							id={iconId}
-							emphasis={
-								disabled
-									? APP_COLOR_PALETTE_EMPHASIS.A40
-									: APP_COLOR_PALETTE_EMPHASIS.A10
-							}
-							onPress={onPress}
-							size={appDimensions.topNavbar.iconSize}
+						<View
+							style={{
+								position: 'relative',
+								height: '100%',
+								backgroundColor: 'red',
+							}}
+						></View>
+						<AppText.H1>{navbarLabel[type]}</AppText.H1>
+						<Ionicons
+							name="chevron-down"
+							style={{ marginLeft: 6, paddingTop: 4 }}
+							size={24}
+							color={'white'}
 						/>
 					</Pressable>
-				))}
+				</View>
+				<View style={{ flexDirection: 'row' }}>
+					{menuItems.map(({ iconId, disabled, onPress }, i) => (
+						<Pressable
+							key={i}
+							style={{
+								padding: appDimensions.topNavbar.padding,
+								marginLeft: appDimensions.topNavbar.marginLeft,
+							}}
+							onPress={onPress}
+						>
+							<AppIcon
+								id={iconId}
+								emphasis={
+									disabled
+										? APP_COLOR_PALETTE_EMPHASIS.A40
+										: APP_COLOR_PALETTE_EMPHASIS.A10
+								}
+								onPress={onPress}
+								size={appDimensions.topNavbar.iconSize}
+							/>
+						</Pressable>
+					))}
+				</View>
 			</View>
+			<Dropdown
+				isOpen={DropdownOpen}
+				items={[{ label: 'All' }, { label: 'Posts' }, { label: 'Users' }]}
+			/>
 		</View>
 	);
 }
@@ -101,9 +138,9 @@ const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 12,
 		paddingVertical: 16,
-		flexDirection: 'row',
 		alignItems: 'center',
 		width: '100%',
+		zIndex: 2000,
 	},
 	headerText: {
 		fontSize: 28,

@@ -37,7 +37,7 @@ function ProfileFollowingsPresenter() {
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: data.items.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	if (TimelineState.items.length === 0)

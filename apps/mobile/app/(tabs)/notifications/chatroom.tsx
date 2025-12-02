@@ -76,7 +76,7 @@ function Page() {
 	const [IsMessageLoading, setIsMessageLoading] = useState(false);
 	const { translateY, onScroll } = useScrollMoreOnPageEnd({
 		itemCount: 0,
-		updateQueryCache: () => {},
+		loadNextPage: () => {},
 	});
 
 	const { state, myId, sendMessage } = useChatroom();

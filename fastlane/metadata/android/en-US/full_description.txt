@@ -1,20 +1,23 @@
-Dhaaga is a third-party app with a focus on browsing,
-general SNS features and chat based use cases.
+A fun-first, open-source, cross-platform client app for the Fediverse.
 
-It supports multiple platforms, has a modern and user-friendly
-interface, adds lots of quality of life improvements and has superior
-performance than installing websites as PWAs on your smartphone.
+Beyond being a timeline reader, the project also explores and introduces
+innovative quality of life improvements and features to enhance
+the day-to-day experience of fedi users.
 
-Some unique feature of Dhaaga (available for all platforms):
+Highlight Features:
 
-- 🗞️ "Social Hub" lets you organise profiles and pins
-- 📁 "Collections" help you save and organise posts
-- 📝 "Quick Post" improves UX when you reply/post
-- 🧵 "Thread View" lets you visualize replies
-- 📥 "Inbox Tabs" help you easily group notifications
+- 🗞️ Innovative "Hub" interface lets you organise and access your pins with ease
+- 📁 Save posts offline under "Collections", with folder support
+- 📝 Clean and compact "Composer" interface, to post and reply in style
+- 🧵 Conversation "Thread View" lets you visualize and sort replies
+- 📥 Notifications are organised into "Inbox Categories"
 - 🖼️ "Gallery Mode" let you browse profiles as an image gallery
 - 💬 "Chat interface" lets you easily talk with your friends
 
-Available (so far) for the following platforms:
+Supported Platforms:
 ---
-🩵 Bluesky 💙 Mastodon 💚 Misskey 💛 Pleroma 🩷 Sharkey 🧡 Cherrypick 💜 Akkoma
+Bluesky (Experimental)
+Mastodon (Vanilla APIs only)
+Misskey (+Sharkey, +CherryPick)
+Pleroma
+Akkoma

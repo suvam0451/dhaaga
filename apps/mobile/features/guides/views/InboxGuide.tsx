@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { QnAType } from '../types/app-guides.types';
-import GuideFactory from '../components/GuideFactory';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
 
 function InboxGuide() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GUIDES]);
@@ -33,7 +33,7 @@ function InboxGuide() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={t('inbox.label')} />;
+	return <GuidePageBuilder questionnaire={qa} label={t('inbox.label')} />;
 }
 
 export default InboxGuide;

@@ -1,6 +1,6 @@
-import GuideFactory from '../components/GuideFactory';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 function DiscoverTabGuide() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GUIDES]);
@@ -24,7 +24,7 @@ function DiscoverTabGuide() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={t('discover.label')} />;
+	return <GuidePageBuilder questionnaire={qa} label={t('discover.label')} />;
 }
 
 export default DiscoverTabGuide;

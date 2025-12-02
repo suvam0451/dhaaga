@@ -73,7 +73,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	 */
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: TimelineState.items.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	return (

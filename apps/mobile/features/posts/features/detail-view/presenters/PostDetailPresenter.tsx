@@ -25,7 +25,7 @@ function PostDetailPresenter({ refetch }: Props) {
 
 	const { onScroll, translateY } = useScrollMoreOnPageEnd({
 		itemCount: 0,
-		updateQueryCache: () => {},
+		loadNextPage: () => {},
 	});
 
 	if (!data.root)

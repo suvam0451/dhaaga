@@ -1,4 +1,4 @@
-name: 'Build Standard Edition Locally'
+name: 'Bundle (.aab) for Release'
 
 on:
   push:
@@ -16,15 +16,23 @@ jobs:
           cache: "npm"
       - run: npm install # Install dependencies
       - run: npm run build-deps
+      - run: npm uninstall expo-dev-client
+        working-directory: ./apps/mobile
       - uses: expo/expo-github-action@v8 # setup EAS
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-      - run: eas build --local --profile=lite --non-interactive --platform=android --output=./output/dhaaga.apk # build app
+      - run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV # ver
+      - run: | # build app
+          eas build \
+          --local \
+          --profile=aab \
+          --non-interactive \
+          --platform=android \
+          --output=./output/Dhaaga-$VERSION.aab
         working-directory: ./apps/mobile
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
           name: app apk
           path: |
-            dist
-            !dist/**/*.md
+            apps/mobile/output

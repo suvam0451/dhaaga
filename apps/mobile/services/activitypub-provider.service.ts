@@ -1,6 +1,7 @@
 import { ApiTargetInterface } from '@dhaaga/bridge';
-import * as FileSystem from 'expo-file-system';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { fetch } from 'expo/fetch';
+import { File } from 'expo-file-system';
 
 /**
  * Wrapper service to invoke provider functions
@@ -35,20 +36,19 @@ class ActivityPubProviderService {
 		switch (domain) {
 			case KNOWN_SOFTWARE.MASTODON: {
 				try {
-					const data = await FileSystem.uploadAsync(
-						`https://${subdomain}/api/v2/media`,
-						fileUri,
-						{
-							headers: {
-								'Content-Type': 'multipart/form-data',
-								Authorization: `Bearer ${token}`,
-							},
-							fieldName: 'file',
-							uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-							mimeType: mimeType,
+					const file = new File(fileUri);
+					const formData = new FormData();
+					formData.append('file', file);
+					const response = await fetch(`https://${subdomain}/api/v2/media`, {
+						method: 'POST',
+						body: formData,
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${token}`,
 						},
-					);
-					const _dt = JSON.parse(data.body);
+					});
+
+					const _dt = await response.json();
 					return { id: _dt['id'], previewUrl: _dt['preview_url'] };
 				} catch (e) {
 					console.log(e);
@@ -58,50 +58,47 @@ class ActivityPubProviderService {
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA: {
 				try {
-					const data = await FileSystem.uploadAsync(
-						`https://${subdomain}/api/v1/media`,
-						fileUri,
-						{
-							headers: {
-								'Content-Type': 'multipart/form-data',
-								Authorization: `Bearer ${token}`,
-							},
-							fieldName: 'file',
-							uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-							mimeType: mimeType,
+					const file = new File(fileUri);
+					const formData = new FormData();
+					formData.append('file', file);
+					const response = await fetch(`https://${subdomain}/api/v1/media`, {
+						method: 'POST',
+						body: formData,
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							Authorization: `Bearer ${token}`,
 						},
-					);
-					const _dt = JSON.parse(data.body);
-					console.log(_dt);
+						// mimeType: mimeType,
+					});
+
+					const _dt = await response.json();
 					return { id: _dt['id'], previewUrl: _dt['preview_url'] };
 				} catch (e) {
 					console.log(e);
 					return null;
 				}
 			}
+			case KNOWN_SOFTWARE.MISSKEY:
 			default: {
 				try {
-					const data = await FileSystem.uploadAsync(
+					const file = new File(fileUri);
+					const formData = new FormData();
+					formData.append('file', file);
+					const response = await fetch(
 						`https://${subdomain}/api/drive/files/create`,
-						fileUri,
 						{
+							method: 'POST',
+							body: formData,
 							headers: {
 								'Content-Type': 'multipart/form-data',
-								// Authorization: `Bearer ${token}`,
+								Authorization: `Bearer ${token}`,
 							},
-							fieldName: 'file',
-							uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-							mimeType: mimeType,
-							parameters: {
-								i: token,
-							},
+							// mimeType: mimeType,
 						},
 					);
-					const _dt = JSON.parse(data.body);
-					return {
-						id: _dt['id'],
-						previewUrl: _dt['thumbnailUrl'],
-					};
+
+					const _dt = await response.json();
+					return { id: _dt['id'], previewUrl: _dt['thumbnailUrl'] };
 				} catch (e) {
 					console.log(e);
 					return null;

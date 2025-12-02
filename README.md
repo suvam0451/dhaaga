@@ -29,8 +29,8 @@ switching apps or websites.
   <a href="https://play.google.com/store/apps/details?id=io.suvam.dhaaga" target="_blank">    
     <img src="./.github/badges/google_play.svg" height="48px"/>
   </a>
-  <a href="https://apt.izzysoft.de/fdroid/index/apk/io.suvam.dhaaga.lite" target="_blank">
-    <img src="./.github/badges/izzy_on_droid.png" height="48px"/>
+  <a href="https://f-droid.org/packages/io.suvam.dhaaga.lite" target="_blank">
+    <img src="./.github/badges/f_droid.svg" height="48px"/>
   </a>
   <a href="https://dhaaga.app" target="_blank">
     <img src="./.github/badges/use_in_browser.png" height="48px"/>

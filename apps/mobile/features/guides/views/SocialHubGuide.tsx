@@ -1,6 +1,6 @@
-import GuideFactory from '../components/GuideFactory';
+import GuidePageBuilder from '#/ui/GuidePageBuilder';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 function SocialHubGuide() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GUIDES]);
@@ -44,7 +44,7 @@ function SocialHubGuide() {
 		},
 	];
 
-	return <GuideFactory questionnaire={qa} label={t('hub.label')} />;
+	return <GuidePageBuilder questionnaire={qa} label={t('hub.label')} />;
 }
 
 export default SocialHubGuide;

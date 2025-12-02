@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useApiSearchPosts } from '../../../hooks/api/useApiSearch';
 import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
 import {
 	PostTimelineStateAction,
 	usePostTimelineState,
 	usePostTimelineDispatch,
 } from '@dhaaga/core';
-import useLoadingMoreIndicatorState from '../../../states/useLoadingMoreIndicatorState';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { Animated, RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
@@ -14,20 +12,29 @@ import Header from '../components/Header';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../components/common/status/StatusItem';
 import { useDiscoverState } from '@dhaaga/core';
+import { searchPostsQueryOpts } from '@dhaaga/react';
+import { useQuery } from '@tanstack/react-query';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
 };
 
 function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
+	const { client, driver, server } = useAppApiClient();
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
 	const TimelineState = usePostTimelineState();
 	const TimelineDispatch = usePostTimelineDispatch();
-	const { data, fetchStatus, refetch } = useApiSearchPosts(
-		State.q,
-		TimelineState.appliedMaxId,
-		State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
+	const { data, fetchStatus, refetch } = useQuery(
+		searchPostsQueryOpts(
+			client,
+			driver,
+			server,
+			State.q,
+			TimelineState.appliedMaxId,
+			State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
+		),
 	);
 
 	useEffect(() => {
@@ -72,7 +79,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	 */
 	const { onScroll } = useScrollMoreOnPageEnd({
 		itemCount: TimelineState.items.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	return (

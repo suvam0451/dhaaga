@@ -35,7 +35,7 @@ function SearchWidget() {
 
 	const MAX_WIDTH = Dimensions.get('window').width;
 	const CONTAINER_PADDING = 24;
-	const WIDGET_MAX_WIDTH = MAX_WIDTH - CONTAINER_PADDING * 2;
+	const WIDGET_MAX_WIDTH = MAX_WIDTH;
 	const textInputRef = useRef<TextInput>(null);
 
 	const [IsWidgetExpanded, setIsWidgetExpanded] = useState(false);
@@ -75,7 +75,7 @@ function SearchWidget() {
 
 		if (isRotated.value === 0) {
 			rotation.value = withTiming(45, { duration: 200 });
-			isRotated.value = withTiming(1, { duration: 300 });
+			isRotated.value = withTiming(1, { duration: 0 });
 			containerWidth.value = withTiming(WIDGET_MAX_WIDTH, { duration: 200 });
 			borderRadius.value = withTiming(16, { duration: 300 });
 		} else {
@@ -83,7 +83,7 @@ function SearchWidget() {
 			setTimeout(() => {
 				rotation.value = withTiming(0, { duration: 200 });
 				containerWidth.value = withTiming(64, { duration: 200 });
-				isRotated.value = withTiming(0, { duration: 300 });
+				isRotated.value = withTiming(0, { duration: 0 });
 				borderRadius.value = withTiming(50, { duration: 300 });
 			}, 260);
 		}
@@ -103,12 +103,23 @@ function SearchWidget() {
 				Extrapolation.CLAMP,
 			),
 			borderRadius: borderRadius.value,
+			right: isRotated.value
+				? withTiming(0, { duration: 300 })
+				: withTiming(CONTAINER_PADDING, { duration: 180 }),
+		};
+	});
+
+	const rootStyle = useAnimatedStyle(() => {
+		return {
+			bottom: isRotated.value
+				? withTiming(0, { duration: 300 })
+				: withTiming(32, { duration: 180 }),
 		};
 	});
 
 	const { theme } = useAppTheme();
 	return (
-		<View style={styles.root}>
+		<Animated.View style={[styles.root, rootStyle]}>
 			{IsWidgetExpanded && <WidgetExpanded />}
 			<Animated.View
 				style={[
@@ -121,23 +132,19 @@ function SearchWidget() {
 							!IsWidgetExpanded && !!State.q
 								? 'rgba(160, 160, 160, 0.28)'
 								: theme.primary.a0,
-						right: CONTAINER_PADDING,
+						// right: CONTAINER_PADDING,
 						borderRadius: 16,
 					},
 				]}
 			>
 				<AnimatedPressable style={{ padding: 8 }} onPress={toggleMenu}>
-					{State.searchStatus === 'loading' ? (
-						<Loader />
-					) : (
-						<Feather
-							name="search"
-							color={
-								!IsWidgetExpanded && !!State.q ? 'rgba(0, 0, 0, 0.36)' : 'black'
-							}
-							size={25}
-						/>
-					)}
+					<Feather
+						name="search"
+						color={
+							!IsWidgetExpanded && !!State.q ? 'rgba(0, 0, 0, 0.36)' : 'black'
+						}
+						size={25}
+					/>
 				</AnimatedPressable>
 				{IsWidgetExpanded && (
 					<TextInput
@@ -159,7 +166,7 @@ function SearchWidget() {
 					/>
 				)}
 			</Animated.View>
-		</View>
+		</Animated.View>
 	);
 }
 
@@ -168,7 +175,7 @@ export default SearchWidget;
 const styles = StyleSheet.create({
 	root: {
 		position: 'absolute',
-		bottom: 32,
+		bottom: 0, // 32
 		width: '100%',
 	},
 

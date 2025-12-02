@@ -1,0 +1,38 @@
+name: 'Package (.apk) for Release'
+
+on:
+  push:
+    branches: ['**']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5 # Checkout
+        with:
+          lfs: true
+      - uses: actions/setup-node@v5 # Install Node.js
+        with:
+          node-version: latest
+          cache: "npm"
+      - run: npm install # Install dependencies
+      - run: npm run build-deps
+      - run: npm uninstall expo-dev-client
+        working-directory: ./apps/mobile
+      - uses: expo/expo-github-action@v8 # setup EAS
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV # ver
+      - run: | # build app
+          eas build \
+          --local \
+          --profile=apk \
+          --non-interactive \
+          --platform=android \
+          --output=./output/Dhaaga-$VERSION.apk
+        working-directory: ./apps/mobile
+      - uses: actions/upload-artifact@v4 # upload artifacts
+        with:
+          name: app apk
+          path: |
+            apps/mobile/output

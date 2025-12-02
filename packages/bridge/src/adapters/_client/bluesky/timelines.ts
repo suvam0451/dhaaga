@@ -15,9 +15,7 @@ import {
 	InvokeBskyFunction_Improved,
 } from '../../../custom-clients/custom-bsky-agent.js';
 import { AppAtpSessionData } from '../../../types/atproto.js';
-import { ApiAsyncResult } from '../../../utils/api-result.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
-import { Err, Ok } from '../../../utils/index.js';
 import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
 
 type FeedGetQueryDto = {
@@ -35,7 +33,7 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): ApiAsyncResult<AppBskyFeedSearchPosts.OutputSchema> {
+	): Promise<AppBskyFeedSearchPosts.OutputSchema> {
 		const agent = getBskyAgent(this.dto);
 
 		return InvokeBskyFunction_Improved<AppBskyFeedSearchPosts.OutputSchema>(
@@ -60,19 +58,18 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
-	): ApiAsyncResult<AppBskyFeedGetTimeline.Response> {
+	): Promise<AppBskyFeedGetTimeline.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
-			const data = await agent.getTimeline({
+			return await agent.getTimeline({
 				limit: query.limit || 10,
 				// 500 on passing null
 				cursor: query.maxId === null ? undefined : query.maxId,
 				algorithm: 'reverse-chronological',
 			});
-			return Ok(data);
 		} catch (e) {
 			console.log('[ERROR]: bluesky', e);
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(ApiErrorCode.UNKNOWN_ERROR);
 		}
 	}
 

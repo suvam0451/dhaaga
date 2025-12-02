@@ -64,7 +64,7 @@ export type DhaagaJsTimelineQueryOptions = {
 	// withReplies?: boolean | null;
 } & __MisskeyTimelineOptions;
 
-export type DriverTimelineGetApiResponse = ApiAsyncResult<
+export type DriverTimelineGetApiResponse = Promise<
 	| MastoStatus[]
 	| MegaStatus[]
 	| Endpoints['notes/timeline']['res']

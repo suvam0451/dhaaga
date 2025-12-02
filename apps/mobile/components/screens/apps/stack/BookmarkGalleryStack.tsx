@@ -121,7 +121,7 @@ function Core() {
 	const { posts, loadMore } = useBookmarkGalleryControllerContext();
 	const { onScroll, translateY, resetPosition } = useScrollMoreOnPageEnd({
 		itemCount: posts.length,
-		updateQueryCache: loadMore,
+		loadNextPage: loadMore,
 	});
 
 	return (

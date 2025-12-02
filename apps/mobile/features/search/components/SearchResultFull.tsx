@@ -18,7 +18,6 @@ function WidgetExpanded() {
 	const { theme } = useAppTheme();
 	const dispatch = useDiscoverDispatch();
 	const State = useDiscoverState();
-	const CONTAINER_PADDING = 24;
 	const [Tabs, setTabs] = useState<SEARCH_RESULT_TAB[]>([]);
 
 	useEffect(() => {
@@ -50,7 +49,6 @@ function WidgetExpanded() {
 				styles.root,
 				{
 					backgroundColor: theme.palette.menubar,
-					marginHorizontal: CONTAINER_PADDING,
 				},
 			]}
 		>
@@ -85,7 +83,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: 4,
 		borderRadius: 8,
 	},
 });

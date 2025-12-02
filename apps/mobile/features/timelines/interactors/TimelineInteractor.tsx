@@ -6,15 +6,22 @@ import {
 	TimelineFetchMode,
 } from '@dhaaga/core';
 import { useLocalSearchParams } from 'expo-router';
-import { useAppDb } from '../../../hooks/utility/global-state-extractors';
-import useTimelineQuery from '../api/useTimelineQuery';
+import {
+	useAppAcct,
+	useAppApiClient,
+	useAppDb,
+} from '#/hooks/utility/global-state-extractors';
 import TimelinePresenter from '../presenters/TimelinePresenter';
 import TimelineErrorView from '../view/TimelineErrorView';
 import { PostTimelinePlaceholderView } from '../components/PostSkeletonView';
 import IdleTimelineView from '../IdleTimelineView';
+import { feedUnifiedQueryOptions } from '@dhaaga/react';
+import { useQuery } from '@tanstack/react-query';
 
 function TimelineInteractor() {
 	const { db } = useAppDb();
+	const { client, driver, server } = useAppApiClient();
+	const { acct } = useAppAcct();
 
 	const State = usePostTimelineState()!;
 	const dispatch = usePostTimelineDispatch()!;
@@ -51,14 +58,15 @@ function TimelineInteractor() {
 		});
 	}, [State.feedType, State.query, State.opts, db]);
 
-	const { fetchStatus, data, status, refetch, error, isFetched } =
-		useTimelineQuery({
+	const { fetchStatus, data, status, refetch, error, isFetched } = useQuery(
+		feedUnifiedQueryOptions(client, driver, server, acct.identifier, {
 			type: State.feedType,
 			query: State.query,
 			opts: State.opts,
 			maxId: State.appliedMaxId,
 			sessionId: State.sessionId,
-		});
+		}),
+	);
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
