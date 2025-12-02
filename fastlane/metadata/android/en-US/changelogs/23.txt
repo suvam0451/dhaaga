@@ -1,7 +1,0 @@
-Dhaaga (Lite) v0.14.0 (17 Jan 2025)
-
-✨ Ability to add/edit profiles from hub interface
-✨ Ability to add/edit user pins from hub interface
-✨ Ability to add/edit tag pins from hub interface
-✨ The user peek modal is now scrollable and shows full profile description
-✨ A first attempt at contextual bylines on the post details page

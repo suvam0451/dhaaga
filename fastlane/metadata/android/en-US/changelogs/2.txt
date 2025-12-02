@@ -1,4 +1,0 @@
-Dhaaga (Lite) v0.3.0
-
-* ✨ Known Software Page
-* ✨ The app now detects software run by instances you encounter

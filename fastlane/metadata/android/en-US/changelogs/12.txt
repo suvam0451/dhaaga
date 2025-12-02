@@ -1,6 +1,0 @@
-Dhaaga (Lite) v0.10.0 (7 Sep 2024)
-
-* ✨Renovated 3rd/4th/6th tab
-* ✨New (cooler 😎) way to switch accounts
-* ✨Couple useful settings
-* 🛠️Various bug fixes

@@ -1,4 +1,0 @@
-Dhaaga (Lite) v0.6.1 (5 Aug 2024)
-
-* ✨ We now have a wiki (better docs, yay!)
-* 🛠️Fixed a mastodon login issue from other instances

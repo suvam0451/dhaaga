@@ -1,5 +1,0 @@
-Dhaaga (Lite) v0.9.0 (1 Sep 2024)
-
-* ✨ Reaction Support (Viewing/Adding/Removing)
-
-p.s. - Akkoma packs and Misskey aliases are also supported in picker.
