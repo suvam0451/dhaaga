@@ -18,6 +18,8 @@ jobs:
       - run: npm run build-deps
       - run: npm install @react-native-community/cli
         working-directory: ./apps/mobile
+      - run: npm uninstall expo-dev-client
+        working-directory: ./apps/mobile
       - run: node lite.js # pre-requisites scripts
         working-directory: ./apps/mobile
         env:

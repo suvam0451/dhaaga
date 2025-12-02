@@ -2,33 +2,25 @@ import { DiscoverCtx } from '@dhaaga/core';
 import SearchTabPresenter from '../presenters/SearchTabPresenter';
 import {
 	useAppAcct,
+	useAppActiveSession,
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
-import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
 import { View } from 'react-native';
 import SearchWidget from '../components/SearchWidget';
-import QuickPost from '../../composer/components/QuickPost';
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import { Redirect } from 'expo-router';
 
 function SearchTabInteractor() {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
+	const { session } = useAppActiveSession();
 
-	if (!acct)
-		return <AddAccountPresenter tab={APP_LANDING_PAGE_TYPE.DISCOVER} />;
+	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
 
 	return (
 		<DiscoverCtx>
 			<View style={{ flex: 1, backgroundColor: theme.palette.bg }}>
 				<SearchTabPresenter />
 				<SearchWidget />
-				{/*<QuickPost*/}
-				{/*	onPress={() => {}}*/}
-				{/*	style={{*/}
-				{/*		marginBottom: 64,*/}
-				{/*	}}*/}
-				{/*/>*/}
 			</View>
 		</DiscoverCtx>
 	);
