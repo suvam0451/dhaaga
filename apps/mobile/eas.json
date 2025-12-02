@@ -38,15 +38,15 @@
 				"APP_NAME": "Dhaaga (Dev)"
 			}
 		},
-		"preview": {
+		"staging": {
 			"extends": "_shared",
 			"android": {
 				"buildType": "apk"
 			},
 			"env": {
 				"APP_VARIANT": "prod",
-				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga.preview",
-				"APP_NAME": "Dhaaga (Preview)"
+				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga.staging",
+				"APP_NAME": "Dhaaga (Staging)"
 			}
 		},
 		"lite": {

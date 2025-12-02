@@ -1,4 +1,4 @@
-name: 'Package (.apk) for Preview'
+name: 'Package (.apk) for Staging'
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
           --profile=preview \
           --non-interactive \
           --platform=android \
-          --output=./output/Dhaaga-$VERSION-Preview.apk
+          --output=./output/Dhaaga-$VERSION-Staging.apk
         working-directory: ./apps/mobile
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
