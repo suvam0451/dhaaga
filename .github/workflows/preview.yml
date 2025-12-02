@@ -1,4 +1,4 @@
-name: 'Build Standard Edition Locally'
+name: 'Package (.apk) for Preview'
 
 on:
   push:

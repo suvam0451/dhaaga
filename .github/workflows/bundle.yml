@@ -1,4 +1,4 @@
-name: 'Bundle (.aab) Locally'
+name: 'Bundle (.aab) for Release'
 
 on:
   push:

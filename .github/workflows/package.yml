@@ -1,4 +1,4 @@
-name: 'Bundle (.apk) Locally'
+name: 'Package (.apk) for Release'
 
 on:
   push:
