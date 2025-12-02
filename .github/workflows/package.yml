@@ -28,5 +28,4 @@ jobs:
         with:
           name: app apk
           path: |
-            dist
-            !dist/**/*.md
+            apps/mobile/output

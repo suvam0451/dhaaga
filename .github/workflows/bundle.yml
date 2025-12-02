@@ -22,11 +22,10 @@ jobs:
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-      - run: eas build --local --profile=aab --non-interactive --platform=android --output=./output/dhaaga.apk # build app
+      - run: eas build --local --profile=aab --non-interactive --platform=android --output=./output/dhaaga.aab # build app
         working-directory: ./apps/mobile
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
           name: app apk
           path: |
-            dist
-            !dist/**/*.md
+            apps/mobile/output
