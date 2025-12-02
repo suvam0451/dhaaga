@@ -1,6 +1,6 @@
 {
 	"name": "@dhaaga/mobile",
-	"version": "0.17.0",
+	"version": "0.17.2",
 	"main": "expo-router/entry",
 	"dependencies": {
 		"@dhaaga/bridge": "*",
@@ -11,7 +11,7 @@
 		"@expo-google-fonts/bebas-neue": "^0.4.1",
 		"@expo-google-fonts/inter": "^0.4.2",
 		"@expo-google-fonts/montserrat": "^0.4.2",
-		"@expo-google-fonts/roboto": "^0.4.1",
+		"@expo-google-fonts/roboto": "^0.4.2",
 		"@expo/vector-icons": "^15.0.2",
 		"@react-native-masked-view/masked-view": "0.3.2",
 		"@react-navigation/bottom-tabs": "^7.4.0",
@@ -41,7 +41,7 @@
 		"expo-video": "~3.0.14",
 		"expo-web-browser": "~15.0.9",
 		"fast-text-encoding": "^1.0.6",
-		"i18next": "^25.6.3",
+		"i18next": "^25.7.1",
 		"immer": "^11.0.1",
 		"jwt-decode": "^4.0.0",
 		"link-preview-js": "^3.0.14",

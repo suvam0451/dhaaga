@@ -1,6 +1,6 @@
 {
 	"name": "dhaaga",
-	"version": "0.17.0",
+	"version": "0.17.2",
 	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
 	"homepage": "https://suvam.io/dhaaga",
 	"author": "Debashish Patra <suvam.io>",
@@ -64,7 +64,7 @@
 		"react-native-safe-area-context": "~5.6.0"
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20251130.1",
+		"@typescript/native-preview": "^7.0.0-dev.20251202.1",
 		"prettier": "^3.7.3"
 	}
 }

@@ -96,7 +96,7 @@ export function Footer({ hideVersion }: { hideVersion?: boolean }) {
 						fontSize: 16,
 					}}
 				>
-					v0.17.0
+					v0.17.2
 				</AppText.SemiBold>
 			)}
 		</View>

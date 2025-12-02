@@ -31,6 +31,6 @@ jobs:
         working-directory: ./apps/mobile/android
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
-          name: apk
+          name: Dhaaga-v$VERSION-Lite
           path: |
             apps/mobile/android/app/build/outputs/apk/release

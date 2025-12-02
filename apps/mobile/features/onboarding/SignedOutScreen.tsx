@@ -70,7 +70,7 @@ function Page() {
 					style={{ textAlign: 'center', marginTop: 8 }}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
 				>
-					v0.17.0
+					v0.17.2
 				</AppText.Medium>
 			</View>
 		</View>

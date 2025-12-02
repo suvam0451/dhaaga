@@ -29,10 +29,10 @@ jobs:
           --profile=aab \
           --non-interactive \
           --platform=android \
-          --output=./output/Dhaaga-$VERSION.aab
+          --output=./output/Dhaaga-v$VERSION.aab
         working-directory: ./apps/mobile
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
-          name: app apk
+          name: Dhaaga-v$VERSION-Bundle
           path: |
             apps/mobile/output
