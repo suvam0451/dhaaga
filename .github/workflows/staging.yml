@@ -26,7 +26,7 @@ jobs:
       - run: | # build app
           eas build \
           --local \
-          --profile=preview \
+          --profile=staging \
           --non-interactive \
           --platform=android \
           --output=./output/Dhaaga-$VERSION-Staging.apk
