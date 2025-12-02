@@ -27,8 +27,6 @@ jobs:
           KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      - run: npx react-native build-android --mode=release # produce aab
-        working-directory: ./apps/mobile
       - run: ./gradlew assembleRelease # produce apk
         working-directory: ./apps/mobile/android
       - uses: actions/upload-artifact@v4 # upload artifacts
