@@ -14,13 +14,22 @@ jobs:
         with:
           node-version: latest
           cache: "npm"
+      - name: Use version
+        run: echo "Package version is $VERSION"
       - run: npm install # Install dependencies
       - run: npm run build-deps
       - uses: expo/expo-github-action@v8 # setup EAS
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-      - run: eas build --local --profile=lite --non-interactive --platform=android --output=./output/dhaaga.apk # build app
+      - run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV # ver
+      - run: | # build app
+          eas build \
+          --local \
+          --profile=preview \
+          --non-interactive \
+          --platform=android \
+          --output=./output/Dhaaga-$VERSION-Preview.apk
         working-directory: ./apps/mobile
       - uses: actions/upload-artifact@v4 # upload artifacts
         with:
