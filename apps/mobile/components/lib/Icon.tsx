@@ -50,6 +50,8 @@ export type APP_ICON_ENUM =
 	| 'chevron-right'
 	| 'chevron-down'
 	| 'chevron-down-circle'
+	| 'chevron-collapse-outline'
+	| 'chevron-expand-outline'
 	| 'cloud-upload-outline'
 	| 'close'
 	| 'close-outline'
@@ -66,10 +68,12 @@ export type APP_ICON_ENUM =
 	| 'eye-filled'
 	| 'eye-off-filled'
 	| 'flash'
+	| 'funnel-outline'
 	| 'gallery'
 	| 'globe'
 	| 'heart'
 	| 'heart-outline'
+	| 'history'
 	| 'home'
 	| 'images'
 	| 'images-outline'
@@ -518,6 +522,24 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'chevron-collapse-outline':
+				return (
+					<Ionicons
+						name="chevron-collapse-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'chevron-expand-outline':
+				return (
+					<Ionicons
+						name="chevron-expand-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'cloud-upload-outline':
 				return (
 					<Ionicons
@@ -662,6 +684,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'funnel-outline':
+				return (
+					<Ionicons
+						name="funnel-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'gallery':
 				return (
 					<Ionicons
@@ -688,6 +719,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'heart-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'history':
+				return (
+					<AntDesign
+						name="history"
 						size={_size}
 						color={_color}
 						style={iconStyle}

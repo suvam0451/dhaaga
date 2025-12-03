@@ -7,7 +7,7 @@ import { appDimensions } from '../../../styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { Ionicons } from '@expo/vector-icons';
-import Dropdown from '#/components/shared/topnavbar/Dropdown';
+import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
 import { useState } from 'react';
 
 export enum APP_LANDING_PAGE_TYPE {
@@ -38,6 +38,9 @@ type AppTabLandingNavbarProps = {
 		onPress?: () => void;
 		disabled?: boolean;
 	}[];
+	hasDropdown?: boolean;
+	dropdownSelectedId?: string;
+	dropdownItems?: { id: string; label: string; onSelect: () => void }[];
 };
 
 /**
@@ -45,7 +48,13 @@ type AppTabLandingNavbarProps = {
  * landing pages for each of the five
  * main routes
  */
-function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
+function AppTabLandingNavbar({
+	type,
+	menuItems,
+	hasDropdown,
+	dropdownSelectedId,
+	dropdownItems,
+}: AppTabLandingNavbarProps) {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 		[APP_LANDING_PAGE_TYPE.HOME]: 'Home',
@@ -66,11 +75,20 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 		[APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS]: 'My Accounts',
 	};
 
+	const NAVBAR_LABEL = hasDropdown
+		? dropdownItems.find((i) => i.id === dropdownSelectedId)?.label
+		: navbarLabel[type];
+
 	const [DropdownOpen, setDropdownOpen] = useState(false);
 
 	function toggleDropdown() {
 		setDropdownOpen((o) => !o);
 	}
+
+	function closeDropdown() {
+		setDropdownOpen(false);
+	}
+
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
@@ -91,13 +109,17 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 								backgroundColor: 'red',
 							}}
 						></View>
-						<AppText.H1>{navbarLabel[type]}</AppText.H1>
-						<Ionicons
-							name="chevron-down"
-							style={{ marginLeft: 6, paddingTop: 4 }}
-							size={24}
-							color={'white'}
-						/>
+						<AppText.H1>{NAVBAR_LABEL}</AppText.H1>
+						{hasDropdown ? (
+							<Ionicons
+								name="chevron-down"
+								style={{ marginLeft: 6, paddingTop: 4 }}
+								size={24}
+								color={'white'}
+							/>
+						) : (
+							<View />
+						)}
 					</Pressable>
 				</View>
 				<View style={{ flexDirection: 'row' }}>
@@ -124,10 +146,15 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 					))}
 				</View>
 			</View>
-			<Dropdown
-				isOpen={DropdownOpen}
-				items={[{ label: 'All' }, { label: 'Posts' }, { label: 'Users' }]}
-			/>
+			{hasDropdown ? (
+				<NavBar_Explore
+					isOpen={DropdownOpen}
+					close={closeDropdown}
+					items={dropdownItems!}
+				/>
+			) : (
+				<View></View>
+			)}
 		</View>
 	);
 }

@@ -1,6 +1,6 @@
-import WithAppStatusContextDataContext from '../../../../hooks/api/statuses/WithAppStatusContextData';
 import { useLocalSearchParams } from 'expo-router';
-import useGetStatusCtxInterface from '../../../../hooks/api/statuses/useGetStatusCtxInterface';
+import WithAppStatusContextDataContext from '#/hooks/api/statuses/WithAppStatusContextData';
+import useGetStatusCtxInterface from '#/hooks/api/statuses/useGetStatusCtxInterface';
 import PostDetailPresenter from './presenters/PostDetailPresenter';
 
 function PostDetailView() {

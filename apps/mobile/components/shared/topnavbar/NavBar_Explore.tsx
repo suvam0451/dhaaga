@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -7,14 +7,23 @@ import Animated, {
 } from 'react-native-reanimated';
 import { AppText } from '#/components/lib/Text';
 
-const Dropdown = ({ items = [], isOpen }) => {
-	const [selected, setSelected] = useState(null);
+type DropdownProps = {
+	items: { id: string; label: string; onSelect: () => void }[];
+	isOpen: boolean;
+	close: () => void;
+};
 
+function NavBar_Explore({ items, isOpen, close }: DropdownProps) {
 	const open = useSharedValue(0); // 0 = closed, 1 = open
 
 	useEffect(() => {
 		open.value = withTiming(isOpen ? 1 : 0, { duration: 180 });
 	}, [isOpen]);
+
+	function onSelect(id: string) {
+		close();
+		items.find((item) => item.id === id)?.onSelect();
+	}
 
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
@@ -35,7 +44,7 @@ const Dropdown = ({ items = [], isOpen }) => {
 						key={index}
 						style={styles.item}
 						onPress={() => {
-							setSelected(item);
+							onSelect(item.id);
 						}}
 					>
 						<AppText.H1>{item.label}</AppText.H1>
@@ -44,14 +53,13 @@ const Dropdown = ({ items = [], isOpen }) => {
 			</Animated.View>
 		</View>
 	);
-};
+}
 
-export default Dropdown;
+export default NavBar_Explore;
 
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',
-		// marginVertical: 20,
 		alignSelf: 'center',
 		zIndex: 99,
 	},
@@ -66,12 +74,8 @@ const styles = StyleSheet.create({
 	},
 	dropdown: {},
 	item: {
-		// height: 45,
 		justifyContent: 'center',
-		// paddingHorizontal: 15,
 		borderBottomWidth: 0.3,
-		// borderBottomColor: 'gray',
 		paddingVertical: 8,
-		// backgroundColor: 'red',
 	},
 });

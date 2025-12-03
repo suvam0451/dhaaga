@@ -5,31 +5,28 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
-import {
-	Dimensions,
-	Pressable,
-	StyleSheet,
-	TextInput,
-	View,
-} from 'react-native';
+import { Dimensions, Pressable, StyleSheet, TextInput } from 'react-native';
 import { useRef, useState } from 'react';
-import {
-	useDiscoverState,
-	useDiscoverDispatch,
-	DiscoverStateAction,
-} from '@dhaaga/core';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { Loader } from '../../../components/lib/Loader';
 import { Feather } from '@expo/vector-icons';
 import { APP_FONTS } from '../../../styles/AppFonts';
-import WidgetExpanded from './SearchResultFull';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const BUTTON_SIZE = 50;
 
-function SearchWidget() {
+type SearchWidgetProps = {
+	SearchTerm: string;
+	setSearchTerm: (term: string) => void;
+	onSearch: () => void;
+};
+
+function SearchWidget({
+	SearchTerm,
+	setSearchTerm,
+	onSearch,
+}: SearchWidgetProps) {
 	const isRotated = useSharedValue(0);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
@@ -43,37 +40,21 @@ function SearchWidget() {
 	const containerWidth = useSharedValue(0);
 	const borderRadius = useSharedValue(16);
 
-	/**
-	 * --- State Management ---
-	 */
-	const State = useDiscoverState();
-	const dispatch = useDiscoverDispatch();
-
-	const updateSearch = (search: string) => {
-		dispatch({
-			type: DiscoverStateAction.SET_SEARCH,
-			payload: {
-				q: search,
-			},
-		});
-	};
-
-	const submitSearch = (search) => {
-		dispatch({
-			type: DiscoverStateAction.APPLY_SEARCH,
-		});
-	};
+	function submitSearch() {
+		onSearch();
+		toggleMenu(false);
+	}
 
 	/**
 	 * --------
 	 */
 
-	const toggleMenu = () => {
-		const isExpanding = !IsWidgetExpanded;
-		if (!isExpanding) textInputRef.current?.blur();
-		setIsWidgetExpanded(!IsWidgetExpanded);
+	function toggleMenu(isOpened?: boolean) {
+		let NEXT_IS_OPENED = !IsWidgetExpanded;
 
-		if (isRotated.value === 0) {
+		if (isOpened !== undefined) NEXT_IS_OPENED = isOpened;
+
+		if (NEXT_IS_OPENED) {
 			rotation.value = withTiming(45, { duration: 200 });
 			isRotated.value = withTiming(1, { duration: 0 });
 			containerWidth.value = withTiming(WIDGET_MAX_WIDTH, { duration: 200 });
@@ -87,12 +68,16 @@ function SearchWidget() {
 				borderRadius.value = withTiming(50, { duration: 300 });
 			}, 260);
 		}
-		if (isExpanding) {
+
+		if (NEXT_IS_OPENED) {
 			setTimeout(() => {
 				textInputRef.current?.focus();
 			}, 200);
+		} else {
+			textInputRef.current?.blur();
 		}
-	};
+		setIsWidgetExpanded(NEXT_IS_OPENED);
+	}
 
 	const containerStyle = useAnimatedStyle(() => {
 		return {
@@ -120,7 +105,7 @@ function SearchWidget() {
 	const { theme } = useAppTheme();
 	return (
 		<Animated.View style={[styles.root, rootStyle]}>
-			{IsWidgetExpanded && <WidgetExpanded />}
+			{/*{IsWidgetExpanded && <WidgetExpanded />}*/}
 			<Animated.View
 				style={[
 					styles.button,
@@ -129,7 +114,7 @@ function SearchWidget() {
 						flexDirection: 'row',
 						paddingLeft: IsWidgetExpanded ? 6 : 0,
 						backgroundColor:
-							!IsWidgetExpanded && !!State.q
+							!IsWidgetExpanded && !!SearchTerm
 								? 'rgba(160, 160, 160, 0.28)'
 								: theme.primary.a0,
 						// right: CONTAINER_PADDING,
@@ -137,11 +122,18 @@ function SearchWidget() {
 					},
 				]}
 			>
-				<AnimatedPressable style={{ padding: 8 }} onPress={toggleMenu}>
+				<AnimatedPressable
+					style={{ padding: 8 }}
+					onPress={() => {
+						toggleMenu();
+					}}
+				>
 					<Feather
 						name="search"
 						color={
-							!IsWidgetExpanded && !!State.q ? 'rgba(0, 0, 0, 0.36)' : 'black'
+							!IsWidgetExpanded && !!SearchTerm
+								? 'rgba(0, 0, 0, 0.36)'
+								: 'black'
 						}
 						size={25}
 					/>
@@ -151,9 +143,9 @@ function SearchWidget() {
 						ref={textInputRef}
 						multiline={false}
 						placeholderTextColor={'rgba(0, 0, 0, 0.84)'}
-						onChangeText={updateSearch}
+						onChangeText={setSearchTerm}
 						onSubmitEditing={submitSearch}
-						value={State.text}
+						value={SearchTerm}
 						placeholder={t(`discover.welcome`)}
 						style={[
 							{
@@ -178,14 +170,9 @@ const styles = StyleSheet.create({
 		bottom: 0, // 32
 		width: '100%',
 	},
-
 	container: {
 		flexDirection: 'row',
-		zIndex: 5, // borderRadius: SIZE / 2,
-		// backgroundColor: 'rgba(1,123,254,0.8)',
-		// justifyContent: 'center',
-		// alignItems: 'center',
-		// position: 'absolute',
+		zIndex: 5,
 	},
 	button: {
 		width: BUTTON_SIZE,

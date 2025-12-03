@@ -6,13 +6,15 @@ export enum APP_ROUTING_ENUM {
 	ATPROTO_SIGNIN = '/profile/onboard/add-bluesky',
 
 	// discover modules
-	DISCOVER_FEED = '/discover/feed',
+	DISCOVER_ROOT = '/explore',
+	DISCOVER_GUIDE = '/explore/user-guide',
+	DISCOVER_FEED = '/explore/feed',
+	DISCOVER_HISTORY = '/explore/history',
 
 	// guides
 	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
 	GUIDE_INBOX = '/notifications/user-guide',
 
-	GUIDE_DISCOVER_TAB = '/discover/user-guide',
 	GUIDE_SETTINGS_TAB = '/profile/user-guide-settings',
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',

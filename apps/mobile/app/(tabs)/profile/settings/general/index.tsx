@@ -6,7 +6,6 @@ import AppTopNavbar, {
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../../../components/lib/Text';
-import { appDimensions } from '../../../../../styles/dimensions';
 import { AppIcon } from '../../../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
 import AppSettingBooleanToggle from '../../../../../components/screens/settings/fragments/AppSettingBooleanToggle';

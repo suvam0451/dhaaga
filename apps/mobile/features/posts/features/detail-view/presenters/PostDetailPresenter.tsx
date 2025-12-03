@@ -7,7 +7,7 @@ import { RefetchOptions } from '@tanstack/react-query';
 import { appDimensions } from '../../../../../styles/dimensions';
 import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
 import StatusItem from '../../../../../components/common/status/StatusItem';
-import ReplyControlPresenter from './ReplyControlPresenter';
+import PostCommentThreadControls from './PostCommentThreadControls';
 import ReplyItemPresenter from './ReplyItemPresenter';
 import NoMoreReplies from '../components/NoMoreReplies';
 
@@ -58,7 +58,7 @@ function PostDetailPresenter({ refetch }: Props) {
 				<WithAppStatusItemContext dto={rootObject}>
 					<StatusItem showFullDetails />
 				</WithAppStatusItemContext>
-				<ReplyControlPresenter />
+				<PostCommentThreadControls count={children.length} />
 				<FlatList
 					data={children}
 					renderItem={({ item }) => (

@@ -22,7 +22,7 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../components/common/status/TextContentView';
-import UserViewNavbar from '../../../components/shared/topnavbar/UserViewNavbar';
+import Navbar_UserDetail from '../../../components/shared/topnavbar/Navbar_UserDetail';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { AppText } from '../../../components/lib/Text';
 import { useTranslation } from 'react-i18next';
@@ -69,7 +69,7 @@ export function ProfileContextWrapped() {
 			onScroll={onScroll}
 			contentContainerStyle={[{ backgroundColor: theme.palette.bg }]}
 		>
-			<UserViewNavbar acct={acct} />
+			<Navbar_UserDetail acct={acct} />
 			{bannerUrl ? (
 				// @ts-ignore-next-line
 				<Image

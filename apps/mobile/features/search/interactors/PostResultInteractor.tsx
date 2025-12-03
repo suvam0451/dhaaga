@@ -4,9 +4,9 @@ import {
 	PostTimelineStateAction,
 	usePostTimelineState,
 	usePostTimelineDispatch,
+	type SearchTabType,
 } from '@dhaaga/core';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { Animated, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
@@ -15,12 +15,18 @@ import { useDiscoverState } from '@dhaaga/core';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { FlashList } from '@shopify/flash-list';
+import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
+	changeActiveTab: (tab: SearchTabType) => void;
 };
 
-function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
+function PostResultInteractor({
+	onDataLoaded,
+	changeActiveTab,
+}: ResultInteractorProps) {
 	const { client, driver, server } = useAppApiClient();
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
@@ -74,13 +80,10 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		});
 	}
 
-	/**
-	 * Composite Hook Collection
-	 */
-	const { onScroll } = useScrollMoreOnPageEnd({
-		itemCount: TimelineState.items.length,
-		loadNextPage: loadMore,
-	});
+	const { onScroll } = useListEndReachedJs(
+		loadMore,
+		TimelineState.items.length,
+	);
 
 	return (
 		<View
@@ -88,16 +91,17 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				flex: 1,
 			}}
 		>
-			<Animated.FlatList
+			<FlashList
 				data={TimelineState.items}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>
 						<StatusItem />
 					</WithAppStatusItemContext>
 				)}
+				style={{ flex: 1 }}
 				onScroll={onScroll}
 				ListHeaderComponent={Header}
-				scrollEventThrottle={16}
+				scrollEventThrottle={64}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
