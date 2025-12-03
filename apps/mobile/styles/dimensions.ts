@@ -19,7 +19,7 @@ export const appDimensions = {
 		padding: 6,
 		marginLeft: 6,
 		height: 52, // 44
-		scrollViewTopPadding: 44 + 2,
+		scrollViewTopPadding: 52,
 	},
 	bottomSheet: {
 		borderRadius: 16,

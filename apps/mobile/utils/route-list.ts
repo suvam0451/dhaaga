@@ -5,21 +5,22 @@ export enum APP_ROUTING_ENUM {
 	MASTODON_SERVER_SELECTION = '/profile/onboard/add-mastodon',
 	ATPROTO_SIGNIN = '/profile/onboard/add-bluesky',
 
-	// discover modules
-	DISCOVER_ROOT = '/explore',
-	DISCOVER_GUIDE = '/explore/user-guide',
-	DISCOVER_FEED = '/explore/feed',
-	DISCOVER_HISTORY = '/explore/history',
+	// 2. Feed
+	FEED_ROOT = '/feed',
+	FEED_GUIDE = '/feed/user-guide',
 
-	// guides
-	GUIDE_NEW_TAB_INTERFACE = '/user-guide-profiles',
-	GUIDE_INBOX = '/notifications/user-guide',
+	// 3. Explore
+	EXPLORE_ROOT = '/explore',
+	EXPLORE_GUIDE = '/explore/user-guide',
+	EXPLORE_FEED = '/explore/feed',
+	EXPLORE_HISTORY = '/explore/history',
 
-	GUIDE_SETTINGS_TAB = '/profile/user-guide-settings',
+	// 4. Inbox
+	INBOX_GUIDE = '/notifications/user-guide',
+	INBOX_MANAGE_SUBSCRIPTIONS = '/notifications/manage-subscriptions',
+
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',
-	GUIDE_TIMELINES = '/feed/user-guide',
-	GUIDE_COMPOSER = '/explore/user-guide',
 
 	ADD_ACCOUNT = '/profile/onboard/add-account',
 
@@ -33,11 +34,6 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
 	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',
-
-	NOTIFICATIONS_MENTIONS = '/notifications',
-	NOTIFICATIONS_CHAT = '/notifications/chat',
-	NOTIFICATIONS_SOCIAL = '/notifications/social',
-	NOTIFICATIONS_UPDATES = '/notifications/updates',
 	CHATROOM = '/notifications/chatroom',
 
 	COLLECTIONS = '/profile/collections',

@@ -67,13 +67,13 @@ export type APP_ICON_ENUM =
 	| 'eye'
 	| 'eye-filled'
 	| 'eye-off-filled'
+	| 'filter-outline'
 	| 'flash'
 	| 'funnel-outline'
 	| 'gallery'
 	| 'globe'
 	| 'heart'
 	| 'heart-outline'
-	| 'history'
 	| 'home'
 	| 'images'
 	| 'images-outline'
@@ -87,6 +87,7 @@ export type APP_ICON_ENUM =
 	| 'more-options-vertical'
 	| 'musical-notes-outline'
 	| 'newspaper'
+	| 'notifications-outline'
 	| 'no-account'
 	| 'palette'
 	| 'person-outline'
@@ -675,6 +676,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'filter-outline':
+				return (
+					<Ionicons
+						name={'filter-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'flash':
 				return (
 					<Ionicons
@@ -719,15 +729,6 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'heart-outline'}
-						size={_size}
-						color={_color}
-						style={iconStyle}
-					/>
-				);
-			case 'history':
-				return (
-					<AntDesign
-						name="history"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -853,6 +854,15 @@ export function AppIcon({
 				return (
 					<MaterialIcons
 						name="no-accounts"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'notifications-outline':
+				return (
+					<Ionicons
+						name="notifications-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -994,7 +1004,12 @@ export function AppIcon({
 				);
 			case 'time-outline':
 				return (
-					<Ionicons name="time-outline" size={64} color={theme.secondary.a30} />
+					<Ionicons
+						name="time-outline"
+						size={_size - 1}
+						color={_color}
+						style={iconStyle}
+					/>
 				);
 
 			case 'trash':

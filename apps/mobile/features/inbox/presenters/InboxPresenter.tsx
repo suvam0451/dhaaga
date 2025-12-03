@@ -1,9 +1,4 @@
-import {
-	useAppAcct,
-	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import AddAccountPresenter from '../../onboarding/presenters/AddAccountPresenter';
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { View } from 'react-native';
 import MentionPresenter from './MentionPresenter';
 import ChatroomPresenter from './ChatroomPresenter';
@@ -17,29 +12,13 @@ import { AppPagerView } from '../../../ui/PagerView';
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
-			return (
-				<InboxCtx>
-					<MentionPresenter />
-				</InboxCtx>
-			);
+			return <MentionPresenter />;
 		case 1:
-			return (
-				<InboxCtx>
-					<ChatroomPresenter />
-				</InboxCtx>
-			);
+			return <ChatroomPresenter />;
 		case 2:
-			return (
-				<InboxCtx>
-					<SocialUpdatePresenter />;
-				</InboxCtx>
-			);
+			return <SocialUpdatePresenter />;
 		case 3:
-			return (
-				<InboxCtx>
-					<UpdatesPresenter />
-				</InboxCtx>
-			);
+			return <UpdatesPresenter />;
 		default:
 			return <View />;
 	}
@@ -47,10 +26,7 @@ const renderScene = (index: number) => {
 
 function InboxPresenter() {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-
-	if (!acct) return <View />;
 
 	const tabLabels = [
 		{
@@ -73,7 +49,7 @@ function InboxPresenter() {
 
 	return (
 		<AppPagerView
-			renderScene={renderScene}
+			renderScene={(i: number) => <InboxCtx>{renderScene(i)}</InboxCtx>}
 			tabCount={4}
 			labels={tabLabels}
 			showBottomNav

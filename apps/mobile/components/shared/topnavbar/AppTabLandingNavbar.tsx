@@ -9,6 +9,11 @@ import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { Ionicons } from '@expo/vector-icons';
 import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
 import { useState } from 'react';
+import {
+	TOP_NAVBAR_BOTTOM_PADDING,
+	TOP_NAVBAR_MENU_ICON_SIZE,
+	TOP_NAVBAR_TOP_PADDING,
+} from '#/components/shared/topnavbar/settings';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -92,46 +97,22 @@ function AppTabLandingNavbar({
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
-				<View style={{ flexGrow: 1 }}>
-					<Pressable
-						style={{
-							flexDirection: 'row',
-							alignItems: 'center',
-							position: 'relative',
-							// zIndex: 99,
-						}}
-						onPress={toggleDropdown}
-					>
-						<View
-							style={{
-								position: 'relative',
-								height: '100%',
-								backgroundColor: 'red',
-							}}
-						></View>
-						<AppText.H1>{NAVBAR_LABEL}</AppText.H1>
-						{hasDropdown ? (
-							<Ionicons
-								name="chevron-down"
-								style={{ marginLeft: 6, paddingTop: 4 }}
-								size={24}
-								color={'white'}
-							/>
-						) : (
-							<View />
-						)}
-					</Pressable>
-				</View>
+				<Pressable style={styles.labelArea} onPress={toggleDropdown}>
+					<AppText.H1>{NAVBAR_LABEL}</AppText.H1>
+					{hasDropdown ? (
+						<Ionicons
+							name="chevron-down"
+							style={{ marginLeft: 6, paddingTop: 4 }}
+							size={24}
+							color={'white'}
+						/>
+					) : (
+						<View />
+					)}
+				</Pressable>
 				<View style={{ flexDirection: 'row' }}>
 					{menuItems.map(({ iconId, disabled, onPress }, i) => (
-						<Pressable
-							key={i}
-							style={{
-								padding: appDimensions.topNavbar.padding,
-								marginLeft: appDimensions.topNavbar.marginLeft,
-							}}
-							onPress={onPress}
-						>
+						<Pressable key={i} style={styles.menuButton} onPress={onPress}>
 							<AppIcon
 								id={iconId}
 								emphasis={
@@ -140,7 +121,7 @@ function AppTabLandingNavbar({
 										: APP_COLOR_PALETTE_EMPHASIS.A10
 								}
 								onPress={onPress}
-								size={appDimensions.topNavbar.iconSize}
+								size={TOP_NAVBAR_MENU_ICON_SIZE}
 							/>
 						</Pressable>
 					))}
@@ -153,7 +134,7 @@ function AppTabLandingNavbar({
 					items={dropdownItems!}
 				/>
 			) : (
-				<View></View>
+				<View />
 			)}
 		</View>
 	);
@@ -164,13 +145,24 @@ export default AppTabLandingNavbar;
 const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 12,
-		paddingVertical: 16,
-		alignItems: 'center',
 		width: '100%',
-		zIndex: 2000,
+		zIndex: 1,
 	},
 	headerText: {
 		fontSize: 28,
 		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
+	},
+	labelArea: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		position: 'relative',
+		flexGrow: 1,
+		paddingVertical: TOP_NAVBAR_TOP_PADDING,
+	},
+	menuButton: {
+		padding: appDimensions.topNavbar.padding,
+		marginLeft: appDimensions.topNavbar.marginLeft,
+		paddingTop: TOP_NAVBAR_TOP_PADDING,
+		paddingBottom: TOP_NAVBAR_BOTTOM_PADDING,
 	},
 });

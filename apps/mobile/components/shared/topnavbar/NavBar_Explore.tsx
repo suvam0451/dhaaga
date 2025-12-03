@@ -37,8 +37,7 @@ function NavBar_Explore({ items, isOpen, close }: DropdownProps) {
 
 	return (
 		<View style={styles.container}>
-			{/* Dropdown Items */}
-			<Animated.View style={[styles.dropdown, animatedStyle]}>
+			<Animated.View style={[animatedStyle]}>
 				{items.map((item, index) => (
 					<TouchableOpacity
 						key={index}
@@ -72,7 +71,6 @@ const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 16,
 	},
-	dropdown: {},
 	item: {
 		justifyContent: 'center',
 		borderBottomWidth: 0.3,

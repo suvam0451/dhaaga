@@ -1,5 +1,5 @@
 import { RefreshControl, StyleSheet, View } from 'react-native';
-import TimelinesHeader from '#/components/shared/topnavbar/fragments/TopNavbarTimelineStack';
+import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
@@ -7,7 +7,7 @@ import { appDimensions } from '#/styles/dimensions';
 import WithAppStatusItemContext from '#/hooks/ap-proto/useAppStatusItem';
 import StatusItem from '#/components/common/status/StatusItem';
 import Animated from 'react-native-reanimated';
-import useAutoHideTopNavOnScroll from '#/hooks/anim/useAutoHideTopNavOnScroll';
+import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
 
 type TimelinePostListViewProps = {
 	items: PostObjectType[];
@@ -30,12 +30,11 @@ function TimelinePostListView({
 
 	function onEndReached() {
 		if (numItems > 0 && !fetching && !refreshing) {
-			console.log('loading more...');
 			loadMore();
 		}
 	}
 	const { scrollHandler, animatedStyle } =
-		useAutoHideTopNavOnScroll(onEndReached);
+		useHideTopNavUsingReanimated(onEndReached);
 
 	return (
 		<View
@@ -46,10 +45,7 @@ function TimelinePostListView({
 				},
 			]}
 		>
-			<Animated.View style={[styles.header, animatedStyle]}>
-				<TimelinesHeader />
-			</Animated.View>
-
+			<NavBar_Feed animatedStyle={animatedStyle} />
 			<View style={{ flex: 1 }}>
 				<Animated.FlatList
 					data={items}

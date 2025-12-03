@@ -24,21 +24,25 @@ function Header() {
 			},
 		});
 	}
+	const menuItems = [
+		{
+			iconId: 'time-outline',
+			onPress: () => {
+				router.navigate(APP_ROUTING_ENUM.EXPLORE_HISTORY);
+			},
+		},
+		{
+			iconId: 'user-guide',
+			onPress: () => {
+				router.navigate(APP_ROUTING_ENUM.EXPLORE_GUIDE);
+			},
+		},
+	];
+
 	return (
 		<AppTabLandingNavbar
 			type={APP_LANDING_PAGE_TYPE.DISCOVER}
-			menuItems={[
-				{
-					iconId: 'history',
-					onPress: () => {},
-				},
-				{
-					iconId: 'user-guide',
-					onPress: () => {
-						router.navigate(APP_ROUTING_ENUM.DISCOVER_GUIDE);
-					},
-				},
-			]}
+			menuItems={menuItems as any}
 			hasDropdown={true}
 			dropdownSelectedId={State.tab}
 			dropdownItems={getSearchTabs(driver).map((o) => ({

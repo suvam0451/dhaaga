@@ -32,7 +32,7 @@ const DiscoverTabListHeader = memo(
 					{
 						iconId: 'user-guide',
 						onPress: () => {
-							router.navigate(APP_ROUTING_ENUM.DISCOVER_GUIDE);
+							router.navigate(APP_ROUTING_ENUM.EXPLORE_GUIDE);
 						},
 					},
 				]}

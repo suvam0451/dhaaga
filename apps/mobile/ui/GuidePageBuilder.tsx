@@ -1,17 +1,11 @@
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
-import {
-	ScrollView,
-	StyleProp,
-	View,
-	ViewStyle,
-	StyleSheet,
-} from 'react-native';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '#/components/shared/topnavbar/AppTopNavbar';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import { AnimatedFlashList } from '@shopify/flash-list';
+import { appDimensions } from '#/styles/dimensions';
+import useHideNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 
 export type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
@@ -19,7 +13,7 @@ export type UserGuideContainerProps = {
 };
 
 function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
-	const { translateY } = useScrollMoreOnPageEnd({});
+	const { scrollHandler, animatedStyle } = useHideNavUsingFlashList();
 	const { theme } = useAppTheme();
 
 	const sectionStyle: StyleProp<ViewStyle> = {
@@ -27,14 +21,20 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 	};
 
 	return (
-		<AppTopNavbar
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={label}
-			translateY={translateY}
-		>
-			<ScrollView contentContainerStyle={styles.scrollView}>
-				{questionnaire.map((block, i) => (
-					<View key={i} style={sectionStyle}>
+		<>
+			<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+			<AnimatedFlashList
+				style={{
+					backgroundColor: theme.palette.bg,
+				}}
+				contentContainerStyle={{
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,
+					paddingHorizontal: 10,
+				}}
+				data={questionnaire}
+				onScroll={scrollHandler}
+				renderItem={({ item }) => (
+					<View style={sectionStyle}>
 						<AppText.Special
 							style={[
 								{
@@ -43,10 +43,11 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 								},
 							]}
 						>
-							{block.question}
+							{item.question}
 						</AppText.Special>
-						{block.answers.map((answer, i) => (
+						{item.answers.map((answer, i) => (
 							<AppText.Normal
+								key={i}
 								forwardedKey={i}
 								style={{
 									color: theme.secondary.a10,
@@ -59,17 +60,10 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 							</AppText.Normal>
 						))}
 					</View>
-				))}
-			</ScrollView>
-		</AppTopNavbar>
+				)}
+			/>
+		</>
 	);
 }
 
 export default GuidePageBuilder;
-
-const styles = StyleSheet.create({
-	scrollView: {
-		paddingTop: 12,
-		paddingHorizontal: 10,
-	},
-});

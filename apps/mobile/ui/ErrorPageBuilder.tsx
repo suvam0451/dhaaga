@@ -25,7 +25,13 @@ function ErrorPageBuilder({
 }: ErrorPageBuilderProps) {
 	return (
 		<>
-			<View style={{ width: 128, height: 196, marginHorizontal: 'auto' }}>
+			<View
+				style={{
+					width: 128,
+					height: 196,
+					marginHorizontal: 'auto',
+				}}
+			>
 				{stickerArt}
 			</View>
 			<View style={{ marginTop: 16, marginHorizontal: 32 }}>

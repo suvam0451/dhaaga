@@ -20,13 +20,9 @@ import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
-	changeActiveTab: (tab: SearchTabType) => void;
 };
 
-function PostResultInteractor({
-	onDataLoaded,
-	changeActiveTab,
-}: ResultInteractorProps) {
+function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const { client, driver, server } = useAppApiClient();
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();

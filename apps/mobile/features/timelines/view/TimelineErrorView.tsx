@@ -1,5 +1,5 @@
 import { Animated, StyleSheet, View } from 'react-native';
-import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
+import NavBar_Feed from '../../../components/shared/topnavbar/NavBar_Feed';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +25,7 @@ function TimelineErrorView({ error }: Props) {
 			}}
 		>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<TimelinesHeader />
+				<NavBar_Feed animatedStyle={{}} />
 			</Animated.View>
 			<ErrorPageBuilder
 				stickerArt={<BearError />}

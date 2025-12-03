@@ -1,8 +1,15 @@
 import { Stack } from 'expo-router/stack';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppAcct,
+	useAppTheme,
+} from '../../../hooks/utility/global-state-extractors';
+import { Redirect } from 'expo-router';
 
 function Layout() {
 	const { theme } = useAppTheme();
+	const { acct } = useAppAcct();
+
+	if (!acct) return <Redirect href={'/'} />;
 	return (
 		<Stack
 			initialRouteName={'index'}
