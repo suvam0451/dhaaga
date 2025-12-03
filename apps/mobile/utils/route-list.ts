@@ -24,7 +24,9 @@ export enum APP_ROUTING_ENUM {
 
 	ADD_ACCOUNT = '/profile/onboard/add-account',
 
+	// 5 Profile
 	PROFILE_TAB = '/profile',
+	PROFILE_GUIDE_ACCOUNTS = '/profile/user-guide-accounts',
 	// Settings Modules
 	SETTINGS_PAGE = '/profile/settings',
 	SETTINGS_TAB_ACCOUNTS = '/profile/settings/accounts',
