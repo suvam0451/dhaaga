@@ -110,7 +110,7 @@ export default function TabLayout() {
 			/>
 
 			<Tabs.Screen
-				name={'notifications'}
+				name={'inbox'}
 				options={{
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>

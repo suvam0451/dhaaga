@@ -16,8 +16,8 @@ export enum APP_ROUTING_ENUM {
 	EXPLORE_HISTORY = '/explore/history',
 
 	// 4. Inbox
-	INBOX_GUIDE = '/notifications/user-guide',
-	INBOX_MANAGE_SUBSCRIPTIONS = '/notifications/manage-subscriptions',
+	INBOX_GUIDE = '/inbox/user-guide',
+	INBOX_MANAGE_SUBSCRIPTIONS = '/inbox/manage-subscriptions',
 
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',
@@ -34,7 +34,7 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
 
 	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',
-	CHATROOM = '/notifications/chatroom',
+	CHATROOM = '/inbox/chatroom',
 
 	COLLECTIONS = '/profile/collections',
 	PROFILES = '/profile/profiles',
