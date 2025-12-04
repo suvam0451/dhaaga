@@ -1,22 +1,21 @@
 import { Fragment } from 'react';
 import ShareIndicator from './fragments/ShareIndicator';
-import { useAppStatusItem } from '../../../hooks/ap-proto/useAppStatusItem';
+import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 import StatusCore from './fragments/StatusCore';
-import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
 import { ReplyIndicator } from './ListView/_shared';
 import ParentPost from './fragments/ParentPost';
 import { PostContainer } from './_shared';
 import { View } from 'react-native';
 
 /**
- * ActivityPub post objects sometimes
+ * ActivityPub post-objects sometimes
  * offer parent post information (Misskey)
  *
- * AT protocol also providers root status
- * information (Bluesy)
+ * AT protocol is also providers root status
+ * information (Bluesky)
  */
 function AncestorFragment() {
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 
 	if (!dto.replyTo) return <ReplyIndicator />;
 
@@ -44,8 +43,7 @@ type StatusItemProps = {
  * @constructor
  */
 function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
-	const { acct } = useAppAcct();
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 
 	if (!dto) return <View />;
 	if (dto.meta.isBoost) {

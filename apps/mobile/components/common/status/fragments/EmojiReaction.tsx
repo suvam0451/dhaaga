@@ -14,12 +14,12 @@ import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppPublishers,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+} from '#/hooks/utility/global-state-extractors';
+import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
 import { Loader } from '../../../lib/Loader';
 
 function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
-	const { dto: postItem } = useAppStatusItem();
+	const { dto: postItem } = withPostItemContext();
 
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);

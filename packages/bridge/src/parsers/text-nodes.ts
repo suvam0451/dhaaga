@@ -205,21 +205,27 @@ export class Builder {
 					return {
 						type: 'inline',
 						uuid: RandomUtil.nanoId(),
-						nodes: node.children.map((o: any) => this.parser(o)),
+						nodes: node.children
+							.map((o: any) => this.parser(o))
+							.filter(Boolean),
 					};
 				}
 				case 'italic': {
 					return {
 						type: 'italic',
 						uuid: RandomUtil.nanoId(),
-						nodes: node.children.map((o: any) => this.parser(o)),
+						nodes: node.children
+							.map((o: any) => this.parser(o))
+							.filter(Boolean),
 					};
 				}
 				case 'bold': {
 					return {
 						type: 'bold',
 						uuid: RandomUtil.nanoId(),
-						nodes: node.children.map((o: any) => this.parser(o)),
+						nodes: node.children
+							.map((o: any) => this.parser(o))
+							.filter(Boolean),
 					};
 				}
 				// NOTE: node.props.acct is also an option

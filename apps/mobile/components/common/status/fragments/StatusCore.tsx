@@ -1,19 +1,20 @@
 import { Fragment, useState } from 'react';
-import useAppNavigator from '../../../../states/useAppNavigator';
+import useAppNavigator from '#/states/useAppNavigator';
 import WithAppStatusItemContext, {
-	useAppStatusItem,
-} from '../../../../hooks/ap-proto/useAppStatusItem';
+	withPostItemContext,
+} from '#/components/containers/contexts/WithPostItemContext';
 import { Pressable, View } from 'react-native';
 import ExplainOutput from '../../explanation/ExplainOutput';
-import MediaItem from '../../../../ui/media/MediaItem';
+import MediaItem from '#/ui/media/MediaItem';
 import EmojiReactions from './EmojiReactions';
 import StatusCw from './StatusCw';
 import PostCreatedBy from './PostCreatedBy';
 import { AppIcon } from '../../../lib/Icon';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { appDimensions } from '../../../../styles/dimensions';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
+import {
+	useAppTheme,
+	useImageInspect,
+} from '#/hooks/utility/global-state-extractors';
 import StatusInteraction from './StatusInteraction';
 import { AppText } from '../../../lib/Text';
 import StatusQuoted from './StatusQuoted';
@@ -87,14 +88,9 @@ function HiddenByCw({
 }
 
 function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 	const { toPost } = useAppNavigator();
-	const { showInspector, appSession } = useGlobalState(
-		useShallow((o) => ({
-			showInspector: o.imageInspectModal.show,
-			appSession: o.appSession,
-		})),
-	);
+	const { showInspector, appSession } = useImageInspect();
 	const [ShowSensitiveContent, setShowSensitiveContent] = useState(false);
 
 	const _target = PostInspector.getContentTarget(dto);
@@ -188,9 +184,9 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 			)}
 
 			{/* Lock reactions for preview (to be refactored) */}
-			{!isPreview && <EmojiReactions dto={_target} />}
-			{!isPreview && <StatusInteraction />}
-			{showFullDetails && <PostFullDetails dto={dto} />}
+			{isPreview ? <View /> : <EmojiReactions dto={_target} />}
+			{isPreview ? <View /> : <StatusInteraction />}
+			{showFullDetails ? <PostFullDetails dto={dto} /> : <View />}
 		</Fragment>
 	);
 }

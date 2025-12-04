@@ -7,7 +7,7 @@ import useApiGetPinnedPosts from '../../../hooks/api/accounts/useApiGetPinnedPos
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { AppText } from '../../../components/lib/Text';
 import StatusItem from '../../../components/common/status/StatusItem';
-import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../../components/containers/contexts/WithPostItemContext';
 import SocialUpdatePresenter from '../../inbox/presenters/SocialUpdatePresenter';
 import { appDimensions } from '../../../styles/dimensions';
 import UpdatesPresenter from '../../inbox/presenters/UpdatesPresenter';

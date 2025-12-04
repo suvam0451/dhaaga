@@ -11,7 +11,7 @@ import {
 	ToggleReplyVisibility,
 } from '../../../../../components/common/status/DetailView/_shared';
 import { MiniMoreOptionsButton } from '../../../../../components/common/status/_shared';
-import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../../../../components/containers/contexts/WithPostItemContext';
 import { TextContentView } from '../../../../../components/common/status/TextContentView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;

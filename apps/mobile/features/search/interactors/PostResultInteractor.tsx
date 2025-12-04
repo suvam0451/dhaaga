@@ -9,7 +9,7 @@ import {
 import { RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
-import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../../components/containers/contexts/WithPostItemContext';
 import StatusItem from '../../../components/common/status/StatusItem';
 import { useDiscoverState } from '@dhaaga/core';
 import { searchPostsQueryOpts } from '@dhaaga/react';

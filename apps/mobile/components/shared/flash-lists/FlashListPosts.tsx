@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { FlashListType_Post } from '../../../services/flashlist.service';
 import { Animated } from 'react-native';
-import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../containers/contexts/WithPostItemContext';
 import StatusItem from '../../common/status/StatusItem';
 
 const SCROLL_EVENT_THROTTLE = 16;

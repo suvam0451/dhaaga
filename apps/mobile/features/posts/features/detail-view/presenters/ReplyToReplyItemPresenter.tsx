@@ -9,7 +9,7 @@ import {
 	MiniMoreOptionsButton,
 	MiniReplyButton,
 } from '../../../../../components/common/status/_shared';
-import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../../../../components/containers/contexts/WithPostItemContext';
 import { TextContentView } from '../../../../../components/common/status/TextContentView';
 import CurvedLine from '../components/CurvedLine';
 

@@ -2,16 +2,10 @@ import {
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
-import {
-	ScrollView,
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet,
-} from 'react-native';
-import WithAppStatusItemContext from '../../../hooks/ap-proto/useAppStatusItem';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import WithAppStatusItemContext from '../../containers/contexts/WithPostItemContext';
 import StatusItem from '../../common/status/StatusItem';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import useAppNavigator from '../../../states/useAppNavigator';

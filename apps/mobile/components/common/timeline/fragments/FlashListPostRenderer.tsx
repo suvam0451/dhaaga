@@ -1,6 +1,6 @@
 import { ListItemEnum, ListItemType } from '../utils/itemType.types';
 import StatusItem from '../../status/StatusItem';
-import WithAppStatusItemContext from '../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../../containers/contexts/WithPostItemContext';
 import { View } from 'react-native';
 
 /**

@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
 import MediaItem from '../../../../ui/media/MediaItem';
 import PostCreatedBy from './PostCreatedBy';
 import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
@@ -36,7 +36,7 @@ function QuoteIndicator() {
 
 function StatusQuoted() {
 	const { theme } = useAppTheme();
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 
 	return (
 		<View
