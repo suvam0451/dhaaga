@@ -10,13 +10,10 @@ const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 				[
 					'expo-notifications',
 					{
-						icon: './local/assets/notification_icon.png',
+						icon: './assets/dhaaga/icon.png',
 						color: '#ffffff',
 						defaultChannel: 'default',
-						sounds: [
-							'./local/assets/notification_sound.wav',
-							'./local/assets/notification_sound_other.wav',
-						],
+						sounds: [],
 						enableBackgroundRemoteNotifications: false,
 					},
 				],
