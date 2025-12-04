@@ -1,14 +1,12 @@
 import { View } from 'react-native';
 import DefaultPinnedItem from '../../../screens/home/timeline-menu/DefaultPinnedItem';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { Button, Text } from '@rneui/themed';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { useTimelineController } from '../../../../features/timelines/api/useTimelineController';
+import { useTimelineController } from '#/features/timelines/api/useTimelineController';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 const ICON_SIZE = 20;
 
 function DefaultTimelineOptions() {
@@ -140,29 +138,14 @@ function DefaultTimelineOptions() {
 					}}
 				/>
 			</View>
-			<View>
-				<Button
-					buttonStyle={{
-						backgroundColor: APP_THEME.COLOR_SCHEME_B,
-					}}
-					onPress={onClickGoToSocialHub}
-				>
-					<Ionicons
-						name="navigate"
-						size={20}
-						color={APP_FONT.MONTSERRAT_HEADER}
-					/>
-					<Text
-						style={{
-							fontFamily: APP_FONTS.INTER_700_BOLD,
-							marginLeft: 4,
-							fontSize: 16,
-						}}
-					>
-						Go to Your Social Hub
-					</Text>
-				</Button>
-			</View>
+			<AppButtonVariantA
+				label={'Go to Social Hub'}
+				style={{
+					backgroundColor: APP_THEME.COLOR_SCHEME_B,
+				}}
+				onClick={onClickGoToSocialHub}
+				loading={false}
+			/>
 		</View>
 	);
 }

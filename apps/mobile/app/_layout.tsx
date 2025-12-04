@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router/stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ThemeProvider } from '@rneui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Appearance, StatusBar, View } from 'react-native';
 import { useEffect, useState } from 'react';
@@ -135,14 +134,11 @@ export default function Page() {
 			<QueryClientProvider client={queryClient}>
 				{/* Asset Loader */}
 				<WithAppAssetsContext>
-					{/* Rneui Custom Themes */}
-					<ThemeProvider>
-						<GestureHandlerRootView>
-							<KeyboardProvider>
-								<App />
-							</KeyboardProvider>
-						</GestureHandlerRootView>
-					</ThemeProvider>
+					<GestureHandlerRootView>
+						<KeyboardProvider>
+							<App />
+						</KeyboardProvider>
+					</GestureHandlerRootView>
 				</WithAppAssetsContext>
 			</QueryClientProvider>
 		</SQLiteProvider>

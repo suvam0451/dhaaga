@@ -1,9 +1,8 @@
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle, FlatList } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import { AnimatedFlashList } from '@shopify/flash-list';
 import { appDimensions } from '#/styles/dimensions';
 import useHideNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 
@@ -23,7 +22,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 	return (
 		<>
 			<NavBar_Simple label={label} animatedStyle={animatedStyle} />
-			<AnimatedFlashList
+			<FlatList
 				style={{
 					backgroundColor: theme.palette.bg,
 				}}

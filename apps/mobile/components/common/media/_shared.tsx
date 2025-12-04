@@ -1,14 +1,13 @@
 import { Image } from 'expo-image';
-import { Fragment, memo, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
-import { Dialog } from '@rneui/themed';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import {
+	useAppDialog,
+	useAppTheme,
+} from '#/hooks/utility/global-state-extractors';
 import { AppText } from '../../lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { appVerticalIndex } from '../../../styles/dimensions';
 
 type Props = {
 	url?: string;
@@ -33,7 +32,6 @@ export function AppImageComponent({
 				flex: 1,
 			}}
 		>
-			{/*@ts-ignore-next-line*/}
 			<Image
 				source={{ uri: url }}
 				style={{
@@ -44,7 +42,6 @@ export function AppImageComponent({
 					justifyContent: 'center',
 					flex: 1,
 				}}
-				objectFit="cover"
 			/>
 		</View>
 	);
@@ -87,7 +84,7 @@ export function AppAudioComponent({ url }: { url: string }) {
 			>
 				<AntDesign
 					// onPress={create}
-					name="play"
+					name="play-circle"
 					size={24}
 					color={theme.secondary.a20}
 				/>
@@ -99,7 +96,7 @@ export function AppAudioComponent({ url }: { url: string }) {
 	);
 }
 
-export const AppVideoComponent = memo(function Foo({
+export function AppVideoComponent({
 	url,
 	containerHeight,
 	containerWidth,
@@ -133,7 +130,6 @@ export const AppVideoComponent = memo(function Foo({
 		};
 	}, [player]);
 
-	console.log(containerWidth, containerHeight);
 	return (
 		<View style={[styles.contentContainer, { height: containerHeight }]}>
 			<VideoView
@@ -148,91 +144,50 @@ export const AppVideoComponent = memo(function Foo({
 			/>
 		</View>
 	);
-});
+}
 
 type AltTextDialogProps = {
 	altText?: string;
 };
 
-export const AltTextOverlay = memo(function Foo({
-	altText,
-}: AltTextDialogProps) {
+export function AltTextOverlay({ altText }: AltTextDialogProps) {
 	const { theme } = useAppTheme();
-	const [IsVisible, setIsVisible] = useState(false);
+	const { show } = useAppDialog();
+
+	function onClickAltText() {
+		show({
+			title: 'Alt Text',
+			description: [altText],
+			actions: [],
+		});
+	}
 	return (
-		<Fragment>
-			<View
-				style={{
-					position: 'absolute',
-					display: altText ? 'flex' : 'none',
-					top: '100%',
-				}}
-			>
-				<View style={{ position: 'relative' }}>
-					<Pressable
-						style={{
-							position: 'absolute',
-							top: -36,
-							left: 6,
-							backgroundColor: theme.palette.bg,
-							padding: 6,
-							borderRadius: 8,
-							opacity: 0.75,
-						}}
-						onPress={() => {
-							setIsVisible(true);
-						}}
-					>
-						<AppText.Medium style={{ fontSize: 13 }}>ALT</AppText.Medium>
-					</Pressable>
-				</View>
-			</View>
-			<Dialog
-				isVisible={IsVisible}
-				onBackdropPress={() => {
-					setIsVisible(false);
-				}}
-				overlayStyle={{
-					backgroundColor: theme.background.a20,
-					zIndex: appVerticalIndex.dialogContent,
-					borderRadius: 8,
-					maxWidth: '80%',
-				}}
-			>
-				<View
+		<View
+			style={{
+				position: 'absolute',
+				display: altText ? 'flex' : 'none',
+				top: '100%',
+			}}
+		>
+			<View style={{ position: 'relative' }}>
+				<Pressable
 					style={{
-						display: 'flex',
-						width: '100%',
-						flexDirection: 'row',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						marginBottom: 4,
+						position: 'absolute',
+						top: -36,
+						left: 6,
+						backgroundColor: theme.palette.bg,
+						padding: 6,
+						borderRadius: 8,
+						opacity: 0.75,
 					}}
+					onPress={onClickAltText}
 				>
-					<AppText.SemiBold
-						style={{
-							fontSize: 20,
-						}}
-					>
-						Alt Text
-					</AppText.SemiBold>
-
-					<View style={{ padding: 8, marginRight: -8, marginTop: -12 }}>
-						<MaterialCommunityIcons
-							name="text-to-speech"
-							size={28}
-							color={theme.secondary.a20}
-						/>
-					</View>
-				</View>
-
-				<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
-					{altText}
-				</AppText.Normal>
-			</Dialog>
-		</Fragment>
+					<AppText.Medium style={{ fontSize: 13 }}>ALT</AppText.Medium>
+				</Pressable>
+			</View>
+		</View>
 	);
-});
+}
 
 export function CarousalIndicatorOverlay({
 	index,

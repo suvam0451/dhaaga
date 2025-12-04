@@ -1,29 +1,29 @@
 {
-  "name": "@dhaaga/react",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/suvam0451/dhaaga",
-    "directory": "packages/react"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "dependencies": {
-    "@dhaaga/bridge": "*",
-    "@tanstack/react-query": "^5.89.0"
-  },
-  "devDependencies": {
-    "@testing-library/react": "^16.3.0",
-    "@vitejs/plugin-react": "^5.0.3",
-    "jsdom": "^27.2.0",
-    "vitest": "^4.0.14"
-  },
-  "peerDependencies": {
-    "react": ">=19.0.0"
-  },
-  "scripts": {
-    "build": "tsgo -p ./tsconfig.json",
-    "tsc": "tsc -p ./tsconfig.json",
-    "test": "vitest run"
-  },
-  "type": "module"
+	"name": "@dhaaga/react",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/suvam0451/dhaaga",
+		"directory": "packages/react"
+	},
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"dependencies": {
+		"@dhaaga/bridge": "*",
+		"@tanstack/react-query": "^5.89.0"
+	},
+	"devDependencies": {
+		"@testing-library/react": "^16.3.0",
+		"@vitejs/plugin-react": "^5.0.3",
+		"jsdom": "^27.2.0",
+		"vitest": "^4.0.15"
+	},
+	"peerDependencies": {
+		"react": ">=19.1.0"
+	},
+	"scripts": {
+		"build": "tsgo -p ./tsconfig.json",
+		"tsc": "tsc -p ./tsconfig.json",
+		"test": "vitest run"
+	},
+	"type": "module"
 }

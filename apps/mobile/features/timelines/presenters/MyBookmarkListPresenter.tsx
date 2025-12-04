@@ -18,8 +18,7 @@ import WithAppStatusItemContext from '#/components/containers/contexts/WithPostI
 import StatusItem from '#/components/common/status/StatusItem';
 import { appDimensions } from '#/styles/dimensions';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import { AnimatedFlashList } from '@shopify/flash-list';
-import { RefreshControl } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 import { countEmojisInBodyContent } from '@dhaaga/bridge/post-process';
@@ -82,7 +81,7 @@ function DataView() {
 	return (
 		<>
 			<NavBar_Simple label={'My Bookmarks'} animatedStyle={animatedStyle} />
-			<AnimatedFlashList
+			<FlatList
 				data={State.items}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>

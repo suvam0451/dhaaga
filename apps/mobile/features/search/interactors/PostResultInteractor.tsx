@@ -4,9 +4,8 @@ import {
 	PostTimelineStateAction,
 	usePostTimelineState,
 	usePostTimelineDispatch,
-	type SearchTabType,
 } from '@dhaaga/core';
-import { RefreshControl, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
 import Header from '../components/Header';
 import WithAppStatusItemContext from '../../../components/containers/contexts/WithPostItemContext';
@@ -15,7 +14,6 @@ import { useDiscoverState } from '@dhaaga/core';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
-import { FlashList } from '@shopify/flash-list';
 import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
 
 type ResultInteractorProps = {
@@ -87,7 +85,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				flex: 1,
 			}}
 		>
-			<FlashList
+			<FlatList
 				data={TimelineState.items}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>

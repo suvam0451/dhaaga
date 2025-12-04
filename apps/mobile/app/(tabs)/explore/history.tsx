@@ -1,10 +1,10 @@
-import { AnimatedFlashList } from '@shopify/flash-list';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import BrowsingHistoryEmpty from '#/components/svgs/BrowsingHistoryEmpty';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import { appDimensions } from '#/styles/dimensions';
+import { FlatList } from 'react-native';
 
 function Page() {
 	const history = [];
@@ -13,7 +13,7 @@ function Page() {
 	return (
 		<>
 			<NavBar_Simple label={'Search History'} animatedStyle={animatedStyle} />
-			<AnimatedFlashList
+			<FlatList
 				data={history}
 				onScroll={scrollHandler}
 				renderItem={({ item }) => <div>{item}</div>}
