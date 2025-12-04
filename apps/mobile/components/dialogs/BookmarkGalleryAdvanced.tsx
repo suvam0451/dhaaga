@@ -3,7 +3,6 @@ import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
 } from '../hooks/tasks/useSyncWithProgress';
 import { RneuiDialogProps } from './_types';
-import AppDialogContainer from '../containers/AppDialogContainer';
 import { ActivityIndicator, View, Text } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 
@@ -34,7 +33,7 @@ function BookmarkGalleryAdvanced({
 	}
 
 	return (
-		<AppDialogContainer IsVisible={IsVisible} setIsVisible={setIsVisible}>
+		<>
 			<AppButtonVariantA
 				label={'Sync Again'}
 				loading={IsTaskRunning}
@@ -69,7 +68,7 @@ function BookmarkGalleryAdvanced({
 					</View>
 				}
 			/>
-		</AppDialogContainer>
+		</>
 	);
 }
 

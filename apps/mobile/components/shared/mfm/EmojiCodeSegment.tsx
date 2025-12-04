@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
-import { Image } from 'expo-image';
+import { Image, ImageErrorEventData, ImageLoadEventData } from 'expo-image';
 import { RandomUtil } from '@dhaaga/bridge';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
@@ -10,6 +10,7 @@ import {
 } from '../../../utils/theming.util';
 import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 
 type Props = {
 	value: string;
@@ -23,12 +24,14 @@ const EMOJI_HEIGHT = 20;
 function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
 	const [ReactionData, setReactionData] =
 		useState<InstanceApi_CustomEmojiDTO>(null);
+	const [EmojiWidth, setEmojiWidth] = useState(EMOJI_HEIGHT);
 	const { theme } = useAppTheme();
 	const { acctManager } = useGlobalState(
 		useShallow((o) => ({
 			acctManager: o.acctManager,
 		})),
 	);
+	const { dto } = withPostItemContext();
 
 	let color = AppThemingUtil.getColorForEmphasis(
 		theme.complementaryB,
@@ -36,22 +39,19 @@ function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
 	);
 
 	const k = RandomUtil.nanoId();
-	const [Width, setWidth] = useState(EMOJI_HEIGHT);
 
 	useEffect(() => {
 		if (!acctManager) return;
-		const match = acctManager.resolveEmoji(value, emojiMap);
-		if (!match) return;
-		setReactionData(match);
+		setReactionData(acctManager.resolveEmoji(value, emojiMap));
+	}, [value]);
 
-		Image.loadAsync(match.url)
-			.then(({ width, height }) => {
-				setWidth(width * (EMOJI_HEIGHT / height));
-			})
-			.catch((e) => {
-				setWidth(EMOJI_HEIGHT);
-			});
-	}, [value, acctManager]);
+	function onLoad(event: ImageLoadEventData) {
+		setEmojiWidth(event.source.width * (EMOJI_HEIGHT / event.source.height));
+	}
+
+	function onError(event: ImageErrorEventData) {
+		setEmojiWidth(EMOJI_HEIGHT);
+	}
 
 	if (!ReactionData)
 		return (
@@ -61,16 +61,18 @@ function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
 		);
 
 	return (
-		<Fragment>
-			{/*@ts-ignore-next-line*/}
-			<Image
-				style={{
-					width: Width,
-					height: EMOJI_HEIGHT,
-				}}
-				source={{ uri: ReactionData.url }}
-			/>
-		</Fragment>
+		<Image
+			key={k}
+			style={{
+				width: EmojiWidth,
+				height: EMOJI_HEIGHT,
+			}}
+			onLoad={onLoad}
+			onError={onError}
+			source={{ uri: ReactionData.url }}
+			priority={'low'}
+			recyclingKey={value}
+		/>
 	);
 }
 

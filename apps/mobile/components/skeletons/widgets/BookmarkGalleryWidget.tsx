@@ -1,5 +1,4 @@
 import { View, StyleSheet } from 'react-native';
-import { Skeleton } from '@rneui/themed';
 
 function BookmarkGalleryWidgetSkeleton() {
 	return (
@@ -14,13 +13,13 @@ function BookmarkGalleryWidgetSkeleton() {
 			<View style={styles.container}>
 				<View style={{ display: 'flex', flexDirection: 'row' }}>
 					<View style={{ flexGrow: 1, height: 54, marginRight: 8 }}>
-						<Skeleton style={styles.skeletonContainer} />
+						<View style={styles.skeletonContainer} />
 					</View>
 					<View style={{ height: 54, width: 72 }}>
-						<Skeleton style={styles.skeletonContainer} />
+						<View style={styles.skeletonContainer} />
 					</View>
 				</View>
-				<Skeleton
+				<View
 					style={{
 						height: 64,
 						borderRadius: 8,
@@ -28,7 +27,7 @@ function BookmarkGalleryWidgetSkeleton() {
 					}}
 				/>
 
-				<Skeleton
+				<View
 					style={{
 						height: 48,
 						borderRadius: 8,

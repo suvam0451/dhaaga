@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AppToggleIcon } from '../../../../lib/Icon';
-import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
+import { withPostItemContext } from '../../../../containers/contexts/WithPostItemContext';
 import {
 	useAppPublishers,
 	useAppTheme,
@@ -12,7 +12,7 @@ import { Pressable } from 'react-native';
  * Like toggle button
  */
 function PostActionButtonToggleLike() {
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { postPub } = useAppPublishers();
 	const [IsLoading, setIsLoading] = useState(false);

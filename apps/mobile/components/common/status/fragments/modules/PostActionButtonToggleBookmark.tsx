@@ -4,7 +4,7 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../../hooks/utility/global-state-extractors';
-import { useAppStatusItem } from '../../../../../hooks/ap-proto/useAppStatusItem';
+import { withPostItemContext } from '../../../../containers/contexts/WithPostItemContext';
 import { AppToggleIcon } from '../../../../lib/Icon';
 import { appDimensions } from '../../../../../styles/dimensions';
 import { ActivityPubService } from '@dhaaga/bridge';
@@ -15,7 +15,7 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
  */
 function PostActionButtonToggleBookmark() {
 	const { driver } = useAppApiClient();
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 	const { postPub } = useAppPublishers();

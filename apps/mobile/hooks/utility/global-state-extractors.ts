@@ -115,6 +115,15 @@ export function useAppPublishers() {
 	);
 }
 
+export function useImageInspect() {
+	return useGlobalState(
+		useShallow((o) => ({
+			showInspector: o.imageInspectModal.show,
+			appSession: o.appSession,
+		})),
+	);
+}
+
 export function useAppBottomSheet() {
 	return useGlobalState(
 		useShallow((o) => ({

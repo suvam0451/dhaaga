@@ -10,7 +10,7 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
 import { AppToggleIcon } from '../../../lib/Icon';
 import { appDimensions } from '../../../../styles/dimensions';
 import { ActivityPubService } from '@dhaaga/bridge';
@@ -22,7 +22,7 @@ import PostStats from '#/components/common/status/PostStats';
  * Press this to toggle sharing status
  */
 function ShareButton() {
-	const { dto: item } = useAppStatusItem();
+	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postPub } = useAppPublishers();
 	const { theme } = useAppTheme();
@@ -63,7 +63,7 @@ function ShareButton() {
  * Press this to toggle like
  */
 function LikeButton() {
-	const { dto: item } = useAppStatusItem();
+	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postPub } = useAppPublishers();
 	const { theme } = useAppTheme();
@@ -102,7 +102,7 @@ function LikeButton() {
  * Press this to open composer (reply mode)
  */
 function CommentButton() {
-	const { dto: item } = useAppStatusItem();
+	const { dto: item } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 
@@ -130,7 +130,7 @@ function CommentButton() {
 }
 
 function ReactButton() {
-	const { dto: item } = useAppStatusItem();
+	const { dto: item } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 
@@ -154,7 +154,7 @@ function ReactButton() {
 }
 
 function SettingsButton() {
-	const { dto: item } = useAppStatusItem();
+	const { dto: item } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 	const { acct } = useAppAcct();
@@ -207,7 +207,7 @@ function StatusInteractionButtons() {
 }
 
 function StatusInteraction() {
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 	const _dto = PostInspector.getContentTarget(dto);
 	return (
 		<View>

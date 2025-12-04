@@ -5,7 +5,7 @@ import WithAutoHideTopNavBar from '../../../../../components/containers/WithAuto
 import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
 import { RefetchOptions } from '@tanstack/react-query';
 import { appDimensions } from '../../../../../styles/dimensions';
-import WithAppStatusItemContext from '../../../../../hooks/ap-proto/useAppStatusItem';
+import WithAppStatusItemContext from '../../../../../components/containers/contexts/WithPostItemContext';
 import StatusItem from '../../../../../components/common/status/StatusItem';
 import PostCommentThreadControls from './PostCommentThreadControls';
 import ReplyItemPresenter from './ReplyItemPresenter';

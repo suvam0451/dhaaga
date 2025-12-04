@@ -1,24 +1,23 @@
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getLinkPreview } from 'link-preview-js';
 import AppLoadingIndicator from '../../error-screen/AppLoadingIndicator';
 import ReadMoreText from '../../utils/ReadMoreText';
-import { OpenGraphUtil } from '../../../utils/og.utils';
+import { OpenGraphUtil } from '#/utils/og.utils';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { AppMenu } from '../../lib/Menu';
 import { AppIcon } from '../../lib/Icon';
 import { AppDivider } from '../../lib/Divider';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { LinkingUtils } from '../../../utils/linking.utils';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { LinkingUtils } from '#/utils/linking.utils';
 import {
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../styles/dimensions';
+} from '#/hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type OpenGraphParsingState = {
 	key: string | null;
@@ -107,26 +106,6 @@ function ABS_Link_Preview() {
 
 	async function parse() {
 		if (!ctx?.linkUrl) return;
-		getLinkPreview(ctx?.linkUrl)
-			.then((res) => {
-				setOpenGraph({
-					key: ctx?.linkUrl,
-					parsed: true,
-					loading: false,
-					og: res as any,
-				});
-			})
-			.catch((e) => {
-				setOpenGraph({
-					key: ctx?.linkUrl,
-					parsed: false,
-					loading: false,
-					og: null,
-				});
-			})
-			.finally(() => {
-				ValueRef.current = ctx?.linkUrl;
-			});
 	}
 
 	useEffect(() => {

@@ -121,6 +121,7 @@ const ActivityPubStatusItemDto = z.object({
 				acct: z.string().optional().nullable(),
 			}),
 		),
+		customEmojiCount: z.number().optional(),
 	}),
 	meta: z.object({
 		sensitive: z.boolean(),

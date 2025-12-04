@@ -40,6 +40,12 @@ type Props = {
 	children: any;
 };
 
+/**
+ * @deprecated to be removed in favor of loading the
+ * assets at runtime, for a faster initial loading time
+ * @param children
+ * @constructor
+ */
 function WithAppAssetsContext({ children }: Props) {
 	const [assets, error] = useAssets([
 		require('../../assets/branding/akomma/logo.png'), // 0

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { PostObjectType } from '@dhaaga/bridge';
-import { useAppPublishers } from '../utility/global-state-extractors';
+import { useAppPublishers } from '../../../hooks/utility/global-state-extractors';
 
 type Type = {
 	dto: PostObjectType;
@@ -16,29 +16,42 @@ const AppStatusItemContext = createContext<Type>(defaultValue);
  * A leaner version of StatusInterface
  * passed around for efficient updates
  */
-export const useAppStatusItem = () => useContext(AppStatusItemContext);
+export const withPostItemContext = () => useContext(AppStatusItemContext);
 
 type Props = {
 	children: any;
 	dto: PostObjectType;
 };
 
+/**
+ * A context provider for a timeline post
+ * item.
+ *
+ * - Makes the post-object available to children
+ * - Subscribes to updates against a post in the global store
+ *
+ * @param children
+ * @param dto
+ * @constructor
+ */
 function WithAppStatusItemContext({ children, dto }: Props) {
 	const { postPub } = useAppPublishers();
-	const [Post, setPost] = useState(postPub?.addIfNotExist(dto?.uuid, dto));
+	const [Post, setPost] = useState(null);
 
-	function onSubscription({ uuid }) {
+	function onUpdate({ uuid }) {
 		setPost(postPub.readCache(uuid));
 	}
 
 	useEffect(() => {
 		if (!dto || !postPub) return;
-		setPost(postPub.addIfNotExist(dto.uuid, dto));
-		postPub.subscribe(dto.uuid, onSubscription);
-		return () => {
-			postPub.unsubscribe(dto.uuid, onSubscription);
-		};
-	}, [dto?.uuid]);
+		setPost(dto);
+		// postPub?.addIfNotExist(dto?.uuid, dto);
+		// setPost(postPub.addIfNotExist(dto.uuid, dto));
+		// postPub.subscribe(dto.uuid, onUpdate);
+		// return () => {
+		// 	postPub.unsubscribe(dto.uuid, onUpdate);
+		// };
+	}, [dto]);
 
 	return (
 		<AppStatusItemContext.Provider

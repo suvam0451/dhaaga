@@ -4,9 +4,9 @@ import {
 	StyleSheet,
 	View,
 	ViewStyle,
+	TouchableOpacity,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRef } from 'react';
 import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
 import {
@@ -14,7 +14,7 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '../../../../hooks/utility/global-state-extractors';
-import { useAppStatusItem } from '../../../../hooks/ap-proto/useAppStatusItem';
+import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
 import useAppNavigator from '../../../../states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
@@ -151,7 +151,6 @@ export function SavedPostCreatedBy({
 					alignItems: 'center',
 					flexDirection: 'row',
 					flexGrow: 1,
-					overflowX: 'hidden',
 					width: 'auto',
 					position: 'relative',
 				},
@@ -204,7 +203,7 @@ type OriginalPosterProps = {
  */
 function PostCreatedBy({ style }: OriginalPosterProps) {
 	const { show, setCtx } = useAppBottomSheet();
-	const { dto } = useAppStatusItem();
+	const { dto } = withPostItemContext();
 	const STATUS_DTO = PostInspector.getContentTarget(dto);
 	const { toProfile } = useAppNavigator();
 	const { driver } = useAppApiClient();
@@ -279,7 +278,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'row',
 		flexGrow: 1,
-		overflowX: 'hidden',
 		width: 'auto',
 		position: 'relative',
 	}, // with border decoration

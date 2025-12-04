@@ -1,3 +1,3 @@
-import Page from '../../../features/timelines/Timeline';
+import Page from '#/features/timelines/Timeline';
 
 export default Page;

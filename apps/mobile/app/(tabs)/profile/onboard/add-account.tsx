@@ -1,29 +1,30 @@
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import AppTopNavbar from '../../../../components/shared/topnavbar/AppTopNavbar';
-import { AddAccountLandingFragment } from '../../../../features/onboarding/presenters/AddAccountPresenter';
+import { AddAccountLandingFragment } from '#/features/onboarding/presenters/AddAccountPresenter';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { Alert, View } from 'react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { useAssets } from 'expo-asset';
 import {
 	OnboardingSignInBanner,
 	OnboardingSignInButton,
-} from '../../../../components/onboarding/OnboardingSignInBanner';
-import { LinkingUtils } from '../../../../utils/linking.utils';
+} from '#/components/onboarding/OnboardingSignInBanner';
+import { LinkingUtils } from '#/utils/linking.utils';
 import { useAtProtoAuth, useDhaagaAuthFormControl } from '@dhaaga/react';
-import { AppFormTextInput } from '../../../../components/lib/FormInput';
+import { AppFormTextInput } from '#/components/lib/FormInput';
 import {
 	useAppAcct,
 	useAppDb,
 	useAppGlobalStateActions,
 	useAppManager,
-} from '../../../../hooks/utility/global-state-extractors';
+	useAppTheme,
+} from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { AccountService } from '@dhaaga/db';
-import AccountDbService from '../../../../services/db/account-db.service';
+import AccountDbService from '#/services/db/account-db.service';
 import { BackHandler } from 'react-native';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import { appDimensions } from '#/styles/dimensions';
 
 function AtProto() {
 	const {
@@ -184,6 +185,7 @@ function MiAuth() {
 }
 
 export function AppAuthenticationPager() {
+	const { theme } = useAppTheme();
 	const [assets, error] = useAssets([
 		require('../../../../assets/dhaaga/icon.png'),
 		require('../../../../assets/branding/bluesky/logo.png'),
@@ -242,7 +244,13 @@ export function AppAuthenticationPager() {
 	if (error || !assets) return <View />;
 
 	return (
-		<View style={{ marginTop: 24 }}>
+		<View
+			style={{
+				paddingTop: appDimensions.topNavbar.height + 24,
+				backgroundColor: theme.background.a0,
+				flex: 1,
+			}}
+		>
 			<OnboardingSignInBanner
 				titleText={t(`onboarding.enterYourServer`)}
 				descText={'Find one here'}
@@ -260,12 +268,11 @@ export function AppAuthenticationPager() {
 }
 
 function Page() {
-	const { translateY } = useScrollMoreOnPageEnd();
-
 	return (
-		<AppTopNavbar title={'Add Account'} translateY={translateY}>
+		<>
+			<NavBar_Simple label={'Add Account'} />
 			<AppAuthenticationPager />
-		</AppTopNavbar>
+		</>
 	);
 }
 
