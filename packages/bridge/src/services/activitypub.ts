@@ -145,7 +145,7 @@ class ActivitypubHelper {
 		const controllerA = new AbortController();
 		const controllerB = new AbortController();
 		const timeoutA = setTimeout(() => controllerA.abort(), 5000);
-		let timeoutB: number | null = null;
+		let timeoutB: NodeJS.Timeout | null = null;
 
 		try {
 			const result = await fetch(
