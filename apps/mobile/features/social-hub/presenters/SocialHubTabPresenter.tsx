@@ -17,7 +17,7 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
 import FeedListPresenter from './FeedListPresenter';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
-import Header from '../components/Header';
+import NavBar_Hub from '#/components/shared/topnavbar/NavBar_Hub';
 import {
 	ProfileService,
 	ProfilePinnedUserService,
@@ -330,7 +330,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			>
-				<Header acct={parentAcct} />
+				<NavBar_Hub acct={parentAcct} />
 
 				{/* --- Pinned Timelines --- */}
 				<FeedListPresenter

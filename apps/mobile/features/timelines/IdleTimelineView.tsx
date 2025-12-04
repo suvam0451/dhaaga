@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
-import TimelinesHeader from '#/components/shared/topnavbar/fragments/TopNavbarTimelineStack';
+import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
@@ -18,7 +18,7 @@ function IdleTimelineView() {
 			style={{ flex: 1, backgroundColor: theme.background.a0, paddingTop: 52 }}
 		>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<TimelinesHeader />
+				<NavBar_Feed animatedStyle={{}} />
 			</Animated.View>
 			<ErrorPageBuilder
 				stickerArt={<BearError />}
@@ -29,7 +29,7 @@ function IdleTimelineView() {
 			/>
 			<View style={{ marginTop: 32 }}>
 				<AppButtonVariantA
-					label={'To Hub'}
+					label={'Go There'}
 					loading={false}
 					onClick={() => {
 						router.navigate('/');

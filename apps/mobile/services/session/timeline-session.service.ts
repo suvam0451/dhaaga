@@ -4,7 +4,6 @@ import {
 	PostTimelineDispatchType,
 	PostTimelineStateAction,
 } from '@dhaaga/core';
-import { Result } from '../../utils/result';
 import { ActivityPubService } from '@dhaaga/bridge';
 
 export class TimelineSessionService {
@@ -38,9 +37,9 @@ export class TimelineSessionService {
 	async toggleLike(
 		draft: PostTimelineStateType,
 		key: string,
-	): Promise<Result<undefined>> {
+	): Promise<undefined> {
 		const match = this.findById(draft, key);
-		if (!match) return { type: 'error', error: new Error('E_Not_Found') };
+		if (!match) throw new Error('E_Not_Found');
 
 		try {
 			const response = await ActivityPubService.toggleLike(
@@ -57,10 +56,9 @@ export class TimelineSessionService {
 					},
 				});
 			}
-			return { type: 'success' };
 		} catch (e) {
 			console.log('[WARN] could not toggle like', e);
-			return { type: 'error', error: new Error(e) };
+			throw new Error(e);
 		}
 	}
 

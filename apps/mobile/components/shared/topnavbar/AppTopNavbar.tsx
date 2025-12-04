@@ -1,16 +1,12 @@
 import { ReactNode } from 'react';
-import { Animated, ScrollView, StyleProp, ViewStyle } from 'react-native';
+import { ScrollView, StyleProp, ViewStyle, View } from 'react-native';
 import TopNavbarGeneric from './fragments/TopNavbarGeneric';
-import TopNavbarLandingGeneric from './fragments/TopNavbarLandingGeneric';
-import TimelinesHeader from './fragments/TopNavbarTimelineStack';
-import NotificationsHeader from './fragments/TopNavbarNotificationStack';
-import TopNavbarProfilePage from './fragments/TopNavbarProfilePage';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import Animated from 'react-native-reanimated';
 
 export enum APP_TOPBAR_TYPE_ENUM {
 	GENERIC,
 	TIMELINE,
-	LANDING_GENERIC,
 	NOTIFICATION_CENTER,
 	PROFILE,
 	APP_SETTINGS,
@@ -42,25 +38,13 @@ function AppTopNavbar({
 		case APP_TOPBAR_TYPE_ENUM.GENERIC:
 			Header = <TopNavbarGeneric title={title} />;
 			break;
-		case APP_TOPBAR_TYPE_ENUM.LANDING_GENERIC:
-			Header = <TopNavbarLandingGeneric title={title} />;
-			break;
-		case APP_TOPBAR_TYPE_ENUM.TIMELINE:
-			Header = <TimelinesHeader />;
-			break;
-		case APP_TOPBAR_TYPE_ENUM.NOTIFICATION_CENTER:
-			Header = <NotificationsHeader />;
-			break;
-		case APP_TOPBAR_TYPE_ENUM.PROFILE:
-			Header = <TopNavbarProfilePage title={title} />;
-			break;
 		default:
 			Header = <TopNavbarGeneric title={title} />;
 			break;
 	}
 
 	return (
-		<Animated.View
+		<View
 			style={{
 				backgroundColor: theme.palette.bg,
 				height: '100%',
@@ -92,7 +76,7 @@ function AppTopNavbar({
 			>
 				{children}
 			</ScrollView>
-		</Animated.View>
+		</View>
 	);
 }
 

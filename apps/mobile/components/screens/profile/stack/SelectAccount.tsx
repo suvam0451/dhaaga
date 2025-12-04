@@ -78,7 +78,7 @@ function SelectAccountStack() {
 					{
 						iconId: 'user-guide',
 						onPress: () => {
-							router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
+							router.navigate(APP_ROUTING_ENUM.PROFILE_GUIDE_ACCOUNTS);
 						},
 					},
 				]}

@@ -17,9 +17,9 @@ export const appDimensions = {
 	topNavbar: {
 		iconSize: 26,
 		padding: 6,
-		marginLeft: 4,
+		marginLeft: 6,
 		height: 52, // 44
-		scrollViewTopPadding: 44 + 2,
+		scrollViewTopPadding: 52,
 	},
 	bottomSheet: {
 		borderRadius: 16,

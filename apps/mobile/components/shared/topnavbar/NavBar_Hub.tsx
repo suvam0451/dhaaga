@@ -2,7 +2,7 @@ import { Account } from '@dhaaga/db';
 import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '../../../styles/dimensions';
-import { AppIcon } from '../../../components/lib/Icon';
+import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ import Animated, {
 	FadeInLeft,
 	FlipOutXUp,
 } from 'react-native-reanimated';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '../../lib/Text';
 import { APP_FONTS } from '../../../styles/AppFonts';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
@@ -79,7 +79,7 @@ function SocialHubHeader({ acct }: Props) {
 							id={iconId as any}
 							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 							onPress={onPress}
-							size={appDimensions.topNavbar.iconSize}
+							size={appDimensions.topNavbar.iconSize + 6}
 						/>
 					</Pressable>
 				))}

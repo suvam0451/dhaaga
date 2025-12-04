@@ -7,8 +7,13 @@ import { appDimensions } from '../../../styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import { Ionicons } from '@expo/vector-icons';
-import Dropdown from '#/components/shared/topnavbar/Dropdown';
+import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
 import { useState } from 'react';
+import {
+	TOP_NAVBAR_BOTTOM_PADDING,
+	TOP_NAVBAR_MENU_ICON_SIZE,
+	TOP_NAVBAR_TOP_PADDING,
+} from '#/components/shared/topnavbar/settings';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -38,6 +43,9 @@ type AppTabLandingNavbarProps = {
 		onPress?: () => void;
 		disabled?: boolean;
 	}[];
+	hasDropdown?: boolean;
+	dropdownSelectedId?: string;
+	dropdownItems?: { id: string; label: string; onSelect: () => void }[];
 };
 
 /**
@@ -45,7 +53,13 @@ type AppTabLandingNavbarProps = {
  * landing pages for each of the five
  * main routes
  */
-function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
+function AppTabLandingNavbar({
+	type,
+	menuItems,
+	hasDropdown,
+	dropdownSelectedId,
+	dropdownItems,
+}: AppTabLandingNavbarProps) {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const navbarLabel: Record<APP_LANDING_PAGE_TYPE, string> = {
 		[APP_LANDING_PAGE_TYPE.HOME]: 'Home',
@@ -66,50 +80,39 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 		[APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS]: 'My Accounts',
 	};
 
+	const NAVBAR_LABEL = hasDropdown
+		? dropdownItems.find((i) => i.id === dropdownSelectedId)?.label
+		: navbarLabel[type];
+
 	const [DropdownOpen, setDropdownOpen] = useState(false);
 
 	function toggleDropdown() {
 		setDropdownOpen((o) => !o);
 	}
+
+	function closeDropdown() {
+		setDropdownOpen(false);
+	}
+
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
-				<View style={{ flexGrow: 1 }}>
-					<Pressable
-						style={{
-							flexDirection: 'row',
-							alignItems: 'center',
-							position: 'relative',
-							// zIndex: 99,
-						}}
-						onPress={toggleDropdown}
-					>
-						<View
-							style={{
-								position: 'relative',
-								height: '100%',
-								backgroundColor: 'red',
-							}}
-						></View>
-						<AppText.H1>{navbarLabel[type]}</AppText.H1>
+				<Pressable style={styles.labelArea} onPress={toggleDropdown}>
+					<AppText.H1>{NAVBAR_LABEL}</AppText.H1>
+					{hasDropdown ? (
 						<Ionicons
 							name="chevron-down"
 							style={{ marginLeft: 6, paddingTop: 4 }}
 							size={24}
 							color={'white'}
 						/>
-					</Pressable>
-				</View>
+					) : (
+						<View />
+					)}
+				</Pressable>
 				<View style={{ flexDirection: 'row' }}>
 					{menuItems.map(({ iconId, disabled, onPress }, i) => (
-						<Pressable
-							key={i}
-							style={{
-								padding: appDimensions.topNavbar.padding,
-								marginLeft: appDimensions.topNavbar.marginLeft,
-							}}
-							onPress={onPress}
-						>
+						<Pressable key={i} style={styles.menuButton} onPress={onPress}>
 							<AppIcon
 								id={iconId}
 								emphasis={
@@ -118,16 +121,21 @@ function AppTabLandingNavbar({ type, menuItems }: AppTabLandingNavbarProps) {
 										: APP_COLOR_PALETTE_EMPHASIS.A10
 								}
 								onPress={onPress}
-								size={appDimensions.topNavbar.iconSize}
+								size={TOP_NAVBAR_MENU_ICON_SIZE}
 							/>
 						</Pressable>
 					))}
 				</View>
 			</View>
-			<Dropdown
-				isOpen={DropdownOpen}
-				items={[{ label: 'All' }, { label: 'Posts' }, { label: 'Users' }]}
-			/>
+			{hasDropdown ? (
+				<NavBar_Explore
+					isOpen={DropdownOpen}
+					close={closeDropdown}
+					items={dropdownItems!}
+				/>
+			) : (
+				<View />
+			)}
 		</View>
 	);
 }
@@ -137,13 +145,24 @@ export default AppTabLandingNavbar;
 const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 12,
-		paddingVertical: 16,
-		alignItems: 'center',
 		width: '100%',
-		zIndex: 2000,
+		zIndex: 1,
 	},
 	headerText: {
 		fontSize: 28,
 		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
+	},
+	labelArea: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		position: 'relative',
+		flexGrow: 1,
+		paddingVertical: TOP_NAVBAR_TOP_PADDING,
+	},
+	menuButton: {
+		padding: appDimensions.topNavbar.padding,
+		marginLeft: appDimensions.topNavbar.marginLeft,
+		paddingTop: TOP_NAVBAR_TOP_PADDING,
+		paddingBottom: TOP_NAVBAR_BOTTOM_PADDING,
 	},
 });

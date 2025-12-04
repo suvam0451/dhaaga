@@ -103,7 +103,7 @@ function ComposerLandingPage() {
 							{
 								iconId: 'user-guide',
 								onPress: () => {
-									router.navigate(APP_ROUTING_ENUM.GUIDE_COMPOSER);
+									router.navigate(APP_ROUTING_ENUM.EXPLORE_GUIDE);
 								},
 							},
 						]}

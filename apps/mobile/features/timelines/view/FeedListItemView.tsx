@@ -23,7 +23,7 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 
 	function onPressFeed() {
 		router.navigate({
-			pathname: APP_ROUTING_ENUM.DISCOVER_FEED,
+			pathname: APP_ROUTING_ENUM.EXPLORE_FEED,
 			params: {
 				uri: item.uri,
 				displayName: item.displayName,

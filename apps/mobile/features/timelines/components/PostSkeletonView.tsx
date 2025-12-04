@@ -2,7 +2,7 @@ import { Animated, FlatList, StyleSheet, View } from 'react-native';
 import { Skeleton } from '../../../ui/Skeleton';
 import { useState } from 'react';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import TimelinesHeader from '../../../components/shared/topnavbar/fragments/TopNavbarTimelineStack';
+import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { appDimensions } from '../../../styles/dimensions';
 
@@ -55,7 +55,7 @@ function PostTimelinePlaceholderView() {
 			]}
 		>
 			<Animated.View style={[styles.header, { transform: [{ translateY }] }]}>
-				<TimelinesHeader />
+				<NavBar_Feed animatedStyle={{}} />
 			</Animated.View>
 			<FlatList
 				data={Array(NumNodes).fill(null)}

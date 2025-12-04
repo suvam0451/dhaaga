@@ -50,6 +50,8 @@ export type APP_ICON_ENUM =
 	| 'chevron-right'
 	| 'chevron-down'
 	| 'chevron-down-circle'
+	| 'chevron-collapse-outline'
+	| 'chevron-expand-outline'
 	| 'cloud-upload-outline'
 	| 'close'
 	| 'close-outline'
@@ -65,7 +67,9 @@ export type APP_ICON_ENUM =
 	| 'eye'
 	| 'eye-filled'
 	| 'eye-off-filled'
+	| 'filter-outline'
 	| 'flash'
+	| 'funnel-outline'
 	| 'gallery'
 	| 'globe'
 	| 'heart'
@@ -83,6 +87,7 @@ export type APP_ICON_ENUM =
 	| 'more-options-vertical'
 	| 'musical-notes-outline'
 	| 'newspaper'
+	| 'notifications-outline'
 	| 'no-account'
 	| 'palette'
 	| 'person-outline'
@@ -518,6 +523,24 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'chevron-collapse-outline':
+				return (
+					<Ionicons
+						name="chevron-collapse-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'chevron-expand-outline':
+				return (
+					<Ionicons
+						name="chevron-expand-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'cloud-upload-outline':
 				return (
 					<Ionicons
@@ -653,10 +676,28 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'filter-outline':
+				return (
+					<Ionicons
+						name={'filter-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'flash':
 				return (
 					<Ionicons
 						name="flash"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'funnel-outline':
+				return (
+					<Ionicons
+						name="funnel-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -818,6 +859,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'notifications-outline':
+				return (
+					<Ionicons
+						name="notifications-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'palette':
 				return (
 					<Ionicons
@@ -954,7 +1004,12 @@ export function AppIcon({
 				);
 			case 'time-outline':
 				return (
-					<Ionicons name="time-outline" size={64} color={theme.secondary.a30} />
+					<Ionicons
+						name="time-outline"
+						size={_size - 1}
+						color={_color}
+						style={iconStyle}
+					/>
 				);
 
 			case 'trash':

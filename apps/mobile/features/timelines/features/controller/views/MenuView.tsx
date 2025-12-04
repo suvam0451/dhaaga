@@ -1,7 +1,7 @@
-import { AppMenu } from '../../../../../components/lib/Menu';
-import { AppIcon } from '../../../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
-import { Fragment } from 'react';
+import { View } from 'react-native';
+import { AppMenu } from '#/components/lib/Menu';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 
 type Props = {
 	onOpenInBrowser: () => void;
@@ -9,7 +9,7 @@ type Props = {
 
 function MenuView({ onOpenInBrowser }: Props) {
 	return (
-		<Fragment>
+		<View style={{ paddingHorizontal: 10 }}>
 			<AppMenu.Option
 				appIconId={
 					<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
@@ -65,7 +65,7 @@ function MenuView({ onOpenInBrowser }: Props) {
 			{/*	label={'Switch Timeline'}*/}
 			{/*	onPress={() => {}}*/}
 			{/*/>*/}
-		</Fragment>
+		</View>
 	);
 }
 

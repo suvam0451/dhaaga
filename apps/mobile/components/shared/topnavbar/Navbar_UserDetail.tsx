@@ -10,7 +10,7 @@ type UserViewNavbarProps = {
 	acct: UserObjectType;
 };
 
-function UserViewNavbar({}: UserViewNavbarProps) {
+function Navbar_UserDetail({}: UserViewNavbarProps) {
 	const MENU_ITEMS = [
 		{
 			iconId: 'cog' as APP_ICON_ENUM,
@@ -72,7 +72,7 @@ function UserViewNavbar({}: UserViewNavbarProps) {
 	);
 }
 
-export default UserViewNavbar;
+export default Navbar_UserDetail;
 
 const styles = StyleSheet.create({
 	container: {

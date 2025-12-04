@@ -14,7 +14,7 @@ const END_OF_CONTAINER_SCROLL_THRESHOLD = 40;
  * @param height
  * @param onEndReached
  */
-function useAutoHideTopNavOnScroll(
+function useHideTopNavUsingReanimated(
 	onEndReached: () => void = () => {},
 	height: number = 52,
 ) {
@@ -26,7 +26,7 @@ function useAutoHideTopNavOnScroll(
 	const scrollHandler = useAnimatedScrollHandler({
 		onScroll: (event) => {
 			/**
-			 * handle reaching bottom of the container
+			 * handle reaching the bottom of the container
 			 */
 			const { layoutMeasurement, contentOffset, contentSize } = event;
 			if (
@@ -72,4 +72,4 @@ function useAutoHideTopNavOnScroll(
 	return { scrollHandler, animatedStyle };
 }
 
-export default useAutoHideTopNavOnScroll;
+export default useHideTopNavUsingReanimated;

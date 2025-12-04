@@ -52,7 +52,7 @@ function getSearchTabs(driver: KNOWN_SOFTWARE | string): SearchTabType[] {
 	} else if (DriverService.supportsMisskeyApi(driver)) {
 		return ['posts', 'users'];
 	} else if (driver === KNOWN_SOFTWARE.MASTODON) {
-		return ['posts', 'users', 'tags', 'news'];
+		return ['posts', 'tags', 'users']; // news
 	} else if (DriverService.supportsPleromaApi(driver)) {
 		return ['posts', 'users'];
 	} else {
