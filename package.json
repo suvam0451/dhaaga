@@ -60,8 +60,7 @@
 	"type": "module",
 	"overrides": {
 		"react": "19.1.0",
-		"react-dom": "19.1.0",
-		"react-native-safe-area-context": "~5.6.0"
+		"react-dom": "19.1.0"
 	},
 	"devDependencies": {
 		"@typescript/native-preview": "^7.0.0-dev.20251204.1",
