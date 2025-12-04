@@ -18,6 +18,8 @@ jobs:
         run: echo "Package version is $VERSION"
       - run: npm install # Install dependencies
       - run: npm run build-deps
+      - run: npm uninstall expo-dev-client
+        working-directory: ./apps/mobile
       - uses: expo/expo-github-action@v8 # setup EAS
         with:
           eas-version: latest
