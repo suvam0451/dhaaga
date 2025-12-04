@@ -3,6 +3,25 @@ import { ExpoConfig, ConfigContext } from '@expo/config';
 const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
 
+const NONFREE_DEPS: ([] | [string] | [string, any])[] =
+	BUNDLE_ID === 'io.suvam.dhaaga.lite'
+		? []
+		: [
+				[
+					'expo-notifications',
+					{
+						icon: './local/assets/notification_icon.png',
+						color: '#ffffff',
+						defaultChannel: 'default',
+						sounds: [
+							'./local/assets/notification_sound.wav',
+							'./local/assets/notification_sound_other.wav',
+						],
+						enableBackgroundRemoteNotifications: false,
+					},
+				],
+			];
+
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
@@ -137,6 +156,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				],
 			},
 		],
+		...NONFREE_DEPS,
 	],
 });
 
