@@ -1,22 +1,13 @@
 import { AccountRoute } from '../_router/routes/_index.js';
 import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-	successWithData,
-} from '../_router/dto/api-responses.dto.js';
-import { MastoErrorHandler, MastojsHandler } from '../_router/_runner.js';
-import {
 	AccountMutePostDto,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import {
-	LibraryPromise,
-	PaginatedLibraryPromise,
-} from '../_router/routes/_types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { PaginatedPromise } from '../_router/routes/_types.js';
 import {
 	MastoAccount,
 	MastoFamiliarFollowers,
@@ -24,12 +15,9 @@ import {
 	MastoList,
 	MastoRelationship,
 	MastoStatus,
-} from '../../../types/mastojs.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
-import { ApiAsyncResult } from '../../../utils/api-result.js';
-import { Err, Ok } from '../../../utils/index.js';
-import { DriverWebfingerType } from '../../../types/query.types.js';
+} from '#/types/mastojs.types.js';
+import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { DriverWebfingerType } from '#/types/query.types.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;
@@ -40,80 +28,54 @@ export class MastodonAccountsRouter implements AccountRoute {
 		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
-	async lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MastoAccount> {
-		try {
-			const data = await this.client.lib.v1.accounts.lookup({
-				acct: webfinger.host
-					? `${webfinger.username}@${webfinger.host}`
-					: webfinger.username,
-			});
-			return Ok(data);
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async lookup(webfinger: DriverWebfingerType): Promise<MastoAccount> {
+		return await this.client.lib.v1.accounts.lookup({
+			acct: webfinger.host
+				? `${webfinger.username}@${webfinger.host}`
+				: webfinger.username,
+		});
 	}
 
-	async follow(
-		id: string,
-		opts: FollowPostDto,
-	): Promise<LibraryResponse<MastoRelationship>> {
-		const fn = this.client.lib.v1.accounts.$select(id).follow;
-		return await MastojsHandler(await MastoErrorHandler(fn, [opts]));
+	async follow(id: string, opts: FollowPostDto): Promise<MastoRelationship> {
+		return this.client.lib.v1.accounts.$select(id).follow(opts);
 	}
 
-	async unfollow(id: string): Promise<LibraryResponse<MastoRelationship>> {
-		const fn = this.client.lib.v1.accounts.$select(id).unfollow;
-		return await MastojsHandler(await MastoErrorHandler(fn));
+	async unfollow(id: string): Promise<MastoRelationship> {
+		return this.client.lib.v1.accounts.$select(id).unfollow();
 	}
 
-	async block(id: string): Promise<LibraryResponse<MastoRelationship>> {
-		const fn = this.client.lib.v1.accounts.$select(id).block;
-		return await MastojsHandler(await MastoErrorHandler(fn));
+	async block(id: string): Promise<MastoRelationship> {
+		return this.client.lib.v1.accounts.$select(id).block();
 	}
 
-	async unblock(id: string): Promise<LibraryResponse<MastoRelationship>> {
-		const fn = this.client.lib.v1.accounts.$select(id).unblock;
-		return await MastojsHandler(await MastoErrorHandler(fn));
+	async unblock(id: string): Promise<MastoRelationship> {
+		return this.client.lib.v1.accounts.$select(id).unblock();
 	}
 
-	async mute(
-		id: string,
-		opts: AccountMutePostDto,
-	): Promise<LibraryResponse<MastoRelationship>> {
-		const fn = this.client.lib.v1.accounts.$select(id).mute;
-		return await MastojsHandler(await MastoErrorHandler(fn, [opts]));
+	async mute(id: string, opts: AccountMutePostDto): Promise<MastoRelationship> {
+		return this.client.lib.v1.accounts.$select(id).mute(opts);
 	}
 
-	async unmute(id: string): Promise<LibraryResponse<MastoRelationship>> {
-		const fn = this.client.lib.v1.accounts.$select(id).unmute;
-		return await MastojsHandler(await MastoErrorHandler(fn));
+	async unmute(id: string): Promise<MastoRelationship> {
+		return this.client.lib.v1.accounts.$select(id).unmute();
 	}
 
-	async removeFollower(id: string): Promise<LibraryResponse<void>> {
-		const fn = this.client.lib.v1.accounts.$select(id).removeFromFollowers;
-		return await MastojsHandler(await MastoErrorHandler(fn));
+	async removeFollower(id: string): Promise<void> {
+		return this.client.lib.v1.accounts.$select(id).removeFromFollowers();
 	}
 
-	async featuredTags(id: string): Promise<LibraryResponse<MastoFeaturedTag[]>> {
-		try {
-			const fn = await this.client.lib.v1.accounts
-				.$select(id)
-				.featuredTags.list();
-			return successWithData(fn);
-		} catch (e) {
-			return errorBuilder<MastoFeaturedTag[]>(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async featuredTags(id: string): Promise<MastoFeaturedTag[]> {
+		return this.client.lib.v1.accounts.$select(id).featuredTags.list();
 	}
 
-	async familiarFollowers(
-		ids: string[],
-	): Promise<LibraryResponse<MastoFamiliarFollowers[]>> {
-		const fn = this.client.lib.v1.accounts.familiarFollowers.fetch;
-		return await MastojsHandler(await MastoErrorHandler(fn, [ids]));
+	async knownFollowers(ids: string[]): Promise<MastoFamiliarFollowers[]> {
+		return this.client.lib.v1.accounts.familiarFollowers.fetch(ids);
 	}
 
-	lists(id: string): Promise<LibraryResponse<MastoList[]>> {
-		throw new Error('Method not implemented.');
+	async getLists(id: string): PaginatedPromise<MastoList[]> {
+		const data = await this.client.lib.v1.lists.list();
+		// TODO: extract cursor from lists
+		return { data };
 	}
 
 	async statuses(
@@ -127,122 +89,56 @@ export class MastodonAccountsRouter implements AccountRoute {
 		}
 	}
 
-	async get(id: string): Promise<LibraryResponse<MastoAccount>> {
-		const fn = this.client.lib.v1.accounts.$select(id).fetch;
-		const { data, error } = await MastoErrorHandler(fn);
-		const resData = await data;
-		if (error || resData === undefined) {
-			return errorBuilder(error);
-		}
-		return successWithData(data);
+	async get(id: string): Promise<MastoAccount> {
+		return this.client.lib.v1.accounts.$select(id).fetch();
 	}
 
-	async getMany(ids: string[]): LibraryPromise<MastoAccount[]> {
-		return await new FetchWrapper(
+	async resolveMany(ids: string[]): Promise<MastoAccount[]> {
+		// FIXME: does this work?
+		return (await new FetchWrapper(
 			this.direct.baseUrl,
 			this.direct.token,
-		).getCamelCase('/api/v1/accounts', { id: ids });
+		).getCamelCase('/api/v1/accounts', { id: ids })) as any;
 	}
 
-	async relationships(
-		ids: string[],
-	): Promise<LibraryResponse<MastoRelationship[]>> {
-		const fn = this.client.lib.v1.accounts.relationships.fetch;
-		const { data, error } = await MastoErrorHandler(fn, [{ id: ids }]);
-		const resData = await data;
-		if (error || resData === undefined) {
-			return errorBuilder(error);
-		}
-		return successWithData(data);
+	async relationships(ids: string[]): Promise<MastoRelationship[]> {
+		return await this.client.lib.v1.accounts.relationships.fetch({
+			id: ids,
+			withSuspended: true,
+		});
 	}
 
-	async likes(query: GetPostsQueryDTO): PaginatedLibraryPromise<MastoStatus[]> {
-		const { data: _data, error } =
-			await this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
-				'/api/v1/favourites',
-				query,
-			);
-
-		if (!_data || error) {
-			return notImplementedErrorBuilder<{
-				data: MastoStatus[];
-				minId: string | null;
-				maxId: string | null;
-			}>();
-		}
-		return {
-			data: _data,
-		};
+	async likes(query: GetPostsQueryDTO): PaginatedPromise<MastoStatus[]> {
+		return this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
+			'/api/v1/favourites',
+			query,
+		);
 	}
 
-	async bookmarks(query: BookmarkGetQueryDTO): Promise<
-		LibraryResponse<{
-			data: MastoStatus[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
-		const { data: _data, error } =
-			await this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
-				'/api/v1/bookmarks',
-				query,
-			);
-
-		if (!_data || error) {
-			return notImplementedErrorBuilder<{
-				data: MastoStatus[];
-				minId: string | null;
-				maxId: string | null;
-			}>();
-		}
-		return {
-			data: _data,
-		};
+	async bookmarks(query: BookmarkGetQueryDTO): PaginatedPromise<MastoStatus[]> {
+		return this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
+			'/api/v1/bookmarks',
+			query,
+		);
 	}
 
-	async followers(query: FollowerGetQueryDTO): LibraryPromise<{
-		data: MastoAccount[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
-		try {
-			const { id, ...rest } = query;
-			const { data: _data, error } =
-				await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
-					`/api/v1/accounts/${id}/followers`,
-					rest,
-				);
-
-			if (error) {
-				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-			}
-			return { data: _data };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async getFollowers(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<MastoAccount[]> {
+		const { id, ...rest } = query;
+		return await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
+			`/api/v1/accounts/${id}/followers`,
+			rest,
+		);
 	}
 
-	async followings(query: FollowerGetQueryDTO): LibraryPromise<{
-		data: MastoAccount[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
-		try {
-			const { id, ...rest } = query;
-			const { data: _data, error } =
-				await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
-					`/api/v1/accounts/${id}/following`,
-					rest,
-				);
-
-			if (error) {
-				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-			}
-			return { data: _data };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async getFollowings(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<MastoAccount[]> {
+		const { id, ...rest } = query;
+		return await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
+			`/api/v1/accounts/${id}/following`,
+			rest,
+		);
 	}
 }

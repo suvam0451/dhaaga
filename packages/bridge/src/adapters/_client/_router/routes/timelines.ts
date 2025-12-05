@@ -1,9 +1,7 @@
-import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
 import { AppBskyFeedGetTimeline, AppBskyFeedSearchPosts } from '@atproto/api';
-import { MastoStatus } from '../../../../types/mastojs.types.js';
-import { MegaStatus } from '../../../../types/megalodon.types.js';
-import { ApiAsyncResult } from '../../../../utils/api-result.js';
+import { MastoStatus } from '#/types/mastojs.types.js';
+import { MegaStatus } from '#/types/megalodon.types.js';
 
 type __MisskeyTimelineOptions = {
 	// common

@@ -4,16 +4,13 @@ import {
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
-} from '../../../../types/mastojs.types.js';
-import { MissContext, MissNote } from '../../../../types/misskey-js.types.js';
-import {
-	MegaScheduledStatus,
-	MegaStatus,
-} from '../../../../types/megalodon.types.js';
+} from '#/types/mastojs.types.js';
+import { MissContext, MissNote } from '#/types/misskey-js.types.js';
+import { MegaScheduledStatus, MegaStatus } from '#/types/megalodon.types.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
-} from '../../../../types/driver.types.js';
+} from '#/types/driver.types.js';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;
@@ -75,7 +72,7 @@ export interface StatusesRoute {
 		MastoContext | MissContext | AppBskyFeedGetPostThread.Response
 	>;
 
-	create(dto: DhaagaJsPostCreateDto): LibraryPromise<
+	create(dto: DhaagaJsPostCreateDto): Promise<
 		| MastoScheduledStatus
 		| MegaStatus
 		| MegaScheduledStatus

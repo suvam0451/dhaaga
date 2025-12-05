@@ -1,15 +1,16 @@
-import { PostInspector, PostObjectType } from '../../../../parsers/post.js';
+import { PostInspector, PostObjectType } from '#/parsers/post.js';
 import { ApiTargetInterface } from './_index.js';
-import { DriverService } from '../../../../services/driver.js';
-import { Err, Ok, Result } from '../../../../utils/index.js';
-import { ApiAsyncResult } from '../../../../utils/api-result.js';
-import { ApiErrorCode } from '../../../../types/result.types.js';
-import ActivityPubService from '../../../../services/activitypub.service.js';
-import { KNOWN_SOFTWARE } from '../../../../data/driver.js';
-import { AtprotoPostService } from '../../../../services/atproto.service.js';
-import ActivityPubReactionsService from '../../../../services/activitypub-reactions.service.js';
-import { DriverPostLikeState } from '../../../../types/driver.types.js';
+import { DriverService } from '#/services/driver.js';
+import { Err, Ok } from '#/utils/index.js';
+import { ApiAsyncResult } from '#/utils/api-result.js';
+import { ApiErrorCode } from '#/types/result.types.js';
+import ActivityPubService from '#/services/activitypub.service.js';
+import { KNOWN_SOFTWARE } from '#/data/driver.js';
+import { AtprotoPostService } from '#/services/atproto.service.js';
+import ActivityPubReactionsService from '#/services/activitypub-reactions.service.js';
+import { DriverPostLikeState } from '#/types/driver.types.js';
 import { AtprotoApiAdapter } from '../../bluesky/_router.js';
+import { getHumanReadableError } from '#/utils/errors.utils.js';
 
 class Mutator {
 	client: ApiTargetInterface;
@@ -83,49 +84,38 @@ class Mutator {
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as result
 	 */
-	async toggleLike(input: PostObjectType): ApiAsyncResult<PostObjectType> {
+	async toggleLike(input: PostObjectType): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
-		let nextState: Result<DriverPostLikeState, string> | undefined;
+		let nextState: DriverPostLikeState | undefined;
 
-		try {
-			if (DriverService.supportsAtProto(this.client.driver)) {
-				const _api = this.client as unknown as AtprotoApiAdapter;
-				nextState = target.atProto?.viewer?.like
-					? await _api.statuses.atProtoDeleteLike(target.atProto?.viewer?.like)
-					: await _api.statuses.atProtoLike(target.meta.uri!, target.meta.cid!);
-			} else if (!DriverService.supportsMisskeyApi(this.client.driver)) {
-				nextState = target.interaction.liked
-					? await this.client.statuses.removeLike(target.id)
-					: await this.client.statuses.like(target.id);
-			}
-
-			if (nextState === undefined)
-				return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
-
-			if (nextState.isErr()) {
-				console.log('[WARN]: failed to toggle like', nextState.error);
-				return Err(nextState.error);
-			}
-
-			const _state = nextState.unwrap();
-			const draft: PostObjectType = JSON.parse(JSON.stringify(input));
-
-			if (draft.id === target.id) {
-				draft.interaction.liked = _state.state;
-				draft.stats.likeCount += _state.state ? 1 : -1;
-				if (draft.atProto && draft.atProto.viewer)
-					draft.atProto.viewer.like = _state.uri;
-			} else if (draft.boostedFrom && draft.boostedFrom.id === target.id) {
-				draft.boostedFrom.interaction.liked = _state.state;
-				draft.boostedFrom.stats.likeCount += _state.state ? 1 : -1;
-				if (draft.boostedFrom.atProto && draft.boostedFrom.atProto.viewer)
-					draft.boostedFrom.atProto.viewer.like = _state.uri;
-			}
-			return Ok(draft);
-		} catch (e) {
-			console.log('[WARN]: failed to toggle like', e);
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		if (DriverService.supportsAtProto(this.client.driver)) {
+			const _api = this.client as unknown as AtprotoApiAdapter;
+			nextState = target.atProto?.viewer?.like
+				? await _api.statuses.atProtoDeleteLike(target.atProto?.viewer?.like)
+				: await _api.statuses.atProtoLike(target.meta.uri!, target.meta.cid!);
+		} else if (!DriverService.supportsMisskeyApi(this.client.driver)) {
+			nextState = target.interaction.liked
+				? await this.client.statuses.removeLike(target.id)
+				: await this.client.statuses.like(target.id);
 		}
+
+		if (nextState === undefined)
+			throw new Error(getHumanReadableError('operation not supported'));
+
+		const draft: PostObjectType = JSON.parse(JSON.stringify(input));
+
+		if (draft.id === target.id) {
+			draft.interaction.liked = nextState.state;
+			draft.stats.likeCount += nextState.state ? 1 : -1;
+			if (draft.atProto && draft.atProto.viewer)
+				draft.atProto.viewer.like = nextState.uri;
+		} else if (draft.boostedFrom && draft.boostedFrom.id === target.id) {
+			draft.boostedFrom.interaction.liked = nextState.state;
+			draft.boostedFrom.stats.likeCount += nextState.state ? 1 : -1;
+			if (draft.boostedFrom.atProto && draft.boostedFrom.atProto.viewer)
+				draft.boostedFrom.atProto.viewer.like = nextState.uri;
+		}
+		return draft;
 	}
 
 	/**
@@ -216,10 +206,10 @@ class Mutator {
 	}
 
 	/**
-	 * Toggles bookmark for this post object and
+	 * Toggles bookmark for this post-object and
 	 * return it with mutations, if successful
 	 * @param {PostObjectType} input post object
-	 * @returns {PostObjectType} wrapped as result
+	 * @returns {PostObjectType} wrapped as a result
 	 */
 	async toggleBookmark(input: PostObjectType): ApiAsyncResult<PostObjectType> {
 		if (!DriverService.canBookmark(this.client.driver))

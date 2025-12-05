@@ -2,23 +2,16 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-} from '../_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
+import { LibraryPromise, PaginatedPromise } from '../_router/routes/_types.js';
 import {
 	MastoConversation,
 	MastoGroupedNotificationsResults,
 	MastoNotification,
-} from '../../../types/mastojs.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
-import {
-	MegaConversation,
-	MegaNotification,
-} from '../../../types/megalodon.types.js';
+} from '#/types/mastojs.types.js';
+import { ApiErrorCode } from '#/types/result.types.js';
+import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
@@ -32,43 +25,24 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		);
 	}
 
-	async get(query: NotificationGetQueryDto): Promise<
-		LibraryResponse<{
-			data: MastoNotification[] | MegaNotification[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
+	async getAllNotifications(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<MastoNotification[]> {
 		const { excludeTypes, types, ...rest } = query;
 
 		if (types && types!.length > 0) {
 			(rest as any)['types[]'] = types!.join(';');
 		}
 
-		const { data: _data, error } =
-			await this.direct.getCamelCaseWithLinkPagination<MastoNotification[]>(
-				'/api/v1/notifications',
-				rest,
-			);
-
-		if (error || !_data) {
-			return notImplementedErrorBuilder<{
-				data: MastoNotification[];
-				minId: string | null;
-				maxId: string | null;
-			}>();
-		}
-
-		return { data: _data };
+		return this.direct.getCamelCaseWithLinkPagination<MastoNotification[]>(
+			'/api/v1/notifications',
+			rest,
+		);
 	}
 
-	async getMentions(query: NotificationGetQueryDto): Promise<
-		LibraryResponse<{
-			data: MastoGroupedNotificationsResults;
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
+	async getMentions(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<MastoGroupedNotificationsResults> {
 		let url =
 			'/api/v2/notifications' +
 			'?exclude_types[]=follow' +
@@ -83,12 +57,9 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		if (query.limit) url += '&limit=' + query.limit;
 		if (query.maxId) url += '&max_id=' + query.maxId;
 
-		const result =
-			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-				url,
-			);
-		if (result.error) return errorBuilder();
-		return { data: result.data };
+		return this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+			url,
+		);
 	}
 
 	async getSocialUpdates(query: NotificationGetQueryDto) {
@@ -106,12 +77,9 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		if (query.limit) url += '&limit=' + query.limit;
 		if (query.maxId) url += '&max_id=' + query.maxId;
 
-		const result =
-			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-				url,
-			);
-		if (result.error) return errorBuilder();
-		return { data: result.data };
+		return this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+			url,
+		);
 	}
 
 	async getSubscriptionUpdates(query: NotificationGetQueryDto) {
@@ -120,54 +88,35 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		if (query.limit) url += '&limit=' + query.limit;
 		if (query.maxId) url += '&max_id=' + query.maxId;
 
-		const result =
-			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-				url,
-			);
-		if (result.error) return errorBuilder();
-		return { data: result.data };
+		return this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+			url,
+		);
 	}
 
 	/**
 	 * a.k.a. - conversations
 	 */
-	async getChats(): LibraryPromise<MastoConversation[] | MegaConversation[]> {
-		try {
-			const data = await this.mastoClient.lib.v1.conversations.list();
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async getChats(): PaginatedPromise<MastoConversation[]> {
+		const data = await this.mastoClient.lib.v1.conversations.list();
+		return {
+			data,
+		};
 	}
 
-	async getChat() {
-		return notImplementedErrorBuilder();
+	async getChat(): PaginatedPromise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getMessages() {
-		return notImplementedErrorBuilder();
+	async getChatMessages(): PaginatedPromise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async markChatRead(id: string): LibraryPromise<MastoConversation> {
-		try {
-			const data = await this.mastoClient.lib.v1.conversations
-				.$select(id)
-				.read();
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async markChatAsRead(id: string): Promise<MastoConversation> {
+		return await this.mastoClient.lib.v1.conversations.$select(id).read();
 	}
 
-	async markChatUnread(id: string): LibraryPromise<MastoConversation> {
-		try {
-			const data = await this.mastoClient.lib.v1.conversations
-				.$select(id)
-				.unread();
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async markChatAsUnread(id: string): Promise<MastoConversation> {
+		return await this.mastoClient.lib.v1.conversations.$select(id).unread();
 	}
 
 	async markChatRemove(id: string): LibraryPromise<void> {
@@ -182,6 +131,6 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 	}
 
 	async sendMessage() {
-		return notImplementedErrorBuilder();
+		throw new Error('method not implemented');
 	}
 }

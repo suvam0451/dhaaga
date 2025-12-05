@@ -2,31 +2,18 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { CasingUtil } from '../../../utils/casing.js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-} from '../_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	MegaConversation,
-	MegaNotification,
-} from '../../../types/megalodon.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { MastoGroupedNotificationsResults } from '../../../types/mastojs.types.js';
-import { MastodonNotificationsRouter } from '../mastodon/notifications.js';
+import { CasingUtil } from '#/utils/casing.js';
+import { PaginatedPromise } from '../_router/routes/_types.js';
+import { MegaConversation, MegaNotification } from '#/types/megalodon.types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoGroupedNotificationsResults } from '#/types/mastojs.types.js';
 
-export class PleromaNotificationsRouter
-	extends MastodonNotificationsRouter
-	implements NotificationsRoute
-{
+export class PleromaNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;
 	pleromaClient: MegalodonPleromaWrapper;
 
 	constructor(forwarded: FetchWrapper) {
-		super(forwarded);
 		this.direct = forwarded;
 		this.pleromaClient = MegalodonPleromaWrapper.create(
 			forwarded.baseUrl,
@@ -34,54 +21,40 @@ export class PleromaNotificationsRouter
 		);
 	}
 
-	async get(query: NotificationGetQueryDto): Promise<
-		LibraryResponse<{
-			data: MegaNotification[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
+	async getAllNotifications(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<MegaNotification[]> {
 		const data = await this.pleromaClient.client.getNotifications(
 			CasingUtil.snakeCaseKeys(query),
 		);
 		return {
-			data: {
-				data: data.data,
-				maxId: undefined,
-				minId: undefined,
-			},
+			data: data.data,
+			maxId: undefined,
+			minId: undefined,
 		};
 	}
 
 	/**
 	 * Pleroma/Akkoma have not implemented grouped notifications
 	 */
-	async getChats(): LibraryPromise<MegaConversation[]> {
-		try {
-			const data = await this.pleromaClient.client.getConversationTimeline();
-			return {
-				data: data.data,
-			};
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async getChats(): PaginatedPromise<MegaConversation[]> {
+		const data = await this.pleromaClient.client.getConversationTimeline();
+		return {
+			data: data.data,
+		};
 	}
 
-	async getChat() {
-		return notImplementedErrorBuilder();
+	async getChat(): PaginatedPromise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getMessages() {
-		return notImplementedErrorBuilder();
+	async getChatMessages(): PaginatedPromise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getMentions(query: NotificationGetQueryDto): Promise<
-		LibraryResponse<{
-			data: MastoGroupedNotificationsResults;
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
+	async getMentions(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<MastoGroupedNotificationsResults> {
 		let url =
 			'/api/v1/notifications' +
 			'?exclude_types[]=follow' +
@@ -96,12 +69,9 @@ export class PleromaNotificationsRouter
 		if (query.limit) url += '&limit=' + query.limit;
 		if (query.maxId) url += '&max_id=' + query.maxId;
 
-		const result =
-			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-				url,
-			);
-		if (result.error) return errorBuilder();
-		return { data: result.data };
+		return this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+			url,
+		);
 	}
 
 	async getSocialUpdates(query: NotificationGetQueryDto) {
@@ -117,12 +87,9 @@ export class PleromaNotificationsRouter
 		if (query.limit) url += '&limit=' + query.limit;
 		if (query.maxId) url += '&max_id=' + query.maxId;
 
-		const result =
-			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
-				url,
-			);
-		if (result.error) return errorBuilder();
-		return { data: result.data };
+		return this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
+			url,
+		);
 	}
 
 	async getSubscriptionUpdates(query: NotificationGetQueryDto) {
@@ -135,11 +102,10 @@ export class PleromaNotificationsRouter
 			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
 				url,
 			);
-		if (result.error) return errorBuilder();
 		return { data: result.data };
 	}
 
 	async sendMessage() {
-		return notImplementedErrorBuilder();
+		throw new Error('method not implemented');
 	}
 }

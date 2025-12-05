@@ -15,6 +15,7 @@ import {
 	DriverLikeStateResult,
 } from '../../../types/driver.types.js';
 import { Err, Ok } from '../../../utils/index.js';
+import { getHumanReadableError } from '#/utils/errors.utils.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;
@@ -234,17 +235,16 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	 * a.k.a. like -- applicable for Sharkey only
 	 * @param id
 	 */
-	async favourite(id: string): LibraryPromise<{
+	async favourite(id: string): Promise<{
 		success: boolean;
 		isFavourited: true;
 	}> {
-		const { error } = await this.direct.post(
-			'/api/notes/like',
-			{ noteId: id },
-			{},
-		);
-		if (error) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		return { data: { success: true, isFavourited: true } };
+		try {
+			await this.direct.post('/api/notes/like', { noteId: id }, {});
+			return { success: true, isFavourited: true };
+		} catch (e: any) {
+			throw new Error(getHumanReadableError(e));
+		}
 	}
 
 	/**
@@ -252,17 +252,16 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	 * @param id
 	 */
 	async like(id: string): DriverLikeStateResult {
-		const { error } = await this.direct.post(
-			'/api/notes/like',
-			{ noteId: id },
-			{},
-		);
-		if (error) return Err(ApiErrorCode.REMOTE_SERVER_ERROR);
-		return Ok({ state: true });
+		try {
+			await this.direct.post('/api/notes/like', { noteId: id }, {});
+			return { state: true };
+		} catch (e) {
+			throw new Error(getHumanReadableError(e));
+		}
 	}
 
 	async removeLike(id: string): DriverLikeStateResult {
-		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+		throw new Error('Method not implemented.');
 	}
 
 	/**

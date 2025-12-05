@@ -8,16 +8,17 @@ import {
 	MegaReaction,
 	MegaScheduledStatus,
 	MegaStatus,
-} from '../../../types/megalodon.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { CasingUtil } from '../../../utils/casing.js';
+} from '#/types/megalodon.types.js';
+import { LibraryResponse } from '#/types/result.types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { CasingUtil } from '#/utils/casing.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
-} from '../../../types/driver.types.js';
-import { Err, Ok } from '../../../utils/index.js';
+} from '#/types/driver.types.js';
+import { Err, Ok } from '#/utils/index.js';
+import { getHumanReadableError } from '#/utils/errors.utils.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -119,24 +120,24 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	async like(id: string): DriverLikeStateResult {
 		try {
 			const data = await this.client.client.favouriteStatus(id);
-			return Ok({
+			return {
 				state: !!data.data.favourited,
 				counter: data.data.favourites_count,
-			});
+			};
 		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(getHumanReadableError(e));
 		}
 	}
 
 	async removeLike(id: string): DriverLikeStateResult {
 		try {
 			const data = await this.client.client.unfavouriteStatus(id);
-			return Ok({
+			return {
 				state: !!data.data.favourited,
 				counter: data.data.favourites_count,
-			});
+			};
 		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(getHumanReadableError(e));
 		}
 	}
 

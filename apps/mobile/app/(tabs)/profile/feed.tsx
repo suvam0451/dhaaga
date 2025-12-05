@@ -14,7 +14,7 @@ import {
 	usePostTimelineState,
 	usePostTimelineDispatch,
 } from '@dhaaga/core';
-import { feedUnifiedQueryOptions } from '@dhaaga/react';
+import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 
 function DataView() {
@@ -50,7 +50,7 @@ function DataView() {
 	}, [db, id]);
 
 	const { fetchStatus, data, status, refetch } = useQuery(
-		feedUnifiedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
 			type: State.feedType,
 			query: State.query,
 			opts: State.opts,

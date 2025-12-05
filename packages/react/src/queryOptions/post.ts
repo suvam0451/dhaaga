@@ -14,9 +14,8 @@ export function postDetailsInterfaceQueryOpts(
 ) {
 	async function api(): Promise<PostTargetInterface> {
 		if (!client) throw new Error('_client not initialized');
-		const { data, error } = await client.statuses.get(postId);
-		if (error) throw new Error(error.message);
-		return PostParser.rawToInterface(data, driver);
+		const data = await client.statuses.get(postId);
+		return PostParser.rawToInterface<unknown>(data, driver);
 	}
 
 	return queryOptions<PostTargetInterface>({

@@ -4,9 +4,9 @@ import {
 	TimelinesRoute,
 } from '../_router/routes/timelines.js';
 import { Endpoints } from 'misskey-js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { ApiErrorCode } from '../../../types/result.types.js';
-import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { ApiErrorCode } from '#/types/result.types.js';
+import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	direct: FetchWrapper;
@@ -77,13 +77,7 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 	 * Limited forks support this feature
 	 */
 	async bubble(query: DhaagaJsTimelineQueryOptions): Promise<any[]> {
-		const { data, error } = await this.direct.post(
-			'/api/notes/bubble-timeline',
-			query,
-			{},
-		);
-		if (error) throw new Error(ApiErrorCode.UNKNOWN_ERROR);
-		return data as any[];
+		return this.direct.post('/api/notes/bubble-timeline', query, {});
 	}
 
 	async hashtag(

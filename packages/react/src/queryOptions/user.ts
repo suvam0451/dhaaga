@@ -30,7 +30,7 @@ export function userFollowsQueryOpts(
 	maxId: string | null,
 ) {
 	return queryOptions({
-		queryKey: [client.key, 'dhaaga/user/follows', maxId],
+		queryKey: ['dhaaga/user/follows', client.key, userId, maxId],
 		queryFn: () =>
 			client.user
 				.getFollows({

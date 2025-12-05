@@ -1,5 +1,4 @@
-import { DefinedUseQueryResult } from '@tanstack/react-query';
-import { PostObjectType, ResultPage } from '@dhaaga/bridge';
+import { PostObjectType } from '@dhaaga/bridge';
 import { countEmojisInBodyContent } from '@dhaaga/bridge/post-process';
 import {
 	PostTimelineStateAction,
@@ -16,17 +15,7 @@ import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 import { FlatList, RefreshControl } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-
-type SimplePostTimelineProps = {
-	timelineLabel: string;
-	queryResult: DefinedUseQueryResult<ResultPage<PostObjectType>, Error>;
-	postProcessingFn?: (input: PostObjectType[]) => PostObjectType[];
-	/**
-	 *  for certain feed types, it may be beneficial for the parent
-	 * 	component to take over the initialization process
-	 */
-	skipTimelineInit?: boolean;
-};
+import { SimpleTimelineProps } from '#/components/timelines/shared';
 
 /**
  * A simple, re-usable timeline renderer
@@ -38,7 +27,7 @@ function SimplePostTimeline({
 	queryResult,
 	postProcessingFn = (input) => countEmojisInBodyContent(input),
 	skipTimelineInit,
-}: SimplePostTimelineProps) {
+}: SimpleTimelineProps<PostObjectType>) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
 	const State = usePostTimelineState()!;
@@ -55,7 +44,6 @@ function SimplePostTimeline({
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
-		console.log('appending', data.items.length, 'items to timeline');
 		dispatch({
 			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: { ...data, items: data.items },

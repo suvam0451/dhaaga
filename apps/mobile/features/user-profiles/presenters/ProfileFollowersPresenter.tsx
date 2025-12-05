@@ -1,9 +1,5 @@
-import { Animated, RefreshControl, View } from 'react-native';
+import { RefreshControl, View, FlatList } from 'react-native';
 import useFollowersInteractor from '../interactors/useFollowersInteractor';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
 import { useState } from 'react';
 import {
 	UserTimelineStateAction,
@@ -11,9 +7,11 @@ import {
 	useUserTimelineState,
 } from '@dhaaga/core';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import UserListItemView from '../../timelines/view/UserListItemView';
-import { appDimensions } from '../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
+import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 
 function ProfileFollowersPresenter() {
 	const [Refreshing, setRefreshing] = useState(false);
@@ -35,35 +33,22 @@ function ProfileFollowersPresenter() {
 		});
 	}
 
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: data.items.length,
-		loadNextPage: loadMore,
-	});
-
-	if (TimelineState.items.length === 0)
-		return (
-			<AppTopNavbar
-				title={t(`noun.follower_other`)}
-				translateY={translateY}
-				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			>
-				<View />
-			</AppTopNavbar>
-		);
+	const { scrollHandler, animatedStyle } =
+		useHideTopNavUsingReanimated(loadMore);
 
 	/**
 	 * NOTE: AT proto does not return a detailed view
 	 */
 	return (
-		<AppTopNavbar
-			title={t(`noun.follower_other`)}
-			translateY={translateY}
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-		>
-			<Animated.FlatList
+		<>
+			<NavBar_Simple
+				label={t(`noun.follower_other`)}
+				animatedStyle={animatedStyle}
+			/>
+			<FlatList
 				data={TimelineState.items}
 				renderItem={({ item }) => <UserListItemView item={item} />}
-				onScroll={onScroll}
+				onScroll={scrollHandler}
 				ListHeaderComponent={<View />}
 				scrollEventThrottle={16}
 				refreshControl={
@@ -74,7 +59,7 @@ function ProfileFollowersPresenter() {
 					paddingBottom: 54,
 				}}
 			/>
-		</AppTopNavbar>
+		</>
 	);
 }
 

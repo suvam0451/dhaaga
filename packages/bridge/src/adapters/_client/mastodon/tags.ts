@@ -1,15 +1,11 @@
-import {
-	PaginatedLibraryPromise,
-	LibraryPromise,
-} from '../_router/routes/_types.js';
+import { PaginatedPromise, LibraryPromise } from '../_router/routes/_types.js';
 import {
 	DhaagaJsFollowedTagsQueryOptions,
 	TagRoute,
 } from '../_router/routes/tags.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import type { MastoTag } from '../../../types/mastojs.types.js';
-import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import type { MastoTag } from '#/types/mastojs.types.js';
+import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
 
 export class MastodonTagRouter implements TagRoute {
 	direct: FetchWrapper;
@@ -22,14 +18,11 @@ export class MastodonTagRouter implements TagRoute {
 
 	async followedTags(
 		query: DhaagaJsFollowedTagsQueryOptions,
-	): PaginatedLibraryPromise<MastoTag[]> {
-		const { data, error } = await this.direct.getCamelCaseWithLinkPagination<
-			MastoTag[]
-		>('/api/v1/followed_tags', query);
-		if (error || !data) {
-			return errorBuilder();
-		}
-		return { data };
+	): PaginatedPromise<MastoTag[]> {
+		return this.direct.getCamelCaseWithLinkPagination<MastoTag[]>(
+			'/api/v1/followed_tags',
+			query,
+		);
 	}
 
 	async follow(id: string): LibraryPromise<MastoTag> {

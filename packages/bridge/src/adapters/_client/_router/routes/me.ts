@@ -1,7 +1,7 @@
 import { LibraryPromise } from './_types.js';
 import { Endpoints } from 'misskey-js';
 import { AppBskyActorGetProfile } from '@atproto/api';
-import { MastoAccountCredentials } from '../../../../types/mastojs.types.js';
+import { MastoAccountCredentials } from '#/types/mastojs.types.js';
 
 export interface MeRoute {
 	/**

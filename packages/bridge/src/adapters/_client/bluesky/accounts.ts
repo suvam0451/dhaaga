@@ -1,3 +1,19 @@
+import type {
+	AppBskyActorDefs,
+	AppBskyActorGetProfile,
+	AppBskyBookmarkDefs,
+	AppBskyFeedGetActorLikes,
+	AppBskyFeedGetAuthorFeed,
+	AppBskyGraphDefs,
+	ComAtprotoIdentityResolveHandle,
+} from '@atproto/api';
+import { Endpoints } from 'misskey-js';
+import type {
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoRelationship,
+} from '#/types/mastojs.types.js';
 import {
 	AccountMutePostDto,
 	AccountRoute,
@@ -6,26 +22,9 @@ import {
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
-import { Endpoints } from 'misskey-js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import {
-	AppBskyActorGetProfile,
-	AppBskyFeedGetActorLikes,
-	AppBskyFeedGetAuthorFeed,
-	AppBskyGraphGetFollowers,
-	AppBskyGraphGetFollows,
-	ComAtprotoIdentityResolveHandle,
-} from '@atproto/api';
+import { LibraryPromise, PaginatedPromise } from '../_router/routes/_types.js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import {
-	MastoAccount,
-	MastoFamiliarFollowers,
-	MastoFeaturedTag,
-	MastoList,
-	MastoRelationship,
-	MastoStatus,
-} from '#/types/mastojs.types.js';
-import { MegaRelationship, MegaStatus } from '#/types/megalodon.types.js';
+import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import { InvokeBskyFunction } from '#/custom-clients/custom-bsky-agent.js';
@@ -52,63 +51,65 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	bookmarks(query: BookmarkGetQueryDTO): Promise<
-		LibraryResponse<{
-			data: MastoStatus[] | MegaStatus[] | Endpoints['i/favorites']['res'];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
-		return Promise.resolve(undefined) as any;
+	async bookmarks(
+		query: BookmarkGetQueryDTO,
+	): PaginatedPromise<AppBskyBookmarkDefs.BookmarkView[]> {
+		const agent = getXrpcAgent(this.dto);
+		const { data } = await agent.app.bsky.bookmark.getBookmarks({
+			limit: query.limit,
+			cursor: query.maxId,
+		});
+		return {
+			data: data.bookmarks,
+			maxId: data.cursor,
+		};
 	}
 
-	familiarFollowers(ids: string[]): LibraryPromise<MastoFamiliarFollowers[]> {
-		return Promise.resolve([]) as any;
+	async knownFollowers(ids: string[]): Promise<MastoFamiliarFollowers[]> {
+		throw new Error(
+			'Method not implemented. Please use accounts.get method,' +
+				' which includes the knownFollowers object ',
+		);
 	}
 
-	featuredTags(id: string): LibraryPromise<MastoFeaturedTag[]> {
-		return Promise.resolve([]) as any;
+	async featuredTags(id: string): Promise<MastoFeaturedTag[]> {
+		throw new Error('Method not available for driver');
 	}
 
 	async follow(
 		id: string,
 		opts: FollowPostDto,
-	): LibraryPromise<
-		MastoRelationship | Endpoints['following/create']['res'] | MegaRelationship
-	> {
-		try {
-			const agent = getXrpcAgent(this.dto);
-			const followResult = await agent.follow(id);
-			return { data: null as any };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	): Promise<{ uri: string; cid: string }> {
+		const agent = getXrpcAgent(this.dto);
+		return await agent.follow(id);
 	}
 
-	async followers(
+	async getFollowers(
 		query: FollowerGetQueryDTO,
-	): LibraryPromise<AppBskyGraphGetFollowers.Response> {
+	): PaginatedPromise<AppBskyActorDefs.ProfileView[]> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.getFollowers({ actor: query.id });
-			return { data };
-		} catch (e) {
-			return errorBuilder(e);
-		}
+		const data = await agent.getFollowers({ actor: query.id });
+		return {
+			data: data.data.followers,
+			maxId: data.data.cursor,
+		};
 	}
 
-	async followings(
+	async getFollowings(
 		query: FollowerGetQueryDTO,
-	): LibraryPromise<AppBskyGraphGetFollows.Response> {
+	): PaginatedPromise<AppBskyActorDefs.ProfileView[]> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.getFollows({ actor: query.id });
-			return { data };
-		} catch (e) {
-			return errorBuilder(e);
-		}
+		const data = await agent.getFollows({ actor: query.id });
+		return {
+			data: data.data.follows,
+			maxId: data.data.cursor,
+		};
 	}
 
+	/**
+	 * NOTE: remember that this also gives us known followers
+	 * @param did
+	 */
 	async get(did: string): LibraryPromise<AppBskyActorGetProfile.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
@@ -135,8 +136,10 @@ class BlueskyAccountsRouter implements AccountRoute {
 		}
 	}
 
-	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]> {
-		return Promise.resolve(undefined) as any;
+	async resolveMany(
+		ids: string[],
+	): Promise<MastoAccount[] | MissUserDetailed[]> {
+		throw new Error('Method not implemented.');
 	}
 
 	likes(query: GetPostsQueryDTO) {
@@ -166,8 +169,13 @@ class BlueskyAccountsRouter implements AccountRoute {
 		);
 	}
 
-	lists(id: string): LibraryPromise<MastoList[]> {
-		return Promise.resolve([]) as any;
+	async getLists(id: string): PaginatedPromise<AppBskyGraphDefs.ListView[]> {
+		const agent = getXrpcAgent(this.dto);
+		const lists = await agent.app.bsky.graph.getLists({ actor: id });
+		return {
+			data: lists.data.lists,
+			maxId: lists.data.cursor,
+		};
 	}
 
 	lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MastoAccount> {
@@ -181,14 +189,14 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	relationships(
+	async relationships(
 		ids: string[],
-	): LibraryPromise<MastoRelationship[] | MegaRelationship[]> {
-		return Promise.resolve(undefined) as any;
+	): Promise<MastoRelationship[] | MegaRelationship[]> {
+		throw new Error('Method not implemented.');
 	}
 
-	removeFollower(id: string): Promise<LibraryResponse<void>> {
-		return Promise.resolve(undefined) as any;
+	async removeFollower(id: string): Promise<void> {
+		throw new Error('Method not implemented.');
 	}
 
 	async statuses(

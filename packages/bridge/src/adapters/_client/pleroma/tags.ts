@@ -1,11 +1,8 @@
-import {
-	PaginatedLibraryPromise,
-	LibraryPromise,
-} from '../_router/routes/_types.js';
+import { PaginatedPromise, LibraryPromise } from '../_router/routes/_types.js';
 import { TagRoute } from '../_router/routes/tags.js';
-import { MegaTag } from '../../../types/megalodon.types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
+import { MegaTag } from '#/types/megalodon.types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
 
 export class PleromaTagsRouter implements TagRoute {
 	direct: FetchWrapper;
@@ -19,13 +16,10 @@ export class PleromaTagsRouter implements TagRoute {
 		);
 	}
 
-	async followedTags(): PaginatedLibraryPromise<MegaTag[]> {
+	async followedTags(): PaginatedPromise<MegaTag[]> {
 		const data = await this.client.client.getFollowedTags();
-
 		return {
-			data: {
-				data: data.data,
-			},
+			data: data.data,
 		};
 	}
 

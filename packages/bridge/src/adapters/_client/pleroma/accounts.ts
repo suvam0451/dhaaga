@@ -4,32 +4,22 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-} from '../_router/dto/api-responses.dto.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from '../default/accounts.js';
 import { GetPostsQueryDTO } from '../_interface.js';
-import {
-	LibraryPromise,
-	PaginatedLibraryPromise,
-} from '../_router/routes/_types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import type {
-	MastoAccount,
-	MastoStatus,
-} from '../../../types/mastojs.types.js';
+import { LibraryPromise, PaginatedPromise } from '../_router/routes/_types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import type { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import type {
 	MegaAccount,
 	MegaRelationship,
 	MegaStatus,
-} from '../../../types/megalodon.types.js';
-import { ApiErrorCode } from '../../../types/result.types.js';
-import { MegalodonPleromaWrapper } from '../../../custom-clients/custom-clients.js';
-import { CasingUtil } from '../../../utils/casing.js';
-import { ApiAsyncResult } from '../../../utils/api-result.js';
-import { Err, Ok } from '../../../utils/index.js';
-import { DriverWebfingerType } from '../../../types/query.types.js';
+} from '#/types/megalodon.types.js';
+import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { CasingUtil } from '#/utils/casing.js';
+import { ApiAsyncResult } from '#/utils/api-result.js';
+import { Err, Ok } from '#/utils/index.js';
+import { DriverWebfingerType } from '#/types/query.types.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter
@@ -47,10 +37,9 @@ export class PleromaAccountsRouter
 		);
 	}
 
-	async get(id: string): LibraryPromise<MegaAccount> {
+	async get(id: string): Promise<MegaAccount> {
 		const data = await this.client.client.getAccount(id);
-		if (data.status !== 200) return errorBuilder(data.statusText);
-		return { data: CasingUtil.camelCaseKeys(data.data) };
+		return CasingUtil.camelCaseKeys(data.data);
 	}
 
 	async lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MegaAccount> {
@@ -75,15 +64,12 @@ export class PleromaAccountsRouter
 		}
 	}
 
-	async relationships(ids: string[]): LibraryPromise<MegaRelationship[]> {
+	async relationships(ids: string[]): Promise<MegaRelationship[]> {
 		const data = await this.client.client.getRelationships(ids);
-		if (data.status !== 200) {
-			return errorBuilder<MegaRelationship[]>(data.statusText);
-		}
-		return { data: CasingUtil.camelCaseKeys(data.data) };
+		return CasingUtil.camelCaseKeys(data.data);
 	}
 
-	async likes(query: GetPostsQueryDTO): PaginatedLibraryPromise<MegaStatus[]> {
+	async likes(query: GetPostsQueryDTO): PaginatedPromise<MegaStatus[]> {
 		// NOTE: do not use Megalodon
 		// const data = await this.client.client.getFavourites(opts);
 		// if (data.status !== 200) {
@@ -91,29 +77,13 @@ export class PleromaAccountsRouter
 		// }
 		// return { data: data.data };
 
-		const { data: _data, error } =
-			await this.direct.getCamelCaseWithLinkPagination<MegaStatus[]>(
-				'/api/v1/favourites',
-				query,
-			);
-
-		if (!_data || error) {
-			return notImplementedErrorBuilder<{
-				data: MegaStatus[];
-				minId: string | null;
-				maxId: string | null;
-			}>();
-		}
-		return {
-			data: _data,
-		};
+		return this.direct.getCamelCaseWithLinkPagination<MegaStatus[]>(
+			'/api/v1/favourites',
+			query,
+		);
 	}
 
-	async bookmarks(query: BookmarkGetQueryDTO): LibraryPromise<{
-		data: MastoStatus[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
+	async bookmarks(query: BookmarkGetQueryDTO): PaginatedPromise<MegaStatus[]> {
 		// Works, but not ideal
 		// const data = await this.lib.client.getBookmarks(query);
 		// return {
@@ -124,22 +94,10 @@ export class PleromaAccountsRouter
 		// 	},
 		// };
 
-		const { data: _data, error } =
-			await this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
-				'/api/v1/bookmarks',
-				query,
-			);
-
-		if (!_data || error) {
-			return notImplementedErrorBuilder<{
-				data: MastoStatus[];
-				minId: string | null;
-				maxId: string | null;
-			}>();
-		}
-		return {
-			data: _data,
-		};
+		return this.direct.getCamelCaseWithLinkPagination<MastoStatus[]>(
+			'/api/v1/bookmarks',
+			query,
+		);
 	}
 
 	async follow(id: string): LibraryPromise<MegaRelationship> {
@@ -160,49 +118,23 @@ export class PleromaAccountsRouter
 		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
-	async followers(query: FollowerGetQueryDTO): LibraryPromise<{
-		data: MastoAccount[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
-		try {
-			const { id, ...rest } = query;
-			const { data: _data, error } =
-				await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
-					`/api/v1/accounts/${id}/followers`,
-					rest,
-				);
-
-			if (error) {
-				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-			}
-			return { data: _data };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async getFollowers(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<MastoAccount[]> {
+		const { id, ...rest } = query;
+		return await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
+			`/api/v1/accounts/${id}/followers`,
+			rest,
+		);
 	}
 
-	async followings(query: FollowerGetQueryDTO): LibraryPromise<{
-		data: MastoAccount[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
-		try {
-			const { id, ...rest } = query;
-			const { data: _data, error } =
-				await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
-					`/api/v1/accounts/${id}/following`,
-					rest,
-				);
-
-			if (error) {
-				return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-			}
-			return { data: _data };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async getFollowings(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<MastoAccount[]> {
+		const { id, ...rest } = query;
+		return await this.direct.getCamelCaseWithLinkPagination<MastoAccount[]>(
+			`/api/v1/accounts/${id}/following`,
+			rest,
+		);
 	}
 }

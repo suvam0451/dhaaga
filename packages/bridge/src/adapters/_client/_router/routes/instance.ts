@@ -1,6 +1,6 @@
 import { mastodon } from 'masto';
 import { LibraryPromise } from './_types.js';
-import { LibraryResponse } from '../../../../types/result.types.js';
+import { LibraryResponse } from '#/types/result.types.js';
 
 export type InstanceApi_SoftwareInfoDTO = {
 	software: string;

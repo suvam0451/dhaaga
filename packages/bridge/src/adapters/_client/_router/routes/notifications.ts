@@ -1,17 +1,22 @@
-import { LibraryPromise } from './_types.js';
-import { MastoNotification } from '../../../../types/mastojs.types.js';
-import { MegaNotification } from '../../../../types/megalodon.types.js';
-import { Facet } from '@atproto/api';
-import {
-	DriverNotificationType,
-	KNOWN_SOFTWARE,
-} from '../../../../data/driver.js';
+import type {
+	AppBskyNotificationListNotifications,
+	ChatBskyConvoDefs,
+	Facet,
+} from '@atproto/api';
+import type {
+	MastoGroupedNotificationsResults,
+	MastoNotification,
+} from '#/types/mastojs.types.js';
+import type { MegaNotification } from '#/types/megalodon.types.js';
+import type { DriverNotificationType, KNOWN_SOFTWARE } from '#/data/driver.js';
+import { PaginatedPromise } from './_types.js';
+import { Endpoints } from 'misskey-js';
 
 export type NotificationGetQueryDto = {
 	limit: number;
 	minId?: string;
 	maxId?: string; // doubles as untilId for misskey
-	accountId?: string; // restrict to notifications recieved from this account
+	accountId?: string; // restrict to notifications received from this account
 	types?: DriverNotificationType[];
 	excludeTypes?: DriverNotificationType[];
 	markAsRead?: boolean; // misskey
@@ -22,21 +27,46 @@ export type NotificationGetQueryDto = {
 export type Pleroma_Notification_Type = '';
 
 export interface NotificationsRoute {
-	get(query: NotificationGetQueryDto): LibraryPromise<{
-		data: MastoNotification[] | MegaNotification[];
-		minId?: string | null;
-		maxId?: string | null;
-	}>;
+	/**
+	 * Query against all categories of notifications
+	 * for the given user.
+	 *
+	 * NOTE: filters may or may not be supported. Dhaaga
+	 * apps use dedicated functions for each category, which
+	 * correctly apply the filters
+	 * @param query
+	 */
+	getAllNotifications(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<
+		| MastoNotification[]
+		| MegaNotification[]
+		| MastoGroupedNotificationsResults
+		| AppBskyNotificationListNotifications.Notification[]
+		| Endpoints['i/notifications-grouped']['res']
+	>;
 
-	getMentions(query: NotificationGetQueryDto): LibraryPromise<any>;
+	getMentions(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<
+		AppBskyNotificationListNotifications.Notification[] | any
+	>;
 
-	getChats(driver: KNOWN_SOFTWARE): LibraryPromise<any>;
+	getChats(driver: KNOWN_SOFTWARE): PaginatedPromise<any>;
 
-	getSocialUpdates(query: NotificationGetQueryDto): LibraryPromise<any>;
+	getSocialUpdates(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<
+		AppBskyNotificationListNotifications.Notification[] | any
+	>;
 
-	getChat(roomId: string): LibraryPromise<any>;
+	getChat(roomId: string): PaginatedPromise<any>;
 
-	getMessages(roomId: string): LibraryPromise<any>;
+	/**
+	 * Get chat messages for a conversation
+	 * @param roomId
+	 */
+	getChatMessages(roomId: string): PaginatedPromise<any>;
 
 	/**
 	 * Supporting text-only replies for now
@@ -46,7 +76,7 @@ export interface NotificationsRoute {
 	sendMessage(
 		convoId: string,
 		content: { text?: string; facets?: Facet[] },
-	): LibraryPromise<any>;
+	): Promise<ChatBskyConvoDefs.MessageView | void>;
 
 	// e,g. of how to get new notifs
 	// https://blob.cat/api/v1/notifications?since_id=2455610&with_muted=true&limit=20

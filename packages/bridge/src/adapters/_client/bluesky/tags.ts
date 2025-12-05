@@ -2,10 +2,7 @@ import {
 	DhaagaJsFollowedTagsQueryOptions,
 	TagRoute,
 } from '../_router/routes/tags.js';
-import {
-	LibraryPromise,
-	PaginatedLibraryPromise,
-} from '../_router/routes/_types.js';
+import { LibraryPromise, PaginatedPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { MastoTag } from '../../../types/mastojs.types.js';
 import { MegaTag } from '../../../types/megalodon.types.js';
@@ -17,7 +14,7 @@ class BlueskyTagsRouter implements TagRoute {
 
 	followedTags(
 		query: DhaagaJsFollowedTagsQueryOptions,
-	): PaginatedLibraryPromise<MastoTag[] | MegaTag[]> {
+	): PaginatedPromise<MastoTag[] | MegaTag[]> {
 		return Promise.resolve(undefined) as any;
 	}
 

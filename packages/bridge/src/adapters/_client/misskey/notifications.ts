@@ -3,13 +3,11 @@ import {
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoNotification } from '../../../types/mastojs.types.js';
-import { LibraryResponse } from '../../../types/result.types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
-import { KNOWN_SOFTWARE } from '../../../data/driver.js';
+import { LibraryPromise, PaginatedPromise } from '../_router/routes/_types.js';
+import { MastoNotification } from '#/types/mastojs.types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
+import { KNOWN_SOFTWARE } from '#/data/driver.js';
 
 type MISSKEY_NOTIFICATION_TYPE =
 	| 'note'
@@ -43,18 +41,14 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
-	async get(query: NotificationGetQueryDto): Promise<
-		LibraryResponse<{
-			data: MastoNotification[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
+	async getAllNotifications(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<Endpoints['i/notifications-grouped']['res']> {
 		const data = await this.client.client.request<
 			'i/notifications-grouped',
 			Endpoints['i/notifications-grouped']['req']
 		>('i/notifications-grouped', query as any);
-		return { data: { data: data as any } };
+		return { data: data as any };
 	}
 
 	async getUngrouped(query: NotificationGetQueryDto): LibraryPromise<{
@@ -91,12 +85,12 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		return { data: { data: data as any } };
 	}
 
-	async getChat() {
-		return notImplementedErrorBuilder();
+	async getChat(): PaginatedPromise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getMessages() {
-		return notImplementedErrorBuilder();
+	async getChatMessages(): PaginatedPromise<any> {
+		throw new Error('method not implemented');
 	}
 
 	async getSocialUpdates(query: NotificationGetQueryDto) {
@@ -134,6 +128,6 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 	}
 
 	async sendMessage() {
-		return notImplementedErrorBuilder();
+		throw new Error('method not implemented');
 	}
 }

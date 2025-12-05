@@ -5,77 +5,58 @@ import {
 	FollowerGetQueryDTO,
 } from '../_router/routes/accounts.js';
 import { Endpoints } from 'misskey-js';
-import {
-	errorBuilder,
-	notImplementedErrorBuilder,
-	successWithData,
-} from '../_router/dto/api-responses.dto.js';
-import { BaseAccountsRouter } from '../default/accounts.js';
+import { errorBuilder } from '../_router/dto/api-responses.dto.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../_interface.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
+import { LibraryPromise, PaginatedPromise } from '../_router/routes/_types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
 import type {
-	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
 	MastoRelationship,
-} from '../../../types/mastojs.types.js';
-import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
-import { Ok } from '../../../utils/index.js';
+} from '#/types/mastojs.types.js';
+import { MissUserDetailed } from '#/types/misskey-js.types.js';
+import { ApiErrorCode } from '#/types/result.types.js';
+import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
 
-export class MisskeyAccountsRouter
-	extends BaseAccountsRouter
-	implements AccountRoute
-{
+export class MisskeyAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;
 	client: MisskeyJsWrapper;
 
 	constructor(forwarded: FetchWrapper) {
-		super();
 		this.direct = forwarded;
 		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
-	async statuses(id: string, query: AccountRouteStatusQueryDto) {
-		return (await this.client.client.request<
+	async statuses(
+		id: string,
+		query: AccountRouteStatusQueryDto,
+	): Promise<Endpoints['users/notes']['res']> {
+		return this.client.client.request<
 			'users/notes',
 			Endpoints['users/notes']['req']
 		>('users/notes', {
 			...query,
 			withFiles: !!query.onlyMedia ? query.onlyMedia : undefined,
-		})) as any;
+		});
 	}
 
-	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {
-		return notImplementedErrorBuilder();
+	async relationships(ids: string[]): Promise<MastoRelationship[]> {
+		throw new Error('method not implemented');
 	}
 
-	async get(id: string): LibraryPromise<MissUserDetailed> {
-		try {
-			const data = await this.client.client.request<
-				any,
-				Endpoints['users/show']['req']
-			>('users/show', {
+	async get(id: string): Promise<MissUserDetailed> {
+		return this.client.client.request<any, Endpoints['users/show']['req']>(
+			'users/show',
+			{
 				userId: id,
-			});
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+			},
+		);
 	}
 
-	async getMany(ids: string[]): LibraryPromise<MissUserDetailed[]> {
-		try {
-			const data = await this.client.client.request('users/show', {
-				userIds: ids,
-			});
-			return { data };
-		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e.code);
-			}
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async resolveMany(ids: string[]): Promise<MissUserDetailed[]> {
+		return this.client.client.request('users/show', {
+			userIds: ids,
+		});
 	}
 
 	/**
@@ -88,60 +69,44 @@ export class MisskeyAccountsRouter
 	async follow(
 		id: string,
 		opts: FollowPostDto,
-	): LibraryPromise<Endpoints['following/create']['res']> {
+	): Promise<Endpoints['following/create']['res']> {
 		try {
-			const data = await this.client.client.request('following/create', {
+			return this.client.client.request('following/create', {
 				userId: id,
 				...opts,
 			});
-			return { data };
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e.code);
-			}
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(e.code ?? e);
 		}
 	}
 
-	async unfollow(
-		id: string,
-	): LibraryPromise<Endpoints['following/delete']['res']> {
+	async unfollow(id: string): Promise<Endpoints['following/delete']['res']> {
 		try {
-			const data = await this.client.client.request('following/delete', {
+			return this.client.client.request('following/delete', {
 				userId: id,
 			});
-			return { data };
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e.code);
-			}
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(e.code ?? e);
 		}
 	}
 
-	async block(id: string): LibraryPromise<Endpoints['blocking/create']['res']> {
+	async block(id: string): Promise<Endpoints['blocking/create']['res']> {
 		try {
-			const data = await this.client.client.request('blocking/create', {
+			return this.client.client.request('blocking/create', {
 				userId: id,
 			});
-			return { data };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
-	async unblock(
-		id: string,
-	): LibraryPromise<Endpoints['blocking/delete']['res']> {
+	async unblock(id: string): Promise<Endpoints['blocking/delete']['res']> {
 		try {
-			const data = await this.client.client.request('blocking/delete', {
+			return await this.client.client.request('blocking/delete', {
 				userId: id,
 			});
-			return { data };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
@@ -166,8 +131,8 @@ export class MisskeyAccountsRouter
 				host,
 			});
 			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
@@ -180,8 +145,8 @@ export class MisskeyAccountsRouter
 				userId: id,
 			});
 			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
@@ -195,8 +160,8 @@ export class MisskeyAccountsRouter
 				userIds: ids,
 			});
 			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
@@ -206,9 +171,8 @@ export class MisskeyAccountsRouter
 				userId: id,
 			});
 			return { data: { renoteMuted: true } };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
@@ -218,9 +182,8 @@ export class MisskeyAccountsRouter
 				userId: id,
 			});
 			return { data: { renoteMuted: false } };
-		} catch (e) {
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 
@@ -233,17 +196,11 @@ export class MisskeyAccountsRouter
 	 * using misskey-js
 	 * @param query
 	 */
-	async bookmarks(query: BookmarkGetQueryDTO): Promise<
-		LibraryResponse<{
-			data: Endpoints['i/favorites']['res'];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
+	async bookmarks(
+		query: BookmarkGetQueryDTO,
+	): PaginatedPromise<Endpoints['i/favorites']['res']> {
 		try {
-			const { data, error } = await this.direct.post<
-				Endpoints['i/favorites']['res']
-			>(
+			const data = await this.direct.post<Endpoints['i/favorites']['res']>(
 				'/api/i/favorites',
 				{
 					limit: query.limit,
@@ -251,13 +208,6 @@ export class MisskeyAccountsRouter
 				},
 				{},
 			);
-			if (error) {
-				return {
-					data: {
-						data: [],
-					},
-				};
-			}
 
 			let maxId = null;
 			let minId = null;
@@ -267,32 +217,18 @@ export class MisskeyAccountsRouter
 				minId = data[0].id;
 			}
 			return {
-				data: {
-					data: data.map((o) => o.note) as any[],
-					maxId,
-					minId,
-				},
+				data: data.map((o) => o.note) as any[],
+				maxId,
+				minId,
 			};
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(ApiErrorCode.UNAUTHORIZED);
-			}
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(e.code ?? e);
 		}
 	}
 
-	async followers(query: FollowerGetQueryDTO): LibraryPromise<
-		| {
-				data: MastoAccount[];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-	> {
+	async getFollowers(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<Endpoints['users/followers']['res']> {
 		try {
 			const data = await this.client.client.request('users/followers', {
 				allowPartial: true,
@@ -300,20 +236,15 @@ export class MisskeyAccountsRouter
 				userId: query.id,
 				untilId: !!query.maxId ? query.maxId : undefined,
 			});
-			return { data: { data } };
+			return { data };
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e.code);
-			}
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(e.code ?? e);
 		}
 	}
 
-	async followings(query: FollowerGetQueryDTO): LibraryPromise<{
-		data: Endpoints['users/following']['res'];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
+	async getFollowings(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<Endpoints['users/following']['res']> {
 		try {
 			const data = await this.client.client.request('users/following', {
 				allowPartial: true,
@@ -321,12 +252,36 @@ export class MisskeyAccountsRouter
 				userId: query.id,
 				untilId: !!query.maxId ? query.maxId : undefined,
 			});
-			return { data: { data } };
+			return { data };
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e.code);
-			}
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(e.code ?? e);
+		}
+	}
+
+	async mute() {}
+	async unmute() {}
+
+	async removeFollower() {}
+
+	async lookup() {}
+
+	async featuredTags(id: string): Promise<MastoFeaturedTag[]> {
+		throw new Error('method unsupported by driver');
+	}
+
+	async knownFollowers(ids: string[]): Promise<MastoFamiliarFollowers[]> {
+		throw new Error('method unsupported by driver');
+	}
+
+	async getLists(): PaginatedPromise<Endpoints['users/lists/list']['res']> {
+		try {
+			const data = await this.client.client.request('users/lists/list', {});
+			return {
+				data,
+				maxId: data.length > 0 ? data[data.length - 1].id : null,
+			};
+		} catch (e: any) {
+			throw new Error(e.code ?? e);
 		}
 	}
 }

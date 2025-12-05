@@ -16,36 +16,43 @@ import { TimelineFetchMode } from '@dhaaga/core';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedGetTimeline } from '@atproto/api';
 
-// to be adjusted based on performance
-const TIMELINE_STATUS_LIMIT = 20;
-
-type AppTimelineQuery = {
-	id: string;
-	label: string;
-};
-
-type TimelineQueryParams = {
+type PostFeedQueryParams = {
 	type: TimelineFetchMode;
-	query?: AppTimelineQuery;
+	query?: {
+		id: string;
+		label: string;
+	};
 	opts?: DhaagaJsTimelineQueryOptions;
 	minId?: string;
 	maxId?: string;
 	sessionId?: string;
+	/**
+	 * 	to be adjusted based on polish
+	 */
+	limit?: number;
 };
 
-type TimelineFetchResultType = ResultPage<PostObjectType>;
+type PostFeedFetchResultType = ResultPage<PostObjectType>;
 
 /**
  * intended for use by single column timelines,
  * where the target feed updates based on the
  * input options
  */
-export function feedUnifiedQueryOptions(
+export function unifiedPostFeedQueryOptions(
 	client: ApiTargetInterface,
 	driver: KNOWN_SOFTWARE,
 	server: string,
 	acctIdentifier: string,
-	{ type, query, opts, maxId, minId, sessionId }: TimelineQueryParams,
+	{
+		type,
+		query,
+		opts,
+		maxId,
+		minId,
+		sessionId,
+		limit = 15,
+	}: PostFeedQueryParams,
 ) {
 	const _id = query?.id;
 	const _query = {
@@ -53,7 +60,7 @@ export function feedUnifiedQueryOptions(
 		...opts,
 
 		// injected
-		limit: TIMELINE_STATUS_LIMIT,
+		limit: limit!,
 		sinceId: minId,
 		untilId: maxId === null ? undefined : maxId,
 		maxId,
@@ -97,7 +104,7 @@ export function feedUnifiedQueryOptions(
 		);
 	}
 
-	function outputSchemaToResultPage(data: any): TimelineFetchResultType {
+	function outputSchemaToResultPage(data: any): PostFeedFetchResultType {
 		return {
 			// success: true,
 			items: PostParser.parse<unknown[]>(data.feed, driver, server),
@@ -137,7 +144,7 @@ export function feedUnifiedQueryOptions(
 	function createResultBatch(
 		data: any,
 		maxId?: string | null,
-	): TimelineFetchResultType {
+	): PostFeedFetchResultType {
 		return {
 			items: generateFeedBatch(data),
 			maxId: generateMaxId(data, maxId),
@@ -145,8 +152,7 @@ export function feedUnifiedQueryOptions(
 		};
 	}
 
-	async function api(): Promise<TimelineFetchResultType> {
-		if (client === null) return defaultResultPage;
+	async function api(): Promise<PostFeedFetchResultType> {
 		switch (type) {
 			case TimelineFetchMode.IDLE:
 				return defaultResultPage;
@@ -223,7 +229,7 @@ export function feedUnifiedQueryOptions(
 				const { data, error } = await (
 					client as AtprotoApiAdapter
 				).timelines.feed({
-					limit: TIMELINE_STATUS_LIMIT,
+					limit,
 					cursor: maxId === null ? undefined : maxId,
 					feed: query!.id,
 				});
@@ -235,7 +241,7 @@ export function feedUnifiedQueryOptions(
 					const { data, error } = await (
 						client as AtprotoApiAdapter
 					).accounts.atProtoLikes(acctIdentifier, {
-						limit: TIMELINE_STATUS_LIMIT,
+						limit,
 						cursor: _query.maxId === null ? undefined : _query.maxId,
 					});
 					if (error) return defaultResultPage;
@@ -250,14 +256,23 @@ export function feedUnifiedQueryOptions(
 				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data.maxId);
 			}
-			default:
-				return defaultResultPage;
+			default: {
+				throw new Error(`unknown timeline type: ${type}`);
+			}
 		}
 	}
 
 	// Queries
-	return queryOptions<TimelineFetchResultType>({
-		queryKey: ['feed/unified', type, _id, _query, maxId, minId, sessionId],
+	return queryOptions<PostFeedFetchResultType>({
+		queryKey: [
+			'dhaaga/feed/unified/posts',
+			type,
+			_id,
+			_query,
+			maxId,
+			minId,
+			sessionId,
+		],
 		queryFn: api,
 		enabled: !!client && type !== TimelineFetchMode.IDLE,
 		initialData: defaultResultPage,

@@ -8,14 +8,13 @@ import {
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
-} from '../../../types/mastojs.types.js';
-import { MissContext } from '../../../types/misskey-js.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
+} from '#/types/mastojs.types.js';
+import { MissContext } from '#/types/misskey-js.types.js';
+import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
-} from '../../../types/driver.types.js';
-import { Err } from '../../../utils/index.js';
+} from '#/types/driver.types.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async get(id: string): Promise<LibraryResponse<MastoStatus>> {
@@ -37,19 +36,19 @@ export class DefaultStatusesRouter implements StatusesRoute {
 	}
 
 	async bookmark(id: string): DriverBookmarkStateResult {
-		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+		throw new Error('not supported by driver');
 	}
 
 	async unBookmark(id: string): DriverBookmarkStateResult {
-		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+		throw new Error('not supported by driver');
 	}
 
 	async like(id: string): DriverLikeStateResult {
-		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+		throw new Error('not supported by driver');
 	}
 
 	async removeLike(id: string): DriverLikeStateResult {
-		return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+		throw new Error('not supported by driver');
 	}
 
 	async getContext(id: string): LibraryPromise<MastoContext | MissContext> {

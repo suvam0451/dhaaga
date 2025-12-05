@@ -77,21 +77,13 @@ export class MastodonStatusesRouter implements StatusesRoute {
 	}
 
 	async like(id: string): DriverLikeStateResult {
-		try {
-			const data = await this.client.lib.v1.statuses.$select(id).favourite();
-			return Ok({ state: !!data.favourited, counter: data.favouritesCount });
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		const data = await this.client.lib.v1.statuses.$select(id).favourite();
+		return { state: !!data.favourited, counter: data.favouritesCount };
 	}
 
 	async removeLike(id: string): DriverLikeStateResult {
-		try {
-			const data = await this.client.lib.v1.statuses.$select(id).unfavourite();
-			return Ok({ state: !!data.favourited, counter: data.favouritesCount });
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		const data = await this.client.lib.v1.statuses.$select(id).unfavourite();
+		return { state: !!data.favourited, counter: data.favouritesCount };
 	}
 
 	async getContext(id: string): LibraryPromise<MastoContext> {

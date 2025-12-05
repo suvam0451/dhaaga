@@ -8,7 +8,7 @@ export type DriverPostLikeState = {
 	counter?: number;
 	uri?: string;
 };
-export type DriverLikeStateResult = ApiAsyncResult<DriverPostLikeState>;
+export type DriverLikeStateResult = Promise<DriverPostLikeState>;
 
 /**
  * Post Bookmark Status

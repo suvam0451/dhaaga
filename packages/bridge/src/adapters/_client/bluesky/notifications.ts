@@ -1,22 +1,17 @@
+import type {
+	AppBskyNotificationListNotifications,
+	ChatBskyConvoDefs,
+	ChatBskyConvoGetMessages,
+	ChatBskyConvoListConvos,
+	Facet,
+} from '@atproto/api';
 import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { MastoNotification } from '../../../types/mastojs.types.js';
-import { MegaNotification } from '../../../types/megalodon.types.js';
-import type {
-	AppBskyNotificationListNotifications,
-	ChatBskyConvoGetConvo,
-	ChatBskyConvoGetMessages,
-	ChatBskyConvoListConvos,
-	Facet,
-	ChatBskyConvoDefs,
-	ChatBskyConvoSendMessage,
-} from '@atproto/api';
-import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
-import type { AppAtpSessionData } from '../../../types/atproto.js';
-import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
+import { PaginatedPromise } from '../_router/routes/_types.js';
+import type { AppAtpSessionData } from '#/types/atproto.js';
+import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	dto: AppAtpSessionData;
@@ -25,100 +20,88 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		this.dto = dto;
 	}
 
-	get(query: NotificationGetQueryDto): LibraryPromise<{
-		data: MastoNotification[] | MegaNotification[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
+	async getAllNotifications(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<AppBskyNotificationListNotifications.Notification[]> {
 		const agent = getXrpcAgent(this.dto);
-		agent.listNotifications();
-		return Promise.resolve({ data: undefined }) as any;
+		const response = await agent.listNotifications({ limit: query.limit });
+		return {
+			data: response.data.notifications,
+			maxId: response.data.cursor,
+		};
 	}
 
-	async getChats(): LibraryPromise<ChatBskyConvoListConvos.OutputSchema> {
+	async getChats(): PaginatedPromise<ChatBskyConvoListConvos.OutputSchema> {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<ChatBskyConvoListConvos.OutputSchema>(
-			'listConvos',
-			agent.chat.bsky.convo.listConvos,
-			agent.chat.bsky.convo,
-			{
-				limit: 10,
-			},
-			{
-				headers: {
-					'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat',
-				},
-			},
+		const data = await agent.chat.bsky.convo.listConvos(
+			{ limit: 10 },
+			{ headers: { 'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat' } },
 		);
+
+		return {
+			data: data.data,
+			maxId: data.data.cursor,
+		};
 	}
 
 	async getChat(
 		convoId: string,
-	): LibraryPromise<ChatBskyConvoGetConvo.OutputSchema> {
+	): PaginatedPromise<ChatBskyConvoDefs.ConvoView> {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<ChatBskyConvoGetConvo.OutputSchema>(
-			'getConvo',
-			agent.chat.bsky.convo.getConvo,
-			agent.chat.bsky.convo,
-			{
-				convoId,
-			},
+		const data = await agent.chat.bsky.convo.getConvo(
+			{ convoId },
 			{
 				headers: {
 					'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat',
 				},
 			},
 		);
+		return {
+			data: data.data.convo,
+		};
 	}
 
-	async getMessages(
+	async getChatMessages(
 		convoId: string,
-	): LibraryPromise<ChatBskyConvoGetMessages.OutputSchema> {
+	): PaginatedPromise<ChatBskyConvoGetMessages.OutputSchema> {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<ChatBskyConvoGetMessages.OutputSchema>(
-			'getMessages',
-			agent.chat.bsky.convo.getMessages,
-			agent.chat.bsky.convo,
-			{
-				convoId,
-				limit: 60,
-			},
+		const data = await agent.chat.bsky.convo.getMessages(
+			{ convoId, limit: 60 },
 			{
 				headers: {
 					'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat',
 				},
 			},
 		);
+		return {
+			data: data.data,
+			maxId: data.data.cursor,
+		};
 	}
 
-	async getMentions(): LibraryPromise<AppBskyNotificationListNotifications.OutputSchema> {
+	async getMentions(): PaginatedPromise<
+		AppBskyNotificationListNotifications.Notification[]
+	> {
 		const agent = getBskyAgent(this.dto);
-		return await InvokeBskyFunction<AppBskyNotificationListNotifications.OutputSchema>(
-			'listNotifications',
-			agent.listNotifications,
-			agent,
-			{
-				reasons: ['mention', 'reply', 'quote'],
-				limit: 30,
-			},
-		);
+		const response = await agent.listNotifications({
+			reasons: ['mention', 'reply', 'quote'],
+			limit: 30,
+		});
+		return {
+			data: response.data.notifications,
+			maxId: response.data.cursor,
+		};
 	}
 
 	async sendMessage(
 		convoId: string,
 		content: { text: string; facets?: Facet[] },
-	): LibraryPromise<ChatBskyConvoDefs.MessageView> {
+	): Promise<ChatBskyConvoDefs.MessageView> {
 		const agent = getXrpcAgent(this.dto);
-		return await InvokeBskyFunction<ChatBskyConvoSendMessage.OutputSchema>(
-			'sendMessage',
-			agent.chat.bsky.convo.sendMessage,
-			agent.chat.bsky.convo,
+		const response = await agent.chat.bsky.convo.sendMessage(
 			{
 				convoId,
-				message: {
-					text: content.text,
-					facets: content.facets,
-				},
+				message: { text: content.text, facets: content.facets },
 			},
 			{
 				headers: {
@@ -126,15 +109,21 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 				},
 			},
 		);
+		return response.data;
 	}
 
-	async getSocialUpdates(query: NotificationGetQueryDto) {
+	async getSocialUpdates(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<AppBskyNotificationListNotifications.Notification[]> {
 		const agent = getBskyAgent(this.dto);
 
 		const resp = await agent.listNotifications({
 			reasons: ['like', 'follow', 'repost'],
 		});
-		return resp;
+		return {
+			data: resp.data.notifications,
+			maxId: resp.data.cursor,
+		};
 	}
 }
 

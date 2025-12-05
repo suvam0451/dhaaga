@@ -1,6 +1,7 @@
 import { ApiErrorCode, LibraryResponse } from '../types/result.types.js';
 import { CasingUtil } from '../utils/casing.js';
 import { BaseUrlNormalizationService } from '../utils/urls.js';
+import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
 
 type DhaagaFetchRequestConfig = {
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';
@@ -82,7 +83,6 @@ class FetchWrapper {
 			for (const item of items) {
 				params.append('types[]', item);
 			}
-			console.log(`${this.baseUrl}${endpoint}?` + params.toString());
 			return `${this.baseUrl}${endpoint}?` + params.toString();
 		}
 
@@ -94,120 +94,62 @@ class FetchWrapper {
 
 	async getCamelCaseWithLinkPagination<T>(
 		endpoint: string,
-		query?: Object | Record<string, string>,
-	): Promise<
-		LibraryResponse<{
-			data: T;
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
-		endpoint = this.withQuery(endpoint, query);
-		return await fetch(endpoint, {
+		query?: object | Record<string, string>,
+	): PaginatedPromise<T> {
+		const url = this.withQuery(endpoint, query);
+
+		const response = await fetch(url, {
 			method: 'GET',
 			headers: this.requestHeader,
-		})
-			.then(async (response) => {
-				if (!response.ok) {
-					throw new Error(
-						JSON.stringify({
-							status: response.status,
-							statusText: response.statusText,
-						}),
-					);
-				}
-				const { minId, maxId } = DhaagaApiUtils.extractPaginationFromLinkHeader(
-					response.headers,
-				);
-				const _data = CasingUtil.camelCaseKeys(await response.json());
-				return {
-					data: {
-						data: _data,
-						minId,
-						maxId,
-					},
-				};
-			})
-			.catch((e) => {
-				console.log(e);
-				return {
-					error: {
-						code: ApiErrorCode.UNKNOWN_ERROR,
-						message: e,
-					},
-				};
-			});
+		});
+
+		if (!response.ok) {
+			throw new Error(response.statusText ?? String(response.status));
+		}
+
+		const { minId, maxId } = DhaagaApiUtils.extractPaginationFromLinkHeader(
+			response.headers,
+		);
+
+		const json = await response.json();
+		const data = CasingUtil.camelCaseKeys(json);
+
+		return { data, minId, maxId };
 	}
 
 	async getCamelCase<T>(
 		endpoint: string,
-		query?: Object | Record<string, string>,
-	): Promise<LibraryResponse<T>> {
-		endpoint = this.withQuery(endpoint, query);
-		return await fetch(endpoint, {
+		query?: object | Record<string, string>,
+	): Promise<T> {
+		const url = this.withQuery(endpoint, query);
+
+		const response = await fetch(url, {
 			method: 'GET',
 			headers: this.requestHeader,
-		})
-			.then(async (response) => {
-				if (!response.ok) {
-					throw new Error(
-						JSON.stringify({
-							status: response.status,
-							statusText: response.statusText,
-						}),
-					);
-				}
-				DhaagaApiUtils.extractPaginationFromLinkHeader(response.headers);
-				const data = CasingUtil.camelCaseKeys(await response.json());
-				return { data };
-			})
-			.catch((e) => {
-				return {
-					error: {
-						code: ApiErrorCode.UNKNOWN_ERROR,
-						message: e,
-					},
-				};
-			});
+		});
+
+		if (!response.ok) throw new Error(response.statusText ?? response.status);
+		const json = await response.json();
+		return CasingUtil.camelCaseKeys(json);
 	}
 
-	async post<T>(
-		endpoint: string,
-		body: object,
-		opts: {},
-	): Promise<LibraryResponse<T>> {
-		endpoint = `${this.baseUrl}${endpoint}`;
-		return await fetch(endpoint, {
+	async post<T>(endpoint: string, body: object, opts: {}): Promise<T> {
+		const url = `${this.baseUrl}${endpoint}`;
+
+		const headers: Record<string, string> = {
+			'Content-Type': 'application/json',
+			...(this.token && { Authorization: `Bearer ${this.token}` }),
+		};
+
+		const response = await fetch(url, {
 			method: 'POST',
-			headers: this.token
-				? {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${this.token}`,
-					}
-				: {
-						'Content-Type': 'application/json',
-					},
+			headers,
 			body: JSON.stringify(body),
-		})
-			.then(async (response) => {
-				if (!response.ok) {
-					throw new Error(
-						JSON.stringify({
-							status: response.status,
-							statusText: response.statusText,
-						}),
-					);
-				}
-				return { data: await response.json() };
-			})
-			.catch((e) => {
-				return {
-					error: {
-						code: ApiErrorCode.UNKNOWN_ERROR,
-						message: e,
-					},
-				};
-			});
+			...opts,
+		});
+
+		if (!response.ok) throw new Error(response.statusText ?? response.status);
+		return response.json();
 	}
 
 	private static applyQueriesToRequestUrl(
@@ -237,68 +179,70 @@ class FetchWrapper {
 		};
 	}
 
-	private static execute() {}
-
 	async get<T>(
 		endpoint: string,
 		opts?: DhaagaFetchRequestConfig,
 	): Promise<LibraryResponse<T>> {
-		endpoint = FetchWrapper.applyQueriesToRequestUrl(endpoint, {
+		const url = FetchWrapper.applyQueriesToRequestUrl(endpoint, {
 			...opts,
 			baseURL: opts?.baseURL || this.baseUrl,
 		});
 
 		try {
 			const response = await fetch(
-				endpoint,
+				url,
 				FetchWrapper.buildRequestInitObject({ ...opts, method: 'GET' }),
 			);
 
 			if (!response.ok) {
-				let errorBody;
 				let message = response.statusText;
 				let errorCode = ApiErrorCode.UNKNOWN_ERROR;
+				let errorBody: any;
+
 				try {
 					errorBody = await response.json();
-					if (typeof errorBody?.error === 'string') message = errorBody.error;
 
-					if (typeof errorBody?.error?.message === 'string')
+					// readable error extraction
+					if (typeof errorBody?.error === 'string') {
+						message = errorBody.error;
+					} else if (typeof errorBody?.error?.message === 'string') {
 						message = errorBody.error.message;
+					}
 				} catch {
-					errorBody = await response.text(); // fallback
+					// fallback if JSON parse fails
+					errorBody = await response.text();
 					console.log('via body', errorBody);
 				}
 
 				switch (response.status) {
-					case 401: {
+					case 401:
 						errorCode = ApiErrorCode.UNAUTHORIZED;
 						break;
-					}
 				}
 
 				return {
 					error: {
 						code: errorCode,
-						// status: response.status,
-						// statusText: response.statusText,
-						// body: errorBody,
 						message,
 					},
 				};
 			}
 
 			let data = await response.json();
+
+			// optional transform convenience
 			if (opts?.transformResponse === 'snake') {
 				data = CasingUtil.snakeCaseKeys(data) as T;
 			} else if (opts?.transformResponse === 'camel') {
 				data = CasingUtil.camelCaseKeys(data) as T;
 			}
+
 			return data;
-		} catch (e) {
+		} catch (err: any) {
 			return {
 				error: {
 					code: ApiErrorCode.UNKNOWN_ERROR,
-					message: e,
+					message: err?.message ?? String(err),
 				},
 			};
 		}

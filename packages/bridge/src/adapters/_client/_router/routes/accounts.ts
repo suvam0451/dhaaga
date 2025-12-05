@@ -1,32 +1,28 @@
 import { Endpoints } from 'misskey-js';
 import { FollowPostDto, GetPostsQueryDTO } from '../../_interface.js';
-import { LibraryPromise } from './_types.js';
-import {
+import type {
+	AppBskyActorDefs,
 	AppBskyActorGetProfile,
+	AppBskyBookmarkDefs,
 	AppBskyFeedGetAuthorFeed,
-	AppBskyGraphGetFollowers,
-	AppBskyGraphGetFollows,
+	AppBskyGraphDefs,
 } from '@atproto/api';
-import {
+import type {
 	MastoAccount,
 	MastoFamiliarFollowers,
 	MastoFeaturedTag,
 	MastoList,
 	MastoRelationship,
 	MastoStatus,
-} from '../../../../types/mastojs.types.js';
-import {
+} from '#/types/mastojs.types.js';
+import type {
 	MegaAccount,
 	MegaRelationship,
 	MegaStatus,
-} from '../../../../types/megalodon.types.js';
-import {
-	MissNote,
-	MissUserDetailed,
-} from '../../../../types/misskey-js.types.js';
-import { LibraryResponse } from '../../../../types/result.types.js';
-import { ApiAsyncResult } from '../../../../utils/api-result.js';
-import { DriverWebfingerType } from '../../../../types/query.types.js';
+} from '#/types/megalodon.types.js';
+import type { MissUserDetailed } from '#/types/misskey-js.types.js';
+import { DriverWebfingerType } from '#/types/query.types.js';
+import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;
@@ -76,13 +72,16 @@ export interface AccountRoute {
 	follow(
 		id: string,
 		opts: FollowPostDto,
-	): LibraryPromise<
-		MastoRelationship | Endpoints['following/create']['res'] | MegaRelationship
+	): Promise<
+		| MastoRelationship
+		| Endpoints['following/create']['res']
+		| MegaRelationship
+		| { uri: string; cid: string }
 	>;
 
 	unfollow(
 		id: string,
-	): LibraryPromise<
+	): Promise<
 		MastoRelationship | Endpoints['following/delete']['res'] | MegaRelationship
 	>;
 
@@ -93,35 +92,29 @@ export interface AccountRoute {
 	block(
 		id: string,
 	): Promise<
-		LibraryResponse<
-			MastoRelationship | Endpoints['blocking/create']['res'] | MegaRelationship
-		>
+		MastoRelationship | Endpoints['blocking/create']['res'] | MegaRelationship
 	>;
 
 	unblock(
 		id: string,
 	): Promise<
-		LibraryResponse<
-			MastoRelationship | Endpoints['blocking/delete']['res'] | MegaRelationship
-		>
+		MastoRelationship | Endpoints['blocking/delete']['res'] | MegaRelationship
 	>;
 
 	mute(
 		id: string,
 		opts: AccountMutePostDto,
-	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>>;
+	): Promise<MastoRelationship | MegaRelationship>;
 
-	unmute(
-		id: string,
-	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>>;
+	unmute(id: string): Promise<MastoRelationship | MegaRelationship>;
 
-	removeFollower(id: string): Promise<LibraryResponse<void>>;
+	removeFollower(id: string): Promise<void>;
 
 	// 200/400
 	// mastodon/misskey/akkoma/pleroma
 	lookup(
 		webfingerUrl: DriverWebfingerType,
-	): ApiAsyncResult<MastoAccount | MegaAccount>;
+	): Promise<MastoAccount | MegaAccount>;
 
 	/**
 	 * General
@@ -139,75 +132,67 @@ export interface AccountRoute {
 		id: string,
 		params: AccountRouteStatusQueryDto,
 	): Promise<
-		MastoStatus[] | MissNote[] | AppBskyFeedGetAuthorFeed.Response | any[]
+		| MastoStatus[]
+		| Endpoints['users/notes']['res']
+		| AppBskyFeedGetAuthorFeed.Response
+		| any[]
 	>;
 
 	get(
 		id: string,
-	): LibraryPromise<
+	): Promise<
 		| MastoAccount
 		| MissUserDetailed
 		| MegaAccount
 		| AppBskyActorGetProfile.Response
 	>;
 
-	getMany(ids: string[]): LibraryPromise<MastoAccount[] | MissUserDetailed[]>;
+	resolveMany(ids: string[]): Promise<MastoAccount[] | MissUserDetailed[]>;
 
 	relationships(
 		ids: string[],
-	): LibraryPromise<MastoRelationship[] | MegaRelationship[]>;
+	): Promise<MastoRelationship[] | MegaRelationship[]>;
 
-	featuredTags(id: string): LibraryPromise<MastoFeaturedTag[]>;
+	featuredTags(id: string): Promise<MastoFeaturedTag[]>;
 
-	familiarFollowers(ids: string[]): LibraryPromise<MastoFamiliarFollowers[]>;
+	knownFollowers(ids: string[]): Promise<MastoFamiliarFollowers[]>;
 
 	/**
 	 * Lists this user is part of
 	 * @param id
 	 */
-	lists(id: string): LibraryPromise<MastoList[]>;
-
-	likes(opts: GetPostsQueryDTO): Promise<
-		LibraryResponse<{
-			data: MastoStatus[] | MegaStatus[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
+	getLists(
+		id: string,
+	): PaginatedPromise<
+		| MastoList[]
+		| AppBskyGraphDefs.ListView[]
+		| Endpoints['users/lists/list']['res']
 	>;
 
-	bookmarks(query: BookmarkGetQueryDTO): Promise<
-		LibraryResponse<{
-			data: MastoStatus[] | MegaStatus[] | Endpoints['i/favorites']['res'];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
+	likes(opts: GetPostsQueryDTO): PaginatedPromise<MastoStatus[] | MegaStatus[]>;
+
+	bookmarks(
+		query: BookmarkGetQueryDTO,
+	): PaginatedPromise<
+		| MastoStatus[]
+		| MegaStatus[]
+		| Endpoints['i/favorites']['res']
+		| AppBskyBookmarkDefs.BookmarkView[]
 	>;
 
-	followers(query: FollowerGetQueryDTO): LibraryPromise<
-		| {
-				data: MastoAccount[];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| AppBskyGraphGetFollowers.Response
+	getFollowers(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<
+		| MastoAccount[]
+		| Endpoints['users/followers']['res']
+		| AppBskyActorDefs.ProfileView[]
 	>;
 
-	followings(query: FollowerGetQueryDTO): LibraryPromise<
-		| {
-				data: MastoAccount[];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-		| AppBskyGraphGetFollows.Response
+	getFollowings(
+		query: FollowerGetQueryDTO,
+	): PaginatedPromise<
+		| MastoAccount[]
+		| Endpoints['users/followers']['res']
+		| AppBskyActorDefs.ProfileView[]
 	>;
 }

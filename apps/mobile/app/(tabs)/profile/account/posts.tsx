@@ -4,7 +4,7 @@ import {
 	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import SimplePostTimeline from '#/components/SimplePostTimeline';
+import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 import useTimelineQueryReactNative from '#/hooks/useTimelineQueryReactNative';
 import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
 import { useEffect } from 'react';

@@ -6,7 +6,7 @@ import {
 	useAppAcct,
 	useAppApiClient,
 } from '#/hooks/utility/global-state-extractors';
-import { feedUnifiedQueryOptions } from '@dhaaga/react';
+import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 
 type TimelineQueryParams = {
 	type: TimelineFetchMode;
@@ -28,7 +28,13 @@ function useTimelineQueryReactNative(params: TimelineQueryParams) {
 	const { acct } = useAppAcct();
 
 	return useQuery(
-		feedUnifiedQueryOptions(client, driver, server, acct.identifier, params),
+		unifiedPostFeedQueryOptions(
+			client,
+			driver,
+			server,
+			acct.identifier,
+			params,
+		),
 	);
 }
 

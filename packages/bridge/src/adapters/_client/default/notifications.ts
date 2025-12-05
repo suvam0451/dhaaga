@@ -2,46 +2,33 @@ import {
 	NotificationGetQueryDto,
 	NotificationsRoute,
 } from '../_router/routes/notifications.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
-import { MastoNotification } from '../../../types/mastojs.types.js';
-import { LibraryResponse } from '../../../types/result.types.js';
 
 export class DefaultNotificationsRouter implements NotificationsRoute {
-	async get(): Promise<
-		LibraryResponse<{
-			data: MastoNotification[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>
-	> {
-		return notImplementedErrorBuilder<{
-			data: MastoNotification[];
-			minId?: string | null;
-			maxId?: string | null;
-		}>();
+	async getAllNotifications(): Promise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getChats() {
-		return notImplementedErrorBuilder();
+	async getChats(): Promise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getChat() {
-		return notImplementedErrorBuilder();
+	async getChat(): Promise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getMessages() {
-		return notImplementedErrorBuilder();
+	async getChatMessages(): Promise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async sendMessage() {
-		return notImplementedErrorBuilder();
+	async sendMessage(): Promise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getMentions() {
-		return notImplementedErrorBuilder();
+	async getMentions(): Promise<any> {
+		throw new Error('method not implemented');
 	}
 
-	async getSocialUpdates(query: NotificationGetQueryDto) {
-		return notImplementedErrorBuilder();
+	async getSocialUpdates(query: NotificationGetQueryDto): Promise<any> {
+		throw new Error('method not implemented');
 	}
 }

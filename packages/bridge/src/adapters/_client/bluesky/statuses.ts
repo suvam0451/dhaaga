@@ -11,13 +11,12 @@ import {
 	ChatBskyConvoSendMessage,
 } from '@atproto/api';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import { ApiErrorCode } from '../../../types/result.types.js';
-import { Err, Ok } from '../../../utils/index.js';
+import { ApiErrorCode } from '#/types/result.types.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
-} from '../../../types/driver.types.js';
-import { getBskyAgent } from '../../../utils/atproto.js';
+} from '#/types/driver.types.js';
+import { getBskyAgent } from '#/utils/atproto.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
@@ -30,19 +29,14 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	async create(dto: DhaagaJsPostCreateDto): LibraryPromise<{
+	async create(dto: DhaagaJsPostCreateDto): Promise<{
 		uri: string;
 		cid: string;
 	}> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.post({
-				text: dto.status,
-			});
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		return agent.post({
+			text: dto.status,
+		});
 	}
 
 	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
@@ -90,25 +84,17 @@ class BlueskyStatusesRouter implements StatusesRoute {
 	}
 
 	async like(uri: string, cid?: string): DriverLikeStateResult {
-		if (!cid) return Err(ApiErrorCode.INVALID_INPUT);
+		if (!cid) throw new Error('invalid input. missing cid');
 		const agent = getBskyAgent(this.dto);
-		try {
-			const result = await agent.like(uri, cid);
-			return Ok({ state: true, uri: result.uri });
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		const result = await agent.like(uri, cid);
+		return { state: true, uri: result.uri };
 	}
 
 	async removeLike(uri: string, cid?: string): DriverLikeStateResult {
-		if (!cid) return Err(ApiErrorCode.INVALID_INPUT);
+		if (!cid) throw new Error('invalid input. missing cid');
 		const agent = getBskyAgent(this.dto);
-		try {
-			await agent.deleteLike(uri);
-			return Ok({ state: false });
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		await agent.deleteLike(uri);
+		return { state: false };
 	}
 
 	unBookmark(id: string): DriverBookmarkStateResult {
@@ -167,22 +153,14 @@ class BlueskyStatusesRouter implements StatusesRoute {
 	 */
 	async atProtoLike(uri: string, cid: string): DriverLikeStateResult {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const result = await agent.like(uri, cid);
-			return Ok({ state: true, uri: result.uri });
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		const result = await agent.like(uri, cid);
+		return { state: true, uri: result.uri };
 	}
 
 	async atProtoDeleteLike(uri: string): DriverLikeStateResult {
 		const agent = getBskyAgent(this.dto);
-		try {
-			await agent.deleteLike(uri);
-			return Ok({ state: false });
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		await agent.deleteLike(uri);
+		return { state: false };
 	}
 
 	async atProtoRepost(

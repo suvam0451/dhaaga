@@ -1,14 +1,11 @@
 import { TagRoute } from '../_router/routes/tags.js';
-import {
-	PaginatedLibraryPromise,
-	LibraryPromise,
-} from '../_router/routes/_types.js';
+import { PaginatedPromise, LibraryPromise } from '../_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '../_router/dto/api-responses.dto.js';
-import type { MastoTag } from '../../../types/mastojs.types.js';
-import { ApiErrorCode } from '../../../types/result.types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { MisskeyJsWrapper } from '../../../custom-clients/custom-clients.js';
+import type { MastoTag } from '#/types/mastojs.types.js';
+import { ApiErrorCode } from '#/types/result.types.js';
+import FetchWrapper from '#/custom-clients/custom-fetch.js';
+import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
 
 export class MisskeyTagsRouter implements TagRoute {
 	direct: FetchWrapper;
@@ -22,8 +19,8 @@ export class MisskeyTagsRouter implements TagRoute {
 	/**
 	 * Misskey and it's forks do not support hashtag following
 	 */
-	async followedTags(): PaginatedLibraryPromise<MastoTag[]> {
-		return { data: { data: [] } };
+	async followedTags(): PaginatedPromise<MastoTag[]> {
+		throw new Error('Method not implemented.');
 	}
 
 	async follow(id: string): LibraryPromise<MastoTag> {

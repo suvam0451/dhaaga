@@ -3,13 +3,13 @@ import {
 	TimelineFetchMode,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import { feedUnifiedQueryOptions } from '@dhaaga/react';
+import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import {
 	useAppAcct,
 	useAppApiClient,
 } from '#/hooks/utility/global-state-extractors';
 import { useQuery } from '@tanstack/react-query';
-import SimplePostTimeline from '#/components/SimplePostTimeline';
+import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 
 function PageContent() {
 	const { client, driver, server } = useAppApiClient();
@@ -18,7 +18,7 @@ function PageContent() {
 	const State = usePostTimelineState()!;
 
 	const queryResult = useQuery(
-		feedUnifiedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
 			type: TimelineFetchMode.BOOKMARKS,
 			maxId: State.appliedMaxId,
 			sessionId: State.sessionId,

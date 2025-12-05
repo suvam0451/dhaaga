@@ -4,8 +4,8 @@ import {
 	AppBskyActorSearchActorsTypeahead,
 	AppBskyFeedSearchPosts,
 } from '@atproto/api';
-import { MastoAccount, MastoStatus } from '../../../../types/mastojs.types.js';
-import { MegaAccount, MegaStatus } from '../../../../types/megalodon.types.js';
+import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
+import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
 
 type MastoUnifiedSearchType = {
 	q: string;
