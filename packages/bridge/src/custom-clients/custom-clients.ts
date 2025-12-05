@@ -10,29 +10,11 @@
  * API calls using fetch
  */
 
-import FetchWrapper from './custom-fetch.js';
+import FetchWrapper from '../client/utils/fetch.js';
 import { mastodon, createRestAPIClient } from 'masto';
-import { Agent, CredentialSession } from '@atproto/api';
 import generator, { MegalodonInterface } from 'megalodon';
 import { KNOWN_SOFTWARE } from '../data/driver.js';
 import { api } from 'misskey-js';
-
-/**
- * Used for --> Bluesky
- */
-export class AtProtoWrapper extends FetchWrapper {
-	lib: Agent;
-
-	constructor(baseUrl: string, token?: string) {
-		super(baseUrl, token);
-
-		this.lib = new Agent(new CredentialSession(new URL(this.baseUrl)));
-	}
-
-	static create(baseUrl: string, token?: string) {
-		return new AtProtoWrapper(baseUrl, token);
-	}
-}
 
 /**
  * Used for --> Mastodon

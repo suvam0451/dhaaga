@@ -2,12 +2,12 @@ import ActivityPubService from './activitypub.service.js';
 import { Dispatch, SetStateAction } from 'react';
 import { z } from 'zod';
 import activitypubService from './activitypub.service.js';
-import { InstanceApi_CustomEmojiDTO } from '../adapters/_client/_router/routes/instance.js';
+import { InstanceApi_CustomEmojiDTO } from '../client/collections/servers/_interface.js';
 import {
 	ApiTargetInterface,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
-} from '../adapters/index.js';
+} from '../client/index.js';
 import { PostParser } from '../parsers/post.js';
 import { DriverReactionResolvedType } from '../types/activitypub.js';
 
@@ -281,16 +281,16 @@ class ActivityPubReactionsService {
 		domain: string,
 		setLoading: (val: boolean) => void,
 	): Promise<ActivityPubReactionStateType> {
-		const { data: newStateData, error: newStateError } = await (
-			client as MisskeyApiAdapter
-		).statuses.get(postId);
+		const currentPost = await (client as MisskeyApiAdapter).statuses.getPost(
+			postId,
+		);
 
-		if (newStateError) {
+		if (!currentPost) {
 			setLoading(false);
 			return [];
 		}
 
-		const status = PostParser.rawToInterface(newStateData, domain);
+		const status = PostParser.rawToInterface(currentPost, domain);
 		setLoading(false);
 		return status.getReactions(status.getMyReaction() || 'N/A');
 	}

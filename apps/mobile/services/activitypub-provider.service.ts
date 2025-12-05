@@ -8,7 +8,7 @@ import { File } from 'expo-file-system';
  */
 class ActivityPubProviderService {
 	static async getStatusContext(client: ApiTargetInterface, id: string) {
-		return client.statuses.getContext(id);
+		return client.statuses.getPostContext(id);
 	}
 
 	static async getStatus(client: ApiTargetInterface, id: string) {

@@ -31,7 +31,7 @@ export function postHierarchyQueryOpts(
 	postId: string,
 ) {
 	async function api() {
-		const { data, error } = await client.statuses.getContext(postId);
+		const { data, error } = await client.statuses.getPostContext(postId);
 		if (error) return null;
 
 		// handled by context solver, instead

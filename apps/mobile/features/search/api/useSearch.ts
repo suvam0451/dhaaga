@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { DhaagaJsPostSearchDTO } from '@dhaaga/bridge/dist/adapters/_client/_router/routes/search';
+import { DhaagaJsPostSearchDTO } from '../../../../../packages/bridge/src/client/collections/search/search';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
 import {

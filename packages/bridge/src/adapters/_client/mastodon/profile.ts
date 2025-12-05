@@ -1,8 +1,8 @@
 import { LibraryPromise } from '../_router/routes/_types.js';
 import { ProfileRoute } from '../_router/routes/profile.js';
-import { MastoAccount } from '../../../types/mastojs.types.js';
-import FetchWrapper from '../../../custom-clients/custom-fetch.js';
-import { MastoJsWrapper } from '../../../custom-clients/custom-clients.js';
+import { MastoAccount } from '#/types/mastojs.types.js';
+import FetchWrapper from '#/client/utils/fetch.js';
+import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
 
 export class MastodonProfileRouter implements ProfileRoute {
 	direct: FetchWrapper;

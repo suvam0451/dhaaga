@@ -1,12 +1,12 @@
 import { RestClientCreateDTO } from '../adapters/_client/_interface.js';
-import { AtprotoApiAdapter, BaseApiAdapter, KNOWN_SOFTWARE } from '../index.js';
+import { AtprotoApiAdapter, KNOWN_SOFTWARE } from '../index.js';
 import { AppAtpSessionData } from '../types/atproto.js';
 import {
+	ApiTargetInterface,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
 	MastoApiAdapter,
-} from '../adapters/index.js';
-import { ApiTargetInterface } from '../adapters/_client/_router/routes/_index.js';
+} from '#/client/index.js';
 
 class Service {
 	static supportsMastoApiV1(driver: KNOWN_SOFTWARE | string) {

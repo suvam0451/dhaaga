@@ -4,7 +4,7 @@ import {
 	MastoApiAdapter,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
-} from '../adapters/index.js';
+} from '../client/index.js';
 import { DriverService } from './driver.js';
 import { RandomUtil } from '../utils/index.js';
 import { LibraryPromise } from '../adapters/_client/_router/routes/_types.js';
@@ -99,7 +99,7 @@ class ActivityPubService {
 	}
 
 	/**
-	 * toggle the bookmark status and return next state
+	 * toggle the bookmark status and return the next state
 	 * @param client
 	 * @param id
 	 * @param localState
@@ -154,20 +154,10 @@ class ActivityPubService {
 			}
 		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
 			if (localState) {
-				const { error } = await (
-					client as MastoApiAdapter
-				).statuses.removeBoost(id);
-				if (error) {
-					console.log('[WARN]: failed to remove boost', error);
-					return null;
-				}
+				await (client as MastoApiAdapter).statuses.removeBoost(id);
 				return -1;
 			} else {
-				const { error } = await (client as MastoApiAdapter).statuses.boost(id);
-				if (error) {
-					console.log('[WARN]: failed to boost', error);
-					return null;
-				}
+				await (client as MastoApiAdapter).statuses.boost(id);
 				return 1;
 			}
 		} else {

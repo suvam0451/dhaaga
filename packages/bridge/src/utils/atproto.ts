@@ -1,5 +1,5 @@
 import { AtpAgent, AtpSessionData } from '@atproto/api';
-import { AtprotoApiAdapter } from '../adapters/index.js';
+import { AtprotoApiAdapter } from '../client/index.js';
 import { ApiAsyncResult } from './api-result.js';
 import { Err, Ok } from './result.js';
 import { ApiErrorCode } from '../types/result.types.js';

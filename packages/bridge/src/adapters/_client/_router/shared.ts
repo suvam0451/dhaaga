@@ -1,4 +1,4 @@
-import { InstanceApi_SoftwareInfoDTO } from './routes/instance.js';
+import { InstanceApi_SoftwareInfoDTO } from '../../../client/collections/servers/_interface.js';
 import { ActivitypubHelper } from '../../../index.js';
 import { LibraryResponse } from '../../../types/result.types.js';
 

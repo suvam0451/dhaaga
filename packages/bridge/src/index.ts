@@ -5,7 +5,7 @@ export {
 	MastoApiAdapter,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
-} from './adapters/index.js';
+} from './client/index.js';
 
 import ActivityPubService from './services/activitypub.service.js';
 export { ActivityPubService };
@@ -21,7 +21,6 @@ import PostAdapterBase from './implementors/status/default.js';
 import MastoApiPostAdapter from './implementors/status/mastodon.js';
 import MisskeyApiPostAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
-import { InstanceApi_CustomEmojiDTO } from './adapters/_client/_router/routes/instance.js';
 import { UserDetailed } from 'misskey-js/autogen/models.js';
 import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.js';
 import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
@@ -30,11 +29,12 @@ import {
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
-} from './adapters/_client/_router/routes/accounts.js';
+} from './client/collections/accounts/_interface.js';
 // used to read viewer
 import AtprotoPostAdapter from './implementors/status/bluesky.js';
 import { KNOWN_SOFTWARE } from './data/driver.js';
 import { DriverService } from './services/driver.js';
+import { InstanceApi_CustomEmojiDTO } from './client/collections/servers/_interface.js';
 
 export {
 	DriverService,
@@ -79,7 +79,7 @@ export {
 	type TagType,
 } from './implementors/tag/_interface.js';
 
-export type { DhaagaJsTimelineQueryOptions } from './adapters/_client/_router/routes/_index.js';
+export type { DhaagaJsTimelineQueryOptions } from './client/collections/timelines/_interface.js';
 
 export type { MfmNode } from './services/index.js';
 export { AtprotoPostService, AtprotoFeedService } from './services/index.js';
