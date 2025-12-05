@@ -138,7 +138,7 @@ export interface AccountRoute {
 	statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): ApiAsyncResult<
+	): Promise<
 		MastoStatus[] | MissNote[] | AppBskyFeedGetAuthorFeed.Response | any[]
 	>;
 

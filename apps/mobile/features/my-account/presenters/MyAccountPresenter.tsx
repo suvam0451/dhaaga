@@ -4,30 +4,28 @@ import {
 	StyleSheet,
 	View,
 } from 'react-native';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import ProfileLandingAccountOverview from '../../../components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
+import ProfileLandingAccountOverview from '#/components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
 import {
 	useAppAcct,
 	useAppActiveSession,
 	useAppApiClient,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { APP_ICON_ENUM } from '../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppText } from '../../../components/lib/Text';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+} from '#/hooks/utility/global-state-extractors';
+import { APP_ICON_ENUM } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { SpecialText } from '#/components/lib/Text';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
-import DriverService, {
-	AppModulesProps,
-} from '../../../services/driver.service';
-import useApiGetMyAccount from '../../../hooks/api/accounts/useApiGetMyAccount';
+import DriverService, { AppModulesProps } from '#/services/driver.service';
+import useApiGetMyAccount from '#/hooks/api/accounts/useApiGetMyAccount';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
-import MyProfileNavbar from '../../../components/shared/topnavbar/MyProfileNavbar';
-import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
+import MyProfileNavbar from '#/components/shared/topnavbar/MyProfileNavbar';
+import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import ModuleItemView from '../views/ModuleItemView';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import AccountLoadError from '#/features/my-account/AccountLoadError';
 import AccountMissingError from '#/features/my-account/AccountMissingError';
 
@@ -67,7 +65,7 @@ function MyAccountPresenter() {
 			label: t(`profile.appFeatures.collections.label`),
 			desc: t(`profile.appFeatures.collections.desc`),
 			iconId: 'layers-outline',
-			to: APP_ROUTING_ENUM.COLLECTIONS,
+			to: APP_ROUTING_ENUM.SPECIAL_FEATURE_COLLECTION_LIST,
 		},
 		// {
 		// 	label: t(`profile.appFeatures.drafts.label`),
@@ -127,12 +125,12 @@ function MyAccountPresenter() {
 					}}
 				/>
 				<View style={{ marginVertical: 8 }} />
-				<AppText.Special
+				<SpecialText
 					style={styles.sectionHeader}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				>
 					{t(`profile.appFeatures.sectionLabel`)}
-				</AppText.Special>
+				</SpecialText>
 				<Animated.FlatList
 					data={appModules}
 					numColumns={2}

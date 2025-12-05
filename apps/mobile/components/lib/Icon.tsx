@@ -43,6 +43,7 @@ export type APP_ICON_ENUM =
 	| 'cog'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
+	| 'checkbox'
 	| 'checkmark'
 	| 'checkmark-circle'
 	| 'checkmark-done-outline'
@@ -90,6 +91,7 @@ export type APP_ICON_ENUM =
 	| 'notifications-outline'
 	| 'no-account'
 	| 'palette'
+	| 'person-add'
 	| 'person-outline'
 	| 'people'
 	| 'phonebook'
@@ -464,6 +466,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'chatbox-ellipses-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'checkbox':
+				return (
+					<Ionicons
+						name="checkbox"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -872,6 +883,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="color-palette-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'person-add':
+				return (
+					<Ionicons
+						name="person-add"
 						size={_size}
 						color={_color}
 						style={iconStyle}

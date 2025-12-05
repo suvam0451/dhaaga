@@ -63,19 +63,15 @@ export class PleromaAccountsRouter
 		return Ok(data.data);
 	}
 
-	async statuses(
-		id: string,
-		query: AccountRouteStatusQueryDto,
-	): ApiAsyncResult<any> {
+	async statuses(id: string, query: AccountRouteStatusQueryDto): Promise<any> {
 		try {
 			const data = await this.client.client.getAccountStatuses(
 				id,
 				CasingUtil.snakeCaseKeys(query) as any,
 			);
-			return Ok(CasingUtil.camelCaseKeys(data.data));
-		} catch (e) {
-			console.log('[ERROR]: getting pleroma user timeline', e);
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			return CasingUtil.camelCaseKeys(data.data);
+		} catch (e: any) {
+			throw new Error(e);
 		}
 	}
 

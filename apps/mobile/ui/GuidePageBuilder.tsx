@@ -1,6 +1,6 @@
 import { StyleProp, View, ViewStyle, FlatList } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import { AppText } from '#/components/lib/Text';
+import { AppText, SpecialText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
@@ -34,7 +34,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 				onScroll={scrollHandler}
 				renderItem={({ item }) => (
 					<View style={sectionStyle}>
-						<AppText.Special
+						<SpecialText
 							style={[
 								{
 									color: theme.primary.a0,
@@ -43,7 +43,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 							]}
 						>
 							{item.question}
-						</AppText.Special>
+						</SpecialText>
 						{item.answers.map((answer, i) => (
 							<AppText.Normal
 								key={i}

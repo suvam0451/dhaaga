@@ -1,5 +1,6 @@
 import { FlatList, RefreshControl, View } from 'react-native';
 import { ReactElement, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type ListWithSkeletonsProps<T> = {
 	items: T[];
@@ -61,20 +62,22 @@ function ListWithSkeletonPlaceholder<T>({
 	}
 
 	return (
-		<FlatList
-			onLayout={onLayout}
-			data={isLoading ? Array(NumNodes).fill(null) : items}
-			renderItem={({ item }) => (isLoading ? SkeletonView() : ItemView(item))}
-			ListHeaderComponent={ListHeaderComponent}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
-			}
-			contentContainerStyle={{
-				paddingBottom: 32,
-			}}
-			ListFooterComponent={listEmpty ? ListEmptyComponent : <View />}
-			onEndReached={onEndReached}
-		/>
+		<GestureHandlerRootView>
+			<FlatList
+				onLayout={onLayout}
+				data={isLoading ? Array(NumNodes).fill(null) : items}
+				renderItem={({ item }) => (isLoading ? SkeletonView() : ItemView(item))}
+				ListHeaderComponent={ListHeaderComponent}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
+				}
+				contentContainerStyle={{
+					paddingBottom: 32,
+				}}
+				ListFooterComponent={listEmpty ? ListEmptyComponent : <View />}
+				onEndReached={onEndReached}
+			/>
+		</GestureHandlerRootView>
 	);
 }
 

@@ -24,21 +24,16 @@ import {
 	MastoList,
 	MastoRelationship,
 	MastoStatus,
-} from '../../../types/mastojs.types.js';
-import {
-	MegaAccount,
-	MegaRelationship,
-	MegaStatus,
-} from '../../../types/megalodon.types.js';
-import { MissUserDetailed } from '../../../types/misskey-js.types.js';
-import { ApiErrorCode, LibraryResponse } from '../../../types/result.types.js';
-import { InvokeBskyFunction } from '../../../custom-clients/custom-bsky-agent.js';
-import { AppAtpSessionData } from '../../../types/atproto.js';
+} from '#/types/mastojs.types.js';
+import { MegaRelationship, MegaStatus } from '#/types/megalodon.types.js';
+import { MissUserDetailed } from '#/types/misskey-js.types.js';
+import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
+import { InvokeBskyFunction } from '#/custom-clients/custom-bsky-agent.js';
+import { AppAtpSessionData } from '#/types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import { ApiAsyncResult } from '../../../utils/api-result.js';
-import { Err, Ok } from '../../../utils/index.js';
-import { DriverWebfingerType } from '../../../types/query.types.js';
-import { getBskyAgent, getXrpcAgent } from '../../../utils/atproto.js';
+import { ApiAsyncResult } from '#/utils/api-result.js';
+import { DriverWebfingerType } from '#/types/query.types.js';
+import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;
@@ -199,17 +194,16 @@ class BlueskyAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): ApiAsyncResult<AppBskyFeedGetAuthorFeed.Response> {
+	): Promise<AppBskyFeedGetAuthorFeed.Response> {
 		const agent = getBskyAgent(this.dto);
 		try {
-			const data = await agent.getAuthorFeed({
+			return await agent.getAuthorFeed({
 				actor: id,
 				filter: params.bskyFilter,
 				limit: params.limit,
 			});
-			return Ok(data);
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+		} catch (e: any) {
+			throw new Error(e);
 		}
 	}
 

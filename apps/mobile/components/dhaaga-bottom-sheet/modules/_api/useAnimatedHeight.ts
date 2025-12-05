@@ -42,7 +42,7 @@ function useAnimatedHeight() {
 					break;
 				}
 				default: {
-					_target = Dimensions.get('window').height * 0.55;
+					_target = Dimensions.get('window').height * 0.5;
 					break;
 				}
 			}

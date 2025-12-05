@@ -1,8 +1,5 @@
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { useEffect, useState } from 'react';
 import {
 	useAppBottomSheet,
@@ -10,16 +7,18 @@ import {
 	useAppDialog,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
-import { appDimensions } from '../../../styles/dimensions';
-import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppIcon } from '../../../components/lib/Icon';
-import { AppAccountSelectionItem } from '../../../components/common/app/Account';
-import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { appDimensions } from '#/styles/dimensions';
+import { AppText } from '#/components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { AppIcon } from '#/components/lib/Icon';
+import { AppAccountSelectionItem } from '#/components/common/app/Account';
+import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -153,20 +152,20 @@ function Page() {
 		show(APP_BOTTOM_SHEET_ENUM.ADD_PROFILE, true);
 	}
 
+	const { scrollHandler, animatedStyle } = useHideTopNavUsingReanimated();
 	return (
-		<AppTopNavbar
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={'Manage Profiles'}
-			translateY={translateY}
-		>
+		<>
+			<NavBar_Simple label={'Manage Profiles'} animatedStyle={animatedStyle} />
 			<ScrollView
 				style={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
 					paddingHorizontal: 10,
+					backgroundColor: theme.background.a0,
 				}}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={init} />
 				}
+				onScroll={scrollHandler}
 			>
 				<View
 					style={{
@@ -215,7 +214,7 @@ function Page() {
 					</View>
 				</Pressable>
 			</ScrollView>
-		</AppTopNavbar>
+		</>
 	);
 }
 

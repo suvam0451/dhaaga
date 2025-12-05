@@ -50,6 +50,8 @@ enum TimelineFetchMode {
 	LIKES = 'Likes',
 
 	FEED = 'Feed',
+
+	MY_POSTS = 'MyPosts',
 }
 
 type State = TimelineReducerBaseState<PostObjectType> & {

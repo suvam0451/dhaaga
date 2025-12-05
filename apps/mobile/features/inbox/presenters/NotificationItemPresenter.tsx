@@ -7,11 +7,15 @@ import BoostNotificationFragment from '../components/BoostNotificationFragment';
 import FollowReqAcceptNotificationFragment from '../components/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from '../components/ReactionNotificationFragment';
 import FollowPresenter from './FollowPresenter';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { FlashListType_Notification } from '../../../services/flashlist.service';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 import GroupedFollowPresenter from './GroupedFollowPresenter';
 import GroupedPostInteractionPresenter from './GroupedPostInteractionPresenter';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { useMemo } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { AppIcon } from '#/components/lib/Icon';
 
 type Props = {
 	item: FlashListType_Notification;
@@ -50,39 +54,56 @@ export function NotificationItemPresenter({ item }: Props) {
 	 * Legacy Singlet Notification Components
 	 */
 
-	switch (_obj.type) {
-		case DriverNotificationType.REPLY:
-			return <ReplyNotificationFragment item={_obj} />;
-		case DriverNotificationType.MENTION:
-		case DriverNotificationType.CHAT:
-		case DriverNotificationType.HOME:
-		case DriverNotificationType.PUBLIC:
-			return <MentionNotificationFragment item={_obj} />;
-		case DriverNotificationType.FAVOURITE:
-			return <FavouriteNotificationFragment item={_obj} />;
-		case DriverNotificationType.FOLLOW:
-			return <FollowPresenter item={_obj} />;
-		case DriverNotificationType.STATUS:
-		case DriverNotificationType.NOTE:
-			return <StatusAlertNotificationFragment item={_obj} />;
-		case DriverNotificationType.REBLOG:
-		case DriverNotificationType.RENOTE:
-			return <BoostNotificationFragment item={_obj} />;
-		case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED:
-			return <FollowReqAcceptNotificationFragment item={_obj} />;
-		case DriverNotificationType.REACTION:
-			return <ReactionNotificationFragment item={_obj} />;
-		case DriverNotificationType.ACHIEVEMENT_EARNED:
-		case DriverNotificationType.APP:
-		default: {
-			console.log('notification type not handled', _obj.type);
-			return (
-				<AppText.Medium style={{ color: theme.complementaryB.a0 }}>
-					Notification Type not handled: {_obj.type}
-				</AppText.Medium>
-			);
+	const Content = useMemo(() => {
+		switch (_obj.type) {
+			case DriverNotificationType.REPLY:
+				return <ReplyNotificationFragment item={_obj} />;
+			case DriverNotificationType.MENTION:
+			case DriverNotificationType.CHAT:
+			case DriverNotificationType.HOME:
+			case DriverNotificationType.PUBLIC:
+				return <MentionNotificationFragment item={_obj} />;
+			case DriverNotificationType.FAVOURITE:
+				return <FavouriteNotificationFragment item={_obj} />;
+			case DriverNotificationType.FOLLOW:
+				return <FollowPresenter item={_obj} />;
+			case DriverNotificationType.STATUS:
+			case DriverNotificationType.NOTE:
+				return <StatusAlertNotificationFragment item={_obj} />;
+			case DriverNotificationType.REBLOG:
+			case DriverNotificationType.RENOTE:
+				return <BoostNotificationFragment item={_obj} />;
+			case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED:
+				return <FollowReqAcceptNotificationFragment item={_obj} />;
+			case DriverNotificationType.REACTION:
+				return <ReactionNotificationFragment item={_obj} />;
+			case DriverNotificationType.ACHIEVEMENT_EARNED:
+			case DriverNotificationType.APP:
+			default: {
+				console.log('notification type not handled', _obj.type);
+				return (
+					<AppText.Medium style={{ color: theme.complementaryB.a0 }}>
+						Notification Type not handled: {_obj.type}
+					</AppText.Medium>
+				);
+			}
 		}
-	}
+	}, [_obj]);
+
+	const renderLeftActions = () => {
+		return (
+			<View style={{ flexDirection: 'row' }}>
+				<TouchableOpacity>
+					<AppIcon id={'chevron-collapse-outline'} />
+				</TouchableOpacity>
+				<TouchableOpacity>
+					<AppIcon id={'chevron-collapse-outline'} />
+				</TouchableOpacity>
+			</View>
+		);
+	};
+
+	return <Swipeable renderLeftActions={renderLeftActions}>{Content}</Swipeable>;
 }
 
 export default NotificationItemPresenter;

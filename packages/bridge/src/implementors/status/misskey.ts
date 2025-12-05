@@ -119,9 +119,9 @@ class MisskeyApiPostAdapter
 
 	getId = () => this.ref.id;
 
-	getRepliesCount = () => this.ref.repliesCount;
+	getRepliesCount = () => this.ref.repliesCount ?? 0;
 
-	getRepostsCount = () => this.ref.renoteCount;
+	getRepostsCount = () => this.ref.renoteCount ?? 0;
 
 	// getFavouritesCount() {
 	// 	return 0;

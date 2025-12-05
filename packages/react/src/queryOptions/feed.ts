@@ -119,6 +119,7 @@ export function feedUnifiedQueryOptions(
 		} else {
 			_feed = data.posts ? data.posts : data;
 		}
+
 		try {
 			return PostParser.parse<unknown[]>(_feed, driver, server);
 		} catch (e) {
@@ -151,7 +152,6 @@ export function feedUnifiedQueryOptions(
 				return defaultResultPage;
 			case TimelineFetchMode.HOME: {
 				const result = await client.timelines.home(_query);
-				// if (result.isErr()) return defaultResultPage;
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.LOCAL: {
@@ -164,25 +164,20 @@ export function feedUnifiedQueryOptions(
 					withRenotes: !opts?.excludeReblogs,
 					withReplies: !opts?.excludeReplies,
 				});
-				console.log(result);
-				// if (result.isErr()) return defaultResultPage;
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.HASHTAG: {
 				const result = await client.timelines.hashtag(_id!, _query);
-				// if (result.isErr()) return defaultResultPage;
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.LIST: {
 				const result = await client.timelines.list(_id!, _query);
-				// if (result.isErr()) return defaultResultPage;
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.USER: {
 				if (!_query || _query.userId === undefined)
 					throw new Error('missing userId');
 				const result = await client.accounts.statuses(_id!, _query as any);
-				if (result.isErr()) return defaultResultPage;
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.SOCIAL: {
@@ -190,7 +185,6 @@ export function feedUnifiedQueryOptions(
 					..._query,
 					social: true,
 				});
-				// if (result.isErr()) return defaultResultPage;
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.BUBBLE: {
@@ -198,7 +192,6 @@ export function feedUnifiedQueryOptions(
 					const result = await (client as PleromaApiAdapter).timelines.bubble(
 						_query,
 					);
-					// if (result.isErr()) return defaultResultPage;
 					return {
 						items: PostParser.parse<unknown[]>(result as any[], driver, server),
 						maxId: generateMaxId(result),
@@ -208,7 +201,6 @@ export function feedUnifiedQueryOptions(
 					const result = await (client as MisskeyApiAdapter).timelines.bubble(
 						_query,
 					);
-					// if (result.isErr()) return defaultResultPage;
 					return {
 						items: PostParser.parse<unknown[]>(result as any[], driver, server),
 						maxId: generateMaxId(result),

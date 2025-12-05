@@ -122,8 +122,8 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): ApiAsyncResult<MastoStatus[]> {
-		return Err(ApiErrorCode.INCOMPATIBLE_DRIVER);
+	): Promise<MastoStatus[]> {
+		throw new Error(ApiErrorCode.INCOMPATIBLE_DRIVER);
 	}
 
 	async relationships(

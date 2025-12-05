@@ -62,7 +62,7 @@ function SelectAccountStack() {
 	];
 
 	function onPressAddAccount() {
-		router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
+		router.navigate(APP_ROUTING_ENUM.PROFILE_ADD_ACCOUNT);
 	}
 
 	return (

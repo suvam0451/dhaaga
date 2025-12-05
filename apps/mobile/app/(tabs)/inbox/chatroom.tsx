@@ -8,20 +8,20 @@ import {
 import { useState } from 'react';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { AppText } from '../../../components/lib/Text';
+} from '#/components/shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
+import { AppText, SpecialText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
-import { AppDivider } from '../../../components/lib/Divider';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppIcon } from '../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import useChatroom from '../../../features/chats/interactors/useChatroom';
-import SendButtonView from '../../../features/chats/views/SendButtonView';
-import InputView from '../../../features/chats/views/InputView';
-import { appDimensions } from '../../../styles/dimensions';
-import RecievedMessageView from '../../../features/chats/views/RecievedMessageView';
-import SentMessageView from '../../../features/chats/views/SentMessageView';
+import { AppDivider } from '#/components/lib/Divider';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import useChatroom from '#/features/chats/interactors/useChatroom';
+import SendButtonView from '#/features/chats/views/SendButtonView';
+import InputView from '#/features/chats/views/InputView';
+import { appDimensions } from '#/styles/dimensions';
+import RecievedMessageView from '#/features/chats/views/RecievedMessageView';
+import SentMessageView from '#/features/chats/views/SentMessageView';
 import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge';
 
 type ParticipantsProps = {
@@ -120,7 +120,7 @@ function Page() {
 								marginLeft: 8,
 							}}
 						>
-							<AppText.Special
+							<SpecialText
 								style={{
 									color: theme.secondary.a20,
 									fontSize: 28,
@@ -128,7 +128,7 @@ function Page() {
 								}}
 							>
 								Participants
-							</AppText.Special>
+							</SpecialText>
 							<View style={{ marginBottom: 16 }}>
 								<Participants accounts={state.room?.members || []} />
 							</View>

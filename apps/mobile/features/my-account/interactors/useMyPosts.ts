@@ -8,7 +8,7 @@ import {
 	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import useTimelineQuery from '../../timelines/api/useTimelineQuery';
+import useTimelineQueryReactNative from '#/hooks/useTimelineQueryReactNative';
 
 function useMyPosts() {
 	const { db } = useAppDb();
@@ -36,7 +36,7 @@ function useMyPosts() {
 		});
 	}, [db]);
 
-	const { fetchStatus, data, status, refetch } = useTimelineQuery({
+	const { fetchStatus, data, status, refetch } = useTimelineQueryReactNative({
 		type: State.feedType,
 		query: State.query,
 		opts: State.opts,

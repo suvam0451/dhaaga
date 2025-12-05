@@ -37,14 +37,13 @@ export class MisskeyAccountsRouter
 	}
 
 	async statuses(id: string, query: AccountRouteStatusQueryDto) {
-		const data = await this.client.client.request<
+		return (await this.client.client.request<
 			'users/notes',
 			Endpoints['users/notes']['req']
 		>('users/notes', {
 			...query,
 			withFiles: !!query.onlyMedia ? query.onlyMedia : undefined,
-		});
-		return Ok(data as any);
+		})) as any;
 	}
 
 	async relationships(ids: string[]): LibraryPromise<MastoRelationship[]> {

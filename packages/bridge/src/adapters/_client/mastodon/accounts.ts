@@ -119,14 +119,11 @@ export class MastodonAccountsRouter implements AccountRoute {
 	async statuses(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): ApiAsyncResult<MastoStatus[]> {
+	): Promise<MastoStatus[]> {
 		try {
-			const data = await this.client.lib.v1.accounts
-				.$select(id)
-				.statuses.list(query);
-			return Ok(data);
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			return await this.client.lib.v1.accounts.$select(id).statuses.list(query);
+		} catch (e: any) {
+			throw new Error(e);
 		}
 	}
 

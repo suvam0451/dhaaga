@@ -1,7 +1,7 @@
-import MyAccountPresenter from '../../../features/my-account/presenters/MyAccountPresenter';
-import AppSettingsPage from '../../../components/screens/profile/stack/AppSettingsPage';
-import { AppPagerView } from '../../../ui/PagerView';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import MyAccountPresenter from '#/features/my-account/presenters/MyAccountPresenter';
+import AppSettingsPage from '#/components/screens/profile/stack/AppSettingsPage';
+import { AppPagerView } from '#/ui/PagerView';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import SelectAccountStack from '#/components/screens/profile/stack/SelectAccount';
 
 const renderScene = (index: number) => {

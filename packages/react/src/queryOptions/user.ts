@@ -83,16 +83,17 @@ async function api(client: ApiTargetInterface, userId: string) {
 			: undefined,
 	});
 
-	if (!result.isOk()) return [];
-	const data = result.unwrap();
-
 	return DriverService.supportsAtProto(client.driver)
 		? PostParser.parse<unknown[]>(
-				(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
+				(result as AppBskyFeedGetAuthorFeed.Response).data.feed,
 				client.driver,
 				client.server!,
 			).filter((o) => !o.meta.isReply)
-		: PostParser.parse<unknown[]>(data as any[], client.driver, client.server!);
+		: PostParser.parse<unknown[]>(
+				result as any[],
+				client.driver,
+				client.server!,
+			);
 }
 
 export function userGalleryQueryOpts(
