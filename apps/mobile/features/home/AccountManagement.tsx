@@ -2,18 +2,18 @@ import { FlatList, RefreshControl, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import AccountListForSoftware from './landing/fragments/AccountListForSoftware';
+import AccountManagementListItem from './components/AccountManagementListItem';
 import { Account, AccountService } from '@dhaaga/db';
 import {
 	useAppDb,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
-import { APP_EVENT_ENUM } from '../../../../services/publishers/app.publisher';
-import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+} from '#/hooks/utility/global-state-extractors';
+import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
-import { AppButtonVariantA } from '../../../lib/Buttons';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '#/components/shared/topnavbar/AppTabLandingNavbar';
@@ -86,7 +86,7 @@ function SelectAccountStack() {
 			<FlatList
 				data={SOFTWARE_ARRAY}
 				renderItem={({ item }) => (
-					<AccountListForSoftware
+					<AccountManagementListItem
 						data={Data}
 						software={item}
 						onListChange={refresh}

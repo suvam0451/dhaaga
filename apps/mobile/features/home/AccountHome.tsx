@@ -23,13 +23,13 @@ import { useState } from 'react';
 import Animated from 'react-native-reanimated';
 import MyProfileNavbar from '#/components/shared/topnavbar/MyProfileNavbar';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
-import ModuleItemView from '../views/ModuleItemView';
+import AccountHomeModuleItem from './components/AccountHomeModuleItem';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import AccountLoadError from '#/features/my-account/AccountLoadError';
-import AccountMissingError from '#/features/my-account/AccountMissingError';
+import AccountLoadError from '#/features/home/views/AccountLoadError';
+import AccountMissingError from '#/features/home/views/AccountMissingError';
 
-function MyAccountPresenter() {
+function AccountHome() {
 	const { onScroll } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
@@ -111,7 +111,7 @@ function MyAccountPresenter() {
 					data={serverModules}
 					numColumns={2}
 					renderItem={({ item }) => (
-						<ModuleItemView
+						<AccountHomeModuleItem
 							desc={item.desc}
 							label={item.label}
 							iconId={item.iconId}
@@ -135,7 +135,7 @@ function MyAccountPresenter() {
 					data={appModules}
 					numColumns={2}
 					renderItem={({ item }) => (
-						<ModuleItemView
+						<AccountHomeModuleItem
 							desc={item.desc}
 							label={item.label}
 							iconId={item.iconId}
@@ -153,7 +153,7 @@ function MyAccountPresenter() {
 	);
 }
 
-export default MyAccountPresenter;
+export default AccountHome;
 
 const styles = StyleSheet.create({
 	sectionHeader: {

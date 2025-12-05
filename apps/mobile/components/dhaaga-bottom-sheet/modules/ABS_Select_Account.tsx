@@ -21,9 +21,9 @@ import {
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
-import { RandomUtil } from '@dhaaga/bridge';
 import { AppIcon } from '#/components/lib/Icon';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
+import RoutingUtils from '#/utils/routing.utils';
 
 type ListItemProps = {
 	acct: Account;
@@ -122,13 +122,7 @@ function ABS_Select_Account() {
 
 	function onPressManageAccount() {
 		hide();
-		router.navigate({
-			pathname: APP_ROUTING_ENUM.PROFILE_TAB,
-			params: {
-				requestId: RandomUtil.nanoId(),
-				pagerIndex: 1,
-			},
-		});
+		RoutingUtils.toAccountManagement();
 	}
 
 	function onPressAddAccount() {

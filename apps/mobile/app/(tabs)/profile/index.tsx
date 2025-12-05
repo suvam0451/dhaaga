@@ -1,17 +1,17 @@
-import MyAccountPresenter from '#/features/my-account/presenters/MyAccountPresenter';
-import AppSettingsPage from '#/components/screens/profile/stack/AppSettingsPage';
 import { AppPagerView } from '#/ui/PagerView';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import SelectAccountStack from '#/components/screens/profile/stack/SelectAccount';
+import AccountHome from '#/features/home/AccountHome';
+import AccountManagement from '#/features/home/AccountManagement';
+import AppSettings from '#/features/settings/AppSettings';
 
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
-			return <MyAccountPresenter />;
+			return <AccountHome />;
 		case 1:
-			return <SelectAccountStack />;
+			return <AccountManagement />;
 		case 2:
-			return <AppSettingsPage />;
+			return <AppSettings />;
 	}
 };
 

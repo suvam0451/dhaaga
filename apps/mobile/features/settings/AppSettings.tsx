@@ -2,16 +2,16 @@ import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Ionicons } from '@expo/vector-icons';
-import { APP_ROUTING_ENUM } from '../../../../utils/route-list';
+import { useTranslation } from 'react-i18next';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
-} from '../../../shared/topnavbar/AppTabLandingNavbar';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { CoffeeIconOnly } from '../../../../features/settings/components/Coffee';
-import { LinkingUtils } from '../../../../utils/linking.utils';
-import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
-import { AppText } from '../../../lib/Text';
+} from '#/components/shared/topnavbar/AppTabLandingNavbar';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { CoffeeIconOnly } from './components/Coffee';
+import { LinkingUtils } from '#/utils/linking.utils';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { AppText } from '#/components/lib/Text';
 
 function Header() {
 	return (
@@ -238,7 +238,7 @@ function SettingCategoryList() {
 	);
 }
 
-function AppSettingsPage() {
+function AppSettings() {
 	const { theme } = useAppTheme();
 	return (
 		<ScrollView
@@ -305,4 +305,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default AppSettingsPage;
+export default AppSettings;

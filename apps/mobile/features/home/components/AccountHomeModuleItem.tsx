@@ -1,10 +1,9 @@
-import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppText } from '../../../components/lib/Text';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { AppText } from '#/components/lib/Text';
 
 type Props = {
 	label: string;
@@ -13,7 +12,7 @@ type Props = {
 	onPress: () => void;
 };
 
-function ModuleItemView({ label, desc, iconId, onPress }: Props) {
+function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -55,7 +54,7 @@ function ModuleItemView({ label, desc, iconId, onPress }: Props) {
 	);
 }
 
-export default ModuleItemView;
+export default AccountHomeModuleItem;
 
 const styles = StyleSheet.create({
 	appModuleContainer: {

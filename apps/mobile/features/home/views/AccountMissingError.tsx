@@ -6,17 +6,21 @@ import AppTabLandingNavbar, {
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	useAppActiveSession,
-	useAppGlobalStateActions,
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
+import RoutingUtils from '#/utils/routing.utils';
 
 function AccountMissingError() {
 	const { theme } = useAppTheme();
 	const { session } = useAppActiveSession();
-	const { restoreSession } = useAppGlobalStateActions();
+
+	function onPressAccountSelect() {
+		RoutingUtils.toAccountManagement();
+	}
+
 	return (
 		<ScrollView
 			style={{
@@ -30,7 +34,7 @@ function AccountMissingError() {
 					{
 						iconId: 'user-guide',
 						onPress: () => {
-							router.navigate(APP_ROUTING_ENUM.GUIDE_SETTINGS_TAB);
+							router.navigate(APP_ROUTING_ENUM.PROFILE_SETTINGS_GUIDE);
 						},
 					},
 				]}
@@ -44,7 +48,7 @@ function AccountMissingError() {
 					style={{ marginTop: 32 }}
 					label={'Select Now'}
 					loading={session.state === 'loading'}
-					onClick={restoreSession}
+					onClick={onPressAccountSelect}
 				/>
 			</ErrorPageBuilder>
 		</ScrollView>

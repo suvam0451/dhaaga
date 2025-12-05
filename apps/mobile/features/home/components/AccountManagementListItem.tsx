@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import SoftwareHeader from '../../../../../../screens/accounts/fragments/SoftwareHeader';
-import AccountListingFragment from '../../../../../../screens/accounts/fragments/AccountListingFragment';
+import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
+import AccountListingFragment from '../../../screens/accounts/fragments/AccountListingFragment';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Account } from '@dhaaga/db';
 
@@ -12,7 +12,7 @@ type AccountListForSoftwareProps = {
 	style?: StyleProp<ViewStyle>;
 };
 
-function AccountListForSoftware({
+function AccountManagementListItem({
 	data,
 	software,
 	onListChange,
@@ -44,4 +44,4 @@ function AccountListForSoftware({
 	);
 }
 
-export default AccountListForSoftware;
+export default AccountManagementListItem;

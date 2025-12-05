@@ -16,6 +16,7 @@ export enum APP_ROUTING_ENUM {
 	EXPLORE_HISTORY = '/explore/history',
 
 	// 4. Inbox
+	INBOX = '/inbox',
 	INBOX_GUIDE = '/inbox/user-guide',
 	INBOX_MANAGE_SUBSCRIPTIONS = '/inbox/manage-subscriptions',
 
