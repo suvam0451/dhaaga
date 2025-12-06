@@ -1,4 +1,4 @@
-import { PostInspector, PostObjectType } from '#/parsers/post.js';
+import { PostInspector } from '#/parsers/post.js';
 import { ApiTargetInterface, AtprotoApiAdapter } from '#/client/index.js';
 import { DriverService } from '#/services/driver.js';
 import { Err, Ok } from '#/utils/index.js';
@@ -10,6 +10,7 @@ import { AtprotoPostService } from '#/services/atproto.service.js';
 import ActivityPubReactionsService from '#/services/activitypub-reactions.service.js';
 import { DriverPostLikeState } from '#/types/driver.types.js';
 import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { PostObjectType } from '#/types/index.js';
 
 class Mutator {
 	client: ApiTargetInterface;

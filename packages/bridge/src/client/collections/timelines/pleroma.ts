@@ -6,7 +6,7 @@ import {
 import { DefaultTimelinesRouter } from './default.js';
 import { CasingUtil } from '#/utils/casing.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 
 export class PleromaTimelinesRouter

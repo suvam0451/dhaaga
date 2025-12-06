@@ -28,7 +28,7 @@ export async function getMastodonAccessToken(
 	return data?.access_token;
 }
 
-export async function verifyCredentialsAtProto(
+export async function verifyCredentialsActivitypub(
 	urlLike: string,
 	token: string,
 ): Promise<MastoAccountCredentials | MegaAccount> {

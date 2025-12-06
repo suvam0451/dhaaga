@@ -16,7 +16,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 } from '#/types/mastojs.types.js';
-import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 
 export class MastodonAccountsRouter implements AccountRoute {

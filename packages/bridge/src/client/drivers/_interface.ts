@@ -17,7 +17,7 @@ import { MeRoute } from '../collections/me/_interface.js';
 import { MediaRoute } from '../collections/media/_interface.js';
 import { ListsRoute } from '../collections/lists/_interface.js';
 import { ParserRoute } from '../../adapters/_client/_router/routes/parser.js';
-import { ProfileRoute } from '../../adapters/_client/_router/routes/profile.js';
+import { ProfileRoute } from '../collections/profile/_interface.js';
 // mutators
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';

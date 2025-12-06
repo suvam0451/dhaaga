@@ -10,7 +10,7 @@ import { MastodonSearchRouter } from '../collections/search/mastodon.js';
 import { MastodonMeRouter } from '../collections/me/mastodon.js';
 import { MastodonMediaRoute } from '../collections/media/mastodon.js';
 import { MastodonListRoute } from '../collections/lists/mastodon.js';
-import { MastodonProfileRouter } from '../../adapters/_client/mastodon/profile.js';
+import { MastodonProfileRouter } from '../collections/profile/mastodon.js';
 import { ApiTargetInterface } from '../index.js';
 import FetchWrapper from '../utils/fetch.js';
 import { PostMutatorRoute } from '../shared/post.js';

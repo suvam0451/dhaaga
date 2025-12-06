@@ -15,7 +15,6 @@ import { MegaStatus } from '#/types/megalodon.types.js';
 import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
-import { InvokeBskyFunction } from '#/client/utils/custom-bsky-agent.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 
 class BlueskySearchRouter implements SearchRoute {
@@ -64,12 +63,7 @@ class BlueskySearchRouter implements SearchRoute {
 		query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams,
 	): LibraryPromise<AppBskyUnspeccedGetPopularFeedGenerators.OutputSchema> {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<AppBskyUnspeccedGetPopularFeedGenerators.OutputSchema>(
-			'getPopularFeedGenerators',
-			agent.app.bsky.unspecced.getPopularFeedGenerators,
-			agent.app.bsky.unspecced,
-			query,
-		);
+		return agent.app.bsky.unspecced.getPopularFeedGenerators(query);
 	}
 }
 

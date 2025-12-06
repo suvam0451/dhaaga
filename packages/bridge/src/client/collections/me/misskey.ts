@@ -1,7 +1,7 @@
 import { MeRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 
 export class MisskeyMeRouter implements MeRoute {
 	direct: FetchWrapper;

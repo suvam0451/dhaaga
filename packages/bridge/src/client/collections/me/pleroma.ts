@@ -1,6 +1,6 @@
 import { MeRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import type { MegaAccount } from '#/types/megalodon.types.js';
 
 export class PleromaMeRouter implements MeRoute {

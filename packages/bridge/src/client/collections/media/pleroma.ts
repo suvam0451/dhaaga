@@ -2,7 +2,7 @@ import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
 import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { MastoMediaAttachment } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
 
 export class PleromaMediaRoute implements MediaRoute {

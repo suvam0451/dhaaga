@@ -1,7 +1,6 @@
-import { LibraryPromise } from '../_router/routes/_types.js';
-import { ProfileRoute } from '../_router/routes/profile.js';
-
-import { MastoAccount } from '../../../types/mastojs.types.js';
+import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
+import { ProfileRoute } from './_interface.js';
+import { MastoAccount } from '#/types/mastojs.types.js';
 
 export class DefaultProfileRouter implements ProfileRoute {
 	followers(): LibraryPromise<MastoAccount> {

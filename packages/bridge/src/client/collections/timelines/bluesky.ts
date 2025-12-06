@@ -3,17 +3,7 @@ import {
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from './_interface.js';
-import {
-	AppBskyFeedGetFeed,
-	AppBskyFeedGetFeedGenerator,
-	AppBskyFeedGetFeedGenerators,
-	AppBskyFeedGetTimeline,
-	AppBskyFeedSearchPosts,
-} from '@atproto/api';
-import {
-	InvokeBskyFunction,
-	InvokeBskyFunction_Improved,
-} from '#/client/utils/custom-bsky-agent.js';
+import { AppBskyFeedGetTimeline, AppBskyFeedSearchPosts } from '@atproto/api';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
@@ -35,17 +25,12 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 		query: DhaagaJsTimelineQueryOptions,
 	): Promise<AppBskyFeedSearchPosts.OutputSchema> {
 		const agent = getBskyAgent(this.dto);
-
-		return InvokeBskyFunction_Improved<AppBskyFeedSearchPosts.OutputSchema>(
-			'searchPosts',
-			agent.app.bsky.feed.searchPosts,
-			agent.app.bsky.feed,
-			{
-				q: q,
-				limit: 10,
-				cursor: query.maxId === null ? undefined : query.maxId,
-			},
-		);
+		const data = await agent.app.bsky.feed.searchPosts({
+			q: q,
+			limit: query.limit,
+			cursor: query.maxId === null ? undefined : query.maxId,
+		});
+		return data.data;
 	}
 
 	hashtagAsGuest(
@@ -93,12 +78,7 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 
 	async feed(params: FeedGetQueryDto) {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<AppBskyFeedGetFeed.OutputSchema>(
-			'getFeed',
-			agent.app.bsky.feed.getFeed,
-			agent.app.bsky.feed,
-			params,
-		);
+		return agent.app.bsky.feed.getFeed(params);
 	}
 
 	/**
@@ -107,14 +87,7 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	 */
 	async getFeedGenerator(uri: string) {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<AppBskyFeedGetFeedGenerator.OutputSchema>(
-			'getFeedGenerator',
-			agent.app.bsky.feed.getFeedGenerator,
-			agent.app.bsky.feed,
-			{
-				feed: uri,
-			},
-		);
+		return agent.app.bsky.feed.getFeedGenerator({ feed: uri });
 	}
 
 	/**
@@ -123,14 +96,7 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	 */
 	async getFeedGenerators(uriList: string[]) {
 		const agent = getXrpcAgent(this.dto);
-		return InvokeBskyFunction<AppBskyFeedGetFeedGenerators.OutputSchema>(
-			'getFeedGenerator',
-			agent.app.bsky.feed.getFeedGenerators,
-			agent.app.bsky.feed,
-			{
-				feed: uriList,
-			},
-		);
+		return agent.app.bsky.feed.getFeedGenerators({ feeds: uriList });
 	}
 }
 

@@ -1,34 +1,13 @@
-import { z } from 'zod';
-import { postObjectSchema } from './post.js';
-import { appUserObjectSchema, UserParser } from './user.js';
 import { PostParser } from './post.js';
+import { UserParser } from './user.js';
 import {
 	DriverNotificationType,
 	KNOWN_SOFTWARE,
 } from '../client/utils/driver.js';
-
-const appNotificationGroupedUserItemSchema = z.object({
-	item: appUserObjectSchema,
-	types: z.array(z.string()),
-	extraData: z.any(),
-});
-
-type NotificationUserGroupType = z.infer<
-	typeof appNotificationGroupedUserItemSchema
->;
-
-export const appNotificationObjectSchema = z.object({
-	id: z.string(),
-	type: z.string(),
-	createdAt: z.coerce.date(),
-	user: appUserObjectSchema.nullable(),
-	post: postObjectSchema.nullable(),
-	extraData: z.any(),
-	read: z.boolean(),
-	users: z.array(appNotificationGroupedUserItemSchema).optional(),
-});
-
-type NotificationObjectType = z.infer<typeof appNotificationObjectSchema>;
+import {
+	type NotificationObjectType,
+	appNotificationObjectSchema,
+} from '#/types/shared/notifications.js';
 
 class Parser {
 	static rawToObject(
@@ -108,5 +87,3 @@ class Parser {
 }
 
 export { Parser as NotificationParser };
-
-export type { NotificationObjectType, NotificationUserGroupType };

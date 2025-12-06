@@ -1,4 +1,4 @@
-import { MastoMediaAttachmentMeta } from '../../types/mastojs.types.js';
+import { MastoMediaAttachmentMeta } from '#/types/mastojs.types.js';
 
 /**
  * For reference, see

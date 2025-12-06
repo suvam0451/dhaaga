@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { GetPostsQueryDTO } from '@dhaaga/bridge/dist/adapters/_client/_interface';
+import type { GetPostsQueryDTO, PostObjectType } from '@dhaaga/bridge/typings';
 import {
 	useAppAcct,
 	useAppApiClient,
@@ -11,7 +11,6 @@ import {
 	PostParser,
 	ActivityPubService,
 } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
 
 function useGetLikes(query: GetPostsQueryDTO) {
 	const { client, driver, server } = useAppApiClient();

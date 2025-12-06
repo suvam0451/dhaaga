@@ -25,12 +25,11 @@ import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
 import {
 	LibraryPromise,
 	PaginatedPromise,
-} from '../../../adapters/_client/_router/routes/_types.js';
-import { errorBuilder } from '../../../adapters/_client/_router/dto/api-responses.dto.js';
+} from '#/adapters/_client/_router/routes/_types.js';
+import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
-import { InvokeBskyFunction } from '#/client/utils/custom-bsky-agent.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ApiAsyncResult } from '#/utils/api-result.js';
@@ -160,16 +159,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		},
 	): LibraryPromise<AppBskyFeedGetActorLikes.OutputSchema> {
 		const agent = getBskyAgent(this.dto);
-		return InvokeBskyFunction<AppBskyFeedGetActorLikes.OutputSchema>(
-			'getActorLikes',
-			agent.getActorLikes,
-			agent.app.bsky.feed,
-			{
-				actor,
-				cursor,
-				limit,
-			},
-		);
+		return agent.getActorLikes({ actor, cursor, limit });
 	}
 
 	async getLists(id: string): PaginatedPromise<AppBskyGraphDefs.ListView[]> {

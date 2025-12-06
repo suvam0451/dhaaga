@@ -19,7 +19,7 @@ import type {
 } from '#/types/mastojs.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
-import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 
 export class MisskeyAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;

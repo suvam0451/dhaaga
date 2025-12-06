@@ -3,7 +3,7 @@ import { CasingUtil } from '#/utils/casing.js';
 import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { MegaConversation, MegaNotification } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { MastoGroupedNotificationsResults } from '#/types/mastojs.types.js';
 
 export class PleromaNotificationsRouter implements NotificationsRoute {

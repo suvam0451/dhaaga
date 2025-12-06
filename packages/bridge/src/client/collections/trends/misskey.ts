@@ -4,7 +4,7 @@ import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import type { MastoStatus, MastoTrendLink } from '#/types/mastojs.types.js';
 import { LibraryResponse } from '#/types/result.types.js';
-import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 
 export class MisskeyTrendsRouter implements TrendsRoute {

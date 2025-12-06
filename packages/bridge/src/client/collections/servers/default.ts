@@ -1,6 +1,5 @@
 import { InstanceApi_CustomEmojiDTO, InstanceRoute } from './_interface.js';
 import { getSoftwareInfoShared } from '#/adapters/_client/_router/shared.js';
-import { MastoErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import FetchWrapper from '#/client/utils/fetch.js';
@@ -10,8 +9,9 @@ import {
 	MastoJsWrapper,
 	MegalodonGoToSocialWrapper,
 	MisskeyJsWrapper,
-} from '#/client/utils/custom-clients.js';
+} from '#/client/utils/api-wrappers.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
+import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
 
 type WelKnownNodeinfo = {
 	links: {

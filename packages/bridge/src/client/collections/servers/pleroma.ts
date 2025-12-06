@@ -1,10 +1,10 @@
 import { InstanceApi_CustomEmojiDTO, InstanceRoute } from './_interface.js';
 import { getSoftwareInfoShared } from '#/adapters/_client/_router/shared.js';
-import { PleromaErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
+import { PleromaErrorHandler } from '#/client/utils/api-wrappers.js';
 
 export class PleromaInstanceRouter implements InstanceRoute {
 	direct: FetchWrapper;

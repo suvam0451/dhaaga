@@ -1,9 +1,9 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
-import { MastoErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { MastoMediaAttachment } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
+import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
 
 export class MastodonMediaRoute implements MediaRoute {
 	direct: FetchWrapper;

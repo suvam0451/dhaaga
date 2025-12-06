@@ -1,7 +1,7 @@
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import { RandomUtil } from '../../../utils/random.js';
-import { notImplementedErrorBuilder } from '../_router/dto/api-responses.dto.js';
+import { notImplementedErrorBuilder } from '../../../adapters/_client/_router/dto/api-responses.dto.js';
 import {
 	AppBskyActorDefs,
 	AppBskyActorGetPreferences,

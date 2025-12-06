@@ -1,7 +1,8 @@
-import { appUserObjectSchema, UserParser } from './user.js';
+import { UserParser } from './user.js';
 import { z } from 'zod';
 import { AppBskyFeedDefs } from '@atproto/api';
 import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
+import { appUserObjectSchema } from '#/types/index.js';
 
 const feedObjectSchema = z.object({
 	uri: z.string(),

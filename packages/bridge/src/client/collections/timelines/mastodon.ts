@@ -1,9 +1,9 @@
 import { DhaagaJsTimelineQueryOptions, TimelinesRoute } from './_interface.js';
-import { MastoErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import { createRestAPIClient } from 'masto';
 import { MastoStatus } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
+import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
 
 export class MastodonTimelinesRouter implements TimelinesRoute {
 	direct: FetchWrapper;

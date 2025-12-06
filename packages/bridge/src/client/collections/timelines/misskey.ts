@@ -6,7 +6,7 @@ import {
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { ApiErrorCode } from '#/types/result.types.js';
-import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	direct: FetchWrapper;

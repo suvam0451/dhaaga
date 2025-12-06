@@ -5,7 +5,7 @@ import {
 import { DhaagaJsFollowedTagsQueryOptions, TagRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MastoTag } from '#/types/mastojs.types.js';
-import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
 
 export class MastodonTagRouter implements TagRoute {
 	direct: FetchWrapper;

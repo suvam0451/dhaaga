@@ -4,7 +4,7 @@ import {
 	MisskeyApiAdapter,
 	AtprotoApiAdapter,
 } from '#/client/index.js';
-import { UserObjectType, UserParser } from '#/parsers/user.js';
+import { UserParser } from '#/parsers/user.js';
 import { DriverUserFindQueryType } from '#/types/query.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { DriverService } from '#/services/driver.js';
@@ -12,6 +12,7 @@ import { FollowerGetQueryDTO } from '../collections/accounts/_interface.js';
 import { KeyExtractorUtil } from '#/utils/key-extractor.js';
 import { ResultPage } from '#/utils/pagination.js';
 import { AppBskyActorGetProfile } from '@atproto/api';
+import { UserObjectType } from '#/types/index.js';
 
 class Route {
 	private client: ApiTargetInterface;
