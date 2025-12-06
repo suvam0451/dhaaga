@@ -33,6 +33,3 @@ enum BridgedEntity {
 	MESSAGE,
 	CHATROOM,
 }
-
-export { BridgedEntity };
-export type { BridgedEntityVariant };

@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { ActivityPubService, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { generateDhaagaAuthStrategy } from '@dhaaga/bridge/auth';
 
 type ReturnType =
 	| {
@@ -47,9 +47,8 @@ function useDhaagaAuthGate(
 	placeholder: string = 'mastodon.social',
 ) {
 	const [Instance, setInstance] = useState(placeholder);
-	const [Software, setSoftware] = useState<KNOWN_SOFTWARE | null>(null);
 	const [IsLoading, setIsLoading] = useState(false);
-	const [Error, setError] = useState<string | null>(null);
+	const [ErrorMessage, setErrorMessage] = useState<string | null>(null);
 
 	/**
 	 *	it is recommended to cache the activitypub client token
@@ -64,15 +63,6 @@ function useDhaagaAuthGate(
 	} | null>(null);
 
 	/**
-	 * use this function to help to detect and show the
-	 * software used by the instance
-	 *
-	 * in case of failure, the given instance may be
-	 * unsupported/invalid
-	 */
-	async function detectSoftware() {}
-
-	/**
 	 * With an instance URL provided,
 	 * A) identify the software used by the instance
 	 * B) (re)generate the client tokens (Mastodon only)
@@ -83,35 +73,18 @@ function useDhaagaAuthGate(
 	 * future visits (/w expiry)
 	 */
 	async function processAuth(): Promise<ReturnType> {
-		// if (strategy === 'activitypub' && !cachedClientTokens.current)
-		// 	return {
-		// 		strategy: 'error',
-		// 		params: {
-		// 			code: 'E_Missing_Cached_Token',
-		// 			message: 'Missing cached token',
-		// 		},
-		// 	};
-
 		setIsLoading(true);
 		try {
 			// const tokens = appManager.storage.getAtprotoServerClientTokens(Instance);
-			const { data: signInStrategy, error } =
-				await ActivityPubService.signInUrl(
-					Instance,
-					cachedClientTokens.current!,
-				);
-			if (error) {
-				// TODO: handle instance software detection error
-				console.log(error);
-				setIsLoading(false);
-				return {
-					strategy: 'error',
-					params: {
-						code: 'E_Failed_To_Detect_Software',
-						message: 'Failed to detect software',
-					},
-				};
-			}
+			const signInStrategy = await generateDhaagaAuthStrategy(
+				Instance,
+				{
+					appName: 'Dhaaga',
+					appWebsite: 'https://suvam.io/dhaaga',
+					appCallback: 'https://suvam.io/dhaaga',
+				},
+				cachedClientTokens.current!,
+			);
 
 			/**
 			 * In-App redirection to the sign-in page
@@ -140,13 +113,7 @@ function useDhaagaAuthGate(
 					};
 				}
 				default: {
-					return {
-						strategy: 'error',
-						params: {
-							code: 'E_Failed_To_Generate_Strategy',
-							message: 'Something went wrong',
-						},
-					};
+					throw new Error('invalid strategy');
 				}
 			}
 		} catch (e) {

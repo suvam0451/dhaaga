@@ -6,10 +6,11 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
 import HashtagSegment from '../../../shared/mfm/HashtagSegment';
 import { appDimensions } from '../../../../styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
-import { PostMentionObjectType, TextParser } from '@dhaaga/bridge';
+import { TextParser } from '@dhaaga/bridge';
 import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
 import LinkSegment from '../../../shared/mfm/LinkSegment';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
+import { PostMentionObjectType } from '@dhaaga/bridge/dist/types';
 
 type TextContentNodeProps = {
 	node: NodeContent;

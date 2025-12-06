@@ -2,14 +2,13 @@ import ActivityPubService from './activitypub.service.js';
 import { Dispatch, SetStateAction } from 'react';
 import { z } from 'zod';
 import activitypubService from './activitypub.service.js';
-import { InstanceApi_CustomEmojiDTO } from '../adapters/_client/_router/routes/instance.js';
 import {
 	ApiTargetInterface,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
-} from '../adapters/index.js';
+} from '../client/index.js';
 import { PostParser } from '../parsers/post.js';
-import { DriverReactionResolvedType } from '../types/activitypub.js';
+import { CustomEmojiObject } from '#/types/shared/reactions.js';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
 const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
@@ -45,6 +44,17 @@ const ActivityPubReactionStateSchema = z.array(activityPubReactionItemSchema);
 type ActivityPubReactionStateType = z.infer<
 	typeof ActivityPubReactionStateSchema
 >;
+
+type DriverReactionResolvedType = {
+	count: number;
+	url?: string;
+	name: string;
+	type: 'text' | 'image';
+	height?: number;
+	width?: number;
+	interactable: boolean;
+	me: boolean;
+};
 
 class ActivityPubReactionsService {
 	/**
@@ -100,7 +110,7 @@ class ActivityPubReactionsService {
 				height?: number;
 				name?: string;
 			}[];
-			cache: InstanceApi_CustomEmojiDTO[];
+			cache: CustomEmojiObject[];
 			me: string;
 		},
 	) {
@@ -281,16 +291,16 @@ class ActivityPubReactionsService {
 		domain: string,
 		setLoading: (val: boolean) => void,
 	): Promise<ActivityPubReactionStateType> {
-		const { data: newStateData, error: newStateError } = await (
-			client as MisskeyApiAdapter
-		).statuses.get(postId);
+		const currentPost = await (client as MisskeyApiAdapter).statuses.getPost(
+			postId,
+		);
 
-		if (newStateError) {
+		if (!currentPost) {
 			setLoading(false);
 			return [];
 		}
 
-		const status = PostParser.rawToInterface(newStateData, domain);
+		const status = PostParser.rawToInterface(currentPost, domain);
 		setLoading(false);
 		return status.getReactions(status.getMyReaction() || 'N/A');
 	}

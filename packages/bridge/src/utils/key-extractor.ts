@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { defaultResultPage, ResultPage } from './pagination.js';
-import { ApiResult } from './api-result.js';
+import { defaultResultPage, ResultPage } from '../types/api-response.js';
 
 const driverLinkHeaderPaginationBlock = z.object({
 	data: z.object({
@@ -55,25 +54,24 @@ const genericPostListSchema = z.array(
 	}),
 );
 
+/**
+ * Extracts pagination keys and object array.
+ *
+ * Works for various forms of input
+ */
 class Util {
-	static getPageFromResult<T>(
-		input: ApiResult<any>,
-		transformer: (input: any[]) => T[] = (input: any[]) => input,
-		seed?: { minId: string | null; maxId: string | null },
-	) {}
-
 	static getPage<T>(
 		input: any,
 		transformer: (input: any[]) => T[] = (input: any[]) => input,
 		seed?: { minId: string | null; maxId: string | null },
 	): ResultPage<T> {
 		/**
-		 * Handle non-array based results
+		 * Handle non-array-based results
 		 */
 		let result = null;
 
 		/**
-		 * Generic post list
+		 * Generic post-list
 		 */
 		result = genericPostListSchema.safeParse(input);
 		if (result.success) {

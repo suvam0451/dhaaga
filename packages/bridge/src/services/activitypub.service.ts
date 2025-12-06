@@ -1,13 +1,10 @@
 import {
 	type ApiTargetInterface,
-	BaseApiAdapter,
 	MastoApiAdapter,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
-} from '../adapters/index.js';
+} from '../client/index.js';
 import { DriverService } from './driver.js';
-import { RandomUtil } from '../utils/index.js';
-import { LibraryPromise } from '../adapters/_client/_router/routes/_types.js';
 
 enum KNOWN_SOFTWARE {
 	// Fediverse Parent Software
@@ -99,7 +96,7 @@ class ActivityPubService {
 	}
 
 	/**
-	 * toggle the bookmark status and return next state
+	 * toggle the bookmark status and return the next state
 	 * @param client
 	 * @param id
 	 * @param localState
@@ -154,20 +151,10 @@ class ActivityPubService {
 			}
 		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
 			if (localState) {
-				const { error } = await (
-					client as MastoApiAdapter
-				).statuses.removeBoost(id);
-				if (error) {
-					console.log('[WARN]: failed to remove boost', error);
-					return null;
-				}
+				await (client as MastoApiAdapter).statuses.removeBoost(id);
 				return -1;
 			} else {
-				const { error } = await (client as MastoApiAdapter).statuses.boost(id);
-				if (error) {
-					console.log('[WARN]: failed to boost', error);
-					return null;
-				}
+				await (client as MastoApiAdapter).statuses.boost(id);
 				return 1;
 			}
 		} else {
@@ -191,53 +178,6 @@ class ActivityPubService {
 				return 1;
 			}
 		}
-	}
-
-	/**
-	 * detect software for a subdomain
-	 * @param urlLike
-	 */
-	static async detectSoftware(urlLike: string) {
-		const client = new BaseApiAdapter();
-		const { data, error } = await client.instances.getSoftwareInfo(urlLike);
-		if (error || !data) return null;
-		return data.software;
-	}
-
-	/**
-	 * Evaluates instance software/version and
-	 * generates the sign-in url to be used
-	 * in the webview
-	 *
-	 * Supported strategies are:
-	 *
-	 * - code
-	 * - miauth
-	 * @param urlLike
-	 * @param token
-	 */
-	static async signInUrl(
-		urlLike: string,
-		token?: {
-			clientId: string;
-			clientSecret: string;
-		},
-	): LibraryPromise<{
-		software: string;
-		version?: string | null;
-		loginUrl: string;
-		loginStrategy: 'code' | 'miauth';
-		clientId?: string;
-		clientSecret?: string;
-	}> {
-		const client = new BaseApiAdapter();
-		return client.instances.getLoginUrl(urlLike, {
-			appCallback: 'https://suvam.io',
-			appName: 'Dhaaga',
-			appClientId: token?.clientId,
-			appClientSecret: token?.clientSecret,
-			uuid: RandomUtil.nanoId(),
-		});
 	}
 
 	/**

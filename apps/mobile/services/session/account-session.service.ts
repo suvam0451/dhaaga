@@ -1,6 +1,5 @@
 import { DataSource, Account } from '@dhaaga/db';
 import { BaseStorageManager } from './_shared';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import {
 	ActivityPubReactionsService,
 	ActivityPubReactionStateType,

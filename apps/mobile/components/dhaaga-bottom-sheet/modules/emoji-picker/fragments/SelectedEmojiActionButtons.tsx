@@ -1,7 +1,6 @@
 import { Fragment, memo, useState } from 'react';
 import { APP_FONT } from '../../../../../styles/AppTheme';
 import { FontAwesome } from '@expo/vector-icons';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,

@@ -16,17 +16,25 @@ export enum APP_ROUTING_ENUM {
 	EXPLORE_HISTORY = '/explore/history',
 
 	// 4. Inbox
+	INBOX = '/inbox',
 	INBOX_GUIDE = '/inbox/user-guide',
 	INBOX_MANAGE_SUBSCRIPTIONS = '/inbox/manage-subscriptions',
 
 	// guides (5th tab)
 	GUIDE_MY_PROFILE = '/profile/user-guide-my-profile',
 
-	ADD_ACCOUNT = '/profile/onboard/add-account',
-
 	// 5 Profile
 	PROFILE_TAB = '/profile',
+	// 5.1 -- Account Integrations
 	PROFILE_GUIDE_ACCOUNTS = '/profile/user-guide-accounts',
+	PROFILE_ADD_ACCOUNT = '/profile/onboard/add-account',
+	PROFILE_COLLECTIONS = '/profile/account/collections',
+	// 5.2 -- Special Features
+	SPECIAL_FEATURE_COLLECTION_LIST = '/profile/dhaaga/collections',
+	SPECIAL_FEATURE_COLLECTION_VIEW = '/profile/dhaaga/collection',
+	// 5.3 -- Settings
+	PROFILE_SETTINGS_GUIDE = '/profile/settings/user-guide',
+
 	// Settings Modules
 	SETTINGS_PAGE = '/profile/settings',
 	SETTINGS_TAB_ACCOUNTS = '/profile/settings/accounts',
@@ -38,7 +46,6 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',
 	CHATROOM = '/inbox/chatroom',
 
-	COLLECTIONS = '/profile/collections',
 	PROFILES = '/profile/profiles',
 
 	MY_LIKES = '/profile/account/likes',
@@ -47,6 +54,4 @@ export enum APP_ROUTING_ENUM {
 	MY_FEEDS = '/profile/account/feeds',
 	MY_DRAFTS = '/profile/account/drafts',
 	MY_POSTS = '/profile/account/posts',
-
-	APP_FEATURE_COLLECTION = '/profile/app-features/collection',
 }

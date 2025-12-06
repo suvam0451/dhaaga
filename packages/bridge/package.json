@@ -12,17 +12,26 @@
 		"url": "https://github.com/suvam0451/dhaaga",
 		"directory": "packages/bridge"
 	},
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
 		},
+		"./auth": {
+			"import": "./dist/auth.js",
+			"types": "./dist/auth.d.ts"
+		},
 		"./post-process": {
 			"import": "./dist/post-process.js",
 			"types": "./dist/post-process.d.ts"
+		},
+		"./typings": {
+			"import": "./dist/typings.js",
+			"types": "./dist/typings.d.ts"
 		}
+	},
+	"imports": {
+		"#/*": "./dist/*"
 	},
 	"dependencies": {
 		"@atproto/api": "^0.18.3",
@@ -31,13 +40,14 @@
 		"html-entities": "^2.6.0",
 		"htmlparser2": "~9.1.0",
 		"jwt-decode": "^4.0.0",
-		"masto": "^7.7.1",
+		"masto": "^7.8.0",
 		"megalodon": "^10.2.0",
 		"mfm-js": "^0.25.0",
-		"misskey-js": "^2025.11.1"
+		"misskey-js": "^2025.12.0",
+		"zod": "^4.1.13"
 	},
 	"scripts": {
-		"build": "tsgo -p ./tsconfig.json",
+		"build": "rm -rf ./dist && tsgo -p ./tsconfig.json",
 		"test": "vitest run"
 	},
 	"type": "module"

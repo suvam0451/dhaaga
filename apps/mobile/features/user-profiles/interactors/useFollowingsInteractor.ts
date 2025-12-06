@@ -9,14 +9,6 @@ function useFollowersInteractor() {
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { client } = useAppApiClient();
 	const queryResult = useQuery(userFollowsQueryOpts(client, id, null));
-	const TimelineDispatch = useUserTimelineDispatch();
-
-	useEffect(() => {
-		TimelineDispatch({
-			type: UserTimelineStateAction.APPEND,
-			payload: queryResult.data,
-		});
-	}, [queryResult.fetchStatus]);
 
 	return { ...queryResult };
 }

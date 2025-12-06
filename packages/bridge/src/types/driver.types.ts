@@ -1,5 +1,3 @@
-import { ApiAsyncResult } from '../utils/api-result.js';
-
 /**
  * Post Like Status
  */
@@ -8,7 +6,7 @@ export type DriverPostLikeState = {
 	counter?: number;
 	uri?: string;
 };
-export type DriverLikeStateResult = ApiAsyncResult<DriverPostLikeState>;
+export type DriverLikeStateResult = Promise<DriverPostLikeState>;
 
 /**
  * Post Bookmark Status
@@ -17,4 +15,4 @@ export type DriverBookmarkLikeState = {
 	state: boolean;
 	counter?: number;
 };
-export type DriverBookmarkStateResult = ApiAsyncResult<DriverPostLikeState>;
+export type DriverBookmarkStateResult = Promise<DriverPostLikeState>;

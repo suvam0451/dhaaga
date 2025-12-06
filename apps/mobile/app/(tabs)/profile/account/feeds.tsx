@@ -1,16 +1,16 @@
 import { FlatList, Pressable, ScrollView, View } from 'react-native';
-import useApiGetMyFeeds from '../../../../hooks/api/useFeeds';
+import useApiGetMyFeeds from '#/hooks/api/useFeeds';
 import AppTopNavbar, {
 	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import { AppText } from '../../../../components/lib/Text';
-import { appDimensions } from '../../../../styles/dimensions';
+} from '#/components/shared/topnavbar/AppTopNavbar';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
+import { AppText, SpecialText } from '#/components/lib/Text';
+import { appDimensions } from '#/styles/dimensions';
 import type { FeedObjectType } from '@dhaaga/bridge';
-import { AppIcon } from '../../../../components/lib/Icon';
-import { AppDivider } from '../../../../components/lib/Divider';
+import { AppIcon } from '#/components/lib/Icon';
+import { AppDivider } from '#/components/lib/Divider';
 import { Image, useImage } from 'expo-image';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 
 type MyFeedItemProps = {
@@ -97,7 +97,7 @@ function Page() {
 					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
 				}}
 			>
-				<AppText.Special
+				<SpecialText
 					style={{
 						fontSize: 32,
 						marginHorizontal: 10,
@@ -105,7 +105,7 @@ function Page() {
 					}}
 				>
 					My Feeds
-				</AppText.Special>
+				</SpecialText>
 				<FlatList
 					data={data.items}
 					renderItem={({ item }) => <MyFeedItem item={item} />}

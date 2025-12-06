@@ -15,7 +15,7 @@ import TimelinePresenter from '../presenters/TimelinePresenter';
 import TimelineErrorView from '../view/TimelineErrorView';
 import { PostTimelinePlaceholderView } from '../components/PostSkeletonView';
 import IdleTimelineView from '../IdleTimelineView';
-import { feedUnifiedQueryOptions } from '@dhaaga/react';
+import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 
 function TimelineInteractor() {
@@ -59,7 +59,7 @@ function TimelineInteractor() {
 	}, [State.feedType, State.query, State.opts, db]);
 
 	const { fetchStatus, data, status, refetch, error, isFetched } = useQuery(
-		feedUnifiedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
 			type: State.feedType,
 			query: State.query,
 			opts: State.opts,

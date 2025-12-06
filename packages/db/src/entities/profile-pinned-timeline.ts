@@ -4,7 +4,7 @@ import { Account, Profile, ProfilePinnedTimeline } from '../_schema.js';
 import { AccountService } from './account.js';
 import { ProfileService } from './profile.js';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { FeedObjectType } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge/typings';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
 import { getTimelinePins } from '../data/driver.js';
 
@@ -84,16 +84,6 @@ class Service {
 			return [];
 		}
 	}
-
-	/**
-	 * Add a pin at end
-	 */
-	static appendPin(
-		db: DataSource,
-		profile: Profile,
-		pin: string,
-		sticky = false,
-	) {}
 
 	/**
 	 * A simple item order fix to ensure the indices

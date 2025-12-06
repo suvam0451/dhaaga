@@ -87,6 +87,7 @@ export enum AppTextVariant {
 	BODY_MEDIUM = 'body.medium',
 	BODY_SEMIBOLD = 'body.semibold',
 	BODY_BOLD = 'body.bold',
+	SPECIAL = 'special',
 
 	H6 = 'h6',
 	H5 = 'h5',

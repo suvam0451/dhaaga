@@ -1,6 +1,5 @@
 import * as mfm from 'mfm-js';
 import type { MfmNode } from 'mfm-js';
-import { decode } from 'html-entities';
 import HtmlParserService from './htmlparser2.js';
 import ActivitypubHelper from './activitypub.js';
 
@@ -62,10 +61,10 @@ export function parseStatusContent(str: string, log?: boolean) {
 	return retval;
 }
 
-export function parseUsername(str: string) {
-	return mfm.parse(str);
-}
-
-export function decodeHTMLString(str: string) {
-	return decode(str);
-}
+// export function parseUsername(str: string) {
+// 	return mfm.parse(str);
+// }
+//
+// export function decodeHTMLString(str: string) {
+// 	return decode(str);
+// }

@@ -1,11 +1,4 @@
-import { DbErrorCode, type DbResult, Err } from '../utils/db-result.js';
-
-export abstract class RepoTemplate<T> {
-	static describe() {}
-	static list<T>(): DbResult<T[]> {
-		return Err(DbErrorCode.NOT_IMPLEMENTED);
-	}
-}
+export abstract class RepoTemplate<T> {}
 
 function TryCatchDecorator(
 	target: any,

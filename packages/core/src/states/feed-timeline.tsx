@@ -4,8 +4,8 @@ import {
 	type TimelineReducerBaseState,
 } from './_timeline.shared.js';
 import { produce } from 'immer';
-import { RandomUtil, type ResultPage } from '@dhaaga/bridge';
-import type { FeedObjectType } from '@dhaaga/bridge';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { FeedObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import {
 	createContext,
 	type Dispatch,

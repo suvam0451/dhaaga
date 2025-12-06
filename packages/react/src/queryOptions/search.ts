@@ -4,15 +4,17 @@ import {
 	AtprotoApiAdapter,
 	defaultResultPage,
 	DriverService,
-	type FeedObjectType,
 	FeedParser,
 	KNOWN_SOFTWARE,
-	type PostObjectType,
 	PostParser,
-	type ResultPage,
-	type UserObjectType,
 	UserParser,
 } from '@dhaaga/bridge';
+import type {
+	UserObjectType,
+	PostObjectType,
+	FeedObjectType,
+	ResultPage,
+} from '@dhaaga/bridge/typings';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedSearchPosts } from '@atproto/api';
 

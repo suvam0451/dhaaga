@@ -1,9 +1,6 @@
 import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
 import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import {
-	type ApiTargetInterface,
-	AtprotoApiAdapter,
-} from '../adapters/index.js';
+import { type ApiTargetInterface, AtprotoApiAdapter } from '../client/index.js';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 

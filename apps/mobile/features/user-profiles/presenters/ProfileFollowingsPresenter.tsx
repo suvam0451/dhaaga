@@ -1,80 +1,22 @@
-import { Animated, RefreshControl, View } from 'react-native';
-import { useState } from 'react';
-import {
-	UserTimelineStateAction,
-	useUserTimelineDispatch,
-	useUserTimelineState,
-} from '@dhaaga/core';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../components/shared/topnavbar/AppTopNavbar';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import UserListItemView from '../../timelines/view/UserListItemView';
-import { appDimensions } from '../../../styles/dimensions';
-import useFollowingsInteractor from '../interactors/useFollowingsInteractor';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import SimpleUserTimeline from '#/components/timelines/SimpleUserTimeline';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { userFollowsQueryOpts } from '@dhaaga/react';
+import { useQuery } from '@tanstack/react-query';
+import { useLocalSearchParams } from 'expo-router';
 
 function ProfileFollowingsPresenter() {
-	const [Refreshing, setRefreshing] = useState(false);
-	const { data, refetch } = useFollowingsInteractor();
-	const TimelineState = useUserTimelineState();
-	const TimelineDispatch = useUserTimelineDispatch();
+	const { client } = useAppApiClient();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
+	const { id } = useLocalSearchParams<{ id: string }>();
+	const queryResult = useQuery(userFollowsQueryOpts(client, id, null));
 
-	function onRefresh() {
-		setRefreshing(true);
-		refetch().finally(() => {
-			setRefreshing(false);
-		});
-	}
-
-	function loadMore() {
-		TimelineDispatch({
-			type: UserTimelineStateAction.REQUEST_LOAD_MORE,
-		});
-	}
-
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: data.items.length,
-		loadNextPage: loadMore,
-	});
-
-	if (TimelineState.items.length === 0)
-		return (
-			<AppTopNavbar
-				title={t(`noun.following_other`)}
-				translateY={translateY}
-				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			>
-				<View />
-			</AppTopNavbar>
-		);
-
-	/**
-	 * NOTE: AT proto does not return a detailed view
-	 */
 	return (
-		<AppTopNavbar
-			title={t(`noun.following_other`)}
-			translateY={translateY}
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-		>
-			<Animated.FlatList
-				data={TimelineState.items}
-				renderItem={({ item }) => <UserListItemView item={item} />}
-				onScroll={onScroll}
-				ListHeaderComponent={<View />}
-				scrollEventThrottle={16}
-				refreshControl={
-					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
-				}
-				contentContainerStyle={{
-					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
-					paddingBottom: 54,
-				}}
-			/>
-		</AppTopNavbar>
+		<SimpleUserTimeline
+			timelineLabel={t(`noun.follower_other`)}
+			queryResult={queryResult}
+		/>
 	);
 }
 

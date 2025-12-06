@@ -9,7 +9,7 @@ import type {
 } from '../../types/misskey-js.types.js';
 import type { MastoAccount } from '../../types/mastojs.types.js';
 import { CasingUtil } from '../../utils/casing.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../../client/utils/driver.js';
 
 export type UserType =
 	| MastoAccount

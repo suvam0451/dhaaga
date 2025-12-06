@@ -6,8 +6,7 @@ and perform common SNS actions in a platform/protocol agnostic way.
 
 - 🔋 Batteries included
 - 🏰 Fully type-safe
-- 🙅 Monadic error handling | No exceptions
-- 🍰 Layered approach | Balances utility/flexibility 
+- 🍰 Balances utility/flexibility using a layered approach 
 
 ### Supported Entities
 

@@ -1,14 +1,14 @@
 import { useEffect, useMemo } from 'react';
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
-import { useApiGetMentionUpdates } from '../../../hooks/api/useNotifications';
+import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
+import { useApiGetMentionUpdates } from '#/hooks/api/useNotifications';
 import NotificationItemPresenter from './NotificationItemPresenter';
 import Header from '../components/Header';
-import FlashListService from '../../../services/flashlist.service';
+import FlashListService from '#/services/flashlist.service';
 import useNotificationStore from '../interactors/useNotificationStore';
 import { NotificationSkeletonView } from '../components/Skeleton';
-import { ListWithSkeletonPlaceholder } from '../../../ui/Lists';
+import { ListWithSkeletonPlaceholder } from '#/ui/Lists';
 import { View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 
 function MentionPresenter() {
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();

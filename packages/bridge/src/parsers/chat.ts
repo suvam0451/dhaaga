@@ -1,26 +1,9 @@
-import { z } from 'zod';
 import { RandomUtil } from '../utils/index.js';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
-
-const appMessageObjectSchema = z.object({
-	uuid: z.string(),
-	id: z.string(),
-	sender: z.object({
-		id: z.string(),
-	}),
-	content: z.object({
-		raw: z.string().nullable().optional(),
-	}),
-	createdAt: z.string(),
-});
-
-/**
- * Typings for a message object used mostly
- * in the Notifications -> Chat section
- *
- * The object is validated to contain no errors
- */
-type MessageObjectType = z.infer<typeof appMessageObjectSchema>;
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
+import {
+	MessageObjectType,
+	appMessageObjectSchema,
+} from '#/types/shared/chat.js';
 
 class Parser {
 	private static export(
@@ -93,4 +76,3 @@ class Parser {
 }
 
 export { Parser as ChatParser };
-export type { MessageObjectType };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useTimelineQuery from './useTimelineQuery';
+import useTimelineQueryReactNative from '#/hooks/useTimelineQueryReactNative';
 import {
 	PostTimelineStateAction,
 	TimelineFetchMode,
@@ -36,7 +36,7 @@ function useTimeline(mode: TimelineFetchMode) {
 		});
 	}, [mode]);
 
-	const { fetchStatus, data, status, refetch } = useTimelineQuery({
+	const { fetchStatus, data, status, refetch } = useTimelineQueryReactNative({
 		type: State.feedType,
 		query: State.query,
 		opts: State.opts,

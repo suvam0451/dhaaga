@@ -27,54 +27,48 @@ type AppTextProps = {
 	onTextLayout?: (e: any) => void;
 };
 
+export function SpecialText({
+	forwardedKey,
+	keygen,
+	style,
+	color,
+	children,
+	numberOfLines,
+	emphasis,
+}: AppTextProps) {
+	const { theme } = useAppTheme();
+	const { i18n } = useTranslation();
+
+	let _color =
+		color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
+	let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
+		AppTextVariant.SPECIAL,
+	);
+
+	const FONT_INCOMPATIBLE = ['jp'].includes(i18n.language);
+	return (
+		<Text
+			key={keygen ? RandomUtil.nanoId() : forwardedKey}
+			style={[
+				_baseStyling,
+				{
+					color: _color,
+					fontFamily: FONT_INCOMPATIBLE
+						? APP_FONTS.ROBOTO_500
+						: APP_FONTS.BEBAS_NEUE_400,
+					fontSize: FONT_INCOMPATIBLE ? 18 : 22,
+				},
+				style,
+			]}
+			numberOfLines={numberOfLines}
+			textBreakStrategy={'simple'}
+		>
+			{children}
+		</Text>
+	);
+}
+
 export class AppText {
-	/**
-	 * The unique BebasNeue font used for
-	 * some of the headers throughout
-	 * the app
-	 * @constructor
-	 */
-	static Special({
-		forwardedKey,
-		keygen,
-		style,
-		color,
-		children,
-		numberOfLines,
-		emphasis,
-	}: AppTextProps) {
-		const { theme } = useAppTheme();
-		const { i18n } = useTranslation();
-
-		let _color =
-			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
-		let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
-			AppTextVariant.BODY_MEDIUM,
-		);
-
-		const FONT_INCOMPATIBLE = ['jp'].includes(i18n.language);
-		return (
-			<Text
-				key={keygen ? RandomUtil.nanoId() : forwardedKey}
-				style={[
-					_baseStyling,
-					{
-						color: _color,
-						fontFamily: FONT_INCOMPATIBLE
-							? APP_FONTS.ROBOTO_500
-							: APP_FONTS.BEBAS_NEUE_400,
-						fontSize: FONT_INCOMPATIBLE ? 18 : 22,
-					},
-					style,
-				]}
-				numberOfLines={numberOfLines}
-				textBreakStrategy={'simple'}
-			>
-				{children}
-			</Text>
-		);
-	}
-
 	static Medium({
 		forwardedKey,
 		keygen,

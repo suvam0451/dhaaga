@@ -1,14 +1,14 @@
 import { Animated, RefreshControl } from 'react-native';
 import { Fragment, useRef, useState } from 'react';
-import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
+import WithScrollOnRevealContext from '#/states/useScrollOnReveal';
 import StatusItem from '../../../common/status/StatusItem';
-import { TimelineLoadingIndicator } from '../../../../ui/LoadingIndicator';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import useTrendingPosts from '../api/useTrendingPosts';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import FeatureUnsupported from '../../../error-screen/FeatureUnsupported';
-import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 
 const SHOWN_SECTION_HEIGHT = 50;
 

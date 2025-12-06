@@ -10,7 +10,6 @@ import {
 } from '@dhaaga/db';
 import {
 	ApiTargetInterface,
-	InstanceApi_CustomEmojiDTO,
 	KNOWN_SOFTWARE,
 	BaseApiAdapter,
 } from '@dhaaga/bridge';

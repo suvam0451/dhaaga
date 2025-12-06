@@ -7,13 +7,14 @@ body:
       value: "## Request a new feature"
   - type: markdown
     attributes:
-      value: |
-        Welcome, and thank you for your time 🙏
+      value: |      
+        Just ask away! No need to duplicate issues first. Also, welcome :)
         
-        * Just ask away. No need to search for duplicate issues.
-        * Please don't mind if I vote against a proposed change.
-          * Crafting a good experience takes a lot of thought and attention.
-          * And, Dhaaga is designed to be an enhancement rather than just a tool.
+        Design Principle:
+        ---
+        "Less is more" | A great experience beats any feature list, all the time.
+        
+        Roadmap (good to browse first) --> https://suvam.io/dhaaga/roadmap
 
   - type: textarea
     id: description

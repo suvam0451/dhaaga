@@ -1,15 +1,11 @@
-import { ScrollView, Text, StyleSheet } from 'react-native';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '../../../../components/shared/topnavbar/AppTopNavbar';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import { APP_FONTS } from '../../../../styles/AppFonts';
+import { Text, StyleSheet } from 'react-native';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import SettingPageBuilder from '#/ui/SettingPageBuilder';
 
 function Page() {
-	const { translateY } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([
 		LOCALIZATION_NAMESPACE.SETTINGS,
@@ -17,24 +13,18 @@ function Page() {
 	]);
 
 	return (
-		<AppTopNavbar
-			type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			title={t(`wellbeing.navbar_Label`)}
-			translateY={translateY}
-		>
-			<ScrollView>
-				<Text style={[styles.text, { color: theme.secondary.a20 }]}>
-					{t(`discover.moreSoon.firstHalf`, {
+		<SettingPageBuilder label={t(`wellbeing.navbar_Label`)}>
+			<Text style={[styles.text, { color: theme.secondary.a20 }]}>
+				{t(`discover.moreSoon.firstHalf`, {
+					ns: LOCALIZATION_NAMESPACE.CORE,
+				})}{' '}
+				<Text style={{ color: theme.complementary.a0 }}>
+					{t(`discover.moreSoon.secondHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,
-					})}{' '}
-					<Text style={{ color: theme.complementary.a0 }}>
-						{t(`discover.moreSoon.secondHalf`, {
-							ns: LOCALIZATION_NAMESPACE.CORE,
-						})}
-					</Text>
+					})}
 				</Text>
-			</ScrollView>
-		</AppTopNavbar>
+			</Text>
+		</SettingPageBuilder>
 	);
 }
 

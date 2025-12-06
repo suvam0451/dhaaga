@@ -5,10 +5,9 @@ import {
 	defaultResultPage,
 	DriverService,
 	DriverUserFindQueryType,
-	type PostObjectType,
 	PostParser,
-	UserObjectType,
 } from '@dhaaga/bridge';
+import type { PostObjectType, UserObjectType } from '@dhaaga/bridge/typings';
 
 /**
  * GET user profile
@@ -30,7 +29,7 @@ export function userFollowsQueryOpts(
 	maxId: string | null,
 ) {
 	return queryOptions({
-		queryKey: [client.key, 'dhaaga/user/follows', maxId],
+		queryKey: ['dhaaga/user/follows', client.key, userId, maxId],
 		queryFn: () =>
 			client.user
 				.getFollows({
@@ -83,16 +82,17 @@ async function api(client: ApiTargetInterface, userId: string) {
 			: undefined,
 	});
 
-	if (!result.isOk()) return [];
-	const data = result.unwrap();
-
 	return DriverService.supportsAtProto(client.driver)
 		? PostParser.parse<unknown[]>(
-				(data as AppBskyFeedGetAuthorFeed.Response).data.feed,
+				(result as AppBskyFeedGetAuthorFeed.Response).data.feed,
 				client.driver,
 				client.server!,
 			).filter((o) => !o.meta.isReply)
-		: PostParser.parse<unknown[]>(data as any[], client.driver, client.server!);
+		: PostParser.parse<unknown[]>(
+				result as any[],
+				client.driver,
+				client.server!,
+			);
 }
 
 export function userGalleryQueryOpts(

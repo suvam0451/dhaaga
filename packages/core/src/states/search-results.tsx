@@ -1,4 +1,4 @@
-import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
+import type { PostObjectType, UserObjectType } from '@dhaaga/bridge/typings';
 import { produce } from 'immer';
 import {
 	createContext,

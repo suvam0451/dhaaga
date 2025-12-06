@@ -1,16 +1,14 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
 import { useAssets } from 'expo-asset';
-import { LinkingUtils } from '../../../utils/linking.utils';
+import { LinkingUtils } from '#/utils/linking.utils';
 
 type CoffeeProps = {
 	containerStyle?: StyleProp<ViewStyle>;
 };
 
 export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
-	const [assets, error] = useAssets([
-		require('../../../assets/badges/bmac-icon.png'),
-	]);
+	const [assets, error] = useAssets([require('#/assets/badges/bmac-icon.png')]);
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
 
 	function onTouch() {

@@ -1,11 +1,4 @@
-import {
-	Text,
-	View,
-	TouchableOpacity,
-	FlatList,
-	StyleSheet,
-} from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { View, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import {
 	AccountDetails,
 	AccountPfp,
@@ -27,14 +20,16 @@ import {
 	useAppGlobalStateActions,
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
-import { AppBottomSheetMenu } from '#/components/lib/Menu';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
+import { AppIcon } from '#/components/lib/Icon';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
+import RoutingUtils from '#/utils/routing.utils';
 
-type FlashListItemProps = {
+type ListItemProps = {
 	acct: Account;
 };
 
-function FlashListItem({ acct }: FlashListItemProps) {
+function ListItem({ acct }: ListItemProps) {
 	const { db } = useAppDb();
 	const { restoreSession } = useAppGlobalStateActions();
 	const { selectAccount } = useGlobalState(
@@ -109,16 +104,10 @@ function FlashListItem({ acct }: FlashListItemProps) {
 						paddingVertical: 12,
 					}}
 				>
-					{acct.selected && (
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-								color: theme.primary.a0,
-								fontSize: 16,
-							}}
-						>
-							Active
-						</Text>
+					{acct.selected ? (
+						<AppIcon id={'checkbox'} size={28} color={theme.primary.a0} />
+					) : (
+						<View />
 					)}
 				</View>
 				<SoftwareHeader height={28} software={acct.driver} />
@@ -128,32 +117,29 @@ function FlashListItem({ acct }: FlashListItemProps) {
 }
 
 function ABS_Select_Account() {
-	const { stateId, isAnimating, hide } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			stateId: o.bottomSheet.stateId,
-			isAnimating: o.bottomSheet.isAnimating,
-			hide: o.bottomSheet.hide,
-		})),
-	);
+	const { stateId, hide } = useAppBottomSheet();
 	const { data } = useAppListAccounts(stateId);
 
-	if (isAnimating) return <View />;
-
-	function onPressMoreAccountOptions() {
+	function onPressManageAccount() {
 		hide();
-		router.navigate(APP_ROUTING_ENUM.PROFILE_TAB);
+		RoutingUtils.toAccountManagement();
+	}
+
+	function onPressAddAccount() {
+		hide();
+		router.navigate(APP_ROUTING_ENUM.PROFILE_ADD_ACCOUNT);
 	}
 
 	return (
 		<FlatList
 			ListHeaderComponent={() => (
-				<AppBottomSheetMenu.Header
+				<BottomSheetMenu
 					title={'Select Account'}
 					menuItems={[
+						{ iconId: 'person-add', onPress: onPressAddAccount },
 						{
 							iconId: 'cog',
-							onPress: onPressMoreAccountOptions,
+							onPress: onPressManageAccount,
 						},
 					]}
 				/>
@@ -165,16 +151,13 @@ function ABS_Select_Account() {
 					<AppButtonVariantA
 						label={'Add Account'}
 						loading={false}
-						onClick={() => {
-							hide();
-							router.navigate(APP_ROUTING_ENUM.ADD_ACCOUNT);
-						}}
+						onClick={onPressAddAccount}
 						style={{ marginTop: 32, marginBottom: 64 }}
 					/>
 				)
 			}
 			data={data}
-			renderItem={({ item }) => <FlashListItem acct={item} />}
+			renderItem={({ item }) => <ListItem acct={item} />}
 		/>
 	);
 }

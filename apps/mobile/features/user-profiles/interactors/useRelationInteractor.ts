@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import useHookLoadingState from '../../../states/useHookLoadingState';
+import useHookLoadingState from '#/states/useHookLoadingState';
 import {
-	LibraryResponse,
 	MastoApiAdapter,
 	MisskeyApiAdapter,
 	KNOWN_SOFTWARE,
 	AtprotoApiAdapter,
 } from '@dhaaga/bridge';
-import ActivitypubRelationService from '../../../services/approto/activitypub-relation.service';
+import ActivitypubRelationService from '#/services/approto/activitypub-relation.service';
 import { AppBskyActorGetProfile } from '@atproto/api';
-import { useAppApiClient } from '../../../hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import { ActivityPubService } from '@dhaaga/bridge';
 
 const defaultValue = {
@@ -94,8 +93,8 @@ function useRelationInteractor(id: string) {
 		}
 	}
 
-	function setMastoRelation({ data, error }: LibraryResponse<any[]>) {
-		if (error || data.length === 0) {
+	function setMastoRelation(data: any[]) {
+		if (!data || data.length === 0) {
 			setRelation({
 				...Relation,
 				error: true,
@@ -119,18 +118,15 @@ function useRelationInteractor(id: string) {
 		});
 	}
 
-	function setBlueskyRelation({
-		data,
-		error,
-	}: LibraryResponse<AppBskyActorGetProfile.Response>) {
-		if (error) {
+	function setBlueskyRelation({ data }: AppBskyActorGetProfile.Response) {
+		if (!data) {
 			setRelation({
 				...Relation,
 				error: true,
 			});
 			return;
 		}
-		const viewer = data.data.viewer;
+		const viewer = data.viewer;
 		setRelation({
 			...Relation,
 			following: !!viewer.following,
@@ -142,8 +138,8 @@ function useRelationInteractor(id: string) {
 		});
 	}
 
-	function setMisskeyRelation({ data, error }: LibraryResponse<any>) {
-		if (error) {
+	function setMisskeyRelation(data: any) {
+		if (!data) {
 			setRelation({
 				...Relation,
 				error: true,
@@ -167,7 +163,7 @@ function useRelationInteractor(id: string) {
 		switch (driver) {
 			case KNOWN_SOFTWARE.MASTODON: {
 				// Mock API response, to avoid duplicate api calls
-				setMastoRelation({ data: [input] });
+				setMastoRelation([input]);
 			}
 		}
 		setIsLoading(false);

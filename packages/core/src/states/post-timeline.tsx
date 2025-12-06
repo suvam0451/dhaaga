@@ -1,8 +1,5 @@
-import type {
-	DhaagaJsTimelineQueryOptions,
-	ResultPage,
-	PostObjectType,
-} from '@dhaaga/bridge';
+import type { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import { RandomUtil } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
@@ -50,6 +47,8 @@ enum TimelineFetchMode {
 	LIKES = 'Likes',
 
 	FEED = 'Feed',
+
+	MY_POSTS = 'MyPosts',
 }
 
 type State = TimelineReducerBaseState<PostObjectType> & {
@@ -495,7 +494,7 @@ function reducer(state: State, action: Actions): State {
 			if (!newItem) return state;
 
 			return produce(state, (draft) => {
-				draft.items = draft.items.map((post) =>
+				draft.items = draft.items.map((post: PostObjectType) =>
 					post.id === newItem.id ? newItem : post,
 				);
 			});

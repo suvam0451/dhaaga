@@ -1,4 +1,4 @@
-import { PostObjectType } from '#/parsers/post.js';
+import { PostObjectType } from '#/types/index.js';
 
 function recursive(node: any): number {
 	if (!node) return 0;

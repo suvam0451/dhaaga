@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect, useRef, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
 import {
 	Dimensions,
@@ -23,7 +23,8 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { APP_FONTS } from '../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useLocalSearchParams } from 'expo-router';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const INDICATOR_PADDING = 16;
@@ -176,6 +177,15 @@ function AppPagerView({
 	const [TabIndex, setTabIndex] = useState(0);
 	const ref = useRef<PagerView>(null);
 
+	const params = useLocalSearchParams();
+	const _requestId: string = params['requestId'] as string;
+	const _pagerIndex: string = params['pagerIndex'] as string;
+
+	useEffect(() => {
+		if (!_pagerIndex) return;
+		ref.current.setPage(Number(_pagerIndex));
+	}, [_requestId]);
+
 	function onPagerViewScroll(e: any) {
 		const { offset, position } = e.nativeEvent;
 		const nextIdx = Math.round(position + offset);
@@ -189,7 +199,7 @@ function AppPagerView({
 	}
 
 	return (
-		<Fragment>
+		<>
 			<PagerView
 				ref={ref}
 				scrollEnabled={true}
@@ -207,7 +217,7 @@ function AppPagerView({
 			{showBottomNav && (
 				<NavBar Index={TabIndex} setIndex={onChipSelected} items={labels} />
 			)}
-		</Fragment>
+		</>
 	);
 }
 

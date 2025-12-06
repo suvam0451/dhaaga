@@ -1,25 +1,7 @@
-import { appUserObjectSchema, UserParser } from './user.js';
-import { z } from 'zod';
+import { UserParser } from './user.js';
 import { AppBskyFeedDefs } from '@atproto/api';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
-
-const feedObjectSchema = z.object({
-	uri: z.string(),
-	cid: z.string(),
-	did: z.string(),
-	creator: appUserObjectSchema,
-	displayName: z.string(),
-	description: z.string().optional(),
-	avatar: z.string().optional(),
-	likeCount: z.number().int().optional(),
-	labels: z.array(z.any()).optional(),
-	viewer: z.object({
-		like: z.string().optional(),
-	}),
-	indexedAt: z.date(),
-});
-
-type FeedObjectType = z.infer<typeof feedObjectSchema>;
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
+import { FeedObjectType, feedObjectSchema } from '#/types/shared/feed.js';
 
 class Parser {
 	static rawToObject(
@@ -83,4 +65,3 @@ class Parser {
 }
 
 export { Parser as FeedParser };
-export type { FeedObjectType };

@@ -1,6 +1,6 @@
 import { DataSource } from '@dhaaga/db';
-import { RandomUtil, type ResultPage } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge';
+import { RandomUtil } from '@dhaaga/bridge';
+import type { UserObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import { produce } from 'immer';
 import {
 	createContext,

@@ -8,10 +8,11 @@ import {
 	useAppDb,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { AppText } from '../../lib/Text';
 import { AppTextInput } from '../../lib/TextInput';
-import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
 
 type AS_Add_Profile_Select_AccountProps = {
 	accts: Account[];
@@ -25,10 +26,7 @@ function AS_Add_Profile_Select_Account({
 	return (
 		<Animated.FlatList
 			ListHeaderComponent={() => (
-				<AppBottomSheetMenu.Header
-					title={'For which Account?'}
-					menuItems={[]}
-				/>
+				<BottomSheetMenu title={'For which Account?'} />
 			)}
 			data={accts}
 			contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -55,8 +53,8 @@ function ABS_Add_Profile_Name_Profile({
 	const [Text, setText] = useState(null);
 	const { theme } = useAppTheme();
 	return (
-		<View>
-			<AppBottomSheetMenu.Header title={'Pick a Name'} menuItems={[]} />
+		<>
+			<BottomSheetMenu title={'Pick a Name'} />
 			<View style={{ padding: 10, marginTop: 24 }}>
 				<AppTextInput.SingleLine
 					placeholder={'Enter name. You can change this later.'}
@@ -90,7 +88,7 @@ function ABS_Add_Profile_Name_Profile({
 					</AppText.SemiBold>
 				</View>
 			</Pressable>
-		</View>
+		</>
 	);
 }
 

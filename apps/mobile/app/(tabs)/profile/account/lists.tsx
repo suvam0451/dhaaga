@@ -1,7 +1,7 @@
-import MyListsPresenter from '../../../../features/my-account/presenters/MyListsPresenter';
+import { View } from 'react-native';
 
-function BookmarkClassic() {
-	return <MyListsPresenter />;
+function Page() {
+	return <View />;
 }
 
-export default BookmarkClassic;
+export default Page;

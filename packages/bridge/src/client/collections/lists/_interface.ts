@@ -1,0 +1,14 @@
+import { Endpoints } from 'misskey-js';
+import { MastoList } from '#/types/mastojs.types.js';
+import { MegaList } from '#/types/megalodon.types.js';
+import { LibraryPromise } from '#/types/index.js';
+
+export interface ListsRoute {
+	update(): Promise<any>;
+
+	get(id: string): Promise<MegaList | MastoList>;
+
+	list(): Promise<
+		MegaList[] | MastoList[] | Endpoints['users/lists/list']['res']
+	>;
+}
