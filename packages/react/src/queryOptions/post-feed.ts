@@ -9,9 +9,8 @@ import {
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
 	PostParser,
-	type ResultPage,
 } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import { TimelineFetchMode } from '@dhaaga/core';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedGetTimeline } from '@atproto/api';
@@ -236,13 +235,12 @@ export function unifiedPostFeedQueryOptions(
 			}
 			case TimelineFetchMode.LIKES: {
 				if (DriverService.supportsAtProto(driver)) {
-					const { data, error } = await (
+					const data = await (
 						client as AtprotoApiAdapter
 					).accounts.atProtoLikes(acctIdentifier, {
 						limit,
 						cursor: _query.maxId === null ? undefined : _query.maxId,
 					});
-					if (error) return defaultResultPage;
 					return {
 						items: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,

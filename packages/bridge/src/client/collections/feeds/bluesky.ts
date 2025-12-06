@@ -1,6 +1,5 @@
-import { AppAtpSessionData } from '../../../types/atproto.js';
-import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
-import { RandomUtil } from '../../../utils/random.js';
+import { AppAtpSessionData } from '#/types/atproto.js';
+import { RandomUtil } from '#/utils/random.js';
 import {
 	AppBskyActorDefs,
 	AppBskyActorGetPreferences,
@@ -8,11 +7,9 @@ import {
 	AppBskyFeedGetFeedGenerator,
 	AtpAgent,
 } from '@atproto/api';
-import { Err, Ok, ResultErr, ResultOk } from '../../../utils/result.js';
-import { ApiErrorCode } from '../../../types/result.types.js';
-import type { ApiAsyncResult } from '../../../utils/api-result.js';
-import { getXrpcAgent } from '../../../utils/atproto.js';
+import { getXrpcAgent } from '#/utils/atproto.js';
 import { notImplementedErrorBuilder } from '#/types/api-response.js';
+import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 
 type SubscriptionUpdateResult = Promise<{
 	success: boolean;
@@ -59,15 +56,11 @@ class BlueskyFeedRouter {
 	 */
 	async getFeedGenerator(
 		uri: string,
-	): ApiAsyncResult<AppBskyFeedGetFeedGenerator.OutputSchema> {
-		try {
-			const data = await this.xrpc.app.bsky.feed.getFeedGenerator({
-				feed: uri,
-			});
-			return ResultOk(data.data);
-		} catch (e) {
-			return ResultErr(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	): Promise<AppBskyFeedGetFeedGenerator.OutputSchema> {
+		const data = await this.xrpc.app.bsky.feed.getFeedGenerator({
+			feed: uri,
+		});
+		return data.data;
 	}
 
 	/**
@@ -76,16 +69,11 @@ class BlueskyFeedRouter {
 	 */
 	async getFeedGenerators(
 		uriList: string[],
-	): ApiAsyncResult<AppBskyFeedDefs.GeneratorView[]> {
-		try {
-			const data = await this.xrpc.app.bsky.feed.getFeedGenerators({
-				feeds: uriList,
-			});
-			if (!data.success) return Err(ApiErrorCode.REMOTE_SERVER_ERROR);
-			return Ok(data.data.feeds);
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	): Promise<AppBskyFeedDefs.GeneratorView[]> {
+		const data = await this.xrpc.app.bsky.feed.getFeedGenerators({
+			feeds: uriList,
+		});
+		return data.data.feeds;
 	}
 
 	// dont know how com.atproto.repo.createRecord works

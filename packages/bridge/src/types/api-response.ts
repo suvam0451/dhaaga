@@ -1,5 +1,21 @@
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 
+type ResultPage<T> = {
+	items: T[];
+	maxId?: string | null;
+	minId?: string | null;
+	error?: Error;
+};
+
+const defaultResultPage = {
+	items: [],
+	maxId: null,
+	minId: null,
+};
+
+export type { ResultPage };
+export { defaultResultPage };
+
 export function errorBuilder<T>(error?: any): LibraryResponse<T> {
 	return {
 		error: {

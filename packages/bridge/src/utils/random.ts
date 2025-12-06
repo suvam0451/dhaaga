@@ -3,7 +3,7 @@ export const urlAlphabet =
 
 class Util {
 	/**
-	 * original code is taken from
+	 * the original code is taken from
 	 * the "nanoid" library
 	 *
 	 * This is the cryptographically

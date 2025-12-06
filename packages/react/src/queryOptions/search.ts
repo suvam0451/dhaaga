@@ -7,13 +7,13 @@ import {
 	FeedParser,
 	KNOWN_SOFTWARE,
 	PostParser,
-	type ResultPage,
 	UserParser,
 } from '@dhaaga/bridge';
 import type {
 	UserObjectType,
 	PostObjectType,
 	FeedObjectType,
+	ResultPage,
 } from '@dhaaga/bridge/typings';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedSearchPosts } from '@atproto/api';

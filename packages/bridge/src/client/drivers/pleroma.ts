@@ -12,7 +12,6 @@ import { PleromaMeRouter } from '../collections/me/pleroma.js';
 import { PleromaMediaRoute } from '../collections/media/pleroma.js';
 import { PleromaListsRoute } from '../collections/lists/pleroma.js';
 import FetchWrapper from '../utils/fetch.js';
-import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
@@ -33,7 +32,6 @@ class Adapter implements ApiTargetInterface {
 	me: PleromaMeRouter;
 	media: PleromaMediaRoute;
 	lists: PleromaListsRoute;
-	post: PostMutatorRoute;
 	user: UserRoute;
 
 	constructor(
@@ -56,7 +54,6 @@ class Adapter implements ApiTargetInterface {
 		this.me = new PleromaMeRouter(this.fetch);
 		this.media = new PleromaMediaRoute(this.fetch);
 		this.lists = new PleromaListsRoute(this.fetch);
-		this.post = new PostMutatorRoute(this);
 		this.user = new UserRoute(this);
 	}
 }

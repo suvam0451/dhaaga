@@ -57,13 +57,6 @@ export type { MediaAttachmentTargetInterface } from './implementors/index.js';
 // export user profile adapters and interfaces
 export { DefaultUser } from './implementors/profile/default.js';
 
-// stub types
-export type {
-	ActivityPubStatus,
-	ActivityPubStatuses,
-	ActivityPubAccount,
-} from './types/activitypub.js';
-
 // export types, adapters and interfaces
 export {
 	ActivityPubUserAdapter,
@@ -100,7 +93,6 @@ export type {
 export { KNOWN_SOFTWARE };
 export type { CustomEmojiObject };
 export { DriverNotificationType } from './client/utils/driver.js';
-export { ApiErrorCode } from './types/result.types.js';
 
 export { RandomUtil } from './utils/random.js';
 
@@ -108,15 +100,10 @@ export { RandomUtil } from './utils/random.js';
 export * from './parsers/index.js';
 // post services
 export { PostInspector, PostResolver } from './parsers/post.js';
-export type { PostMentionObjectType } from './parsers/post.js';
 export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
-
-// pagination util
-export { defaultResultPage } from './utils/pagination.js';
-export type { ResultPage } from './utils/pagination.js';
 
 export { AtprotoUtils } from './utils/atproto.js';
 export { KeyExtractorUtil } from './utils/key-extractor.js';
-export type { ApiResult } from './utils/api-result.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
+export { defaultResultPage } from './types/api-response.js';

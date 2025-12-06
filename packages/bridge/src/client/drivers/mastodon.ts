@@ -13,7 +13,6 @@ import { MastodonListRoute } from '../collections/lists/mastodon.js';
 import { MastodonProfileRouter } from '../collections/profile/mastodon.js';
 import { ApiTargetInterface } from '../index.js';
 import FetchWrapper from '../utils/fetch.js';
-import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
@@ -35,7 +34,6 @@ class Adapter implements ApiTargetInterface {
 	media: MastodonMediaRoute;
 	lists: MastodonListRoute;
 	profile: MastodonProfileRouter;
-	post: PostMutatorRoute;
 	user: UserRoute;
 
 	constructor(
@@ -59,7 +57,6 @@ class Adapter implements ApiTargetInterface {
 		this.media = new MastodonMediaRoute(this.fetch);
 		this.lists = new MastodonListRoute(this.fetch);
 		this.profile = new MastodonProfileRouter(this.fetch);
-		this.post = new PostMutatorRoute(this);
 		this.user = new UserRoute(this);
 	}
 }

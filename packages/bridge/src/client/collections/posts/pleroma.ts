@@ -12,9 +12,7 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
-import { Err, Ok } from '#/utils/index.js';
-import { getHumanReadableError } from '#/utils/errors.utils.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { getHumanReadableError } from '#/utils/errors.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -28,19 +26,14 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		);
 	}
 
-	async getPost(id: string): LibraryPromise<MegaStatus> {
+	async getPost(id: string): Promise<MegaStatus> {
 		const response = await this.client.client.getStatus(id);
-		if (response.status !== 200) {
-			console.log('[ERROR]: failed to get status', response.statusText);
-		}
-		return {
-			data: CasingUtil.camelCaseKeys(response.data),
-		};
+		return CasingUtil.camelCaseKeys(response.data);
 	}
 
 	async create(
 		dto: DhaagaJsPostCreateDto,
-	): LibraryPromise<MegaStatus | MegaScheduledStatus> {
+	): Promise<MegaStatus | MegaScheduledStatus> {
 		const response = await this.client.client.postStatus(dto.status, {
 			language: dto.language,
 			visibility: dto.mastoVisibility,
@@ -49,11 +42,7 @@ export class PleromaStatusesRouter implements StatusesRoute {
 			spoiler_text: dto.spoilerText,
 			media_ids: dto.mediaIds || [],
 		});
-		if (response.status !== 200) {
-			console.log('[ERROR]: failed to create status', response.statusText);
-		}
-
-		return { data: CasingUtil.camelCaseKeys(response.data) };
+		return CasingUtil.camelCaseKeys(response.data);
 	}
 
 	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
@@ -76,41 +65,29 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	async getReactionDetails(
 		postId: string,
 		reactionId: string,
-	): LibraryPromise<MegaReaction[]> {
+	): Promise<MegaReaction[]> {
 		const data = await this.client.client.getEmojiReactions(postId);
-		if (data.status !== 200) {
-			console.log('[ERROR]: failed to get reaction details', data.statusText);
-			return errorBuilder<MegaReaction[]>(data.statusText);
-		}
-		return { data: CasingUtil.camelCaseKeys(data.data) };
+		return CasingUtil.camelCaseKeys(data.data);
 	}
 
-	async addReaction(id: string, shortCode: string): LibraryPromise<any> {
+	async addReaction(id: string, shortCode: string): Promise<any> {
 		const data = await this.client.client.createEmojiReaction(id, shortCode);
-		if (data.status !== 200) {
-			console.log('[ERROR]: failed to add reaction', data.statusText);
-			return errorBuilder(data.statusText);
-		}
-		return { data: CasingUtil.camelCaseKeys(data.data) };
+		return CasingUtil.camelCaseKeys(data.data);
 	}
 
-	async removeReaction(id: string, shortCode: string): LibraryPromise<any> {
+	async removeReaction(id: string, shortCode: string): Promise<any> {
 		const data = await this.client.client.deleteEmojiReaction(id, shortCode);
-		if (data.status !== 200) {
-			console.log('[ERROR]: failed to remove reaction', data.statusText);
-			return errorBuilder(data.statusText);
-		}
-		return { data: CasingUtil.camelCaseKeys(data.data) };
+		return CasingUtil.camelCaseKeys(data.data);
 	}
 
 	async bookmark(id: string): DriverBookmarkStateResult {
 		const data = await this.client.client.bookmarkStatus(id);
-		return Ok({ state: data.data.bookmarked });
+		return { state: data.data.bookmarked };
 	}
 
 	async unBookmark(id: string): DriverBookmarkStateResult {
 		const data = await this.client.client.unbookmarkStatus(id);
-		return Ok({ state: data.data.bookmarked });
+		return { state: data.data.bookmarked };
 	}
 
 	async like(id: string): DriverLikeStateResult {
@@ -142,13 +119,13 @@ export class PleromaStatusesRouter implements StatusesRoute {
 		return CasingUtil.camelCaseKeys(data.data);
 	}
 
-	async boost(id: string): LibraryPromise<MegaStatus> {
+	async boost(id: string): Promise<MegaStatus> {
 		const data = await this.client.client.reblogStatus(id);
-		return { data: data.data };
+		return data.data;
 	}
 
-	async removeBoost(id: string): LibraryPromise<MegaStatus> {
+	async removeBoost(id: string): Promise<MegaStatus> {
 		const data = await this.client.client.unreblogStatus(id);
-		return { data: data.data };
+		return data.data;
 	}
 }

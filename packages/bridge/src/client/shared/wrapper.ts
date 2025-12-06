@@ -10,7 +10,7 @@ import { ApiErrorCode } from '#/types/result.types.js';
 import { DriverService } from '#/services/driver.js';
 import { FollowerGetQueryDTO } from '../collections/accounts/_interface.js';
 import { KeyExtractorUtil } from '#/utils/key-extractor.js';
-import { ResultPage } from '#/utils/pagination.js';
+import type { ResultPage } from '#/types/api-response.js';
 import { AppBskyActorGetProfile } from '@atproto/api';
 import { UserObjectType } from '#/types/index.js';
 
@@ -50,7 +50,7 @@ class Route {
 					).accounts.getDid(query.handle);
 
 					const data: AppBskyActorGetProfile.Response =
-						await this.client.accounts.get(didData?.data?.data?.did!);
+						await this.client.accounts.get(didData?.data?.did!);
 					return UserParser.parse<unknown>(data.data, driver, server);
 				} else if (DriverService.supportsMastoApiV1(this.client.driver)) {
 					// FIXME: need to split this

@@ -18,7 +18,6 @@ import { MediaRoute } from '../collections/media/_interface.js';
 import { ListsRoute } from '../collections/lists/_interface.js';
 import { ProfileRoute } from '../collections/profile/_interface.js';
 // mutators
-import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 
@@ -46,7 +45,6 @@ interface ApiTargetInterface {
 	media: MediaRoute;
 	lists: ListsRoute;
 	// mutators
-	post: PostMutatorRoute;
 	user: UserRoute;
 }
 

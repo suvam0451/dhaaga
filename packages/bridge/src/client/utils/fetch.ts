@@ -1,6 +1,6 @@
 import { CasingUtil } from '#/utils/casing.js';
 import { BaseUrlNormalizationService } from '#/utils/urls.js';
-import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { getHumanReadableError } from '#/utils/errors.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 type DhaagaFetchRequestConfig = {

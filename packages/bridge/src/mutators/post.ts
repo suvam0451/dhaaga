@@ -1,25 +1,16 @@
 import { PostInspector } from '#/parsers/post.js';
 import { ApiTargetInterface, AtprotoApiAdapter } from '#/client/index.js';
 import { DriverService } from '#/services/driver.js';
-import { Err, Ok } from '#/utils/index.js';
-import { ApiAsyncResult } from '#/utils/api-result.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import ActivityPubService from '#/services/activitypub.service.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { AtprotoPostService } from '#/services/atproto.service.js';
 import ActivityPubReactionsService from '#/services/activitypub-reactions.service.js';
 import { DriverPostLikeState } from '#/types/driver.types.js';
-import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { getHumanReadableError } from '#/utils/errors.js';
 import { PostObjectType } from '#/types/index.js';
 
 class Mutator {
-	client: ApiTargetInterface;
-
-	constructor(client: ApiTargetInterface) {
-		this.client = client;
-	}
-
-	private _applyReactionData(input: PostObjectType, _data: any) {
+	private static _applyReactionData(input: PostObjectType, _data: any) {
 		const target = PostInspector.getContentTarget(input);
 		const draft: PostObjectType = JSON.parse(JSON.stringify(input));
 
@@ -30,34 +21,32 @@ class Mutator {
 		return draft;
 	}
 
-	async addReaction(
+	static async addReaction(
+		client: ApiTargetInterface,
 		input: PostObjectType,
 		reactionCode: string,
-	): ApiAsyncResult<PostObjectType> {
+	): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
-		try {
-			/**
-			 * Response looks like this
-			 *
-			 * [{"accounts": [], "count": 1, "id": ":ablobbongo_lr@.:", "me": true, "url": null}]
-			 */
-			const nextState = await ActivityPubReactionsService.addReaction(
-				this.client,
-				target.id,
-				reactionCode,
-				this.client.driver,
-				() => {},
-			);
-			return Ok(this._applyReactionData(input, nextState));
-		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		/**
+		 * Response looks like this
+		 *
+		 * [{"accounts": [], "count": 1, "id": ":ablobbongo_lr@.:", "me": true, "url": null}]
+		 */
+		const nextState = await ActivityPubReactionsService.addReaction(
+			client,
+			target.id,
+			reactionCode,
+			client.driver,
+			() => {},
+		);
+		return this._applyReactionData(input, nextState);
 	}
 
 	async removeReaction(
+		client: ApiTargetInterface,
 		input: PostObjectType,
 		reactionCode: string,
-	): ApiAsyncResult<PostObjectType> {
+	): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
 		try {
 			/**
@@ -66,37 +55,42 @@ class Mutator {
 			 * [{"accounts": [], "count": 1, "id": ":ablobbongo_lr@.:", "me": true, "url": null}]
 			 */
 			const nextState = await ActivityPubReactionsService.removeReaction(
-				this.client,
+				client,
 				target.id,
 				reactionCode,
-				this.client.driver,
+				client.driver,
 				(ok: boolean) => {},
 			);
-			return Ok(this._applyReactionData(input, nextState));
+			return Mutator._applyReactionData(input, nextState);
 		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			console.log(e);
+			return input;
 		}
 	}
 
 	/**
 	 * Toggles like for this post object and
 	 * return it with mutations, if successful
+	 * @param client
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as result
 	 */
-	async toggleLike(input: PostObjectType): Promise<PostObjectType> {
+	async toggleLike(
+		client: ApiTargetInterface,
+		input: PostObjectType,
+	): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
 		let nextState: DriverPostLikeState | undefined;
 
-		if (DriverService.supportsAtProto(this.client.driver)) {
-			const _api = this.client as unknown as AtprotoApiAdapter;
+		if (DriverService.supportsAtProto(client.driver)) {
+			const _api = client as unknown as AtprotoApiAdapter;
 			nextState = target.atProto?.viewer?.like
 				? await _api.statuses.atProtoDeleteLike(target.atProto?.viewer?.like)
 				: await _api.statuses.atProtoLike(target.meta.uri!, target.meta.cid!);
-		} else if (!DriverService.supportsMisskeyApi(this.client.driver)) {
+		} else if (!DriverService.supportsMisskeyApi(client.driver)) {
 			nextState = target.interaction.liked
-				? await this.client.statuses.removeLike(target.id)
-				: await this.client.statuses.like(target.id);
+				? await client.statuses.removeLike(target.id)
+				: await client.statuses.like(target.id);
 		}
 
 		if (nextState === undefined)
@@ -124,13 +118,16 @@ class Mutator {
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as result
 	 */
-	async toggleShare(input: PostObjectType): Promise<PostObjectType> {
+	async toggleShare(
+		client: ApiTargetInterface,
+		input: PostObjectType,
+	): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
 
-		if (DriverService.supportsAtProto(this.client.driver)) {
+		if (DriverService.supportsAtProto(client.driver)) {
 			if (!target.atProto) return input;
 			const result = await AtprotoPostService.toggleRepost(
-				this.client,
+				client,
 				target.meta.uri!,
 				target.meta.cid!,
 				target.atProto.viewer?.repost,
@@ -154,10 +151,10 @@ class Mutator {
 			return draft;
 		} else {
 			const res = await ActivityPubService.toggleBoost(
-				this.client,
+				client,
 				target.id,
 				target.interaction.boosted,
-				this.client.driver as KNOWN_SOFTWARE,
+				client.driver as KNOWN_SOFTWARE,
 			);
 			const draft: PostObjectType = JSON.parse(JSON.stringify(input));
 
@@ -178,15 +175,15 @@ class Mutator {
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as result
 	 */
-	async loadBookmarkState(input: PostObjectType): Promise<PostObjectType> {
+	async loadBookmarkState(
+		client: ApiTargetInterface,
+		input: PostObjectType,
+	): Promise<PostObjectType> {
 		const target = PostInspector.getContentTarget(input);
 		if (target.state.isBookmarkStateFinal) return input;
 
 		try {
-			const res = await ActivityPubService.getBookmarkState(
-				this.client,
-				target.id,
-			);
+			const res = await ActivityPubService.getBookmarkState(client, target.id);
 			if (res === null) return input;
 
 			const draft: PostObjectType = JSON.parse(JSON.stringify(input));
@@ -208,23 +205,25 @@ class Mutator {
 	/**
 	 * Toggles bookmark for this post-object and
 	 * return it with mutations, if successful
+	 * @param client
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as a result
 	 */
-	async toggleBookmark(input: PostObjectType): ApiAsyncResult<PostObjectType> {
-		if (!DriverService.canBookmark(this.client.driver))
-			return Err(ApiErrorCode.OPERATION_UNSUPPORTED);
+	async toggleBookmark(
+		client: ApiTargetInterface,
+		input: PostObjectType,
+	): Promise<PostObjectType> {
+		if (!DriverService.canBookmark(client.driver)) {
+			console.log('[WARN]: bookmarking not supported');
+			return input;
+		}
 
 		const target = PostInspector.getContentTarget(input);
 
 		try {
-			const result = target.interaction.bookmarked
-				? await this.client.statuses.unBookmark(target.id)
-				: await this.client.statuses.bookmark(target.id);
-
-			if (result.isErr()) return Err(ApiErrorCode.UNKNOWN_ERROR);
-
-			const _state = result.unwrap();
+			const _state = target.interaction.bookmarked
+				? await client.statuses.unBookmark(target.id)
+				: await client.statuses.bookmark(target.id);
 			const draft: PostObjectType = JSON.parse(JSON.stringify(input));
 
 			if (draft.id === target.id) {
@@ -234,11 +233,12 @@ class Mutator {
 				draft.boostedFrom.interaction.bookmarked = _state.state;
 				draft.boostedFrom.state.isBookmarkStateFinal = true;
 			}
-			return Ok(draft);
+			return draft;
 		} catch (e) {
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			console.log(e);
+			return input;
 		}
 	}
 }
 
-export { Mutator as PostMutatorRoute };
+export { Mutator as PostMutator };

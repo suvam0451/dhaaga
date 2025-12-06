@@ -2,9 +2,8 @@ import {
 	ApiTargetInterface,
 	DhaagaJsTimelineQueryOptions,
 	KNOWN_SOFTWARE,
-	type ResultPage,
 } from '@dhaaga/bridge';
-import { UserObjectType } from '@dhaaga/bridge/typings';
+import { UserObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import { queryOptions } from '@tanstack/react-query';
 
 enum UserFeedFetchMode {

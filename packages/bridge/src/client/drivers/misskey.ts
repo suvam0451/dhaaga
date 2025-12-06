@@ -12,7 +12,6 @@ import { MisskeyMediaRouter } from '../collections/media/misskey.js';
 import { MisskeyListsRoute } from '../collections/lists/misskey.js';
 import FetchWrapper from '../utils/fetch.js';
 import { ApiTargetInterface } from '../index.js';
-import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
@@ -33,7 +32,6 @@ class Adapter implements ApiTargetInterface {
 	me: MisskeyMeRouter;
 	media: MisskeyMediaRouter;
 	lists: MisskeyListsRoute;
-	post: PostMutatorRoute;
 	user: UserRoute;
 
 	constructor(
@@ -57,7 +55,6 @@ class Adapter implements ApiTargetInterface {
 		this.me = new MisskeyMeRouter(this.fetch);
 		this.media = new MisskeyMediaRouter(this.fetch);
 		this.lists = new MisskeyListsRoute(this.fetch);
-		this.post = new PostMutatorRoute(this);
 		this.user = new UserRoute(this);
 	}
 }

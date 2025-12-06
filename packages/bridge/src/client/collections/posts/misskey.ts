@@ -1,7 +1,6 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import type { MastoScheduledStatus } from '#/types/mastojs.types.js';
 import type { MissContext, MissNote } from '#/types/misskey-js.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
@@ -9,8 +8,7 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
-import { Err, Ok } from '#/utils/index.js';
-import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { getHumanReadableError } from '#/utils/errors.js';
 import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 type RenoteCreateDTO = {
@@ -30,26 +28,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 
 	async create(
 		dto: DhaagaJsPostCreateDto,
-	): LibraryPromise<MastoScheduledStatus> {
+	): Promise<Endpoints['notes/create']['res']> {
 		try {
-			console.log('dto', {
-				// ...dto,
-				lang: dto.language,
-				visibility: dto.misskeyVisibility,
-				replyId: dto.inReplyToId,
-				text: dto.status,
-				visibleUserIds:
-					dto.misskeyVisibility === 'specified'
-						? dto.visibleUserIds || []
-						: undefined,
-				fileIds: dto.mediaIds || [],
-				cw: dto.spoilerText || null,
-				localOnly: false, // reactionAcceptance: null,
-				poll: dto.poll || null,
-				scheduledAt: null, // cw: dto.spoilerText || null,
-			});
-
-			const data = await this.client.client.request<
+			return this.client.client.request<
 				// @ts-ignore-next-line
 				Endpoints['notes/create']['req'],
 				any
@@ -68,14 +49,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 				localOnly: false, // reactionAcceptance: null,
 				poll: dto.poll || null,
 				scheduledAt: null, // cw: dto.spoilerText || null,
-			});
-			return { data: data as any };
+			}) as any;
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e);
-			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
+			throw new Error(getHumanReadableError(e));
 		}
 	}
 
@@ -100,11 +76,10 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 
 	async getReactions(
 		postId: string,
-	): LibraryPromise<Endpoints['notes/reactions']['res']> {
-		const data = await this.client.client.request('notes/reactions', {
+	): Promise<Endpoints['notes/reactions']['res']> {
+		return this.client.client.request('notes/reactions', {
 			noteId: postId,
 		});
-		return { data };
 	}
 
 	async getReactionDetails(
@@ -184,14 +159,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			await this.client.client.request('notes/favorites/create', {
 				noteId: id,
 			});
-			return Ok({ state: true });
+			return { state: true };
 		} catch (e: any) {
-			if (e.code) {
-				// ERR_BAD_REQUEST, ERR_BAD_RESPONSE
-				if (e.code === 'ALREADY_FAVORITED') return Ok({ state: true });
-				return Err(e.code);
-			}
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(getHumanReadableError(e));
 		}
 	}
 
@@ -200,14 +170,9 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 			await this.client.client.request('notes/favorites/delete', {
 				noteId: id,
 			});
-			return Ok({ state: false });
+			return { state: false };
 		} catch (e: any) {
-			if (e.code) {
-				// ERR_BAD_REQUEST, ERR_BAD_RESPONSE
-				if (e.code === 'NOT_FAVORITED') return Ok({ state: false });
-				return Err(e.code);
-			}
-			return Err(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(getHumanReadableError(e));
 		}
 	}
 

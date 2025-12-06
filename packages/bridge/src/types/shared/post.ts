@@ -152,6 +152,16 @@ const postObjectSchema = ActivityPubStatusLevelTwo.extend({
 type PostObjectType = z.infer<typeof postObjectSchema>;
 type PostRootObjectType = z.infer<typeof ActivityPubStatusItemDto>;
 
+const mentionObjectSchema = z.object({
+	id: z.string(),
+	handle: z.string().optional(),
+	url: z.string().optional(),
+	acct: z.string().optional().nullable(),
+	username: z.string().optional().nullable(),
+});
+
+type PostMentionObjectType = z.infer<typeof mentionObjectSchema>;
+
 export { postObjectSchema };
 export type {
 	PostRootObjectType,
@@ -160,4 +170,5 @@ export type {
 	PostAuthorType,
 	PostMediaAttachmentType,
 	ActivityPubReactionStateType,
+	PostMentionObjectType,
 };

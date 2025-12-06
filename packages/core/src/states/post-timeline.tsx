@@ -1,5 +1,5 @@
-import type { DhaagaJsTimelineQueryOptions, ResultPage } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import { RandomUtil } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {

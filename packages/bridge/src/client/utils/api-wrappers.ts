@@ -16,7 +16,7 @@ import generator, { MegalodonInterface } from 'megalodon';
 import { KNOWN_SOFTWARE } from './driver.js';
 import { api } from 'misskey-js';
 import { LibraryResponse } from '#/types/result.types.js';
-import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { getHumanReadableError } from '#/utils/errors.js';
 
 /**
  * Used for --> Mastodon

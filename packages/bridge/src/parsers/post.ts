@@ -2,30 +2,18 @@ import { z } from 'zod';
 import { UserParser } from './user.js';
 import { TextNodeParser } from './text-nodes.js';
 import { DriverService } from '../services/driver.js';
-import { ResultPage } from '../utils/pagination.js';
-import { Err, Ok, RandomUtil } from '../utils/index.js';
-import { ApiErrorCode } from '../types/result.types.js';
-import { ApiResult } from '../utils/api-result.js';
+import { RandomUtil } from '../utils/index.js';
 import { ActivitypubStatusAdapter } from '../implementors/status/_adapters.js';
 import { PostTargetInterface } from '../implementors/index.js';
 import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 import AtprotoPostAdapter from '../implementors/status/bluesky.js';
 import { ActivitypubHelper, DriverUserFindQueryType } from '../index.js';
 import {
-	PostObjectType,
-	postObjectSchema,
+	PostMentionObjectType,
 	ActivityPubStatusItemDto,
+	postObjectSchema,
+	PostObjectType,
 } from '#/types/shared/post.js';
-
-const mentionObjectSchema = z.object({
-	id: z.string(),
-	handle: z.string().optional(),
-	url: z.string().optional(),
-	acct: z.string().optional().nullable(),
-	username: z.string().optional().nullable(),
-});
-
-type PostMentionObjectType = z.infer<typeof mentionObjectSchema>;
 
 /**
  * The Parser class provides a set of static methods to handle tasks such as
@@ -273,23 +261,6 @@ class Parser {
 			}
 		}
 	}
-
-	static parseApiResponse(
-		input: any,
-		driver: string | KNOWN_SOFTWARE,
-		server: string,
-	): ApiResult<ResultPage<PostObjectType>> {
-		if (Array.isArray(input)) {
-			return Ok({
-				items: Parser.parse<unknown[]>(input, driver, server),
-				maxId: null,
-				minId: null,
-				isLoaded: true,
-			});
-		}
-		console.log('[WARN]: failed to identify shape of the input');
-		return Err(ApiErrorCode.PARSING_FAILED);
-	}
 }
 
 class Inspector {
@@ -378,4 +349,3 @@ export {
 	Inspector as PostInspector,
 	Resolver as PostResolver,
 };
-export type { PostMentionObjectType };

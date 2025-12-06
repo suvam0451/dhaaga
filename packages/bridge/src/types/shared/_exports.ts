@@ -16,5 +16,6 @@ export {
 	PostAuthorType,
 	PostMediaAttachmentType,
 	ActivityPubReactionStateType,
+	PostMentionObjectType,
 } from './post.js';
 export { UserObjectType } from './user.js';

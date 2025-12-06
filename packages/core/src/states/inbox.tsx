@@ -6,8 +6,10 @@ import {
 	useContext,
 	useReducer,
 } from 'react';
-import type { ResultPage } from '@dhaaga/bridge';
-import type { NotificationObjectType } from '@dhaaga/bridge/typings';
+import type {
+	NotificationObjectType,
+	ResultPage,
+} from '@dhaaga/bridge/typings';
 
 type State = {
 	seen: Set<string>;

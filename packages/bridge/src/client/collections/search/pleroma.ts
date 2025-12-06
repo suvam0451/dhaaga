@@ -3,7 +3,7 @@ import type { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
-import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { getHumanReadableError } from '#/utils/errors.js';
 import { LibraryPromise } from '#/types/index.js';
 
 export class PleromaSearchRouter implements SearchRoute {

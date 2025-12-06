@@ -8,7 +8,6 @@ import {
 	PleromaApiAdapter,
 } from '../client/index.js';
 import { PostParser } from '../parsers/post.js';
-import { DriverReactionResolvedType } from '../types/activitypub.js';
 import { CustomEmojiObject } from '#/types/shared/reactions.js';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
@@ -45,6 +44,17 @@ const ActivityPubReactionStateSchema = z.array(activityPubReactionItemSchema);
 type ActivityPubReactionStateType = z.infer<
 	typeof ActivityPubReactionStateSchema
 >;
+
+type DriverReactionResolvedType = {
+	count: number;
+	url?: string;
+	name: string;
+	type: 'text' | 'image';
+	height?: number;
+	width?: number;
+	interactable: boolean;
+	me: boolean;
+};
 
 class ActivityPubReactionsService {
 	/**

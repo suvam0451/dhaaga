@@ -15,8 +15,6 @@ import type {
 } from '#/types/megalodon.types.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
-import { ApiAsyncResult } from '#/utils/api-result.js';
-import { Err, Ok } from '#/utils/index.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 import { errorBuilder, LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
@@ -42,14 +40,14 @@ export class PleromaAccountsRouter
 		return CasingUtil.camelCaseKeys(data.data);
 	}
 
-	async lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MegaAccount> {
+	async lookup(webfinger: DriverWebfingerType): Promise<MegaAccount> {
 		const data = await this.client.client.lookupAccount(
 			webfinger.host
 				? `${webfinger.username}@${webfinger.host}`
 				: webfinger.username,
 		);
-		if (data.status !== 200) return Err(data.statusText);
-		return Ok(data.data);
+		if (data.status !== 200) throw new Error(data.statusText);
+		return data.data;
 	}
 
 	async statuses(id: string, query: AccountRouteStatusQueryDto): Promise<any> {

@@ -27,10 +27,9 @@ import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import { ApiAsyncResult } from '#/utils/api-result.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
@@ -109,14 +108,9 @@ class BlueskyAccountsRouter implements AccountRoute {
 	 * NOTE: remember that this also gives us known followers
 	 * @param did
 	 */
-	async get(did: string): LibraryPromise<AppBskyActorGetProfile.Response> {
+	async get(did: string): Promise<AppBskyActorGetProfile.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.getProfile({ actor: did });
-			return { data };
-		} catch (e) {
-			return errorBuilder(e);
-		}
+		return agent.getProfile({ actor: did });
 	}
 
 	/**
@@ -124,15 +118,9 @@ class BlueskyAccountsRouter implements AccountRoute {
 	 */
 	async getDid(
 		handle: string,
-	): LibraryPromise<ComAtprotoIdentityResolveHandle.Response> {
+	): Promise<ComAtprotoIdentityResolveHandle.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.resolveHandle({ handle });
-			return { data };
-		} catch (e) {
-			console.log('[WARN]: failed to resolve handle', e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		return agent.resolveHandle({ handle });
 	}
 
 	async resolveMany(
@@ -154,9 +142,10 @@ class BlueskyAccountsRouter implements AccountRoute {
 			limit: number;
 			cursor: string | undefined;
 		},
-	): LibraryPromise<AppBskyFeedGetActorLikes.OutputSchema> {
+	): Promise<AppBskyFeedGetActorLikes.OutputSchema> {
 		const agent = getBskyAgent(this.dto);
-		return agent.getActorLikes({ actor, cursor, limit });
+		const data = await agent.getActorLikes({ actor, cursor, limit });
+		return data.data;
 	}
 
 	async getLists(id: string): PaginatedPromise<AppBskyGraphDefs.ListView[]> {
@@ -168,15 +157,15 @@ class BlueskyAccountsRouter implements AccountRoute {
 		};
 	}
 
-	lookup(webfinger: DriverWebfingerType): ApiAsyncResult<MastoAccount> {
-		return Promise.resolve(undefined) as any;
+	lookup(webfinger: DriverWebfingerType): Promise<MastoAccount> {
+		throw new Error('Method not implemented.');
 	}
 
 	mute(
 		id: string,
 		opts: AccountMutePostDto,
-	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>> {
-		return Promise.resolve(undefined) as any;
+	): Promise<MastoRelationship | MegaRelationship> {
+		throw new Error('Method not implemented.');
 	}
 
 	async relationships(
@@ -209,14 +198,10 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	async unfollow(id: string): LibraryPromise<MastoRelationship> {
-		try {
-			const agent = getXrpcAgent(this.dto);
-			await agent.deleteFollow(id);
-			return { data: null as any };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async unfollow(id: string): Promise<MastoRelationship | null> {
+		const agent = getXrpcAgent(this.dto);
+		await agent.deleteFollow(id);
+		return null;
 	}
 
 	unmute(
