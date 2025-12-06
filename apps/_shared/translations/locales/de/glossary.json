@@ -1,0 +1,31 @@
+{
+  "noun": {
+    "post_one": "Beitrag",
+    "post_other": "Beiträge",
+    "user_one": "Benutzer",
+    "user_other": "Benutzer",
+    "follower_one": "Follower",
+    "follower_other": "Follower",
+    "following_one": "Folge ich",
+    "following_other": "Folge ich",
+    "like_one": "Gefällt mir",
+    "like_other": "Gefällt mir",
+    "share_one": "Teilen",
+    "share_other": "Geteilt",
+    "reply_one": "Antworten",
+    "reply_other": "Antworten",
+    "quote_one": "Zitat",
+    "quote_other": "Zitate"
+  },
+  "relationship": {
+    "friends": "Freunde",
+    "following": "Folge"
+  },
+  "relationshipCta": {
+    "followBack": "Zurückfolgen",
+    "follow": "Folgen"
+  },
+  "verb": {
+    "message": "Nachricht 🚧"
+  }
+}

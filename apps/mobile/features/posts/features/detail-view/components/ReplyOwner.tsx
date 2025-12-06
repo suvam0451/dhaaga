@@ -1,10 +1,10 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { PostObjectType } from '@dhaaga/bridge';
-import { appDimensions } from '../../../../../styles/dimensions';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../../../components/lib/Text';
-import { TextContentView } from '../../../../../components/common/status/TextContentView';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
+import { appDimensions } from '#/styles/dimensions';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { AppText } from '#/components/lib/Text';
+import { TextContentView } from '#/components/common/status/TextContentView';
 
 type Props = {
 	dto: PostObjectType;
