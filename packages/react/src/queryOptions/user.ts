@@ -5,10 +5,9 @@ import {
 	defaultResultPage,
 	DriverService,
 	DriverUserFindQueryType,
-	type PostObjectType,
 	PostParser,
-	UserObjectType,
 } from '@dhaaga/bridge';
+import type { PostObjectType, UserObjectType } from '@dhaaga/bridge/typings';
 
 /**
  * GET user profile

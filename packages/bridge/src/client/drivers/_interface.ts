@@ -16,7 +16,6 @@ import {
 import { MeRoute } from '../collections/me/_interface.js';
 import { MediaRoute } from '../collections/media/_interface.js';
 import { ListsRoute } from '../collections/lists/_interface.js';
-import { ParserRoute } from '../../adapters/_client/_router/routes/parser.js';
 import { ProfileRoute } from '../collections/profile/_interface.js';
 // mutators
 import { PostMutatorRoute } from '../shared/post.js';
@@ -58,7 +57,6 @@ export type {
 	MeRoute,
 	MediaRoute,
 	NotificationsRoute,
-	ParserRoute,
 	ProfileRoute,
 	SearchRoute,
 	StatusesRoute,

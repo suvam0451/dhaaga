@@ -1,6 +1,4 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
-import { errorBuilder } from '../../../adapters/_client/_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import {
 	MegaReaction,
 	MegaScheduledStatus,
@@ -16,6 +14,7 @@ import {
 } from '#/types/driver.types.js';
 import { Err, Ok } from '#/utils/index.js';
 import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;

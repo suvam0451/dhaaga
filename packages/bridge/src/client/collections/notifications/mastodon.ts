@@ -1,10 +1,5 @@
 import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
-import {
-	LibraryPromise,
-	PaginatedPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
 import {
 	MastoConversation,
 	MastoGroupedNotificationsResults,
@@ -12,6 +7,8 @@ import {
 } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;

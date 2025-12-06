@@ -1,5 +1,4 @@
 import { TrendsRoute } from './_interface.js';
-import { notImplementedErrorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import {
 	MastoStatus,
 	MastoTag,
@@ -7,6 +6,7 @@ import {
 } from '#/types/mastojs.types.js';
 import { LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
+import { notImplementedErrorBuilder } from '#/types/api-response.js';
 
 export class PleromaTrendsRouter implements TrendsRoute {
 	client: FetchWrapper;

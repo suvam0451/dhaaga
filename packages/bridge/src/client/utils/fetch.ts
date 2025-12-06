@@ -1,7 +1,7 @@
 import { CasingUtil } from '#/utils/casing.js';
 import { BaseUrlNormalizationService } from '#/utils/urls.js';
-import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 type DhaagaFetchRequestConfig = {
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';

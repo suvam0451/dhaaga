@@ -1,14 +1,8 @@
-import {
-	InstanceApi_CustomEmojiDTO,
-	InstanceRoute,
-	MastoTranslation,
-} from './_interface.js';
-import { getSoftwareInfoShared } from '#/adapters/_client/_router/shared.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
-import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
+import { InstanceRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
-import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
+import { CustomEmojiObject } from '#/types/shared/reactions.js';
+import { MastoTranslation } from '#/types/index.js';
 
 export class MastodonInstanceRouter implements InstanceRoute {
 	direct: FetchWrapper;
@@ -17,28 +11,11 @@ export class MastodonInstanceRouter implements InstanceRoute {
 		this.direct = forwarded;
 	}
 
-	getLoginUrl(
-		urlLike: string,
-		{}: { appName: string; appCallback: string; uuid: string },
-	): LibraryPromise<{
-		software: string;
-		version?: string | null | undefined;
-		loginUrl: string;
-		loginStrategy: 'code' | 'miauth';
-	}> {
-		throw new Error('Method not implemented.');
-	}
-
-	async getCustomEmojis(
-		urlLike: string,
-	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
-		const fn = MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list;
-		const { data, error } = await MastoErrorHandler(fn);
-		if (error) return { error };
-		const x = await data;
-		if (!x) return { error: { code: ApiErrorCode.UNKNOWN_ERROR } };
-		return {
-			data: x!.map((o: any) => ({
+	async getCustomEmojis(urlLike: string): Promise<CustomEmojiObject[]> {
+		const data =
+			await MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list();
+		return (
+			data?.map((o: any) => ({
 				shortCode: o.shortcode,
 				url: o.url,
 				staticUrl: o.staticUrl,
@@ -46,28 +23,15 @@ export class MastodonInstanceRouter implements InstanceRoute {
 				category: o.category,
 				aliases: [],
 				tags: [],
-			})),
-			error,
-		};
+			})) ?? []
+		);
 	}
 
-	async getSoftwareInfo(urlLike: string) {
-		return getSoftwareInfoShared(urlLike);
-	}
-
-	async getTranslation(
-		id: string,
-		lang: string,
-	): Promise<LibraryResponse<MastoTranslation>> {
+	async getTranslation(id: string, lang: string): Promise<MastoTranslation> {
 		const _client = MastoJsWrapper.create(
 			this.direct.baseUrl,
 			this.direct.token,
 		);
-		const data = await _client.lib.v1.statuses
-			.$select(id)
-			.translate({ lang: 'en' });
-		return {
-			data,
-		};
+		return _client.lib.v1.statuses.$select(id).translate({ lang: 'en' });
 	}
 }

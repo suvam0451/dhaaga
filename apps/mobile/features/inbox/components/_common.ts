@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import type { NotificationObjectType } from '@dhaaga/bridge';
+import type { NotificationObjectType } from '@dhaaga/bridge/typings';
 
 export const ICON_SIZE = 36;
 

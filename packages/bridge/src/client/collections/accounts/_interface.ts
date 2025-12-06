@@ -22,7 +22,8 @@ import type {
 } from '#/types/megalodon.types.js';
 import type { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
-import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
+
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export type BookmarkGetQueryDTO = {
 	limit: number;

@@ -116,17 +116,3 @@ export async function MastoErrorHandler<T extends (...args: any[]) => any>(
 		return { error: { code: 'UNKNOWN_ERROR' } };
 	}
 }
-
-export async function PleromaErrorHandler<T extends (...args: any[]) => any>(
-	foo: ThisParameterType<T>,
-	func: T,
-): Promise<LibraryResponse<ReturnType<T>>> {
-	try {
-		return {
-			data: await func.bind(foo).apply(foo),
-		};
-	} catch (e) {
-		getHumanReadableError(e);
-		return { error: { code: 'UNKNOWN_ERROR' } };
-	}
-}

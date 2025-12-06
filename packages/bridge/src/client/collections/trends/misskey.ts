@@ -1,11 +1,13 @@
 import { TrendsRoute } from './_interface.js';
-import { notImplementedErrorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import type { MastoStatus, MastoTrendLink } from '#/types/mastojs.types.js';
 import { LibraryResponse } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import FetchWrapper from '#/client/utils/fetch.js';
+import {
+	LibraryPromise,
+	notImplementedErrorBuilder,
+} from '#/types/api-response.js';
 
 export class MisskeyTrendsRouter implements TrendsRoute {
 	driver: FetchWrapper;

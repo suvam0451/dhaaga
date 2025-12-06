@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { RandomUtil, verifyMisskeyToken } from '@dhaaga/bridge';
+import { RandomUtil } from '@dhaaga/bridge';
+import { verifyMisskeyToken } from '@dhaaga/bridge/auth';
 
 function useMiauthLogin(instance: string, signInUrl: string) {
 	const [Code, setCode] = useState<string | null>(null);

@@ -5,7 +5,6 @@
 		"module": "NodeNext",
 		"jsx": "react-jsx",
 		"moduleResolution": "NodeNext",
-		"verbatimModuleSyntax": false,
 		"moduleDetection": "force",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,

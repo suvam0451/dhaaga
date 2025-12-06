@@ -1,13 +1,10 @@
 import {
 	type ApiTargetInterface,
-	BaseApiAdapter,
 	MastoApiAdapter,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
 } from '../client/index.js';
 import { DriverService } from './driver.js';
-import { RandomUtil } from '../utils/index.js';
-import { LibraryPromise } from '../adapters/_client/_router/routes/_types.js';
 
 enum KNOWN_SOFTWARE {
 	// Fediverse Parent Software
@@ -181,53 +178,6 @@ class ActivityPubService {
 				return 1;
 			}
 		}
-	}
-
-	/**
-	 * detect software for a subdomain
-	 * @param urlLike
-	 */
-	static async detectSoftware(urlLike: string) {
-		const client = new BaseApiAdapter();
-		const { data, error } = await client.instances.getSoftwareInfo(urlLike);
-		if (error || !data) return null;
-		return data.software;
-	}
-
-	/**
-	 * Evaluates instance software/version and
-	 * generates the sign-in url to be used
-	 * in the webview
-	 *
-	 * Supported strategies are:
-	 *
-	 * - code
-	 * - miauth
-	 * @param urlLike
-	 * @param token
-	 */
-	static async signInUrl(
-		urlLike: string,
-		token?: {
-			clientId: string;
-			clientSecret: string;
-		},
-	): LibraryPromise<{
-		software: string;
-		version?: string | null;
-		loginUrl: string;
-		loginStrategy: 'code' | 'miauth';
-		clientId?: string;
-		clientSecret?: string;
-	}> {
-		const client = new BaseApiAdapter();
-		return client.instances.getLoginUrl(urlLike, {
-			appCallback: 'https://suvam.io',
-			appName: 'Dhaaga',
-			appClientId: token?.clientId,
-			appClientSecret: token?.clientSecret,
-			uuid: RandomUtil.nanoId(),
-		});
 	}
 
 	/**

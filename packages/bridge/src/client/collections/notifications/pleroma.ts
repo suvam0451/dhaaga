@@ -1,10 +1,10 @@
 import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
 import { CasingUtil } from '#/utils/casing.js';
-import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { MegaConversation, MegaNotification } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { MastoGroupedNotificationsResults } from '#/types/mastojs.types.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class PleromaNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;

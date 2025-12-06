@@ -3,12 +3,11 @@ import {
 	MastoUnifiedSearchType,
 	SearchRoute,
 } from './_interface.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { MastoAccount, MastoStatus, MastoTag } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 export class MastodonSearchRouter implements SearchRoute {
 	direct: FetchWrapper;

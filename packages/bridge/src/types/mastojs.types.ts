@@ -23,3 +23,4 @@ export type MastoGroupedNotificationsResults =
 export type MastoScheduledStatus = mastodon.v1.ScheduledStatus;
 export type MastoMediaAttachment = mastodon.v1.MediaAttachment;
 export type MastoMediaAttachmentMeta = mastodon.v1.MediaAttachmentMeta;
+export type MastoTranslation = mastodon.v1.Translation;

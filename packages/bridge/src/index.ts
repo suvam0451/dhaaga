@@ -8,22 +8,15 @@ export {
 } from './client/index.js';
 
 import ActivityPubService from './services/activitypub.service.js';
-export { ActivityPubService };
 import ActivityPubReactionsService, {
-	type ActivityPubReactionStateType,
 	type ActivityPubReactionItemType,
+	type ActivityPubReactionStateType,
 } from './services/activitypub-reactions.service.js';
-export { ActivityPubReactionsService };
-export type { ActivityPubReactionStateType, ActivityPubReactionItemType };
-
 //  status adapters
 import PostAdapterBase from './implementors/status/default.js';
 import MastoApiPostAdapter from './implementors/status/mastodon.js';
 import MisskeyApiPostAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
-import { UserDetailed } from 'misskey-js/autogen/models.js';
-import { errorBuilder } from './adapters/_client/_router/dto/api-responses.dto.js';
-import { LibraryPromise } from './adapters/_client/_router/routes/_types.js';
 import {
 	AccountMutePostDto,
 	AccountRouteStatusQueryDto,
@@ -34,7 +27,12 @@ import {
 import AtprotoPostAdapter from './implementors/status/bluesky.js';
 import { KNOWN_SOFTWARE } from './client/utils/driver.js';
 import { DriverService } from './services/driver.js';
-import { InstanceApi_CustomEmojiDTO } from './client/collections/servers/_interface.js';
+
+import { CustomEmojiObject } from '#/types/shared/reactions.js';
+
+export { ActivityPubService };
+export { ActivityPubReactionsService };
+export type { ActivityPubReactionStateType, ActivityPubReactionItemType };
 
 export {
 	DriverService,
@@ -91,33 +89,6 @@ export { ActivitypubStatusAdapter } from './implementors/status/_adapters.js';
 export { ActivitypubHelper };
 export { parseStatusContent, preprocessPostContent } from './services/index.js';
 
-type MiauthSessionCheckResponse =
-	| { ok: false }
-	| {
-			ok: true;
-			token: string;
-			user: UserDetailed;
-	  };
-
-export const verifyMisskeyToken = async (host: string, session: string) => {
-	const res = await fetch(`${host}/api/miauth/${session}/check`, {
-		method: 'POST',
-		headers: {
-			// 'Content-Type': 'application/json',
-		},
-	});
-
-	// If the API returns JSON, parse it:
-	if (!res.ok) {
-		throw new Error(`Request failed: ${res.status} ${res.statusText}`);
-	}
-
-	const data = await res.json(); // typed as MiauthSessionCheckResponse if you cast it
-	return data as MiauthSessionCheckResponse;
-};
-
-export { type LibraryPromise, errorBuilder };
-
 // DTOs
 export type {
 	AccountMutePostDto,
@@ -127,28 +98,17 @@ export type {
 };
 
 export { KNOWN_SOFTWARE };
-export type { InstanceApi_CustomEmojiDTO };
+export type { CustomEmojiObject };
 export { DriverNotificationType } from './client/utils/driver.js';
 export { ApiErrorCode } from './types/result.types.js';
 
 export { RandomUtil } from './utils/random.js';
 
 // chat services
-export { ChatParser } from './parsers/chat.js';
-// feed services
-export { FeedParser } from './parsers/feed.js';
-export type { FeedObjectType } from './parsers/feed.js';
-// text services
-export { TextParser } from './parsers/text.js';
+export * from './parsers/index.js';
 // post services
-export { PostParser, PostInspector, PostResolver } from './parsers/post.js';
+export { PostInspector, PostResolver } from './parsers/post.js';
 export type { PostMentionObjectType } from './parsers/post.js';
-// user services
-export { UserParser } from './parsers/user.js';
-// notification services
-export { NotificationParser } from './parsers/notification.js';
-// text node services
-export { TextNodeParser } from './parsers/text-nodes.js';
 export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
 
 // pagination util

@@ -1,5 +1,4 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import {
 	AppBskyFeedGetPostThread,
 	AtpSessionData,
@@ -7,12 +6,12 @@ import {
 	ChatBskyConvoGetConvoForMembers,
 	ChatBskyConvoSendMessage,
 } from '@atproto/api';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
 import { getBskyAgent } from '#/utils/atproto.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;

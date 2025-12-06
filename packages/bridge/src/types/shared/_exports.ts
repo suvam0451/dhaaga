@@ -4,6 +4,7 @@
  */
 
 export { MessageObjectType } from './chat.js';
+export { FeedObjectType } from './feed.js';
 export {
 	NotificationObjectType,
 	NotificationUserGroupType,

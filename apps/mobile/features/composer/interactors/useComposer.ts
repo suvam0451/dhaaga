@@ -2,7 +2,6 @@ import { useComposerCtx } from '../contexts/useComposerCtx';
 import type { UserObjectType } from '@dhaaga/bridge';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import TextEditorService from '../../../services/text-editor.service';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import {
 	useAppBottomSheet,
 	useAppPublishers,

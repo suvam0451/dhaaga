@@ -4,13 +4,8 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from './_interface.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from './default.js';
 import { GetPostsQueryDTO } from '../../types/_interface.js';
-import {
-	LibraryPromise,
-	PaginatedPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import type {
@@ -23,6 +18,8 @@ import { CasingUtil } from '#/utils/casing.js';
 import { ApiAsyncResult } from '#/utils/api-result.js';
 import { Err, Ok } from '#/utils/index.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class PleromaAccountsRouter
 	extends BaseAccountsRouter

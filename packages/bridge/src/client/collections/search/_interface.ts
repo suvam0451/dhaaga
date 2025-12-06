@@ -1,4 +1,3 @@
-import { LibraryPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import {
 	AppBskyActorSearchActorsTypeahead,
@@ -6,6 +5,7 @@ import {
 } from '@atproto/api';
 import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
+import { LibraryPromise } from '#/types/index.js';
 
 type MastoUnifiedSearchType = {
 	q: string;

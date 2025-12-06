@@ -22,11 +22,6 @@ import {
 	FollowerGetQueryDTO,
 } from './_interface.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
-import {
-	LibraryPromise,
-	PaginatedPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
@@ -35,6 +30,8 @@ import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.
 import { ApiAsyncResult } from '#/utils/api-result.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;

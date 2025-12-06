@@ -1,11 +1,11 @@
 import { GetTrendingDTO } from '../../types/_interface.js';
 import { Endpoints } from 'misskey-js';
-import { LibraryPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import {
 	MastoStatus,
 	MastoTag,
 	MastoTrendLink,
 } from '../../../types/mastojs.types.js';
+import { LibraryPromise } from '#/types/index.js';
 
 export interface TrendsRoute {
 	tags(

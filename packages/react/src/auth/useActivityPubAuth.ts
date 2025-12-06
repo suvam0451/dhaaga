@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { BaseApiAdapter } from '@dhaaga/bridge';
-import type { MastoAccountCredentials } from '@dhaaga/bridge';
+import {
+	exchangeCodeForAccessToken,
+	verifyCredentialsActivitypub,
+} from '@dhaaga/bridge/auth';
 
 /**
  * The auth processor hooks are separated
@@ -17,7 +19,8 @@ function useActivityPubAuth(
 	const [Code, setCode] = useState<string | null>(null);
 	const [IsLoading, setIsLoading] = useState(false);
 	const [Error, setError] = useState<string | null>(null);
-	const [UserData, setUserData] = useState<MastoAccountCredentials | null>();
+	// TODO: use a consistent type for this
+	const [UserData, setUserData] = useState<any | null>();
 
 	/**
 	 * Resets the local auth state.
@@ -56,7 +59,7 @@ function useActivityPubAuth(
 	 * is in the snake case
 	 */
 	async function authenticate(): Promise<{
-		userData: MastoAccountCredentials;
+		userData: any;
 		accessToken: string;
 	} | null> {
 		if (!_clientId || !_clientSecret) {
@@ -65,25 +68,24 @@ function useActivityPubAuth(
 		}
 		setIsLoading(true);
 		try {
-			const token = await new BaseApiAdapter().instances.getMastodonAccessToken(
+			const token = await exchangeCodeForAccessToken(
 				instance,
 				Code!,
 				_clientId,
 				_clientSecret,
 			);
 
-			const { data: verified, error } =
-				await new BaseApiAdapter().instances.verifyCredentials(
-					instance /**
-					 * Pleroma/Akkoma give
-					 * us another token, while one
-					 * exists already (above request will fail)
-					 *
-					 * ^ In such cases, the pasted code is
-					 * itself the token
-					 */,
-					token || Code, // fucking yolo it, xDD
-				);
+			const { data: verified, error } = await verifyCredentialsActivitypub(
+				instance /**
+				 * Pleroma/Akkoma give
+				 * us another token, while one
+				 * exists already (above request will fail)
+				 *
+				 * ^ In such cases, the pasted code is
+				 * itself the token
+				 */,
+				token || Code!, // fucking yolo it, xDD
+			);
 
 			if (error) {
 				setError(error.code);

@@ -1,7 +1,7 @@
-import { LibraryPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { MastoList } from '#/types/mastojs.types.js';
 import { MegaList } from '#/types/megalodon.types.js';
+import { LibraryPromise } from '#/types/index.js';
 
 export interface ListsRoute {
 	update(): Promise<any>;

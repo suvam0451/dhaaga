@@ -1,11 +1,9 @@
-import {
-	PaginatedPromise,
-	LibraryPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
 import { DhaagaJsFollowedTagsQueryOptions, TagRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MastoTag } from '#/types/mastojs.types.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
+import { LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonTagRouter implements TagRoute {
 	direct: FetchWrapper;

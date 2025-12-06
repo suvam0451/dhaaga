@@ -2,7 +2,6 @@ import ActivityPubService from './activitypub.service.js';
 import { Dispatch, SetStateAction } from 'react';
 import { z } from 'zod';
 import activitypubService from './activitypub.service.js';
-import { InstanceApi_CustomEmojiDTO } from '../client/collections/servers/_interface.js';
 import {
 	ApiTargetInterface,
 	MisskeyApiAdapter,
@@ -10,6 +9,7 @@ import {
 } from '../client/index.js';
 import { PostParser } from '../parsers/post.js';
 import { DriverReactionResolvedType } from '../types/activitypub.js';
+import { CustomEmojiObject } from '#/types/shared/reactions.js';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
 const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
@@ -100,7 +100,7 @@ class ActivityPubReactionsService {
 				height?: number;
 				name?: string;
 			}[];
-			cache: InstanceApi_CustomEmojiDTO[];
+			cache: CustomEmojiObject[];
 			me: string;
 		},
 	) {

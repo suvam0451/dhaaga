@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { Image, ImageErrorEventData, ImageLoadEventData } from 'expo-image';
-import { RandomUtil } from '@dhaaga/bridge';
+import { InstanceApi_CustomEmojiDTO, RandomUtil } from '@dhaaga/bridge';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppThemingUtil,
 } from '../../../utils/theming.util';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 

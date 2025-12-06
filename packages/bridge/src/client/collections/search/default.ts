@@ -4,9 +4,9 @@ import {
 	DhaagaJsUserSearchDTO,
 	SearchRoute,
 } from './_interface.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
+import { LibraryPromise } from '#/types/index.js';
 
 export class DefaultSearchRouter implements SearchRoute {
 	async findUsers(

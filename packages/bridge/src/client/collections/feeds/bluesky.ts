@@ -1,7 +1,6 @@
 import { AppAtpSessionData } from '../../../types/atproto.js';
 import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import { RandomUtil } from '../../../utils/random.js';
-import { notImplementedErrorBuilder } from '../../../adapters/_client/_router/dto/api-responses.dto.js';
 import {
 	AppBskyActorDefs,
 	AppBskyActorGetPreferences,
@@ -13,6 +12,7 @@ import { Err, Ok, ResultErr, ResultOk } from '../../../utils/result.js';
 import { ApiErrorCode } from '../../../types/result.types.js';
 import type { ApiAsyncResult } from '../../../utils/api-result.js';
 import { getXrpcAgent } from '../../../utils/atproto.js';
+import { notImplementedErrorBuilder } from '#/types/api-response.js';
 
 type SubscriptionUpdateResult = Promise<{
 	success: boolean;

@@ -5,12 +5,7 @@ import {
 	FollowerGetQueryDTO,
 } from './_interface.js';
 import { Endpoints } from 'misskey-js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
-import {
-	LibraryPromise,
-	PaginatedPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type {
 	MastoFamiliarFollowers,
@@ -20,6 +15,8 @@ import type {
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MisskeyAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;

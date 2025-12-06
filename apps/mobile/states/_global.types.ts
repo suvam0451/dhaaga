@@ -10,15 +10,10 @@ import { Account, DataSource, Profile } from '@dhaaga/db';
 import ProfileSessionManager from '#/services/session/profile-session.service';
 import AppSessionManager from '#/services/session/app-session.service';
 import AccountSessionManager from '#/services/session/account-session.service';
-import {
-	ApiTargetInterface,
-	appUserObjectSchema,
-	KNOWN_SOFTWARE,
-	UserObjectType,
-} from '@dhaaga/bridge';
+import { ApiTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import { UserObjectType } from '@dhaaga/bridge/typings';
 import { AppColorSchemeType } from '#/utils/theming.util';
 import { SQLiteDatabase } from 'expo-sqlite';
-import { z } from 'zod';
 
 export type AppModalStateBase = {
 	stateId: string;
@@ -129,7 +124,7 @@ export type AppHubState = {
 type AppSessionIndicatorObject = {
 	state: 'idle' | 'loading' | 'valid' | 'invalid';
 	target: Account | null;
-	me: z.infer<typeof appUserObjectSchema> | null;
+	me: UserObjectType | null;
 	error?: string;
 	logs: string[];
 };

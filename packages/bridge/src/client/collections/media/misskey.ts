@@ -1,9 +1,8 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
+import { getHumanReadableError } from '#/utils/errors.utils.js';
 
 export class MisskeyMediaRouter implements MediaRoute {
 	direct: FetchWrapper;
@@ -40,11 +39,7 @@ export class MisskeyMediaRouter implements MediaRoute {
 			});
 			return { data };
 		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e.code);
-			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(getHumanReadableError(e));
 		}
 	}
 }

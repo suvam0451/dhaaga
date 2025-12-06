@@ -15,3 +15,10 @@ export function notImplementedErrorBuilder<T>(): LibraryResponse<T> {
 		},
 	};
 }
+
+export type PaginatedPromise<T> = Promise<{
+	data: T;
+	minId?: string | null;
+	maxId?: string | null;
+}>;
+export type LibraryPromise<T> = Promise<LibraryResponse<T>>;

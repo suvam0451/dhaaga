@@ -7,7 +7,6 @@ import {
 } from './_interface.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { PaginatedPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import {
 	MastoAccount,
 	MastoFamiliarFollowers,
@@ -18,6 +17,7 @@ import {
 } from '#/types/mastojs.types.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;

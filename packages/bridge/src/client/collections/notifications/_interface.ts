@@ -12,8 +12,8 @@ import type {
 	DriverNotificationType,
 	KNOWN_SOFTWARE,
 } from '#/client/utils/driver.js';
-import { PaginatedPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export type NotificationGetQueryDto = {
 	limit: number;

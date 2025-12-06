@@ -1,5 +1,4 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { MastoMediaAttachment } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
@@ -25,10 +24,8 @@ export class PleromaMediaRoute implements MediaRoute {
 		const data = await this.client.client.updateMedia(id, {
 			description: text,
 		});
-		if (data.status !== 200) {
-			console.log(data.statusText);
-			return errorBuilder(data.statusText);
-		}
+		if (data.status !== 200) throw new Error(data.statusText);
+
 		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 }

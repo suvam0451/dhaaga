@@ -1,4 +1,4 @@
-import { InstanceApi_CustomEmojiDTO, TagTargetInterface } from '@dhaaga/bridge';
+import { TagTargetInterface } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
 
 /**

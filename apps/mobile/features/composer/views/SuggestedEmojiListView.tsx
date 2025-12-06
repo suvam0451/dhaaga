@@ -1,4 +1,3 @@
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { APP_FONTS } from '../../../styles/AppFonts';

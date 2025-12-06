@@ -3,7 +3,6 @@ import {
 	DhaagaJsUserSearchDTO,
 	SearchRoute,
 } from './_interface.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import {
 	AppBskyActorSearchActorsTypeahead,
@@ -12,10 +11,10 @@ import {
 } from '@atproto/api';
 import { MastoStatus } from '#/types/mastojs.types.js';
 import { MegaStatus } from '#/types/megalodon.types.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 class BlueskySearchRouter implements SearchRoute {
 	dto: AppAtpSessionData;

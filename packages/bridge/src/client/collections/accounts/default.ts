@@ -6,10 +6,6 @@ import {
 	FollowerGetQueryDTO,
 } from './_interface.js';
 import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
-import {
-	LibraryPromise,
-	PaginatedPromise,
-} from '../../../adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import {
 	MastoAccount,
@@ -26,6 +22,8 @@ import {
 } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
+import { LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
 	async lookup(

@@ -8,10 +8,10 @@ import {
 	KNOWN_SOFTWARE,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
-	type PostObjectType,
 	PostParser,
 	type ResultPage,
 } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 import { TimelineFetchMode } from '@dhaaga/core';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedGetTimeline } from '@atproto/api';
@@ -226,14 +226,12 @@ export function unifiedPostFeedQueryOptions(
 				return createResultBatch(data.data, data?.maxId);
 			}
 			case TimelineFetchMode.FEED: {
-				const { data, error } = await (
-					client as AtprotoApiAdapter
-				).timelines.feed({
+				const data = await (client as AtprotoApiAdapter).timelines.feed({
 					limit,
 					cursor: maxId === null ? undefined : maxId,
 					feed: query!.id,
 				});
-				if (error) return defaultResultPage;
+
 				return outputSchemaToResultPage(data);
 			}
 			case TimelineFetchMode.LIKES: {

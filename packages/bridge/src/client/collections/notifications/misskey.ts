@@ -1,13 +1,11 @@
 import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
-import {
-	LibraryPromise,
-	PaginatedPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
 import { MastoNotification } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
+import { LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 type MISSKEY_NOTIFICATION_TYPE =
 	| 'note'

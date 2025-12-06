@@ -1,5 +1,4 @@
 import * as SQLite from 'expo-sqlite';
-import { DbErrorCode, type DbResult, Err, Ok } from '../utils/db-result.js';
 
 type ExpoSqliteColumnDefinition = {
 	cid: number;
@@ -33,19 +32,12 @@ export class MigrationRepo {
 		);
 	}
 
-	static list(
-		opts: SqlListOptions = { limit: 10, offset: 0 },
-	): DbResult<Migration[]> {
+	static list(opts: SqlListOptions = { limit: 10, offset: 0 }): Migration[] {
 		const db = SQLite.openDatabaseSync(APP_DB);
-		try {
-			const result = db.getAllSync<Migration>(
-				`SELECT * FROM ${TABLE_NAME} ORDER BY userVersion DESC LIMIT ? OFFSET ?;`,
-				opts.limit || 10,
-				opts.offset || 0,
-			);
-			return Ok(result);
-		} catch (e) {
-			return Err(DbErrorCode.UNKNOWN);
-		}
+		return db.getAllSync<Migration>(
+			`SELECT * FROM ${TABLE_NAME} ORDER BY userVersion DESC LIMIT ? OFFSET ?;`,
+			opts.limit || 10,
+			opts.offset || 0,
+		);
 	}
 }

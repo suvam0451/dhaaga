@@ -1,7 +1,7 @@
-import { PaginatedPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 import { MastoTag } from '#/types/mastojs.types.js';
 import { MegaTag } from '#/types/megalodon.types.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export type DhaagaJsFollowedTagsQueryOptions = {
 	limit: number;

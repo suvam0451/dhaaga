@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { InstanceApi_CustomEmojiDTO } from '@dhaaga/bridge';
 import { StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '../../../../../styles/AppFonts';
 import { Image } from 'expo-image';

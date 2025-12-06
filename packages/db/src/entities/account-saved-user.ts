@@ -2,7 +2,7 @@ import { RepoTemplate } from './_base.repo.js';
 import { Account, AccountSavedUser } from '../_schema.js';
 import { DataSource } from '../dataSource.js';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { PostAuthorType } from '@dhaaga/bridge';
+import type { PostAuthorType } from '@dhaaga/bridge/typings';
 
 class Repo implements RepoTemplate<AccountSavedUser> {}
 

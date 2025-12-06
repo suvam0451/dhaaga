@@ -1,5 +1,4 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import {
 	MastoContext,
 	MastoScheduledStatus,
@@ -10,6 +9,7 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
+import { LibraryPromise } from '#/types/index.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async getPost(id: string): Promise<MastoStatus> {

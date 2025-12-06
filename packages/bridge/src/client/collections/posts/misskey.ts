@@ -1,7 +1,5 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MastoScheduledStatus } from '#/types/mastojs.types.js';
 import type { MissContext, MissNote } from '#/types/misskey-js.types.js';
@@ -13,6 +11,7 @@ import {
 } from '#/types/driver.types.js';
 import { Err, Ok } from '#/utils/index.js';
 import { getHumanReadableError } from '#/utils/errors.utils.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;

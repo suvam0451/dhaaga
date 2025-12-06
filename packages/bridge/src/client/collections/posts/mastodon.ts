@@ -1,6 +1,4 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import type {
 	MastoContext,
 	MastoScheduledStatus,
@@ -15,6 +13,7 @@ import {
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
 import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;

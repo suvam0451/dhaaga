@@ -6,9 +6,9 @@ import type {
 	Facet,
 } from '@atproto/api';
 import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
-import { PaginatedPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import type { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	dto: AppAtpSessionData;

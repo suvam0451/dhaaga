@@ -1,11 +1,9 @@
-import {
-	PaginatedPromise,
-	LibraryPromise,
-} from '#/adapters/_client/_router/routes/_types.js';
 import { TagRoute } from './_interface.js';
 import { MegaTag } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
+import { LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class PleromaTagsRouter implements TagRoute {
 	direct: FetchWrapper;

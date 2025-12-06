@@ -12,6 +12,8 @@ export type {
 	UserObjectType,
 	// chat
 	MessageObjectType,
+	// feed
+	FeedObjectType,
 } from '#/types/shared/_exports.js';
 
 export type { GetPostsQueryDTO } from '#/client/types/_interface.js';

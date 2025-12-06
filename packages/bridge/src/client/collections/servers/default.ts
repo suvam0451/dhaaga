@@ -1,17 +1,19 @@
-import { InstanceApi_CustomEmojiDTO, InstanceRoute } from './_interface.js';
-import { getSoftwareInfoShared } from '#/adapters/_client/_router/shared.js';
-import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
+import { InstanceRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoAccountCredentials } from '#/types/mastojs.types.js';
-import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
+import {
+	MastoAccountCredentials,
+	MastoTranslation,
+} from '#/types/mastojs.types.js';
+import { ApiErrorCode } from '#/types/result.types.js';
 import {
 	MastoJsWrapper,
 	MegalodonGoToSocialWrapper,
 	MisskeyJsWrapper,
 } from '#/client/utils/api-wrappers.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
-import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
+import { identifyBackendSoftware } from '#/client/utils/detect-software.js';
+import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { CustomEmojiObject } from '#/types/shared/reactions.js';
 
 type WelKnownNodeinfo = {
 	links: {
@@ -25,249 +27,8 @@ const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
 const NODEINFO_21 = 'http://nodeinfo.diaspora.software/ns/schema/2.1';
 
 export class DefaultInstanceRouter implements InstanceRoute {
-	private misskeyAuthUrl({
-		urlLike,
-		uuid,
-		appName,
-		appCallback,
-		perms,
-	}: {
-		urlLike: string;
-		uuid: string;
-		perms: string[];
-		appName: string;
-		appCallback: string;
-	}) {
-		const authEndpoint = `https://${urlLike}/miauth/${uuid}`;
-
-		// Set up parameters for the query string
-		const options: Record<string, string> = {
-			name: appName,
-			callback: appCallback, // https://example.com --> https://suvam.io
-			permission: perms.join(','),
-		};
-
-		// Generate the query string
-		const queryString = Object.keys(options)
-			.map((key) => `${key}=${encodeURIComponent(options[key])}`)
-			.join('&');
-
-		return `${authEndpoint}?${queryString}`;
-	}
-
 	/**
-	 *
-	 * @param urlLike
-	 * @param uuid
-	 * @param appName
-	 * @param appCallback
-	 * @param appClientId
-	 * @param appClientSecret
-	 */
-	async getLoginUrl(
-		urlLike: string,
-		{
-			uuid,
-			appName,
-			appCallback,
-			appClientId,
-			appClientSecret,
-		}: {
-			appName: string;
-			appCallback: string;
-			appClientId?: string;
-			uuid: string;
-			appClientSecret?: string;
-		},
-	): LibraryPromise<{
-		software: string;
-		version?: string | null;
-		loginUrl: string;
-		loginStrategy: 'code' | 'miauth';
-		clientId?: string;
-		clientSecret?: string;
-	}> {
-		let _appClientId = appClientId;
-		let _appClientSecret = appClientSecret;
-
-		const { data, error } = await this.getSoftwareInfo(urlLike);
-		if (error) return { error };
-
-		switch (data.software) {
-			case KNOWN_SOFTWARE.FIREFISH: {
-				const FIREFISH_PERMS = [
-					'read:account',
-					'write:account',
-					'read:blocks',
-					'write:blocks',
-					'read:drive',
-					'write:drive',
-					'read:favorites',
-					'write:favorites',
-					'read:following',
-					'write:following',
-					'read:mutes',
-					'write:mutes',
-					'write:notes',
-					'read:notifications',
-					'write:notifications',
-					'read:reactions',
-					'write:reactions',
-					'write:votes',
-				];
-
-				return {
-					data: {
-						loginUrl: this.misskeyAuthUrl({
-							urlLike,
-							uuid,
-							appName,
-							appCallback,
-							perms: FIREFISH_PERMS,
-						}),
-						loginStrategy: 'miauth',
-						version: data.version,
-						software: data.software,
-					},
-				};
-			}
-			case KNOWN_SOFTWARE.SHARKEY:
-			case KNOWN_SOFTWARE.MEISSKEY:
-			case KNOWN_SOFTWARE.CHERRYPICK:
-			case KNOWN_SOFTWARE.KMYBLUE:
-			case KNOWN_SOFTWARE.ICESHRIMP:
-			case KNOWN_SOFTWARE.MISSKEY: {
-				const MISSKEY_PERMS = [
-					'write:user-groups',
-					'read:user-groups',
-					'read:page-likes',
-					'write:page-likes',
-					'write:pages',
-					'read:pages',
-					'write:votes',
-					'write:reactions',
-					'read:reactions',
-					'write:notifications',
-					'read:notifications',
-					'write:notes',
-					'write:mutes',
-					'read:mutes',
-					'read:account',
-					'write:account',
-					'read:blocks',
-					'write:blocks',
-					'read:drive',
-					'write:drive',
-					'read:favorites',
-					'write:favorites',
-					'read:following',
-					'write:following',
-					'read:messaging',
-					'write:messaging',
-				];
-				const MISSKEY_PERMS_POST_V12_47_0 = ['read:channels', 'write:channels'];
-				const MISSKEY_PERMS_POST_V12_75_0 = [
-					'read:gallery',
-					'write:gallery',
-					'read:gallery-likes',
-					'write:gallery-likes',
-				];
-
-				return {
-					data: {
-						loginUrl: this.misskeyAuthUrl({
-							urlLike,
-							uuid,
-							appName,
-							appCallback,
-							perms: [
-								...MISSKEY_PERMS,
-								...MISSKEY_PERMS_POST_V12_75_0,
-								...MISSKEY_PERMS_POST_V12_47_0,
-							],
-						}),
-						loginStrategy: 'miauth',
-						version: data.version,
-						software: data.software,
-					},
-				};
-			}
-
-			case KNOWN_SOFTWARE.PLEROMA:
-			case KNOWN_SOFTWARE.AKKOMA:
-			case KNOWN_SOFTWARE.MASTODON: {
-				/**
-				 * If the client id and secret are not provided,
-				 * we need to create one
-				 */
-				if (!_appClientId || !_appClientSecret) {
-					const clientIdFormData: Record<string, string> = {
-						client_name: 'Dhaaga',
-						redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
-						scopes: 'read write follow push',
-						website: 'https://suvam.io/dhaaga',
-					};
-
-					// Generate the query string
-					const clientIdQueryString = Object.keys(clientIdFormData)
-						.map((key) => `${key}=${encodeURIComponent(clientIdFormData[key])}`)
-						.join('&');
-
-					const clientId = await fetch(`https://${urlLike}/api/v1/apps`, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded',
-						},
-						body: clientIdQueryString,
-					});
-					if (!clientId.ok) {
-						console.log('no ok');
-					}
-					const _body = await clientId.json();
-					_appClientId = _body?.['client_id'];
-					_appClientSecret = _body?.['client_secret'];
-				}
-
-				const authEndpoint = `https://${urlLike}/oauth/authorize`;
-
-				// Set up parameters for the query string
-				const options: Record<string, string> = {
-					client_id: _appClientId!,
-					redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-					response_type: 'code',
-					scope: 'read write follow push',
-				};
-				// Generate the query string
-				const queryString = Object.keys(options)
-					.map((key) => `${key}=${encodeURIComponent(options[key])}`)
-					.join('&');
-
-				return {
-					data: {
-						loginUrl: `${authEndpoint}?${queryString}`,
-						loginStrategy: 'code',
-						version: data.version,
-						software: data.software,
-						clientId: _appClientId,
-						clientSecret: _appClientSecret,
-					},
-				};
-			}
-			default: {
-				return {
-					data: {
-						loginUrl: '',
-						loginStrategy: 'code',
-						version: data.version,
-						software: data.software,
-					},
-				};
-			}
-		}
-	}
-
-	/**
-	 * For default client, we must
+	 * For the default client, we must
 	 * determine the instance on owr own
 	 * @param urlLike
 	 * @param software
@@ -275,10 +36,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	async getCustomEmojis(
 		urlLike: string,
 		software?: string,
-	): Promise<LibraryResponse<InstanceApi_CustomEmojiDTO[]>> {
+	): Promise<CustomEmojiObject[]> {
 		if (!software) {
-			const { data, error } = await this.getSoftwareInfo(urlLike);
-			if (error || !data) return { error };
+			const data = await this.getSoftwareInfo(urlLike);
 			software = data.software;
 		}
 
@@ -287,22 +47,19 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			case KNOWN_SOFTWARE.ICESHRIMP:
 			case KNOWN_SOFTWARE.MASTODON:
 			case KNOWN_SOFTWARE.KMYBLUE: {
-				const emojiFn = MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list;
-				const { data, error } = await MastoErrorHandler(emojiFn);
-				if (error) return { error };
-				const rex = await data;
-				const mapped: InstanceApi_CustomEmojiDTO[] = rex!.map((o) => ({
-					shortCode: o.shortcode,
-					url: o.url,
-					staticUrl: o.staticUrl,
-					visibleInPicker: o.visibleInPicker,
-					category: o.category,
-					aliases: [],
-					tags: [],
-				}));
-				return {
-					data: mapped,
-				};
+				const rex =
+					await MastoJsWrapper.create(urlLike).lib.v1.customEmojis.list();
+				return (
+					rex?.map((o) => ({
+						shortCode: o.shortcode,
+						url: o.url,
+						staticUrl: o.staticUrl,
+						visibleInPicker: o.visibleInPicker,
+						category: o.category,
+						aliases: [],
+						tags: [],
+					})) ?? []
+				);
 			}
 			case KNOWN_SOFTWARE.SHARKEY:
 			case KNOWN_SOFTWARE.MISSKEY:
@@ -311,98 +68,49 @@ export class DefaultInstanceRouter implements InstanceRoute {
 					'emojis',
 					{},
 				);
-				return {
-					data: emojiFn.emojis.map((o: any) => ({
-						shortCode: o.name,
-						url: o.url,
-						staticUrl: o.url,
-						visibleInPicker: true,
-						category: o.category,
-						aliases: o.aliases,
-						tags: [],
-					})),
-				};
+				return emojiFn.emojis.map((o: any) => ({
+					shortCode: o.name,
+					url: o.url,
+					staticUrl: o.url,
+					visibleInPicker: true,
+					category: o.category,
+					aliases: o.aliases,
+					tags: [],
+				}));
 			}
 			case KNOWN_SOFTWARE.PLEROMA:
 			case KNOWN_SOFTWARE.AKKOMA: {
-				try {
-					// NOTE: Megalodon payload seems deprecated
-					const data = await new FetchWrapper(urlLike).get<any[]>(
-						'/api/v1/custom_emojis',
-					);
-					return {
-						data: data.map((o) => ({
-							shortCode: o.shortcode,
-							url: o.url,
-							staticUrl: o.static_url,
-							visibleInPicker: o.visible_in_picker,
-							aliases: [],
-							category: o.category,
-							tags: (o as any).tags || [],
-						})),
-					};
-				} catch (e: any) {
-					if (e?.response?.status && e?.response?.statusText) {
-						if (e?.response?.status === 401) {
-							return {
-								error: {
-									code: ApiErrorCode.UNAUTHORIZED,
-									message: e?.response?.statusText,
-								},
-							};
-						}
-					}
-					return {
-						error: {
-							code: ApiErrorCode.UNKNOWN_ERROR,
-							message: e,
-						},
-					};
-				}
+				// NOTE: Megalodon payload seems deprecated
+				const data = await new FetchWrapper(urlLike).get<any[]>(
+					'/api/v1/custom_emojis',
+				);
+				return data.map((o) => ({
+					shortCode: o.shortcode,
+					url: o.url,
+					staticUrl: o.static_url,
+					visibleInPicker: o.visible_in_picker,
+					aliases: [],
+					category: o.category,
+					tags: (o as any).tags || [],
+				}));
 			}
 			case KNOWN_SOFTWARE.GOTOSOCIAL: {
-				try {
-					const dt =
-						await MegalodonGoToSocialWrapper.create(
-							urlLike,
-						).client.getInstanceCustomEmojis();
-					return {
-						data: dt.data.map((o) => ({
-							shortCode: o.shortcode,
-							url: o.url,
-							staticUrl: o.static_url,
-							visibleInPicker: o.visible_in_picker,
-							aliases: [],
-							category: o.category,
-							tags: [],
-						})),
-					};
-				} catch (e: any) {
-					if (e?.response?.status && e?.response?.statusText) {
-						if (e?.response?.status === 401) {
-							return {
-								error: {
-									code: ApiErrorCode.UNAUTHORIZED,
-									message: e?.response?.statusText,
-								},
-							};
-						}
-					}
-					return {
-						error: {
-							code: ApiErrorCode.UNKNOWN_ERROR,
-							message: e,
-						},
-					};
-				}
+				const dt =
+					await MegalodonGoToSocialWrapper.create(
+						urlLike,
+					).client.getInstanceCustomEmojis();
+				return dt.data.map((o) => ({
+					shortCode: o.shortcode,
+					url: o.url,
+					staticUrl: o.static_url,
+					visibleInPicker: o.visible_in_picker,
+					aliases: [],
+					category: o.category,
+					tags: [],
+				}));
 			}
 			default: {
-				return {
-					error: {
-						code: ApiErrorCode.FEATURE_UNSUPPORTED,
-						message: software,
-					},
-				};
+				throw new Error(`backend software incompatible for ${urlLike}`);
 			}
 		}
 	}
@@ -479,17 +187,11 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	}
 
 	async getSoftwareInfo(urlLike: string) {
-		const { data, error } = await getSoftwareInfoShared(urlLike);
-		if (error) return { error };
-		return { data };
+		return identifyBackendSoftware(urlLike);
 	}
 
-	async getTranslation(id: string, lang: string) {
-		return {
-			error: {
-				code: ApiErrorCode.DEFAULT_CLIENT,
-			},
-		};
+	async getTranslation(id: string, lang: string): Promise<MastoTranslation> {
+		throw new Error('Method not implemented.');
 	}
 
 	/**

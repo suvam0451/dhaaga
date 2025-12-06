@@ -1,9 +1,7 @@
 import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
-import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { MastoMediaAttachment } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
-import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
 
 export class MastodonMediaRoute implements MediaRoute {
 	direct: FetchWrapper;
@@ -45,14 +43,9 @@ export class MastodonMediaRoute implements MediaRoute {
 	}
 
 	async updateDescription(id: string, text: string) {
-		const fn = this.client.lib.v1.media.$select(id).update;
-		const { data, error } = await MastoErrorHandler(fn, [
-			{
-				description: text,
-			},
-		]);
-		if (error || !data) return errorBuilder(error);
-		const resData = await data;
-		return { data: resData };
+		const data = await this.client.lib.v1.media.$select(id).update({
+			description: text,
+		});
+		return { data };
 	}
 }
