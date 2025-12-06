@@ -1,50 +1,107 @@
-### About
+# Shared Packages
 
-These are the internal, shared packages for this project.
-They are written in typescript and can be imported directly (So, no need to
-build)
+---
 
-### Their Utility
+## @dhaaga/bridge
 
-#### bridge
+Workhorse behind the Dhaaga project.
 
-This package defines adapters and interfaces for common types of entities
-found in ActivityPub (e.g. - Status, Profile)
+Implements an api/interface/object level interface
+around supported decentralized protocols and 
+api client libraries.
 
-By using adapter pattern, we try to abstract away the fragmented api logic
-in the fediverse.
+It is designed to be consumed in three levels 
+of abstractions:
 
-For example, many a times, different implementations of ActivityPub have
-different APIs to perform the same action. Or, their data shape might be
-different.
+### A) As a unified API Client
 
-In other cases, an action might be entirely unsupported (e.g - custom emoji
-reaction in Misskey and its forks).
+Intended for low-level consumption and response body post-processing (for 
+example, [how mastodon returns pagination tokens embedded in headers]
+(https://docs.joinmastodon.org/methods/bookmarks/), or how misskey uses per-post
+separate keys for pagination.
 
-#### shared-provider-mastodon
+Consumers of this library should never have to use this level of abstraction.
 
-We try to use existing libraries (such as misskey-js, masto.js, megalodon).
-But, sometimes, we just have to write our own code to suit project needs.
+```ts
+const client = new DhaagaClient(crdentials);
+const data = await client.statuses.getPost(id);
+console.log(data)
+```
 
-This package houses those custom code.
+### B) As an abstraction interface
 
-#### shared-provider-misskey
+A balanced middle layer between the raw response object model and the object 
+model.
 
-Same as above, but for Misskey
+At this layer of abstraction, we can still do protocol level operations 
+since we still have access to the raw response object, along-with various 
+utility functions built on top of it..
 
-#### shared-utility-html-parser
 
-Parsing post content in a web client --> 😇
-Parsing post content in a mobile client --> 🥲
+```ts
+const DRIVER = "bluesky" | "mastodon" | "misskey"
+const client = new DhaagaClient(crdentials);
+const data = await client.statuses.getPost(id);
+const i = PostParser.rawToInterface(data, DRIVER);
+console.log(i.isReply());
+```
 
-It is very tricky to get HTML content rendering correctly in a native app.
-This includes support for instance emojis, parsing links and hashtags etc.
+### C) As an object model
 
-This package acts as a middleware, which manipulates the received HTML content
-to make it easier to be consumed by a node-based parser
-like [MFM-js](https://github.com/misskey-dev/mfm.js).
+At this level of abstraction, the api response has been:
 
-### Their Purpose
+- processed into a simple JSON object.
+- decluttered of redundant/irrelevant information
+- is type-safe
+- all contents have been processed into ASTs (MfM, Facets, etc.)
 
-Just keeping all this logic separate, in case I ever have to bring back the
-desktop app.
+This efficient format can be stored and operated on using the following 
+helper libraries:
+
+- Processors → 1-pass calculations to embed extras *(e.g. - post reply count)*
+- Viewers → helper functions to extract any relevant information
+- Mutators → helps perform api action on the object model *(e.g - like/share)* 
+
+This is 95% of what the downstream apps interact with.
+
+```ts
+const DRIVER = "bluesky" | "mastodon" | "misskey"
+const SERVER = "misskey.io" | "mastodon.social"
+const client = new DhaagaClient(crdentials);
+const data = await client.statuses.getPost(id);
+const post = PostParser.parse(data, DRIVER, SERVER);
+
+// if -> post.meta.isReply
+console.log(post.replyTo.postedBy, post.replyTo.content.parsed);
+// else
+console.log(post.postedBy, post.content.parsed);
+```
+
+## @dhaaga/react
+
+Since we have two react codebases *(mobile and web)*, this library stores
+the shared components between them:
+
+- reducers
+- react context wrappers
+- hooks *(authentication, session, etc.)*
+- state management logic
+
+## @dhaaga/orm
+
+I wrote my own sqlite ORM after mongodb 
+[deprecated realm db](https://github.com/realm/realm-swift/discussions/8680) 
+and caused the project months of setback and architectural pivot.
+
+It has full entity CRUD support, migration runners/sync 
+and fully integrates with expo-sqlite with no gotchas.
+
+I wanted maximum flexibility and long-term stability; So, I chose not to 
+go with any existing library solutions.
+
+## @dhaaga/db
+
+Used by the mobile app only.
+
+Entity definitions and repo/service functions and utility
+wrapper for said entities.

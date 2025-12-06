@@ -1,0 +1,187 @@
+{
+  "account": {
+    "moreActions": {
+      "title": "Akcje Konta",
+      "description": [
+        "Synchronizuj dane swojego profilu (zdjęcie, nazwa itp.) lub usuń swoje konto."
+      ],
+      "syncOption": "Synchronizuj (🚧)",
+      "removeOption": "Usuń konto"
+    },
+    "confirmDelete": {
+      "title": "Potwierdź usunięcie",
+      "description": [
+        "Usunięcie konta spowoduje usunięcie wszystkich profili na hubie, kolekcji i danych przeglądania",
+        "Potwierdź i kontynuuj?"
+      ],
+      "confirmOption": "Potwierdź i usuń"
+    }
+  },
+  "collection": {
+    "moreOptions": {
+      "title": "Zaktualizuj kolekcję",
+      "description": [
+        "Zmień nazwę, opisz lub usuń tę kolekcję"
+      ],
+      "renameOption": "Zmień nazwę",
+      "updateDescriptionOption": "Zaktualizuj opis",
+      "removeOption": "Usuń"
+    },
+    "add": {
+      "title": "Dodaj kolekcję",
+      "description": [
+        "Możesz zarządzać kolekcjami z przeglądu swojego konta (5. zakładka)."
+      ],
+      "placeholder": "Nazwij swoją kolekcję"
+    },
+    "rename": {
+      "title": "Zmień nazwę kolekcji",
+      "description": [
+        "Nadaj nową nazwę tej kolekcji."
+      ],
+      "placeholder": "Nazwa Twojej kolekcji"
+    },
+    "describe": {
+      "title": "Opisz tę kolekcję",
+      "description": [
+        "Zaktualizuj opis tej kolekcji",
+        "Wpisz pusty ciąg, aby ustawić domyślny"
+      ],
+      "placeholder": "Opisz swoją kolekcję"
+    },
+    "delete": {
+      "title": "Potwierdź usunięcie",
+      "description": [
+        "Czy na pewno chcesz usunąć tę kolekcję?",
+        "Wszystkie posty zapisane w tej kolekcji zostaną utracone."
+      ],
+      "deleteConfirmOption": "Potwierdź i usuń"
+    }
+  },
+  "composer": {
+    "setAltText": {
+      "title": "Tekst alternatywny",
+      "description": [
+        "Zobacz tekst alternatywny dla tego obrazu.",
+        "Wpisz pusty ciąg, aby usunąć."
+      ],
+      "placeholder": "Wprowadź nowy tekst alternatywny"
+    },
+    "setVisibility": {
+      "title": "Ustaw widoczność",
+      "description": [
+        "Twoje posty \"Niewymienione\" są ukryte przed kanałami i wyszukiwaniem.",
+        "Twoje wiadomości \"Bezpośrednie\" nie są szyfrowane."
+      ],
+      "publicLabel": "Publiczny",
+      "unlistedLabel": "Niewymieniony",
+      "followersOnlyLabel": "Tylko dla obserwujących",
+      "directLabel": "Bezpośredni"
+    }
+  },
+  "hub": {
+    "profileAdd": {
+      "title": "Dodaj profil",
+      "description": [
+        "Profile pomagają w organizowaniu Twoich przypięć i układu hubu według zainteresowań."
+      ],
+      "placeholder": "Nazwij swój profil",
+      "successToast": "Profil został pomyślnie dodany!"
+    },
+    "profileDelete": {
+      "title": "Potwierdź usunięcie",
+      "description": [
+        "Czy na pewno chcesz usunąć ten profil?",
+        "Wszystkie przypięcia i zapisany układ zostaną utracone."
+      ],
+      "deleteConfirmOption": "Potwierdź i usuń"
+    },
+    "profileEdit": {
+      "title": "Edytuj profil",
+      "description": [
+        "Możesz zmienić nazwę lub usunąć ten profil."
+      ],
+      "descriptionAlt": [
+        "Możesz zmienić nazwę tylko w domyślnym profilu."
+      ],
+      "renameOption": "Zmień nazwę",
+      "deleteOption": "Usuń"
+    },
+    "profileRename": {
+      "title": "Zmień nazwę profilu",
+      "description": [
+        "Nadaj nową nazwę temu profilowi."
+      ],
+      "placeholder": "Nazwij swój profil"
+    },
+    "tagAdd": {
+      "title": "Dodaj hashtag",
+      "description": [
+        "Tagi można również dodać podczas przeglądania osi czasu (naciskając tag)."
+      ],
+      "placeholder": "Nazwa tagu",
+      "successToast": "Tag został pomyślnie dodany!"
+    },
+    "tagRemove": {},
+    "tagEdit": {
+      "title": "Zmień przypięty tag",
+      "description": [
+        "Możesz zmienić nazwę lub usunąć ten przypięty tag."
+      ]
+    },
+    "tagRename": {
+      "title": "Zmień nazwę przypiętego tagu",
+      "description": [
+        "Zmień hashtag, do którego prowadzi ten pin."
+      ],
+      "placeholder": "Zaktualizuj swój tag tutaj"
+    },
+    "userEdit": {
+      "title": "Zmień przypiętego użytkownika",
+      "description": [
+        "Możesz usunąć to przypięcie.",
+        "Przestawianie będzie obsługiwane w przyszłej aktualizacji."
+      ]
+    }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "Brak powiązania",
+      "description": [
+        "Aktualnie nie jesteś powiązany z tym użytkownikiem."
+      ],
+      "followOption": "Obserwuj"
+    },
+    "follower": {
+      "title": "Obserwujący",
+      "description": [
+        "Ten użytkownik aktualnie Cię obserwuje."
+      ],
+      "followBackOption": "Obserwuj z powrotem"
+    },
+    "following": {
+      "title": "Obserwujesz",
+      "description": [
+        "Aktualnie obserwujesz tego użytkownika."
+      ],
+      "unfollowOption": "Zrezygnuj z obserwowania"
+    },
+    "friends": {
+      "title": "Przyjaciele",
+      "description": [
+        "Oboje się obserwujecie."
+      ],
+      "unfollowOption": "Zrezygnuj z obserwowania"
+    },
+    "requestPending": {
+      "title": "Wniosek w toku",
+      "description": [
+        "Wysłałeś temu użytkownikowi prośbę o obserwowanie.",
+        "Wygląda na to, że nie została jeszcze zaakceptowana.",
+        "Możesz spróbować odświeżyć status lub poczekać."
+      ],
+      "refreshOption": "Odśwież",
+      "cancelOption": "Anuluj"
+    }
+  }
+}
