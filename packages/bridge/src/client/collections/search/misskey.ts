@@ -8,7 +8,7 @@ import { Endpoints } from 'misskey-js';
 import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MisskeySearchRouter implements SearchRoute {
 	direct: FetchWrapper;

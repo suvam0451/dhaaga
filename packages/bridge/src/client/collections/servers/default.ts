@@ -10,8 +10,8 @@ import {
 	MastoJsWrapper,
 	MegalodonGoToSocialWrapper,
 	MisskeyJsWrapper,
-} from '#/custom-clients/custom-clients.js';
-import { KNOWN_SOFTWARE } from '#/data/driver.js';
+} from '#/client/utils/custom-clients.js';
+import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 
 type WelKnownNodeinfo = {
 	links: {
@@ -327,13 +327,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			case KNOWN_SOFTWARE.AKKOMA: {
 				try {
 					// NOTE: Megalodon payload seems deprecated
-					const { data, error } = await new FetchWrapper(urlLike).get<any[]>(
+					const data = await new FetchWrapper(urlLike).get<any[]>(
 						'/api/v1/custom_emojis',
 					);
-					if (error) {
-						console.log('[WARN]: error fetching emojis', error);
-						return { data: [] };
-					}
 					return {
 						data: data.map((o) => ({
 							shortCode: o.shortcode,

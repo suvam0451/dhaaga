@@ -15,7 +15,7 @@ import { MegaStatus } from '#/types/megalodon.types.js';
 import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
-import { InvokeBskyFunction } from '#/custom-clients/custom-bsky-agent.js';
+import { InvokeBskyFunction } from '#/client/utils/custom-bsky-agent.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 
 class BlueskySearchRouter implements SearchRoute {

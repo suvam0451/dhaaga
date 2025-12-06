@@ -8,7 +8,7 @@ import { MastoErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MastodonInstanceRouter implements InstanceRoute {
 	direct: FetchWrapper;

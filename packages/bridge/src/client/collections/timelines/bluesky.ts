@@ -13,7 +13,7 @@ import {
 import {
 	InvokeBskyFunction,
 	InvokeBskyFunction_Improved,
-} from '#/custom-clients/custom-bsky-agent.js';
+} from '#/client/utils/custom-bsky-agent.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';

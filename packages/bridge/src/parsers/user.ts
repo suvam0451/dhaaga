@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TextNodeParser } from './text-nodes.js';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 import {
 	ActivityPubUserAdapter,
 	UserTargetInterface,

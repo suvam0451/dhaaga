@@ -1,4 +1,4 @@
-import { RestClientCreateDTO } from '../../adapters/_client/_interface.js';
+import { RestClientCreateDTO } from '../types/_interface.js';
 import { MisskeyInstanceRouter } from '../collections/servers/misskey.js';
 import { MisskeyAccountsRouter } from '../collections/accounts/misskey.js';
 import { MisskeyStatusesRouter } from '../collections/posts/misskey.js';
@@ -14,7 +14,7 @@ import FetchWrapper from '../utils/fetch.js';
 import { ApiTargetInterface } from '../index.js';
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

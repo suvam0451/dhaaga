@@ -5,7 +5,7 @@ import { Err, Ok } from '#/utils/index.js';
 import { ApiAsyncResult } from '#/utils/api-result.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import ActivityPubService from '#/services/activitypub.service.js';
-import { KNOWN_SOFTWARE } from '#/data/driver.js';
+import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { AtprotoPostService } from '#/services/atproto.service.js';
 import ActivityPubReactionsService from '#/services/activitypub-reactions.service.js';
 import { DriverPostLikeState } from '#/types/driver.types.js';

@@ -1,8 +1,5 @@
 import { Endpoints } from 'misskey-js';
-import {
-	FollowPostDto,
-	GetPostsQueryDTO,
-} from '../../../adapters/_client/_interface.js';
+import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
 import type {
 	AppBskyActorDefs,
 	AppBskyActorGetProfile,

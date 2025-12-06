@@ -11,7 +11,7 @@ import {
 	MastoNotification,
 } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;

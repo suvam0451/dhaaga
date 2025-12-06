@@ -9,7 +9,7 @@ import type {
 } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 import { Err, Ok } from '#/utils/index.js';
 import {
 	DriverBookmarkStateResult,

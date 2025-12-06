@@ -4,7 +4,7 @@ import { PleromaErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
 
 export class PleromaInstanceRouter implements InstanceRoute {
 	direct: FetchWrapper;

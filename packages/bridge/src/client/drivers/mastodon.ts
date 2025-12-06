@@ -1,4 +1,4 @@
-import { RestClientCreateDTO } from '../../adapters/_client/_interface.js';
+import { RestClientCreateDTO } from '../types/_interface.js';
 import { MastodonInstanceRouter } from '../collections/servers/mastodon.js';
 import { MastodonAccountsRouter } from '../collections/accounts/mastodon.js';
 import { MastodonStatusesRouter } from '../collections/posts/mastodon.js';
@@ -15,7 +15,7 @@ import { ApiTargetInterface } from '../index.js';
 import FetchWrapper from '../utils/fetch.js';
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

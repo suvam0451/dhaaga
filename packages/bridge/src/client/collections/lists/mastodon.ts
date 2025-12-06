@@ -1,7 +1,7 @@
 import { ListsRoute } from './_interface.js';
 import type { MastoList } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MastodonListRoute implements ListsRoute {
 	direct: FetchWrapper;

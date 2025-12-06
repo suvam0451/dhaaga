@@ -1,13 +1,4 @@
-import {
-	ApiErrorCode,
-	LibraryResponse,
-} from '../../../../types/result.types.js';
-
-export function successWithData(data: any) {
-	return {
-		data,
-	};
-}
+import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 
 export function errorBuilder<T>(error?: any): LibraryResponse<T> {
 	return {

@@ -15,7 +15,7 @@ import { AppAtpSessionData } from '../../types/atproto.js';
 import BlueskyFeedRouter from '../../adapters/_client/bluesky/feeds.js';
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../utils/driver.js';
 import { getXrpcAgent } from '../../utils/atproto.js';
 
 export type AtprotoClientCreateDTO = AppAtpSessionData;

@@ -5,7 +5,7 @@ import {
 import { TagRoute } from './_interface.js';
 import { MegaTag } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
 
 export class PleromaTagsRouter implements TagRoute {
 	direct: FetchWrapper;

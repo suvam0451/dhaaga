@@ -13,7 +13,7 @@ import { DefaultListRoute } from '../collections/lists/default.js';
 import { DefaultProfileRouter } from '../../adapters/_client/default/profile.js';
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

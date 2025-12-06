@@ -1,7 +1,7 @@
-import { ApiErrorCode, LibraryResponse } from '../../types/result.types.js';
-import { CasingUtil } from '../../utils/casing.js';
-import { BaseUrlNormalizationService } from '../../utils/urls.js';
+import { CasingUtil } from '#/utils/casing.js';
+import { BaseUrlNormalizationService } from '#/utils/urls.js';
 import { PaginatedPromise } from '#/adapters/_client/_router/routes/_types.js';
+import { getHumanReadableError } from '#/utils/errors.utils.js';
 
 type DhaagaFetchRequestConfig = {
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH';
@@ -179,10 +179,7 @@ class FetchWrapper {
 		};
 	}
 
-	async get<T>(
-		endpoint: string,
-		opts?: DhaagaFetchRequestConfig,
-	): Promise<LibraryResponse<T>> {
+	async get<T>(endpoint: string, opts?: DhaagaFetchRequestConfig): Promise<T> {
 		const url = FetchWrapper.applyQueriesToRequestUrl(endpoint, {
 			...opts,
 			baseURL: opts?.baseURL || this.baseUrl,
@@ -196,7 +193,7 @@ class FetchWrapper {
 
 			if (!response.ok) {
 				let message = response.statusText;
-				let errorCode = ApiErrorCode.UNKNOWN_ERROR;
+				let errorCode = null;
 				let errorBody: any;
 
 				try {
@@ -216,16 +213,9 @@ class FetchWrapper {
 
 				switch (response.status) {
 					case 401:
-						errorCode = ApiErrorCode.UNAUTHORIZED;
-						break;
+						errorCode = 'unauthorized';
+						throw new Error('unauthorized');
 				}
-
-				return {
-					error: {
-						code: errorCode,
-						message,
-					},
-				};
 			}
 
 			let data = await response.json();
@@ -239,12 +229,7 @@ class FetchWrapper {
 
 			return data;
 		} catch (err: any) {
-			return {
-				error: {
-					code: ApiErrorCode.UNKNOWN_ERROR,
-					message: err?.message ?? String(err),
-				},
-			};
+			throw new Error(getHumanReadableError(err));
 		}
 	}
 }

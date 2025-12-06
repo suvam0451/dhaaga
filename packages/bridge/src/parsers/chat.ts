@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { RandomUtil } from '../utils/index.js';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 
 const appMessageObjectSchema = z.object({
 	uuid: z.string(),

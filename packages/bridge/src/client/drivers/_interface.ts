@@ -21,7 +21,7 @@ import { ProfileRoute } from '../../adapters/_client/_router/routes/profile.js';
 // mutators
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
-import { KNOWN_SOFTWARE } from '#/data/driver.js';
+import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 
 interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

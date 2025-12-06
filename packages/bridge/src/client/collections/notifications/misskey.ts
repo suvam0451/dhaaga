@@ -6,8 +6,8 @@ import {
 } from '#/adapters/_client/_router/routes/_types.js';
 import { MastoNotification } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
-import { KNOWN_SOFTWARE } from '#/data/driver.js';
+import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
+import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 
 type MISSKEY_NOTIFICATION_TYPE =
 	| 'note'

@@ -1,5 +1,5 @@
 import { TrendsRoute } from './_interface.js';
-import { GetTrendingDTO } from '#/adapters/_client/_interface.js';
+import { GetTrendingDTO } from '#/client/types/_interface.js';
 import { MastoErrorHandler } from '#/adapters/_client/_router/_runner.js';
 import {
 	MastoStatus,
@@ -8,7 +8,7 @@ import {
 } from '#/types/mastojs.types.js';
 import { LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MastodonTrendsRouter implements TrendsRoute {
 	direct: FetchWrapper;

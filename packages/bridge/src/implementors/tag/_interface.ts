@@ -4,7 +4,7 @@ import MisskeyTag from './misskey.js';
 import MastodonTag from './mastodon.js';
 import DefaultTag from './default.js';
 import BlueskyTag from './bluesky.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../../client/utils/driver.js';
 
 export type TagType = mastodon.v1.Tag | Hashtag | null | undefined;
 

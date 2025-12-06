@@ -6,7 +6,7 @@ import FetchWrapper from '#/client/utils/fetch.js';
 import type { MastoScheduledStatus } from '#/types/mastojs.types.js';
 import type { MissContext, MissNote } from '#/types/misskey-js.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
-import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,

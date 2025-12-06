@@ -8,7 +8,10 @@ import type {
 	MastoNotification,
 } from '#/types/mastojs.types.js';
 import type { MegaNotification } from '#/types/megalodon.types.js';
-import type { DriverNotificationType, KNOWN_SOFTWARE } from '#/data/driver.js';
+import type {
+	DriverNotificationType,
+	KNOWN_SOFTWARE,
+} from '#/client/utils/driver.js';
 import { PaginatedPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import { Endpoints } from 'misskey-js';
 

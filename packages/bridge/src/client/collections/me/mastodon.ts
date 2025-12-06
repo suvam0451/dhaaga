@@ -1,6 +1,6 @@
 import { MeRoute } from './_interface.js';
 import { MastoAccountCredentials } from '#/types/mastojs.types.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 
 export class MastodonMeRouter implements MeRoute {

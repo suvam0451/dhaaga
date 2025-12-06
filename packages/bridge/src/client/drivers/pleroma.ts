@@ -1,5 +1,5 @@
 import { ApiTargetInterface } from '../index.js';
-import { RestClientCreateDTO } from '../../adapters/_client/_interface.js';
+import { RestClientCreateDTO } from '../types/_interface.js';
 import { PleromaInstanceRouter } from '../collections/servers/pleroma.js';
 import { PleromaAccountsRouter } from '../collections/accounts/pleroma.js';
 import { PleromaStatusesRouter } from '../collections/posts/pleroma.js';
@@ -14,7 +14,7 @@ import { PleromaListsRoute } from '../collections/lists/pleroma.js';
 import FetchWrapper from '../utils/fetch.js';
 import { PostMutatorRoute } from '../shared/post.js';
 import { UserRoute } from '../shared/wrapper.js';
-import { KNOWN_SOFTWARE } from '../../data/driver.js';
+import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;

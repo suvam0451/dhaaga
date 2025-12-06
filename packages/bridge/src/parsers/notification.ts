@@ -2,7 +2,10 @@ import { z } from 'zod';
 import { postObjectSchema } from './post.js';
 import { appUserObjectSchema, UserParser } from './user.js';
 import { PostParser } from './post.js';
-import { DriverNotificationType, KNOWN_SOFTWARE } from '../data/driver.js';
+import {
+	DriverNotificationType,
+	KNOWN_SOFTWARE,
+} from '../client/utils/driver.js';
 
 const appNotificationGroupedUserItemSchema = z.object({
 	item: appUserObjectSchema,

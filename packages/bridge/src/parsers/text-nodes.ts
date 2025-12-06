@@ -3,7 +3,7 @@ import { TextParser } from './text.js';
 import { RandomUtil } from '../utils/index.js';
 import { DriverService } from '../services/driver.js';
 import { MfmNode } from '../services/index.js';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 
 export type AppTextNodeType =
 	| 'para'

@@ -10,10 +10,10 @@
  * API calls using fetch
  */
 
-import FetchWrapper from '../client/utils/fetch.js';
+import FetchWrapper from './fetch.js';
 import { mastodon, createRestAPIClient } from 'masto';
 import generator, { MegalodonInterface } from 'megalodon';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { KNOWN_SOFTWARE } from './driver.js';
 import { api } from 'misskey-js';
 
 /**

@@ -8,7 +8,7 @@ import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { MastoAccount, MastoStatus, MastoTag } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MastodonSearchRouter implements SearchRoute {
 	direct: FetchWrapper;

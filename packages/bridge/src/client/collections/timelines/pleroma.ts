@@ -6,7 +6,7 @@ import {
 import { DefaultTimelinesRouter } from './default.js';
 import { CasingUtil } from '#/utils/casing.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 
 export class PleromaTimelinesRouter
@@ -57,14 +57,10 @@ export class PleromaTimelinesRouter
 	async bubble(
 		query: DhaagaJsTimelineQueryOptions,
 	): DriverTimelineGetApiResponse {
-		const { data: _data, error } = await this.direct.get<any[]>(
-			'/api/v1/timelines/bubble',
-			{
-				queries: CasingUtil.snakeCaseKeys(query),
-			},
-		);
-		if (error) throw new Error(error.code);
-		return CasingUtil.camelCaseKeys(_data);
+		const data = await this.direct.get<any[]>('/api/v1/timelines/bubble', {
+			queries: CasingUtil.snakeCaseKeys(query),
+		});
+		return CasingUtil.camelCaseKeys(data);
 	}
 
 	async list(

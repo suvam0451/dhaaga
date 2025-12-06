@@ -32,7 +32,7 @@ import {
 } from './client/collections/accounts/_interface.js';
 // used to read viewer
 import AtprotoPostAdapter from './implementors/status/bluesky.js';
-import { KNOWN_SOFTWARE } from './data/driver.js';
+import { KNOWN_SOFTWARE } from './client/utils/driver.js';
 import { DriverService } from './services/driver.js';
 import { InstanceApi_CustomEmojiDTO } from './client/collections/servers/_interface.js';
 
@@ -128,7 +128,7 @@ export type {
 
 export { KNOWN_SOFTWARE };
 export type { InstanceApi_CustomEmojiDTO };
-export { DriverNotificationType } from './data/driver.js';
+export { DriverNotificationType } from './client/utils/driver.js';
 export type { LibraryResponse } from './types/result.types.js';
 export { ApiErrorCode } from './types/result.types.js';
 
@@ -186,5 +186,5 @@ export type { ApiResult } from './utils/api-result.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
 
-export * from './types.js';
+export * from './types/index.js';
 export * from './auth/index.js';

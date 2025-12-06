@@ -1,8 +1,6 @@
-import { errorBuilder } from '../adapters/_client/_router/dto/api-responses.dto.js';
-import { ApiErrorCode } from '../types/result.types.js';
-import { LibraryPromise } from '../adapters/_client/_router/routes/_types.js';
-import { ApiAsyncResult } from '../utils/api-result.js';
-import { Err, Ok } from '../utils/index.js';
+import { errorBuilder } from '#/adapters/_client/_router/dto/api-responses.dto.js';
+import { ApiErrorCode } from '#/types/result.types.js';
+import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 
 /**
  * Call a bsky function and handle errors

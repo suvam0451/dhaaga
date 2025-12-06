@@ -5,10 +5,7 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from './_interface.js';
-import {
-	FollowPostDto,
-	GetPostsQueryDTO,
-} from '../../../adapters/_client/_interface.js';
+import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { PaginatedPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import {
@@ -19,7 +16,7 @@ import {
 	MastoRelationship,
 	MastoStatus,
 } from '#/types/mastojs.types.js';
-import { MastoJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MastoJsWrapper } from '#/client/utils/custom-clients.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 
 export class MastodonAccountsRouter implements AccountRoute {

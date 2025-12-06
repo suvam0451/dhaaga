@@ -6,7 +6,7 @@ import {
 } from './_interface.js';
 import { errorBuilder } from '../../../adapters/_client/_router/dto/api-responses.dto.js';
 import { BaseAccountsRouter } from './default.js';
-import { GetPostsQueryDTO } from '../../../adapters/_client/_interface.js';
+import { GetPostsQueryDTO } from '../../types/_interface.js';
 import {
 	LibraryPromise,
 	PaginatedPromise,
@@ -18,7 +18,7 @@ import type {
 	MegaRelationship,
 	MegaStatus,
 } from '#/types/megalodon.types.js';
-import { MegalodonPleromaWrapper } from '#/custom-clients/custom-clients.js';
+import { MegalodonPleromaWrapper } from '#/client/utils/custom-clients.js';
 import { CasingUtil } from '#/utils/casing.js';
 import { ApiAsyncResult } from '#/utils/api-result.js';
 import { Err, Ok } from '#/utils/index.js';

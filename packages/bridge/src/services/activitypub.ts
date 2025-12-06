@@ -1,5 +1,5 @@
 import { ApiErrorCode, LibraryResponse } from '../types/result.types.js';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 import { DriverService } from './driver.js';
 import { BaseUrlNormalizationService } from '../utils/urls.js';
 

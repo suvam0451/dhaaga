@@ -1,4 +1,4 @@
-import { RestClientCreateDTO } from '../adapters/_client/_interface.js';
+import { RestClientCreateDTO } from '../client/types/_interface.js';
 import { AtprotoApiAdapter, KNOWN_SOFTWARE } from '../index.js';
 import { AppAtpSessionData } from '../types/atproto.js';
 import {

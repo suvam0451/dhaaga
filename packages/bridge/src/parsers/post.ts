@@ -8,7 +8,7 @@ import { ApiErrorCode } from '../types/result.types.js';
 import { ApiResult } from '../utils/api-result.js';
 import { ActivitypubStatusAdapter } from '../implementors/status/_adapters.js';
 import { PostTargetInterface } from '../implementors/index.js';
-import { KNOWN_SOFTWARE } from '../data/driver.js';
+import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 import AtprotoPostAdapter from '../implementors/status/bluesky.js';
 import { ActivitypubHelper, DriverUserFindQueryType } from '../index.js';
 

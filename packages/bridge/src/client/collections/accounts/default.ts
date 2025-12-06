@@ -5,10 +5,7 @@ import {
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from './_interface.js';
-import {
-	FollowPostDto,
-	GetPostsQueryDTO,
-} from '../../../adapters/_client/_interface.js';
+import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
 import {
 	LibraryPromise,
 	PaginatedPromise,

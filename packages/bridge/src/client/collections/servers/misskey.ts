@@ -4,7 +4,7 @@ import { getSoftwareInfoShared } from '#/adapters/_client/_router/shared.js';
 import { LibraryPromise } from '#/adapters/_client/_router/routes/_types.js';
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MisskeyInstanceRouter implements InstanceRoute {
 	direct: FetchWrapper;

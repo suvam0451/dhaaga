@@ -1,4 +1,4 @@
-import { GetTrendingDTO } from '../../../adapters/_client/_interface.js';
+import { GetTrendingDTO } from '../../types/_interface.js';
 import { Endpoints } from 'misskey-js';
 import { LibraryPromise } from '../../../adapters/_client/_router/routes/_types.js';
 import {

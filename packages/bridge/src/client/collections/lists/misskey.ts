@@ -2,7 +2,7 @@ import { ListsRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import { MegaList } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MisskeyJsWrapper } from '#/custom-clients/custom-clients.js';
+import { MisskeyJsWrapper } from '#/client/utils/custom-clients.js';
 
 export class MisskeyListsRoute implements ListsRoute {
 	direct: FetchWrapper;
