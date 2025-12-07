@@ -25,19 +25,43 @@ type NotificationUserGroupType = z.infer<
 	typeof appNotificationGroupedUserItemSchema
 >;
 
-type MastoApiGroupedNotificationType = {
-	groupKey: string;
-	notificationsCount: 1;
-	type: 'mention';
-	mostRecentNotificationId: number;
-	pageMinId: string;
-	pageMaxId: string;
-	latestPageNotificationAt: Date;
-	sampleAccountIds: string[];
-	statusId: string;
+const mastoApiV2NotificationGroupSchema = z.object({
+	groupKey: z.string(),
+	latestPageNotificationAt: z.date(),
+	mostRecentNotificationId: z.number(),
+	notificationsCount: z.number(),
+	pageMaxId: z.string(),
+	pageMinId: z.string(),
+	sampleAccountIds: z.array(z.string()),
+	statusId: z.string(),
+	type: z.enum([
+		'mention',
+		'status',
+		'reblog',
+		'follow',
+		'follow_request',
+		'favourite',
+		'poll',
+		'update',
+		'quote',
+		'quoted_update',
+		'admin.sign_up',
+		'admin.report',
+		'severed_relationships',
+		'moderation_warning',
+	]),
+});
+
+type MastoApiGroupedNotificationType = z.infer<
+	typeof mastoApiV2NotificationGroupSchema
+>;
+
+export {
+	appNotificationGroupedUserItemSchema,
+	appNotificationObjectSchema,
+	mastoApiV2NotificationGroupSchema,
 };
 
-export { appNotificationGroupedUserItemSchema, appNotificationObjectSchema };
 export type {
 	MastoApiGroupedNotificationType,
 	NotificationUserGroupType,

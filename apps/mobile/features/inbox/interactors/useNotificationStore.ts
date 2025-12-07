@@ -26,10 +26,11 @@ function useNotificationStore() {
 	}, [acct]);
 
 	function appendNotifications(page: ResultPage<NotificationObjectType>) {
+		if (!page) return;
 		dispatch({
 			type: InboxStateAction.APPEND,
 			payload: {
-				page: page,
+				page,
 			},
 		});
 		lastId.current = page.maxId;

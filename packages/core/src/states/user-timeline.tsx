@@ -79,7 +79,7 @@ function reducer(state: State, action: Actions): State {
 			const copy = Array.from(state.items);
 
 			return produce(state, (draft) => {
-				for (const item of action.payload.items) {
+				for (const item of action.payload.data) {
 					if (draft.seen.has(item.id)) continue;
 					draft.seen.add(item.id);
 					copy.push(item);

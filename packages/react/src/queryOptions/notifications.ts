@@ -34,7 +34,6 @@ function getMentionNotificationsQueryOpts(
 			limit: NOTIFICATION_PAGE_SIZE,
 			maxId,
 		});
-		if (results.error) throw new Error(results.error.message);
 
 		if (ActivityPubService.misskeyLike(driver)) {
 			return GroupedNotificationParser.parseForMisskey(
@@ -44,7 +43,7 @@ function getMentionNotificationsQueryOpts(
 			);
 		} else if (ActivityPubService.supportsV2(driver)) {
 			return GroupedNotificationParser.parseForMastodonV2(
-				results.data,
+				results,
 				driver,
 				server,
 			);

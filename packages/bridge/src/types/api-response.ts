@@ -1,14 +1,14 @@
 import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
 
 type ResultPage<T> = {
-	items: T[];
+	data: T;
 	maxId?: string | null;
 	minId?: string | null;
 	error?: Error;
 };
 
 const defaultResultPage = {
-	items: [],
+	data: [],
 	maxId: null,
 	minId: null,
 };

@@ -31,7 +31,7 @@ type PostFeedQueryParams = {
 	limit?: number;
 };
 
-type PostFeedFetchResultType = ResultPage<PostObjectType>;
+type PostFeedFetchResultType = ResultPage<PostObjectType[]>;
 
 /**
  * intended for use by single column timelines,
@@ -105,8 +105,7 @@ export function unifiedPostFeedQueryOptions(
 
 	function outputSchemaToResultPage(data: any): PostFeedFetchResultType {
 		return {
-			// success: true,
-			items: PostParser.parse<unknown[]>(data.feed, driver, server),
+			data: PostParser.parse<unknown[]>(data.feed, driver, server),
 			maxId: data.cursor === undefined ? null : data.cursor,
 			minId: null,
 		};
@@ -145,7 +144,7 @@ export function unifiedPostFeedQueryOptions(
 		maxId?: string | null,
 	): PostFeedFetchResultType {
 		return {
-			items: generateFeedBatch(data),
+			data: generateFeedBatch(data),
 			maxId: generateMaxId(data, maxId),
 			minId: null,
 		};
@@ -198,7 +197,7 @@ export function unifiedPostFeedQueryOptions(
 						_query,
 					);
 					return {
-						items: PostParser.parse<unknown[]>(result as any[], driver, server),
+						data: PostParser.parse<unknown[]>(result as any[], driver, server),
 						maxId: generateMaxId(result),
 						minId: null,
 					};
@@ -207,7 +206,7 @@ export function unifiedPostFeedQueryOptions(
 						_query,
 					);
 					return {
-						items: PostParser.parse<unknown[]>(result as any[], driver, server),
+						data: PostParser.parse<unknown[]>(result as any[], driver, server),
 						maxId: generateMaxId(result),
 						minId: null,
 					};
@@ -242,7 +241,7 @@ export function unifiedPostFeedQueryOptions(
 						cursor: _query.maxId === null ? undefined : _query.maxId,
 					});
 					return {
-						items: PostParser.parse<unknown[]>(data.feed, driver, server),
+						data: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,
 						minId: null,
 					};

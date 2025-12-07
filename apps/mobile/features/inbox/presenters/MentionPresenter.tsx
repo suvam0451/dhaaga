@@ -12,12 +12,10 @@ function MentionPresenter() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
 	const queryResult = useApiGetMentionUpdates(maxId);
-	const { data, refetch, isPending, fetchStatus } = queryResult;
+	const { data, refetch, isPending, fetchStatus, error } = queryResult;
 
 	useEffect(() => {
-		if (fetchStatus !== 'fetching') {
-			append(data);
-		}
+		if (fetchStatus !== 'fetching' && !error) append(data);
 	}, [fetchStatus]);
 
 	async function refresh() {

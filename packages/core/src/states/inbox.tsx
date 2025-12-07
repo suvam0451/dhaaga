@@ -53,10 +53,10 @@ function reducer(state: State, action: Actions): State {
 		}
 		case ACTION.APPEND: {
 			return produce(state, (draft) => {
-				if (action.payload.page.items.length === 0 && state.items.length === 0)
+				if (action.payload.page.data.length === 0 && state.items.length === 0)
 					draft.listEmpty = true;
 
-				for (const item of action.payload.page.items) {
+				for (const item of action.payload.page.data) {
 					if (draft.seen.has(item.id)) continue;
 					draft.seen.add(item.id);
 					draft.items.push(item);
@@ -67,7 +67,7 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.seen = new Set();
 				draft.items = [];
-				for (const item of action.payload.page.items) {
+				for (const item of action.payload.page.data) {
 					if (draft.seen.has(item.id)) continue;
 					draft.seen.add(item.id);
 					draft.items.push(item);

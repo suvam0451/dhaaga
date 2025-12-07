@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { NotificationObjectType, ResultPage } from '#/typings.js';
 import { PostParser } from '#/parsers/post.js';
@@ -5,6 +6,7 @@ import { UserParser } from '#/parsers/user.js';
 import { MastoApiGroupedNotificationType } from '#/types/shared/notifications.js';
 import { produce } from 'immer';
 import { RandomUtil } from '#/utils/index.js';
+import { MastoGroupedNotificationsResults } from '#/types/index.js';
 
 class Parser {
 	/**
@@ -22,7 +24,7 @@ class Parser {
 		category: 'mentions' | 'chat' | 'social' | 'updates',
 	): ResultPage<NotificationObjectType> {
 		return {
-			items: input.data.map((o: any) => {
+			data: input.data.map((o: any) => {
 				return {
 					id: o.id,
 					// akkoma uses "mention" type for "status" updates
@@ -47,10 +49,10 @@ class Parser {
 	 * @param server
 	 */
 	static parseForMastodonV2(
-		input: any,
+		input: ResultPage<MastoGroupedNotificationsResults>,
 		driver: KNOWN_SOFTWARE,
 		server: string,
-	): ResultPage<NotificationObjectType> {
+	): ResultPage<NotificationObjectType[]> {
 		const acctList = input.data.accounts;
 		const postList = input.data.statuses;
 		const seenPost = new Map();
@@ -75,15 +77,13 @@ class Parser {
 						type: group.type,
 					})),
 					read: true,
-					createdAt: group.latestPageNotificationAt,
+					createdAt: group.latestPageNotificationAt
+						? new Date(group.latestPageNotificationAt)
+						: new Date(),
 					extraData: {},
 				});
 				counter++;
-				continue;
-			}
-
-			// handle groups that have no post association
-			if (!seenPost.has(group.statusId)) {
+			} else if (!seenPost.has(group.statusId)) {
 				results.push({
 					id: group.groupKey,
 					/**
@@ -108,7 +108,9 @@ class Parser {
 						types: [group.type],
 					})),
 					read: true,
-					createdAt: group.latestPageNotificationAt,
+					createdAt: group.latestPageNotificationAt
+						? new Date(group.latestPageNotificationAt)
+						: new Date(),
 					extraData: {},
 				});
 
@@ -142,7 +144,7 @@ class Parser {
 		}
 
 		return {
-			items: results,
+			data: results,
 			maxId: input.maxId,
 			minId: input.minId,
 		};
@@ -202,7 +204,7 @@ class Parser {
 		server: string,
 	): ResultPage<NotificationObjectType> {
 		return {
-			items: data.data
+			data: data.data
 				.map((o: any) => {
 					try {
 						if (['achievementEarned', 'note:grouped'].includes(o.type)) {

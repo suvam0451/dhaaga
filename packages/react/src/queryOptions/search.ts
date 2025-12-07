@@ -18,8 +18,8 @@ import type {
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedSearchPosts } from '@atproto/api';
 
-type PostResultPage = ResultPage<PostObjectType>;
-type FeedResultPage = ResultPage<FeedObjectType>;
+type PostResultPage = ResultPage<PostObjectType[]>;
+type FeedResultPage = ResultPage<FeedObjectType[]>;
 
 export function searchFeedsQueryOpts(
 	client: AtprotoApiAdapter,
@@ -40,7 +40,7 @@ export function searchFeedsQueryOpts(
 		if (error) return defaultResultPage;
 		return {
 			...defaultResultPage,
-			items: FeedParser.parse<unknown[]>(data.feeds, driver, server),
+			data: FeedParser.parse<unknown[]>(data.feeds, driver, server),
 			maxId: data.cursor as any,
 		};
 	}
@@ -49,7 +49,6 @@ export function searchFeedsQueryOpts(
 		queryKey: ['search/feeds', server, q, maxId],
 		queryFn: api,
 		enabled: !!client && DriverService.supportsAtProto(driver),
-		initialData: defaultResultPage,
 	});
 }
 
@@ -96,7 +95,7 @@ export function searchPostsQueryOpts(
 			return {
 				...defaultResultPage,
 				maxId: _data.data.cursor,
-				items: PostParser.parse<unknown[]>(_data.data.posts, driver, server),
+				data: PostParser.parse<unknown[]>(_data.data.posts, driver, server),
 			};
 		}
 
@@ -117,8 +116,8 @@ export function searchPostsQueryOpts(
 		}
 
 		return {
+			data: _posts,
 			maxId: __maxId,
-			items: _posts,
 			minId: null,
 		};
 	}

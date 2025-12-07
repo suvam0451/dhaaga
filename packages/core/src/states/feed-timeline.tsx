@@ -78,7 +78,7 @@ function reducer(state: State, action: Actions): State {
 		}
 		case ACTION.APPEND_RESULTS: {
 			const copy = Array.from(state.items);
-			for (const item of action.payload.items) {
+			for (const item of action.payload.data) {
 				if (state.seen.has(item.uri)) continue;
 				copy.push(item);
 			}

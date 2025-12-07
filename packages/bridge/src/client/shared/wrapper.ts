@@ -98,7 +98,7 @@ class Route {
 	 */
 	async getFollowers(
 		query: FollowerGetQueryDTO,
-	): Promise<ResultPage<UserObjectType>> {
+	): Promise<ResultPage<UserObjectType[]>> {
 		const result = await this.client.accounts.getFollowers(query);
 		return KeyExtractorUtil.getPage<UserObjectType>(result, (o) =>
 			UserParser.parse<unknown[]>(o, this.client.driver, this.client.server!),
@@ -107,7 +107,7 @@ class Route {
 
 	async getFollows(
 		query: FollowerGetQueryDTO,
-	): Promise<ResultPage<UserObjectType>> {
+	): Promise<ResultPage<UserObjectType[]>> {
 		const result = await this.client.accounts.getFollowings(query);
 		return KeyExtractorUtil.getPage<UserObjectType>(result, (o) =>
 			UserParser.parse<unknown[]>(o, this.client.driver, this.client.server!),
