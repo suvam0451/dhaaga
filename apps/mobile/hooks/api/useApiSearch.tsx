@@ -12,7 +12,7 @@ import type {
 	UserObjectType,
 	FeedObjectType,
 	ResultPage,
-} from '@dhaaga/bridge';
+} from '@dhaaga/bridge/typings';
 
 type FeedResultPage = ResultPage<FeedObjectType>;
 

@@ -25,5 +25,21 @@ type NotificationUserGroupType = z.infer<
 	typeof appNotificationGroupedUserItemSchema
 >;
 
+type MastoApiGroupedNotificationType = {
+	groupKey: string;
+	notificationsCount: 1;
+	type: 'mention';
+	mostRecentNotificationId: number;
+	pageMinId: string;
+	pageMaxId: string;
+	latestPageNotificationAt: Date;
+	sampleAccountIds: string[];
+	statusId: string;
+};
+
 export { appNotificationGroupedUserItemSchema, appNotificationObjectSchema };
-export type { NotificationUserGroupType, NotificationObjectType };
+export type {
+	MastoApiGroupedNotificationType,
+	NotificationUserGroupType,
+	NotificationObjectType,
+};

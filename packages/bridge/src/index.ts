@@ -25,10 +25,7 @@ import {
 } from './client/collections/accounts/_interface.js';
 // used to read viewer
 import AtprotoPostAdapter from './implementors/status/bluesky.js';
-import { KNOWN_SOFTWARE } from './client/utils/driver.js';
 import { DriverService } from './services/driver.js';
-
-import { CustomEmojiObject } from '#/types/shared/reactions.js';
 
 export { ActivityPubService };
 export { ActivityPubReactionsService };
@@ -90,14 +87,16 @@ export type {
 	FollowerGetQueryDTO,
 };
 
-export { KNOWN_SOFTWARE };
-export type { CustomEmojiObject };
-export { DriverNotificationType } from './client/utils/driver.js';
+export {
+	DriverNotificationType,
+	KNOWN_SOFTWARE,
+} from './client/utils/driver.js';
 
 export { RandomUtil } from './utils/random.js';
 
-// chat services
 export * from './parsers/index.js';
+export * from './viewers/index.js';
+
 // post services
 export { PostInspector, PostResolver } from './parsers/post.js';
 export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
@@ -107,5 +106,3 @@ export { KeyExtractorUtil } from './utils/key-extractor.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
 export { defaultResultPage } from './types/api-response.js';
-
-export * from './viewers/index.js';

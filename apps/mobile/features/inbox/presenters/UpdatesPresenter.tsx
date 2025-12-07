@@ -1,18 +1,18 @@
-import { APP_LANDING_PAGE_TYPE } from '../../../components/shared/topnavbar/AppTabLandingNavbar';
-import { useApiGetSubscriptionUpdates } from '../../../hooks/api/useNotifications';
-import { useEffect, useMemo } from 'react';
+import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
+import { useApiGetSubscriptionUpdates } from '#/hooks/api/useNotifications';
+import { useEffect, useMemo, useState } from 'react';
 import useNotificationStore from '../interactors/useNotificationStore';
 import NotificationItemPresenter from './NotificationItemPresenter';
 import Header from '../components/Header';
-import FlashListService from '../../../services/flashlist.service';
-import { ListWithSkeletonPlaceholder } from '../../../ui/Lists';
-import { NotificationSkeletonView } from '../components/Skeleton';
-import EmptyNotificationsView from '#/features/inbox/view/EmptyNotificationsView';
+import FlashListService from '#/services/flashlist.service';
+import { FlatList, RefreshControl } from 'react-native';
+import { StateIndicator } from '../components/StateIndicator';
 
 function UpdatesPresenter() {
+	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
-	const { data, refetch, isPending, fetchStatus, isRefetching } =
-		useApiGetSubscriptionUpdates(maxId);
+	const queryResult = useApiGetSubscriptionUpdates(maxId);
+	const { data, refetch, isPending, fetchStatus } = queryResult;
 
 	// FIXME: looping requests
 	useEffect(() => {
@@ -34,20 +34,40 @@ function UpdatesPresenter() {
 		if (!isPending && data.items.length > 0) loadNext();
 	}
 
-	const IS_LOADING = listItems.length === 0 && (isPending || isRefetching);
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
+	function _onRefresh() {
+		setIsRefreshing(true);
+		refresh().finally(() => {
+			setIsRefreshing(false);
+		});
+	}
 
 	return (
-		<ListWithSkeletonPlaceholder
-			SkeletonView={NotificationSkeletonView}
-			ItemView={(item) => <NotificationItemPresenter item={item} />}
-			items={listItems}
-			isLoading={IS_LOADING}
-			onEndReached={onEndReached}
-			SkeletonEstimatedHeight={136}
+		<FlatList
+			onLayout={onLayout}
+			data={listItems}
+			renderItem={({ item }) => <NotificationItemPresenter item={item} />}
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.UPDATES} />}
-			onRefresh={refresh}
-			listEmpty={state.listEmpty}
-			ListEmptyComponent={<EmptyNotificationsView />}
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
+			}
+			contentContainerStyle={{
+				paddingBottom: 32,
+			}}
+			ListEmptyComponent={
+				<StateIndicator
+					numItems={listItems.length}
+					containerHeight={ContainerHeight}
+					queryResult={queryResult}
+				/>
+			}
+			onEndReached={() => {
+				if (!isPending) loadNext();
+			}}
 		/>
 	);
 }

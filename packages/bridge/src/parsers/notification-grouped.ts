@@ -1,22 +1,12 @@
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppResultPageType } from '../types/app.types';
+import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
+import { NotificationObjectType, ResultPage } from '#/typings.js';
+import { PostParser } from '#/parsers/post.js';
+import { UserParser } from '#/parsers/user.js';
+import { MastoApiGroupedNotificationType } from '#/types/shared/notifications.js';
 import { produce } from 'immer';
-import { UserParser, PostParser } from '@dhaaga/bridge';
-import type { NotificationObjectType } from '@dhaaga/bridge/typings';
+import { RandomUtil } from '#/utils/index.js';
 
-export type MastoApiGroupedNotificationType = {
-	groupKey: string;
-	notificationsCount: 1;
-	type: 'mention';
-	mostRecentNotificationId: number;
-	pageMinId: string;
-	pageMaxId: string;
-	latestPageNotificationAt: Date;
-	sampleAccountIds: string[];
-	statusId: string;
-};
-
-class ServiceV1 {
+class Parser {
 	/**
 	 * Resolve notifications for v1 api
 	 * grouped notification objects
@@ -25,14 +15,14 @@ class ServiceV1 {
 	 * @param server
 	 * @param category
 	 */
-	static packNotifs(
+	static parseForMastodonV1(
 		input: any,
 		driver: KNOWN_SOFTWARE,
 		server: string,
 		category: 'mentions' | 'chat' | 'social' | 'updates',
-	): AppResultPageType<NotificationObjectType> {
+	): ResultPage<NotificationObjectType> {
 		return {
-			items: input.data.map((o) => {
+			items: input.data.map((o: any) => {
 				return {
 					id: o.id,
 					// akkoma uses "mention" type for "status" updates
@@ -46,24 +36,21 @@ class ServiceV1 {
 			}),
 			maxId: input.maxId,
 			minId: input.minId,
-			success: true,
 		};
 	}
-}
 
-class ServiceV2 {
 	/**
-	 * Resolve notifications for v2 api
-	 * grouped notification objects
+	 * This should apply for newer mastodon servers
+	 * that have grouped notifications enabled
 	 * @param input
 	 * @param driver
 	 * @param server
 	 */
-	static packNotifs(
+	static parseForMastodonV2(
 		input: any,
 		driver: KNOWN_SOFTWARE,
 		server: string,
-	): AppResultPageType<NotificationObjectType> {
+	): ResultPage<NotificationObjectType> {
 		const acctList = input.data.accounts;
 		const postList = input.data.statuses;
 		const seenPost = new Map();
@@ -72,7 +59,7 @@ class ServiceV2 {
 		for (const group of input.data.notificationGroups) {
 			const _group: MastoApiGroupedNotificationType = group;
 
-			// handles groups that have no post association
+			// handles groups that have no post-association
 			if (_group.statusId === undefined) {
 				results.push({
 					id: group.groupKey,
@@ -89,6 +76,7 @@ class ServiceV2 {
 					})),
 					read: true,
 					createdAt: group.latestPageNotificationAt,
+					extraData: {},
 				});
 				counter++;
 				continue;
@@ -107,7 +95,7 @@ class ServiceV2 {
 					type: group.type,
 					user: null,
 					post: PostParser.parse<unknown>(
-						postList.find((x) => x.id === group.statusId),
+						postList.find((x: any) => x.id === group.statusId),
 						driver,
 						server,
 					),
@@ -121,6 +109,7 @@ class ServiceV2 {
 					})),
 					read: true,
 					createdAt: group.latestPageNotificationAt,
+					extraData: {},
 				});
 
 				seenPost.set(group.statusId, counter);
@@ -136,11 +125,14 @@ class ServiceV2 {
 							}
 						} else {
 							draft.users?.push({
-								item: UserParser.parse<unknown>(
-									acctList.find((x: any) => x.id === id),
-									driver,
-									server,
-								),
+								item: {
+									...UserParser.parse<unknown>(
+										acctList.find((x: any) => x.id === id),
+										driver,
+										server,
+									),
+								},
+								extraData: {},
 								types: [group.type],
 							});
 						}
@@ -150,7 +142,6 @@ class ServiceV2 {
 		}
 
 		return {
-			success: true,
 			items: results,
 			maxId: input.maxId,
 			minId: input.minId,
@@ -194,6 +185,69 @@ class ServiceV2 {
 		// 	minId: input.minId,
 		// };
 	}
+
+	/**
+	 * Translates misskey notification objects
+	 * for usage throughout the app
+	 * @param data make sure to pass correct object
+	 * @param driver misskey compatible driver
+	 * @param server your home server
+	 *
+	 * NOTE: converts 'specified' visibility to
+	 * 'chat'
+	 */
+	static parseForMisskey(
+		data: any,
+		driver: KNOWN_SOFTWARE,
+		server: string,
+	): ResultPage<NotificationObjectType> {
+		return {
+			items: data.data
+				.map((o: any) => {
+					try {
+						if (['achievementEarned', 'note:grouped'].includes(o.type)) {
+							return null;
+						}
+
+						const _postTarget = !!o.note ? o.note : o;
+
+						const _acct = !['login'].includes(o.type)
+							? UserParser.parse<unknown>(o.user, driver, server)
+							: null;
+						// cherrypick fixes
+						const _post =
+							_postTarget &&
+							!['login', 'follow', 'followRequestAccepted'].includes(o.type)
+								? PostParser.parse<unknown>(_postTarget, driver, server)
+								: null;
+
+						if (!_post) {
+							console.log('[WARN]: failed to pack notification for', o);
+							return null;
+						}
+
+						const _obj: NotificationObjectType = {
+							id: RandomUtil.nanoId(),
+							type:
+								o.type ||
+								(_post.visibility === 'specified' ? 'chat' : _post.visibility),
+							post: _post,
+							user: _acct,
+							read: false,
+							createdAt: new Date(o.createdAt || _post.createdAt),
+							extraData: {},
+						};
+						return _obj;
+					} catch (e) {
+						console.log('[WARN]: failed to resolve notification', e);
+						return null;
+					}
+				})
+				.filter(Boolean),
+			minId: null,
+			maxId: data.data[data.data.length - 1].id,
+		};
+	}
 }
 
-export { ServiceV1 as MastoApiV1Service, ServiceV2 as MastoApiV2Service };
+export { Parser as GroupedNotificationParser };

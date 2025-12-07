@@ -1,6 +1,5 @@
 import { FlatList, View } from 'react-native';
 import { Skeleton } from '#/ui/Skeleton';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 /**
  * Height: 308
@@ -32,24 +31,12 @@ function PostTimelineSkeleton({
 }: {
 	containerHeight: number;
 }) {
-	const { theme } = useAppTheme();
 	const NUM_NODES = Math.floor(containerHeight / 310);
 
 	if (NUM_NODES === 0) return <View style={{ height: '100%' }} />;
+
 	return (
-		<View
-			style={[
-				{
-					flex: 1,
-					backgroundColor: theme.palette.bg,
-				},
-			]}
-		>
-			<FlatList
-				data={Array(NUM_NODES).fill(null)}
-				renderItem={() => <Node />}
-			/>
-		</View>
+		<FlatList data={Array(NUM_NODES).fill(null)} renderItem={() => <Node />} />
 	);
 }
 

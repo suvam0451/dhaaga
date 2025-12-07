@@ -1,13 +1,12 @@
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import { View } from 'react-native';
 import MentionPresenter from './MentionPresenter';
 import ChatroomPresenter from './ChatroomPresenter';
 import SocialUpdatePresenter from './SocialUpdatePresenter';
 import UpdatesPresenter from './UpdatesPresenter';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { InboxCtx } from '@dhaaga/core';
-import { AppPagerView } from '../../../ui/PagerView';
+import { AppPagerView } from '#/ui/PagerView';
 
 const renderScene = (index: number) => {
 	switch (index) {
@@ -20,7 +19,7 @@ const renderScene = (index: number) => {
 		case 3:
 			return <UpdatesPresenter />;
 		default:
-			return <View />;
+			throw new Error('Invalid tab index for inbox tab');
 	}
 };
 

@@ -1,19 +1,18 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetMentionUpdates } from '#/hooks/api/useNotifications';
 import NotificationItemPresenter from './NotificationItemPresenter';
 import Header from '../components/Header';
 import FlashListService from '#/services/flashlist.service';
 import useNotificationStore from '../interactors/useNotificationStore';
-import { NotificationSkeletonView } from '../components/Skeleton';
-import { ListWithSkeletonPlaceholder } from '#/ui/Lists';
-import { View } from 'react-native';
-import { AppText } from '#/components/lib/Text';
+import { FlatList, RefreshControl } from 'react-native';
+import { StateIndicator } from '../components/StateIndicator';
 
 function MentionPresenter() {
+	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { state, loadNext, maxId, append, reset } = useNotificationStore();
-	const { data, refetch, isPending, fetchStatus, isRefetching } =
-		useApiGetMentionUpdates(maxId);
+	const queryResult = useApiGetMentionUpdates(maxId);
+	const { data, refetch, isPending, fetchStatus } = queryResult;
 
 	useEffect(() => {
 		if (fetchStatus !== 'fetching') {
@@ -30,26 +29,40 @@ function MentionPresenter() {
 		return FlashListService.notifications(state.items);
 	}, [state.items]);
 
-	const IS_LOADING = listItems.length === 0 && (isPending || isRefetching);
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
+	function _onRefresh() {
+		setIsRefreshing(true);
+		refresh().finally(() => {
+			setIsRefreshing(false);
+		});
+	}
 
 	return (
-		<ListWithSkeletonPlaceholder
-			SkeletonView={NotificationSkeletonView}
-			ItemView={(item) => <NotificationItemPresenter item={item} />}
-			items={listItems}
-			isLoading={IS_LOADING}
+		<FlatList
+			onLayout={onLayout}
+			data={listItems}
+			renderItem={({ item }) => <NotificationItemPresenter item={item} />}
+			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
+			}
+			contentContainerStyle={{
+				paddingBottom: 32,
+			}}
+			ListEmptyComponent={
+				<StateIndicator
+					numItems={listItems.length}
+					containerHeight={ContainerHeight}
+					queryResult={queryResult}
+				/>
+			}
 			onEndReached={() => {
 				if (!isPending) loadNext();
 			}}
-			SkeletonEstimatedHeight={136}
-			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
-			onRefresh={refresh}
-			listEmpty={state.listEmpty}
-			ListEmptyComponent={
-				<View>
-					<AppText.Normal>Notification List Empty</AppText.Normal>
-				</View>
-			}
 		/>
 	);
 }

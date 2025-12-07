@@ -6,7 +6,7 @@ import AppTopNavbar, {
 import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { AppText, SpecialText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
-import type { FeedObjectType } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge/typings';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppDivider } from '#/components/lib/Divider';
 import { Image, useImage } from 'expo-image';
@@ -107,7 +107,7 @@ function Page() {
 					My Feeds
 				</SpecialText>
 				<FlatList
-					data={data.items}
+					data={data}
 					renderItem={({ item }) => <MyFeedItem item={item} />}
 				/>
 			</ScrollView>
