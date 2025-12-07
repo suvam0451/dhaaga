@@ -68,7 +68,7 @@ function SimplePostTimeline({
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
 			type: PostTimelineStateAction.APPEND_RESULTS,
-			payload: { ...data, items: data.items },
+			payload: data,
 		});
 	}, [fetchStatus]);
 

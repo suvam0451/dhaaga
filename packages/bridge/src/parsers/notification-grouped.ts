@@ -84,6 +84,11 @@ class Parser {
 				});
 				counter++;
 			} else if (!seenPost.has(group.statusId)) {
+				const post = PostParser.parse<unknown>(
+					postList.find((x: any) => x.id === group.statusId),
+					driver,
+					server,
+				);
 				results.push({
 					id: group.groupKey,
 					/**
@@ -94,11 +99,7 @@ class Parser {
 					 */
 					type: group.type,
 					user: null,
-					post: PostParser.parse<unknown>(
-						postList.find((x: any) => x.id === group.statusId),
-						driver,
-						server,
-					),
+					post,
 					users: group.sampleAccountIds.map((o: string) => ({
 						item: UserParser.parse<unknown>(
 							acctList.find((x: any) => x.id === o),
@@ -111,7 +112,9 @@ class Parser {
 					createdAt: group.latestPageNotificationAt
 						? new Date(group.latestPageNotificationAt)
 						: new Date(),
-					extraData: {},
+					extraData: {
+						interaction: post.interaction,
+					},
 				});
 
 				seenPost.set(group.statusId, counter);

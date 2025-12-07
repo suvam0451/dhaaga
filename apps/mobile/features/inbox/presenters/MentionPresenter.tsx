@@ -1,66 +1,76 @@
-import { useEffect, useMemo, useState } from 'react';
-import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetMentionUpdates } from '#/hooks/api/useNotifications';
 import NotificationItemPresenter from './NotificationItemPresenter';
-import Header from '../components/Header';
-import FlashListService from '#/services/flashlist.service';
 import useNotificationStore from '../interactors/useNotificationStore';
-import { FlatList, RefreshControl } from 'react-native';
-import { StateIndicator } from '../components/StateIndicator';
+import { TouchableOpacity, View } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import type { NotificationObjectType } from '@dhaaga/bridge/typings';
+import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
 
-function MentionPresenter() {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
-	const { state, loadNext, maxId, append, reset } = useNotificationStore();
-	const queryResult = useApiGetMentionUpdates(maxId);
-	const { data, refetch, isPending, fetchStatus, error } = queryResult;
+function Wrapper({ item }: { item: NotificationObjectType }) {
+	const { theme } = useAppTheme();
 
-	useEffect(() => {
-		if (fetchStatus !== 'fetching' && !error) append(data);
-	}, [fetchStatus]);
+	function renderLeftActions(progress, dragX) {
+		// A shared flag so haptically triggers only once
+		// const triggered = useSharedValue(false);
 
-	async function refresh() {
-		reset();
-		await refetch();
-	}
+		// useAnimatedReaction(
+		// 	() => progress.value,
+		// 	(value) => {
+		// 		const threshold = 0.8; // 30% reveal
+		//
+		// 		if (value > threshold && !triggered.value) {
+		// 			triggered.value = true;
+		// 			runOnJS(triggerHaptic)();
+		// 		}
+		//
+		// 		if (value <= threshold && triggered.value) {
+		// 			triggered.value = false; // reset so you can trigger again next swipe
+		// 		}
+		// 	},
+		// );
 
-	const listItems = useMemo(() => {
-		return FlashListService.notifications(state.items);
-	}, [state.items]);
-
-	const [ContainerHeight, setContainerHeight] = useState(0);
-	function onLayout(event: any) {
-		setContainerHeight(event.nativeEvent.layout.height);
-	}
-
-	function _onRefresh() {
-		setIsRefreshing(true);
-		refresh().finally(() => {
-			setIsRefreshing(false);
-		});
+		return (
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'sync-outline'} size={32} />
+				</TouchableOpacity>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'chatbox-outline'} size={32} />
+				</TouchableOpacity>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'heart'} size={32} />
+				</TouchableOpacity>
+			</View>
+		);
 	}
 
 	return (
-		<FlatList
-			onLayout={onLayout}
-			data={listItems}
-			renderItem={({ item }) => <NotificationItemPresenter item={item} />}
-			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
-			}
-			contentContainerStyle={{
-				paddingBottom: 32,
-			}}
-			ListEmptyComponent={
-				<StateIndicator
-					numItems={listItems.length}
-					containerHeight={ContainerHeight}
-					queryResult={queryResult}
-				/>
-			}
-			onEndReached={() => {
-				if (!isPending) loadNext();
-			}}
+		<Swipeable
+			renderLeftActions={renderLeftActions}
+			overshootRight={false}
+			overshootFriction={8}
+			childrenContainerStyle={{ backgroundColor: theme.background.a0 }}
+		>
+			<NotificationItemPresenter item={item} />
+		</Swipeable>
+	);
+}
+
+function MentionPresenter() {
+	const { maxId } = useNotificationStore();
+	const queryResult = useApiGetMentionUpdates(maxId);
+
+	return (
+		<SimpleInboxTimeline
+			queryResult={queryResult}
+			Wrapper={({ item }) => <Wrapper item={item} />}
 		/>
 	);
 }

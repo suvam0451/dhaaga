@@ -13,7 +13,6 @@ function FollowReqAcceptNotificationFragment({ item }: Props) {
 				notificationType={DriverNotificationType.FOLLOW_REQUEST_ACCEPTED}
 				createdAt={item.createdAt}
 			/>
-			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 }

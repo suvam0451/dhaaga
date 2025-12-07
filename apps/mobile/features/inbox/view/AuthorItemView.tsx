@@ -1,20 +1,20 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE } from '../components/_common';
-import { AppIcon } from '../../../components/lib/Icon';
-import { DatetimeUtil } from '../../../utils/datetime.utils';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { TextContentView } from '../../../components/common/status/TextContentView';
-import { AppText } from '../../../components/lib/Text';
-import { appDimensions } from '../../../styles/dimensions';
+import { DatetimeUtil } from '#/utils/datetime.utils';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { TextContentView } from '#/components/common/status/TextContentView';
+import { AppText } from '#/components/lib/Text';
+import { appDimensions } from '#/styles/dimensions';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { AppIcon } from '#/components/lib/Icon';
 
 type Props = {
 	handle: string;
 	parsedDisplayName: AppParsedTextNodes;
 	avatarUrl: string;
-	extraData?: string;
+	extraData?: any;
 	createdAt: Date | string;
 	Icon: any;
 	bg: string;
@@ -39,6 +39,7 @@ export function AuthorItemView({
 	onAvatarPressed,
 	onUserPressed,
 	onMoreOptionsPressed,
+	extraData,
 }: Props) {
 	const { theme } = useAppTheme();
 
@@ -52,7 +53,6 @@ export function AuthorItemView({
 			}}
 		>
 			<Pressable style={styles.senderAvatarContainer} onPress={onAvatarPressed}>
-				{/*@ts-ignore-next-line*/}
 				<Image
 					source={{
 						uri: avatarUrl,
@@ -98,6 +98,7 @@ export function AuthorItemView({
 					paddingHorizontal: 4,
 					paddingLeft: 16,
 					flexDirection: 'row',
+					alignItems: 'center',
 				}}
 				onPress={onMoreOptionsPressed}
 			>
@@ -110,7 +111,11 @@ export function AuthorItemView({
 				>
 					{DatetimeUtil.timeAgo(createdAt)}
 				</AppText.Normal>
-				<AppIcon id={'ellipsis-v'} color={theme.secondary.a40} size={20} />
+				{extraData?.interaction?.liked ? (
+					<AppIcon id={'heart'} size={28} color={theme.primary.a0} />
+				) : (
+					<View />
+				)}
 			</Pressable>
 		</View>
 	);

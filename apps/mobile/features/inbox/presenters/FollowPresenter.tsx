@@ -13,7 +13,6 @@ function FollowPresenter({ item }: Props) {
 				notificationType={DriverNotificationType.FOLLOW}
 				createdAt={item.createdAt}
 			/>
-			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 }

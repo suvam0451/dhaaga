@@ -95,7 +95,6 @@ function AuthorItemPresenter({
 				};
 			}
 			case DriverNotificationType.REACTION: {
-				console.log('izanagi', extraData);
 				const emoji = acctManager.resolveEmoji(extraData, new Map());
 
 				if (!emoji) {

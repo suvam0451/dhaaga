@@ -2,7 +2,7 @@ import type {
 	UserObjectType,
 	NotificationObjectType,
 	PostObjectType,
-} from '@dhaaga/bridge';
+} from '@dhaaga/bridge/typings';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import {
 	ProfilePinnedTag,
@@ -47,20 +47,6 @@ class FlashListService {
 	}
 
 	static users(input: UserObjectType[]) {}
-
-	static notifications(
-		input: NotificationObjectType[],
-	): FlashListType_Notification[] {
-		if (!input || !Array.isArray(input)) return [];
-		return input
-			.map((o) => ({
-				type: o.type as unknown as DriverNotificationType,
-				props: {
-					dto: o,
-				},
-			}))
-			.filter((o) => !!o);
-	}
 
 	static pinnedTags(input: ProfilePinnedTag[]): FlashListType_PinnedTag[] {
 		return [

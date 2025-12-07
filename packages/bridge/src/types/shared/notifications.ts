@@ -8,8 +8,6 @@ const appNotificationGroupedUserItemSchema = z.object({
 	extraData: z.any(),
 });
 
-type NotificationObjectType = z.infer<typeof appNotificationObjectSchema>;
-
 const appNotificationObjectSchema = z.object({
 	id: z.string(),
 	type: z.string(),
@@ -20,6 +18,8 @@ const appNotificationObjectSchema = z.object({
 	read: z.boolean(),
 	users: z.array(appNotificationGroupedUserItemSchema).optional(),
 });
+
+type NotificationObjectType = z.infer<typeof appNotificationObjectSchema>;
 
 type NotificationUserGroupType = z.infer<
 	typeof appNotificationGroupedUserItemSchema

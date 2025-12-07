@@ -33,7 +33,6 @@ function StatusAlertNotificationFragment({ item }: Props) {
 				noIcon
 			/>
 			<NotificationPostPeek post={target} />
-			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 }

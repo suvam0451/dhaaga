@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
 import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
-import { AppDivider } from '../../../components/lib/Divider';
 
 function ReactionNotificationFragment({ item }: Props) {
 	const user = item.user;
@@ -18,7 +17,6 @@ function ReactionNotificationFragment({ item }: Props) {
 				createdAt={item.createdAt}
 			/>
 			<NotificationPostPeek post={post} />
-			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 }
