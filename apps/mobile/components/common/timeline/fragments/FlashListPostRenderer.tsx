@@ -1,5 +1,5 @@
 import { ListItemEnum, ListItemType } from '../utils/itemType.types';
-import StatusItem from '../../status/StatusItem';
+import StatusItem from '#/features/post-view/StatusItem';
 import WithAppStatusItemContext from '../../../containers/contexts/WithPostItemContext';
 import { View } from 'react-native';
 

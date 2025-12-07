@@ -5,7 +5,7 @@ import { AppText } from '#/components/lib/Text';
 import { AppDivider } from '#/components/lib/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { StatItem } from '#/components/common/status/PostStats';
+import { StatItem } from '#/features/post-view/views/PostInteractionStatsRow';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';

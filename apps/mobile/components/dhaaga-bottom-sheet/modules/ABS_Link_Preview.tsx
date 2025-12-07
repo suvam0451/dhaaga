@@ -18,6 +18,7 @@ import {
 import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import BottomSheetActionMenuBuilder from '#/ui/BottomSheetActionMenuBuilder';
 
 type OpenGraphParsingState = {
 	key: string | null;
@@ -62,33 +63,27 @@ function ParsingFailedView({
 			>
 				{t(`linkPreview.failedStateLabel`)}
 			</Text>
-			<AppMenu.Option
-				appIconId={
-					<AppIcon
-						id={'external-link'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				}
-				label={t(`linkPreview.menuLabel_retry`)}
-				onPress={onRetry}
-			/>
-			<AppMenu.Option
-				appIconId={
-					<AppIcon
-						id={'external-link'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				}
-				label={t(`linkPreview.menuLabel_copyLink`)}
-				onPress={onCopy}
-			/>
-			<AppMenu.Option
-				appIconId={
-					<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
-				}
-				label={t(`linkPreview.menu_openInBrowser_label`)}
-				onPress={onOpenExternal}
-				desc={t(`linkPreview.menu_openInBrowser_desc`)}
+			<BottomSheetActionMenuBuilder
+				items={[
+					{
+						appIconId: 'external-link',
+						label: t(`linkPreview.menuLabel_retry`),
+						onPress: onRetry,
+					},
+					{
+						appIconId: 'copy',
+						label: t(`linkPreview.menuLabel_copyLink`),
+						onPress: onCopy,
+						activeLabel: 'Copied!',
+						active: copied,
+					},
+					{
+						appIconId: 'browser',
+						label: t(`linkPreview.menu_openInBrowser_label`),
+						description: t(`linkPreview.menu_openInBrowser_desc`),
+						onPress: onOpenExternal,
+					},
+				]}
 			/>
 		</View>
 	);
@@ -99,18 +94,19 @@ function ABS_Link_Preview() {
 	const { ctx, stateId, visible, type } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
+	const [SavedToClipboard, setSavedToClipboard] = useState(false);
 	const ValueRef = useRef<string>(null);
 	const [OpenGraph, setOpenGraph] = useState(OgDefault);
 
 	const INACTIVE = !visible || type !== APP_BOTTOM_SHEET_ENUM.LINK;
 
-	async function parse() {
-		if (!ctx?.linkUrl) return;
-	}
+	function placeholder() {}
 
 	useEffect(() => {
-		if (INACTIVE) return;
-		parse();
+		if (INACTIVE || !!ctx?.linkUrl) return;
+		setSavedToClipboard(false);
+
+		ValueRef.current = ctx?.linkUrl;
 	}, [stateId]);
 
 	const domain = useMemo(() => {
@@ -133,7 +129,17 @@ function ABS_Link_Preview() {
 		);
 	}
 
-	function onLinkCopy() {}
+	function onLinkCopy() {
+		LinkingUtils.saveToClipboard(ValueRef.current)
+			.then(() => {
+				setSavedToClipboard(true);
+			})
+			.catch((e) => {
+				console.log(e, ValueRef.current);
+				setSavedToClipboard(false);
+			});
+	}
+
 	function onOpenExternal() {
 		LinkingUtils.openURL(ValueRef.current);
 	}
@@ -143,9 +149,9 @@ function ABS_Link_Preview() {
 	if (!OpenGraph.loading && !OpenGraph.parsed) {
 		return (
 			<ParsingFailedView
-				onRetry={parse}
+				onRetry={placeholder}
 				onCopy={onLinkCopy}
-				copied={false}
+				copied={SavedToClipboard}
 				onOpenExternal={onOpenExternal}
 			/>
 		);
@@ -159,7 +165,6 @@ function ABS_Link_Preview() {
 		<ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
 			<View>
 				{obj.image ? (
-					// @ts-ignore-next-line
 					<Image
 						source={{
 							uri: obj.image,

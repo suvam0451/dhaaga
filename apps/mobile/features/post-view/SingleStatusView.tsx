@@ -4,24 +4,24 @@ import WithAppStatusItemContext, {
 	withPostItemContext,
 } from '#/components/containers/contexts/WithPostItemContext';
 import { Pressable, View } from 'react-native';
-import ExplainOutput from '../../explanation/ExplainOutput';
+import ExplainOutput from '#/components/common/explanation/ExplainOutput';
 import MediaItem from '#/ui/media/MediaItem';
-import EmojiReactions from './EmojiReactions';
-import StatusCw from './StatusCw';
-import PostCreatedBy from './PostCreatedBy';
-import { AppIcon } from '../../../lib/Icon';
+import EmojiReactions from '#/components/common/status/fragments/EmojiReactions';
+import PostContentWarning from './PostContentWarning';
+import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
 import {
 	useAppTheme,
 	useImageInspect,
 } from '#/hooks/utility/global-state-extractors';
-import StatusInteraction from './StatusInteraction';
-import { AppText } from '../../../lib/Text';
-import StatusQuoted from './StatusQuoted';
-import { PostMoreOptionsButton } from '../_shared';
-import { TextContentView } from '../TextContentView';
+import PostActionRow from '#/features/post-view/views/PostActionRow';
+import { AppText } from '#/components/lib/Text';
+import StatusQuoted from '#/features/post-view/views/StatusQuoted';
+import { PostMoreOptionsButton } from '#/components/common/status/_shared';
+import { TextContentView } from '#/components/common/status/TextContentView';
 import { PostInspector } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
+import { PinOrnament } from '#/features/post-view/components/Ornaments';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -36,23 +36,6 @@ type StatusCoreProps = {
 	isPin?: boolean;
 	showFullDetails?: boolean;
 };
-
-function PinIndicator() {
-	const { theme } = useAppTheme();
-	return (
-		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
-			<AppText.Medium
-				style={{
-					color: theme.complementary.a0,
-					marginLeft: 6,
-				}}
-			>
-				Pinned
-			</AppText.Medium>
-		</View>
-	);
-}
 
 type PostFullDetailsProps = {
 	dto: PostObjectType;
@@ -84,10 +67,14 @@ function HiddenByCw({
 	visible: boolean;
 }) {
 	if (!visible) return <View />;
-	return <Fragment>{children}</Fragment>;
+	return <>{children}</>;
 }
 
-function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
+function SingleStatusView({
+	isPreview,
+	isPin,
+	showFullDetails,
+}: StatusCoreProps) {
 	const { dto } = withPostItemContext();
 	const { toPost } = useAppNavigator();
 	const { showInspector, appSession } = useImageInspect();
@@ -109,7 +96,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 
 	return (
 		<Fragment>
-			{isPin && <PinIndicator />}
+			<PinOrnament isPinned={isPin} />
 			<View
 				style={{
 					flexDirection: 'row',
@@ -124,19 +111,23 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 				{!isPreview && <PostMoreOptionsButton post={_target} />}
 			</View>
 
-			{isSensitive && (
-				<StatusCw
+			{isSensitive ? (
+				<PostContentWarning
 					cw={spoilerText}
 					show={ShowSensitiveContent}
 					setShow={setShowSensitiveContent}
 				/>
+			) : (
+				<View />
 			)}
 
 			{/* --- Media Items --- */}
 			<HiddenByCw
 				visible={isSensitive ? ShowSensitiveContent && HAS_MEDIA : HAS_MEDIA}
 			>
-				<Pressable
+				<MediaItem
+					attachments={_target.content.media}
+					calculatedHeight={_target.calculated.mediaContainerHeight}
 					onPress={onGalleryInspect}
 					style={{
 						marginTop:
@@ -144,12 +135,7 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 								? SECTION_MARGIN_BOTTOM * 0.5
 								: 0,
 					}}
-				>
-					<MediaItem
-						attachments={_target.content.media}
-						calculatedHeight={_target.calculated.mediaContainerHeight}
-					/>
-				</Pressable>
+				/>
 			</HiddenByCw>
 
 			{/* --- Text Content --- */}
@@ -185,10 +171,10 @@ function StatusCore({ isPreview, isPin, showFullDetails }: StatusCoreProps) {
 
 			{/* Lock reactions for preview (to be refactored) */}
 			{isPreview ? <View /> : <EmojiReactions dto={_target} />}
-			{isPreview ? <View /> : <StatusInteraction />}
+			{isPreview ? <View /> : <PostActionRow />}
 			{showFullDetails ? <PostFullDetails dto={dto} /> : <View />}
 		</Fragment>
 	);
 }
 
-export default StatusCore;
+export default SingleStatusView;

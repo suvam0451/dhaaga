@@ -1,7 +1,12 @@
 import * as Linking from 'expo-linking';
+import * as Clipboard from 'expo-clipboard';
 import { Share } from 'react-native';
 
 export class LinkingUtils {
+	static async saveToClipboard(content: string) {
+		await Clipboard.setStringAsync(content);
+	}
+
 	static openURL(url: string) {
 		try {
 			Linking.openURL(url).then((success) => {

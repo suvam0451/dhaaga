@@ -12,7 +12,6 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
-// icons packs
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Octicons from '@expo/vector-icons/Octicons';
@@ -1156,13 +1155,13 @@ export function AppToggleIcon({
 					onPress={onPress}
 				/>
 			)}
-			{count ? (
-				<AppText.Medium
-					style={{ marginLeft: 4, color: flag ? activeTint : inactiveTint }}
-				>
-					{count}
-				</AppText.Medium>
-			) : null}
+			{/*{count ? (*/}
+			{/*	<AppText.Medium*/}
+			{/*		style={{ marginLeft: 4, color: flag ? activeTint : inactiveTint }}*/}
+			{/*	>*/}
+			{/*		{count}*/}
+			{/*	</AppText.Medium>*/}
+			{/*) : null}*/}
 		</View>
 	);
 }

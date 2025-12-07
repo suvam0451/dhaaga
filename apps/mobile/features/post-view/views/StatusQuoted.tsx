@@ -1,42 +1,20 @@
 import { StyleSheet, View } from 'react-native';
-import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
-import MediaItem from '../../../../ui/media/MediaItem';
-import PostCreatedBy from './PostCreatedBy';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../../styles/dimensions';
-import { TextContentView } from '../TextContentView';
-import { AppText } from '../../../lib/Text';
-import { AppIcon } from '../../../lib/Icon';
+import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import MediaItem from '#/ui/media/MediaItem';
+import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
+import { TextContentView } from '#/components/common/status/TextContentView';
+import { QuoteOrnament } from '#/features/post-view/components/Ornaments';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
-
-function QuoteIndicator() {
-	const { theme } = useAppTheme();
-
-	return (
-		<View
-			style={{
-				flexDirection: 'row',
-				alignItems: 'center',
-				marginBottom: SECTION_MARGIN_BOTTOM,
-			}}
-		>
-			<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
-			<AppText.SemiBold
-				style={{
-					color: theme.complementary.a0,
-					marginLeft: 4,
-				}}
-			>
-				Quoted this Post
-			</AppText.SemiBold>
-		</View>
-	);
-}
 
 function StatusQuoted() {
 	const { theme } = useAppTheme();
 	const { dto } = withPostItemContext();
+
+	// TODO: media interaction not implemented
+	function onPressMediaItem() {}
 
 	return (
 		<View
@@ -48,11 +26,12 @@ function StatusQuoted() {
 				},
 			]}
 		>
-			<QuoteIndicator />
+			<QuoteOrnament />
 			<PostCreatedBy style={{ marginBottom: SECTION_MARGIN_BOTTOM }} />
 			<MediaItem
 				attachments={dto.content.media}
 				calculatedHeight={dto.calculated.mediaContainerHeight}
+				onPress={onPressMediaItem}
 			/>
 			<TextContentView
 				tree={dto.content.parsed}

@@ -1,9 +1,9 @@
-import { Dispatch, memo, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { AppIcon } from '../../../lib/Icon';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../../styles/dimensions';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { AppIcon } from '../../components/lib/Icon';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
 
 type WithCwTextProps = {
 	cw?: string;
@@ -15,15 +15,14 @@ type WithCwTextProps = {
  * Will hide the media
  * and text content
  */
-const StatusCw = memo(({ show, setShow, cw }: WithCwTextProps) => {
+function PostContentWarning({ show, setShow, cw }: WithCwTextProps) {
 	const { theme } = useAppTheme();
-
 	return (
 		<Pressable
 			style={[
 				styles.root,
 				{
-					backgroundColor: theme.complementaryA.a50,
+					backgroundColor: theme.background.a50,
 				},
 			]}
 			onPress={() => {
@@ -34,7 +33,7 @@ const StatusCw = memo(({ show, setShow, cw }: WithCwTextProps) => {
 				style={{
 					width: 8,
 					height: '100%',
-					backgroundColor: theme.complementary.a0,
+					backgroundColor: theme.primary.a0,
 					borderTopStartRadius: 6,
 					borderBottomLeftRadius: 6,
 				}}
@@ -49,14 +48,14 @@ const StatusCw = memo(({ show, setShow, cw }: WithCwTextProps) => {
 				}}
 			>
 				{show ? (
-					<AppIcon id="eye-filled" size={24} color={'black'} />
+					<AppIcon id="eye-filled" size={24} color={theme.secondary.a40} />
 				) : (
-					<AppIcon id="eye-off-filled" size={24} color={'black'} />
+					<AppIcon id="eye-off-filled" size={24} color={theme.secondary.a40} />
 				)}
 				<Text
 					style={{
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-						color: 'black',
+						color: theme.secondary.a20,
 						marginLeft: 8,
 					}}
 				>
@@ -68,14 +67,14 @@ const StatusCw = memo(({ show, setShow, cw }: WithCwTextProps) => {
 				style={{
 					width: 8,
 					height: '100%',
-					backgroundColor: theme.complementary.a0,
+					backgroundColor: theme.primary.a0,
 					borderTopEndRadius: 6,
 					borderBottomEndRadius: 6,
 				}}
 			/>
 		</Pressable>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	root: {
@@ -83,8 +82,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderRadius: 6,
+		marginTop: 8,
 		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 });
 
-export default StatusCw;
+export default PostContentWarning;

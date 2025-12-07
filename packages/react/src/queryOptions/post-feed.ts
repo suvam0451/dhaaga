@@ -248,8 +248,7 @@ export function unifiedPostFeedQueryOptions(
 					};
 				}
 
-				const { data, error } = await client.accounts.likes(_query);
-				if (error) return defaultResultPage;
+				const data = await client.accounts.likes(_query);
 				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.TRENDING_POSTS: {

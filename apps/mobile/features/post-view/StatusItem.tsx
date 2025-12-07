@@ -1,10 +1,10 @@
 import { Fragment } from 'react';
-import ShareIndicator from './fragments/ShareIndicator';
+import ShareIndicator from '../../components/common/status/fragments/ShareIndicator';
 import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
-import StatusCore from './fragments/StatusCore';
-import { ReplyIndicator } from './ListView/_shared';
-import ParentPost from './fragments/ParentPost';
-import { PostContainer } from './_shared';
+import SingleStatusView from './SingleStatusView';
+import { ReplyIndicator } from '../../components/common/status/ListView/_shared';
+import ParentPost from '../../components/common/status/fragments/ParentPost';
+import { PostContainer } from '../../components/common/status/_shared';
 import { View } from 'react-native';
 
 /**
@@ -51,7 +51,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 		if (!!dto.content.raw || dto.content.media.length > 0) {
 			return (
 				<PostContainer>
-					<StatusCore
+					<SingleStatusView
 						hasBoost={true}
 						isPreview={isPreview}
 						isPin={isPin}
@@ -70,7 +70,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 							createdAt={dto.createdAt}
 						/>
 						<AncestorFragment />
-						<StatusCore
+						<SingleStatusView
 							hasBoost={true}
 							hasParent={true}
 							isPreview={isPreview}
@@ -87,7 +87,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 							parsedDisplayName={dto.postedBy?.parsedDisplayName}
 							createdAt={dto.createdAt}
 						/>
-						<StatusCore
+						<SingleStatusView
 							hasBoost={true}
 							isPreview={isPreview}
 							isPin={isPin}
@@ -101,7 +101,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 		return (
 			<PostContainer>
 				<AncestorFragment />
-				<StatusCore
+				<SingleStatusView
 					hasParent={true}
 					isPreview={isPreview}
 					isPin={isPin}
@@ -112,7 +112,7 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 	} else {
 		return (
 			<PostContainer>
-				<StatusCore
+				<SingleStatusView
 					isPreview={isPreview}
 					isPin={isPin}
 					showFullDetails={showFullDetails}

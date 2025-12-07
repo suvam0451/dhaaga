@@ -5,7 +5,7 @@ import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { appDimensions } from '#/styles/dimensions';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
-import StatusItem from '#/components/common/status/StatusItem';
+import StatusItem from '#/features/post-view/StatusItem';
 import Animated from 'react-native-reanimated';
 import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
 

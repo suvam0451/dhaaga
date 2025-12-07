@@ -6,7 +6,7 @@ import { AppInstagramTabControl } from '#/components/lib/SegmentedControl';
 import useApiGetPinnedPosts from '#/hooks/api/accounts/useApiGetPinnedPosts';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { AppText } from '#/components/lib/Text';
-import StatusItem from '#/components/common/status/StatusItem';
+import StatusItem from '#/features/post-view/StatusItem';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
 import SocialUpdatePresenter from '../../inbox/presenters/SocialUpdatePresenter';
 import { appDimensions } from '#/styles/dimensions';

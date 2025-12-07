@@ -2,21 +2,21 @@ import { useState } from 'react';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { StyleSheet, View } from 'react-native';
-import PostActionButtonToggleBookmark from './modules/PostActionButtonToggleBookmark';
+import PostActionButtonToggleBookmark from '#/components/common/status/fragments/modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
-import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
-import { AppToggleIcon } from '../../../lib/Icon';
-import { appDimensions } from '../../../../styles/dimensions';
+} from '#/hooks/utility/global-state-extractors';
+import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { AppToggleIcon } from '#/components/lib/Icon';
+import { appDimensions } from '#/styles/dimensions';
 import { ActivityPubService } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { PostInspector } from '@dhaaga/bridge';
-import PostStats from '#/components/common/status/PostStats';
+import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionStatsRow';
 
 /**
  * Press this to toggle sharing status
@@ -206,18 +206,18 @@ function StatusInteractionButtons() {
 	);
 }
 
-function StatusInteraction() {
+function PostActionRow() {
 	const { dto } = withPostItemContext();
 	const _dto = PostInspector.getContentTarget(dto);
 	return (
-		<View>
-			{/*<PostStats dto={_dto} />*/}
+		<View style={{ marginTop: 8 }}>
+			<PostInteractionStatsRow dto={_dto} />
 			<StatusInteractionButtons />
 		</View>
 	);
 }
 
-export default StatusInteraction;
+export default PostActionRow;
 
 const styles = StyleSheet.create({
 	interactionButtonSection: {

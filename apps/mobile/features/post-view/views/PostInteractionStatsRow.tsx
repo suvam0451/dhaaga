@@ -8,13 +8,13 @@ import {
 import {
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { AppText } from '../../lib/Text';
-import type { PostObjectType } from '@dhaaga/bridge';
+} from '#/hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import { AppText } from '#/components/lib/Text';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { PostInspector } from '@dhaaga/bridge';
 
 type StatItemProps = {
@@ -34,7 +34,7 @@ function util(o: number): string {
 }
 
 /**
- * Shows a post stat
+ * Shows a post-stat
  */
 export function StatItem({
 	count,
@@ -52,7 +52,7 @@ export function StatItem({
 	return (
 		<Pressable onPress={onPress}>
 			<View style={{ flexDirection: 'row' }}>
-				<AppText.Medium style={[{ color, fontSize: 14 }]}>
+				<AppText.Medium style={[{ color, fontSize: 16 }]}>
 					{formatted}{' '}
 					<AppText.Medium style={{ color, fontSize: 13 }}>
 						{label}
@@ -87,7 +87,7 @@ type PostStatsProps = {
  * vertical screen estate
  * @constructor
  */
-function PostStats({ style, dto }: PostStatsProps) {
+function PostInteractionStatsRow({ style, dto }: PostStatsProps) {
 	const { show, setCtx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
@@ -144,7 +144,7 @@ function PostStats({ style, dto }: PostStatsProps) {
 	);
 }
 
-export default PostStats;
+export default PostInteractionStatsRow;
 
 const styles = StyleSheet.create({
 	container: {

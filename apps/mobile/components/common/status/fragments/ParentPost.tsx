@@ -1,11 +1,11 @@
 import { Pressable, View } from 'react-native';
-import MediaItem from '../../../../ui/media/MediaItem';
-import PostStats from '../PostStats';
+import MediaItem from '#/ui/media/MediaItem';
+import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionStatsRow';
 import WithAppStatusItemContext from '../../../containers/contexts/WithPostItemContext';
-import StatusQuoted from './StatusQuoted';
+import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
-import type { PostObjectType } from '@dhaaga/bridge';
-import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import {
 	PostedByTextOneLine,
 	ReplyIndicator as ReplyContextLine,
@@ -13,8 +13,8 @@ import {
 } from '../Fragments';
 import { ReplyIndicator } from '../ListView/_shared';
 import { TextContentView } from '../TextContentView';
-import useAppNavigator from '../../../../states/useAppNavigator';
-import { appDimensions } from '../../../../styles/dimensions';
+import useAppNavigator from '#/states/useAppNavigator';
+import { appDimensions } from '#/styles/dimensions';
 
 type Props = {
 	dto: PostObjectType;
@@ -30,6 +30,8 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 	function onPressBody() {
 		toPost(dto.id);
 	}
+
+	function onPressImage() {}
 
 	return (
 		<View>
@@ -49,6 +51,7 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 						style={{
 							marginTop: appDimensions.timelines.sectionBottomMargin,
 						}}
+						onPress={onPressImage}
 					/>
 					<Pressable onPress={onPressBody}>
 						<TextContentView
@@ -63,7 +66,7 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 							<StatusQuoted />
 						</WithAppStatusItemContext>
 					)}
-					<PostStats dto={dto} />
+					<PostInteractionStatsRow dto={dto} />
 				</View>
 				<ReplyContextLine />
 			</View>
