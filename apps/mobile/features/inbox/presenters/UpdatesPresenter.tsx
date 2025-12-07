@@ -30,10 +30,6 @@ function UpdatesPresenter() {
 		return FlashListService.notifications(state.items);
 	}, [state.items]);
 
-	function onEndReached() {
-		if (!isPending && data.items.length > 0) loadNext();
-	}
-
 	const [ContainerHeight, setContainerHeight] = useState(0);
 	function onLayout(event: any) {
 		setContainerHeight(event.nativeEvent.layout.height);

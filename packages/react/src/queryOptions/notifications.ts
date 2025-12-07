@@ -118,23 +118,18 @@ function getSocialNotificationsQueryOpts(
 			limit: NOTIFICATION_PAGE_SIZE,
 			maxId,
 		});
-		if (result.error) throw new Error(result.error.message);
 
 		if (ActivityPubService.misskeyLike(driver)) {
-			return GroupedNotificationParser.parseForMisskey(
-				result.data,
-				driver,
-				server,
-			);
+			return GroupedNotificationParser.parseForMisskey(result, driver, server);
 		} else if (ActivityPubService.supportsV2(driver)) {
 			return GroupedNotificationParser.parseForMastodonV2(
-				result.data,
+				result,
 				driver,
 				server,
 			);
 		} else if (ActivityPubService.pleromaLike(driver)) {
 			return GroupedNotificationParser.parseForMastodonV1(
-				result.data,
+				result,
 				driver,
 				server,
 				'social',
@@ -176,11 +171,7 @@ function getSubscriptionNotificationsQueryOpts(
 				maxId,
 			});
 
-			return GroupedNotificationParser.parseForMisskey(
-				result.data,
-				driver,
-				server,
-			);
+			return GroupedNotificationParser.parseForMisskey(result, driver, server);
 		} else if (ActivityPubService.supportsV2(driver)) {
 			const result = await (
 				client as MastoApiAdapter
@@ -189,7 +180,7 @@ function getSubscriptionNotificationsQueryOpts(
 				maxId,
 			});
 			return GroupedNotificationParser.parseForMastodonV2(
-				result.data,
+				result,
 				driver,
 				server,
 			);
@@ -201,7 +192,7 @@ function getSubscriptionNotificationsQueryOpts(
 				maxId,
 			});
 			return GroupedNotificationParser.parseForMastodonV1(
-				result.data,
+				result,
 				driver,
 				server,
 				'updates',
