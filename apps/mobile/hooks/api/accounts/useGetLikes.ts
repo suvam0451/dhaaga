@@ -4,7 +4,7 @@ import {
 	useAppAcct,
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
-import { AppResultPageType } from '../../../types/app.types';
+import { AppResultPageType } from '#/types/app.types';
 import {
 	AtprotoApiAdapter,
 	KNOWN_SOFTWARE,
@@ -20,13 +20,13 @@ function useGetLikes(query: GetPostsQueryDTO) {
 		queryKey: ['acct/likes', acct, query],
 		queryFn: async () => {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
-				const { data, error } = await (
-					client as AtprotoApiAdapter
-				).accounts.atProtoLikes(acct.identifier, {
-					limit: 5,
-					cursor: query.maxId === null ? undefined : query.maxId,
-				});
-				if (error) throw new Error(error.message);
+				const data = await (client as AtprotoApiAdapter).accounts.atProtoLikes(
+					acct.identifier,
+					{
+						limit: 5,
+						cursor: query.maxId === null ? undefined : query.maxId,
+					},
+				);
 				return {
 					success: true,
 					items: PostParser.parse<unknown[]>(data.feed, driver, server),

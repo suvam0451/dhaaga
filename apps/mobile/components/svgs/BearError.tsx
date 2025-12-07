@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from 'react';
 import Svg, { Path, Ellipse, Circle } from 'react-native-svg';
 const SvgComponent = (props) => (

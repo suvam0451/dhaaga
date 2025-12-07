@@ -58,7 +58,7 @@ function WelcomeScreenFeatureShowcase() {
 
 		intervalRef.current = setInterval(() => {
 			setIndex((prev) => (prev + 1) % DISPLAY_ITEMS.length);
-		}, AUTOPLAY_INTERVAL);
+		}, AUTOPLAY_INTERVAL) as any;
 	};
 
 	// Update index every 2 seconds

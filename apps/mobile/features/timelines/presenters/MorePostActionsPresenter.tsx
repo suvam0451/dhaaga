@@ -1,19 +1,19 @@
 import { Dispatch, Fragment, SetStateAction } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { AppIcon } from '../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
-import { AppDivider } from '../../../components/lib/Divider';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+} from '#/hooks/utility/global-state-extractors';
+import { AppText } from '#/components/lib/Text';
+import { AppDivider } from '#/components/lib/Divider';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { DriverService, PostInspector } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 
 function ActionButton({
 	Icon,

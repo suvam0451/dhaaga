@@ -1,4 +1,4 @@
-import { useAppDb } from '../../../hooks/utility/global-state-extractors';
+import { useAppDb } from '#/hooks/utility/global-state-extractors';
 import { useMutation } from '@tanstack/react-query';
 import {
 	Profile,
@@ -6,7 +6,7 @@ import {
 	ProfileService,
 	ProfilePinnedTimelineService,
 } from '@dhaaga/db';
-import type { UserObjectType, FeedObjectType } from '@dhaaga/bridge';
+import type { UserObjectType, FeedObjectType } from '@dhaaga/bridge/typings';
 
 export function useProfileMutation() {
 	const { db } = useAppDb();

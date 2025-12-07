@@ -252,6 +252,42 @@ export function unifiedPostFeedQueryOptions(
 				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data.maxId);
 			}
+			case TimelineFetchMode.TRENDING_POSTS: {
+				if (!DriverService.supportsMastoApiV2(driver)) {
+					throw new Error(
+						'trending posts only supported on Mastodon v2 API compatible servers',
+					);
+				}
+				const data = await client.trends.posts({
+					limit: 20,
+					offset: 0,
+				});
+				return createResultBatch(data);
+			}
+			case TimelineFetchMode.TRENDING_USERS: {
+				if (!DriverService.supportsMastoApiV2(driver)) {
+					throw new Error(
+						'trending posts only supported on Mastodon v2 API compatible servers',
+					);
+				}
+				const data = await client.trends.posts({
+					limit: 20,
+					offset: 0,
+				});
+				return createResultBatch(data);
+			}
+			case TimelineFetchMode.TRENDING_TAGS: {
+				if (!DriverService.supportsMastoApiV2(driver)) {
+					throw new Error(
+						'trending posts only supported on Mastodon v2 API compatible servers',
+					);
+				}
+				const data = await client.trends.posts({
+					limit: 20,
+					offset: 0,
+				});
+				return createResultBatch(data);
+			}
 			default: {
 				throw new Error(`unknown timeline type: ${type}`);
 			}

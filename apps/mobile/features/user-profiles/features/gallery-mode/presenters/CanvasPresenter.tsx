@@ -22,9 +22,9 @@ const MARGIN_HORIZONTAL = 10;
 
 function CanvasPresenter({ src, onNext, onPrev, height, width }: Props) {
 	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>();
+		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
 
 	const maxW = Dimensions.get('window').width - MARGIN_HORIZONTAL * 2;
 

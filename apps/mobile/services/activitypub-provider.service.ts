@@ -12,11 +12,11 @@ class ActivityPubProviderService {
 	}
 
 	static async getStatus(client: ApiTargetInterface, id: string) {
-		return client.statuses.get(id);
+		return client.statuses.getPost(id);
 	}
 
 	static async getStatusAsArray(client: ApiTargetInterface, id: string) {
-		const status = await client.statuses.get(id);
+		const status = await client.statuses.getPost(id);
 		return [status];
 	}
 

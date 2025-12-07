@@ -1,9 +1,9 @@
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import {
 	useAccountManager,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { useMemo } from 'react';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -11,12 +11,12 @@ import { Text } from 'react-native';
 import { Image } from 'expo-image';
 import Octicons from '@expo/vector-icons/Octicons';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { AuthorItemView } from '../view/AuthorItemView';
-import { LocalizationService } from '../../../services/localization.service';
-import { AppIcon } from '../../../components/lib/Icon';
-import useAppNavigator from '../../../states/useAppNavigator';
-import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge';
+import { LocalizationService } from '#/services/localization.service';
+import { AppIcon } from '#/components/lib/Icon';
+import useAppNavigator from '#/states/useAppNavigator';
+import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge/typings';
 
 type Props = {
 	user: PostAuthorType | UserObjectType;

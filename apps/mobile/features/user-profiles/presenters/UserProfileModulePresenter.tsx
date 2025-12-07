@@ -1,15 +1,15 @@
 import { useMemo, useRef, useState } from 'react';
 import ProfileGalleryModePresenter from '../features/gallery-mode/presenters/ProfileGalleryModePresenter';
 import { StyleProp, View, ViewStyle, Dimensions, FlatList } from 'react-native';
-import type { UserObjectType } from '@dhaaga/bridge';
-import { AppInstagramTabControl } from '../../../components/lib/SegmentedControl';
-import useApiGetPinnedPosts from '../../../hooks/api/accounts/useApiGetPinnedPosts';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
-import StatusItem from '../../../components/common/status/StatusItem';
-import WithAppStatusItemContext from '../../../components/containers/contexts/WithPostItemContext';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
+import { AppInstagramTabControl } from '#/components/lib/SegmentedControl';
+import useApiGetPinnedPosts from '#/hooks/api/accounts/useApiGetPinnedPosts';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { AppText } from '#/components/lib/Text';
+import StatusItem from '#/components/common/status/StatusItem';
+import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
 import SocialUpdatePresenter from '../../inbox/presenters/SocialUpdatePresenter';
-import { appDimensions } from '../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 import UpdatesPresenter from '../../inbox/presenters/UpdatesPresenter';
 
 type AppPagerViewListProps = {

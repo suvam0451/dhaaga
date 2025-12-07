@@ -12,9 +12,10 @@ import {
 	ApiTargetInterface,
 	KNOWN_SOFTWARE,
 	BaseApiAdapter,
+	CustomEmojiObject,
 } from '@dhaaga/bridge';
 import { BaseStorageManager } from './_shared';
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 /**
  * ---- Storage Interfaces ----
@@ -23,12 +24,12 @@ import type { UserObjectType } from '@dhaaga/bridge';
 class Storage extends BaseStorageManager {
 	getEmojis(server: string) {
 		return this.getJson<{
-			data: InstanceApi_CustomEmojiDTO[];
+			data: CustomEmojiObject[];
 			lastFetchedAt: Date;
 		}>(`emojis/${server}`);
 	}
 
-	setEmojis(server: string, data: InstanceApi_CustomEmojiDTO[]) {
+	setEmojis(server: string, data: CustomEmojiObject[]) {
 		this.setJson(`emojis/${server}`, {
 			data,
 			lastFetchedAt: new Date(),
@@ -51,7 +52,7 @@ class ProfileSessionManager {
 	client: ApiTargetInterface;
 
 	cacheManager: Storage;
-	customEmojis: InstanceApi_CustomEmojiDTO[];
+	customEmojis: CustomEmojiObject[];
 
 	constructor(db: DataSource) {
 		this.db = db;
@@ -110,14 +111,12 @@ class ProfileSessionManager {
 		if (!serverRecord || serverRecord.driver === KNOWN_SOFTWARE.UNKNOWN) {
 			const x = new BaseApiAdapter();
 			const softwareInfoResult = await x.instances.getSoftwareInfo(server);
-			if (softwareInfoResult.error) {
-				console.log('[WARN]: failed to fetch server info', server);
-				return null;
+			if (softwareInfoResult) {
+				KnownServerService.upsert(this.db, {
+					url: server,
+					driver: softwareInfoResult.software,
+				});
 			}
-			KnownServerService.upsert(this.db, {
-				url: server,
-				driver: softwareInfoResult.data.software,
-			});
 		}
 		return KnownServerService.getByUrl(this.db, server);
 	}
@@ -146,14 +145,10 @@ class ProfileSessionManager {
 		const _url = serverRecord.server;
 
 		const x = new BaseApiAdapter();
-		const { data, error } = await x.instances.getCustomEmojis(_url);
-		if (error) {
-			console.log('[WARN]: failed to get emojis');
-			return null;
-		}
+		const data = await x.instances.getCustomEmojis(_url);
 
 		this.cacheManager.setJson(`emojis/${_url}`, {
-			data: data,
+			data,
 			lastFetchedAt: new Date(),
 		});
 		this.cacheManager.setEmojis(_url, data);

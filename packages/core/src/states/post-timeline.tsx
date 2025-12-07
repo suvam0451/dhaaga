@@ -49,6 +49,10 @@ enum TimelineFetchMode {
 	FEED = 'Feed',
 
 	MY_POSTS = 'MyPosts',
+
+	TRENDING_POSTS = 'TrendingPosts',
+	TRENDING_USERS = 'TrendingUsers',
+	TRENDING_TAGS = 'TrendingTags',
 }
 
 type State = TimelineReducerBaseState<PostObjectType> & {

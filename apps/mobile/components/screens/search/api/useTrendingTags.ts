@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useScrollOnReveal } from '../../../../states/useScrollOnReveal';
-import { useAppApiClient } from '../../../../hooks/utility/global-state-extractors';
+import { useScrollOnReveal } from '#/states/useScrollOnReveal';
+import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 
 function useTrendingTags() {
 	const { client } = useAppApiClient();
@@ -11,9 +11,7 @@ function useTrendingTags() {
 	async function api() {
 		if (!client) return;
 
-		const { data, error } = await client.trends.tags({ limit: 20, offset: 0 });
-		if (error) return [];
-		return data;
+		return client.trends.tags({ limit: 20, offset: 0 });
 	}
 
 	// Queries

@@ -3,16 +3,16 @@ import {
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { ActivityPubService } from '@dhaaga/bridge';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import type { PostObjectType } from '@dhaaga/bridge';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 import { Fragment } from 'react';
 import { AccountSavedPost } from '@dhaaga/db';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { DatetimeUtil } from '../../../utils/datetime.utils';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import { DatetimeUtil } from '#/utils/datetime.utils';
 import { AppText } from '../../lib/Text';
 
 type PostMoreOptionsButtonProps = {

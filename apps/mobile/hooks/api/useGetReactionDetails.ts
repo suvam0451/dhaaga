@@ -8,7 +8,7 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../states/_global';
 import { UserParser } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 type ReactionDetails = {
 	id: string;

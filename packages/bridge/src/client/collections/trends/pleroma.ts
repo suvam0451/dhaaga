@@ -4,9 +4,7 @@ import {
 	MastoTag,
 	MastoTrendLink,
 } from '#/types/mastojs.types.js';
-import { LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { notImplementedErrorBuilder } from '#/types/api-response.js';
 
 export class PleromaTrendsRouter implements TrendsRoute {
 	client: FetchWrapper;
@@ -15,15 +13,15 @@ export class PleromaTrendsRouter implements TrendsRoute {
 		this.client = forwarded;
 	}
 
-	async tags(): Promise<LibraryResponse<MastoTag[]>> {
-		return notImplementedErrorBuilder();
+	async tags(): Promise<MastoTag[]> {
+		throw new Error('pleroma does not support trends');
 	}
 
-	async posts(): Promise<LibraryResponse<MastoStatus[]>> {
-		return notImplementedErrorBuilder();
+	async posts(): Promise<MastoStatus[]> {
+		throw new Error('pleroma does not support trends');
 	}
 
-	async links(): Promise<LibraryResponse<MastoTrendLink[]>> {
-		return notImplementedErrorBuilder();
+	async links(): Promise<MastoTrendLink[]> {
+		throw new Error('pleroma does not support trends');
 	}
 }

@@ -1,5 +1,5 @@
 import { BasePubSubService } from './_base.pubisher';
-import type { PostObjectType } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
 import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '../../components/common/status/fragments/_shared.types';

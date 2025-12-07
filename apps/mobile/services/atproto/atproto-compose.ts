@@ -33,11 +33,7 @@ export type AtprotoReplyEmbed = {
 
 class AtprotoComposerService {
 	private static async getPost(client: AtprotoApiAdapter, uri: string) {
-		const { data, error } = await client.statuses.get(uri);
-		if (error) {
-			console.log('[WARN]: failed to fetch freshly created post');
-			return null;
-		}
+		const data = await client.statuses.getPost(uri);
 		return data.data.thread as ThreadViewPost;
 	}
 

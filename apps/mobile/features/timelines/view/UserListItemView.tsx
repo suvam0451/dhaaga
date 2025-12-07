@@ -1,14 +1,14 @@
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppDivider } from '../../../components/lib/Divider';
-import { appDimensions } from '../../../styles/dimensions';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { AppDivider } from '#/components/lib/Divider';
+import { appDimensions } from '#/styles/dimensions';
 import { useState } from 'react';
 import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
-import { TextContentView } from '../../../components/common/status/TextContentView';
+import { TextContentView } from '#/components/common/status/TextContentView';
 
 const ICON_SIZE = 42;
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;

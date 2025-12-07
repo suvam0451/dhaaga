@@ -12,6 +12,7 @@ import useLoadingMoreIndicatorState from '../states/useLoadingMoreIndicatorState
 import { FetchStatus } from '@tanstack/react-query';
 
 type LoadingMoreProps = {
+	numItems: number;
 	networkFetchStatus: FetchStatus;
 	isLoading?: boolean;
 	style?: StyleProp<ViewStyle>;
@@ -22,12 +23,15 @@ type LoadingMoreProps = {
  * @param networkFetchStatus
  * @param isLoading
  * @param style
+ * @param numItems = 0 is handled by the skeleton
+ * placeholder and error indicator components
  * @constructor
  */
 function TimelineLoadingIndicator({
 	networkFetchStatus,
 	isLoading,
 	style,
+	numItems,
 }: LoadingMoreProps) {
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus: networkFetchStatus,
@@ -35,7 +39,7 @@ function TimelineLoadingIndicator({
 	});
 
 	const { theme } = useAppTheme();
-	if (!visible) return <View />;
+	if (!visible || numItems === 0) return <View />;
 	if (visible && loading)
 		return (
 			<View style={[styles.widgetRootContainer, style]}>

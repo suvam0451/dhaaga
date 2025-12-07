@@ -1,9 +1,6 @@
-import { FeedObjectType } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge/typings';
 import { Profile, ProfilePinnedTimelineService } from '@dhaaga/db';
-import {
-	useAppAcct,
-	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
 import { useQuery } from '@tanstack/react-query';
 
 export function useSocialHubFeedPinStatus(

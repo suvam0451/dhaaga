@@ -1,4 +1,5 @@
-import { PostObjectType } from '@dhaaga/bridge';
+import { View } from 'react-native';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
 import { countEmojisInBodyContent } from '@dhaaga/bridge/post-process';
 import {
 	PostTimelineStateAction,
@@ -16,6 +17,26 @@ import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashLis
 import { FlatList, RefreshControl } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
+import PostTimelineSkeleton from '#/ui/PostTimelineSkeleton';
+import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
+import { DefinedUseQueryResult } from '@tanstack/react-query';
+import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
+
+export function TimelineStateIndicator({
+	queryResult,
+	containerHeight,
+}: {
+	containerHeight: number;
+	queryResult: DefinedUseQueryResult<ResultPage<PostObjectType>, Error>;
+}) {
+	const State = usePostTimelineState()!;
+
+	const { isFetched, error, isRefetching } = queryResult;
+	if (State.items.length === 0 && (isRefetching || !isFetched))
+		return <PostTimelineSkeleton containerHeight={containerHeight} />;
+	if (error) return <TimelineErrorView error={error} />;
+	return <View />;
+}
 
 /**
  * A simple, re-usable timeline renderer
@@ -27,6 +48,7 @@ function SimplePostTimeline({
 	queryResult,
 	postProcessingFn = (input) => countEmojisInBodyContent(input),
 	skipTimelineInit,
+	feedSwitcherEnabled,
 }: SimpleTimelineProps<PostObjectType>) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
@@ -72,10 +94,20 @@ function SimplePostTimeline({
 	const { scrollHandler, animatedStyle } =
 		useHideTopNavUsingFlashList(onEndReached);
 
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
 	return (
 		<>
-			<NavBar_Simple label={timelineLabel} animatedStyle={animatedStyle} />
+			{feedSwitcherEnabled ? (
+				<NavBar_Feed animatedStyle={animatedStyle} />
+			) : (
+				<NavBar_Simple label={timelineLabel} animatedStyle={animatedStyle} />
+			)}
 			<FlatList
+				onLayout={onLayout}
 				data={State.items}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>
@@ -93,8 +125,17 @@ function SimplePostTimeline({
 					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
 				}
 				style={{ backgroundColor: theme.background.a0 }}
+				ListEmptyComponent={
+					<TimelineStateIndicator
+						containerHeight={ContainerHeight}
+						queryResult={queryResult}
+					/>
+				}
 			/>
-			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
+			<TimelineLoadingIndicator
+				numItems={State.items.length}
+				networkFetchStatus={fetchStatus}
+			/>
 		</>
 	);
 }

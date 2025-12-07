@@ -6,7 +6,6 @@ import {
 	PostTimelineCtx,
 	UserTimelineCtx,
 	FeedTimelineCtx,
-	type SearchTabType,
 } from '@dhaaga/core';
 import FeedResultInteractor from '../interactors/FeedResultInteractor';
 import Header from '../components/Header';
@@ -28,25 +27,13 @@ function SearchResultPresenter({ refetch }: FeedSearchResultPresenterProps) {
 		});
 	}
 
-	function changeActiveTab(value: SearchTabType) {
-		DiscoverTabDispatch({
-			type: DiscoverStateAction.SET_CATEGORY,
-			payload: {
-				tab: value,
-			},
-		});
-	}
-
 	if (!State.q) return <LandingPageView />;
 
 	switch (State.category) {
 		case 'posts':
 			return (
 				<PostTimelineCtx>
-					<PostResultInteractor
-						changeActiveTab={changeActiveTab}
-						onDataLoaded={onDataLoaded}
-					/>
+					<PostResultInteractor onDataLoaded={onDataLoaded} />
 				</PostTimelineCtx>
 			);
 		case 'users':

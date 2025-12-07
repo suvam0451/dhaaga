@@ -1,6 +1,6 @@
 import { RefreshControl, StyleSheet, View } from 'react-native';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
-import type { PostObjectType } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { appDimensions } from '#/styles/dimensions';
@@ -66,6 +66,7 @@ function TimelinePostListView({
 			</View>
 			<TimelineLoadingIndicator
 				networkFetchStatus={fetching ? 'fetching' : 'idle'}
+				numItems={numItems}
 			/>
 		</View>
 	);

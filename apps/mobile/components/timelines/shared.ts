@@ -1,4 +1,8 @@
-import { PostObjectType, ResultPage, UserObjectType } from '@dhaaga/bridge';
+import type {
+	PostObjectType,
+	ResultPage,
+	UserObjectType,
+} from '@dhaaga/bridge/typings';
 import { DefinedUseQueryResult } from '@tanstack/react-query';
 
 export type SimpleTimelineProps<T = PostObjectType | UserObjectType> = {
@@ -10,4 +14,5 @@ export type SimpleTimelineProps<T = PostObjectType | UserObjectType> = {
 	 * 	component to take over the initialization process
 	 */
 	skipTimelineInit?: boolean;
+	feedSwitcherEnabled?: boolean;
 };

@@ -61,7 +61,7 @@ class Adapter implements ApiTargetInterface {
 		this.statuses = new BlueskyStatusesRouter(this.dto);
 		this.tags = new BlueskyTagsRouter();
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
-		this.trends = new BlueskyTrendsRouter();
+		this.trends = new BlueskyTrendsRouter(this.dto);
 		this.feeds = new BlueskyFeedRouter(this.dto);
 		this.user = new UserRoute(this.dto);
 	}

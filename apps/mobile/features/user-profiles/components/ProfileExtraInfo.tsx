@@ -4,7 +4,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ProfileModuleFactory from './ProfileModuleFactory';
 import useGlobalState from '../../../states/_global';
 import { useShallow } from 'zustand/react/shallow';
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 type ExtraInformationFieldProps = {
 	label: string;

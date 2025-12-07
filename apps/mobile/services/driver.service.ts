@@ -1,7 +1,7 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import type { APP_ICON_ENUM } from '../components/lib/Icon';
 import { APP_ROUTING_ENUM } from '../utils/route-list';
-import { ActivityPubService } from '@dhaaga//bridge';
+import { ActivityPubService } from '@dhaaga/bridge';
 import type { TFunction } from 'i18next';
 import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 

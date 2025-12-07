@@ -24,7 +24,7 @@ import {
 	MastoApiV1Service,
 	MastoApiV2Service,
 } from '../../services/masto-api.service';
-import type { NotificationObjectType } from '@dhaaga/bridge';
+import type { NotificationObjectType } from '@dhaaga/bridge/typings';
 
 const NOTIFICATION_PAGE_SIZE = 20;
 

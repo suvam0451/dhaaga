@@ -3,8 +3,9 @@ import { BaseStorageManager } from './_shared';
 import {
 	ActivityPubReactionsService,
 	ActivityPubReactionStateType,
+	type CustomEmojiObject,
 } from '@dhaaga/bridge';
-import { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 enum KEY {
 	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',
@@ -13,12 +14,12 @@ enum KEY {
 class Storage extends BaseStorageManager {
 	getEmojis(server: string) {
 		return this.getJson<{
-			data: InstanceApi_CustomEmojiDTO[];
+			data: CustomEmojiObject[];
 			lastFetchedAt: Date;
 		}>(`emojis/${server}`);
 	}
 
-	setEmojis(server: string, data: InstanceApi_CustomEmojiDTO[]) {
+	setEmojis(server: string, data: CustomEmojiObject[]) {
 		this.setJson(`emojis/${server}`, {
 			data,
 			lastFetchedAt: new Date(),
@@ -44,7 +45,7 @@ class AccountSessionManager {
 	db: DataSource;
 	storage: Storage;
 	acct: Account;
-	serverReactionCache: InstanceApi_CustomEmojiDTO[];
+	serverReactionCache: CustomEmojiObject[];
 
 	constructor(db: DataSource, acct: Account) {
 		this.db = db;
@@ -65,7 +66,7 @@ class AccountSessionManager {
 	resolveEmoji(
 		id: string,
 		emojiMap: Map<string, string>,
-	): InstanceApi_CustomEmojiDTO | null {
+	): CustomEmojiObject | null {
 		// avoid storage reads
 		let store = null;
 

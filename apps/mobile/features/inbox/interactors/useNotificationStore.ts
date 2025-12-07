@@ -1,12 +1,12 @@
-import useAppPaginator from '../../../hooks/app/useAppPaginator';
-import { AppResultPageType } from '../../../types/app.types';
-import { NotificationObjectType } from '@dhaaga/bridge';
+import useAppPaginator from '#/hooks/app/useAppPaginator';
+import { AppResultPageType } from '#/types/app.types';
+import { NotificationObjectType } from '@dhaaga/bridge/typings';
 import {
 	InboxStateAction,
 	useInboxState,
 	useInboxDispatch,
 } from '@dhaaga/core';
-import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
+import { useAppAcct } from '#/hooks/utility/global-state-extractors';
 import { useEffect } from 'react';
 
 /**
