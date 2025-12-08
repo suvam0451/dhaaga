@@ -15,7 +15,7 @@ function Node() {
 			onLayout={onLayout}
 		>
 			<View style={{ flexDirection: 'row', marginVertical: 10 }}>
-				<Skeleton height={40} width={40} style={{ borderRadius: '100%' }} />
+				<Skeleton height={40} width={40} style={{ borderRadius: 20 }} />
 				<Skeleton
 					height={40}
 					width={'auto'}

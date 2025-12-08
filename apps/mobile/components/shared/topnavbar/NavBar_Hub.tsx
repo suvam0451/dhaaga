@@ -12,10 +12,10 @@ import Animated, {
 	FadeInLeft,
 	FlipOutXUp,
 } from 'react-native-reanimated';
-import { AppText } from '../../lib/Text';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { NativeTextH1 } from '#/ui/NativeText';
 
 type Props = {
 	acct?: Account;
@@ -61,7 +61,7 @@ function SocialHubHeader({ acct }: Props) {
 					</Animated.View>
 				) : (
 					<Animated.View entering={FadeInLeft} exiting={FlipOutXUp}>
-						<AppText.H1>{t(`hub.navbarLabel`)}</AppText.H1>
+						<NativeTextH1>{t(`hub.navbarLabel`)}</NativeTextH1>
 					</Animated.View>
 				)}
 			</Animated.View>

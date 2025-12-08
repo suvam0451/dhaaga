@@ -9,7 +9,7 @@ import {
 } from '#/components/common/media/_shared';
 import AppImageCarousel from '#/components/common/media/fragments/AppImageCarousel';
 import useGalleryDims from '#/hooks/app/useGalleryDims';
-import type { PostMediaAttachmentType } from '@dhaaga/bridge/typings';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
 import { appDimensions } from '#/styles/dimensions';
 import { MediaAttachmentViewer } from '@dhaaga/bridge';
 
@@ -111,7 +111,6 @@ function MediaItem({
 						style,
 					]}
 				>
-					{' '}
 					<TimelineMediaRendered
 						attachment={attachments[0]}
 						CalculatedHeight={calculatedHeight}

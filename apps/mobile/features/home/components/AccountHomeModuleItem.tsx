@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppText } from '#/components/lib/Text';
+import { NativeTextH6 } from '#/ui/NativeText';
 
 type Props = {
 	label: string;
@@ -34,12 +35,12 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 						iconStyle={{ color: theme.secondary.a0 }}
 					/>
 				</View>
-				<AppText.H6
+				<NativeTextH6
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 					color={theme.complementary.a0}
 				>
 					{label}
-				</AppText.H6>
+				</NativeTextH6>
 				<AppText.Medium
 					style={{
 						width: 96,

@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
-import useLongLinkTextCollapse from '../../../states/useLongLinkTextCollapse';
-import { useAppMfmContext } from '../../../hooks/app/useAppMfmContext';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import TextUtils from '../../../utils/text.utils';
+import useLongLinkTextCollapse from '#/states/useLongLinkTextCollapse';
+import { useAppMfmContext } from '#/hooks/app/useAppMfmContext';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import TextUtils from '#/utils/text.utils';
 import {
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../lib/Text';
+} from '#/hooks/utility/global-state-extractors';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 type LinkProcessorProps = {
 	url: string;
@@ -46,7 +46,7 @@ function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 	}
 
 	return (
-		<AppText.Medium
+		<NativeTextMedium
 			style={[
 				styles.text,
 				{
@@ -59,7 +59,7 @@ function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 			numberOfLines={1}
 		>
 			{displayName ? linkDisplayName : Result}
-		</AppText.Medium>
+		</NativeTextMedium>
 	);
 }
 

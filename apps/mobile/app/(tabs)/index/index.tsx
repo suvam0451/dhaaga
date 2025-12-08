@@ -13,6 +13,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
 import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
+import { NativeTextH6 } from '#/ui/NativeText';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -51,13 +52,13 @@ function HubGreetingFragment({
 			}}
 		>
 			<View style={{ flexGrow: 1 }}>
-				<AppText.H6
+				<NativeTextH6
 					numberOfLines={1}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 					style={[{ maxWidth: '80%' }]}
 				>
 					{greeting}, {acct?.displayName}
-				</AppText.H6>
+				</NativeTextH6>
 				<AppText.Medium
 					style={{
 						color: theme.primary.a0,

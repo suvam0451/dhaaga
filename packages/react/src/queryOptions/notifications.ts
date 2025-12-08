@@ -55,8 +55,12 @@ function getMentionNotificationsQueryOpts(
 				'mentions',
 			);
 		} else if (ActivityPubService.blueskyLike(driver)) {
-			const _data = results.data;
-			throw new Error('bluesky mentions not implemented');
+			return GroupedNotificationParser.parseForBluesky(
+				results,
+				client,
+				driver,
+				server,
+			);
 		} else {
 			throw new Error('unsupported driver');
 		}

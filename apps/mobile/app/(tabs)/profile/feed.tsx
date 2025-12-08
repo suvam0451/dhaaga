@@ -59,6 +59,7 @@ function DataView() {
 		<SimplePostTimeline
 			timelineLabel={State?.query?.label ?? 'Custom Feed'}
 			queryResult={queryResult}
+			skipTimelineInit
 		/>
 	);
 }

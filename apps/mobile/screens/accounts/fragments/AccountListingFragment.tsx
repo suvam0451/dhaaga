@@ -6,7 +6,7 @@ import {
 	Pressable,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import {
 	Account,
@@ -20,11 +20,11 @@ import {
 	useAppGlobalStateActions,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { APP_EVENT_ENUM } from '../../../services/publishers/app.publisher';
+} from '#/hooks/utility/global-state-extractors';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type Props = {
 	acct: Account;
@@ -79,6 +79,7 @@ type selectedIndicatorProps = {
 	selected: boolean;
 	onClicked: () => void;
 };
+
 export function AccountDetails({
 	displayName,
 	username,

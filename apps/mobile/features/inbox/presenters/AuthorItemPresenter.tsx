@@ -16,7 +16,7 @@ import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '#/services/localization.service';
 import { AppIcon } from '#/components/lib/Icon';
 import useAppNavigator from '#/states/useAppNavigator';
-import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge/typings';
+import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge';
 
 type Props = {
 	user: PostAuthorType | UserObjectType;

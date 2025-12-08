@@ -1,21 +1,22 @@
 import { Account, AccountService } from '@dhaaga/db';
-import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
+import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
 import {
 	useAppAcct,
 	useAppDb,
 	useAppDialog,
 	useAppGlobalStateActions,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import useAppNavigator from '../../../states/useAppNavigator';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
+} from '#/hooks/utility/global-state-extractors';
+import useAppNavigator from '#/states/useAppNavigator';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppText } from '../../../components/lib/Text';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { AppText } from '#/components/lib/Text';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { Image } from 'expo-image';
+import { NativeTextH6 } from '#/ui/NativeText';
 
 type Props = {
 	pinId: number;
@@ -96,7 +97,7 @@ function PinnedTimelineItemView({
 							/>
 						)}
 					</View>
-					<AppText.H6
+					<NativeTextH6
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{
 							color: theme.complementary.a0,
@@ -104,7 +105,7 @@ function PinnedTimelineItemView({
 						numberOfLines={1}
 					>
 						{label}
-					</AppText.H6>
+					</NativeTextH6>
 					<AppText.Medium
 						style={{
 							width: 96,

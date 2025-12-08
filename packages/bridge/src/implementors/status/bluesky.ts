@@ -234,8 +234,15 @@ class AtprotoPostAdapter implements PostTargetInterface {
 						return EmbedViewProcessor_Video.compile(this.post.embed as any);
 					else return [];
 				}
+				case 'app.bsky.embed.record#view': {
+					// this is a quote post. no media attachments
+					return [];
+				}
 				default: {
-					console.log('[WARN]: this.post.embed type not handled!');
+					console.log(
+						'[WARN]: this.post.embed type not handled!',
+						this.post.embed,
+					);
 				}
 			}
 		}

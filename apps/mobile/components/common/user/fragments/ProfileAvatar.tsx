@@ -11,7 +11,6 @@ const ProfileAvatar = memo(
 	({ containerStyle, imageStyle, uri }: ProfileAvatarProps) => {
 		return (
 			<View style={containerStyle}>
-				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri }} style={imageStyle} />
 			</View>
 		);

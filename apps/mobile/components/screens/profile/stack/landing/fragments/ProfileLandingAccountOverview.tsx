@@ -46,7 +46,7 @@ const localStyles = StyleSheet.create({
 		width: '100%',
 		backgroundColor: '#0553',
 		padding: 2, // borderRadius: 8,
-		borderRadius: '100%',
+		borderRadius: 8,
 	},
 	avatarContainer: {
 		width: 84,

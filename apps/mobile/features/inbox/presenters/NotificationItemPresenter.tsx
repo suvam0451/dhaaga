@@ -11,7 +11,8 @@ import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { AppText } from '#/components/lib/Text';
 import GroupedFollowPresenter from './GroupedFollowPresenter';
 import GroupedPostInteractionPresenter from './GroupedPostInteractionPresenter';
-import type { NotificationObjectType } from '@dhaaga/bridge/typings';
+import type { NotificationObjectType } from '@dhaaga/bridge';
+import QuotePostNotification from '#/features/inbox/components/QuotePostNotification';
 
 type Props = {
 	item: NotificationObjectType;
@@ -66,6 +67,8 @@ export function NotificationItemPresenter({ item }: Props) {
 			return <ReactionNotificationFragment item={item} />;
 		case DriverNotificationType.ACHIEVEMENT_EARNED:
 		case DriverNotificationType.APP:
+		case DriverNotificationType.QUOTE:
+			return <QuotePostNotification item={item} />;
 		default: {
 			console.log('notification type not handled', item.type);
 			return (

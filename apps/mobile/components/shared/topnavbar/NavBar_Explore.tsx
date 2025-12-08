@@ -5,7 +5,7 @@ import Animated, {
 	useSharedValue,
 	withTiming,
 } from 'react-native-reanimated';
-import { AppText } from '#/components/lib/Text';
+import { NativeTextH1 } from '#/ui/NativeText';
 
 type DropdownProps = {
 	items: { id: string; label: string; onSelect: () => void }[];
@@ -46,7 +46,7 @@ function NavBar_Explore({ items, isOpen, close }: DropdownProps) {
 							onSelect(item.id);
 						}}
 					>
-						<AppText.H1>{item.label}</AppText.H1>
+						<NativeTextH1>{item.label}</NativeTextH1>
 					</TouchableOpacity>
 				))}
 			</Animated.View>

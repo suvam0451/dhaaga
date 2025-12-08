@@ -34,7 +34,7 @@ type StatusItemProps = {
 	// disables all interactions
 	isPreview?: boolean;
 	isPin?: boolean;
-	// for post details page
+	// for post-details page
 	showFullDetails?: boolean;
 };
 

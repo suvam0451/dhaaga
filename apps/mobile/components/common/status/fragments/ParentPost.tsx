@@ -4,7 +4,7 @@ import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionS
 import WithAppStatusItemContext from '../../../containers/contexts/WithPostItemContext';
 import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import {
 	PostedByTextOneLine,

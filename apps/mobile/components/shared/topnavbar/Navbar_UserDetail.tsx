@@ -3,7 +3,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { router } from 'expo-router';
 
 type UserViewNavbarProps = {
@@ -36,7 +36,6 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 						padding: appDimensions.topNavbar.padding * 2,
 						marginLeft: appDimensions.topNavbar.marginLeft,
 						backgroundColor: 'rgba(40, 40, 40, 0.56)',
-						borderRadius: '100%',
 					}}
 					onPress={onPressBack}
 				>
@@ -55,7 +54,6 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 							padding: appDimensions.topNavbar.padding * 2,
 							marginLeft: appDimensions.topNavbar.marginLeft,
 							backgroundColor: 'rgba(40, 40, 40, 0.75)',
-							borderRadius: '100%',
 						}}
 						onPress={onPress}
 					>

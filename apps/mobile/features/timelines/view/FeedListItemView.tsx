@@ -1,15 +1,14 @@
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { Pressable, View } from 'react-native';
-import { AppText } from '#/components/lib/Text';
-import { AppDivider } from '#/components/lib/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { StatItem } from '#/features/post-view/views/PostInteractionStatsRow';
-import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
+import { NativeTextMedium, NativeTextSemiBold } from '#/ui/NativeText';
+import { AppDividerSoft } from '#/ui/Divider';
+import useAppNavigator from '#/states/useAppNavigator';
 
 type SearchResultFeedItemProps = {
 	item: FeedObjectType;
@@ -20,15 +19,10 @@ const FEED_AVATAR_SIZE = 42;
 export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 	const { theme } = useAppTheme();
 	const img = useImage({ uri: item.avatar });
+	const { toFeed } = useAppNavigator();
 
 	function onPressFeed() {
-		router.navigate({
-			pathname: APP_ROUTING_ENUM.EXPLORE_FEED,
-			params: {
-				uri: item.uri,
-				displayName: item.displayName,
-			},
-		});
+		toFeed(item.uri, item.displayName);
 	}
 
 	if (item.avatar && !img) return <View />;
@@ -41,7 +35,6 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
 				}}
 			>
-				{/*@ts-ignore-next-line*/}
 				<Image
 					source={img}
 					style={{
@@ -51,33 +44,33 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 					}}
 				/>
 				<View style={{ flexGrow: 1, marginLeft: 8 }}>
-					<AppText.SemiBold style={{ fontSize: 16 }}>
+					<NativeTextSemiBold style={{ fontSize: 16 }}>
 						{item.displayName}
-					</AppText.SemiBold>
+					</NativeTextSemiBold>
 
-					<AppText.Medium
+					<NativeTextMedium
 						style={{ fontSize: 14 }}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 					>
 						by{' '}
-						<AppText.Medium
+						<NativeTextMedium
 							style={{ fontSize: 14 }}
 							color={theme.complementary.a0}
 						>
 							{item.creator.handle}
-						</AppText.Medium>
-					</AppText.Medium>
+						</NativeTextMedium>
+					</NativeTextMedium>
 				</View>
 				<TimelineIndicatorPresenter item={item} />
 			</View>
-			<AppText.Normal
+			<NativeTextMedium
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				style={{
 					marginBottom: appDimensions.timelines.sectionBottomMargin * 2,
 				}}
 			>
 				{item.description}
-			</AppText.Normal>
+			</NativeTextMedium>
 			<View style={{}}>
 				<StatItem
 					count={item.likeCount}
@@ -86,12 +79,7 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 					nextCounts={[]}
 				/>
 			</View>
-			<AppDivider.Soft
-				style={{
-					backgroundColor: '#363636',
-					marginVertical: 12,
-				}}
-			/>
+			<AppDividerSoft />
 		</Pressable>
 	);
 }

@@ -1,12 +1,16 @@
-// @ts-nocheck
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
-import { NotificationObjectType, ResultPage } from '#/typings.js';
 import { PostParser } from '#/parsers/post.js';
 import { UserParser } from '#/parsers/user.js';
-import { MastoApiGroupedNotificationType } from '#/types/shared/notifications.js';
+import {
+	MastoApiGroupedNotificationType,
+	NotificationObjectType,
+} from '#/types/shared/notifications.js';
 import { produce } from 'immer';
 import { RandomUtil } from '#/utils/index.js';
 import { MastoGroupedNotificationsResults } from '#/types/index.js';
+import { AppBskyNotificationListNotifications } from '@atproto/api';
+import { AtprotoApiAdapter } from '#/client/index.js';
+import { ResultPage } from '#/types/api-response.js';
 
 class Parser {
 	/**
@@ -59,7 +63,7 @@ class Parser {
 		let counter = 0;
 		const results: NotificationObjectType[] = [];
 		for (const group of input.data.notificationGroups) {
-			const _group: MastoApiGroupedNotificationType = group;
+			const _group: MastoApiGroupedNotificationType = group as any;
 
 			// handles groups that have no post-association
 			if (_group.statusId === undefined) {
@@ -68,14 +72,17 @@ class Parser {
 					type: group.type,
 					user: null,
 					post: null,
-					users: group.sampleAccountIds.map((o: string) => ({
-						item: UserParser.parse<unknown>(
-							acctList.find((x: any) => x.id === o),
-							driver,
-							server,
-						),
-						type: group.type,
-					})),
+					users: (group.sampleAccountIds as unknown as string[]).map(
+						(o: string) => ({
+							item: UserParser.parse<unknown>(
+								acctList.find((x: any) => x.id === o),
+								driver,
+								server,
+							),
+							types: [group.type],
+							extraData: {},
+						}),
+					),
 					read: true,
 					createdAt: group.latestPageNotificationAt
 						? new Date(group.latestPageNotificationAt)
@@ -100,20 +107,23 @@ class Parser {
 					type: group.type,
 					user: null,
 					post,
-					users: group.sampleAccountIds.map((o: string) => ({
-						item: UserParser.parse<unknown>(
-							acctList.find((x: any) => x.id === o),
-							driver,
-							server,
-						),
-						types: [group.type],
-					})),
+					users: (group.sampleAccountIds as unknown as string[]).map(
+						(o: string) => ({
+							item: UserParser.parse<unknown>(
+								acctList.find((x: any) => x.id === o),
+								driver,
+								server,
+							),
+							types: [group.type],
+							extraData: {},
+						}),
+					),
 					read: true,
 					createdAt: group.latestPageNotificationAt
 						? new Date(group.latestPageNotificationAt)
 						: new Date(),
 					extraData: {
-						interaction: post.interaction,
+						interaction: post!.interaction,
 					},
 				});
 
@@ -251,6 +261,57 @@ class Parser {
 				.filter(Boolean),
 			minId: null,
 			maxId: data.data[data.data.length - 1].id,
+		};
+	}
+
+	/**
+	 * 	The post statistics are not resolved at this point.
+	 * 	Additional API call needs to be made to
+	 * 	xrpc/app.bsky.feed.getPosts?uris=
+	 *
+	 * @param data
+	 * @param client
+	 * @param driver
+	 * @param server
+	 */
+	static async parseForBluesky(
+		data: ResultPage<AppBskyNotificationListNotifications.Notification[]>,
+		client: AtprotoApiAdapter,
+		driver: KNOWN_SOFTWARE,
+		server: string,
+	): Promise<ResultPage<NotificationObjectType[]>> {
+		let results = data.data.map((o) => {
+			const _user = UserParser.parse<unknown>(o.author, driver, server);
+			const _post =
+				o.record && o.record.$type === 'app.bsky.feed.post'
+					? PostParser.parse<unknown>(o, driver, server)
+					: null;
+			return {
+				id: o.uri,
+				uri: o.uri,
+				cid: o.cid,
+				type: o.reason,
+				user: _user,
+				post: _post,
+				createdAt: new Date(o.indexedAt),
+				read: o.isRead,
+				extraData: {},
+				users: [],
+			};
+		});
+
+		const uris = results.map((o) => o.uri);
+		const posts = await client.posts.getPosts(uris);
+		const parsed = PostParser.parse<unknown[]>(posts, driver, server);
+
+		results = results.map((o) => ({
+			...o,
+			post: parsed.find((x) => x.id === o.uri) || o.post,
+		}));
+
+		return {
+			...data,
+			data: results,
 		};
 	}
 }

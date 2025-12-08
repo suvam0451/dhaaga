@@ -24,10 +24,6 @@
 		"./post-process": {
 			"import": "./dist/post-process.js",
 			"types": "./dist/post-process.d.ts"
-		},
-		"./typings": {
-			"import": "./dist/typings.js",
-			"types": "./dist/typings.d.ts"
 		}
 	},
 	"imports": {

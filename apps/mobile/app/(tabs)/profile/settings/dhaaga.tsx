@@ -17,7 +17,7 @@ function Page() {
 			<Text style={[styles.text, { color: theme.secondary.a20 }]}>
 				{t(`discover.moreSoon.firstHalf`, {
 					ns: LOCALIZATION_NAMESPACE.CORE,
-				})}{' '}
+				})}
 				<Text style={{ color: theme.complementary.a0 }}>
 					{t(`discover.moreSoon.secondHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,

@@ -140,6 +140,37 @@ function useAppNavigator() {
 		}
 	}
 
+	/**
+	 * Each tab has its own dedicated feed
+	 * renderer
+	 * @param uri
+	 * @param label
+	 */
+	function toFeed(uri: string, label?: string) {
+		// probably in the bottom sheet
+		if (!navigator || !navigator.getId) return;
+
+		const _id = navigator.getId();
+		if (!_id || _id === '/(tabs)/index') {
+			router.navigate({
+				pathname: `/feed`,
+				// TODO: populate with stuff...
+				params: {
+					// uri: item.uri,
+					// displayName: item.displayName,
+				},
+			});
+		} else {
+			router.navigate({
+				pathname: `${navigator.getId()}/feed`,
+				params: {
+					uri: uri,
+					displayName: label,
+				},
+			});
+		}
+	}
+
 	return {
 		toPost,
 		toHome,
@@ -149,6 +180,7 @@ function useAppNavigator() {
 		toFollows,
 		toTimelineViaPin,
 		toUserPosts,
+		toFeed,
 	};
 }
 
