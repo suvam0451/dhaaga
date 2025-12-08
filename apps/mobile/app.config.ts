@@ -51,9 +51,9 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		// softwareKeyboardLayoutMode: 'pan',
 		icon: './assets/dhaaga/icon.png',
 		adaptiveIcon: {
-			foregroundImage: './assets/dhaaga/adaptive-icon.png',
-			backgroundColor: '#e7ce8b',
-			monochromeImage: './assets/dhaaga/adaptive-icon.png',
+			foregroundImage: './assets/dhaaga/adaptive-foreground.png',
+			backgroundImage: './assets/dhaaga/adaptive-background.png',
+			monochromeImage: './assets/dhaaga/adaptive-foreground.png',
 		},
 	},
 	androidStatusBar: {
