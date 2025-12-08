@@ -178,7 +178,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	async statuses(
+	async getPosts(
 		id: string,
 		params: AccountRouteStatusQueryDto,
 	): Promise<AppBskyFeedGetAuthorFeed.Response> {

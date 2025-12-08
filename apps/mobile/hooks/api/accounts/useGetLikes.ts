@@ -20,7 +20,7 @@ function useGetLikes(query: GetPostsQueryDTO) {
 		queryKey: ['acct/likes', acct, query],
 		queryFn: async () => {
 			if (driver === KNOWN_SOFTWARE.BLUESKY) {
-				const data = await (client as AtprotoApiAdapter).accounts.atProtoLikes(
+				const data = await (client as AtprotoApiAdapter).users.atProtoLikes(
 					acct.identifier,
 					{
 						limit: 5,
@@ -35,7 +35,7 @@ function useGetLikes(query: GetPostsQueryDTO) {
 				};
 			}
 
-			const { data, error } = await client.accounts.likes({
+			const { data, error } = await client.users.likes({
 				...query,
 				limit: 5,
 			});

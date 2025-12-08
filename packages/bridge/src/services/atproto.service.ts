@@ -15,9 +15,8 @@ class AtprotoPostService {
 		viewer: ViewerState,
 	) {
 		const _client = client as AtprotoApiAdapter;
-		if (viewer.like === undefined)
-			return _client.statuses.atProtoLike(uri, cid);
-		return _client.statuses.atProtoDeleteLike(viewer.like);
+		if (viewer.like === undefined) return _client.posts.atProtoLike(uri, cid);
+		return _client.posts.atProtoDeleteLike(viewer.like);
 	}
 
 	/**
@@ -31,13 +30,13 @@ class AtprotoPostService {
 	) {
 		const _client = client as AtprotoApiAdapter;
 		if (repostView === undefined) {
-			const result = await _client.statuses.atProtoRepost(uri, cid);
+			const result = await _client.posts.atProtoRepost(uri, cid);
 			if (result.success)
 				return { state: result.liked, uri: result.uri, success: true };
 			return { state: false, uri: undefined, success: false };
 		}
 
-		const result = await _client.statuses.atProtoDeleteRepost(repostView);
+		const result = await _client.posts.atProtoDeleteRepost(repostView);
 		if (result.success) return { state: result.liked, success: true };
 		return { state: true, uri: repostView, success: false };
 	}

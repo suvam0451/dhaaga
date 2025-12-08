@@ -181,7 +181,7 @@ export function unifiedPostFeedQueryOptions(
 			case TimelineFetchMode.USER: {
 				if (!_query || _query.userId === undefined)
 					throw new Error('missing userId');
-				const result = await client.accounts.statuses(_id!, _query as any);
+				const result = await client.users.getPosts(_id!, _query as any);
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.SOCIAL: {
@@ -219,7 +219,7 @@ export function unifiedPostFeedQueryOptions(
 				return getPageFromResult(result);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
-				const { data, error } = await client.accounts.bookmarks(_query);
+				const { data, error } = await client.users.bookmarks(_query);
 				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data?.maxId);
 			}
@@ -234,12 +234,13 @@ export function unifiedPostFeedQueryOptions(
 			}
 			case TimelineFetchMode.LIKES: {
 				if (DriverService.supportsAtProto(driver)) {
-					const data = await (
-						client as AtprotoApiAdapter
-					).accounts.atProtoLikes(acctIdentifier, {
-						limit,
-						cursor: _query.maxId === null ? undefined : _query.maxId,
-					});
+					const data = await (client as AtprotoApiAdapter).users.atProtoLikes(
+						acctIdentifier,
+						{
+							limit,
+							cursor: _query.maxId === null ? undefined : _query.maxId,
+						},
+					);
 					return {
 						data: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,
@@ -247,7 +248,7 @@ export function unifiedPostFeedQueryOptions(
 					};
 				}
 
-				const data = await client.accounts.likes(_query);
+				const data = await client.users.likes(_query);
 				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.TRENDING_POSTS: {

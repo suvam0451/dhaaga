@@ -22,8 +22,8 @@ class Adapter implements ApiTargetInterface {
 
 	fetch: FetchWrapper;
 	instances: PleromaInstanceRouter;
-	accounts: PleromaAccountsRouter;
-	statuses: PleromaStatusesRouter;
+	users: PleromaAccountsRouter;
+	posts: PleromaStatusesRouter;
 	trends: PleromaTrendsRouter;
 	notifications: PleromaNotificationsRouter;
 	timelines: PleromaTimelinesRouter;
@@ -44,8 +44,8 @@ class Adapter implements ApiTargetInterface {
 		this.key = dto.clientId.toString();
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new PleromaInstanceRouter(this.fetch);
-		this.accounts = new PleromaAccountsRouter(this.fetch);
-		this.statuses = new PleromaStatusesRouter(this.fetch);
+		this.users = new PleromaAccountsRouter(this.fetch);
+		this.posts = new PleromaStatusesRouter(this.fetch);
 		this.trends = new PleromaTrendsRouter(this.fetch);
 		this.notifications = new PleromaNotificationsRouter(this.fetch);
 		this.timelines = new PleromaTimelinesRouter(this.fetch);

@@ -50,7 +50,7 @@ export class PleromaAccountsRouter
 		return data.data;
 	}
 
-	async statuses(id: string, query: AccountRouteStatusQueryDto): Promise<any> {
+	async getPosts(id: string, query: AccountRouteStatusQueryDto): Promise<any> {
 		try {
 			const data = await this.client.client.getAccountStatuses(
 				id,

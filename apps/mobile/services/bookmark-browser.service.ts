@@ -24,7 +24,7 @@ class BookmarkBrowserService {
 		const done = false;
 		let syncedCount = 0;
 		do {
-			const { data } = await client.accounts.bookmarks({
+			const { data } = await client.users.bookmarks({
 				limit: 40,
 				maxId,
 			});

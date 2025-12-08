@@ -39,8 +39,10 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 	const { data } = useQuery(userGalleryQueryOpts(client, userId));
 
 	useEffect(() => {
+		if (!data) return;
+
 		let images: MediaPostTuple[] = [];
-		for (const item of data) {
+		for (const item of data.data) {
 			for (const mediaItem of item.content.media) {
 				if (MediaUtils.isImageType(mediaItem.type)) {
 					images.push({

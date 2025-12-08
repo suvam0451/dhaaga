@@ -33,6 +33,8 @@ export type APP_ICON_ENUM =
 	| 'add'
 	| 'add-circle-outline'
 	| 'albums-outline'
+	| 'apps-outline'
+	| 'arrow-redo-outline'
 	| 'bell'
 	| 'back'
 	| 'bookmark'
@@ -42,6 +44,8 @@ export type APP_ICON_ENUM =
 	| 'cog'
 	| 'chatbox-outline'
 	| 'chat-ellipses-outline'
+	| 'chatbubbles-outline'
+	| 'chatbubble-ellipses-outline'
 	| 'checkbox'
 	| 'checkmark'
 	| 'checkmark-circle'
@@ -72,6 +76,7 @@ export type APP_ICON_ENUM =
 	| 'funnel-outline'
 	| 'gallery'
 	| 'globe'
+	| 'grid-outline'
 	| 'heart'
 	| 'heart-outline'
 	| 'home'
@@ -82,6 +87,7 @@ export type APP_ICON_ENUM =
 	| 'layers-outline'
 	| 'list'
 	| 'lock-closed-outline'
+	| 'megaphone-outline'
 	| 'menu'
 	| 'message'
 	| 'more-options-vertical'
@@ -389,6 +395,24 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'apps-outline':
+				return (
+					<Ionicons
+						name={'apps-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'arrow-redo-outline':
+				return (
+					<Ionicons
+						name="arrow-redo-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'bell':
 				return (
 					<Ionicons
@@ -465,6 +489,24 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'chatbox-ellipses-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'chatbubbles-outline':
+				return (
+					<Ionicons
+						name={'chatbubbles-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'chatbubble-ellipses-outline':
+				return (
+					<Ionicons
+						name={'chatbubble-ellipses-outline'}
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -726,6 +768,15 @@ export function AppIcon({
 				return (
 					<Feather name="globe" size={_size} color={_color} style={iconStyle} />
 				);
+			case 'grid-outline':
+				return (
+					<Ionicons
+						name={'grid-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'heart':
 				return (
 					<Ionicons
@@ -815,6 +866,15 @@ export function AppIcon({
 				return (
 					<FontAwesome6
 						name="heart-pulse"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'megaphone-outline':
+				return (
+					<Ionicons
+						name="megaphone-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -1108,10 +1168,12 @@ export function AppIcon({
 	// 	</View>
 	// );
 	//
-	return (
+	return onPress ? (
 		<Pressable style={[containerStyle]} onPress={onPress}>
 			{Icon}
 		</Pressable>
+	) : (
+		<View style={[containerStyle]}>{Icon}</View>
 	);
 }
 

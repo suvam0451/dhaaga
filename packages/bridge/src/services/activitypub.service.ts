@@ -106,9 +106,7 @@ class ActivityPubService {
 		id: string,
 		localState: boolean,
 	) {
-		return localState
-			? client.statuses.unBookmark(id)
-			: client.statuses.bookmark(id);
+		return localState ? client.posts.unBookmark(id) : client.posts.bookmark(id);
 	}
 
 	static async toggleLike(
@@ -117,8 +115,8 @@ class ActivityPubService {
 		idA: string,
 		idB?: string,
 	) {
-		if (localState) return client.statuses.removeLike(idA, idB);
-		return client.statuses.like(idA, idB);
+		if (localState) return client.posts.removeLike(idA, idB);
+		return client.posts.like(idA, idB);
 	}
 
 	static async toggleBoost(
@@ -129,7 +127,7 @@ class ActivityPubService {
 	): Promise<-1 | 1 | null> {
 		if (ActivityPubService.misskeyLike(domain)) {
 			if (localState) {
-				const { error } = await (client as MisskeyApiAdapter).statuses.unrenote(
+				const { error } = await (client as MisskeyApiAdapter).posts.unrenote(
 					id,
 				);
 				if (error) {
@@ -138,7 +136,7 @@ class ActivityPubService {
 				}
 				return -1;
 			} else {
-				const { error } = await (client as MisskeyApiAdapter).statuses.renote({
+				const { error } = await (client as MisskeyApiAdapter).posts.renote({
 					renoteId: id,
 					visibility: 'followers',
 					localOnly: true,
@@ -151,26 +149,24 @@ class ActivityPubService {
 			}
 		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
 			if (localState) {
-				await (client as MastoApiAdapter).statuses.removeBoost(id);
+				await (client as MastoApiAdapter).posts.removeBoost(id);
 				return -1;
 			} else {
-				await (client as MastoApiAdapter).statuses.boost(id);
+				await (client as MastoApiAdapter).posts.boost(id);
 				return 1;
 			}
 		} else {
 			if (localState) {
-				const { error } = await (
-					client as PleromaApiAdapter
-				).statuses.removeBoost(id);
+				const { error } = await (client as PleromaApiAdapter).posts.removeBoost(
+					id,
+				);
 				if (error) {
 					console.log('[WARN]: failed to remove boost', error);
 					return null;
 				}
 				return -1;
 			} else {
-				const { error } = await (client as PleromaApiAdapter).statuses.boost(
-					id,
-				);
+				const { error } = await (client as PleromaApiAdapter).posts.boost(id);
 				if (error) {
 					console.log('[WARN]: failed to boost', error);
 					return null;
@@ -192,9 +188,9 @@ class ActivityPubService {
 		client: ApiTargetInterface,
 		id: string,
 	): Promise<boolean | null> {
-		const { data, error } = await (
-			client as MisskeyApiAdapter
-		).statuses.getState(id);
+		const { data, error } = await (client as MisskeyApiAdapter).posts.getState(
+			id,
+		);
 		if (error) {
 			console.log('[WARN]: error fetching bookmarked state');
 			return null;

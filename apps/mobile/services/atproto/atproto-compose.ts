@@ -33,7 +33,7 @@ export type AtprotoReplyEmbed = {
 
 class AtprotoComposerService {
 	private static async getPost(client: AtprotoApiAdapter, uri: string) {
-		const data = await client.statuses.getPost(uri);
+		const data = await client.posts.getPost(uri);
 		return data.data.thread as ThreadViewPost;
 	}
 
@@ -205,13 +205,15 @@ class AtprotoComposerService {
 	): Promise<MessageView> {
 		if (!id) {
 			const { data: room, error: roomError } =
-				await client.statuses.getConvoForMembers(members);
+				await client.posts.getConvoForMembers(members);
 			if (roomError) return null;
 			id = room.data.convo.id;
 		}
 
-		const { data: msgData, error: msgError } =
-			await client.statuses.sendMessage(id, text);
+		const { data: msgData, error: msgError } = await client.posts.sendMessage(
+			id,
+			text,
+		);
 		if (msgError) return null;
 		return msgData.data;
 	}

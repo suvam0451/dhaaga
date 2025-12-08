@@ -14,7 +14,7 @@ export function postDetailsInterfaceQueryOpts(
 ) {
 	async function api(): Promise<PostTargetInterface> {
 		if (!client) throw new Error('_client not initialized');
-		const data = await client.statuses.getPost(postId);
+		const data = await client.posts.getPost(postId);
 		return PostParser.rawToInterface<unknown>(data, driver);
 	}
 
@@ -31,7 +31,7 @@ export function postHierarchyQueryOpts(
 	postId: string,
 ) {
 	async function api() {
-		const { data, error } = await client.statuses.getPostContext(postId);
+		const { data, error } = await client.posts.getPostContext(postId);
 		if (error) return null;
 
 		// handled by context solver, instead
