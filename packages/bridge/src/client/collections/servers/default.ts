@@ -13,7 +13,7 @@ import {
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { identifyBackendSoftware } from '#/client/utils/detect-software.js';
 import { errorBuilder, LibraryPromise } from '#/types/index.js';
-import { CustomEmojiObject } from '#/types/shared/reactions.js';
+import { CustomEmojiObjectType } from '#/types/shared/reactions.js';
 
 type WelKnownNodeinfo = {
 	links: {
@@ -36,7 +36,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	async getCustomEmojis(
 		urlLike: string,
 		software?: string,
-	): Promise<CustomEmojiObject[]> {
+	): Promise<CustomEmojiObjectType[]> {
 		if (!software) {
 			const data = await this.getSoftwareInfo(urlLike);
 			software = data.software;

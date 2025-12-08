@@ -1,4 +1,4 @@
-export type CustomEmojiObject = {
+export type CustomEmojiObjectType = {
 	shortCode: string;
 	url: string;
 	staticUrl: string;

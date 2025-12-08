@@ -16,7 +16,9 @@ import {
 	useAppDb,
 	useAppGlobalStateActions,
 	useAppManager,
+	useAppPublishers,
 	useAppTheme,
+	useHub,
 } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
@@ -25,6 +27,8 @@ import AccountDbService from '#/services/db/account-db.service';
 import { BackHandler } from 'react-native';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
+import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import RoutingUtils from '#/utils/routing.utils';
 
 function AtProto() {
 	const {
@@ -39,6 +43,8 @@ function AtProto() {
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();
 	const { restoreSession } = useAppGlobalStateActions();
+	const { appSub } = useAppPublishers();
+	const { loadAccounts } = useHub();
 
 	async function onSubmit() {
 		authenticate().then((res) => {
@@ -55,8 +61,9 @@ function AtProto() {
 				AccountService.ensureAccountSelection(db);
 				restoreSession();
 			}
-			Alert.alert('Account Added. Welcome to Dhaaga.');
-			router.replace(APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS);
+			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			loadAccounts();
+			RoutingUtils.toAccountManagement();
 		});
 	}
 
@@ -187,11 +194,11 @@ function MiAuth() {
 export function AppAuthenticationPager() {
 	const { theme } = useAppTheme();
 	const [assets, error] = useAssets([
-		require('../../../../assets/dhaaga/icon.png'),
-		require('../../../../assets/branding/bluesky/logo.png'),
-		require('../../../../assets/branding/mastodon/logo.png'),
-		require('../../../../assets/branding/misskey/logo.png'),
-		require('../../../../assets/branding/lemmy/logo.png'),
+		require('#/assets/dhaaga/icon.png'),
+		require('#/assets/branding/bluesky/logo.png'),
+		require('#/assets/branding/mastodon/logo.png'),
+		require('#/assets/branding/misskey/logo.png'),
+		require('#/assets/branding/lemmy/logo.png'),
 	]);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const [IsPlatformSelected, setIsPlatformSelected] = useState(false);

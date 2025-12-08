@@ -18,4 +18,5 @@ export {
 	ActivityPubReactionStateType,
 	PostMentionObjectType,
 } from './post.js';
+export { CustomEmojiObjectType } from './reactions.js';
 export { UserObjectType } from './user.js';

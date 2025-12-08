@@ -15,6 +15,8 @@ export type {
 	MessageObjectType,
 	// feed
 	FeedObjectType,
+	// reactions
+	CustomEmojiObjectType,
 } from '#/types/shared/_exports.js';
 
 export type { GetPostsQueryDTO } from '#/client/types/_interface.js';
