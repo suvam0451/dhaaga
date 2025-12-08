@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { postLinkAttachmentObjectSchema } from '#/types/shared/link-attachments.js';
 
 const ActivityPubReactionStateSchema = z.array(
 	z.object({
@@ -62,6 +63,7 @@ export const ActivityPubStatusItemDto = z.object({
 		raw: z.string().nullable().optional(),
 		parsed: z.array(z.any()),
 		media: z.array(AppActivityPubMediaDto),
+		links: z.array(postLinkAttachmentObjectSchema),
 	}),
 	interaction: z.object({
 		boosted: z.boolean(),

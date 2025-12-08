@@ -1,4 +1,3 @@
-import { AppBottomSheetMenu } from '../../lib/Menu';
 import { useEffect, useState } from 'react';
 import { Account, AccountService, ProfileService } from '@dhaaga/db';
 import { Animated, Pressable, View } from 'react-native';
@@ -26,7 +25,7 @@ function AS_Add_Profile_Select_Account({
 	return (
 		<Animated.FlatList
 			ListHeaderComponent={() => (
-				<BottomSheetMenu title={'For which Account?'} />
+				<BottomSheetMenu variant={'clear'} title={'For which Account?'} />
 			)}
 			data={accts}
 			contentContainerStyle={{ paddingHorizontal: 10 }}
@@ -54,7 +53,7 @@ function ABS_Add_Profile_Name_Profile({
 	const { theme } = useAppTheme();
 	return (
 		<>
-			<BottomSheetMenu title={'Pick a Name'} />
+			<BottomSheetMenu variant={'clear'} title={'Pick a Name'} />
 			<View style={{ padding: 10, marginTop: 24 }}>
 				<AppTextInput.SingleLine
 					placeholder={'Enter name. You can change this later.'}

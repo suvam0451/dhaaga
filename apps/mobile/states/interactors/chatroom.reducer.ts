@@ -1,7 +1,7 @@
 import { AppChatRoom } from '#/services/chat.service';
 import { produce } from 'immer';
 import { Dispatch } from 'react';
-import type { MessageObjectType } from '@dhaaga/bridge/typings';
+import type { MessageObjectType } from '@dhaaga/bridge';
 
 type CHATROOM_SEND_STATUS = 'idle' | 'typing' | 'sending' | 'sent';
 

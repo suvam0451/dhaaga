@@ -2,30 +2,10 @@
 	"name": "dhaaga",
 	"version": "0.17.2",
 	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
+	"author": "Debashish Patra <mailto:hi@suvam.io>",
 	"homepage": "https://suvam.io/dhaaga",
-	"author": "Debashish Patra <suvam.io>",
 	"license": "AGPL-3.0-or-later",
 	"private": true,
-	"keywords": [
-		"fediverse",
-		"bluesky",
-		"mastodon",
-		"misskey",
-		"ios",
-		"android",
-		"sharkey",
-		"meisskey",
-		"cherrypick",
-		"pleroma",
-		"akkoma"
-	],
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/suvam0451/dhaaga.git"
-	},
-	"bugs": {
-		"url": "https://github.com/suvam0451/dhaaga/issues"
-	},
 	"scripts": {
 		"dev:app": "npm run dev --workspace=@dhaaga/mobile",
 		"dev:web": "npm run dev --workspace=@dhaaga/web",
@@ -46,9 +26,6 @@
 		"apps/mobile",
 		"apps/web"
 	],
-	"dependencies": {
-		"zod": "^4.1.13"
-	},
 	"prettier": {
 		"bracketSpacing": true,
 		"printWidth": 80,
@@ -57,13 +34,13 @@
 		"tabWidth": 2,
 		"useTabs": true
 	},
-	"type": "module",
 	"overrides": {
 		"react": "19.1.0",
 		"react-dom": "19.1.0"
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20251207.1",
+		"@typescript/native-preview": "^7.0.0-dev.20251208.1",
 		"prettier": "^3.7.4"
-	}
+	},
+	"type": "module"
 }

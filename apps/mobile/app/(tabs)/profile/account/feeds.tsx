@@ -1,27 +1,23 @@
-import { FlatList, Pressable, ScrollView, View } from 'react-native';
+import { Pressable, RefreshControl, View } from 'react-native';
 import useApiGetMyFeeds from '#/hooks/api/useFeeds';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '#/components/shared/topnavbar/AppTopNavbar';
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { AppText, SpecialText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppDivider } from '#/components/lib/Divider';
-import { Image, useImage } from 'expo-image';
+import { Image } from 'expo-image';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
+import Animated from 'react-native-reanimated';
+import { useState } from 'react';
 
 type MyFeedItemProps = {
 	item: FeedObjectType;
 };
 
 function MyFeedItem({ item }: MyFeedItemProps) {
-	const { theme } = useAppTheme();
-	const image = useImage({ uri: item?.avatar });
-	if (!image) return <View />;
-
 	function onPress() {
 		router.navigate({
 			pathname: '/profile/feed',
@@ -43,9 +39,8 @@ function MyFeedItem({ item }: MyFeedItemProps) {
 				}}
 			>
 				<View>
-					{/*@ts-ignore-next-line*/}
 					<Image
-						source={image}
+						source={{ uri: item?.avatar }}
 						style={{ width: 36, height: 36, borderRadius: 8 }}
 					/>
 				</View>
@@ -54,64 +49,65 @@ function MyFeedItem({ item }: MyFeedItemProps) {
 						{item.displayName}
 					</AppText.Medium>
 				</View>
+
 				<View style={{ width: 24 }}>
 					<AppIcon id={'chevron-right'} />
 				</View>
 			</View>
-			<AppDivider.Hard
-				style={{ marginVertical: 8, backgroundColor: theme.background.a50 }}
-			/>
 		</Pressable>
 	);
 }
 
 function Page() {
-	const { data, error } = useApiGetMyFeeds();
-	const { translateY } = useScrollMoreOnPageEnd();
+	const [IsRefreshing, setIsRefreshing] = useState(false);
+	const { theme } = useAppTheme();
+	const { data, refetch } = useApiGetMyFeeds();
+	const { scrollHandler, animatedStyle } = useHideTopNavUsingFlashList();
 
-	if (error) {
-		return (
-			<AppTopNavbar
-				title={'My Feeds'}
-				translateY={translateY}
-				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			>
-				<ScrollView
-					contentContainerStyle={{
-						marginTop: appDimensions.topNavbar.scrollViewTopPadding,
-					}}
-				>
+	function onRefresh() {
+		setIsRefreshing(true);
+		refetch().finally(() => setIsRefreshing(false));
+	}
+
+	return (
+		<>
+			<NavBar_Simple label={'My Feeds'} animatedStyle={animatedStyle} />
+			<Animated.FlatList
+				data={data ?? []}
+				renderItem={({ item }) => <MyFeedItem item={item} />}
+				onScroll={scrollHandler}
+				ListHeaderComponent={
+					<SpecialText
+						style={{
+							fontSize: 32,
+							marginHorizontal: 10,
+							marginVertical: appDimensions.timelines.sectionBottomMargin * 3,
+						}}
+					>
+						My Feeds
+					</SpecialText>
+				}
+				contentContainerStyle={{
+					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
+				}}
+				style={{ backgroundColor: theme.background.a0 }}
+				ListEmptyComponent={
 					<AppText.SemiBold
 						style={{ textAlign: 'center', fontSize: 24, paddingVertical: 24 }}
 					>
 						Some Error Occurred
 					</AppText.SemiBold>
-				</ScrollView>
-			</AppTopNavbar>
-		);
-	}
-	return (
-		<AppTopNavbar title={'My Feeds'} translateY={translateY}>
-			<ScrollView
-				contentContainerStyle={{
-					marginTop: appDimensions.topNavbar.scrollViewTopPadding,
-				}}
-			>
-				<SpecialText
-					style={{
-						fontSize: 32,
-						marginHorizontal: 10,
-						marginVertical: appDimensions.timelines.sectionBottomMargin * 3,
-					}}
-				>
-					My Feeds
-				</SpecialText>
-				<FlatList
-					data={data}
-					renderItem={({ item }) => <MyFeedItem item={item} />}
-				/>
-			</ScrollView>
-		</AppTopNavbar>
+				}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+				}
+				ItemSeparatorComponent={() => (
+					<AppDivider.Hard
+						style={{ marginVertical: 8, backgroundColor: theme.background.a50 }}
+					/>
+				)}
+			/>
+		</>
 	);
 }
 

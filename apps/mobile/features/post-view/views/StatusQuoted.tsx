@@ -1,57 +1,41 @@
-import { StyleSheet, View } from 'react-native';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
 import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { appDimensions } from '#/styles/dimensions';
 import { TextContentView } from '#/components/common/status/TextContentView';
 import { QuoteOrnament } from '#/features/post-view/components/Ornaments';
+import { PostObjectType } from '@dhaaga/bridge';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
-function StatusQuoted() {
-	const { theme } = useAppTheme();
-	const { dto } = withPostItemContext();
+type Props = {
+	post: PostObjectType;
+};
 
+function StatusQuoted({ post }: Props) {
 	// TODO: media interaction not implemented
 	function onPressMediaItem() {}
 
+	if (!post) {
+		console.log('[WARN]: expected post object in quoted status slot', post);
+		return <View />;
+	}
 	return (
-		<View
-			style={[
-				styles.root,
-				{
-					borderColor: theme.complementaryA.a0,
-					marginBottom: SECTION_MARGIN_BOTTOM * 1.5,
-				},
-			]}
-		>
-			<QuoteOrnament />
+		<QuoteOrnament>
 			<PostCreatedBy style={{ marginBottom: SECTION_MARGIN_BOTTOM }} />
 			<MediaItem
-				attachments={dto.content.media}
-				calculatedHeight={dto.calculated.mediaContainerHeight}
+				attachments={post.content.media}
+				calculatedHeight={post.calculated.mediaContainerHeight}
 				onPress={onPressMediaItem}
 			/>
 			<TextContentView
-				tree={dto.content.parsed}
+				tree={post.content.parsed}
 				variant={'bodyContent'}
 				mentions={[]}
-				emojiMap={dto.calculated.emojis}
+				emojiMap={post.calculated.emojis}
 			/>
-		</View>
+		</QuoteOrnament>
 	);
 }
-
-const styles = StyleSheet.create({
-	root: {
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		marginTop: 8,
-		borderRadius: 6,
-		borderStyle: 'dashed',
-		borderWidth: 1,
-	},
-});
 
 export default StatusQuoted;

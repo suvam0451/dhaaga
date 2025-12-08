@@ -3,7 +3,7 @@ import {
 	DhaagaJsTimelineQueryOptions,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { UserObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import { UserObjectType, ResultPage } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
 enum UserFeedFetchMode {

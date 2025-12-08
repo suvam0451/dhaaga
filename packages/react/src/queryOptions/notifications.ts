@@ -7,10 +7,7 @@ import {
 	MastoApiAdapter,
 	PleromaApiAdapter,
 } from '@dhaaga/bridge';
-import type {
-	NotificationObjectType,
-	ResultPage,
-} from '@dhaaga/bridge/typings';
+import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
 const NOTIFICATION_PAGE_SIZE = 20;
@@ -55,8 +52,12 @@ function getMentionNotificationsQueryOpts(
 				'mentions',
 			);
 		} else if (ActivityPubService.blueskyLike(driver)) {
-			const _data = results.data;
-			throw new Error('bluesky mentions not implemented');
+			return GroupedNotificationParser.parseForBluesky(
+				results,
+				client,
+				driver,
+				server,
+			);
 		} else {
 			throw new Error('unsupported driver');
 		}

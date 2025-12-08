@@ -1,11 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { AppText } from '../../lib/Text';
-import { appDimensions } from '../../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { Ionicons } from '@expo/vector-icons';
 import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
 import { useState } from 'react';
@@ -14,6 +13,7 @@ import {
 	TOP_NAVBAR_MENU_ICON_SIZE,
 	TOP_NAVBAR_TOP_PADDING,
 } from '#/components/shared/topnavbar/settings';
+import { NativeTextH1 } from '#/ui/NativeText';
 
 export enum APP_LANDING_PAGE_TYPE {
 	HOME,
@@ -98,7 +98,7 @@ function AppTabLandingNavbar({
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
 				<Pressable style={styles.labelArea} onPress={toggleDropdown}>
-					<AppText.H1>{NAVBAR_LABEL}</AppText.H1>
+					<NativeTextH1>{NAVBAR_LABEL}</NativeTextH1>
 					{hasDropdown ? (
 						<Ionicons
 							name="chevron-down"
@@ -132,6 +132,7 @@ function AppTabLandingNavbar({
 					isOpen={DropdownOpen}
 					close={closeDropdown}
 					items={dropdownItems!}
+					selectedItemId={dropdownSelectedId}
 				/>
 			) : (
 				<View />

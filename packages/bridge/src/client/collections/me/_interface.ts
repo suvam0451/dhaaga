@@ -9,6 +9,6 @@ export interface MeRoute {
 	getMe(): Promise<
 		| MastoAccountCredentials
 		| Endpoints['i']['res']
-		| AppBskyActorGetProfile.Response
+		| AppBskyActorGetProfile.OutputSchema
 	>;
 }

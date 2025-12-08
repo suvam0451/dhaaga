@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { AtprotoApiAdapter, MisskeyApiAdapter } from '@dhaaga/bridge';
 import { PostParser, ActivityPubService } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,

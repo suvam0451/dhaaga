@@ -1,10 +1,9 @@
 import { View, Alert, Text, TouchableOpacity } from 'react-native';
 import TitleOnlyNoScrollContainer from '#/components/containers/TitleOnlyNoScrollContainer';
 import HideOnKeyboardVisibleContainer from '#/components/containers/HideOnKeyboardVisibleContainer';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import PleromaPasteToken from '#/features/onboarding/components/PleromaPasteToken';
-import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import {
 	useAppDb,
@@ -17,6 +16,7 @@ import { useActivityPubAuth } from '@dhaaga/react';
 import AccountDbService from '#/services/db/account-db.service';
 import appStyling from '#/styles/AppStyles';
 import { AppAuthWebView } from '#/components/lib/WebView';
+import RoutingUtils from '#/utils/routing.utils';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
@@ -52,12 +52,9 @@ function MastodonSignInStack() {
 			userData,
 		);
 		if (upsertResult) {
-			Alert.alert(
-				'Account Added. Drag down to refresh if any screen feels outdated.',
-			);
 			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
-			router.replace(APP_ROUTING_ENUM.PROFILE_TAB);
+			RoutingUtils.toAccountManagement();
 		}
 	}
 

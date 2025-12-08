@@ -23,6 +23,15 @@ type AutoHideNavBarProps = {
 	contentContainerStyle?: StyleProp<ViewStyle>;
 };
 
+/**
+ * @deprecated use NavBar_ collection, instead
+ * @param title
+ * @param children
+ * @param translateY
+ * @param type
+ * @param contentContainerStyle
+ * @constructor
+ */
 function AppTopNavbar({
 	title,
 	children,

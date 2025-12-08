@@ -1,8 +1,5 @@
 import useAppPaginator from '#/hooks/app/useAppPaginator';
-import type {
-	NotificationObjectType,
-	ResultPage,
-} from '@dhaaga/bridge/typings';
+import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import {
 	InboxStateAction,
 	useInboxState,
@@ -25,7 +22,7 @@ function useNotificationStore() {
 		reset();
 	}, [acct]);
 
-	function appendNotifications(page: ResultPage<NotificationObjectType>) {
+	function appendNotifications(page: ResultPage<NotificationObjectType[]>) {
 		if (!page) return;
 		dispatch({
 			type: InboxStateAction.APPEND,

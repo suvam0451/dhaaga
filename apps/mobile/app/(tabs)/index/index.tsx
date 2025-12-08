@@ -1,18 +1,17 @@
 import { useEffect, useMemo } from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import SocialHubPresenter from '../../../features/social-hub/presenters/SocialHubPresenter';
-import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
+import SocialHubPresenter from '#/features/social-hub/presenters/SocialHubPresenter';
 import { Account } from '@dhaaga/db';
 import {
 	useAppAcct,
 	useAppTheme,
 	useHub,
-} from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+} from '#/hooks/utility/global-state-extractors';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
+import { NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -36,11 +35,7 @@ type HubGreetingFragmentProps = {
 	noLogo?: boolean;
 };
 
-function HubGreetingFragment({
-	greeting,
-	acct,
-	noLogo,
-}: HubGreetingFragmentProps) {
+function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -51,14 +46,14 @@ function HubGreetingFragment({
 			}}
 		>
 			<View style={{ flexGrow: 1 }}>
-				<AppText.H6
+				<NativeTextH6
 					numberOfLines={1}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 					style={[{ maxWidth: '80%' }]}
 				>
 					{greeting}, {acct?.displayName}
-				</AppText.H6>
-				<AppText.Medium
+				</NativeTextH6>
+				<NativeTextMedium
 					style={{
 						color: theme.primary.a0,
 						maxWidth: '80%',
@@ -66,21 +61,8 @@ function HubGreetingFragment({
 					numberOfLines={1}
 				>
 					@{acct?.username}@{acct?.server}
-				</AppText.Medium>
+				</NativeTextMedium>
 			</View>
-			{!noLogo && (
-				<View
-					style={{
-						position: 'absolute',
-						right: 8,
-						justifyContent: 'center',
-						height: '100%',
-						marginTop: 'auto',
-					}}
-				>
-					<SoftwareHeader software={acct?.driver} iconSizeMultiplier={2.5} />
-				</View>
-			)}
 		</View>
 	);
 }

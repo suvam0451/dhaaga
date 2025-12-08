@@ -1,8 +1,8 @@
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
-} from '../../../components/shared/topnavbar/AppTabLandingNavbar';
+} from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	DiscoverStateAction,
 	useDiscoverDispatch,
@@ -24,6 +24,32 @@ function Header() {
 			},
 		});
 	}
+
+	function explorePageTabs(): {
+		id: string;
+		label: string;
+		onSelect: () => void;
+	}[] {
+		const protocolLevel = getSearchTabs(driver).map((o) => ({
+			id: o,
+			label: o.charAt(0).toUpperCase() + o.slice(1),
+			onSelect: () => {
+				changeTab(o);
+			},
+		}));
+
+		return [
+			{
+				id: 'explore',
+				label: 'Explore',
+				onSelect: () => {
+					changeTab('explore');
+				},
+			},
+			...protocolLevel,
+		];
+	}
+
 	const menuItems = [
 		{
 			iconId: 'time-outline',
@@ -45,13 +71,7 @@ function Header() {
 			menuItems={menuItems as any}
 			hasDropdown={true}
 			dropdownSelectedId={State.tab}
-			dropdownItems={getSearchTabs(driver).map((o) => ({
-				id: o,
-				label: o.charAt(0).toUpperCase() + o.slice(1),
-				onSelect: () => {
-					changeTab(o);
-				},
-			}))}
+			dropdownItems={explorePageTabs()}
 		/>
 	);
 }

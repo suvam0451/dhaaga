@@ -2,7 +2,7 @@ import type {
 	PostMediaAttachmentType,
 	PostObjectType,
 	ResultPage,
-} from '@dhaaga/bridge/typings';
+} from '@dhaaga/bridge';
 import { produce } from 'immer';
 import { MediaAttachmentViewer } from '@dhaaga/bridge';
 import {
@@ -103,10 +103,10 @@ function reducer(state: State, action: Actions): State {
 				for (const tuple of bundleCopy) {
 					if (rightHeight >= leftHeight) {
 						nextLeftPage.push(tuple);
-						leftHeight += tuple.media.height;
+						leftHeight += tuple.media.height ?? 1; // 1, to evenly spread
 					} else {
 						nextRightPage.push(tuple);
-						rightHeight += tuple.media.height;
+						rightHeight += tuple.media.height ?? 1; // 1, to evenly spread
 					}
 					counter++;
 					if (counter >= 10) {

@@ -12,7 +12,7 @@ import {
 import { appDimensions } from '#/styles/dimensions';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '#/components/lib/Text';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { PostInspector } from '@dhaaga/bridge';

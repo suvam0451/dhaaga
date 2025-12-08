@@ -1,8 +1,5 @@
 import { UseQueryResult } from '@tanstack/react-query';
-import type {
-	NotificationObjectType,
-	ResultPage,
-} from '@dhaaga/bridge/typings';
+import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import useNotificationStore from '#/features/inbox/interactors/useNotificationStore';
 import { useEffect, useState } from 'react';
 import Header from '#/features/inbox/components/Header';

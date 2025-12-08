@@ -3,13 +3,13 @@
  * the library as pure type definitions
  */
 
-export { MessageObjectType } from './chat.js';
-export { FeedObjectType } from './feed.js';
-export {
+export type { MessageObjectType } from './chat.js';
+export type { FeedObjectType } from './feed.js';
+export type {
 	NotificationObjectType,
 	NotificationUserGroupType,
 } from './notifications.js';
-export {
+export type {
 	PostRootObjectType,
 	PostStatsType,
 	PostObjectType,
@@ -18,4 +18,6 @@ export {
 	ActivityPubReactionStateType,
 	PostMentionObjectType,
 } from './post.js';
-export { UserObjectType } from './user.js';
+export type { CustomEmojiObjectType } from './reactions.js';
+export type { UserObjectType } from './user.js';
+export type { PostLinkAttachmentObjectType } from './link-attachments.js';

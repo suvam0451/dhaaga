@@ -12,10 +12,10 @@ import {
 	ApiTargetInterface,
 	KNOWN_SOFTWARE,
 	BaseApiAdapter,
-	CustomEmojiObject,
+	CustomEmojiObjectType,
 } from '@dhaaga/bridge';
 import { BaseStorageManager } from './_shared';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * ---- Storage Interfaces ----
@@ -24,12 +24,12 @@ import type { UserObjectType } from '@dhaaga/bridge/typings';
 class Storage extends BaseStorageManager {
 	getEmojis(server: string) {
 		return this.getJson<{
-			data: CustomEmojiObject[];
+			data: CustomEmojiObjectType[];
 			lastFetchedAt: Date;
 		}>(`emojis/${server}`);
 	}
 
-	setEmojis(server: string, data: CustomEmojiObject[]) {
+	setEmojis(server: string, data: CustomEmojiObjectType[]) {
 		this.setJson(`emojis/${server}`, {
 			data,
 			lastFetchedAt: new Date(),
@@ -52,7 +52,7 @@ class ProfileSessionManager {
 	client: ApiTargetInterface;
 
 	cacheManager: Storage;
-	customEmojis: CustomEmojiObject[];
+	customEmojis: CustomEmojiObjectType[];
 
 	constructor(db: DataSource) {
 		this.db = db;

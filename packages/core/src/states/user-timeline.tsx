@@ -1,6 +1,6 @@
 import { DataSource } from '@dhaaga/db';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { UserObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { UserObjectType, ResultPage } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
 	createContext,
@@ -44,7 +44,7 @@ type Actions =
 	  }
 	| {
 			type: ACTION.APPEND;
-			payload: ResultPage<UserObjectType>;
+			payload: ResultPage<UserObjectType[]>;
 	  }
 	| {
 			type: ACTION.SET_QUERY_OPTS;

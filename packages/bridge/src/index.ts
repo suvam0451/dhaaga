@@ -105,4 +105,11 @@ export { AtprotoUtils } from './utils/atproto.js';
 export { KeyExtractorUtil } from './utils/key-extractor.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
-export { defaultResultPage } from './types/api-response.js';
+export { defaultResultPage, type ResultPage } from './types/api-response.js';
+
+export * from './types/shared/_exports.js';
+
+export type { GetPostsQueryDTO } from '#/client/types/_interface.js';
+
+export { postObjectSchema } from './types/shared/post.js';
+export { BaseUrlNormalizationService } from './utils/urls.js';

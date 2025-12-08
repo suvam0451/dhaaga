@@ -3,7 +3,7 @@ import { TextContentView } from '#/components/common/status/TextContentView';
 import { Image, useImage } from 'expo-image';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	user: UserObjectType;

@@ -8,7 +8,7 @@ import {
 	PleromaApiAdapter,
 } from '../client/index.js';
 import { PostParser } from '../parsers/post.js';
-import { CustomEmojiObject } from '#/types/shared/reactions.js';
+import { CustomEmojiObjectType } from '#/types/shared/reactions.js';
 
 const MISSKEY_LOCAL_EX = /:(.*?):/;
 const MISSKEY_LOCAL_ALT_EX = /:(.*?)@.:/;
@@ -110,7 +110,7 @@ class ActivityPubReactionsService {
 				height?: number;
 				name?: string;
 			}[];
-			cache: CustomEmojiObject[];
+			cache: CustomEmojiObjectType[];
 			me: string;
 		},
 	) {

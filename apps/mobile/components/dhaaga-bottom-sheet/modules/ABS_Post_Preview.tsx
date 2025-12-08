@@ -6,7 +6,7 @@ import {
 import { useEffect, useState } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import WithAppStatusItemContext from '../../containers/contexts/WithPostItemContext';
-import StatusItem from '#/features/post-view/StatusItem';
+import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { APP_FONTS } from '#/styles/AppFonts';
 import useAppNavigator from '#/states/useAppNavigator';
 
@@ -83,7 +83,7 @@ function ABS_Post_Preview() {
 				{/*</TouchableOpacity>*/}
 			</View>
 			<WithAppStatusItemContext dto={Post}>
-				<StatusItem isPreview />
+				<PostTimelineEntryView isPreview />
 			</WithAppStatusItemContext>
 
 			<View style={{ marginTop: 36 }}>

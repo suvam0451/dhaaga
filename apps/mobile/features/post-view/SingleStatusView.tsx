@@ -20,8 +20,9 @@ import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import { PostMoreOptionsButton } from '#/components/common/status/_shared';
 import { TextContentView } from '#/components/common/status/TextContentView';
 import { PostInspector } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { PinOrnament } from '#/features/post-view/components/Ornaments';
+import PostLinkAttachments from '#/features/post-item/components/PostLinkAttachments';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -164,11 +165,10 @@ function SingleStatusView({
 
 			{/*FIXME: enable for bluesky*/}
 			{IS_QUOTE_BOOST && !!dto.boostedFrom && (
-				<WithAppStatusItemContext dto={_target.boostedFrom}>
-					<StatusQuoted />
-				</WithAppStatusItemContext>
+				<StatusQuoted post={_target.boostedFrom} />
 			)}
 
+			<PostLinkAttachments items={dto.content.links} />
 			{/* Lock reactions for preview (to be refactored) */}
 			{isPreview ? <View /> : <EmojiReactions dto={_target} />}
 			{isPreview ? <View /> : <PostActionRow />}

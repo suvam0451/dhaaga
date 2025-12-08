@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
 import { userGalleryQueryOpts } from '@dhaaga/react';
-import type {
-	PostMediaAttachmentType,
-	PostObjectType,
-} from '@dhaaga/bridge/typings';
+import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
 import MediaUtils from '#/utils/media.utils';
 import { appDimensions } from '#/styles/dimensions';
 import CanvasPresenter from './CanvasPresenter';

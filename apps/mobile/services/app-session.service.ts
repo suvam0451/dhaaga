@@ -13,7 +13,7 @@ import {
 	KNOWN_SOFTWARE,
 	UserParser,
 } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { AtProtoAuthService } from '@dhaaga/bridge/auth';
 import AccountMetadataDbService from '#/services/db/account-metadata-db.service';
 

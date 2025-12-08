@@ -1,6 +1,7 @@
 export * from './mastojs.types.js';
 export * from './megalodon.types.js';
 export * from './misskey-js.types.js';
+export * from './shared/_exports.js';
 export { NotificationObjectType } from '#/types/shared/notifications.js';
 export { NotificationUserGroupType } from '#/types/shared/notifications.js';
 export { PostRootObjectType } from '#/types/shared/post.js';

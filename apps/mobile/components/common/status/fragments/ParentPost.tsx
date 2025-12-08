@@ -1,10 +1,9 @@
 import { Pressable, View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
 import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionStatsRow';
-import WithAppStatusItemContext from '../../../containers/contexts/WithPostItemContext';
 import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import {
 	PostedByTextOneLine,
@@ -62,9 +61,7 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 						/>
 					</Pressable>
 					{IS_QUOTE_BOOST && !!dto.boostedFrom && (
-						<WithAppStatusItemContext dto={dto.boostedFrom}>
-							<StatusQuoted />
-						</WithAppStatusItemContext>
+						<StatusQuoted post={dto.boostedFrom} />
 					)}
 					<PostInteractionStatsRow dto={dto} />
 				</View>

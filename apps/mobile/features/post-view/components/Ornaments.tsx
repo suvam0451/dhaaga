@@ -1,7 +1,7 @@
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppText } from '#/components/lib/Text';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
@@ -28,26 +28,82 @@ export function PinOrnament({ isPinned }: PinOrnamentProps) {
 	);
 }
 
-export function QuoteOrnament() {
+export function QuoteOrnament({ children }: any) {
 	const { theme } = useAppTheme();
 
 	return (
 		<View
-			style={{
-				flexDirection: 'row',
-				alignItems: 'center',
-				marginBottom: SECTION_MARGIN_BOTTOM,
-			}}
+			style={[
+				styles.quoteOrnamentRoot,
+				{
+					borderColor: theme.complementaryA.a0,
+					marginBottom: SECTION_MARGIN_BOTTOM * 1.5,
+				},
+			]}
 		>
-			<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
-			<AppText.SemiBold
+			<View
 				style={{
-					color: theme.complementary.a0,
-					marginLeft: 4,
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginBottom: SECTION_MARGIN_BOTTOM,
 				}}
 			>
-				Quoted this Post
-			</AppText.SemiBold>
+				<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
+				<AppText.SemiBold
+					style={{
+						color: theme.complementary.a0,
+						marginLeft: 4,
+					}}
+				>
+					Quoted this Post
+				</AppText.SemiBold>
+			</View>
+			{children}
 		</View>
 	);
 }
+
+export function LinkAttachmentOrnament({ children }: any) {
+	const { theme } = useAppTheme();
+
+	return (
+		<View
+			style={[
+				styles.quoteOrnamentRoot,
+				{
+					borderColor: theme.complementaryA.a0,
+				},
+			]}
+		>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginBottom: SECTION_MARGIN_BOTTOM,
+				}}
+			>
+				<AppIcon id={'link-outline'} size={14} color={theme.complementary.a0} />
+				<AppText.SemiBold
+					style={{
+						color: theme.complementary.a0,
+						marginLeft: 4,
+					}}
+				>
+					Shared this Link
+				</AppText.SemiBold>
+			</View>
+			{children}
+		</View>
+	);
+}
+
+const styles = StyleSheet.create({
+	quoteOrnamentRoot: {
+		paddingHorizontal: 10,
+		paddingVertical: 4,
+		marginTop: 8,
+		borderRadius: 6,
+		borderStyle: 'dashed',
+		borderWidth: 1,
+	},
+});

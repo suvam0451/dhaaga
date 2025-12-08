@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import ShareIndicator from '../../components/common/status/fragments/ShareIndicator';
 import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
-import SingleStatusView from './SingleStatusView';
+import SingleStatusView from '../post-view/SingleStatusView';
 import { ReplyIndicator } from '../../components/common/status/ListView/_shared';
 import ParentPost from '../../components/common/status/fragments/ParentPost';
 import { PostContainer } from '../../components/common/status/_shared';
@@ -34,7 +34,7 @@ type StatusItemProps = {
 	// disables all interactions
 	isPreview?: boolean;
 	isPin?: boolean;
-	// for post details page
+	// for post-details page
 	showFullDetails?: boolean;
 };
 
@@ -42,7 +42,11 @@ type StatusItemProps = {
  * Renders a status/note
  * @constructor
  */
-function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
+function PostTimelineEntryView({
+	isPreview,
+	isPin,
+	showFullDetails,
+}: StatusItemProps) {
 	const { dto } = withPostItemContext();
 
 	if (!dto) return <View />;
@@ -122,4 +126,4 @@ function StatusItem({ isPreview, isPin, showFullDetails }: StatusItemProps) {
 	}
 }
 
-export default StatusItem;
+export default PostTimelineEntryView;

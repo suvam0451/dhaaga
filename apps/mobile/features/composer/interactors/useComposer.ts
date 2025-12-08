@@ -1,5 +1,5 @@
 import { useComposerCtx } from '../contexts/useComposerCtx';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { CustomEmojiObjectType, UserObjectType } from '@dhaaga/bridge';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import TextEditorService from '#/services/text-editor.service';
 import {
@@ -53,7 +53,7 @@ function useComposer() {
 		});
 	}
 
-	function onEmojiAutofill(item: InstanceApi_CustomEmojiDTO) {
+	function onEmojiAutofill(item: CustomEmojiObjectType) {
 		dispatch({
 			type: PostComposerReducerActionType.SET_TEXT,
 			payload: {

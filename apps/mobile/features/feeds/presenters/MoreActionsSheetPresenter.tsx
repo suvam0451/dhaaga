@@ -16,7 +16,7 @@ import MenuView from '../../timelines/features/controller/views/MenuView';
 import { LinkingUtils } from '#/utils/linking.utils';
 import { AppDivider } from '#/components/lib/Divider';
 import { AtprotoApiAdapter, AtprotoUtils } from '@dhaaga/bridge';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 
 function Divider() {
 	const { theme } = useAppTheme();

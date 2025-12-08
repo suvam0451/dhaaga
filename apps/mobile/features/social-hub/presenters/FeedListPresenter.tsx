@@ -1,13 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Account, ProfilePinnedTimeline } from '@dhaaga/db';
-import { HubService } from '../../../services/hub.service';
-import Animated from 'react-native-reanimated';
+import { HubService } from '#/services/hub.service';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import PinnedTimelineItemView from '../views/PinnedTimelineItemView';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
-import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 
 type SocialHubPinnedTimelinesProps = {
 	account: Account;
@@ -29,7 +26,7 @@ function FeedListPresenter({
 			style={styles.root}
 			onPressAdd={onPressAddFeed}
 		>
-			<Animated.FlatList
+			<FlatList
 				data={destinations}
 				numColumns={2}
 				horizontal={false}

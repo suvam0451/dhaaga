@@ -7,14 +7,14 @@ import {
 } from '@dhaaga/core';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import Header from '../components/Header';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
-import StatusItem from '../../post-view/StatusItem';
+import PostTimelineEntryView from '../../post-item/PostTimelineEntryView';
 import { useDiscoverState } from '@dhaaga/core';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
+import { PostSearchStateIndicator } from '#/features/search/components/StateIndicators';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -26,7 +26,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const State = useDiscoverState();
 	const TimelineState = usePostTimelineState();
 	const TimelineDispatch = usePostTimelineDispatch();
-	const { data, fetchStatus, refetch } = useQuery(
+	const queryResult = useQuery(
 		searchPostsQueryOpts(
 			client,
 			driver,
@@ -36,6 +36,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 			State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
 		),
 	);
+	const { data, fetchStatus, refetch } = queryResult;
 
 	useEffect(() => {
 		TimelineDispatch({
@@ -79,6 +80,11 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		TimelineState.items.length,
 	);
 
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
 	return (
 		<View
 			style={{
@@ -86,18 +92,24 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 			}}
 		>
 			<FlatList
+				onLayout={onLayout}
 				data={TimelineState.items}
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>
-						<StatusItem />
+						<PostTimelineEntryView />
 					</WithAppStatusItemContext>
 				)}
 				style={{ flex: 1 }}
 				onScroll={onScroll}
-				ListHeaderComponent={Header}
 				scrollEventThrottle={64}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+				}
+				ListEmptyComponent={
+					<PostSearchStateIndicator
+						queryResult={queryResult}
+						containerHeight={ContainerHeight}
+					/>
 				}
 			/>
 			<TimelineLoadingIndicator

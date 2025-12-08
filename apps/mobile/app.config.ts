@@ -2,6 +2,7 @@ import { ExpoConfig, ConfigContext } from '@expo/config';
 
 const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
+const APP_SCHEME = process.env.APP_SCHEME ?? 'dhaaga-lite';
 
 const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
@@ -27,7 +28,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	orientation: 'portrait',
 	icon: './assets/dhaaga/icon.png',
 	userInterfaceStyle: 'dark',
-	scheme: 'dhaaga',
+	scheme: APP_SCHEME,
 	jsEngine: 'hermes',
 	platforms: ['android'],
 	developmentClient: {
@@ -50,9 +51,9 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		// softwareKeyboardLayoutMode: 'pan',
 		icon: './assets/dhaaga/icon.png',
 		adaptiveIcon: {
-			foregroundImage: './assets/dhaaga/adaptive-icon.png',
-			backgroundColor: '#e7ce8b',
-			monochromeImage: './assets/dhaaga/adaptive-icon.png',
+			foregroundImage: './assets/dhaaga/adaptive_foreground.png',
+			backgroundImage: './assets/dhaaga/adaptive_background.png',
+			monochromeImage: './assets/dhaaga/adaptive_foreground.png',
 		},
 	},
 	androidStatusBar: {

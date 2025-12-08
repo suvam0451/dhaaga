@@ -1,4 +1,4 @@
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	item: UserObjectType;

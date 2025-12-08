@@ -85,6 +85,7 @@ export type APP_ICON_ENUM =
 	| 'info'
 	| 'language'
 	| 'layers-outline'
+	| 'link-outline'
 	| 'list'
 	| 'lock-closed-outline'
 	| 'megaphone-outline'
@@ -839,6 +840,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name={'layers-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'link-outline':
+				return (
+					<Ionicons
+						name="link-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}

@@ -24,17 +24,13 @@
 		"./post-process": {
 			"import": "./dist/post-process.js",
 			"types": "./dist/post-process.d.ts"
-		},
-		"./typings": {
-			"import": "./dist/typings.js",
-			"types": "./dist/typings.d.ts"
 		}
 	},
 	"imports": {
 		"#/*": "./dist/*"
 	},
 	"dependencies": {
-		"@atproto/api": "^0.18.3",
+		"@atproto/api": "^0.18.5",
 		"dom-serializer": "^2.0.0",
 		"domhandler": "^5.0.3",
 		"html-entities": "^2.6.0",

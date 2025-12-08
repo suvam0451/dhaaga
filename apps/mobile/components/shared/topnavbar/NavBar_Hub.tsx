@@ -1,21 +1,21 @@
 import { Account } from '@dhaaga/db';
-import { TimeOfDayGreeting } from '../../../app/(tabs)/index';
+import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { appDimensions } from '../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { useHub } from '../../../hooks/utility/global-state-extractors';
+import { useHub } from '#/hooks/utility/global-state-extractors';
 import Animated, {
 	FadeOut,
 	FadeInLeft,
 	FlipOutXUp,
 } from 'react-native-reanimated';
-import { AppText } from '../../lib/Text';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { NativeTextH1 } from '#/ui/NativeText';
 
 type Props = {
 	acct?: Account;
@@ -61,7 +61,7 @@ function SocialHubHeader({ acct }: Props) {
 					</Animated.View>
 				) : (
 					<Animated.View entering={FadeInLeft} exiting={FlipOutXUp}>
-						<AppText.H1>{t(`hub.navbarLabel`)}</AppText.H1>
+						<NativeTextH1>{t(`hub.navbarLabel`)}</NativeTextH1>
 					</Animated.View>
 				)}
 			</Animated.View>

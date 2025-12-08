@@ -1,5 +1,5 @@
 import { ListItemEnum, ListItemType } from '../utils/itemType.types';
-import StatusItem from '#/features/post-view/StatusItem';
+import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import WithAppStatusItemContext from '../../../containers/contexts/WithPostItemContext';
 import { View } from 'react-native';
 
@@ -18,21 +18,21 @@ const FlashListPostRenderer = ({ item }: { item: ListItemType }) => {
 		case ListItemEnum.ListItemWithImage: {
 			return (
 				<WithAppStatusItemContext dto={item.props.dto}>
-					<StatusItem />
+					<PostTimelineEntryView />
 				</WithAppStatusItemContext>
 			);
 		}
 		case ListItemEnum.ListItemWithText: {
 			return (
 				<WithAppStatusItemContext dto={item.props.dto}>
-					<StatusItem />
+					<PostTimelineEntryView />
 				</WithAppStatusItemContext>
 			);
 		}
 		case ListItemEnum.ListItemWithSpoiler: {
 			return (
 				<WithAppStatusItemContext dto={item.props.dto}>
-					<StatusItem />
+					<PostTimelineEntryView />
 				</WithAppStatusItemContext>
 			);
 		}

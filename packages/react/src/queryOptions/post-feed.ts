@@ -10,7 +10,7 @@ import {
 	PleromaApiAdapter,
 	PostParser,
 } from '@dhaaga/bridge';
-import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '@dhaaga/core';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedGetTimeline } from '@atproto/api';
@@ -103,20 +103,17 @@ export function unifiedPostFeedQueryOptions(
 		);
 	}
 
-	function outputSchemaToResultPage(data: any): PostFeedFetchResultType {
-		return {
-			data: PostParser.parse<unknown[]>(data.feed, driver, server),
-			maxId: data.cursor === undefined ? null : data.cursor,
-			minId: null,
-		};
-	}
-
 	function generateFeedBatch(data: any) {
 		let _feed = [];
 		if (DriverService.supportsAtProto(driver)) {
-			if (data.posts) {
+			if (Array.isArray(data)) {
+				_feed = data;
+			} else if (data.posts && Array.isArray(data.posts)) {
 				// for hashtags
 				_feed = data.posts;
+			} else if (data.feed && Array.isArray(data.posts)) {
+				// feed generators
+				_feed = data.feed;
 			} else {
 				const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
 				_feed = _payload.data.feed;
@@ -224,13 +221,13 @@ export function unifiedPostFeedQueryOptions(
 				return createResultBatch(data.data, data?.maxId);
 			}
 			case TimelineFetchMode.FEED: {
-				const data = await (client as AtprotoApiAdapter).timelines.feed({
+				const data = await (client as AtprotoApiAdapter).timelines.getFeed({
 					limit,
 					cursor: maxId === null ? undefined : maxId,
 					feed: query!.id,
 				});
 
-				return outputSchemaToResultPage(data);
+				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.LIKES: {
 				if (DriverService.supportsAtProto(driver)) {

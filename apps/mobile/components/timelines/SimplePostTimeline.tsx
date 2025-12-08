@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 import { countEmojisInBodyContent } from '@dhaaga/bridge/post-process';
 import {
 	PostTimelineStateAction,
@@ -10,14 +10,14 @@ import { useEffect, useState } from 'react';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
-import StatusItem from '#/features/post-view/StatusItem';
+import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { appDimensions } from '#/styles/dimensions';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 import { FlatList, RefreshControl } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
-import PostTimelineSkeleton from '#/ui/PostTimelineSkeleton';
+import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { DefinedUseQueryResult } from '@tanstack/react-query';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
@@ -27,13 +27,13 @@ export function TimelineStateIndicator({
 	containerHeight,
 }: {
 	containerHeight: number;
-	queryResult: DefinedUseQueryResult<ResultPage<PostObjectType>, Error>;
+	queryResult: DefinedUseQueryResult<ResultPage<PostObjectType[]>, Error>;
 }) {
 	const State = usePostTimelineState()!;
 
 	const { isFetched, error, isRefetching } = queryResult;
 	if (State.items.length === 0 && (isRefetching || !isFetched))
-		return <PostTimelineSkeleton containerHeight={containerHeight} />;
+		return <PostSkeleton containerHeight={containerHeight} />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <View />;
 }
@@ -49,7 +49,7 @@ function SimplePostTimeline({
 	postProcessingFn = (input) => countEmojisInBodyContent(input),
 	skipTimelineInit,
 	feedSwitcherEnabled,
-}: SimpleTimelineProps<PostObjectType>) {
+}: SimpleTimelineProps<PostObjectType[]>) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
 	const State = usePostTimelineState()!;
@@ -112,7 +112,7 @@ function SimplePostTimeline({
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>
 						<TimelineFilter_EmojiCrash>
-							<StatusItem />
+							<PostTimelineEntryView />
 						</TimelineFilter_EmojiCrash>
 					</WithAppStatusItemContext>
 				)}

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { GetPostsQueryDTO, PostObjectType } from '@dhaaga/bridge/typings';
+import type { GetPostsQueryDTO, PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,

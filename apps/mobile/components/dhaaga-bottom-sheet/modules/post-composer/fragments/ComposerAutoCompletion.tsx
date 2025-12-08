@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
+import { APP_FONTS } from '#/styles/AppFonts';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
 } from 'react-native-reanimated';
-import TextEditorService from '../../../../../services/text-editor.service';
-import { PostComposerReducerActionType } from '../../../../../features/composer/reducers/composer.reducer';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import TextEditorService from '#/services/text-editor.service';
+import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import type { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 function ComposerAutoCompletion() {
 	const { theme } = useAppTheme();
@@ -36,7 +37,7 @@ function ComposerAutoCompletion() {
 		};
 	});
 
-	function onEmojiAccepted(item: InstanceApi_CustomEmojiDTO) {
+	function onEmojiAccepted(item: CustomEmojiObjectType) {
 		dispatch({
 			type: PostComposerReducerActionType.SET_TEXT,
 			payload: {

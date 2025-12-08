@@ -2,9 +2,9 @@ import { useLocalSearchParams } from 'expo-router';
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { userProfileQueryOpts } from '@dhaaga/react';
-import ProfileStatView from '../view/ProfileStatView';
+import ProfileStatView from './view/ProfileStatView';
 import ProfileAvatar from '#/components/common/user/fragments/ProfileAvatar';
-import UserRelationPresenter from './UserRelationPresenter';
+import UserRelationPresenter from './presenters/UserRelationPresenter';
 import { AppIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
 import {
@@ -35,7 +35,7 @@ import UserProfileMiscellaneous from '#/features/user-profiles/UserProfileMiscel
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 const TABS = ['gallery', 'pin-octicons', 'gallery', 'gallery'];
 
-export function ProfileContextWrapped() {
+export function UserProfilePage() {
 	const pagerRef = useRef(null);
 	const listsRef = useRef([]);
 	const [TabIndex, setTabIndex] = useState(0);
@@ -353,7 +353,7 @@ export function ProfileContextWrapped() {
 	);
 }
 
-export default ProfileContextWrapped;
+export default UserProfilePage;
 
 const localStyles = StyleSheet.create({
 	avatarImageContainer: {

@@ -1,4 +1,4 @@
-import InboxTimelineSkeleton from '#/ui/InboxTimelineSkeleton';
+import InboxPostSkeleton from '#/ui/skeletons/InboxPostSkeleton';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { UseQueryResult } from '@tanstack/react-query';
 import { View } from 'react-native';
@@ -14,7 +14,7 @@ export function StateIndicator({
 }) {
 	const { isFetched, error, isRefetching } = queryResult;
 	if (numItems === 0 && (isRefetching || !isFetched))
-		return <InboxTimelineSkeleton containerHeight={containerHeight} />;
+		return <InboxPostSkeleton containerHeight={containerHeight} />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <View />;
 }

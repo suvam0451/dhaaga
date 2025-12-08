@@ -5,7 +5,7 @@ import {
 } from './_timeline.shared.js';
 import { produce } from 'immer';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { FeedObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { FeedObjectType, ResultPage } from '@dhaaga/bridge';
 import {
 	createContext,
 	type Dispatch,
@@ -15,7 +15,7 @@ import {
 } from 'react';
 
 type State = TimelineReducerBaseState<FeedObjectType> & {};
-type PageType = ResultPage<FeedObjectType>;
+type PageType = ResultPage<FeedObjectType[]>;
 
 export const DEFAULT: State = {
 	...timelineReducerBaseDefaults,

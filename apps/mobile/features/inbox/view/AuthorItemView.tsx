@@ -40,6 +40,7 @@ export function AuthorItemView({
 	onUserPressed,
 	onMoreOptionsPressed,
 	extraData,
+	handle,
 }: Props) {
 	const { theme } = useAppTheme();
 
@@ -73,17 +74,21 @@ export function AuthorItemView({
 				</View>
 			</Pressable>
 			<Pressable style={{ marginLeft: 12, flex: 1 }} onPress={onUserPressed}>
-				<TextContentView
-					tree={parsedDisplayName}
-					variant={'displayName'}
-					mentions={[]}
-					emojiMap={emojiMap}
-					oneLine
-					style={{
-						marginRight: 16,
-						marginBottom: appDimensions.timelines.sectionBottomMargin * 0.25,
-					}}
-				/>
+				{parsedDisplayName.length > 0 ? (
+					<TextContentView
+						tree={parsedDisplayName}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={emojiMap}
+						oneLine
+						style={{
+							marginRight: 16,
+							marginBottom: appDimensions.timelines.sectionBottomMargin * 0.25,
+						}}
+					/>
+				) : (
+					<AppText.SemiBold>{handle}</AppText.SemiBold>
+				)}
 				<AppText.Normal
 					style={{ fontSize: 13.5 }}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}

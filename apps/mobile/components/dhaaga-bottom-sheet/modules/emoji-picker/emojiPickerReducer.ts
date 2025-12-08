@@ -1,5 +1,6 @@
 import { produce } from 'immer';
-import { KNOWN_SOFTWARE, CustomEmojiObject } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
+import type { CustomEmojiObjectType } from '@dhaaga/bridge';
 import AccountSessionManager from '#/services/session/account-session.service';
 
 export type Emoji = {
@@ -7,15 +8,16 @@ export type Emoji = {
 	url: string;
 	tags: string[];
 };
+
 export type EMOJI_PICKER_STATE = {
-	tagEmojiMap: Map<string, Emoji[]>;
+	tagEmojiMap: Map<string, CustomEmojiObjectType[]>;
 	allTags: string[];
-	selectedReaction: CustomEmojiObject | null;
+	selectedReaction: CustomEmojiObjectType | null;
 	// filter context
 	searchTerm: string;
 	selectedTag: string;
 	// filter results
-	visibleReactions: Emoji[];
+	visibleReactions: CustomEmojiObjectType[];
 	// meta
 	resultSize: number;
 	totalSize: number;
@@ -60,7 +62,7 @@ function emojiPickerReducer(
 			}
 
 			return produce(state, (draft) => {
-				draft.tagEmojiMap = new Map<string, CustomEmojiObject[]>();
+				draft.tagEmojiMap = new Map<string, CustomEmojiObjectType[]>();
 				switch (_domain) {
 					case KNOWN_SOFTWARE.PLEROMA:
 					case KNOWN_SOFTWARE.AKKOMA: {

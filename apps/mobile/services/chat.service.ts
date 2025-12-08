@@ -1,7 +1,7 @@
 import { ChatBskyConvoDefs, ChatBskyConvoListConvos } from '@atproto/api';
 import { Account, AccountMetadataService, DataSource } from '@dhaaga/db';
 import { UserParser, ChatParser, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import type { MessageObjectType, UserObjectType } from '@dhaaga/bridge/typings';
+import type { MessageObjectType, UserObjectType } from '@dhaaga/bridge';
 
 /**
  * Represents a chatroom item
@@ -38,7 +38,7 @@ class ChatService {
 			unreadCount: input.unreadCount,
 			muted: input.muted === undefined ? false : input.muted,
 			members,
-			seen: input.opened === undefined ? false : input.opened,
+			seen: true,
 			lastMessage,
 			myId: myDid,
 		} as AppChatRoom;

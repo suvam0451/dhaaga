@@ -55,7 +55,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		TimelineDispatch({
 			type: UserTimelineStateAction.APPEND,
 			payload: {
-				items: data,
+				data,
 				maxId,
 				minId: null,
 			},
@@ -89,7 +89,10 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				refreshing={Refreshing}
 				ListHeaderComponent={Header}
 			/>
-			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
+			<TimelineLoadingIndicator
+				numItems={State.results.users.length}
+				networkFetchStatus={fetchStatus}
+			/>
 		</View>
 	);
 }

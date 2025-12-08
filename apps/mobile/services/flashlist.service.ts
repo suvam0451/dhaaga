@@ -2,7 +2,7 @@ import type {
 	UserObjectType,
 	NotificationObjectType,
 	PostObjectType,
-} from '@dhaaga/bridge/typings';
+} from '@dhaaga/bridge';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import {
 	ProfilePinnedTag,

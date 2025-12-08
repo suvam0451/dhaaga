@@ -11,7 +11,7 @@
 		"immer": "^11.0.1"
 	},
 	"peerDependencies": {
-		"@atproto/api": ">=0.16.0",
+		"@atproto/api": "*",
 		"react": ">=19.0.0"
 	},
 	"scripts": {

@@ -1,12 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import {
 	useAppAcct,
 	useAppApiClient,
 	useAppDb,
 } from '#/hooks/utility/global-state-extractors';
-import WithAutoHideTopNavBar from '#/components/containers/WithAutoHideTopNavBar';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	PostTimelineStateAction,
 	PostTimelineCtx,
@@ -15,10 +13,9 @@ import {
 } from '@dhaaga/core';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
-import { View } from 'react-native';
+import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 
 function DataView() {
-	const [Refreshing, setRefreshing] = useState(false);
 	const { db } = useAppDb();
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
@@ -49,7 +46,7 @@ function DataView() {
 		});
 	}, [db, id]);
 
-	const { fetchStatus, data, status, refetch } = useQuery(
+	const queryResult = useQuery(
 		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
 			type: State.feedType,
 			query: State.query,
@@ -58,42 +55,12 @@ function DataView() {
 		}),
 	);
 
-	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
-		dispatch({
-			type: PostTimelineStateAction.APPEND_RESULTS,
-			payload: data,
-		});
-	}, [fetchStatus]);
-
-	function loadMore() {
-		dispatch({
-			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
-		});
-	}
-
-	/**
-	 * Composite Hook Collection
-	 */
-	const { onScroll, translateY } = useScrollMoreOnPageEnd({
-		itemCount: State.items.length,
-		loadNextPage: loadMore,
-	});
-
-	function onRefresh() {
-		setRefreshing(true);
-		dispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-		refetch().finally(() => {
-			setRefreshing(false);
-		});
-	}
-
 	return (
-		<WithAutoHideTopNavBar title={'Feed'} translateY={translateY}>
-			<View />
-		</WithAutoHideTopNavBar>
+		<SimplePostTimeline
+			timelineLabel={State?.query?.label ?? 'Custom Feed'}
+			queryResult={queryResult}
+			skipTimelineInit
+		/>
 	);
 }
 

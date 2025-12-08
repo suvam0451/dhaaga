@@ -1,18 +1,21 @@
-import { DhaagaJsMentionObject, PostTargetInterface } from './_interface.js';
+import {
+	DhaagaJsMentionObject,
+	PostTargetInterface,
+	Status,
+} from './_interface.js';
 import { MediaAttachmentToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { MediaAttachmentInstance } from '../media-attachment/unique.js';
-import PostAdapterBase from './default.js';
 import type { MastoStatus } from '../../types/mastojs.types.js';
 import { CasingUtil } from '../../utils/casing.js';
+import {
+	MastoApiCardObjectType,
+	PostLinkAttachmentObjectType,
+} from '#/types/shared/link-attachments.js';
 
-class MastoApiPostAdapter
-	extends PostAdapterBase
-	implements PostTargetInterface
-{
+class MastoApiPostAdapter implements PostTargetInterface {
 	ref: MastoStatus;
 
 	constructor(ref: MastoStatus) {
-		super();
 		this.ref = ref;
 	}
 
@@ -105,7 +108,7 @@ class MastoApiPostAdapter
 
 	getAccountUrl = () => (this.ref.account as any).uri || this.ref.account.url;
 
-	getRepostedStatus() {
+	getRepostedStatus(): PostTargetInterface | null {
 		if (this.ref.reblog) {
 			return new MastoApiPostAdapter(this.ref.reblog);
 		}
@@ -126,6 +129,22 @@ class MastoApiPostAdapter
 		});
 	}
 
+	getLinkAttachments(): PostLinkAttachmentObjectType[] {
+		const data = this.ref.card as unknown as MastoApiCardObjectType;
+		if (!data) return [];
+
+		return [
+			{
+				url: data.url,
+				title: data.title,
+				description: data.description,
+				bannerImageUrl: data.image,
+				bannerWidth: data.width,
+				bannerHeight: data.height,
+			},
+		];
+	}
+
 	getContent = () => this.ref.content;
 
 	getFacets = () => [];
@@ -135,6 +154,51 @@ class MastoApiPostAdapter
 	}
 
 	getAccountId_Poster = () => this.ref.account?.id;
+
+	getCid(): string | null {
+		return null;
+	}
+
+	getMyReaction(): string | null | undefined {
+		return undefined;
+	}
+
+	getParentRaw(): Status {
+		return undefined;
+	}
+
+	getQuoteRaw(): undefined | null {
+		return undefined;
+	}
+
+	getReactionEmojis(): {
+		height?: number;
+		width?: number;
+		name: string;
+		url: string;
+	}[] {
+		return [];
+	}
+
+	getRootRaw(): undefined | null {
+		return undefined;
+	}
+
+	getUri(): string | null {
+		return null;
+	}
+
+	hasParentAvailable(): boolean {
+		return false;
+	}
+
+	hasQuoteAvailable(): boolean {
+		return false;
+	}
+
+	hasRootAvailable(): boolean {
+		return false;
+	}
 }
 
 export default MastoApiPostAdapter;

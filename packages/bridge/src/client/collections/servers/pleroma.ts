@@ -1,7 +1,7 @@
 import { InstanceRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
-import { CustomEmojiObject } from '#/types/shared/reactions.js';
+import { CustomEmojiObjectType } from '#/types/shared/reactions.js';
 
 export class PleromaInstanceRouter implements InstanceRoute {
 	direct: FetchWrapper;
@@ -19,7 +19,7 @@ export class PleromaInstanceRouter implements InstanceRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	async getCustomEmojis(urlLike: string): Promise<CustomEmojiObject[]> {
+	async getCustomEmojis(urlLike: string): Promise<CustomEmojiObjectType[]> {
 		const data =
 			await MegalodonPleromaWrapper.create(
 				urlLike,

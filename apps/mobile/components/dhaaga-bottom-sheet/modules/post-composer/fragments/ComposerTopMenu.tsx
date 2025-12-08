@@ -92,7 +92,6 @@ function ComposerTopMenu() {
 				}}
 			>
 				<View style={styles.avatarBorderBox}>
-					{/*@ts-ignore-next-line*/}
 					<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
 				</View>
 				<View style={{ flexGrow: 1, marginLeft: 6 }}>
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
 	avatarContainer: {
 		height: 36,
 		width: 36,
-		borderRadius: '100%',
+		borderRadius: 19,
 	},
 	displayName: {
 		fontSize: 16,

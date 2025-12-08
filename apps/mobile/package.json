@@ -16,14 +16,15 @@
 		"@react-native-masked-view/masked-view": "0.3.2",
 		"@react-navigation/bottom-tabs": "^7.4.0",
 		"@react-navigation/native-stack": "^7.3.16",
-		"@shopify/flash-list": "^2.2.0",
 		"@tanstack/react-query": "^5.90.12",
 		"expo": "~54.0.27",
 		"expo-asset": "~12.0.9",
 		"expo-audio": "~1.0.16",
+		"expo-auth-session": "~7.0.10",
 		"expo-build-properties": "~1.0.10",
 		"expo-clipboard": "~8.0.8",
 		"expo-constants": "~18.0.8",
+		"expo-crypto": "~15.0.8",
 		"expo-dev-client": "~6.0.20",
 		"expo-device": "~8.0.10",
 		"expo-file-system": "~19.0.11",
@@ -42,7 +43,7 @@
 		"expo-video": "~3.0.15",
 		"expo-web-browser": "~15.0.10",
 		"fast-text-encoding": "^1.0.6",
-		"i18next": "^25.7.1",
+		"i18next": "^25.7.2",
 		"immer": "^11.0.1",
 		"jwt-decode": "^4.0.0",
 		"react": "19.1.0",
@@ -79,6 +80,10 @@
 	"devDependencies": {
 		"@types/react": "^19.2.7",
 		"typescript": "~5.9.2"
+	},
+	"imports": {
+		"#": "./",
+		"#/*": "./*"
 	},
 	"expo": {
 		"install": {

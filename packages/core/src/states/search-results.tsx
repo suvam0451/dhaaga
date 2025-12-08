@@ -1,4 +1,4 @@
-import type { PostObjectType, UserObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
 	createContext,
@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 const searchTabs = [
+	'explore',
 	'top',
 	'latest',
 	'feeds',

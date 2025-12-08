@@ -6,9 +6,9 @@ import {
 	ActivityPubReactionsService,
 } from '@dhaaga/bridge';
 import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../states/_global';
+import useGlobalState from '#/states/_global';
 import { UserParser } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type ReactionDetails = {
 	id: string;

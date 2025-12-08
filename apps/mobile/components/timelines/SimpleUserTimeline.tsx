@@ -1,4 +1,4 @@
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import {
@@ -17,7 +17,7 @@ function SimpleUserTimeline({
 	timelineLabel,
 	queryResult,
 	skipTimelineInit,
-}: SimpleTimelineProps<UserObjectType>) {
+}: SimpleTimelineProps<UserObjectType[]>) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
 	const State = useUserTimelineState();
@@ -36,7 +36,7 @@ function SimpleUserTimeline({
 		if (fetchStatus === 'fetching' || status !== 'success') return;
 		dispatch({
 			type: UserTimelineStateAction.APPEND,
-			payload: { ...data, items: data.items },
+			payload: data,
 		});
 	}, [fetchStatus]);
 

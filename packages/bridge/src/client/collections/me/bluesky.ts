@@ -16,9 +16,10 @@ export class BlueskyMeRouter implements MeRoute {
 		this.xrpc = getXrpcAgent(this.dto);
 	}
 
-	async getMe(): Promise<AppBskyActorGetProfile.Response> {
+	async getMe(): Promise<AppBskyActorGetProfile.OutputSchema> {
 		const agent = getBskyAgent(this.dto);
-		return agent.getProfile({ actor: this.dto.did });
+		const data = await agent.getProfile({ actor: this.dto.did });
+		return data.data;
 	}
 
 	/**

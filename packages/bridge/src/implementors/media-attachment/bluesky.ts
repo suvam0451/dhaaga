@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { MediaAttachmentTargetInterface } from './_interface.js';
-import { RandomUtil } from '../../utils/random.js';
+import { RandomUtil } from '#/utils/random.js';
+import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
 
 /**
  * Bluesky Media Attachment
@@ -99,7 +100,7 @@ class BlueskyVideoAttachmentAdapter implements MediaAttachmentTargetInterface {
 	}
 }
 
-export const bskyEmbedExternalSchema = z.object({
+export const bskyEmbedExternalSchema_2 = z.object({
 	// Record
 	// $type: z.literal('app.bsky.embed.external'),
 	// external: z.object({
@@ -121,7 +122,10 @@ export const bskyEmbedExternalSchema = z.object({
 
 type BskyEmbedExternalType = z.infer<typeof bskyEmbedExternalSchema>;
 
-class EmbedViewProcessor_External implements MediaAttachmentTargetInterface {
+/**
+ * @deprecated
+ */
+class EmbedViewProcessor_External_2 implements MediaAttachmentTargetInterface {
 	/**
 	 *  "thumb": {
 	 *		"$type": "blob",
@@ -139,7 +143,7 @@ class EmbedViewProcessor_External implements MediaAttachmentTargetInterface {
 	}
 
 	static create(obj: BskyEmbedExternalType) {
-		return new EmbedViewProcessor_External(obj);
+		return new EmbedViewProcessor_External_2(obj);
 	}
 
 	static isCompatible(obj: any) {
@@ -149,7 +153,7 @@ class EmbedViewProcessor_External implements MediaAttachmentTargetInterface {
 
 	static compile(obj: any): MediaAttachmentTargetInterface[] {
 		const { data } = bskyEmbedExternalSchema.safeParse(obj);
-		return [EmbedViewProcessor_External.create(data!)];
+		return [EmbedViewProcessor_External_2.create(data!)];
 	}
 
 	/**
@@ -197,20 +201,60 @@ const bskyEmbedImagesSchemaImageItem = z.object({
 
 type BskyImageEmbedItem = z.infer<typeof bskyEmbedImagesSchemaImageItem>;
 
-const bskyEmbedImagesSchema = z.object({
+const bskyEmbedImagesViewSchema = z.object({
 	$type: z.literal('app.bsky.embed.images#view'),
 	images: z.array(bskyEmbedImagesSchemaImageItem),
 });
 
-// handles --> app.bsky.embed.images#view
+const bskyEmbedImageSchema = z.object({
+	$type: z.literal('app.bsky.embed.images'),
+	images: z.array(
+		z.object({
+			alt: z.string(),
+			aspectRatio: z.object({
+				height: z.number().int(),
+				width: z.number().int(),
+			}),
+			image: z.object({
+				$type: z.literal('blob'),
+				ref: z.object({
+					$link: z.string(),
+				}),
+				mimeType: z.string(),
+				size: z.number().int(),
+			}),
+		}),
+	),
+});
+
 class EmbedViewProcessor_Images {
 	static isCompatible(obj: any) {
-		const { success } = bskyEmbedImagesSchema.safeParse(obj);
+		const { success } = bskyEmbedImageSchema.safeParse(obj);
 		return success;
 	}
 
 	static compile(obj: any): MediaAttachmentTargetInterface[] {
-		const { data } = bskyEmbedImagesSchema.safeParse(obj);
+		const { data } = bskyEmbedImageSchema.safeParse(obj);
+		return data!.images.map((o) =>
+			BlueskyMediaAttachmentAdapter.create({
+				alt: o.alt,
+				aspectRatio: o.aspectRatio,
+				fullsize: o.image.ref.$link,
+				thumb: o.image.ref.$link,
+			}),
+		);
+	}
+}
+
+// handles --> app.bsky.embed.images#view
+class EmbedViewProcessor_ImagesView {
+	static isCompatible(obj: any) {
+		const { success } = bskyEmbedImagesViewSchema.safeParse(obj);
+		return success;
+	}
+
+	static compile(obj: any): MediaAttachmentTargetInterface[] {
+		const { data } = bskyEmbedImagesViewSchema.safeParse(obj);
 		return data!.images.map((o) => BlueskyMediaAttachmentAdapter.create(o));
 	}
 }
@@ -249,6 +293,34 @@ class EmbedViewProcessor_Video {
 	}
 }
 
+const bskyEmbedExternalSchema = z.object({
+	$type: z.literal('app.bsky.embed.external#view'),
+	external: z.object({
+		uri: z.string(),
+		title: z.string(),
+		description: z.string(),
+		thumb: z.string(),
+	}),
+});
+
+class LinkEmbedProcessor_External {
+	static isCompatible(obj: any) {
+		const { success } = bskyEmbedExternalSchema.safeParse(obj);
+		return success;
+	}
+
+	static compile(obj: any): PostLinkAttachmentObjectType[] {
+		const { data } = bskyEmbedExternalSchema.safeParse(obj);
+		return [
+			{
+				...data!.external,
+				url: data!.external.uri,
+				bannerImageUrl: data!.external.thumb,
+			},
+		];
+	}
+}
+
 /**
  * --------------------
  */
@@ -267,8 +339,8 @@ class EmbedViewProcessor_RecordWithMedia {
 
 	static compile(obj: any): MediaAttachmentTargetInterface[] {
 		const { data } = bskyEmbedRecordWithMediaSchema.safeParse(obj);
-		if (EmbedViewProcessor_Images.isCompatible(data!.media))
-			return EmbedViewProcessor_Images.compile(data!.media);
+		if (EmbedViewProcessor_ImagesView.isCompatible(data!.media))
+			return EmbedViewProcessor_ImagesView.compile(data!.media);
 		if (EmbedViewProcessor_Video.isCompatible(data!.media))
 			return EmbedViewProcessor_Video.compile(data!.media);
 		return [];
@@ -276,8 +348,9 @@ class EmbedViewProcessor_RecordWithMedia {
 }
 
 export {
-	EmbedViewProcessor_External,
-	EmbedViewProcessor_Images,
+	EmbedViewProcessor_External_2,
+	LinkEmbedProcessor_External,
+	EmbedViewProcessor_ImagesView,
 	EmbedViewProcessor_RecordWithMedia,
 	EmbedViewProcessor_Video,
 	BlueskyMediaAttachmentAdapter,

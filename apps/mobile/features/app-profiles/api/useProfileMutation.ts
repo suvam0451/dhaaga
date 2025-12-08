@@ -6,7 +6,7 @@ import {
 	ProfileService,
 	ProfilePinnedTimelineService,
 } from '@dhaaga/db';
-import type { UserObjectType, FeedObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType, FeedObjectType } from '@dhaaga/bridge';
 
 export function useProfileMutation() {
 	const { db } = useAppDb();

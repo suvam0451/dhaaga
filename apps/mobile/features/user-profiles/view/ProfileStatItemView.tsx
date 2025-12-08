@@ -2,6 +2,7 @@ import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
 import { Pressable, StyleSheet } from 'react-native';
 import { AppText } from '../../../components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { NativeTextH6 } from '#/ui/NativeText';
 
 function util(o: number): string {
 	const formatter = new Intl.NumberFormat('en-US', {
@@ -24,9 +25,9 @@ function ProfileStatItemView({ count, label, onPress }: Props) {
 	}
 	return (
 		<Pressable style={[{}, styles.touchContainer]} onPress={_onPress}>
-			<AppText.H6 style={{ color: theme.complementary.a0 }}>
+			<NativeTextH6 style={{ color: theme.complementary.a0 }}>
 				{util(count)}
-			</AppText.H6>
+			</NativeTextH6>
 			<AppText.Medium
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 				style={[{ fontSize: 13 }]}

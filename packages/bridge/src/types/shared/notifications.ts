@@ -4,6 +4,10 @@ import { appUserObjectSchema, postObjectSchema } from '#/types/index.js';
 
 const appNotificationGroupedUserItemSchema = z.object({
 	item: appUserObjectSchema,
+	/**
+	 * this lets us treat users who liked
+	 * and shared separately
+	 */
 	types: z.array(z.string()),
 	extraData: z.any(),
 });
@@ -17,6 +21,8 @@ const appNotificationObjectSchema = z.object({
 	extraData: z.any(),
 	read: z.boolean(),
 	users: z.array(appNotificationGroupedUserItemSchema).optional(),
+	uri: z.string().optional(),
+	cid: z.string().optional(),
 });
 
 type NotificationObjectType = z.infer<typeof appNotificationObjectSchema>;

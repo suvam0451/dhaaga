@@ -1,16 +1,16 @@
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import RawTextSegment from '../../../shared/mfm/RawTextSegment';
-import { TEXT_PARSING_VARIANT } from '../../../../types/app.types';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../utils/theming.util';
+import { TEXT_PARSING_VARIANT } from '#/types/app.types';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import HashtagSegment from '../../../shared/mfm/HashtagSegment';
-import { appDimensions } from '../../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 import MentionSegment from '../../../shared/mfm/MentionSegment';
 import { TextParser } from '@dhaaga/bridge';
 import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
 import LinkSegment from '../../../shared/mfm/LinkSegment';
 import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
-import { PostMentionObjectType } from '@dhaaga/bridge/dist/types';
+import type { PostMentionObjectType } from '@dhaaga/bridge';
 
 type TextContentNodeProps = {
 	node: NodeContent;

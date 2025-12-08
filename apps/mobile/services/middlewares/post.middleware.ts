@@ -1,11 +1,11 @@
-import { ActivitypubHelper } from '@dhaaga/bridge';
+import { ActivitypubHelper, TextNodeParser } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AccountSavedPost } from '@dhaaga/db';
 import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
 import { TextParser, RandomUtil, postObjectSchema } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 /**
  * converts unified interfaces into
@@ -46,6 +46,7 @@ class PostMiddleware {
 				displayName: user.displayName,
 				handle: handle,
 				instance: user.remoteServer,
+				parsedDisplayName: TextNodeParser.parse(driver, user.displayName || ''),
 			},
 			content: {
 				raw: input.textContent,
@@ -58,6 +59,13 @@ class PostMiddleware {
 						url: o.url,
 						previewUrl: o.previewUrl,
 					})) || [],
+				links: [],
+				parsed: TextNodeParser.parse(
+					driver,
+					input.textContent,
+					// FIXME: bluesky saved post objects would need to also store facets
+					// input.getFacets(),
+				),
 			},
 			stats: {
 				replyCount: -1,

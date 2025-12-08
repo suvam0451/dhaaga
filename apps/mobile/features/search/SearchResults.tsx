@@ -1,4 +1,3 @@
-import { RefetchOptions } from '@tanstack/react-query';
 import {
 	useDiscoverDispatch,
 	useDiscoverState,
@@ -7,17 +6,13 @@ import {
 	UserTimelineCtx,
 	FeedTimelineCtx,
 } from '@dhaaga/core';
-import FeedResultInteractor from '../interactors/FeedResultInteractor';
-import Header from '../components/Header';
-import PostResultInteractor from '../interactors/PostResultInteractor';
-import UserResultInteractor from '../interactors/UserResultInteractor';
-import LandingPageView from '../views/LandingPageView';
+import FeedResultInteractor from './views/FeedResultInteractor';
+import PostResultInteractor from './views/PostResultInteractor';
+import UserResultInteractor from './views/UserResultInteractor';
+import LandingPageView from './views/LandingPageView';
+import { View } from 'react-native';
 
-type FeedSearchResultPresenterProps = {
-	refetch: (options?: RefetchOptions) => Promise<void>;
-};
-
-function SearchResultPresenter({ refetch }: FeedSearchResultPresenterProps) {
+function SearchResults() {
 	const State = useDiscoverState();
 	const DiscoverTabDispatch = useDiscoverDispatch();
 
@@ -50,8 +45,8 @@ function SearchResultPresenter({ refetch }: FeedSearchResultPresenterProps) {
 			);
 
 		default:
-			return <Header />;
+			return <View />;
 	}
 }
 
-export default SearchResultPresenter;
+export default SearchResults;

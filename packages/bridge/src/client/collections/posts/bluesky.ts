@@ -1,5 +1,6 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
 import {
+	AppBskyFeedDefs,
 	AppBskyFeedGetPostThread,
 	AtpSessionData,
 	ChatBskyConvoGetConvo,
@@ -54,6 +55,14 @@ class BlueskyStatusesRouter implements StatusesRoute {
 			uri: id,
 			depth: 1,
 		});
+	}
+
+	async getPosts(ids: string[]): Promise<AppBskyFeedDefs.PostView[]> {
+		const agent = getBskyAgent(this.dto);
+		const data = await agent.getPosts({
+			uris: ids,
+		});
+		return data.data.posts;
 	}
 
 	async getPostContext(

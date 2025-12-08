@@ -4,7 +4,7 @@ import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
 import UserRelationPresenter from '../presenters/UserRelationPresenter';
-import { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { TextContentView } from '#/components/common/status/TextContentView';
 
 function util(o: number): string {

@@ -102,77 +102,6 @@ export class AppText {
 		);
 	}
 
-	static H6({
-		forwardedKey,
-		keygen,
-		style,
-		color,
-		children,
-		numberOfLines,
-		emphasis,
-	}: AppTextProps) {
-		const { theme } = useAppTheme();
-
-		let _color =
-			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
-
-		let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
-			AppTextVariant.H6,
-		);
-
-		return (
-			<Text
-				key={keygen ? RandomUtil.nanoId() : forwardedKey}
-				style={[
-					_baseStyling,
-					{
-						color: _color,
-					},
-					style,
-				]}
-				numberOfLines={numberOfLines}
-			>
-				{children}
-			</Text>
-		);
-	}
-
-	static H1({
-		forwardedKey,
-		keygen,
-		style,
-		color,
-		children,
-		numberOfLines,
-		emphasis,
-	}: AppTextProps) {
-		const { theme } = useAppTheme();
-
-		let _color =
-			color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
-
-		let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
-			AppTextVariant.H1,
-		);
-
-		return (
-			<Text
-				key={keygen ? RandomUtil.nanoId() : forwardedKey}
-				style={[
-					_baseStyling,
-					{
-						color: _color,
-					},
-					style,
-				]}
-				numberOfLines={numberOfLines}
-				textBreakStrategy={'simple'}
-			>
-				{children}
-			</Text>
-		);
-	}
-
 	static Normal({
 		style,
 		color,
@@ -227,24 +156,6 @@ export class AppText {
 					_baseStyling,
 					{
 						color: _color,
-					},
-					style,
-				]}
-				numberOfLines={numberOfLines}
-			>
-				{children}
-			</Text>
-		);
-	}
-
-	static SemiBoldAlt({ style, children, numberOfLines }: AppTextProps) {
-		const { theme } = useAppTheme();
-		return (
-			<Text
-				style={[
-					{
-						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-						color: theme.secondary.a0,
 					},
 					style,
 				]}

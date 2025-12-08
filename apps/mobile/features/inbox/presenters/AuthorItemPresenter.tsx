@@ -16,7 +16,7 @@ import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '#/services/localization.service';
 import { AppIcon } from '#/components/lib/Icon';
 import useAppNavigator from '#/states/useAppNavigator';
-import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge/typings';
+import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge';
 
 type Props = {
 	user: PostAuthorType | UserObjectType;
@@ -120,9 +120,8 @@ function AuthorItemPresenter({
 				} else {
 					return {
 						Icon: (
-							// @ts-ignore-next-line
 							<Image
-								source={{ uri: emoji }}
+								source={{ uri: emoji.url }}
 								style={{ height: 18, width: 18 }}
 							/>
 						),

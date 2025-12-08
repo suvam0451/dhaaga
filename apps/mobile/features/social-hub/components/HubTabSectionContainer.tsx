@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	item: {
-		borderRadius: '100%',
+		borderRadius: 32,
 		width: 64,
 		height: 64,
 		backgroundColor: 'red',

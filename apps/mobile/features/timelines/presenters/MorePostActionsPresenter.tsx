@@ -13,7 +13,7 @@ import { AppDivider } from '#/components/lib/Divider';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { DriverService, PostInspector } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 function ActionButton({
 	Icon,

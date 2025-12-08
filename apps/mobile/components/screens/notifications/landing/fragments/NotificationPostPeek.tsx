@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import useAppNavigator from '#/states/useAppNavigator';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../../common/status/TextContentView';
@@ -11,9 +11,9 @@ type Props = {
 };
 
 /**
- * Shows a preview of the status being liked/boosted,
+ * Shows a preview of the status being liked/boosted.
  *
- * - upto 3 lines for text-only posts
+ * - up to 3 lines for text-only posts
  */
 export function NotificationPostPeek({ post }: Props) {
 	const { driver } = useAppApiClient();
@@ -26,7 +26,7 @@ export function NotificationPostPeek({ post }: Props) {
 	}
 
 	return (
-		<View>
+		<>
 			<MediaThumbListPresenter
 				post={post}
 				items={post?.content?.media}
@@ -40,6 +40,6 @@ export function NotificationPostPeek({ post }: Props) {
 					emojiMap={post.calculated.emojis}
 				/>
 			</PressableDisabledOnSwipe>
-		</View>
+		</>
 	);
 }

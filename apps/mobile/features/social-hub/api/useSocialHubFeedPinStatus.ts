@@ -1,4 +1,4 @@
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { Profile, ProfilePinnedTimelineService } from '@dhaaga/db';
 import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
 import { useQuery } from '@tanstack/react-query';

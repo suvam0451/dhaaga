@@ -1,9 +1,9 @@
-import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 import { DefinedUseQueryResult } from '@tanstack/react-query';
 import { usePostTimelineState } from '@dhaaga/core';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { View } from 'react-native';
-import PostTimelineSkeleton from '#/ui/PostTimelineSkeleton';
+import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 
 export function PostTimelineStateIndicator({
 	queryResult,
@@ -16,7 +16,7 @@ export function PostTimelineStateIndicator({
 
 	const { isFetched, error, isRefetching } = queryResult;
 	if (State.items.length === 0 && (isRefetching || !isFetched))
-		return <PostTimelineSkeleton containerHeight={containerHeight} />;
+		return <PostSkeleton containerHeight={containerHeight} />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <View />;
 }

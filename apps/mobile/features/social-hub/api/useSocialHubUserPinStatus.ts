@@ -1,10 +1,7 @@
 import { Profile, ProfilePinnedUserService } from '@dhaaga/db';
 import { useQuery } from '@tanstack/react-query';
-import {
-	useAppAcct,
-	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 export function useSocialHubUserPinStatus(
 	profile: Profile,
