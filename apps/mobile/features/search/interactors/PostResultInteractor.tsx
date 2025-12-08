@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { SEARCH_RESULT_TAB } from '../../../services/driver.service';
+import { SEARCH_RESULT_TAB } from '#/services/driver.service';
 import {
 	PostTimelineStateAction,
 	usePostTimelineState,
 	usePostTimelineDispatch,
 } from '@dhaaga/core';
 import { FlatList, RefreshControl, View } from 'react-native';
-import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import Header from '../components/Header';
-import WithAppStatusItemContext from '../../../components/containers/contexts/WithPostItemContext';
-import StatusItem from '../../../components/common/status/StatusItem';
+import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import StatusItem from '../../post-view/StatusItem';
 import { useDiscoverState } from '@dhaaga/core';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
@@ -100,7 +100,10 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 			/>
-			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
+			<TimelineLoadingIndicator
+				numItems={TimelineState.items.length}
+				networkFetchStatus={fetchStatus}
+			/>
 		</View>
 	);
 }

@@ -4,11 +4,11 @@ import {
 	useAppDb,
 	useAppManager,
 	useProfileManager,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { View } from 'react-native';
 import { ProfilePinnedUserService } from '@dhaaga/db';
 import { AppMenuItem } from '../../lib/Menu';
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 function AppBottomSheetUserMoreActions() {
 	const currentTargetId = useRef(null);

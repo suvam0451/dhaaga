@@ -1,4 +1,4 @@
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 import UserListItemView from '../../timelines/view/UserListItemView';
 import { Animated, RefreshControl, StyleProp, ViewStyle } from 'react-native';
 

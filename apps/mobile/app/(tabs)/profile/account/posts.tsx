@@ -35,14 +35,12 @@ function Content() {
 		});
 	}, [db]);
 
-	console.log(State.feedType, State.appliedMaxId, State.opts, State.query);
 	const queryResult = useTimelineQueryReactNative({
 		type: State.feedType,
 		query: State.query,
 		opts: State.opts,
 		maxId: State.appliedMaxId,
 	});
-	console.log(queryResult.data?.items.length, 'items returned');
 
 	return (
 		<SimplePostTimeline

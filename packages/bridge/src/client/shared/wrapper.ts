@@ -29,12 +29,12 @@ class Route {
 			case 'did': {
 				// AT protocol exclusive
 				const data: AppBskyActorGetProfile.Response =
-					await this.client.accounts.get(query.did);
+					await this.client.users.get(query.did);
 				return UserParser.parse<unknown>(data.data, driver, server!);
 			}
 
 			case 'userId': {
-				const data = await this.client.accounts.get(query.userId);
+				const data = await this.client.users.get(query.userId);
 				return UserParser.parse<unknown>(data, driver, server!);
 			}
 
@@ -45,16 +45,16 @@ class Route {
 			case 'handle': {
 				if (DriverService.supportsAtProto(driver)) {
 					// fetch did for a handle (not needed, if regex check passes)
-					const didData = await (
-						this.client as AtprotoApiAdapter
-					).accounts.getDid(query.handle);
+					const didData = await (this.client as AtprotoApiAdapter).users.getDid(
+						query.handle,
+					);
 
 					const data: AppBskyActorGetProfile.Response =
-						await this.client.accounts.get(didData?.data?.did!);
+						await this.client.users.get(didData?.data?.did!);
 					return UserParser.parse<unknown>(data.data, driver, server);
 				} else if (DriverService.supportsMastoApiV1(this.client.driver)) {
 					// FIXME: need to split this
-					const data = await (this.client as MastoApiAdapter).accounts.lookup({
+					const data = await (this.client as MastoApiAdapter).users.lookup({
 						username: query.handle,
 						host: null,
 					});
@@ -72,14 +72,14 @@ class Route {
 			 */
 			case 'webfinger': {
 				if (DriverService.supportsMastoApiV1(this.client.driver)) {
-					const data = await (this.client as MastoApiAdapter).accounts.lookup(
+					const data = await (this.client as MastoApiAdapter).users.lookup(
 						query.webfinger,
 					);
 					return UserParser.parse<unknown>(data, driver, server);
 				} else if (DriverService.supportsMisskeyApi(this.client.driver)) {
 					const findResult = await (
 						this.client as MisskeyApiAdapter
-					).accounts.findByWebfinger(query.webfinger);
+					).users.findByWebfinger(query.webfinger);
 					return UserParser.parse<unknown>(findResult.data, driver, server);
 				} else {
 					throw new Error(ApiErrorCode.OPERATION_UNSUPPORTED);
@@ -98,8 +98,8 @@ class Route {
 	 */
 	async getFollowers(
 		query: FollowerGetQueryDTO,
-	): Promise<ResultPage<UserObjectType>> {
-		const result = await this.client.accounts.getFollowers(query);
+	): Promise<ResultPage<UserObjectType[]>> {
+		const result = await this.client.users.getFollowers(query);
 		return KeyExtractorUtil.getPage<UserObjectType>(result, (o) =>
 			UserParser.parse<unknown[]>(o, this.client.driver, this.client.server!),
 		);
@@ -107,8 +107,8 @@ class Route {
 
 	async getFollows(
 		query: FollowerGetQueryDTO,
-	): Promise<ResultPage<UserObjectType>> {
-		const result = await this.client.accounts.getFollowings(query);
+	): Promise<ResultPage<UserObjectType[]>> {
+		const result = await this.client.users.getFollowings(query);
 		return KeyExtractorUtil.getPage<UserObjectType>(result, (o) =>
 			UserParser.parse<unknown[]>(o, this.client.driver, this.client.server!),
 		);

@@ -85,12 +85,12 @@ class Mutator {
 		if (DriverService.supportsAtProto(client.driver)) {
 			const _api = client as unknown as AtprotoApiAdapter;
 			nextState = target.atProto?.viewer?.like
-				? await _api.statuses.atProtoDeleteLike(target.atProto?.viewer?.like)
-				: await _api.statuses.atProtoLike(target.meta.uri!, target.meta.cid!);
+				? await _api.posts.atProtoDeleteLike(target.atProto?.viewer?.like)
+				: await _api.posts.atProtoLike(target.meta.uri!, target.meta.cid!);
 		} else if (!DriverService.supportsMisskeyApi(client.driver)) {
 			nextState = target.interaction.liked
-				? await client.statuses.removeLike(target.id)
-				: await client.statuses.like(target.id);
+				? await client.posts.removeLike(target.id)
+				: await client.posts.like(target.id);
 		}
 
 		if (nextState === undefined)
@@ -222,8 +222,8 @@ class Mutator {
 
 		try {
 			const _state = target.interaction.bookmarked
-				? await client.statuses.unBookmark(target.id)
-				: await client.statuses.bookmark(target.id);
+				? await client.posts.unBookmark(target.id)
+				: await client.posts.bookmark(target.id);
 			const draft: PostObjectType = JSON.parse(JSON.stringify(input));
 
 			if (draft.id === target.id) {

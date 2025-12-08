@@ -34,8 +34,8 @@ interface ApiTargetInterface {
 	key: string;
 
 	instances: InstanceRoute;
-	accounts: AccountRoute;
-	statuses: StatusesRoute;
+	users: AccountRoute;
+	posts: StatusesRoute;
 	trends: TrendsRoute;
 	notifications: NotificationsRoute;
 	timelines: TimelinesRoute;

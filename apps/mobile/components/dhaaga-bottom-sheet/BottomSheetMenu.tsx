@@ -3,6 +3,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { appDimensions } from '#/styles/dimensions';
 
 type Props = {
 	title: string;
@@ -10,22 +11,41 @@ type Props = {
 		iconId: string;
 		onPress: () => void;
 	}[];
+	variant: 'raised' | 'clear';
+	CustomHeader?: any;
 };
 
-function BottomSheetMenu({ title, menuItems = [] }: Props) {
+function BottomSheetMenu({
+	title,
+	menuItems = [],
+	variant,
+	CustomHeader,
+}: Props) {
 	const { theme } = useAppTheme();
 	return (
-		<View style={styles.container}>
-			<Text
-				style={{
-					fontFamily: APP_FONTS.INTER_700_BOLD,
-					color: theme.textColor.high,
-					fontSize: 20,
-					flex: 1,
-				}}
-			>
-				{title}
-			</Text>
+		<View
+			style={[
+				styles.container,
+				{
+					backgroundColor:
+						variant === 'raised' ? theme.background.a30 : 'transparent',
+				},
+			]}
+		>
+			{CustomHeader ? (
+				CustomHeader
+			) : (
+				<Text
+					style={{
+						fontFamily: APP_FONTS.INTER_700_BOLD,
+						color: theme.textColor.high,
+						fontSize: 20,
+						flex: 1,
+					}}
+				>
+					{title}
+				</Text>
+			)}
 			<View style={{ flexDirection: 'row' }}>
 				{menuItems.map((o, i) => (
 					<Pressable
@@ -51,11 +71,14 @@ export default BottomSheetMenu;
 
 const styles = StyleSheet.create({
 	container: {
-		marginVertical: 16,
+		paddingBottom: 16,
 		justifyContent: 'space-between',
 		flexDirection: 'row',
-		marginHorizontal: 16,
+		paddingHorizontal: 16,
 		alignItems: 'center',
-		marginTop: 32,
+		marginTop: 0,
+		paddingTop: 32,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
 	},
 });

@@ -8,7 +8,7 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import useGlobalState from '../../states/_global';
 import { UserParser } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 type ReactionDetails = {
 	id: string;
@@ -38,7 +38,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 		if (ActivityPubService.pleromaLike(driver)) {
 			const { data, error } = await (
 				client as PleromaApiAdapter
-			).statuses.getReactions(postId);
+			).posts.getReactions(postId);
 
 			if (error) {
 				return null;
@@ -62,7 +62,7 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 		} else if (ActivityPubService.misskeyLike(driver)) {
 			const { data, error } = await (
 				client as MisskeyApiAdapter
-			).statuses.getReactionDetails(postId, id);
+			).posts.getReactionDetails(postId, id);
 
 			if (error) {
 				console.log('[ERROR]: failed to get reaction details', error);

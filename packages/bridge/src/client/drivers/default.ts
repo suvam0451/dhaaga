@@ -20,8 +20,8 @@ class Adapter implements ApiTargetInterface {
 	key: string;
 
 	instances: DefaultInstanceRouter;
-	accounts: DefaultAccountRouter;
-	statuses: DefaultStatusesRouter;
+	users: DefaultAccountRouter;
+	posts: DefaultStatusesRouter;
 	trends: DefaultTrendsRouter;
 	notifications: DefaultNotificationsRouter;
 	timelines: DefaultTimelinesRouter;
@@ -38,8 +38,8 @@ class Adapter implements ApiTargetInterface {
 		this.server = null;
 		this.key = 'N/A';
 		this.instances = new DefaultInstanceRouter();
-		this.accounts = new DefaultAccountRouter();
-		this.statuses = new DefaultStatusesRouter();
+		this.users = new DefaultAccountRouter();
+		this.posts = new DefaultStatusesRouter();
 		this.trends = new DefaultTrendsRouter();
 		this.notifications = new DefaultNotificationsRouter();
 		this.timelines = new DefaultTimelinesRouter();

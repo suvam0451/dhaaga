@@ -6,7 +6,6 @@ import {
 	useAppDb,
 } from '#/hooks/utility/global-state-extractors';
 import WithAutoHideTopNavBar from '#/components/containers/WithAutoHideTopNavBar';
-import { PostTimelinePresenter } from '#/features/timelines/presenters/PostTimelinePresenter';
 import { useEffect, useState } from 'react';
 import {
 	PostTimelineStateAction,
@@ -16,6 +15,7 @@ import {
 } from '@dhaaga/core';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
+import { View } from 'react-native';
 
 function DataView() {
 	const [Refreshing, setRefreshing] = useState(false);
@@ -92,13 +92,7 @@ function DataView() {
 
 	return (
 		<WithAutoHideTopNavBar title={'Feed'} translateY={translateY}>
-			<PostTimelinePresenter
-				data={State.items}
-				onScroll={onScroll}
-				refreshing={Refreshing}
-				onRefresh={onRefresh}
-				fetchStatus={fetchStatus}
-			/>
+			<View />
 		</WithAutoHideTopNavBar>
 	);
 }

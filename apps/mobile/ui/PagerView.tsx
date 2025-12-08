@@ -165,6 +165,7 @@ type AppPagerViewProps = {
 	 */;
 	showBottomNav?: boolean;
 	props?: StyleProp<ViewStyle>;
+	scrollEnabled: boolean;
 };
 
 function AppPagerView({
@@ -173,6 +174,7 @@ function AppPagerView({
 	labels,
 	showBottomNav,
 	props,
+	scrollEnabled,
 }: AppPagerViewProps) {
 	const [TabIndex, setTabIndex] = useState(0);
 	const ref = useRef<PagerView>(null);
@@ -202,7 +204,7 @@ function AppPagerView({
 		<>
 			<PagerView
 				ref={ref}
-				scrollEnabled={true}
+				scrollEnabled={scrollEnabled}
 				style={[{ flex: 1 }, props]}
 				initialPage={TabIndex}
 				onPageScroll={onPagerViewScroll}

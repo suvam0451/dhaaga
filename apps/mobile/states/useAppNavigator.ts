@@ -70,7 +70,7 @@ function useAppNavigator() {
 		if (!_id || _id === '/(tabs)/index') {
 			router.navigate(`/profile/${id}`);
 		} else {
-			router.navigate(`${navigator.getId()}/profile/${id}`);
+			router.navigate(`${navigator.getId()}/user/${id}`);
 		}
 	}
 

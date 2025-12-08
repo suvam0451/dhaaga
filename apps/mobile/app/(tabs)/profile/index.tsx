@@ -40,6 +40,7 @@ function Page() {
 			labels={labels}
 			showBottomNav
 			props={{ backgroundColor: theme.background.a0 }}
+			scrollEnabled={false}
 		/>
 	);
 }

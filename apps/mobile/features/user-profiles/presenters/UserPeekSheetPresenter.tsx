@@ -1,14 +1,14 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import ProfileAvatar from '../../../components/common/user/fragments/ProfileAvatar';
+import ProfileAvatar from '#/components/common/user/fragments/ProfileAvatar';
 import UserRelationPresenter from './UserRelationPresenter';
-import { TextContentView } from '../../../components/common/status/TextContentView';
+import { TextContentView } from '#/components/common/status/TextContentView';
 import useProfilePeekSheetInteractor from '../interactors/useProfilePeekSheetInteractor';
-import { appDimensions } from '../../../styles/dimensions';
-import { AppText } from '../../../components/lib/Text';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
+import { AppText } from '#/components/lib/Text';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Image } from 'expo-image';
 import ProfileStatPresenter from './ProfileStatPresenter';
-import { Skeleton } from '../../../ui/Skeleton';
+import { Skeleton } from '#/ui/Skeleton';
 
 /**
  * This bottom sheet will show a preview

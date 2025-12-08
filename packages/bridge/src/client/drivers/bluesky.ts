@@ -24,7 +24,7 @@ class Adapter implements ApiTargetInterface {
 	server: string | null;
 	key: string;
 
-	accounts: BlueskyAccountsRouter;
+	users: BlueskyAccountsRouter;
 	instances: BlueskyInstanceRouter;
 	lists: BlueskyListRoute;
 	me: BlueskyMeRouter;
@@ -32,7 +32,7 @@ class Adapter implements ApiTargetInterface {
 	notifications: BlueskyNotificationsRouter;
 	profile: BlueskyProfileRouter;
 	search: BlueskySearchRouter;
-	statuses: BlueskyStatusesRouter;
+	posts: BlueskyStatusesRouter;
 	tags: BlueskyTagsRouter;
 	timelines: BlueskyTimelinesRouter;
 	trends: BlueskyTrendsRouter;
@@ -50,7 +50,7 @@ class Adapter implements ApiTargetInterface {
 		this.server = server;
 		this.key = dto.clientId.toString();
 		this.dto = dto;
-		this.accounts = new BlueskyAccountsRouter(this.dto);
+		this.users = new BlueskyAccountsRouter(this.dto);
 		this.instances = new BlueskyInstanceRouter();
 		this.lists = new BlueskyListRoute();
 		this.me = new BlueskyMeRouter(this.dto);
@@ -58,10 +58,10 @@ class Adapter implements ApiTargetInterface {
 		this.notifications = new BlueskyNotificationsRouter(this.dto);
 		this.profile = new BlueskyProfileRouter();
 		this.search = new BlueskySearchRouter(this.dto);
-		this.statuses = new BlueskyStatusesRouter(this.dto);
+		this.posts = new BlueskyStatusesRouter(this.dto);
 		this.tags = new BlueskyTagsRouter();
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
-		this.trends = new BlueskyTrendsRouter();
+		this.trends = new BlueskyTrendsRouter(this.dto);
 		this.feeds = new BlueskyFeedRouter(this.dto);
 		this.user = new UserRoute(this.dto);
 	}

@@ -1,6 +1,6 @@
 import { produce } from 'immer';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import AccountSessionManager from '../../../../services/session/account-session.service';
+import { KNOWN_SOFTWARE, CustomEmojiObject } from '@dhaaga/bridge';
+import AccountSessionManager from '#/services/session/account-session.service';
 
 export type Emoji = {
 	shortCode: string;
@@ -10,7 +10,7 @@ export type Emoji = {
 export type EMOJI_PICKER_STATE = {
 	tagEmojiMap: Map<string, Emoji[]>;
 	allTags: string[];
-	selectedReaction: InstanceApi_CustomEmojiDTO | null;
+	selectedReaction: CustomEmojiObject | null;
 	// filter context
 	searchTerm: string;
 	selectedTag: string;
@@ -60,7 +60,7 @@ function emojiPickerReducer(
 			}
 
 			return produce(state, (draft) => {
-				draft.tagEmojiMap = new Map<string, InstanceApi_CustomEmojiDTO[]>();
+				draft.tagEmojiMap = new Map<string, CustomEmojiObject[]>();
 				switch (_domain) {
 					case KNOWN_SOFTWARE.PLEROMA:
 					case KNOWN_SOFTWARE.AKKOMA: {

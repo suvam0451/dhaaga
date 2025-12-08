@@ -17,7 +17,6 @@ function FavouriteNotificationFragment({ item }: Props) {
 				createdAt={item.createdAt}
 			/>
 			<NotificationPostPeek post={post} />
-			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>
 	);
 }

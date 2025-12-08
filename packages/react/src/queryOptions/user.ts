@@ -7,7 +7,11 @@ import {
 	DriverUserFindQueryType,
 	PostParser,
 } from '@dhaaga/bridge';
-import type { PostObjectType, UserObjectType } from '@dhaaga/bridge/typings';
+import type {
+	PostObjectType,
+	ResultPage,
+	UserObjectType,
+} from '@dhaaga/bridge/typings';
 
 /**
  * GET user profile
@@ -18,7 +22,7 @@ export function userProfileQueryOpts(
 ) {
 	return queryOptions<UserObjectType>({
 		queryKey: [client.key, 'dhaaga/user', query],
-		queryFn: () => client.user.findOne(query).then((o) => o.unwrap()),
+		queryFn: () => client.user.findOne(query),
 		enabled: !!client,
 	});
 }
@@ -65,9 +69,12 @@ export function userFollowersQueryOpts(
 	});
 }
 
-async function api(client: ApiTargetInterface, userId: string) {
-	const result = await client.accounts.statuses(userId, {
-		limit: 40,
+async function api(
+	client: ApiTargetInterface,
+	userId: string,
+): Promise<ResultPage<PostObjectType[]>> {
+	const result = await client.users.getPosts(userId, {
+		limit: 10,
 		userId,
 		onlyMedia: true,
 		excludeReblogs: true,
@@ -82,7 +89,7 @@ async function api(client: ApiTargetInterface, userId: string) {
 			: undefined,
 	});
 
-	return DriverService.supportsAtProto(client.driver)
+	const data = DriverService.supportsAtProto(client.driver)
 		? PostParser.parse<unknown[]>(
 				(result as AppBskyFeedGetAuthorFeed.Response).data.feed,
 				client.driver,
@@ -93,16 +100,19 @@ async function api(client: ApiTargetInterface, userId: string) {
 				client.driver,
 				client.server!,
 			);
+
+	return {
+		data,
+	};
 }
 
 export function userGalleryQueryOpts(
 	client: ApiTargetInterface,
 	userId: string,
 ) {
-	return queryOptions<PostObjectType[]>({
+	return queryOptions<ResultPage<PostObjectType[]>>({
 		queryKey: [`dhaaga/profile/gallery`, userId],
 		queryFn: () => api(client, userId),
 		enabled: !!client && !!userId,
-		initialData: [],
 	});
 }

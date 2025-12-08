@@ -5,7 +5,7 @@ import MediaService from '../media.service';
 import { Dimensions } from 'react-native';
 import { MEDIA_CONTAINER_MAX_HEIGHT } from '../../components/common/media/_common';
 import { TextParser, RandomUtil, postObjectSchema } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 
 /**
  * converts unified interfaces into

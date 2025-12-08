@@ -1,15 +1,15 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { Pressable, View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
-import { AppDivider } from '../../../components/lib/Divider';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { StatItem } from '../../../components/common/status/PostStats';
+import { AppText } from '#/components/lib/Text';
+import { AppDivider } from '#/components/lib/Divider';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { StatItem } from '#/features/post-view/views/PostInteractionStatsRow';
 import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';
-import type { FeedObjectType } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge/typings';
 
 type SearchResultFeedItemProps = {
 	item: FeedObjectType;

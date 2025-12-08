@@ -174,7 +174,7 @@ function useRelationInteractor(id: string) {
 		setIsLoading(true);
 
 		if (ActivityPubService.mastodonLike(driver)) {
-			(client as MastoApiAdapter).accounts
+			(client as MastoApiAdapter).users
 				.relationships([id])
 				.then(setMastoRelation)
 				.finally(() => {
@@ -182,7 +182,7 @@ function useRelationInteractor(id: string) {
 					forceUpdate();
 				});
 		} else if (ActivityPubService.misskeyLike(driver)) {
-			(client as MisskeyApiAdapter).accounts
+			(client as MisskeyApiAdapter).users
 				.get(id)
 				.then(setMisskeyRelation)
 				.finally(() => {
@@ -190,7 +190,7 @@ function useRelationInteractor(id: string) {
 					forceUpdate();
 				});
 		} else if (ActivityPubService.blueskyLike(driver)) {
-			(client as AtprotoApiAdapter).accounts
+			(client as AtprotoApiAdapter).users
 				.get(id)
 				.then(setBlueskyRelation)
 				.then(() => {

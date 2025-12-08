@@ -9,12 +9,12 @@ import {
 } from '@dhaaga/db';
 import {
 	ApiTargetInterface,
-	AtProtoAuthService,
 	DriverService,
 	KNOWN_SOFTWARE,
-	UserObjectType,
 	UserParser,
 } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
+import { AtProtoAuthService } from '@dhaaga/bridge/auth';
 import AccountMetadataDbService from '#/services/db/account-metadata-db.service';
 
 export class AppSessionService {

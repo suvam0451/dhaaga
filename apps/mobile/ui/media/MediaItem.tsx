@@ -1,4 +1,4 @@
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
 import { useMemo } from 'react';
 import {
 	AltTextOverlay,
@@ -6,16 +6,18 @@ import {
 	AppImageComponent,
 	AppVideoComponent,
 	CarousalIndicatorOverlay,
-} from '../../components/common/media/_shared';
-import AppImageCarousel from '../../components/common/media/fragments/AppImageCarousel';
-import useGalleryDims from '../../hooks/app/useGalleryDims';
-import type { PostMediaAttachmentType } from '@dhaaga/bridge';
-import { appDimensions } from '../../styles/dimensions';
+} from '#/components/common/media/_shared';
+import AppImageCarousel from '#/components/common/media/fragments/AppImageCarousel';
+import useGalleryDims from '#/hooks/app/useGalleryDims';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge/typings';
+import { appDimensions } from '#/styles/dimensions';
+import { MediaAttachmentViewer } from '@dhaaga/bridge';
 
 type ImageCarousalProps = {
 	attachments: PostMediaAttachmentType[];
 	calculatedHeight: number;
 	style?: StyleProp<ViewStyle>;
+	onPress: () => void;
 };
 
 /**
@@ -43,15 +45,17 @@ function TimelineMediaRendered({
 	]);
 
 	const MediaItem = useMemo(() => {
-		const type = attachment.type;
-
-		switch (type) {
-			case 'image':
-			case 'image/jpeg':
-			case 'image/png':
-			case 'image/webp':
-			case 'image/gif':
-			case 'image/avif': {
+		if (MediaAttachmentViewer.isImage(attachment)) {
+			if (MediaAttachmentViewer.isAnimatedImage(attachment)) {
+				return (
+					<AppVideoComponent
+						type={'video'}
+						url={attachment.url}
+						containerHeight={ContainerHeight}
+						containerWidth={ContainerWidth}
+					/>
+				);
+			} else {
 				return (
 					<AppImageComponent
 						url={attachment.previewUrl}
@@ -61,28 +65,20 @@ function TimelineMediaRendered({
 					/>
 				);
 			}
-			case 'video':
-			case 'video/mp4':
-			case 'video/webm':
-			case 'gifv':
-			case 'video/quicktime': {
-				return (
-					<AppVideoComponent
-						type={'video'}
-						url={attachment.url}
-						containerHeight={ContainerHeight}
-						containerWidth={ContainerWidth}
-					/>
-				);
-			}
-			case 'audio':
-			case 'audio/mpeg': {
-				return <AppAudioComponent url={attachment.url} />;
-			}
-			default: {
-				console.log('[WARN]: unsupported media type', type);
-				return <View></View>;
-			}
+		} else if (MediaAttachmentViewer.isVideo(attachment)) {
+			return (
+				<AppVideoComponent
+					type={'video'}
+					url={attachment.url}
+					containerHeight={ContainerHeight}
+					containerWidth={ContainerWidth}
+				/>
+			);
+		} else if (MediaAttachmentViewer.isAudio(attachment)) {
+			return <AppAudioComponent url={attachment.url} />;
+		} else {
+			console.log('[WARN]: unsupported media type', attachment);
+			return <View></View>;
 		}
 	}, [attachment, ContainerHeight, ContainerWidth]);
 
@@ -99,28 +95,52 @@ function MediaItem({
 	attachments,
 	calculatedHeight,
 	style,
+	onPress,
 }: ImageCarousalProps) {
 	if (!attachments || attachments.length === 0) return <View />;
 
 	if (attachments.length === 1) {
-		return (
-			<View
-				style={[
-					{
-						marginBottom: appDimensions.timelines.sectionBottomMargin,
-						flex: 1,
-					},
-					style,
-				]}
-			>
-				<TimelineMediaRendered
-					attachment={attachments[0]}
-					CalculatedHeight={calculatedHeight}
-					altText={attachments[0]?.alt}
-					totalCount={1}
-				/>
-			</View>
-		);
+		if (MediaAttachmentViewer.isVideo(attachments[0])) {
+			return (
+				<View
+					style={[
+						{
+							marginBottom: appDimensions.timelines.sectionBottomMargin,
+							flex: 1,
+						},
+						style,
+					]}
+				>
+					{' '}
+					<TimelineMediaRendered
+						attachment={attachments[0]}
+						CalculatedHeight={calculatedHeight}
+						altText={attachments[0]?.alt}
+						totalCount={1}
+					/>
+				</View>
+			);
+		} else {
+			return (
+				<Pressable
+					style={[
+						{
+							marginBottom: appDimensions.timelines.sectionBottomMargin,
+							flex: 1,
+						},
+						style,
+					]}
+					onPress={onPress}
+				>
+					<TimelineMediaRendered
+						attachment={attachments[0]}
+						CalculatedHeight={calculatedHeight}
+						altText={attachments[0]?.alt}
+						totalCount={1}
+					/>
+				</Pressable>
+			);
+		}
 	}
 	return (
 		<View style={style}>

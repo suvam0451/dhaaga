@@ -22,8 +22,8 @@ class Adapter implements ApiTargetInterface {
 
 	fetch: FetchWrapper;
 	instances: MisskeyInstanceRouter;
-	accounts: MisskeyAccountsRouter;
-	statuses: MisskeyStatusesRouter;
+	users: MisskeyAccountsRouter;
+	posts: MisskeyStatusesRouter;
 	trends: MisskeyTrendsRouter;
 	notifications: MisskeyNotificationsRouter;
 	timelines: MisskeyTimelinesRouter;
@@ -45,8 +45,8 @@ class Adapter implements ApiTargetInterface {
 
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new MisskeyInstanceRouter(this.fetch);
-		this.accounts = new MisskeyAccountsRouter(this.fetch);
-		this.statuses = new MisskeyStatusesRouter(this.fetch);
+		this.users = new MisskeyAccountsRouter(this.fetch);
+		this.posts = new MisskeyStatusesRouter(this.fetch);
 		this.trends = new MisskeyTrendsRouter(this.fetch);
 		this.notifications = new MisskeyNotificationsRouter(this.fetch);
 		this.timelines = new MisskeyTimelinesRouter(this.fetch);

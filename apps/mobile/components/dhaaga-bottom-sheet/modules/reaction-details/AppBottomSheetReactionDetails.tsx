@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
-import useGetReactionDetails from '../../../../hooks/api/useGetReactionDetails';
+import useGetReactionDetails from '#/hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
-import { APP_FONT } from '../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
@@ -16,9 +16,9 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { TextContentView } from '../../../common/status/TextContentView';
-import type { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 
 function ReactingUser({ dto }: { dto: UserObjectType }) {
 	const { theme } = useAppTheme();

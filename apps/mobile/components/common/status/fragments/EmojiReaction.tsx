@@ -8,9 +8,9 @@ import {
 	Pressable,
 } from 'react-native';
 import EmojiReactionImage from './EmojiReactionImage';
-import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
 import {
 	useAppPublishers,
 	useAppTheme,

@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 export function ReplyIndicator() {
 	const { theme } = useAppTheme();

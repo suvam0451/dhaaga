@@ -1,22 +1,17 @@
 import {
 	useAppApiClient,
 	useAppBottomSheet,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
 import { userProfileQueryOpts } from '@dhaaga/react';
-import { DriverUserFindQueryType, UserObjectType } from '@dhaaga/bridge';
-import DriverService from '../../../services/driver.service';
+import { DriverUserFindQueryType } from '@dhaaga/bridge';
+import DriverService from '#/services/driver.service';
 import { useQuery } from '@tanstack/react-query';
 
 function useProfilePeekSheetInteractor() {
 	const { server, client } = useAppApiClient();
 	const { ctx, stateId } = useAppBottomSheet();
 	const [SearchQuery, setSearchQuery] = useState<DriverUserFindQueryType>(null);
-	const [UserObject, setUserObject] = useState<UserObjectType>(null);
-
-	const { data, fetchStatus, isLoading, isFetching } = useQuery(
-		userProfileQueryOpts(client, SearchQuery),
-	);
 
 	useEffect(() => {
 		if (ctx?.did) {
@@ -31,12 +26,7 @@ function useProfilePeekSheetInteractor() {
 		}
 	}, [ctx, stateId]);
 
-	useEffect(() => {
-		if (fetchStatus === 'fetching' || !data) return;
-		setUserObject(data);
-	}, [data, fetchStatus]);
-
-	return { data: UserObject, isLoading, isFetching };
+	return useQuery(userProfileQueryOpts(client, SearchQuery));
 }
 
 export default useProfilePeekSheetInteractor;

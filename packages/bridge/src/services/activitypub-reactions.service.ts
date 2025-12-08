@@ -244,7 +244,7 @@ class ActivityPubReactionsService {
 		if (ActivityPubService.pleromaLike(domain)) {
 			const { data, error } = await (
 				client as PleromaApiAdapter
-			).statuses.removeReaction(postId, reactionId);
+			).posts.removeReaction(postId, reactionId);
 			if (error) {
 				console.log('[WARN]: failed to add reaction', error);
 				return null;
@@ -260,7 +260,7 @@ class ActivityPubReactionsService {
 		} else if (ActivityPubService.misskeyLike(domain)) {
 			const { error } = await (
 				client as MisskeyApiAdapter
-			).statuses.removeReaction(postId, reactionId);
+			).posts.removeReaction(postId, reactionId);
 			if (error && error.code) {
 				console.log('[WARN]: failed to remove reaction', error);
 				return null;
@@ -291,7 +291,7 @@ class ActivityPubReactionsService {
 		domain: string,
 		setLoading: (val: boolean) => void,
 	): Promise<ActivityPubReactionStateType> {
-		const currentPost = await (client as MisskeyApiAdapter).statuses.getPost(
+		const currentPost = await (client as MisskeyApiAdapter).posts.getPost(
 			postId,
 		);
 
@@ -324,7 +324,7 @@ class ActivityPubReactionsService {
 		if (ActivityPubService.pleromaLike(domain)) {
 			const { data, error } = await (
 				client as PleromaApiAdapter
-			).statuses.addReaction(postId, reactionId);
+			).posts.addReaction(postId, reactionId);
 
 			if (error) {
 				console.log('[WARN]: failed to add reaction', error);
@@ -342,9 +342,10 @@ class ActivityPubReactionsService {
 			if (!MISSKEY_LOCAL_EX.test(reactionId)) {
 				reactionId = `:${reactionId}:`;
 			}
-			const { error } = await (
-				client as MisskeyApiAdapter
-			).statuses.addReaction(postId, reactionId);
+			const { error } = await (client as MisskeyApiAdapter).posts.addReaction(
+				postId,
+				reactionId,
+			);
 
 			if (error) {
 				console.log('[WARN]: failed to add reaction', error);

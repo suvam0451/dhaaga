@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { PostObjectType } from '@dhaaga/bridge';
-import { useAppPublishers } from '../../../hooks/utility/global-state-extractors';
+import type { PostObjectType } from '@dhaaga/bridge/typings';
+import { useAppPublishers } from '#/hooks/utility/global-state-extractors';
 
 type Type = {
 	dto: PostObjectType;

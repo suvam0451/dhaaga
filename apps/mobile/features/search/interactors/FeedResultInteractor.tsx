@@ -91,7 +91,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
 			/>
-			<TimelineLoadingIndicator networkFetchStatus={fetchStatus} />
+			<TimelineLoadingIndicator numItems={0} networkFetchStatus={fetchStatus} />
 		</View>
 	);
 }

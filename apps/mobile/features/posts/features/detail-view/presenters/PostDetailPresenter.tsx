@@ -1,12 +1,12 @@
-import { useAppStatusContextDataContext } from '../../../../../hooks/api/statuses/WithAppStatusContextData';
+import { useAppStatusContextDataContext } from '#/hooks/api/statuses/WithAppStatusContextData';
 import { useMemo, useState } from 'react';
 import { Animated, FlatList, RefreshControl, View } from 'react-native';
-import WithAutoHideTopNavBar from '../../../../../components/containers/WithAutoHideTopNavBar';
-import useScrollMoreOnPageEnd from '../../../../../states/useScrollMoreOnPageEnd';
+import WithAutoHideTopNavBar from '#/components/containers/WithAutoHideTopNavBar';
+import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { RefetchOptions } from '@tanstack/react-query';
-import { appDimensions } from '../../../../../styles/dimensions';
-import WithAppStatusItemContext from '../../../../../components/containers/contexts/WithPostItemContext';
-import StatusItem from '../../../../../components/common/status/StatusItem';
+import { appDimensions } from '#/styles/dimensions';
+import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import StatusItem from '../../../../post-view/StatusItem';
 import PostCommentThreadControls from './PostCommentThreadControls';
 import ReplyItemPresenter from './ReplyItemPresenter';
 import NoMoreReplies from '../components/NoMoreReplies';

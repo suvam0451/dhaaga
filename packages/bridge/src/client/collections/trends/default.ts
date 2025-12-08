@@ -6,26 +6,19 @@ import {
 	MastoTag,
 	MastoTrendLink,
 } from '#/types/mastojs.types.js';
-import { LibraryResponse } from '#/types/result.types.js';
-import {
-	LibraryPromise,
-	notImplementedErrorBuilder,
-} from '#/types/api-response.js';
 
 export class DefaultTrendsRouter implements TrendsRoute {
 	async tags(
 		opts: GetTrendingDTO,
-	): LibraryPromise<MastoTag[] | Endpoints['hashtags/trend']['res']> {
-		return notImplementedErrorBuilder();
+	): Promise<MastoTag[] | Endpoints['hashtags/trend']['res']> {
+		throw new Error('Method not supported');
 	}
 
-	async posts(opts: GetTrendingDTO): Promise<LibraryResponse<MastoStatus[]>> {
-		return notImplementedErrorBuilder();
+	async posts(opts: GetTrendingDTO): Promise<MastoStatus[]> {
+		throw new Error('Method not supported');
 	}
 
-	async links(
-		opts: GetTrendingDTO,
-	): Promise<LibraryResponse<MastoTrendLink[]>> {
-		return notImplementedErrorBuilder();
+	async links(opts: GetTrendingDTO): Promise<MastoTrendLink[]> {
+		throw new Error('Method not supported');
 	}
 }

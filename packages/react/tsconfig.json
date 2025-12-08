@@ -1,33 +1,28 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "jsx": "preserve",
-    "moduleResolution": "NodeNext",
-    "verbatimModuleSyntax": false,
-    "moduleDetection": "force",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    // Strictness
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "rootDir": "src",
-    "outDir": "dist",
-    // perf
-    "removeComments": true,
-    "preserveConstEnums": true,
-    // debugging
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "__test__",
-    "dist"
-  ]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "NodeNext",
+		"jsx": "react-jsx",
+		"moduleResolution": "NodeNext",
+		"verbatimModuleSyntax": false,
+		"moduleDetection": "force",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true,
+		// Strictness
+		"strict": true,
+		"noFallthroughCasesInSwitch": true,
+		"rootDir": "src",
+		"outDir": "dist",
+		// perf
+		"removeComments": true,
+		"preserveConstEnums": true,
+		// debugging
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true
+	},
+	"include": ["src"],
+	"exclude": ["__test__", "dist"]
 }

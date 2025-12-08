@@ -1,0 +1,233 @@
+{
+  "feed": {
+    "subscribeOption": "Abonnieren",
+    "unsubscribeOption": "Abbestellen",
+    "pinOption": "Anheften",
+    "unpinOption": "Lösen"
+  },
+  "features": {
+    "notAvailable": {
+      "title": "Nicht verfügbar",
+      "desc": "Dieses Feature ist entweder nicht von Dhaaga implementiert oder auf deiner SNS-Plattform nicht verfügbar."
+    }
+  },
+  "errors": {
+    "errorLabel": "Fehler",
+    "timelineErrorLabel": "Dhaaga konnte diese Zeitleiste nicht laden. Melden Sie diesen Fehler dem Entwickler."
+  },
+  "onboarding": {
+    "addAccountButton": "Konto hinzufügen",
+    "accountCreationNotSupported": "Die Kontenerstellung wird nicht unterstützt",
+    "needBlueskyAccount": "Du benötigst ein Bluesky-Konto",
+    "createOneHere": "Erstelle eines hier",
+    "loginButton": "Einloggen",
+    "appPassword": "App-Passwort",
+    "enterYourServer": "Geben Sie Ihren Server ein",
+    "serverUrl": "Ihre Server-URL",
+    "popularMastodon": "Beliebte Mastodon-Server",
+    "popularPleroma": "Beliebte Pleroma-Server",
+    "popularAkkoma": "Beliebte Akkoma-Server"
+  },
+  "topNav": {
+    "primary": {
+      "hub": "Soziales Hub",
+      "discover": "Entdecken",
+      "compose": "Erstellen",
+      "account": "Mein Konto",
+      "setting": "App-Einstellungen",
+      "inbox": "Posteingang",
+      "mentions": "Erwähnungen",
+      "chat": "Chat",
+      "social": "Soziales",
+      "updates": "Updates"
+    },
+    "secondary": {
+      "addProfile": "Profil hinzufügen",
+      "myLikes": "Meine Likes",
+      "myBookmarks": "Meine Lesezeichen",
+      "myAccount": "Mein Konto",
+      "myProfile": "Mein Profil",
+      "appSettings": "App-Einstellungen",
+      "manageAccounts": "Konten verwalten",
+      "blueskySignIn": "Bluesky Anmelden",
+      "selectServer": "Server auswählen",
+      "mastodonSignIn": "Mastodon Anmelden",
+      "misskeySignIn": "Misskey Anmelden",
+      "pickPlatform": "Plattform wählen"
+    }
+  },
+  "dialogs": {
+    "renameOption": "Umbenennen",
+    "deleteOption": "Löschen",
+    "dismissOption": "Abbrechen",
+    "saveOption": "Speichern"
+  },
+  "discover": {
+    "moreSoon": {
+      "firstHalf": "Mehr kommt noch",
+      "secondHalf": "bald™"
+    },
+    "instructions": [
+      "1) Drücke 🔍, um mit der Suche zu beginnen",
+      "2)️ Sende (↵), um zu suchen",
+      "3)️ Drücke 🔍 erneut, um das Widget zu verbergen",
+      "Löschen (x), um hierher zurückzukehren]"
+    ],
+    "welcome": "Lass uns etwas Neues entdecken!"
+  },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "App-Funktionen",
+      "likes": {
+        "label": "Gefällt mir",
+        "desc": "Beiträge, die mir gefallen haben"
+      },
+      "bookmarks": {
+        "label": "Lesezeichen",
+        "desc": "Meine Lesezeichen"
+      },
+      "feeds": {
+        "label": "Feeds",
+        "desc": "Abonnierte Feeds"
+      },
+      "lists": {
+        "label": "Listen",
+        "desc": "Meine Listen"
+      },
+      "socialHub": {
+        "label": "Social Hub",
+        "desc": "Profile verwalten"
+      },
+      "collections": {
+        "label": "Sammlungen",
+        "desc": "Lesezeichen++"
+      },
+      "drafts": {
+        "label": "Entwürfe",
+        "desc": "Verlorene Nachrichten"
+      }
+    }
+  },
+  "sheets": {
+    "backOption": "Zurück"
+  },
+  "hub": {
+    "feeds": {
+      "global": "Global",
+      "local": "Lokal",
+      "social": "Sozial",
+      "home": "Startseite",
+      "bubble": "Blase"
+    },
+    "greetings": {
+      "goodMorning": "Guten Morgen",
+      "goodAfternoon": "Guten Nachmittag",
+      "goodEvening": "Guten Abend",
+      "goodNight": "Gute Nacht"
+    },
+    "navbarLabel": "Soziales Hub",
+    "section": {
+      "feeds": "Feeds",
+      "users": "Benutzer",
+      "tags": "Tags",
+      "timelines": "Zeitleisten"
+    }
+  },
+  "inbox": {
+    "name": "Posteingang",
+    "nav": {
+      "mentions": "Erwähnungen",
+      "chat": "Chat",
+      "social": "Sozial",
+      "updates": "Updates"
+    },
+    "summary": {
+      "liked": "Hat deinen Beitrag geliked",
+      "followRequestAccepted": "Hat deine Follow-Anfrage akzeptiert",
+      "followed": "Hat dir gefolgt",
+      "shared": "Hat deinen Beitrag geteilt",
+      "reacted": "Hat auf deinen Beitrag reagiert",
+      "posted": "Beitrag veröffentlicht",
+      "replied": "Hat dir geantwortet",
+      "mentioned": "Hat dich erwähnt"
+    }
+  },
+  "collections": {
+    "name": "Sammlungen",
+    "addButton": "Sammlung hinzufügen",
+    "fallbackDesc": "Keine Beschreibung angegeben",
+    "emptyTitle": "Sammlung leer",
+    "emptyDesc": "Diese Sammlung enthält keine gespeicherten Beiträge"
+  },
+  "composer": {
+    "pageTitle": "Erstellen",
+    "quickPost": "Schnellbeitrag",
+    "quickPostCta": "Was denkst du?",
+    "quickPostSubmit": "Beitrag posten",
+    "noAttachments": "Keine Anhänge hinzugefügt",
+    "landing": {
+      "tComposeFull": "Beitrag erstellen",
+      "dComposeFull": [
+        "Längere Beiträge",
+        "Mehr Optionen"
+      ],
+      "tComposePoll": "Umfrage erstellen",
+      "dComposePoll": [
+        "<Nicht Implementiert>"
+      ],
+      "tViewScheduled": "Geplante Beiträge ansehen",
+      "dViewScheduled": [
+        "<Nicht Implementiert>"
+      ],
+      "tViewDrafts": "Entwürfe ansehen",
+      "dViewDrafts": [
+        "<Nicht Implementiert>"
+      ]
+    }
+  },
+  "quickPost": {
+    "name": "Schnellbeitrag",
+    "spoilerPlaceholder": "Spoiler / Inhaltswarnung",
+    "ctaPlaceholder": "Was denkst du?",
+    "postButton": "Beitrag posten",
+    "replyingTo": "Antworten auf: ",
+    "quoting": "Zitat: ",
+    "visibility": {
+      "public": "Öffentlich",
+      "unlisted": "Startseite",
+      "direct": "Direkt",
+      "private": "Folge mir"
+    },
+    "interactivity": {
+      "everybody": "Jeder",
+      "nobody": "Nur ich",
+      "Limited": "Eingeschränkt"
+    }
+  },
+  "chatroom": {
+    "sendInterfacePlaceholder": "Deine Nachricht"
+  },
+  "setting": {
+    "accountModule": {
+      "title": "Konten",
+      "desc": "Konten hinzufügen und verwalten"
+    },
+    "generalModule": {
+      "title": "Allgemein",
+      "desc": "Die üblichsten, langweiligen Einstellungen sind hier"
+    },
+    "appFeaturesModule": {
+      "title": "Goodie Hut",
+      "desc": "Einzigartige Funktionen von Dhaaga anpassen"
+    },
+    "digitalWellbeingModule": {
+      "title": "Digitale Gesundheit",
+      "desc": "Trenne dich, um dich wieder mit dir selbst zu verbinden"
+    },
+    "advancedModule": {
+      "title": "Erweitert",
+      "desc": "'Für Power-User"
+    },
+    "footer": "Erstellt mit \uD83D\uDC9B von Debashish Patra"
+  }
+}

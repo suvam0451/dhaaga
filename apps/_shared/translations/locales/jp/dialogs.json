@@ -1,0 +1,188 @@
+{
+  "account": {
+    "moreActions": {
+      "title": "アカウント操作",
+      "description": [
+        "プロフィールデータ（アイコン、名前など）を同期するか、アカウントを削除します。"
+      ],
+      "syncOption": "同期する（🚧）",
+      "removeOption": "アカウント削除"
+    },
+    "confirmDelete": {
+      "title": "削除確認",
+      "description": [
+        "アカウントを削除すると、すべてのハブプロフィール、コレクション、閲覧データが削除されます。",
+        "確認して続行しますか？"
+      ],
+      "confirmOption": "確認して削除"
+    }
+  },
+  "collection": {
+    "moreOptions": {
+      "title": "コレクションを更新",
+      "description": [
+        "このコレクションの名前変更、説明の追加、または削除を行います。"
+      ],
+      "renameOption": "名前変更",
+      "updateDescriptionOption": "説明を更新",
+      "removeOption": "削除"
+    },
+    "add": {
+      "title": "コレクションを追加",
+      "description": [
+        "アカウントの概要（5番目のタブ）からコレクションを管理できます。"
+      ],
+      "placeholder": "コレクションに名前を付けてください"
+    },
+    "rename": {
+      "title": "コレクションの名前変更",
+      "description": [
+        "このコレクションに新しい名前を付けてください。"
+      ],
+      "placeholder": "コレクションの名前"
+    },
+    "describe": {
+      "title": "このコレクションを説明する",
+      "description": [
+        "このコレクションの説明を更新します。",
+        "空の文字列を送信してデフォルトに設定します。"
+      ],
+      "placeholder": "コレクションの説明を入力"
+    },
+    "delete": {
+      "title": "削除確認",
+      "description": [
+        "本当にこのコレクションを削除してもよろしいですか？",
+        "このコレクションに保存した投稿は失われます。"
+      ],
+      "deleteConfirmOption": "確認して削除"
+    }
+  },
+  "composer": {
+    "setAltText": {
+      "title": "代替テキスト",
+      "description": [
+        "この画像の代替テキストを表示します。",
+        "空の文字列を送信して削除します。"
+      ],
+      "placeholder": "新しい代替テキストを入力してください"
+    },
+    "setVisibility": {
+      "title": "表示設定",
+      "description": [
+        "\"未公開\"の投稿はフィードや検索結果に表示されません。",
+        "\"ダイレクト\"メッセージは暗号化されていません。"
+      ],
+      "publicLabel": "公開",
+      "unlistedLabel": "未公開",
+      "followersOnlyLabel": "フォロワー限定",
+      "directLabel": "ダイレクト"
+    }
+  },
+  "hub": {
+    "profileAdd": {
+      "title": "プロフィール追加",
+      "description": [
+        "プロフィールは、ピンやハブのレイアウトを興味に基づいて整理するのに役立ちます。"
+      ],
+      "placeholder": "プロフィールに名前を付けてください",
+      "successToast": "プロフィールが正常に追加されました！"
+    },
+    "profileDelete": {
+      "title": "削除の確認",
+      "description": [
+        "本当にこのプロフィールを削除してもよろしいですか？",
+        "すべてのピンと保存されたレイアウトが失われます。"
+      ],
+      "deleteConfirmOption": "確認して削除"
+    },
+    "profileEdit": {
+      "title": "プロフィールの編集",
+      "description": [
+        "このプロフィールの名前を変更するか、削除することができます。"
+      ],
+      "descriptionAlt": [
+        "デフォルトのプロフィールのみ名前を変更できます。"
+      ],
+      "renameOption": "名前変更",
+      "deleteOption": "削除"
+    },
+    "profileRename": {
+      "title": "プロフィール名の変更",
+      "description": [
+        "このプロフィールに新しい名前を付けてください。"
+      ],
+      "placeholder": "プロフィールに名前を付けてください"
+    },
+    "tagAdd": {
+      "title": "ハッシュタグ追加",
+      "description": [
+        "タイムラインを閲覧中に（タグを押すことで）タグを追加することもできます。"
+      ],
+      "placeholder": "タグの名前",
+      "successToast": "タグが正常に追加されました！"
+    },
+    "tagRemove": {
+    },
+    "tagEdit": {
+      "title": "ピン留めしたタグの変更",
+      "description": [
+        "このピン留めしたタグの名前を変更するか、削除することができます。"
+      ]
+    },
+    "tagRename": {
+      "title": "ピン留めしたタグの名前変更",
+      "description": [
+        "このピンが案内するハッシュタグを変更します。"
+      ],
+      "placeholder": "ここでタグを更新してください"
+    },
+    "userEdit": {
+      "title": "ピン留めしたユーザーの変更",
+      "description": [
+        "このピンを削除できます。",
+        "並べ替えは次回の更新でサポート予定です。"
+      ]
+    }
+  },
+  "relationship": {
+    "notRelated": {
+      "title": "関連なし",
+      "description": [
+        "現在、このユーザーとは関連がありません。"
+      ],
+      "followOption": "フォロー"
+    },
+    "follower": {
+      "title": "フォロワー",
+      "description": [
+        "このユーザーは現在あなたをフォローしています。"
+      ],
+      "followBackOption": "フォロー返し"
+    },
+    "following": {
+      "title": "フォロー中",
+      "description": [
+        "あなたは現在このユーザーをフォローしています。"
+      ],
+      "unfollowOption": "フォロー解除"
+    },
+    "friends": {
+      "title": "友達",
+      "description": [
+        "お互いにフォローし合っています。"
+      ],
+      "unfollowOption": "フォロー解除"
+    },
+    "requestPending": {
+      "title": "リクエスト保留中",
+      "description": [
+        "あなたはこのユーザーにフォロリクエストを送信しました。",
+        "しかし、まだ受け入れられていないようです。",
+        "ステータスを更新するか、待ってみてください。"
+      ],
+      "refreshOption": "更新",
+      "cancelOption": "キャンセル"
+    }
+  }
+}

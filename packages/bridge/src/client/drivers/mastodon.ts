@@ -23,8 +23,8 @@ class Adapter implements ApiTargetInterface {
 
 	fetch: FetchWrapper;
 	instances: MastodonInstanceRouter;
-	accounts: MastodonAccountsRouter;
-	statuses: MastodonStatusesRouter;
+	users: MastodonAccountsRouter;
+	posts: MastodonStatusesRouter;
 	trends: MastodonTrendsRouter;
 	notifications: MastodonNotificationsRouter;
 	timelines: MastodonTimelinesRouter;
@@ -46,8 +46,8 @@ class Adapter implements ApiTargetInterface {
 		this.key = dto.clientId.toString();
 		this.fetch = FetchWrapper.create(dto.instance, dto.token);
 		this.instances = new MastodonInstanceRouter(this.fetch);
-		this.accounts = new MastodonAccountsRouter(this.fetch);
-		this.statuses = new MastodonStatusesRouter(this.fetch);
+		this.users = new MastodonAccountsRouter(this.fetch);
+		this.posts = new MastodonStatusesRouter(this.fetch);
 		this.trends = new MastodonTrendsRouter(this.fetch);
 		this.notifications = new MastodonNotificationsRouter(this.fetch);
 		this.timelines = new MastodonTimelinesRouter(this.fetch);

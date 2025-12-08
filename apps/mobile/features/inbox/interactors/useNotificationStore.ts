@@ -1,12 +1,14 @@
-import useAppPaginator from '../../../hooks/app/useAppPaginator';
-import { AppResultPageType } from '../../../types/app.types';
-import { NotificationObjectType } from '@dhaaga/bridge';
+import useAppPaginator from '#/hooks/app/useAppPaginator';
+import type {
+	NotificationObjectType,
+	ResultPage,
+} from '@dhaaga/bridge/typings';
 import {
 	InboxStateAction,
 	useInboxState,
 	useInboxDispatch,
 } from '@dhaaga/core';
-import { useAppAcct } from '../../../hooks/utility/global-state-extractors';
+import { useAppAcct } from '#/hooks/utility/global-state-extractors';
 import { useEffect } from 'react';
 
 /**
@@ -23,13 +25,12 @@ function useNotificationStore() {
 		reset();
 	}, [acct]);
 
-	function appendNotifications(
-		page: AppResultPageType<NotificationObjectType>,
-	) {
+	function appendNotifications(page: ResultPage<NotificationObjectType>) {
+		if (!page) return;
 		dispatch({
 			type: InboxStateAction.APPEND,
 			payload: {
-				page: page,
+				page,
 			},
 		});
 		lastId.current = page.maxId;

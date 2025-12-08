@@ -1,20 +1,20 @@
 import { useProfileListFeedAssignment } from '../api/useProfileQuery';
 import ProfileAssignmentPresenter from '../presenters/ProfileAssignmentPresenter';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import {
 	useAppAcct,
 	useAppDb,
 	useAppDialog,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { useProfileMutation } from '../api/useProfileMutation';
 import { Profile, ProfileService } from '@dhaaga/db';
 import useApiGetFeedDetails from '../../timelines/features/controller/interactors/useApiGetFeedDetails';
 
 type Props = {
 	uri: string;
-	Header?: JSX.Element;
-	Footer?: JSX.Element;
+	Header?: any;
+	Footer?: any;
 };
 
 function ProfileFeedAssignInteractor({ uri, Header, Footer }: Props) {

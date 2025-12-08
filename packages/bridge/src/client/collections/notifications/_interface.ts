@@ -52,7 +52,9 @@ export interface NotificationsRoute {
 	getMentions(
 		query: NotificationGetQueryDto,
 	): PaginatedPromise<
-		AppBskyNotificationListNotifications.Notification[] | any
+		| AppBskyNotificationListNotifications.Notification[]
+		| MastoGroupedNotificationsResults
+		| any
 	>;
 
 	getChats(driver: KNOWN_SOFTWARE): PaginatedPromise<any>;

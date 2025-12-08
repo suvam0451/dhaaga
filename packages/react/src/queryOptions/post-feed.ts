@@ -31,7 +31,7 @@ type PostFeedQueryParams = {
 	limit?: number;
 };
 
-type PostFeedFetchResultType = ResultPage<PostObjectType>;
+type PostFeedFetchResultType = ResultPage<PostObjectType[]>;
 
 /**
  * intended for use by single column timelines,
@@ -105,8 +105,7 @@ export function unifiedPostFeedQueryOptions(
 
 	function outputSchemaToResultPage(data: any): PostFeedFetchResultType {
 		return {
-			// success: true,
-			items: PostParser.parse<unknown[]>(data.feed, driver, server),
+			data: PostParser.parse<unknown[]>(data.feed, driver, server),
 			maxId: data.cursor === undefined ? null : data.cursor,
 			minId: null,
 		};
@@ -145,7 +144,7 @@ export function unifiedPostFeedQueryOptions(
 		maxId?: string | null,
 	): PostFeedFetchResultType {
 		return {
-			items: generateFeedBatch(data),
+			data: generateFeedBatch(data),
 			maxId: generateMaxId(data, maxId),
 			minId: null,
 		};
@@ -182,7 +181,7 @@ export function unifiedPostFeedQueryOptions(
 			case TimelineFetchMode.USER: {
 				if (!_query || _query.userId === undefined)
 					throw new Error('missing userId');
-				const result = await client.accounts.statuses(_id!, _query as any);
+				const result = await client.users.getPosts(_id!, _query as any);
 				return createResultBatch(result);
 			}
 			case TimelineFetchMode.SOCIAL: {
@@ -198,7 +197,7 @@ export function unifiedPostFeedQueryOptions(
 						_query,
 					);
 					return {
-						items: PostParser.parse<unknown[]>(result as any[], driver, server),
+						data: PostParser.parse<unknown[]>(result as any[], driver, server),
 						maxId: generateMaxId(result),
 						minId: null,
 					};
@@ -207,7 +206,7 @@ export function unifiedPostFeedQueryOptions(
 						_query,
 					);
 					return {
-						items: PostParser.parse<unknown[]>(result as any[], driver, server),
+						data: PostParser.parse<unknown[]>(result as any[], driver, server),
 						maxId: generateMaxId(result),
 						minId: null,
 					};
@@ -220,7 +219,7 @@ export function unifiedPostFeedQueryOptions(
 				return getPageFromResult(result);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
-				const { data, error } = await client.accounts.bookmarks(_query);
+				const { data, error } = await client.users.bookmarks(_query);
 				if (error) return defaultResultPage;
 				return createResultBatch(data.data, data?.maxId);
 			}
@@ -235,22 +234,58 @@ export function unifiedPostFeedQueryOptions(
 			}
 			case TimelineFetchMode.LIKES: {
 				if (DriverService.supportsAtProto(driver)) {
-					const data = await (
-						client as AtprotoApiAdapter
-					).accounts.atProtoLikes(acctIdentifier, {
-						limit,
-						cursor: _query.maxId === null ? undefined : _query.maxId,
-					});
+					const data = await (client as AtprotoApiAdapter).users.atProtoLikes(
+						acctIdentifier,
+						{
+							limit,
+							cursor: _query.maxId === null ? undefined : _query.maxId,
+						},
+					);
 					return {
-						items: PostParser.parse<unknown[]>(data.feed, driver, server),
+						data: PostParser.parse<unknown[]>(data.feed, driver, server),
 						maxId: data.cursor === undefined ? null : data.cursor,
 						minId: null,
 					};
 				}
 
-				const { data, error } = await client.accounts.likes(_query);
-				if (error) return defaultResultPage;
+				const data = await client.users.likes(_query);
 				return createResultBatch(data.data, data.maxId);
+			}
+			case TimelineFetchMode.TRENDING_POSTS: {
+				if (!DriverService.supportsMastoApiV2(driver)) {
+					throw new Error(
+						'trending posts only supported on Mastodon v2 API compatible servers',
+					);
+				}
+				const data = await client.trends.posts({
+					limit: 20,
+					offset: 0,
+				});
+				return createResultBatch(data);
+			}
+			case TimelineFetchMode.TRENDING_USERS: {
+				if (!DriverService.supportsMastoApiV2(driver)) {
+					throw new Error(
+						'trending posts only supported on Mastodon v2 API compatible servers',
+					);
+				}
+				const data = await client.trends.posts({
+					limit: 20,
+					offset: 0,
+				});
+				return createResultBatch(data);
+			}
+			case TimelineFetchMode.TRENDING_TAGS: {
+				if (!DriverService.supportsMastoApiV2(driver)) {
+					throw new Error(
+						'trending posts only supported on Mastodon v2 API compatible servers',
+					);
+				}
+				const data = await client.trends.posts({
+					limit: 20,
+					offset: 0,
+				});
+				return createResultBatch(data);
 			}
 			default: {
 				throw new Error(`unknown timeline type: ${type}`);

@@ -129,7 +129,7 @@ export interface AccountRoute {
 	 * @param id
 	 * @param params
 	 */
-	statuses(
+	getPosts(
 		id: string,
 		params: AccountRouteStatusQueryDto,
 	): Promise<

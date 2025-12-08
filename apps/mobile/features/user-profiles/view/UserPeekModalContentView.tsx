@@ -1,11 +1,11 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { appDimensions } from '../../../styles/dimensions';
-import { AppText } from '../../../components/lib/Text';
+import { appDimensions } from '#/styles/dimensions';
+import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
 import UserRelationPresenter from '../presenters/UserRelationPresenter';
-import { UserObjectType } from '@dhaaga/bridge';
-import { TextContentView } from '../../../components/common/status/TextContentView';
+import { UserObjectType } from '@dhaaga/bridge/typings';
+import { TextContentView } from '#/components/common/status/TextContentView';
 
 function util(o: number): string {
 	const formatter = new Intl.NumberFormat('en-US', {

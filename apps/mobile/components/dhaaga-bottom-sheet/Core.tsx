@@ -9,7 +9,7 @@ import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomS
 import ABS_Select_Account from './modules/ABS_Select_Account';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
 import ABS_Link_Preview from './modules/ABS_Link_Preview';
-import AppBottomSheetHashtag from './modules/AppBottomSheetHashtag';
+import ABS_TagDetails from './modules/ABS_TagDetails';
 import { APP_FONTS } from '../../styles/AppFonts';
 import AppBottomSheetUserMoreActions from './modules/AppBottomSheetUserMoreActions';
 import {
@@ -99,7 +99,7 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.LINK:
 			return <ABS_Link_Preview />;
 		case APP_BOTTOM_SHEET_ENUM.HASHTAG:
-			return <AppBottomSheetHashtag />;
+			return <ABS_TagDetails />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS:
 			return <AppBottomSheetUserMoreActions />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
@@ -151,7 +151,7 @@ function AppBottomSheet() {
 					width: '100%',
 					backgroundColor: theme.palette.bg,
 					zIndex: appVerticalIndex.sheetBackdrop,
-					opacity: 0.32,
+					opacity: 0.42,
 				}}
 				onPress={onBottomSheetCloseEvent}
 			/>

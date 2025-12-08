@@ -27,7 +27,7 @@ export class MisskeyAccountsRouter implements AccountRoute {
 		this.client = MisskeyJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
-	async statuses(
+	async getPosts(
 		id: string,
 		query: AccountRouteStatusQueryDto,
 	): Promise<Endpoints['users/notes']['res']> {

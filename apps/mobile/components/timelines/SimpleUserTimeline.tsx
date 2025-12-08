@@ -1,4 +1,4 @@
-import { UserObjectType } from '@dhaaga/bridge';
+import type { UserObjectType } from '@dhaaga/bridge/typings';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import {

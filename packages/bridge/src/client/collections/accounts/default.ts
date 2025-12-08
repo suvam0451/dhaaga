@@ -101,7 +101,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	async statuses(
+	async getPosts(
 		id: string,
 		query: AccountRouteStatusQueryDto,
 	): Promise<MastoStatus[]> {

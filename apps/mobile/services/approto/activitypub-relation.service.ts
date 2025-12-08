@@ -36,14 +36,10 @@ class ActivitypubRelationService {
 	async follow() {
 		this.setLoading(true);
 		try {
-			const { data, error } = await this.client.accounts.follow(this.userId, {
+			await this.client.users.follow(this.userId, {
 				reblogs: true,
 				notify: false,
 			});
-			if (error) {
-				console.log('failed to follow', error);
-				return false;
-			}
 			return true;
 		} catch (e) {
 			console.log('failed to follow', e);
@@ -55,13 +51,7 @@ class ActivitypubRelationService {
 
 	async unFollow(did?: string) {
 		try {
-			const { data, error } = await this.client.accounts.unfollow(
-				did || this.userId,
-			);
-			if (error) {
-				console.log('failed to unfollow', error);
-				return false;
-			}
+			await this.client.users.unfollow(did || this.userId);
 			return true;
 		} catch (e) {
 			console.log('failed to unfollow', e);

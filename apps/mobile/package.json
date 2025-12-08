@@ -16,6 +16,7 @@
 		"@react-native-masked-view/masked-view": "0.3.2",
 		"@react-navigation/bottom-tabs": "^7.4.0",
 		"@react-navigation/native-stack": "^7.3.16",
+		"@shopify/flash-list": "^2.2.0",
 		"@tanstack/react-query": "^5.90.12",
 		"expo": "~54.0.27",
 		"expo-asset": "~12.0.9",
@@ -70,7 +71,7 @@
 		"lite": "node ./lite.js",
 		"android": "expo run:android",
 		"ios": "expo run:ios",
-		"tl:sync": "node ./i18n/sync.js",
+		"tl:sync": "node ../_shared/translations/sync.js",
 		"eas-build-pre-install": "cd ../.. && npm run link:all",
 		"eas-build-post-install": "cd ../.. && npm run build-deps"
 	},

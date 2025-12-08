@@ -4,15 +4,19 @@ import {
 	MastoStatus,
 	MastoTag,
 	MastoTrendLink,
-} from '../../../types/mastojs.types.js';
-import { LibraryPromise } from '#/types/index.js';
+} from '#/types/mastojs.types.js';
+import { AppBskyUnspeccedDefs } from '@atproto/api';
 
 export interface TrendsRoute {
 	tags(
 		opts: GetTrendingDTO,
-	): LibraryPromise<MastoTag[] | Endpoints['hashtags/trend']['res']>;
+	): Promise<
+		| MastoTag[]
+		| Endpoints['hashtags/trend']['res']
+		| AppBskyUnspeccedDefs.TrendView[]
+	>;
 
-	posts(opts: GetTrendingDTO): LibraryPromise<MastoStatus[]>;
+	posts(opts: GetTrendingDTO): Promise<MastoStatus[]>;
 
-	links(opts: GetTrendingDTO): LibraryPromise<MastoTrendLink[]>;
+	links(opts: GetTrendingDTO): Promise<MastoTrendLink[]>;
 }

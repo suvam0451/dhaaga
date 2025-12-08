@@ -1,55 +1,76 @@
-import { useEffect, useMemo } from 'react';
-import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetMentionUpdates } from '#/hooks/api/useNotifications';
 import NotificationItemPresenter from './NotificationItemPresenter';
-import Header from '../components/Header';
-import FlashListService from '#/services/flashlist.service';
 import useNotificationStore from '../interactors/useNotificationStore';
-import { NotificationSkeletonView } from '../components/Skeleton';
-import { ListWithSkeletonPlaceholder } from '#/ui/Lists';
-import { View } from 'react-native';
-import { AppText } from '#/components/lib/Text';
+import { TouchableOpacity, View } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import type { NotificationObjectType } from '@dhaaga/bridge/typings';
+import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
 
-function MentionPresenter() {
-	const { state, loadNext, maxId, append, reset } = useNotificationStore();
-	const { data, refetch, isPending, fetchStatus, isRefetching } =
-		useApiGetMentionUpdates(maxId);
+function Wrapper({ item }: { item: NotificationObjectType }) {
+	const { theme } = useAppTheme();
 
-	useEffect(() => {
-		if (fetchStatus !== 'fetching') {
-			append(data);
-		}
-	}, [fetchStatus]);
+	function renderLeftActions(progress, dragX) {
+		// A shared flag so haptically triggers only once
+		// const triggered = useSharedValue(false);
 
-	async function refresh() {
-		reset();
-		await refetch();
+		// useAnimatedReaction(
+		// 	() => progress.value,
+		// 	(value) => {
+		// 		const threshold = 0.8; // 30% reveal
+		//
+		// 		if (value > threshold && !triggered.value) {
+		// 			triggered.value = true;
+		// 			runOnJS(triggerHaptic)();
+		// 		}
+		//
+		// 		if (value <= threshold && triggered.value) {
+		// 			triggered.value = false; // reset so you can trigger again next swipe
+		// 		}
+		// 	},
+		// );
+
+		return (
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'sync-outline'} size={32} />
+				</TouchableOpacity>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'chatbox-outline'} size={32} />
+				</TouchableOpacity>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'heart'} size={32} />
+				</TouchableOpacity>
+			</View>
+		);
 	}
 
-	const listItems = useMemo(() => {
-		return FlashListService.notifications(state.items);
-	}, [state.items]);
+	return (
+		<Swipeable
+			renderLeftActions={renderLeftActions}
+			overshootRight={false}
+			overshootFriction={8}
+			childrenContainerStyle={{ backgroundColor: theme.background.a0 }}
+		>
+			<NotificationItemPresenter item={item} />
+		</Swipeable>
+	);
+}
 
-	const IS_LOADING = listItems.length === 0 && (isPending || isRefetching);
+function MentionPresenter() {
+	const { maxId } = useNotificationStore();
+	const queryResult = useApiGetMentionUpdates(maxId);
 
 	return (
-		<ListWithSkeletonPlaceholder
-			SkeletonView={NotificationSkeletonView}
-			ItemView={(item) => <NotificationItemPresenter item={item} />}
-			items={listItems}
-			isLoading={IS_LOADING}
-			onEndReached={() => {
-				if (!isPending) loadNext();
-			}}
-			SkeletonEstimatedHeight={136}
-			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
-			onRefresh={refresh}
-			listEmpty={state.listEmpty}
-			ListEmptyComponent={
-				<View>
-					<AppText.Normal>Notification List Empty</AppText.Normal>
-				</View>
-			}
+		<SimpleInboxTimeline
+			queryResult={queryResult}
+			Wrapper={({ item }) => <Wrapper item={item} />}
 		/>
 	);
 }

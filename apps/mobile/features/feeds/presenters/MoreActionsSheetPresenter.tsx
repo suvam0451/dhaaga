@@ -6,20 +6,17 @@ import {
 	useAppTheme,
 } from '../../../hooks/utility/global-state-extractors';
 import { View } from 'react-native';
-import { appDimensions } from '../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 import { Image } from 'expo-image';
-import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { StatItem } from '../../../components/common/status/PostStats';
+import { AppText } from '#/components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { StatItem } from '../../post-view/views/PostInteractionStatsRow';
 import ProfileFeedAssignInteractor from '../../app-profiles/interactors/ProfileFeedAssignInteractor';
 import MenuView from '../../timelines/features/controller/views/MenuView';
-import { LinkingUtils } from '../../../utils/linking.utils';
-import { AppDivider } from '../../../components/lib/Divider';
-import {
-	AtprotoApiAdapter,
-	AtprotoUtils,
-	FeedObjectType,
-} from '@dhaaga/bridge';
+import { LinkingUtils } from '#/utils/linking.utils';
+import { AppDivider } from '#/components/lib/Divider';
+import { AtprotoApiAdapter, AtprotoUtils } from '@dhaaga/bridge';
+import type { FeedObjectType } from '@dhaaga/bridge/typings';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -50,10 +47,16 @@ function MoreActionsSheetPresenter() {
 
 	if (!Feed) return <View />;
 
-	function onOpenInBrowser() {
-		AtprotoUtils.generateFeedUrl(client as AtprotoApiAdapter, Uri).then((o) =>
-			o.tap(LinkingUtils.openURL),
-		);
+	async function onOpenInBrowser() {
+		try {
+			const url = await AtprotoUtils.generateFeedUrl(
+				client as AtprotoApiAdapter,
+				Uri,
+			);
+			LinkingUtils.openURL(url);
+		} catch (e: any) {
+			console.log(e);
+		}
 	}
 
 	return (

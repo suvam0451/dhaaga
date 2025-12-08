@@ -49,6 +49,10 @@ enum TimelineFetchMode {
 	FEED = 'Feed',
 
 	MY_POSTS = 'MyPosts',
+
+	TRENDING_POSTS = 'TrendingPosts',
+	TRENDING_USERS = 'TrendingUsers',
+	TRENDING_TAGS = 'TrendingTags',
 }
 
 type State = TimelineReducerBaseState<PostObjectType> & {
@@ -349,7 +353,7 @@ function reducer(state: State, action: Actions): State {
 			const copy = Array.from(state.items);
 
 			return produce(state, (draft) => {
-				for (const item of action.payload.items) {
+				for (const item of action.payload.data) {
 					if (state.seen.has(item.id)) continue;
 					copy.push(item);
 					draft.seen.add(item.id);

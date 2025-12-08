@@ -8,17 +8,13 @@ import FollowReqAcceptNotificationFragment from '../components/FollowReqAccepNot
 import ReactionNotificationFragment from '../components/ReactionNotificationFragment';
 import FollowPresenter from './FollowPresenter';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import { FlashListType_Notification } from '../../../services/flashlist.service';
 import { AppText } from '#/components/lib/Text';
 import GroupedFollowPresenter from './GroupedFollowPresenter';
 import GroupedPostInteractionPresenter from './GroupedPostInteractionPresenter';
-import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
-import { useMemo } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { AppIcon } from '#/components/lib/Icon';
+import type { NotificationObjectType } from '@dhaaga/bridge/typings';
 
 type Props = {
-	item: FlashListType_Notification;
+	item: NotificationObjectType;
 };
 
 /**
@@ -28,82 +24,57 @@ type Props = {
 export function NotificationItemPresenter({ item }: Props) {
 	const { theme } = useAppTheme();
 
-	let _obj = item.props.dto;
-
-	if (_obj.user === null) {
-		if (_obj.users.length > 1) {
+	if (item.user === null) {
+		if (item.users.length > 1) {
 			switch (item.type) {
 				case DriverNotificationType.FOLLOW:
-					return <GroupedFollowPresenter item={_obj} />;
+					return <GroupedFollowPresenter item={item} />;
 				case DriverNotificationType.REBLOG:
 				case DriverNotificationType.RENOTE:
 				case DriverNotificationType.FAVOURITE:
-					return <GroupedPostInteractionPresenter item={_obj} />;
+					return <GroupedPostInteractionPresenter item={item} />;
 				default:
-					return <GroupedFollowPresenter item={_obj} />;
+					return <GroupedFollowPresenter item={item} />;
 			}
-		} else if (_obj.users.length === 1) {
+		} else if (item.users.length === 1) {
 			// For a single user, render the legacy singlet components
-			_obj = { ..._obj, user: _obj.users[0].item };
+			item = { ...item, user: item.users[0].item };
 		}
 	}
 
-	// if (_obj.users.length > 0) return <View />;
-
-	/**
-	 * Legacy Singlet Notification Components
-	 */
-
-	const Content = useMemo(() => {
-		switch (_obj.type) {
-			case DriverNotificationType.REPLY:
-				return <ReplyNotificationFragment item={_obj} />;
-			case DriverNotificationType.MENTION:
-			case DriverNotificationType.CHAT:
-			case DriverNotificationType.HOME:
-			case DriverNotificationType.PUBLIC:
-				return <MentionNotificationFragment item={_obj} />;
-			case DriverNotificationType.FAVOURITE:
-				return <FavouriteNotificationFragment item={_obj} />;
-			case DriverNotificationType.FOLLOW:
-				return <FollowPresenter item={_obj} />;
-			case DriverNotificationType.STATUS:
-			case DriverNotificationType.NOTE:
-				return <StatusAlertNotificationFragment item={_obj} />;
-			case DriverNotificationType.REBLOG:
-			case DriverNotificationType.RENOTE:
-				return <BoostNotificationFragment item={_obj} />;
-			case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED:
-				return <FollowReqAcceptNotificationFragment item={_obj} />;
-			case DriverNotificationType.REACTION:
-				return <ReactionNotificationFragment item={_obj} />;
-			case DriverNotificationType.ACHIEVEMENT_EARNED:
-			case DriverNotificationType.APP:
-			default: {
-				console.log('notification type not handled', _obj.type);
-				return (
-					<AppText.Medium style={{ color: theme.complementaryB.a0 }}>
-						Notification Type not handled: {_obj.type}
-					</AppText.Medium>
-				);
-			}
+	switch (item.type) {
+		case DriverNotificationType.REPLY:
+			return <ReplyNotificationFragment item={item} />;
+		case DriverNotificationType.MENTION:
+		case DriverNotificationType.CHAT:
+		case DriverNotificationType.HOME:
+		case DriverNotificationType.PUBLIC:
+			return <MentionNotificationFragment item={item} />;
+		case DriverNotificationType.FAVOURITE:
+			return <FavouriteNotificationFragment item={item} />;
+		case DriverNotificationType.FOLLOW:
+			return <FollowPresenter item={item} />;
+		case DriverNotificationType.STATUS:
+		case DriverNotificationType.NOTE:
+			return <StatusAlertNotificationFragment item={item} />;
+		case DriverNotificationType.REBLOG:
+		case DriverNotificationType.RENOTE:
+			return <BoostNotificationFragment item={item} />;
+		case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED:
+			return <FollowReqAcceptNotificationFragment item={item} />;
+		case DriverNotificationType.REACTION:
+			return <ReactionNotificationFragment item={item} />;
+		case DriverNotificationType.ACHIEVEMENT_EARNED:
+		case DriverNotificationType.APP:
+		default: {
+			console.log('notification type not handled', item.type);
+			return (
+				<AppText.Medium style={{ color: theme.complementaryB.a0 }}>
+					Notification Type not handled: {item.type}
+				</AppText.Medium>
+			);
 		}
-	}, [_obj]);
-
-	const renderLeftActions = () => {
-		return (
-			<View style={{ flexDirection: 'row' }}>
-				<TouchableOpacity>
-					<AppIcon id={'chevron-collapse-outline'} />
-				</TouchableOpacity>
-				<TouchableOpacity>
-					<AppIcon id={'chevron-collapse-outline'} />
-				</TouchableOpacity>
-			</View>
-		);
-	};
-
-	return <Swipeable renderLeftActions={renderLeftActions}>{Content}</Swipeable>;
+	}
 }
 
 export default NotificationItemPresenter;

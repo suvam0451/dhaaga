@@ -8,15 +8,15 @@ import { File } from 'expo-file-system';
  */
 class ActivityPubProviderService {
 	static async getStatusContext(client: ApiTargetInterface, id: string) {
-		return client.statuses.getPostContext(id);
+		return client.posts.getPostContext(id);
 	}
 
 	static async getStatus(client: ApiTargetInterface, id: string) {
-		return client.statuses.get(id);
+		return client.posts.getPost(id);
 	}
 
 	static async getStatusAsArray(client: ApiTargetInterface, id: string) {
-		const status = await client.statuses.get(id);
+		const status = await client.posts.getPost(id);
 		return [status];
 	}
 

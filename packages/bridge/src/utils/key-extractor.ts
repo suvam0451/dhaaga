@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { defaultResultPage, ResultPage } from '../types/api-response.js';
+import { ResultPage } from '../types/api-response.js';
 
 const driverLinkHeaderPaginationBlock = z.object({
 	data: z.object({
@@ -63,8 +63,7 @@ class Util {
 	static getPage<T>(
 		input: any,
 		transformer: (input: any[]) => T[] = (input: any[]) => input,
-		seed?: { minId: string | null; maxId: string | null },
-	): ResultPage<T> {
+	): ResultPage<T[]> {
 		/**
 		 * Handle non-array-based results
 		 */
@@ -76,7 +75,7 @@ class Util {
 		result = genericPostListSchema.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(input),
+				data: transformer(input),
 				minId: result.data.length > 0 ? result.data[0].id : null,
 				maxId:
 					result.data.length > 0
@@ -88,7 +87,7 @@ class Util {
 		result = driverLinkHeaderPaginationBlock.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(result.data.data.data),
+				data: transformer(result.data.data.data),
 				minId: result.data.data.minId,
 				maxId: result.data.data.maxId,
 			};
@@ -97,7 +96,7 @@ class Util {
 		result = atProtoPostSearchResultResponseSchema.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(result.data.posts),
+				data: transformer(result.data.posts),
 				minId: null,
 				maxId: result.data.cursor || null,
 			};
@@ -106,7 +105,7 @@ class Util {
 		result = atProtoUserFollowsResponseSchema.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(result.data.data.follows),
+				data: transformer(result.data.data.follows),
 				minId: null,
 				maxId: result.data.data.cursor || null,
 			};
@@ -115,7 +114,7 @@ class Util {
 		result = atProtoUserFollowersResponseSchema.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(result.data.data.followers),
+				data: transformer(result.data.data.followers),
 				minId: null,
 				maxId: result.data.data.cursor || null,
 			};
@@ -124,7 +123,7 @@ class Util {
 		result = misskeyApiUserFollowsResponseSchema.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(result.data.data.map((o) => o.followee)),
+				data: transformer(result.data.data.map((o) => o.followee)),
 				maxId: result.data.data[result.data.data.length - 1].id,
 				minId: null,
 			};
@@ -133,13 +132,13 @@ class Util {
 		result = misskeyApiUserFollowersResponseSchema.safeParse(input);
 		if (result.success) {
 			return {
-				items: transformer(result.data.data.map((o) => o.follower)),
+				data: transformer(result.data.data.map((o) => o.follower)),
 				maxId: result.data.data[result.data.data.length - 1].id,
 				minId: null,
 			};
 		}
 
-		return defaultResultPage;
+		throw new Error('failed to extract pagination keys');
 	}
 }
 

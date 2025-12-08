@@ -78,15 +78,11 @@ export class MastodonAccountsRouter implements AccountRoute {
 		return { data };
 	}
 
-	async statuses(
+	async getPosts(
 		id: string,
 		query: AccountRouteStatusQueryDto,
 	): Promise<MastoStatus[]> {
-		try {
-			return await this.client.lib.v1.accounts.$select(id).statuses.list(query);
-		} catch (e: any) {
-			throw new Error(e);
-		}
+		return this.client.lib.v1.accounts.$select(id).statuses.list(query);
 	}
 
 	async get(id: string): Promise<MastoAccount> {
