@@ -4,7 +4,7 @@ import { KNOWN_SOFTWARE, PostTargetInterface } from '@dhaaga/bridge';
 import { AppBskyFeedGetPostThread } from '@atproto/api';
 import AtprotoContextService from '#/services/atproto/atproto-context-service';
 import { PostParser } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 
 export enum STATUS_CONTEXT_REDUCER_ACTION {
 	INIT = 'init',

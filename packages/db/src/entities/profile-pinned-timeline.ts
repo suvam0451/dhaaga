@@ -4,7 +4,7 @@ import { Account, Profile, ProfilePinnedTimeline } from '../_schema.js';
 import { AccountService } from './account.js';
 import { ProfileService } from './profile.js';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
 import { getTimelinePins } from '../data/driver.js';
 

@@ -5,7 +5,7 @@ import {
 	useAppApiClient,
 } from '../../utility/global-state-extractors';
 import { UserParser } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * Gets the user's account and

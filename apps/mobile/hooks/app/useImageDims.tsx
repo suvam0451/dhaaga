@@ -1,7 +1,7 @@
-import type { PostMediaAttachmentType } from '@dhaaga/bridge/typings';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
 import { useEffect, useRef, useState } from 'react';
-import MediaService from '../../services/media.service';
-import MediaUtils from '../../utils/media.utils';
+import MediaService from '#/services/media.service';
+import MediaUtils from '#/utils/media.utils';
 import { useImage } from 'expo-image';
 
 /**

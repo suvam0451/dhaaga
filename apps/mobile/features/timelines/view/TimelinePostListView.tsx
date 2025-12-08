@@ -1,6 +1,6 @@
 import { RefreshControl, StyleSheet, View } from 'react-native';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { appDimensions } from '#/styles/dimensions';

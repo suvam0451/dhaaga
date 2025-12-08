@@ -4,7 +4,7 @@ import { Account, Profile, ProfilePinnedUser } from '../_schema.js';
 import { AccountService } from './account.js';
 import { z } from 'zod';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { APP_PINNED_OBJECT_TYPE } from '../types/db.types.js';
 
 const profileUserPinCreateSchema = z.object({

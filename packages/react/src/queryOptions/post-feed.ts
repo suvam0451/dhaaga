@@ -10,7 +10,7 @@ import {
 	PleromaApiAdapter,
 	PostParser,
 } from '@dhaaga/bridge';
-import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '@dhaaga/core';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedGetTimeline } from '@atproto/api';

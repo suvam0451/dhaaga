@@ -2,7 +2,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppResultPageType } from '../types/app.types';
 import { produce } from 'immer';
 import { UserParser, PostParser } from '@dhaaga/bridge';
-import type { NotificationObjectType } from '@dhaaga/bridge/typings';
+import type { NotificationObjectType } from '@dhaaga/bridge';
 
 export type MastoApiGroupedNotificationType = {
 	groupKey: string;
@@ -89,6 +89,7 @@ class ServiceV2 {
 					})),
 					read: true,
 					createdAt: group.latestPageNotificationAt,
+					extraData: {},
 				});
 				counter++;
 				continue;
@@ -121,6 +122,7 @@ class ServiceV2 {
 					})),
 					read: true,
 					createdAt: group.latestPageNotificationAt,
+					extraData: {},
 				});
 
 				seenPost.set(group.statusId, counter);
@@ -142,6 +144,7 @@ class ServiceV2 {
 									server,
 								),
 								types: [group.type],
+								extraData: {},
 							});
 						}
 					});

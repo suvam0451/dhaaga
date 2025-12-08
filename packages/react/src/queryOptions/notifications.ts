@@ -7,10 +7,7 @@ import {
 	MastoApiAdapter,
 	PleromaApiAdapter,
 } from '@dhaaga/bridge';
-import type {
-	NotificationObjectType,
-	ResultPage,
-} from '@dhaaga/bridge/typings';
+import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
 const NOTIFICATION_PAGE_SIZE = 20;

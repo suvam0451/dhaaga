@@ -1,9 +1,10 @@
 import { BasePubSubService } from './_base.pubisher';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
-import { Emoji } from '../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
-import { EmojiDto } from '../../components/common/status/fragments/_shared.types';
+import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
+import { EmojiDto } from '#/components/common/status/fragments/_shared.types';
 
+// FIXME: please refactor this mutator
 class Mutator {
 	private readonly client: ApiTargetInterface;
 
@@ -28,7 +29,7 @@ class Mutator {
 	}
 
 	async toggleShare(input: PostObjectType): Promise<PostObjectType> {
-		return this.client.post.toggleShare(input);
+		return this.client.posts.toggleShare(input);
 	}
 
 	async addReaction(

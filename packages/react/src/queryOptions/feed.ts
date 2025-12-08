@@ -5,7 +5,7 @@ import {
 	FeedParser,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
 export function getMyFeedListQueryOpts(

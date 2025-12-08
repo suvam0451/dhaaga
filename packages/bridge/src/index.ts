@@ -110,3 +110,5 @@ export { defaultResultPage, type ResultPage } from './types/api-response.js';
 export * from './types/shared/_exports.js';
 
 export type { GetPostsQueryDTO } from '#/client/types/_interface.js';
+
+export { postObjectSchema } from './types/shared/post.js';

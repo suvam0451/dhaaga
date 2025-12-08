@@ -11,7 +11,7 @@ import ProfileSessionManager from '#/services/session/profile-session.service';
 import AppSessionManager from '#/services/session/app-session.service';
 import AccountSessionManager from '#/services/session/account-session.service';
 import { ApiTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 import { AppColorSchemeType } from '#/utils/theming.util';
 import { SQLiteDatabase } from 'expo-sqlite';
 

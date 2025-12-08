@@ -10,13 +10,13 @@ import {
 import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import {
 	useAppPublishers,
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
-import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
-import { Loader } from '../../../lib/Loader';
+import { Loader } from '#/components/lib/Loader';
+import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 
 function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	const { dto: postItem } = withPostItemContext();

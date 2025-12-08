@@ -11,7 +11,7 @@ import type {
 	PostObjectType,
 	ResultPage,
 	UserObjectType,
-} from '@dhaaga/bridge/typings';
+} from '@dhaaga/bridge';
 
 /**
  * GET user profile

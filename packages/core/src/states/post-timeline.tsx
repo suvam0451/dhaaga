@@ -1,5 +1,5 @@
 import type { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
-import type { PostObjectType, ResultPage } from '@dhaaga/bridge/typings';
+import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 import { RandomUtil } from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
@@ -22,7 +22,7 @@ import {
 } from './_timeline.shared.js';
 
 type AppTimelineQueryOptions = DhaagaJsTimelineQueryOptions;
-type PageType = ResultPage<PostObjectType>;
+type PageType = ResultPage<PostObjectType[]>;
 
 enum TimelineFetchMode {
 	IDLE = 'Idle',

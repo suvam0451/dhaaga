@@ -4,10 +4,7 @@ import {
 	ActivityPubReactionsService,
 	ActivityPubReactionStateType,
 } from '@dhaaga/bridge';
-import type {
-	UserObjectType,
-	CustomEmojiObjectType,
-} from '@dhaaga/bridge/typings';
+import type { UserObjectType, CustomEmojiObjectType } from '@dhaaga/bridge';
 
 enum KEY {
 	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',

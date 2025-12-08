@@ -8,7 +8,7 @@ import {
 import { View } from 'react-native';
 import { ProfilePinnedUserService } from '@dhaaga/db';
 import { AppMenuItem } from '../../lib/Menu';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 function AppBottomSheetUserMoreActions() {
 	const currentTargetId = useRef(null);

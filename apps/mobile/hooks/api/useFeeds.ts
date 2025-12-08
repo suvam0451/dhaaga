@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import {
 	useAppAcct,
 	useAppApiClient,

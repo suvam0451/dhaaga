@@ -3,7 +3,7 @@ import { Account, AccountSavedPost } from '../_schema.js';
 import { DataSource } from '../dataSource.js';
 import { AccountSavedUserService } from './account-saved-user.js';
 import { RandomUtil } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge/typings';
+import type { PostObjectType } from '@dhaaga/bridge';
 import { SavedPostMediaAttachmentService } from './saved-post-media-attachment.js';
 
 class Repo implements RepoTemplate<AccountSavedPost> {}

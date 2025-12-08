@@ -22,7 +22,7 @@ import InputView from '#/features/chats/views/InputView';
 import { appDimensions } from '#/styles/dimensions';
 import RecievedMessageView from '#/features/chats/views/RecievedMessageView';
 import SentMessageView from '#/features/chats/views/SentMessageView';
-import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge';
 
 type ParticipantsProps = {
 	accounts: UserObjectType[];

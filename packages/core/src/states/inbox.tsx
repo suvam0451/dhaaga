@@ -6,10 +6,7 @@ import {
 	useContext,
 	useReducer,
 } from 'react';
-import type {
-	NotificationObjectType,
-	ResultPage,
-} from '@dhaaga/bridge/typings';
+import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 
 type State = {
 	seen: Set<string>;
@@ -32,11 +29,11 @@ enum ACTION {
 type Actions =
 	| {
 			type: ACTION.APPEND;
-			payload: { page: ResultPage<NotificationObjectType> };
+			payload: { page: ResultPage<NotificationObjectType[]> };
 	  }
 	| {
 			type: ACTION.REPLACE;
-			payload: { page: ResultPage<NotificationObjectType> };
+			payload: { page: ResultPage<NotificationObjectType[]> };
 	  }
 	| {
 			type: ACTION.RESET;

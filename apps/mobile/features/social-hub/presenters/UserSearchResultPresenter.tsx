@@ -6,7 +6,7 @@ import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
 import { Profile } from '@dhaaga/db';
 import { useSocialHubUserPinStatus } from '../api/useSocialHubUserPinStatus';
-import type { UserObjectType } from '@dhaaga/bridge/typings';
+import type { UserObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	profile: Profile;

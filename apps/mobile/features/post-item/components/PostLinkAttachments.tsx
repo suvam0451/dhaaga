@@ -1,5 +1,5 @@
 import { AppText } from '#/components/lib/Text';
-import type { PostLinkAttachmentObjectType } from '@dhaaga/bridge/typings';
+import type { PostLinkAttachmentObjectType } from '@dhaaga/bridge';
 import { Dimensions, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';

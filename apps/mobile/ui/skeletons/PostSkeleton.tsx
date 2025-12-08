@@ -26,11 +26,7 @@ function Node() {
 	);
 }
 
-function PostTimelineSkeleton({
-	containerHeight,
-}: {
-	containerHeight: number;
-}) {
+function PostSkeleton({ containerHeight }: { containerHeight: number }) {
 	const NUM_NODES = containerHeight ? Math.floor(containerHeight / 310) : 0;
 
 	if (NUM_NODES === 0) return <View style={{ height: '100%' }} />;
@@ -40,4 +36,4 @@ function PostTimelineSkeleton({
 	);
 }
 
-export default PostTimelineSkeleton;
+export default PostSkeleton;

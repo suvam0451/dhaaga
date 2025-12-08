@@ -2,7 +2,7 @@ import { Pressable, RefreshControl, View } from 'react-native';
 import useApiGetMyFeeds from '#/hooks/api/useFeeds';
 import { AppText, SpecialText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
-import type { FeedObjectType } from '@dhaaga/bridge/typings';
+import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppDivider } from '#/components/lib/Divider';
 import { Image } from 'expo-image';

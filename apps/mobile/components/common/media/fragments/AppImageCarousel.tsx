@@ -11,7 +11,7 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import useCircularListSwipe from '#/hooks/useCircularListSwipe';
 import useGalleryDims from '#/hooks/app/useGalleryDims';
 import { appDimensions } from '#/styles/dimensions';
-import type { PostMediaAttachmentType } from '@dhaaga/bridge/typings';
+import type { PostMediaAttachmentType } from '@dhaaga/bridge';
 import { MediaService } from '@dhaaga/core';
 
 type MediaViewProps = {

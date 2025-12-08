@@ -14,7 +14,7 @@ import type {
 	PostObjectType,
 	FeedObjectType,
 	ResultPage,
-} from '@dhaaga/bridge/typings';
+} from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 import type { AppBskyFeedSearchPosts } from '@atproto/api';
 

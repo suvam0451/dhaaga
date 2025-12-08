@@ -2,18 +2,12 @@ import { FlatList, View } from 'react-native';
 import { Skeleton } from '#/ui/Skeleton';
 
 /**
- * Current height: 136px
- * With Extra padding: 148px
+ * Current height: 136 px
+ * With Extra padding: 148 px
  */
 function Node() {
-	function onLayout(event: any) {
-		console.log(event.nativeEvent.layout.height);
-	}
 	return (
-		<View
-			style={{ paddingHorizontal: 10, marginBottom: 16 }}
-			onLayout={onLayout}
-		>
+		<View style={{ paddingHorizontal: 10, marginBottom: 16 }}>
 			<View style={{ flexDirection: 'row', marginVertical: 10 }}>
 				<Skeleton height={40} width={40} style={{ borderRadius: 20 }} />
 				<Skeleton
@@ -37,11 +31,7 @@ function Node() {
 	);
 }
 
-function InboxTimelineSkeleton({
-	containerHeight,
-}: {
-	containerHeight: number;
-}) {
+function InboxPostSkeleton({ containerHeight }: { containerHeight: number }) {
 	const NUM_NODES = containerHeight
 		? Math.floor((containerHeight - 64) / 136)
 		: 0;
@@ -53,4 +43,4 @@ function InboxTimelineSkeleton({
 	);
 }
 
-export default InboxTimelineSkeleton;
+export default InboxPostSkeleton;
