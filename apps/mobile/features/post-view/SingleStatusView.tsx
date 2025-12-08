@@ -165,9 +165,7 @@ function SingleStatusView({
 
 			{/*FIXME: enable for bluesky*/}
 			{IS_QUOTE_BOOST && !!dto.boostedFrom && (
-				<WithAppStatusItemContext dto={_target.boostedFrom}>
-					<StatusQuoted />
-				</WithAppStatusItemContext>
+				<StatusQuoted post={_target.boostedFrom} />
 			)}
 
 			<PostLinkAttachments items={dto.content.links} />

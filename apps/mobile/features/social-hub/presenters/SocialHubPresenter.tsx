@@ -1,7 +1,4 @@
-import {
-	useAppTheme,
-	useHub,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme, useHub } from '#/hooks/utility/global-state-extractors';
 import SocialHubTabPresenter from './SocialHubTabPresenter';
 import { View } from 'react-native';
 

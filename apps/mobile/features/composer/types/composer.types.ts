@@ -1,9 +1,9 @@
-import { TagTargetInterface } from '@dhaaga/bridge';
+import type { CustomEmojiObjectType, TagTargetInterface } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
 
 /**
  * Indicates what is currently being typed
- * into the TextInput, and what type of
+ * into the TextInput and what type of
  * suggestion to generate, based on what was
  * typed ahead. Some examples:
  *
@@ -19,5 +19,5 @@ export type AutoFillPromptType = {
 export type AutoFillResultsType = {
 	accounts: UserObjectType[];
 	hashtags: TagTargetInterface[];
-	emojis: InstanceApi_CustomEmojiDTO[];
+	emojis: CustomEmojiObjectType[];
 };

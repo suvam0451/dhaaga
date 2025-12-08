@@ -79,7 +79,7 @@ class AtprotoComposerService {
 	}
 
 	/**
-	 * Generate post record from reducer state
+	 * Generate post-record from reducer state
 	 * @param client
 	 * @param state
 	 */

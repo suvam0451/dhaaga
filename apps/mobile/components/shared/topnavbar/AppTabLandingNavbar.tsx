@@ -132,6 +132,7 @@ function AppTabLandingNavbar({
 					isOpen={DropdownOpen}
 					close={closeDropdown}
 					items={dropdownItems!}
+					selectedItemId={dropdownSelectedId}
 				/>
 			) : (
 				<View />

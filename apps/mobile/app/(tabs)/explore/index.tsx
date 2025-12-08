@@ -21,7 +21,8 @@ import {
 } from '#/hooks/utility/global-state-extractors';
 import SearchWidget from '#/features/search/components/SearchWidget';
 import { getSearchTabs } from '@dhaaga/db';
-import SearchResultPresenter from '#/features/search/presenters/SearchResultPresenter';
+import SearchResults from '#/features/search/SearchResults';
+import Header from '#/features/search/components/Header';
 
 /**
  * Renders the results of a
@@ -69,7 +70,12 @@ const Content = forwardRef((props, ref) => {
 		});
 	}, [driver]);
 
-	return <SearchResultPresenter refetch={async () => {}} />;
+	return (
+		<>
+			<Header />
+			<SearchResults />
+		</>
+	);
 });
 
 function Page() {

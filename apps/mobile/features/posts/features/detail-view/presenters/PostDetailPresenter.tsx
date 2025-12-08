@@ -6,7 +6,7 @@ import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { RefetchOptions } from '@tanstack/react-query';
 import { appDimensions } from '#/styles/dimensions';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
-import StatusItem from '../../../../post-view/StatusItem';
+import StatusItem from '#/features/post-item/PostTimelineEntryView';
 import PostCommentThreadControls from './PostCommentThreadControls';
 import ReplyItemPresenter from './ReplyItemPresenter';
 import NoMoreReplies from '../components/NoMoreReplies';

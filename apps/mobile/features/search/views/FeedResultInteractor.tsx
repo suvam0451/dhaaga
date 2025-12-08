@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useFeedTimelineDispatch, useFeedTimelineState } from '@dhaaga/core';
-import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
+import { useApiSearchFeeds } from '#/hooks/api/useApiSearch';
 import { ACTION, FeedTimelineStateAction } from '@dhaaga/core';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { Animated, RefreshControl, View } from 'react-native';
-import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
-import Header from '../components/Header';
+import { FlatList, RefreshControl, View } from 'react-native';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import FeedListItemView from '../../timelines/view/FeedListItemView';
-import NoResults from '../../../components/error-screen/NoResults';
+import NoResults from '#/components/error-screen/NoResults';
 import { useDiscoverState } from '@dhaaga/core';
 
 type FeedResultInteractorProps = {
@@ -51,42 +49,26 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 			return;
 		}
 		onDataLoaded(false);
-		if (data.items.length === 0) return;
+		if (data.data.length === 0) return;
 
 		dispatch({
 			type: FeedTimelineStateAction.APPEND_RESULTS,
-			payload: {
-				items: data.items,
-				maxId: data.maxId,
-				minId: null,
-			},
+			payload: data,
 		});
 	}, [fetchStatus]);
-
-	/**
-	 * Composite Hook Collection
-	 */
-	const { onScroll } = useScrollMoreOnPageEnd({
-		itemCount: feedState.items.length,
-		loadNextPage: loadMore,
-	});
 
 	if (isFetched && feedState.items.length === 0)
 		return (
 			<View>
-				<Header />
 				<NoResults text={'No results 🤔'} subtext={'Try a different keyword'} />
 			</View>
 		);
 
 	return (
 		<View style={{ flex: 1 }}>
-			<Animated.FlatList
+			<FlatList
 				data={feedState.items}
 				renderItem={({ item }) => <FeedListItemView item={item} />}
-				onScroll={onScroll}
-				ListHeaderComponent={Header}
-				scrollEventThrottle={16}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}

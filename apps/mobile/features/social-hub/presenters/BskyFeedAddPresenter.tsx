@@ -106,7 +106,7 @@ function BskyFeedAddSheetPresenter() {
 				</View>
 			</Pressable>
 			<FlatList
-				data={data.items}
+				data={data.data}
 				renderItem={({ item }) => (
 					<FeedSearchResultPresenter
 						feed={item}

@@ -120,9 +120,8 @@ function AuthorItemPresenter({
 				} else {
 					return {
 						Icon: (
-							// @ts-ignore-next-line
 							<Image
-								source={{ uri: emoji }}
+								source={{ uri: emoji.url }}
 								style={{ height: 18, width: 18 }}
 							/>
 						),

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
-import StatusItem from '#/features/post-view/StatusItem';
+import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { appDimensions } from '#/styles/dimensions';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
@@ -112,7 +112,7 @@ function SimplePostTimeline({
 				renderItem={({ item }) => (
 					<WithAppStatusItemContext dto={item}>
 						<TimelineFilter_EmojiCrash>
-							<StatusItem />
+							<PostTimelineEntryView />
 						</TimelineFilter_EmojiCrash>
 					</WithAppStatusItemContext>
 				)}

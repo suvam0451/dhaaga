@@ -112,3 +112,4 @@ export * from './types/shared/_exports.js';
 export type { GetPostsQueryDTO } from '#/client/types/_interface.js';
 
 export { postObjectSchema } from './types/shared/post.js';
+export { BaseUrlNormalizationService } from './utils/urls.js';

@@ -5,7 +5,7 @@ import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { appDimensions } from '#/styles/dimensions';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
-import StatusItem from '#/features/post-view/StatusItem';
+import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import Animated from 'react-native-reanimated';
 import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
 
@@ -51,7 +51,7 @@ function TimelinePostListView({
 					data={items}
 					renderItem={({ item }) => (
 						<WithAppStatusItemContext dto={item}>
-							<StatusItem />
+							<PostTimelineEntryView />
 						</WithAppStatusItemContext>
 					)}
 					onScroll={scrollHandler}

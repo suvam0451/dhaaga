@@ -39,7 +39,12 @@ export class BaseUrlNormalizationService {
 			const hasProtocol = /^https?:\/\//i.test(input);
 			const url = new URL(hasProtocol ? input : `https://${input}`);
 
-			return url.host; // Includes port (e.g., 'localhost:8080')
+			let host = url.host; // Includes port (e.g., 'localhost:8080')
+
+			// Remove the leading "www."
+			host = host.replace(/^www\./i, '');
+
+			return host;
 		} catch (e) {
 			throw new Error(`Invalid URL: ${input}`);
 		}

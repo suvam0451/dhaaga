@@ -14,7 +14,6 @@ function LandingPageView() {
 	}) as string[];
 	return (
 		<View style={{ flex: 1 }}>
-			<Header />
 			<View
 				style={{
 					alignItems: 'center',

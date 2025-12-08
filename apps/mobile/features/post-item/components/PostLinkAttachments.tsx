@@ -1,31 +1,30 @@
-import { AppText } from '#/components/lib/Text';
 import type { PostLinkAttachmentObjectType } from '@dhaaga/bridge';
 import { Dimensions, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';
+import { LinkAttachmentOrnament } from '#/features/post-view/components/Ornaments';
+import { NativeTextMedium } from '#/ui/NativeText';
+import { BaseUrlNormalizationService } from '@dhaaga/bridge';
+import { AppDividerSoft } from '#/ui/Divider';
 
 type Props = {
-	items: PostLinkAttachmentObjectType;
+	items: PostLinkAttachmentObjectType[];
 };
 
 function PostLinkAttachments({ items }: Props) {
+	if (items.length === 0) return <View />;
+	const item = items[0];
+
 	const width = Dimensions.get('window').width - 40;
 	const height =
-		items.bannerHeight && items.bannerWidth
-			? items.bannerHeight * (width / items.bannerWidth)
+		item.bannerHeight && item.bannerWidth
+			? item.bannerHeight * (width / item.bannerWidth)
 			: 200;
 
 	return (
 		<View>
 			{items.map((item: PostLinkAttachmentObjectType) => (
-				<View
-					style={{
-						padding: 4,
-						borderColor: 'gray',
-						borderWidth: 0.5,
-						borderRadius: 8,
-					}}
-				>
+				<LinkAttachmentOrnament>
 					{item.bannerImageUrl ? (
 						<Image
 							source={{
@@ -42,15 +41,21 @@ function PostLinkAttachments({ items }: Props) {
 					<View
 						style={{ padding: 4, paddingHorizontal: 6, paddingVertical: 12 }}
 					>
-						<AppText.Medium>{item.title}</AppText.Medium>
-						<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
+						<NativeTextMedium numberOfLines={3} style={{ marginBottom: 4 }}>
+							{item.title}
+						</NativeTextMedium>
+						<NativeTextMedium
+							numberOfLines={5}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+						>
 							{item.description}
-						</AppText.Medium>
-						<View
-							style={{ height: 1.5, width: '100%', backgroundColor: 'gray' }}
-						/>
+						</NativeTextMedium>
+						<AppDividerSoft style={{ marginVertical: 6 }} />
+						<NativeTextMedium>
+							{BaseUrlNormalizationService.stripHttps(item.url)}
+						</NativeTextMedium>
 					</View>
-				</View>
+				</LinkAttachmentOrnament>
 			))}
 		</View>
 	);

@@ -6,15 +6,23 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { NativeTextH1 } from '#/ui/NativeText';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 type DropdownProps = {
 	items: { id: string; label: string; onSelect: () => void }[];
+	selectedItemId: string;
 	isOpen: boolean;
 	close: () => void;
 };
 
-function NavBar_Explore({ items, isOpen, close }: DropdownProps) {
+function NavBar_Explore({
+	items,
+	isOpen,
+	close,
+	selectedItemId,
+}: DropdownProps) {
 	const open = useSharedValue(0); // 0 = closed, 1 = open
+	const { theme } = useAppTheme();
 
 	useEffect(() => {
 		open.value = withTiming(isOpen ? 1 : 0, { duration: 180 });
@@ -31,7 +39,7 @@ function NavBar_Explore({ items, isOpen, close }: DropdownProps) {
 				duration: 300,
 			}),
 			opacity: open.value,
-			marginBottom: withTiming(open.value === 1 ? 16 : 0),
+			marginBottom: withTiming(open.value === 1 ? 32 : 0),
 		};
 	});
 
@@ -46,7 +54,11 @@ function NavBar_Explore({ items, isOpen, close }: DropdownProps) {
 							onSelect(item.id);
 						}}
 					>
-						<NativeTextH1>{item.label}</NativeTextH1>
+						<NativeTextH1
+							color={item.id === selectedItemId ? theme.primary.a0 : undefined}
+						>
+							{item.label}
+						</NativeTextH1>
 					</TouchableOpacity>
 				))}
 			</Animated.View>

@@ -142,6 +142,7 @@ function ABS_Select_Account() {
 							onPress: onPressManageAccount,
 						},
 					]}
+					variant={'clear'}
 				/>
 			)}
 			ListFooterComponent={() =>

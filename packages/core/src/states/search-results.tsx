@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 const searchTabs = [
+	'explore',
 	'top',
 	'latest',
 	'feeds',
