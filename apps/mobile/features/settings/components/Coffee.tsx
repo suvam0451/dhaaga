@@ -44,7 +44,7 @@ export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
 
 function Coffee({ containerStyle }: CoffeeProps) {
 	const [assets, error] = useAssets([
-		require('../../../assets/badges/bmc-button.png'),
+		require('#/assets/badges/bmc-button.png'),
 	]);
 
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
