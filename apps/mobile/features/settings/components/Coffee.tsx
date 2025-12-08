@@ -8,7 +8,7 @@ type CoffeeProps = {
 };
 
 export function CoffeeIconOnly({ containerStyle }: CoffeeProps) {
-	const [assets, error] = useAssets([require('#/assets/badges/bmac-icon.png')]);
+	const [assets, error] = useAssets([require('#/assets/badges/bmac_icon.png')]);
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
 
 	function onTouch() {
