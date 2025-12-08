@@ -2,17 +2,13 @@ import { PostTargetInterface } from './_interface.js';
 import { DriveFile } from 'misskey-js/autogen/models.js';
 import { DriveFileToMediaAttachmentAdapter } from '../media-attachment/adapter.js';
 import { DriveFileInstance } from '../media-attachment/unique.js';
-import PostAdapterBase from './default.js';
 import { Note } from 'misskey-js/autogen/models.js';
+import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
 
-class MisskeyApiPostAdapter
-	extends PostAdapterBase
-	implements PostTargetInterface
-{
+class MisskeyApiPostAdapter implements PostTargetInterface {
 	ref: Note;
 
 	constructor(ref: Note) {
-		super();
 		this.ref = ref;
 	}
 
@@ -166,6 +162,16 @@ class MisskeyApiPostAdapter
 		});
 	}
 
+	/**
+	 * For Misskey, we must make extra api requests to
+	 * the proxy server to resolve the links:
+	 *
+	 * https://misskey.io/url?url=https%3A%2F%2Fsuvam.io%2F&lang=ja-JP
+	 */
+	getLinkAttachments(): PostLinkAttachmentObjectType[] {
+		return [];
+	}
+
 	getContent = () => this.ref?.text;
 
 	getFacets = () => [];
@@ -177,6 +183,46 @@ class MisskeyApiPostAdapter
 	getAccountId_Poster = (): string => this?.ref?.user?.id;
 
 	getMyReaction = (): string | null | undefined => this.ref.myReaction;
+
+	getCachedEmojis(): Map<string, string> {
+		return new Map();
+	}
+
+	getCid(): string | null {
+		return null;
+	}
+
+	getFavouritesCount(): number {
+		return 0;
+	}
+
+	getIsBookmarked(): boolean | null | undefined {
+		return undefined;
+	}
+
+	getIsRebloggedByMe(): boolean | null | undefined {
+		return undefined;
+	}
+
+	getQuoteRaw(): undefined | null {
+		return undefined;
+	}
+
+	getRootRaw(): undefined | null {
+		return undefined;
+	}
+
+	getUri(): string | null {
+		return null;
+	}
+
+	hasQuoteAvailable(): boolean {
+		return false;
+	}
+
+	hasRootAvailable(): boolean {
+		return false;
+	}
 }
 
 export default MisskeyApiPostAdapter;

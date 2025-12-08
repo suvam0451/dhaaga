@@ -3,6 +3,7 @@ import { Note } from 'misskey-js/autogen/models.js';
 import type { mastodon } from 'masto';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
+import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
 
 export type Status = mastodon.v1.Status | Note | null | undefined;
 export type StatusArray = Status[];
@@ -81,6 +82,15 @@ interface PostTargetInterface {
 	isReposted(): boolean;
 
 	getMediaAttachments(): MediaAttachmentTargetInterface[];
+
+	/**
+	 * Get external links attached/embedded in the post.
+	 *
+	 * For Misskey and Mastodon, the links are also
+	 * part of the body content, whereas for bluesky,
+	 * they are pure embeds.
+	 */
+	getLinkAttachments(): PostLinkAttachmentObjectType[];
 
 	getMentions(): DhaagaJsMentionObject[];
 

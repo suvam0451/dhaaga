@@ -96,6 +96,7 @@ class Parser {
 						url: o.getUrl()!,
 						previewUrl: o.getPreviewUrl(),
 					})) || [],
+				links: input.getLinkAttachments(),
 			},
 			stats: {
 				replyCount: input.getRepliesCount(),

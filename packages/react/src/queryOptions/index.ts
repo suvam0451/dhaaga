@@ -1,3 +1,4 @@
+export * from './feed.js';
 export * from './post.js';
 export * from './post-feed.js';
 export * from './search.js';

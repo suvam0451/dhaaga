@@ -3,10 +3,15 @@ import {
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from './_interface.js';
-import { AppBskyFeedGetTimeline, AppBskyFeedSearchPosts } from '@atproto/api';
+import {
+	AppBskyFeedDefs,
+	AppBskyFeedGetTimeline,
+	AppBskyFeedSearchPosts,
+} from '@atproto/api';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 type FeedGetQueryDto = {
 	feed: string;
@@ -76,9 +81,12 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 		return Promise.resolve(undefined) as any;
 	}
 
-	async feed(params: FeedGetQueryDto) {
+	async getFeed(
+		params: FeedGetQueryDto,
+	): PaginatedPromise<AppBskyFeedDefs.FeedViewPost[]> {
 		const agent = getXrpcAgent(this.dto);
-		return agent.app.bsky.feed.getFeed(params);
+		const data = await agent.app.bsky.feed.getFeed(params);
+		return { data: data.data.feed, maxId: data.data.cursor };
 	}
 
 	/**

@@ -6,6 +6,7 @@ import {
 } from './_interface.js';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import type { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
+import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
 
 class PostAdapterBase implements PostTargetInterface {
 	getCid(): string | null {
@@ -170,6 +171,10 @@ class PostAdapterBase implements PostTargetInterface {
 	getFacets = () => [];
 
 	getMediaAttachments(): MediaAttachmentTargetInterface[] {
+		return [];
+	}
+
+	getLinkAttachments(): PostLinkAttachmentObjectType[] {
 		return [];
 	}
 

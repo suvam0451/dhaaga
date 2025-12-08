@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { appDimensions } from '../../../styles/dimensions';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { appDimensions } from '#/styles/dimensions';
 import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import type { UserObjectType } from '@dhaaga/bridge/typings';
 import { router } from 'expo-router';
 

@@ -16,9 +16,9 @@ type Props = {
  * can
  *
  * - show a label
- * - has a back button on left
- * - can have an array of buttons on right
- * - (optionally) auto-hides on content scroll
+ * - has a back button on the left
+ * - can have an array of buttons on the right
+ * - (optionally) auto-hides on the content scroll
  * @constructor
  */
 function NavBar_Simple({ label, animatedStyle }: Props) {

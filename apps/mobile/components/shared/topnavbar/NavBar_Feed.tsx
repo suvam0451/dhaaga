@@ -7,21 +7,21 @@ import {
 	ViewStyle,
 } from 'react-native';
 import TimelineWidgetModal from '../../widgets/timelines/core/Modal';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { router } from 'expo-router';
 import { AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { LocalizationService } from '../../../services/localization.service';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { LocalizationService } from '#/services/localization.service';
 import { usePostTimelineState, usePostTimelineDispatch } from '@dhaaga/core';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppBottomSheet_TimelineReference,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+} from '#/hooks/utility/global-state-extractors';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import Animated from 'react-native-reanimated';
 import { TOP_NAVBAR_MENU_ICON_SIZE } from '#/components/shared/topnavbar/settings';
 

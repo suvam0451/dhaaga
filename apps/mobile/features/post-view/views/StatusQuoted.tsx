@@ -16,6 +16,10 @@ function StatusQuoted() {
 	// TODO: media interaction not implemented
 	function onPressMediaItem() {}
 
+	if (!dto) {
+		console.log('[WARN]: expected post object in quoted status slot', dto);
+		return <View />;
+	}
 	return (
 		<View
 			style={[

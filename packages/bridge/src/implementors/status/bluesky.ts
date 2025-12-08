@@ -1,12 +1,14 @@
 import { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
 import { DhaagaJsMentionObject, PostTargetInterface } from './_interface.js';
 import {
-	EmbedViewProcessor_External,
-	EmbedViewProcessor_Images,
+	EmbedViewProcessor_External_2,
+	EmbedViewProcessor_ImagesView,
 	EmbedViewProcessor_RecordWithMedia,
 	EmbedViewProcessor_Video,
+	LinkEmbedProcessor_External,
 } from '../media-attachment/bluesky.js';
 import { AppBskyRichtextFacet } from '@atproto/api';
+import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
 
 type BlueskyRichTextFacet = {
 	$type?: 'app.bsky.richtext.facet';
@@ -190,12 +192,53 @@ class AtprotoPostAdapter implements PostTargetInterface {
 			return [];
 		}
 
-		// tenor etc.
-		if (EmbedViewProcessor_External.isCompatible(this.post.embed))
-			return EmbedViewProcessor_External.compile(this.post.embed as any);
+		if (this.post.embed) {
+			switch (this.post.embed.$type) {
+				case 'app.bsky.embed.external#view': {
+					// Links to external sites (see getUrlAttachments)
+					return [];
+				}
+				case 'app.bsky.embed.external': {
+					// GIFs, Tenor etc.
+					// tenor etc.
+					if (EmbedViewProcessor_External_2.isCompatible(this.post.embed))
+						return EmbedViewProcessor_External_2.compile(
+							this.post.embed as any,
+						);
+					else return [];
+				}
+				case 'app.bsky.embed.images': {
+					// should not be an issue, I guess...
+					console.log("[WARN]: app.bsky.embed.images' type not handled!");
 
-		if (EmbedViewProcessor_RecordWithMedia.isCompatible(this.post.embed))
-			return EmbedViewProcessor_RecordWithMedia.compile(this.post.embed);
+					// images#view is present at root level
+					// if (EmbedViewProcessor_ImagesView.isCompatible(this.embed))
+					// 	return EmbedViewProcessor_ImagesView.compile(this.embed as any);
+					// else return [];
+					return [];
+				}
+				case 'app.bsky.embed.images#view': {
+					if (EmbedViewProcessor_ImagesView.isCompatible(this.post.embed))
+						return EmbedViewProcessor_ImagesView.compile(
+							this.post.embed as any,
+						);
+					else return [];
+				}
+				case 'app.bsky.embed.recordWithMedia#view': {
+					if (EmbedViewProcessor_RecordWithMedia.isCompatible(this.post.embed))
+						return EmbedViewProcessor_RecordWithMedia.compile(this.post.embed);
+					else return [];
+				}
+				case 'app.bsky.embed.video#view': {
+					if (EmbedViewProcessor_Video.isCompatible(this.post.embed))
+						return EmbedViewProcessor_Video.compile(this.post.embed as any);
+					else return [];
+				}
+				default: {
+					console.log('[WARN]: this.post.embed type not handled!');
+				}
+			}
+		}
 
 		if (this.post.$type === 'app.bsky.embed.record#viewRecord') {
 			// this handles an original post attached to a quote post
@@ -205,8 +248,8 @@ class AtprotoPostAdapter implements PostTargetInterface {
 				const attachments = [];
 
 				for (const embed of embeds) {
-					if (EmbedViewProcessor_Images.isCompatible(embed))
-						attachments.push(...EmbedViewProcessor_Images.compile(embed));
+					if (EmbedViewProcessor_ImagesView.isCompatible(embed))
+						attachments.push(...EmbedViewProcessor_ImagesView.compile(embed));
 
 					if (EmbedViewProcessor_Video.isCompatible(embed))
 						attachments.push(...EmbedViewProcessor_Video.compile(embed));
@@ -220,12 +263,22 @@ class AtprotoPostAdapter implements PostTargetInterface {
 			return [];
 		}
 
-		if (EmbedViewProcessor_Images.isCompatible(this.post.embed))
-			return EmbedViewProcessor_Images.compile(this.post.embed as any);
+		return [];
+	}
 
-		if (EmbedViewProcessor_Video.isCompatible(this.post.embed))
-			return EmbedViewProcessor_Video.compile(this.post.embed as any);
-
+	getLinkAttachments(): PostLinkAttachmentObjectType[] {
+		if (this.post.embed) {
+			switch (this.post.embed.$type) {
+				case 'app.bsky.embed.external#view': {
+					if (LinkEmbedProcessor_External.isCompatible(this.post.embed))
+						return LinkEmbedProcessor_External.compile(this.post.embed as any);
+					else return [];
+				}
+				default: {
+					return [];
+				}
+			}
+		}
 		return [];
 	}
 
