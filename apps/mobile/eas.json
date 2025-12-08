@@ -14,6 +14,7 @@
 			"env": {
 				"APP_VARIANT": "prod",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
+				"APP_SCHEME": "dhaaga",
 				"APP_NAME": "Dhaaga"
 			}
 		},
@@ -25,6 +26,7 @@
 			"env": {
 				"APP_VARIANT": "prod",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
+				"APP_SCHEME": "dhaaga",
 				"APP_NAME": "Dhaaga"
 			}
 		},
@@ -35,6 +37,7 @@
 			"env": {
 				"APP_VARIANT": "dev",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga.dev",
+				"APP_SCHEME": "dhaaga-dev",
 				"APP_NAME": "Dhaaga (Dev)"
 			}
 		},
@@ -46,6 +49,7 @@
 			"env": {
 				"APP_VARIANT": "prod",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga.staging",
+				"APP_SCHEME": "dhaaga-staging",
 				"APP_NAME": "Dhaaga (Staging)"
 			}
 		},
@@ -55,7 +59,8 @@
 				"buildType": "apk"
 			},
 			"env": {
-				"APP_VARIANT": "dev"
+				"APP_VARIANT": "dev",
+				"APP_SCHEME": "dhaaga-lite"
 			}
 		}
 	}
