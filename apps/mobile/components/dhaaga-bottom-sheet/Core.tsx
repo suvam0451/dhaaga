@@ -5,7 +5,6 @@ import WithComposerContext from '../../features/composer/contexts/useComposerCtx
 import ComposerPresenter from '../../features/composer/presenters/ComposerPresenter';
 import UserPeekSheetPresenter from '../../features/user-profiles/presenters/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActions';
-import AppBottomSheetReactionDetails from './modules/reaction-details/AppBottomSheetReactionDetails';
 import ABS_Select_Account from './modules/ABS_Select_Account';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
 import ABS_Link_Preview from './modules/ABS_Link_Preview';
@@ -18,9 +17,9 @@ import {
 } from '../../hooks/utility/global-state-extractors';
 import TagAddSheetPresenter from '../../features/social-hub/presenters/TagAddSheetPresenter';
 import UserAddSheetPresenter from '../../features/social-hub/presenters/UserAddSheetPresenter';
-import ABS_Post_Show_Comments from './modules/ABS_Post_Show_Comments';
-import ABS_Post_Show_Likes from './modules/ABS_Post_Show_Likes';
-import ABS_Post_Show_Shares from './modules/ABS_Post_Show_Shares';
+import ShowComments from './post-metrics/ShowComments';
+import ShowLikes from './post-metrics/ShowLikes';
+import ShowShares from './post-metrics/ShowShares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
@@ -31,6 +30,7 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
 import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddSheetPresenter';
 import MoreActionsSheetPresenter from '../../features/feeds/presenters/MoreActionsSheetPresenter';
 import { Fragment } from 'react';
+import ShowReactionDetails from '#/components/dhaaga-bottom-sheet/post-metrics/ShowReactionDetails';
 
 /**
  * The little handle thingy on top of every bottom sheet
@@ -89,7 +89,7 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.MORE_FEED_ACTIONS:
 			return <MoreActionsSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:
-			return <AppBottomSheetReactionDetails />;
+			return <ShowReactionDetails />;
 		case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:
 			return <ABS_Select_Account />;
 		case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
@@ -111,11 +111,11 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED:
 			return <FeedAddSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES:
-			return <ABS_Post_Show_Comments />;
+			return <ShowComments />;
 		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES:
-			return <ABS_Post_Show_Likes />;
+			return <ShowLikes />;
 		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES:
-			return <ABS_Post_Show_Shares />;
+			return <ShowShares />;
 		case APP_BOTTOM_SHEET_ENUM.POST_PREVIEW:
 			return <ABS_Post_Preview />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_REACTION:

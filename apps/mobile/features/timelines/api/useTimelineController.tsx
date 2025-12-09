@@ -1,11 +1,5 @@
 import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
-import {
-	createContext,
-	Dispatch,
-	SetStateAction,
-	useContext,
-	useState,
-} from 'react';
+import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { TimelineFetchMode } from '@dhaaga/core';
 
 export type AppTimelineQuery = {
@@ -42,56 +36,9 @@ const TimelineControllerContext = createContext<Type>(defaultValue);
  * - set the type of timeline to render
  * - set query target (setQuery, applicable for lists/tags/users/remote)
  * - set other query options
+ *
+ * @deprecated unused
  */
 export function useTimelineController() {
 	return useContext(TimelineControllerContext);
 }
-
-type Props = {
-	children: any;
-};
-
-function WithTimelineControllerContext({ children }: Props) {
-	// const { get, set } = useGlobalState(
-	// 	useShallow((o) => ({
-	// 		get: o.homepageType,
-	// 		set: o.setHomepageType,
-	// 	})),
-	// );
-
-	function setTimelineTypeFn(x: TimelineFetchMode) {
-		// set(x);
-	}
-
-	const [ShowTimelineSelection, setShowTimelineSelection] = useState(false);
-
-	const [Query, setQuery] = useState<AppTimelineQuery | undefined>(undefined);
-	const [Opts, setOpts] = useState({ limit: 5 });
-
-	function setQueryOptions(input: DhaagaJsTimelineQueryOptions) {
-		setOpts(input);
-	}
-
-	function setQueryParams(input: AppTimelineQuery) {
-		setQuery(input);
-	}
-
-	return (
-		<TimelineControllerContext.Provider
-			value={{
-				timelineType: TimelineFetchMode.HOME,
-				setTimelineType: setTimelineTypeFn,
-				opts: Opts,
-				setOpts: setQueryOptions,
-				query: Query,
-				setQuery: setQueryParams,
-				ShowTimelineSelection,
-				setShowTimelineSelection,
-			}}
-		>
-			{children}
-		</TimelineControllerContext.Provider>
-	);
-}
-
-export default WithTimelineControllerContext;

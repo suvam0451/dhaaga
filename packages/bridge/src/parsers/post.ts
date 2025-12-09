@@ -71,7 +71,7 @@ class Parser {
 				);
 
 		return {
-			uuid: RandomUtil.nanoId(),
+			uuid: input.getId(),
 			id: input.getId(),
 			visibility: input.getVisibility(),
 			createdAt: input.getCreatedAt(),

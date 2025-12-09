@@ -12,7 +12,7 @@ import {
 import { appDimensions } from '#/styles/dimensions';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '#/components/lib/Text';
-import type { PostObjectType } from '@dhaaga/bridge';
+import { PostObjectType } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { PostInspector } from '@dhaaga/bridge';
@@ -102,7 +102,9 @@ function PostInteractionStatsRow({ style, dto }: PostStatsProps) {
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1) return <View />;
 
 	function onPressLikeCounter() {
-		setCtx({ uuid: dto.uuid });
+		setCtx({
+			uuid: dto.uuid,
+		});
 		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES, true);
 	}
 

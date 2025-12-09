@@ -191,7 +191,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.getLikes({
 			uri: id,
-			cursor: maxId,
+			cursor: maxId === null ? undefined : maxId,
 			limit,
 		});
 		return {
@@ -208,7 +208,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.getRepostedBy({
 			uri: id,
-			cursor: maxId,
+			cursor: maxId === null ? undefined : maxId,
 			limit,
 		});
 		return {
@@ -225,7 +225,7 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		const agent = getXrpcAgent(this.dto);
 		const data = await agent.app.bsky.feed.getQuotes({
 			uri: id,
-			cursor: maxId,
+			cursor: maxId === null ? undefined : maxId,
 			limit,
 		});
 		return {

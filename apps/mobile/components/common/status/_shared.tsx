@@ -175,13 +175,6 @@ export function PostContainer({ children }: any) {
 			>
 				{children}
 			</View>
-			<View
-				style={{
-					backgroundColor: '#1c1c1c',
-					height: 1,
-					marginVertical: 10,
-				}}
-			/>
 		</Fragment>
 	);
 }

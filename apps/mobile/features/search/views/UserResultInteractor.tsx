@@ -6,11 +6,10 @@ import {
 	useUserTimelineDispatch,
 	useUserTimelineState,
 } from '@dhaaga/core';
-import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
-import Header from '../components/Header';
-import { UserListView } from '../../_shared/views/UserListView';
+import UserListItemView from '#/features/timelines/view/UserListItemView';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -71,10 +70,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	/**
 	 * Composite Hook Collection
 	 */
-	const { onScroll } = useScrollMoreOnPageEnd({
-		itemCount: TimelineState.items.length,
-		loadNextPage: loadMore,
-	});
+	const { scrollHandler } = useScrollHandleFlatList(loadMore);
 
 	return (
 		<View
@@ -82,12 +78,14 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				flex: 1,
 			}}
 		>
-			<UserListView
-				items={TimelineState.items}
-				onScroll={onScroll}
-				onRefresh={onRefresh}
-				refreshing={Refreshing}
-				ListHeaderComponent={Header}
+			<FlatList
+				data={TimelineState.items}
+				renderItem={({ item }) => <UserListItemView item={item} />}
+				onScroll={scrollHandler}
+				scrollEventThrottle={16}
+				refreshControl={
+					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+				}
 			/>
 			<TimelineLoadingIndicator
 				numItems={State.results.users.length}

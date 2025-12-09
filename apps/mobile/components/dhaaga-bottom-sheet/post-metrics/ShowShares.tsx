@@ -1,14 +1,13 @@
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { UserTimelineCtx } from '@dhaaga/core';
 
-function Content() {
+function ShowShares() {
 	const { theme } = useAppTheme();
 	const title = 'Sorry 😔';
 	const desc = [
 		'This feature is not implemented yet!',
-		'Unfortunately, there is no other way to view likes :(',
+		'Unfortunately, there is no other way to view who else has shared this post :(',
 		'Good software takes time to build. Soon™',
 	];
 
@@ -29,15 +28,7 @@ function Content() {
 	);
 }
 
-function ABS_Post_Show_Likes() {
-	return (
-		<UserTimelineCtx>
-			<Content />
-		</UserTimelineCtx>
-	);
-}
-
-export default ABS_Post_Show_Likes;
+export default ShowShares;
 
 const styles = StyleSheet.create({
 	sheetTitle: {

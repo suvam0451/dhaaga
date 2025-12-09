@@ -1,10 +1,35 @@
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import {
+	useAppBottomSheet,
+	useAppPublishers,
+	useAppTheme,
+} from '#/hooks/utility/global-state-extractors';
+import { useApiGetPostComments } from '#/hooks/api/usePostInteractions';
+import { useEffect, useState } from 'react';
 
-function ABS_Post_Show_Comments() {
+function ShowComments() {
 	const { theme } = useAppTheme();
+	const { ctx, stateId, hide } = useAppBottomSheet();
+	const { postObjectActions } = useAppPublishers();
+
+	const [MaxId, setMaxId] = useState(null);
+
 	const title = 'Sorry 😔';
+	const {} = useApiGetPostComments(ctx?.uuid, MaxId);
+
+	const [Post, setPost] = useState(postObjectActions.read(ctx?.uuid));
+
+	useEffect(() => {
+		function update({ uuid }: { uuid: string }) {
+			setPost(postObjectActions.read(uuid));
+		}
+		postObjectActions.subscribe(ctx.uuid, update);
+		return () => {
+			postObjectActions.unsubscribe(ctx.uuid, update);
+		};
+	}, [ctx, stateId]);
+
 	const desc = [
 		'This feature is not implemented yet!',
 		'But, you can still enter the post details page to view replies!',
@@ -27,7 +52,7 @@ function ABS_Post_Show_Comments() {
 	);
 }
 
-export default ABS_Post_Show_Comments;
+export default ShowComments;
 
 const styles = StyleSheet.create({
 	sheetTitle: {

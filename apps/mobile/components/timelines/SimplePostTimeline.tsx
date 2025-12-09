@@ -21,6 +21,7 @@ import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { DefinedUseQueryResult } from '@tanstack/react-query';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
+import { AppDividerSoft } from '#/ui/Divider';
 
 export function TimelineStateIndicator({
 	queryResult,
@@ -131,6 +132,9 @@ function SimplePostTimeline({
 						queryResult={queryResult}
 					/>
 				}
+				ItemSeparatorComponent={() => (
+					<AppDividerSoft style={{ marginVertical: 10 }} />
+				)}
 			/>
 			<TimelineLoadingIndicator
 				numItems={State.items.length}
