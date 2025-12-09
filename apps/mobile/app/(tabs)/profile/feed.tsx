@@ -47,7 +47,7 @@ function DataView() {
 	}, [db, id]);
 
 	const queryResult = useQuery(
-		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct?.identifier, {
 			type: State.feedType,
 			query: State.query,
 			opts: State.opts,

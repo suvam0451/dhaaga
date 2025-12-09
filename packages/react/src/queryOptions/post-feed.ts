@@ -153,7 +153,7 @@ export function unifiedPostFeedQueryOptions(
 				return defaultResultPage;
 			case TimelineFetchMode.HOME: {
 				const result = await client.timelines.home(_query);
-				return createResultBatch(result);
+				return createResultBatch(result.data, result.maxId);
 			}
 			case TimelineFetchMode.LOCAL: {
 				const result = await client.timelines.public({

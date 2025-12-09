@@ -5,7 +5,8 @@
 		"paths": {
 			"#/*": ["./*"],
 			"multiformats/cid": ["node_modules/multiformats/types/src/cid.d.ts"]
-		}
+		},
+		"strict": false
 	},
 	"include": ["./**/*.ts", "./**/*.tsx", "./**/*.js"],
 	"exclude": ["node_modules"]

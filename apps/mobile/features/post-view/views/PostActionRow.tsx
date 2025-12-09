@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import PostActionButtonToggleBookmark from '#/components/common/status/fragments/modules/PostActionButtonToggleBookmark';
 import {
 	useAppAcct,
@@ -13,10 +13,10 @@ import {
 import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 import { AppToggleIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
-import { ActivityPubService } from '@dhaaga/bridge';
+import { ActivityPubService, PostInspector } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
-import { PostInspector } from '@dhaaga/bridge';
 import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionStatsRow';
+import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
 
 /**
  * Press this to toggle sharing status
@@ -34,18 +34,10 @@ function ShareButton() {
 	}
 
 	const FLAG = PostInspector.isShared(item);
-	const _target = PostInspector.getContentTarget(item);
-	const COUNT = _target.stats.boostCount;
 
 	const canLike = ActivityPubService.canLike(driver);
 	return (
-		<AppToggleIcon
-			flag={FLAG}
-			activeIconId={'sync-outline'}
-			inactiveIconId={'sync-outline'}
-			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a40}
-			size={appDimensions.timelines.actionButtonSize}
+		<Pressable
 			style={[
 				styles.actionButton,
 				{
@@ -53,8 +45,17 @@ function ShareButton() {
 				},
 			]}
 			onPress={onPress}
-			count={COUNT}
-		/>
+		>
+			{FLAG ? (
+				<DhaagaSkinnedIcon
+					id={DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_ACTIVE}
+				/>
+			) : (
+				<DhaagaSkinnedIcon
+					id={DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_INACTIVE}
+				/>
+			)}
+		</Pressable>
 	);
 }
 
@@ -65,7 +66,6 @@ function LikeButton() {
 	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postObjectActions } = useAppPublishers();
-	const { theme } = useAppTheme();
 
 	async function onPress() {
 		await postObjectActions.toggleLike(item.uuid, setIsLoading);
@@ -74,16 +74,9 @@ function LikeButton() {
 
 	const FLAG = PostInspector.isLiked(item);
 	const _target = PostInspector.getContentTarget(item);
-	const COUNT = _target.stats.likeCount;
 
 	return (
-		<AppToggleIcon
-			flag={FLAG}
-			activeIconId={'heart'}
-			inactiveIconId={'heart-outline'}
-			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a40}
-			size={appDimensions.timelines.actionButtonSize}
+		<Pressable
 			style={[
 				styles.actionButton,
 				{
@@ -91,8 +84,15 @@ function LikeButton() {
 				},
 			]}
 			onPress={onPress}
-			count={COUNT}
-		/>
+		>
+			{FLAG ? (
+				<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_ACTIVE} />
+			) : (
+				<DhaagaSkinnedIcon
+					id={DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_INACTIVE}
+				/>
+			)}
+		</Pressable>
 	);
 }
 
@@ -101,7 +101,6 @@ function LikeButton() {
  */
 function CommentButton() {
 	const { dto: item } = withPostItemContext();
-	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 
 	function onPress() {
@@ -109,21 +108,10 @@ function CommentButton() {
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
 	}
 
-	const _target = PostInspector.getContentTarget(item);
-	const COUNT = _target.stats.replyCount;
-
 	return (
-		<AppToggleIcon
-			flag={false}
-			activeIconId={'chatbox-outline'}
-			inactiveIconId={'chatbox-outline'}
-			activeTint={theme.primary.a0}
-			inactiveTint={theme.secondary.a40}
-			size={appDimensions.timelines.actionButtonSize}
-			style={styles.actionButton}
-			onPress={onPress}
-			count={COUNT}
-		/>
+		<Pressable style={styles.actionButton} onPress={onPress}>
+			<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.POST_REPLY_BUTTON} />
+		</Pressable>
 	);
 }
 

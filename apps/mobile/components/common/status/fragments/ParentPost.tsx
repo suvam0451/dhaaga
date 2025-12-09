@@ -14,6 +14,7 @@ import { ReplyIndicator } from '../ListView/_shared';
 import { TextContentView } from '../TextContentView';
 import useAppNavigator from '#/states/useAppNavigator';
 import { appDimensions } from '#/styles/dimensions';
+import ReplyIndicatorDecoration from '#/skins/ReplyIndicatorDecoration';
 
 type Props = {
 	dto: PostObjectType;
@@ -65,7 +66,7 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 					)}
 					<PostInteractionStatsRow dto={dto} />
 				</View>
-				<ReplyContextLine />
+				<ReplyIndicatorDecoration />
 			</View>
 		</View>
 	);

@@ -52,3 +52,7 @@ export enum LOCALIZATION_NAMESPACE {
  * "displayName"
  */
 export type TEXT_PARSING_VARIANT = 'bodyContent' | 'displayName';
+
+const SKINS = ['christmas', 'sakura', 'retromania'] as const;
+
+export type DHAAGA_SKIN = (typeof SKINS)[number] | undefined;

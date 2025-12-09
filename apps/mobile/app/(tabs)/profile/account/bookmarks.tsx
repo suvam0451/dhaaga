@@ -18,7 +18,7 @@ function PageContent() {
 	const State = usePostTimelineState()!;
 
 	const queryResult = useQuery(
-		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct?.identifier, {
 			type: TimelineFetchMode.BOOKMARKS,
 			maxId: State.appliedMaxId,
 			sessionId: State.sessionId,
