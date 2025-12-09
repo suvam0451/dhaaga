@@ -4,6 +4,8 @@ import {
 	KNOWN_SOFTWARE,
 	PostParser,
 	PostTargetInterface,
+	ResultPage,
+	UserObjectType,
 } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
@@ -53,7 +55,27 @@ export function postHierarchyQueryOpts(
 		ancestors: PostTargetInterface[];
 		descendants: PostTargetInterface[];
 	}>({
-		queryKey: ['post/hierarchy', postId],
+		queryKey: ['dhaaga/post/context', postId],
+		queryFn: api,
+		enabled: !!client && postId !== undefined,
+	});
+}
+
+export function postLikesQueryOpts(client: ApiTargetInterface, postId: string) {
+	async function api(): Promise<ResultPage<UserObjectType[]>> {
+		const data = await client.posts.getLikedBy(postId);
+		return {
+			data: PostParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+			maxId: data.maxId,
+		};
+	}
+
+	return queryOptions<ResultPage<UserObjectType[]>>({
+		queryKey: ['dhaaga/post/likes', postId],
 		queryFn: api,
 		enabled: !!client && postId !== undefined,
 	});

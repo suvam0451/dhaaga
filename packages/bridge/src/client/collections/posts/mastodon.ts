@@ -1,5 +1,6 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
 import type {
+	MastoAccount,
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
@@ -12,6 +13,7 @@ import {
 } from '#/types/driver.types.js';
 import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
 import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -85,5 +87,33 @@ export class MastodonStatusesRouter implements StatusesRoute {
 
 	async removeBoost(id: string): Promise<MastoStatus> {
 		return this.client.lib.v1.statuses.$select(id).unreblog();
+	}
+
+	/**
+	 * an extra api call to /relationships is required
+	 * to resolve relations
+	 */
+	async getLikedBy(id: string): PaginatedPromise<MastoAccount[]> {
+		const data = await this.client.lib.v1.statuses
+			.$select(id)
+			.favouritedBy.list();
+		return {
+			data,
+		};
+	}
+
+	async getSharedBy(id: string): PaginatedPromise<MastoAccount[]> {
+		const data = await this.client.lib.v1.statuses
+			.$select(id)
+			.rebloggedBy.list();
+		return {
+			data,
+		};
+	}
+
+	async getQuotedBy(id: string): PaginatedPromise<MastoStatus[]> {
+		return {
+			data: [],
+		};
 	}
 }

@@ -1,5 +1,10 @@
-import { AppBskyFeedGetPostThread } from '@atproto/api';
 import {
+	AppBskyActorDefs,
+	AppBskyFeedDefs,
+	AppBskyFeedGetPostThread,
+} from '@atproto/api';
+import {
+	type MastoAccount,
 	MastoContext,
 	MastoScheduledStatus,
 	MastoStatus,
@@ -10,6 +15,8 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
+import { PaginatedPromise } from '#/types/api-response.js';
+import { Endpoints } from 'misskey-js';
 
 export type DhaagaJsPostCreateDto = {
 	inReplyToId: null | string;
@@ -80,4 +87,26 @@ export interface StatusesRoute {
 	>;
 
 	delete(id: string): Promise<{ success: boolean; deleted: boolean }>;
+
+	getLikedBy(
+		id: string,
+		limit?: number,
+		maxId?: string,
+	): PaginatedPromise<AppBskyActorDefs.ProfileView[] | MastoAccount[]>;
+
+	getSharedBy(
+		id: string,
+		limit?: number,
+		maxId?: string,
+	): PaginatedPromise<
+		| AppBskyActorDefs.ProfileView[]
+		| MastoAccount[]
+		| Endpoints['notes/renotes']['res']
+	>;
+
+	getQuotedBy(
+		id: string,
+		limit?: number,
+		maxId?: string,
+	): PaginatedPromise<AppBskyFeedDefs.PostView[] | MastoStatus[] | any>;
 }

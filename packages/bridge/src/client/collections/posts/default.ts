@@ -45,4 +45,16 @@ export class DefaultStatusesRouter implements StatusesRoute {
 	async getPostContext(id: string): Promise<MastoContext | MissContext> {
 		throw new Error('not supported by driver');
 	}
+
+	async getLikedBy(id: string): Promise<any> {
+		throw new Error('not supported by driver');
+	}
+
+	async getSharedBy(id: string): Promise<any> {
+		throw new Error('not supported by driver');
+	}
+
+	async getQuotedBy(id: string): Promise<any> {
+		throw new Error('not supported by driver');
+	}
 }

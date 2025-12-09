@@ -91,7 +91,7 @@ function Content() {
 		dispatch({
 			type: PostTimelineStateAction.RESET,
 		});
-	}, [State.feedType, State.query, State.opts, db]);
+	}, [State.feedType, State.query, State.opts, db, acct?.identifier]);
 
 	const queryResult = useQuery(
 		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {

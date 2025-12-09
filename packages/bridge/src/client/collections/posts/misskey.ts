@@ -10,6 +10,7 @@ import {
 } from '#/types/driver.types.js';
 import { getHumanReadableError } from '#/utils/errors.js';
 import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;
@@ -292,5 +293,33 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 					throw new Error(getHumanReadableError(e));
 				});
 		});
+	}
+
+	async getLikedBy(id: string): PaginatedPromise<any> {
+		return {
+			data: [],
+		};
+	}
+
+	/**
+	 * Try to use the current renote count as limit
+	 * @param id
+	 * @param limit
+	 */
+	async getSharedBy(
+		id: string,
+		limit?: number,
+	): PaginatedPromise<Endpoints['notes/renotes']['res']> {
+		const renotes = await this.client.client.request('notes/renotes', {
+			noteId: id,
+			limit,
+		});
+		return {
+			data: renotes,
+		};
+	}
+
+	async getQuotedBy(id: string) {
+		return { data: [] };
 	}
 }

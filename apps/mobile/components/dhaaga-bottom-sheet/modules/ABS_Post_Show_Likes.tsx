@@ -1,8 +1,9 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { UserTimelineCtx } from '@dhaaga/core';
 
-function ABS_Post_Show_Likes() {
+function Content() {
 	const { theme } = useAppTheme();
 	const title = 'Sorry 😔';
 	const desc = [
@@ -25,6 +26,14 @@ function ABS_Post_Show_Likes() {
 				</Text>
 			))}
 		</ScrollView>
+	);
+}
+
+function ABS_Post_Show_Likes() {
+	return (
+		<UserTimelineCtx>
+			<Content />
+		</UserTimelineCtx>
 	);
 }
 

@@ -6,21 +6,31 @@ import {
 } from '#/types/megalodon.types.js';
 import { LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
+import {
+	MastoJsWrapper,
+	MegalodonPleromaWrapper,
+} from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
 import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
 import { getHumanReadableError } from '#/utils/errors.js';
+import { PaginatedPromise } from '#/types/api-response.js';
+import type { MastoAccount, MastoStatus } from '#/types/index.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
 	client: MegalodonPleromaWrapper;
+	mastoClient: MastoJsWrapper;
 
 	constructor(forwarded: FetchWrapper) {
 		this.direct = forwarded;
 		this.client = MegalodonPleromaWrapper.create(
+			forwarded.baseUrl,
+			forwarded.token,
+		);
+		this.mastoClient = MastoJsWrapper.create(
 			forwarded.baseUrl,
 			forwarded.token,
 		);
@@ -127,5 +137,33 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	async removeBoost(id: string): Promise<MegaStatus> {
 		const data = await this.client.client.unreblogStatus(id);
 		return data.data;
+	}
+
+	/**
+	 * megalodon does not implement
+	 * @param id
+	 */
+	async getLikedBy(id: string) {
+		const data = await this.mastoClient.lib.v1.statuses
+			.$select(id)
+			.favouritedBy.list();
+		return {
+			data,
+		};
+	}
+
+	async getSharedBy(id: string): PaginatedPromise<MastoAccount[]> {
+		const data = await this.mastoClient.lib.v1.statuses
+			.$select(id)
+			.rebloggedBy.list();
+		return {
+			data,
+		};
+	}
+
+	async getQuotedBy(id: string): PaginatedPromise<MastoStatus[]> {
+		return {
+			data: [],
+		};
 	}
 }

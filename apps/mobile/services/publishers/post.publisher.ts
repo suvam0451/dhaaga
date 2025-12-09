@@ -5,7 +5,7 @@ import { EmojiDto } from '#/components/common/status/fragments/_shared.types';
 import { PostMutator } from '@dhaaga/bridge';
 
 /**
- * Responsible for mutating post objects,
+ * Responsible for mutating post-objects,
  * as per requested operation and publishing
  * the updates to all subscribed data stores
  */
@@ -24,7 +24,6 @@ export class PostPublisherService extends EventBus {
 
 	write(uuid: string, data: PostObjectType) {
 		this.cache.set(uuid, data);
-		this.publish(uuid);
 		return this.cache.get(uuid);
 	}
 
@@ -68,9 +67,9 @@ export class PostPublisherService extends EventBus {
 			(sum, key) => sum + (this.subscriptions[key]?.size || 0),
 			0,
 		);
-		console.log(
-			`[CLEANUP] Event "${lastUuid}" cleaned. Cache items: ${this.cache.size}, Total active subscriptions: ${totalSubscriptions}`,
-		);
+		// console.log(
+		// 	`[CLEANUP] Event "${lastUuid}" cleaned. Cache items: ${this.cache.size}, Total active subscriptions: ${totalSubscriptions}`,
+		// );
 	}
 
 	/**

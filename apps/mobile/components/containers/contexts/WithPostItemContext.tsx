@@ -38,18 +38,18 @@ function WithAppStatusItemContext({ children, dto }: Props) {
 	const { postObjectActions } = useAppPublishers();
 	const [Post, setPost] = useState(null);
 
-	function onUpdate({ uuid }) {
-		setPost(postObjectActions.read(uuid));
-	}
-
 	useEffect(() => {
 		if (!dto || !postObjectActions) return;
+
+		function update({ uuid }) {
+			setPost(postObjectActions.read(uuid));
+		}
 		setPost(postObjectActions.write(dto.uuid, dto));
-		postObjectActions.subscribe(dto.uuid, onUpdate);
+		postObjectActions.subscribe(dto.uuid, update);
 		return () => {
-			postObjectActions.unsubscribe(dto.uuid, onUpdate);
+			postObjectActions.unsubscribe(dto.uuid, update);
 		};
-	}, [dto]);
+	}, [dto.uuid]);
 
 	return (
 		<AppStatusItemContext.Provider

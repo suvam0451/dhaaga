@@ -23,8 +23,8 @@ function PostLinkAttachments({ items }: Props) {
 
 	return (
 		<View>
-			{items.map((item: PostLinkAttachmentObjectType) => (
-				<LinkAttachmentOrnament>
+			{items.map((item: PostLinkAttachmentObjectType, i) => (
+				<LinkAttachmentOrnament key={i}>
 					{item.bannerImageUrl ? (
 						<Image
 							source={{
