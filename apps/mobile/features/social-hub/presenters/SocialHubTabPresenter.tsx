@@ -320,7 +320,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	}
 
 	return (
-		<View>
+		<>
 			<ScrollView
 				style={{
 					backgroundColor: theme.palette.bg,
@@ -363,7 +363,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 				onPressProfile={onPressProfile}
 			/>
 			<ComposeButton />
-		</View>
+		</>
 	);
 }
 

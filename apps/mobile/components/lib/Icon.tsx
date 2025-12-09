@@ -659,7 +659,7 @@ export function AppIcon({
 				);
 			case 'clear':
 				return (
-					<AntDesign
+					<Ionicons
 						name="close"
 						size={_size}
 						color={_color}

@@ -145,7 +145,7 @@ function reducer(state: State, action: Actions): State {
 			return produce(state, (draft) => {
 				draft.text = null;
 				draft.q = null;
-				draft.tab = 'home';
+				// draft.tab = 'home';
 			});
 		}
 		case ACTION.APPLY_SEARCH: {

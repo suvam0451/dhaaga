@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react';
 import { SEARCH_RESULT_TAB } from '#/services/driver.service';
 import {
 	PostTimelineStateAction,
-	usePostTimelineState,
+	useDiscoverState,
 	usePostTimelineDispatch,
+	usePostTimelineState,
 } from '@dhaaga/core';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
 import PostTimelineEntryView from '../../post-item/PostTimelineEntryView';
-import { useDiscoverState } from '@dhaaga/core';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
 import { PostSearchStateIndicator } from '#/features/search/components/StateIndicators';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
+import Animated from 'react-native-reanimated';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -94,7 +95,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 				flex: 1,
 			}}
 		>
-			<FlatList
+			<Animated.FlatList
 				onLayout={onLayout}
 				data={TimelineState.items}
 				renderItem={({ item }) => (

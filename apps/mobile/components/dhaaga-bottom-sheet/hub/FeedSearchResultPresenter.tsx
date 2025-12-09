@@ -1,11 +1,11 @@
-import { useSocialHubFeedPinStatus } from '../api/useSocialHubFeedPinStatus';
+import { useSocialHubFeedPinStatus } from '#/features/social-hub/api/useSocialHubFeedPinStatus';
 import { Profile } from '@dhaaga/db';
-import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
+import { useProfileMutation } from '#/features/app-profiles/api/useProfileMutation';
 import { StyleSheet, View } from 'react-native';
-import UserPinSearchResultControllerView from '../views/UserPinSearchResultController';
-import { AppDivider } from '../../../components/lib/Divider';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import FeedPinSearchResultView from '../views/FeedPinSearchResultView';
+import UserPinSearchResultControllerView from '#/features/social-hub/views/UserPinSearchResultController';
+import { AppDivider } from '../../lib/Divider';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import FeedPinSearchResultView from '#/features/social-hub/views/FeedPinSearchResultView';
 import type { FeedObjectType } from '@dhaaga/bridge';
 
 type Props = {

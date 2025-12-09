@@ -1,5 +1,4 @@
 import {
-	ActivityPubService,
 	ApiTargetInterface,
 	AtprotoApiAdapter,
 	defaultResultPage,
@@ -16,7 +15,6 @@ import type {
 	ResultPage,
 } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
-import type { AppBskyFeedSearchPosts } from '@atproto/api';
 
 type PostResultPage = ResultPage<PostObjectType[]>;
 type FeedResultPage = ResultPage<FeedObjectType[]>;
@@ -75,7 +73,7 @@ export function searchPostsQueryOpts(
 		const _maxId = FALLBACK_TO_OFFSET ? undefined : maxId;
 		const _untilId = FALLBACK_TO_OFFSET ? undefined : maxId;
 
-		const { data, error } = await client.search.findPosts({
+		const data = await client.search.findPosts({
 			maxId: _maxId,
 			q,
 			limit: 10,
@@ -85,17 +83,13 @@ export function searchPostsQueryOpts(
 			untilId: !!_untilId ? _untilId : undefined,
 			offset,
 		});
-		if (error) {
-			console.log('[WARN]: error searching for posts', error.message);
-			throw new Error(error.message);
-		}
 
 		if (DriverService.supportsAtProto(driver)) {
-			const _data = data as AppBskyFeedSearchPosts.Response;
+			const _data = data;
 			return {
 				...defaultResultPage,
-				maxId: _data.data.cursor,
-				data: PostParser.parse<unknown[]>(_data.data.posts, driver, server),
+				maxId: _data.maxId,
+				data: PostParser.parse<unknown[]>(_data.data, driver, server),
 			};
 		}
 
@@ -131,14 +125,15 @@ export function searchPostsQueryOpts(
 }
 
 export function searchUsersQueryOpts(
-	client: AtprotoApiAdapter,
-	driver: KNOWN_SOFTWARE,
-	server: string,
+	client: ApiTargetInterface,
+	acctIdentifier: string,
+	defaultTo: 'auto' | 'followings' | 'suggested',
 	q: string,
 	maxId?: string,
 ) {
 	async function api(): Promise<UserObjectType[]> {
-		const { data, error } = await client.search.findUsers({
+		// TODO: if q is empty, find us a list of recommended users
+		const data = await client.search.findUsers({
 			maxId,
 			q,
 			limit: 10,
@@ -146,29 +141,25 @@ export function searchUsersQueryOpts(
 			type: 'accounts',
 			untilId: maxId,
 		});
-		if (error) {
-			console.log('[WARN]: error searching for posts', error.message);
-			throw new Error(error.message);
-		}
-		if (ActivityPubService.blueskyLike(driver)) {
+		if (DriverService.supportsAtProto(client.driver)) {
 			return UserParser.parse<unknown[]>(
-				(data as any).data.actors as any[],
-				driver,
-				server,
+				data.data,
+				client.driver,
+				client.server!,
 			);
 		} else {
 			return UserParser.parse<unknown[]>(
-				data as unknown as any[],
-				driver,
-				server,
+				data.data,
+				client.driver,
+				client.server!,
 			);
 		}
 	}
 
 	return queryOptions<UserObjectType[]>({
-		queryKey: ['search/users', server, q, maxId],
+		queryKey: ['dhaaga/search/users', acctIdentifier, q, maxId],
 		queryFn: api,
-		enabled: client !== null && !!q,
+		enabled: !!client,
 		initialData: [],
 	});
 }

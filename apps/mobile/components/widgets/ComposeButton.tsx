@@ -19,7 +19,7 @@ function ComposeButton() {
 		<Pressable
 			style={{
 				position: 'absolute',
-				bottom: 32,
+				bottom: 64,
 				right: 24,
 				width: 50,
 				height: 50,

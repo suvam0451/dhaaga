@@ -10,7 +10,7 @@ export function useSocialHubUserPinStatus(
 	const { db } = useAppDb();
 	const { acct } = useAppAcct();
 	return useQuery<boolean>({
-		queryKey: ['hub/pin/user', profile.id, user.id],
+		queryKey: ['hub/pin/user', profile?.id, user?.id],
 		queryFn: () => {
 			return ProfilePinnedUserService.isPinnedForProfile(
 				db,
