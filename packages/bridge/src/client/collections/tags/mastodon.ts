@@ -2,7 +2,6 @@ import { DhaagaJsFollowedTagsQueryOptions, TagRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MastoTag } from '#/types/mastojs.types.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
-import { LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonTagRouter implements TagRoute {
@@ -23,18 +22,15 @@ export class MastodonTagRouter implements TagRoute {
 		);
 	}
 
-	async follow(id: string): LibraryPromise<MastoTag> {
-		const data = await this.client.lib.v1.tags.$select(id).follow();
-		return { data };
+	async follow(id: string): Promise<MastoTag> {
+		return this.client.lib.v1.tags.$select(id).follow();
 	}
 
-	async get(id: string): LibraryPromise<MastoTag> {
-		const data = await this.client.lib.v1.tags.$select(id).fetch();
-		return { data };
+	async get(id: string): Promise<MastoTag> {
+		return this.client.lib.v1.tags.$select(id).fetch();
 	}
 
-	async unfollow(id: string): LibraryPromise<MastoTag> {
-		const data = await this.client.lib.v1.tags.$select(id).unfollow();
-		return { data };
+	async unfollow(id: string): Promise<MastoTag> {
+		return this.client.lib.v1.tags.$select(id).unfollow();
 	}
 }

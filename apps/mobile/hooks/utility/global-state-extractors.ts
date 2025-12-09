@@ -108,7 +108,7 @@ export function useHub() {
 export function useAppPublishers() {
 	return useGlobalState(
 		useShallow((o) => ({
-			postPub: o.publishers.postPub,
+			postObjectActions: o.publishers.postObjectActions,
 			userPub: o.publishers.userPub,
 			appSub: o.publishers.appSub,
 		})),

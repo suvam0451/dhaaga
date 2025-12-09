@@ -15,8 +15,6 @@ import { createRestAPIClient, mastodon } from 'masto';
 import generator, { MegalodonInterface } from 'megalodon';
 import { KNOWN_SOFTWARE } from './driver.js';
 import { api } from 'misskey-js';
-import { LibraryResponse } from '#/types/result.types.js';
-import { getHumanReadableError } from '#/utils/errors.js';
 
 /**
  * Used for --> Mastodon
@@ -99,20 +97,5 @@ export class MisskeyJsWrapper extends FetchWrapper {
 
 	static create(baseUrl: string, token?: string) {
 		return new MisskeyJsWrapper(baseUrl, token);
-	}
-}
-
-// Define a generic function that takes another function as input
-export async function MastoErrorHandler<T extends (...args: any[]) => any>(
-	func: T,
-	args?: Parameters<T>,
-): Promise<LibraryResponse<ReturnType<T>>> {
-	try {
-		return {
-			data: args ? await func(...args) : await func(),
-		};
-	} catch (e) {
-		getHumanReadableError(e);
-		return { error: { code: 'UNKNOWN_ERROR' } };
 	}
 }

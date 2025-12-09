@@ -1,7 +1,7 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
 import type {
+	MastoAccount,
 	MastoContext,
-	MastoScheduledStatus,
 	MastoStatus,
 } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
@@ -10,8 +10,7 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
-import { MastoErrorHandler } from '#/client/utils/api-wrappers.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;
@@ -22,34 +21,21 @@ export class MastodonStatusesRouter implements StatusesRoute {
 		this.client = MastoJsWrapper.create(forwarded.baseUrl, forwarded.token);
 	}
 
-	async create(
-		dto: DhaagaJsPostCreateDto,
-	): LibraryPromise<MastoScheduledStatus> {
-		const fn = this.client.lib.v1.statuses.create;
-		const { data, error } = await MastoErrorHandler(fn, [
-			{
-				...dto,
-				visibility: dto.mastoVisibility,
-			},
-		]);
-		if (error || !data) return errorBuilder(error);
-		const retData = await data;
-		return { data: retData };
+	async create(dto: DhaagaJsPostCreateDto): Promise<MastoStatus> {
+		return this.client.lib.v1.statuses.create({
+			...dto,
+			visibility: dto.mastoVisibility,
+		});
 	}
 
 	async delete(id: string): Promise<{ success: boolean; deleted: boolean }> {
-		const fn = this.client.lib.v1.statuses.$select(id).remove;
-		const { data, error } = await MastoErrorHandler(fn);
-		if (error || !data) return { success: false, deleted: false };
+		const data = this.client.lib.v1.statuses.$select(id).remove();
+		if (!data) return { success: false, deleted: false };
 		return { success: true, deleted: true };
 	}
 
-	async getPost(id: string): LibraryPromise<MastoStatus> {
-		const fn = this.client.lib.v1.statuses.$select(id).fetch;
-		const { data, error } = await MastoErrorHandler(fn);
-		if (error || !data) return errorBuilder(error);
-		const retData = await data;
-		return { data: retData };
+	async getPost(id: string): Promise<MastoStatus> {
+		return this.client.lib.v1.statuses.$select(id).fetch();
 	}
 
 	async bookmark(id: string): DriverBookmarkStateResult {
@@ -85,5 +71,33 @@ export class MastodonStatusesRouter implements StatusesRoute {
 
 	async removeBoost(id: string): Promise<MastoStatus> {
 		return this.client.lib.v1.statuses.$select(id).unreblog();
+	}
+
+	/**
+	 * an extra api call to /relationships is required
+	 * to resolve relations
+	 */
+	async getLikedBy(id: string): PaginatedPromise<MastoAccount[]> {
+		const data = await this.client.lib.v1.statuses
+			.$select(id)
+			.favouritedBy.list();
+		return {
+			data,
+		};
+	}
+
+	async getSharedBy(id: string): PaginatedPromise<MastoAccount[]> {
+		const data = await this.client.lib.v1.statuses
+			.$select(id)
+			.rebloggedBy.list();
+		return {
+			data,
+		};
+	}
+
+	async getQuotedBy(id: string): PaginatedPromise<MastoStatus[]> {
+		return {
+			data: [],
+		};
 	}
 }

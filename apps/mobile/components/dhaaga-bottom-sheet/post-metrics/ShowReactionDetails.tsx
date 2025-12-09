@@ -48,7 +48,7 @@ function ReactingUser({ dto }: { dto: UserObjectType }) {
 	);
 }
 
-function AppBottomSheetReactionDetails() {
+function ShowReactionDetails() {
 	const { theme } = useAppTheme();
 	const { client, driver } = useAppApiClient();
 	const { acct } = useAppAcct();
@@ -201,4 +201,4 @@ function AppBottomSheetReactionDetails() {
 	);
 }
 
-export default AppBottomSheetReactionDetails;
+export default ShowReactionDetails;

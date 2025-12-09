@@ -24,14 +24,13 @@ import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionS
 function ShareButton() {
 	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	const { theme } = useAppTheme();
 	const { driver } = useAppApiClient();
 
 	async function onPress() {
-		postPub.toggleShare(item.uuid, setIsLoading).finally(() => {
-			Haptics.impactAsync(ImpactFeedbackStyle.Medium);
-		});
+		await postObjectActions.toggleShare(item.uuid, setIsLoading);
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
 	const FLAG = PostInspector.isShared(item);
@@ -65,13 +64,12 @@ function ShareButton() {
 function LikeButton() {
 	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	const { theme } = useAppTheme();
 
-	async function _toggleLike() {
-		postPub.toggleLike(item.uuid, setIsLoading).finally(() => {
-			Haptics.impactAsync(ImpactFeedbackStyle.Medium);
-		});
+	async function onPress() {
+		await postObjectActions.toggleLike(item.uuid, setIsLoading);
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
 	const FLAG = PostInspector.isLiked(item);
@@ -92,7 +90,7 @@ function LikeButton() {
 					marginLeft: -6,
 				},
 			]}
-			onPress={_toggleLike}
+			onPress={onPress}
 			count={COUNT}
 		/>
 	);

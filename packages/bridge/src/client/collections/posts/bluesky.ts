@@ -1,5 +1,6 @@
 import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
 import {
+	AppBskyActorDefs,
 	AppBskyFeedDefs,
 	AppBskyFeedGetPostThread,
 	AtpSessionData,
@@ -11,8 +12,8 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
-import { getBskyAgent } from '#/utils/atproto.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
@@ -96,47 +97,29 @@ class BlueskyStatusesRouter implements StatusesRoute {
 
 	async getConvoForMembers(
 		members: string[],
-	): LibraryPromise<ChatBskyConvoGetConvoForMembers.Response> {
+	): Promise<ChatBskyConvoGetConvoForMembers.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.chat.bsky.convo.getConvoForMembers({
-				members,
-			});
-			return { data };
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
-		}
+		return await agent.chat.bsky.convo.getConvoForMembers({
+			members,
+		});
 	}
 
-	async getConvo(id: string): LibraryPromise<ChatBskyConvoGetConvo.Response> {
+	async getConvo(id: string): Promise<ChatBskyConvoGetConvo.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.chat.bsky.convo.getConvo({
-				convoId: id,
-			});
-			return { data };
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
-		}
+		return await agent.chat.bsky.convo.getConvo({
+			convoId: id,
+		});
 	}
 
 	async sendMessage(
 		id: string,
 		msg: string,
-	): LibraryPromise<ChatBskyConvoSendMessage.Response> {
+	): Promise<ChatBskyConvoSendMessage.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.chat.bsky.convo.sendMessage({
-				convoId: id,
-				message: { text: msg },
-			});
-			return { data };
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
-		}
+		return agent.chat.bsky.convo.sendMessage({
+			convoId: id,
+			message: { text: msg },
+		});
 	}
 
 	/**
@@ -179,6 +162,57 @@ class BlueskyStatusesRouter implements StatusesRoute {
 			console.log(e);
 			return { success: false };
 		}
+	}
+
+	async getLikedBy(
+		id: string,
+		limit?: number,
+		maxId?: string,
+	): PaginatedPromise<AppBskyActorDefs.ProfileView[]> {
+		const agent = getBskyAgent(this.dto);
+		const data = await agent.getLikes({
+			uri: id,
+			cursor: maxId === null ? undefined : maxId,
+			limit,
+		});
+		return {
+			data: data.data.likes.map((o) => o.actor),
+			maxId: data.data.cursor,
+		};
+	}
+
+	async getSharedBy(
+		id: string,
+		limit?: number,
+		maxId?: string,
+	): PaginatedPromise<AppBskyActorDefs.ProfileView[]> {
+		const agent = getBskyAgent(this.dto);
+		const data = await agent.getRepostedBy({
+			uri: id,
+			cursor: maxId === null ? undefined : maxId,
+			limit,
+		});
+		return {
+			data: data.data.repostedBy,
+			maxId: data.data.cursor,
+		};
+	}
+
+	async getQuotedBy(
+		id: string,
+		limit?: number,
+		maxId?: string,
+	): PaginatedPromise<AppBskyFeedDefs.PostView[]> {
+		const agent = getXrpcAgent(this.dto);
+		const data = await agent.app.bsky.feed.getQuotes({
+			uri: id,
+			cursor: maxId === null ? undefined : maxId,
+			limit,
+		});
+		return {
+			data: data.data.posts,
+			maxId: data.data.cursor,
+		};
 	}
 }
 

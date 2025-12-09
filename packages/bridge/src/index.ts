@@ -92,10 +92,10 @@ export {
 	KNOWN_SOFTWARE,
 } from './client/utils/driver.js';
 
-export { RandomUtil } from './utils/random.js';
-
+export * from './utils/index.js';
 export * from './parsers/index.js';
 export * from './viewers/index.js';
+export * from './mutators/index.js';
 
 // post services
 export { PostInspector, PostResolver } from './parsers/post.js';

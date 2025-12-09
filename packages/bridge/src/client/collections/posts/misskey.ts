@@ -9,7 +9,8 @@ import {
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
 import { getHumanReadableError } from '#/utils/errors.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;
@@ -82,10 +83,7 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		});
 	}
 
-	async getReactionDetails(
-		postId: string,
-		reactionId: string,
-	): LibraryPromise<any> {
+	async getReactionDetails(postId: string, reactionId: string): Promise<any> {
 		try {
 			const data = await this.client.client.request('notes/reactions', {
 				noteId: postId,
@@ -104,54 +102,33 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	async addReaction(
 		postId: string,
 		reactionId: string,
-	): LibraryPromise<{ success: true; reacted: true; id: string }> {
-		try {
-			await this.client.client.request('notes/reactions/create', {
-				noteId: postId,
-				reaction: reactionId,
-			});
-			return { data: { success: true, reacted: true, id: reactionId } };
-		} catch (e: any) {
-			if (e.code) return errorBuilder(e);
-			console.log('[ERROR]: failed to add reaction', reactionId, e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	): Promise<{ success: true; reacted: true; id: string }> {
+		await this.client.client.request('notes/reactions/create', {
+			noteId: postId,
+			reaction: reactionId,
+		});
+		return { success: true, reacted: true, id: reactionId };
 	}
 
 	async removeReaction(
 		postId: string,
 		reactionId: string,
-	): LibraryPromise<{
+	): Promise<{
 		success: false;
 		reacted: false;
 		id: string;
 	}> {
-		try {
-			await this.client.client.request('notes/reactions/delete', {
-				noteId: postId,
-				reaction: reactionId,
-			});
-			return { data: { success: false, reacted: false, id: reactionId } };
-		} catch (e: any) {
-			if (e.code) return errorBuilder(e);
-			console.log('[ERROR]: failed to remove reaction', reactionId, e);
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		await this.client.client.request('notes/reactions/delete', {
+			noteId: postId,
+			reaction: reactionId,
+		});
+		return { success: false, reacted: false, id: reactionId };
 	}
 
-	async getState(id: string): LibraryPromise<Endpoints['notes/state']['res']> {
-		try {
-			const data = await this.client.client.request('notes/state', {
-				noteId: id,
-			});
-			return { data };
-		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e);
-			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
-		}
+	async getState(id: string): Promise<Endpoints['notes/state']['res']> {
+		return this.client.client.request('notes/state', {
+			noteId: id,
+		});
 	}
 
 	async bookmark(id: string): DriverBookmarkStateResult {
@@ -176,19 +153,10 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	async renotes(id: string): LibraryPromise<Endpoints['notes/renotes']['res']> {
-		try {
-			const data = await this.client.client.request('notes/renotes', {
-				noteId: id,
-			});
-			return { data };
-		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e);
-			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
-		}
+	async renotes(id: string): Promise<Endpoints['notes/renotes']['res']> {
+		return this.client.client.request('notes/renotes', {
+			noteId: id,
+		});
 	}
 
 	/**
@@ -228,45 +196,27 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 	 * Possible to renote multiple times
 	 * @param dto
 	 */
-	async renote(dto: RenoteCreateDTO): LibraryPromise<{
+	async renote(dto: RenoteCreateDTO): Promise<{
 		success: true;
 		renoted: true;
 		post: Endpoints['notes/create']['res'];
 	}> {
-		try {
-			const data = await this.client.client.request('notes/create', dto);
-			return {
-				data: {
-					success: true,
-					renoted: true,
-					post: data,
-				},
-			};
-		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e);
-			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
-		}
+		const data = await this.client.client.request('notes/create', dto);
+		return {
+			success: true,
+			renoted: true,
+			post: data,
+		};
 	}
 
-	async unrenote(id: string): LibraryPromise<{
+	async unrenote(id: string): Promise<{
 		success: true;
 		renoted: false;
 	}> {
-		try {
-			await this.client.client.request('notes/unrenote', {
-				noteId: id,
-			});
-			return { data: { success: true, renoted: false } };
-		} catch (e: any) {
-			if (e.code) {
-				return errorBuilder(e);
-			}
-			console.log(e);
-			return errorBuilder(ApiErrorCode.UNAUTHORIZED);
-		}
+		await this.client.client.request('notes/unrenote', {
+			noteId: id,
+		});
+		return { success: true, renoted: false };
 	}
 
 	async getPostContext(id: string, limit?: number): Promise<MissContext> {
@@ -292,5 +242,33 @@ export class MisskeyStatusesRouter implements StatusesRoute {
 					throw new Error(getHumanReadableError(e));
 				});
 		});
+	}
+
+	async getLikedBy(id: string): PaginatedPromise<any> {
+		return {
+			data: [],
+		};
+	}
+
+	/**
+	 * Try to use the current renote count as limit
+	 * @param id
+	 * @param limit
+	 */
+	async getSharedBy(
+		id: string,
+		limit?: number,
+	): PaginatedPromise<Endpoints['notes/renotes']['res']> {
+		const renotes = await this.client.client.request('notes/renotes', {
+			noteId: id,
+			limit,
+		});
+		return {
+			data: renotes,
+		};
+	}
+
+	async getQuotedBy(id: string) {
+		return { data: [] };
 	}
 }

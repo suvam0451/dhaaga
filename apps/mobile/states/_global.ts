@@ -86,15 +86,11 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 		driver: KNOWN_SOFTWARE.UNKNOWN,
 		router: null,
 		me: null,
-		// activePack: null,
-		// packId: null,
 		imageInspectModal: ModalStateBlockGenerator(
 			set,
 			APP_KNOWN_MODAL.IMAGE_INSPECT,
 		),
 		userPeekModal: ModalStateBlockGenerator(set, APP_KNOWN_MODAL.USER_PEEK),
-		// packList: null,
-		// theme: APP_BUILT_IN_THEMES[0],
 		appInitialize: (db: SQLiteDatabase) => {
 			set((state) => {
 				const _db = new DataSource(db);
@@ -103,15 +99,11 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 				state.publishers.appSub = new AppPublisherService();
 			});
 		},
-		// getPacks: () => [],
-		// setPack: (packId: string) => {
-		// 	set({ packId });
-		// },
 		selectAccount: async (selection: Account) => {
 			AccountService.select(get().db!, selection);
 		},
 		publishers: {
-			postPub: null,
+			postObjectActions: null,
 			userPub: null,
 			appSub: null,
 		},
@@ -168,7 +160,7 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 					state.profileSessionManager = null;
 					state.router = null;
 					state.driver = KNOWN_SOFTWARE.UNKNOWN;
-					state.publishers.postPub = null;
+					state.publishers.postObjectActions = null;
 				});
 				return;
 			}
@@ -190,10 +182,7 @@ const useGlobalState = create<AppGlobalState & AppGlobalActions>()(
 					state.profileSessionManager = new ProfileSessionManager(_db);
 					state.router = router;
 					state.driver = acct.driver as KNOWN_SOFTWARE;
-					state.publishers.postPub = new PostPublisherService(
-						acct.driver as KNOWN_SOFTWARE,
-						router,
-					);
+					state.publishers.postObjectActions = new PostPublisherService(router);
 				});
 			} catch (e) {
 				set((state) => {

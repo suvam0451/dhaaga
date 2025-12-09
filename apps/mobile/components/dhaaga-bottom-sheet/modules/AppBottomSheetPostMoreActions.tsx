@@ -1,23 +1,22 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Emoji } from './emoji-picker/emojiPickerReducer';
-import MorePostActionsPresenter from '../../../features/timelines/presenters/MorePostActionsPresenter';
+import MorePostActionsPresenter from '#/features/timelines/presenters/MorePostActionsPresenter';
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
-} from '../../../hooks/utility/global-state-extractors';
-import { usePostInteractor } from '../../../features/_pubsub/interactors/usePostInteractor';
-import { appDimensions } from '../../../styles/dimensions';
+} from '#/hooks/utility/global-state-extractors';
+import { usePostActions } from '#/hooks/pubsub/usePostActions';
+import { appDimensions } from '#/styles/dimensions';
 
-const AppBottomSheetPostMoreActions = memo(() => {
-	const { ctx, stateId } = useAppBottomSheet();
+function AppBottomSheetPostMoreActions() {
+	const { ctx, stateId, hide } = useAppBottomSheet();
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
-	const { hide } = useAppBottomSheet();
 	const { client, driver } = useAppApiClient();
 
-	const { post } = usePostInteractor(ctx?.uuid);
+	const { post } = usePostActions(ctx?.uuid);
 
 	useEffect(() => {
 		setEditMode('root');
@@ -55,7 +54,7 @@ const AppBottomSheetPostMoreActions = memo(() => {
 			)}
 		</View>
 	);
-});
+}
 
 export default AppBottomSheetPostMoreActions;
 

@@ -24,7 +24,7 @@ import {
 import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
-import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
+import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
@@ -42,7 +42,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 	block(
 		id: string,
 	): Promise<
-		LibraryResponse<
+		Promise<
 			MastoRelationship | Endpoints['blocking/create']['res'] | MegaRelationship
 		>
 	> {
@@ -194,7 +194,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		}
 	}
 
-	unblock(id: string): Promise<LibraryResponse<MastoRelationship>> {
+	unblock(id: string): Promise<Promise<MastoRelationship>> {
 		return Promise.resolve(undefined) as any;
 	}
 
@@ -204,9 +204,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		return null;
 	}
 
-	unmute(
-		id: string,
-	): Promise<LibraryResponse<MastoRelationship | MegaRelationship>> {
+	unmute(id: string): Promise<Promise<MastoRelationship | MegaRelationship>> {
 		return Promise.resolve(undefined) as any;
 	}
 

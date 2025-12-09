@@ -79,7 +79,7 @@ function MorePostActionsPresenter({
 	setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
 	item: PostObjectType;
 }) {
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const _target = PostInspector.getContentTarget(item);
@@ -104,11 +104,11 @@ function MorePostActionsPresenter({
 	}
 
 	async function onClickToggleLike() {
-		postPub.toggleLike(item.uuid);
+		postObjectActions.toggleLike(item.uuid);
 	}
 
 	async function onClickToggleBookmark() {
-		postPub.toggleBookmark(item.uuid);
+		postObjectActions.toggleBookmark(item.uuid);
 	}
 
 	function onReply() {

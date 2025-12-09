@@ -27,12 +27,12 @@ type PostMoreOptionsButtonProps = {
 export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
 	const { show, setCtx } = useAppBottomSheet();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	const { theme } = useAppTheme();
 
 	function onPress() {
 		if (ActivityPubService.misskeyLike(driver)) {
-			postPub.finalizeBookmarkState(post?.uuid).finally(() => {});
+			postObjectActions.loadBookmarkState(post?.uuid);
 		}
 		setCtx({ uuid: post.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
@@ -75,7 +75,7 @@ export function SavedPostMoreOptionsButton({
 }: SavedPostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
 	const { show, setCtx } = useAppBottomSheet();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 
 	function onPress() {
 		setCtx({ uuid: post.uuid });
@@ -106,11 +106,11 @@ export function SavedPostMoreOptionsButton({
 export function MiniMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
 	const { show, setCtx } = useAppBottomSheet();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 
 	function onPress() {
 		if (ActivityPubService.misskeyLike(driver)) {
-			postPub.finalizeBookmarkState(post?.uuid).finally(() => {});
+			postObjectActions.loadBookmarkState(post?.uuid).finally(() => {});
 		}
 		setCtx({ uuid: post.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
@@ -175,13 +175,6 @@ export function PostContainer({ children }: any) {
 			>
 				{children}
 			</View>
-			<View
-				style={{
-					backgroundColor: '#1c1c1c',
-					height: 1,
-					marginVertical: 10,
-				}}
-			/>
 		</Fragment>
 	);
 }

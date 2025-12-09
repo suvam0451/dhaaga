@@ -59,7 +59,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	androidStatusBar: {
 		barStyle: 'dark-content',
 		backgroundColor: '#e6cf8b',
-		translucent: false,
+		translucent: true,
 	},
 	splash: {
 		image: './assets/dhaaga/icon.png',

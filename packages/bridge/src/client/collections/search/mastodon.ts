@@ -7,7 +7,8 @@ import { MastoAccount, MastoStatus, MastoTag } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonSearchRouter implements SearchRoute {
 	direct: FetchWrapper;
@@ -20,40 +21,43 @@ export class MastodonSearchRouter implements SearchRoute {
 
 	async findUsers(
 		query: DhaagaJsUserSearchDTO,
-	): LibraryPromise<MastoAccount[]> {
-		try {
-			const data = await this.client.lib.v2.search.list({
-				...query,
-				q: query.query,
-			});
-			return { data: data.accounts };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	): PaginatedPromise<MastoAccount[]> {
+		const data = await this.client.lib.v2.search.list({
+			...query,
+			q: query.query,
+		});
+		return {
+			data: data.accounts,
+			maxId: data.accounts.length
+				? data.accounts[data.accounts.length - 1].id
+				: undefined,
+		};
 	}
 
-	async findPosts(query: DhaagaJsUserSearchDTO): LibraryPromise<MastoStatus[]> {
-		try {
-			const data = await this.client.lib.v2.search.list({
-				...query,
-				q: query.query,
-			});
-			return { data: data.statuses };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async findPosts(
+		query: DhaagaJsUserSearchDTO,
+	): PaginatedPromise<MastoStatus[]> {
+		const data = await this.client.lib.v2.search.list({
+			...query,
+			q: query.query,
+		});
+		return {
+			data: data.statuses,
+			maxId: data.statuses.length
+				? data.statuses[data.statuses.length - 1].id
+				: undefined,
+		};
 	}
 
-	async unifiedSearch(query: MastoUnifiedSearchType): LibraryPromise<{
+	async unifiedSearch(query: MastoUnifiedSearchType): Promise<{
 		accounts: MastoAccount[];
 		statuses: MastoStatus[];
 		hashtags: MastoTag[];
 	}> {
 		try {
-			const data = await this.client.lib.v2.search.list({
+			return await this.client.lib.v2.search.list({
 				...query,
 			});
-			return { data: data };
 		} catch (e) {
 			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
 		}

@@ -1,10 +1,10 @@
 import { View, StyleSheet, Text } from 'react-native';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { AppButtonVariantA } from '../../components/lib/Buttons';
-import { AppText } from '../../components/lib/Text';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
+import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
-import SoftwareHeader from '../../screens/accounts/fragments/SoftwareHeader';
+import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
 
 export type AccountCreationPreviewProps = {
 	avatar: string;
@@ -33,7 +33,6 @@ function UserDataPreview({
 			<View>
 				{avatar && (
 					<View style={{ height: 48, width: 48, borderRadius: 16 }}>
-						{/*@ts-ignore-next-line*/}
 						<Image
 							style={styles.image}
 							source={avatar}

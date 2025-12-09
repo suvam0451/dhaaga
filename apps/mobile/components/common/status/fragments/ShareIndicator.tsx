@@ -40,7 +40,6 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 			>
 				<AppIcon id={'retweet'} size={18} color={theme.complementary.a0} />
 				<View>
-					{/*@ts-ignore-next-line*/}
 					<Image
 						source={avatarUrl}
 						style={{

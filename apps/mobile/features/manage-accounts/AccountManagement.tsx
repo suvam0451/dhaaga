@@ -1,8 +1,8 @@
-import { FlatList, RefreshControl, ScrollView } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import AccountManagementListItem from './components/AccountManagementListItem';
+import AccountManagementListItem from '../home/components/AccountManagementListItem';
 import { Account, AccountService } from '@dhaaga/db';
 import {
 	useAppDb,
@@ -66,50 +66,44 @@ function SelectAccountStack() {
 	}
 
 	return (
-		<ScrollView
-			style={{
-				paddingBottom: 16,
+		<FlatList
+			data={SOFTWARE_ARRAY}
+			renderItem={({ item }) => (
+				<AccountManagementListItem
+					data={Data}
+					software={item}
+					onListChange={refresh}
+				/>
+			)}
+			contentContainerStyle={{
+				paddingHorizontal: 4,
 				backgroundColor: theme.palette.bg,
 			}}
-		>
-			<AppTabLandingNavbar
-				type={APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS}
-				menuItems={[
-					{
-						iconId: 'user-guide',
-						onPress: () => {
-							router.navigate(APP_ROUTING_ENUM.PROFILE_GUIDE_ACCOUNTS);
+			ListHeaderComponent={
+				<AppTabLandingNavbar
+					type={APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS}
+					menuItems={[
+						{
+							iconId: 'user-guide',
+							onPress: () => {
+								router.navigate(APP_ROUTING_ENUM.PROFILE_GUIDE_ACCOUNTS);
+							},
 						},
-					},
-				]}
-			/>
-			<FlatList
-				data={SOFTWARE_ARRAY}
-				renderItem={({ item }) => (
-					<AccountManagementListItem
-						data={Data}
-						software={item}
-						onListChange={refresh}
-					/>
-				)}
-				contentContainerStyle={{
-					paddingHorizontal: 4,
-					backgroundColor: theme.palette.bg,
-				}}
-				ListFooterComponent={
-					<AppButtonVariantA
-						label={t(`onboarding.addAccountButton`)}
-						loading={false}
-						onClick={onPressAddAccount}
-						style={{ width: 196, marginTop: 32 }}
-					/>
-				}
-				refreshControl={
-					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
-				}
-			/>
-			{/*</AppTopNavbar>*/}
-		</ScrollView>
+					]}
+				/>
+			}
+			ListFooterComponent={
+				<AppButtonVariantA
+					label={t(`onboarding.addAccountButton`)}
+					loading={false}
+					onClick={onPressAddAccount}
+					style={{ width: 196, marginTop: 32 }}
+				/>
+			}
+			refreshControl={
+				<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+			}
+		/>
 	);
 }
 

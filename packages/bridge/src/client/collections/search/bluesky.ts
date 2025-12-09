@@ -5,7 +5,8 @@ import {
 } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import {
-	AppBskyActorSearchActorsTypeahead,
+	AppBskyActorDefs,
+	AppBskyFeedDefs,
 	AppBskyFeedSearchPosts,
 	AppBskyUnspeccedGetPopularFeedGenerators,
 } from '@atproto/api';
@@ -14,7 +15,8 @@ import { MegaStatus } from '#/types/megalodon.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskySearchRouter implements SearchRoute {
 	dto: AppAtpSessionData;
@@ -25,44 +27,45 @@ class BlueskySearchRouter implements SearchRoute {
 
 	async findPosts(
 		q: DhaagaJsPostSearchDTO,
-	): LibraryPromise<
+	): PaginatedPromise<
 		| MastoStatus[]
 		| Endpoints['notes/search']['res']
 		| MegaStatus[]
 		| AppBskyFeedSearchPosts.Response
 	> {
-		try {
-			const agent = getBskyAgent(this.dto);
-			const data = await agent.app.bsky.feed.searchPosts({
-				q: q.q,
-				limit: 10,
-				sort: q.sort,
-				cursor: q.maxId === null ? undefined : q.maxId,
-			});
+		const agent = getBskyAgent(this.dto);
+		const data = await agent.app.bsky.feed.searchPosts({
+			q: q.q,
+			limit: 10,
+			sort: q.sort,
+			cursor: q.maxId === null ? undefined : q.maxId,
+		});
 
-			if (!data.success) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		if (!data.success) return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
+		return {
+			data: data.data.posts,
+			maxId: data.data.cursor,
+			hitsTotal: data.data.hitsTotal,
+		};
 	}
 
 	async findUsers(
 		q: DhaagaJsUserSearchDTO,
-	): LibraryPromise<AppBskyActorSearchActorsTypeahead.Response> {
+	): PaginatedPromise<AppBskyActorDefs.ProfileViewBasic[]> {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.app.bsky.actor.searchActorsTypeahead({
 			q: q.q,
 			limit: q.limit || 8,
 		});
-		return { data };
+		return { data: data.data.actors, maxId: null };
 	}
 
 	async findFeeds(
 		query: AppBskyUnspeccedGetPopularFeedGenerators.QueryParams,
-	): LibraryPromise<AppBskyUnspeccedGetPopularFeedGenerators.OutputSchema> {
+	): PaginatedPromise<AppBskyFeedDefs.GeneratorView[]> {
 		const agent = getXrpcAgent(this.dto);
-		return agent.app.bsky.unspecced.getPopularFeedGenerators(query);
+		const data = await agent.app.bsky.unspecced.getPopularFeedGenerators(query);
+		return { data: data.data.feeds, maxId: data.data.cursor };
 	}
 }
 

@@ -4,7 +4,7 @@ import type { MastoTag } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MisskeyTagsRouter implements TagRoute {
@@ -23,28 +23,24 @@ export class MisskeyTagsRouter implements TagRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	async follow(id: string): LibraryPromise<MastoTag> {
+	async follow(id: string): Promise<MastoTag> {
 		return errorBuilder<MastoTag>(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
-	async unfollow(id: string): LibraryPromise<MastoTag> {
+	async unfollow(id: string): Promise<MastoTag> {
 		return errorBuilder<MastoTag>(ApiErrorCode.OPERATION_UNSUPPORTED);
 	}
 
-	async get(id: string): LibraryPromise<Endpoints['hashtags/show']['res']> {
-		const data = await this.client.client.request<
+	async get(id: string): Promise<Endpoints['hashtags/show']['res']> {
+		return this.client.client.request<
 			'hashtags/show',
 			Endpoints['hashtags/show']['req']
 		>('hashtags/show', { tag: id });
-		return { data };
 	}
 
-	async getTrend(
-		id: string,
-	): LibraryPromise<Endpoints['hashtags/trend']['res']> {
-		const data = await this.client.client.request('hashtags/trend', {
+	async getTrend(id: string): Promise<Endpoints['hashtags/trend']['res']> {
+		return await this.client.client.request('hashtags/trend', {
 			tag: id,
 		});
-		return { data };
 	}
 }

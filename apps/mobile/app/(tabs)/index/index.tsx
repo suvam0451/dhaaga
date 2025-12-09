@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { StatusBar, StyleProp, View, ViewStyle } from 'react-native';
 import SocialHubPresenter from '#/features/social-hub/presenters/SocialHubPresenter';
 import { Account } from '@dhaaga/db';
 import {
@@ -45,6 +45,7 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 				position: 'relative',
 			}}
 		>
+			<StatusBar barStyle="light-content" backgroundColor={theme.primary.a0} />
 			<View style={{ flexGrow: 1 }}>
 				<NativeTextH6
 					numberOfLines={1}

@@ -7,7 +7,6 @@ import { DefaultTimelinesRouter } from './default.js';
 import { CasingUtil } from '#/utils/casing.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter
@@ -28,14 +27,13 @@ export class PleromaTimelinesRouter
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
 	): DriverTimelineGetApiResponse {
-		try {
-			const data = await this.client.client.getHomeTimeline(
-				CasingUtil.snakeCaseKeys(query),
-			);
-			return data.data;
-		} catch (e) {
-			throw new Error(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		const data = await this.client.client.getHomeTimeline(
+			CasingUtil.snakeCaseKeys(query),
+		);
+		return {
+			data: data.data,
+			maxId: data.data.length > 0 ? data.data[0].id : null,
+		};
 	}
 
 	async public(
@@ -45,12 +43,18 @@ export class PleromaTimelinesRouter
 			const data = await this.client.client.getLocalTimeline(
 				CasingUtil.snakeCaseKeys(query),
 			);
-			return data.data;
+			return {
+				data: data.data,
+				maxId: data.data.length > 0 ? data.data[0].id : null,
+			};
 		} else {
 			const data = await this.client.client.getPublicTimeline(
 				CasingUtil.snakeCaseKeys(query),
 			);
-			return data.data;
+			return {
+				data: data.data,
+				maxId: data.data.length > 0 ? data.data[0].id : null,
+			};
 		}
 	}
 
@@ -71,7 +75,10 @@ export class PleromaTimelinesRouter
 			q,
 			CasingUtil.snakeCaseKeys(query),
 		);
-		return data.data;
+		return {
+			data: data.data,
+			maxId: data.data.length > 0 ? data.data[0].id : null,
+		};
 	}
 
 	async hashtag(
@@ -82,6 +89,9 @@ export class PleromaTimelinesRouter
 			q,
 			CasingUtil.snakeCaseKeys(query),
 		);
-		return data.data;
+		return {
+			data: data.data,
+			maxId: data.data.length > 0 ? data.data[0].id : null,
+		};
 	}
 }

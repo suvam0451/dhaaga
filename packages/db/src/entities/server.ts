@@ -1,6 +1,6 @@
 import { KnownServer } from '../_schema.js';
 import { DbErrorHandler } from './_base.repo.js';
-import { KNOWN_SOFTWARE, BaseApiAdapter } from '@dhaaga/bridge';
+import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { DataSource } from '../dataSource.js';
 import { RandomUtil } from '@dhaaga/bridge';
 
@@ -109,23 +109,6 @@ class Service {
 		driver: KNOWN_SOFTWARE | string,
 	) {
 		return Repo.updateDriver(db, server.id, driver.toString());
-	}
-
-	static async syncDriver(db: DataSource, url: string, force = false) {
-		let match = Service.getByUrl(db, url);
-		const x = new BaseApiAdapter();
-		if (!match || force) {
-			const instanceResult = await x.instances.getNodeInfo(url);
-			if (instanceResult.error) return;
-
-			const driverGetResult = await x.instances.getSoftware(
-				instanceResult.data,
-			);
-			if (driverGetResult.error) {
-				console.log('[ERROR]: failed to get driver details for', url);
-				return;
-			}
-		}
 	}
 }
 

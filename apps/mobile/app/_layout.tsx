@@ -2,8 +2,8 @@ import { Stack } from 'expo-router/stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Appearance, StatusBar, View } from 'react-native';
-import { useEffect, useState } from 'react';
+import { StatusBar, View } from 'react-native';
+import { Fragment, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { LogBox } from 'react-native';
 import { enableMapSet } from 'immer';
@@ -76,14 +76,6 @@ function App() {
 		setIsRendered(true);
 	}
 
-	useEffect(() => {
-		setTimeout(() => {
-			Appearance.setColorScheme('dark');
-			StatusBar.setBarStyle('light-content');
-			StatusBar.setBackgroundColor(theme.background.a0);
-		}, 100);
-	}, [pathname]);
-
 	const { height } = useNativeKeyboardAnimation(20, 20);
 	const fakeView = useAnimatedStyle(() => {
 		return {
@@ -92,37 +84,51 @@ function App() {
 		};
 	}, []);
 
+	const HAS_NO_STICKY_MENU = ['/index', '/explore', '/inbox', '/profile'];
 	return (
-		<SafeAreaView
-			style={{ backgroundColor: theme.background.a10, flex: 1 }}
-			onLayout={onLayout}
-		>
-			<StatusBar
-				barStyle="light-content"
-				backgroundColor={theme.background.a0}
+		<Fragment>
+			<SafeAreaView
+				edges={['top']}
+				style={{
+					flex: 0,
+					backgroundColor: HAS_NO_STICKY_MENU.includes(pathname)
+						? theme.background.a0
+						: theme.background.a10,
+				}}
 			/>
-			<View style={{ flex: 1 }}>
-				<Stack
-					initialRouteName={'(tabs)'}
-					screenOptions={{
-						headerShown: false,
-						navigationBarColor: theme.background.a0,
-					}}
-				>
-					<Stack.Screen
-						name="(tabs)"
-						options={{
-							presentation: 'modal',
+			<SafeAreaView
+				edges={['left', 'right', 'bottom']}
+				style={{ flex: 1, backgroundColor: theme.background.a10 }}
+				onLayout={onLayout}
+			>
+				<StatusBar
+					barStyle="light-content"
+					backgroundColor={theme.background.a0}
+					translucent={true}
+				/>
+				<View style={{ flex: 1 }}>
+					<Stack
+						initialRouteName={'(tabs)'}
+						screenOptions={{
+							headerShown: false,
+							navigationBarColor: theme.background.a0,
 						}}
-					/>
-				</Stack>
-				{/* Globally shared components */}
-				<ImageInspectModal />
-				<AppBottomSheet />
-				<AppDialog />
-			</View>
-			<Animated.View style={fakeView} />
-		</SafeAreaView>
+					>
+						<Stack.Screen
+							name="(tabs)"
+							options={{
+								presentation: 'modal',
+							}}
+						/>
+					</Stack>
+					{/* Globally shared components */}
+					<ImageInspectModal />
+					<AppBottomSheet />
+					<AppDialog />
+				</View>
+				<Animated.View style={fakeView} />
+			</SafeAreaView>
+		</Fragment>
 	);
 }
 

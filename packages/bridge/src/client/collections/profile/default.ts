@@ -1,15 +1,14 @@
 import { ProfileRoute } from './_interface.js';
 import { MastoAccount } from '#/types/mastojs.types.js';
-import { LibraryPromise } from '#/types/index.js';
 
 export class DefaultProfileRouter implements ProfileRoute {
-	followers(): LibraryPromise<MastoAccount> {
+	followers(): Promise<MastoAccount> {
 		throw new Error('Method not implemented.');
 	}
-	followings(): LibraryPromise<MastoAccount> {
+	followings(): Promise<MastoAccount> {
 		throw new Error('Method not implemented.');
 	}
-	followRequests(): LibraryPromise<MastoAccount> {
+	followRequests(): Promise<MastoAccount> {
 		throw new Error('Method not implemented.');
 	}
 }

@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { Image, useImage } from 'expo-image';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { AppDivider } from '#/components/lib/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import { useState } from 'react';
 import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
 import { TextContentView } from '#/components/common/status/TextContentView';
+import { AppDividerHard } from '#/ui/Divider';
 
 const ICON_SIZE = 42;
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
@@ -82,7 +82,6 @@ function UserListItemView({ item }: Props) {
 						alignItems: 'center',
 					}}
 				>
-					{/*@ts-ignore-next-line*/}
 					<Image
 						source={{ uri: item.avatarUrl }}
 						style={{
@@ -117,7 +116,7 @@ function UserListItemView({ item }: Props) {
 					mentions={[]}
 					emojiMap={item.calculated.emojis}
 				/>
-				<AppDivider.Hard
+				<AppDividerHard
 					style={{
 						marginVertical: MARGIN_BOTTOM,
 						backgroundColor: theme.background.a50,
@@ -143,6 +142,17 @@ function UserListItemView({ item }: Props) {
 	);
 }
 
+/**
+ * An alternative layout, since at proto
+ * does not offer profile stats
+ * @param props
+ * @constructor
+ */
+function UserListItemViewBsky(props: Props) {}
+
+/**
+ * exclude banner and stats
+ */
 export default UserListItemView;
 
 const styles = StyleSheet.create({

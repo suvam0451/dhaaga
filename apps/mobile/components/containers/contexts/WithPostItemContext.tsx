@@ -35,23 +35,21 @@ type Props = {
  * @constructor
  */
 function WithAppStatusItemContext({ children, dto }: Props) {
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	const [Post, setPost] = useState(null);
 
-	function onUpdate({ uuid }) {
-		setPost(postPub.readCache(uuid));
-	}
-
 	useEffect(() => {
-		if (!dto || !postPub) return;
-		setPost(dto);
-		// postPub?.addIfNotExist(dto?.uuid, dto);
-		// setPost(postPub.addIfNotExist(dto.uuid, dto));
-		// postPub.subscribe(dto.uuid, onUpdate);
-		// return () => {
-		// 	postPub.unsubscribe(dto.uuid, onUpdate);
-		// };
-	}, [dto]);
+		if (!dto || !postObjectActions) return;
+
+		function update({ uuid }) {
+			setPost(postObjectActions.read(uuid));
+		}
+		setPost(postObjectActions.write(dto.uuid, dto));
+		postObjectActions.subscribe(dto.uuid, update);
+		return () => {
+			postObjectActions.unsubscribe(dto.uuid, update);
+		};
+	}, [dto.uuid]);
 
 	return (
 		<AppStatusItemContext.Provider

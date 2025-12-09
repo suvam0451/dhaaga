@@ -22,7 +22,6 @@ function SoftwareHeader({ software, addText, height = 64, style }: Props) {
 	const WIDTH = (logo.width! / logo.height!) * height;
 	return (
 		<View style={[{ flexDirection: 'row', alignItems: 'center' }, style]}>
-			{/*@ts-ignore-next-line*/}
 			<Image
 				source={{ uri: logo.localUri! }}
 				style={{
@@ -30,7 +29,7 @@ function SoftwareHeader({ software, addText, height = 64, style }: Props) {
 					height: height,
 				}}
 			/>
-			{addText && (
+			{addText ? (
 				<Text
 					style={[
 						styles.accountCategoryText,
@@ -39,6 +38,8 @@ function SoftwareHeader({ software, addText, height = 64, style }: Props) {
 				>
 					{Theming?.label}
 				</Text>
+			) : (
+				<View />
 			)}
 		</View>
 	);

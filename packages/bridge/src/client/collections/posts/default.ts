@@ -9,16 +9,13 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
-import { LibraryPromise } from '#/types/index.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async getPost(id: string): Promise<MastoStatus> {
 		throw new Error('not supported by driver');
 	}
 
-	async create(
-		dto: DhaagaJsPostCreateDto,
-	): LibraryPromise<MastoScheduledStatus> {
+	async create(dto: DhaagaJsPostCreateDto): Promise<MastoScheduledStatus> {
 		throw new Error('not supported by driver');
 	}
 
@@ -43,6 +40,18 @@ export class DefaultStatusesRouter implements StatusesRoute {
 	}
 
 	async getPostContext(id: string): Promise<MastoContext | MissContext> {
+		throw new Error('not supported by driver');
+	}
+
+	async getLikedBy(id: string): Promise<any> {
+		throw new Error('not supported by driver');
+	}
+
+	async getSharedBy(id: string): Promise<any> {
+		throw new Error('not supported by driver');
+	}
+
+	async getQuotedBy(id: string): Promise<any> {
 		throw new Error('not supported by driver');
 	}
 }

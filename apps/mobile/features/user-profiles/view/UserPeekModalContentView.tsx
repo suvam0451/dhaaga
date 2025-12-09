@@ -25,7 +25,6 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 
 	return (
 		<ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-			{/*@ts-ignore-next-line*/}
 			<Image
 				source={{ uri: user.banner }}
 				style={{
