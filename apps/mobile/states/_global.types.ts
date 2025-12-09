@@ -107,7 +107,7 @@ export type AppBottomSheetState = {
 };
 
 export type AppPubSubState = {
-	postPub: PostPublisherService;
+	postObjectActions: PostPublisherService;
 	userPub: PostPublisherService;
 	appSub: AppPublisherService;
 };

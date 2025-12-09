@@ -13,19 +13,19 @@ import useAppNavigator from '#/states/useAppNavigator';
 function ABS_Post_Preview() {
 	const { ctx, stateId, hide } = useAppBottomSheet();
 	const { toPost } = useAppNavigator();
-	const { postPub } = useAppPublishers();
-	const [Post, setPost] = useState(postPub.readCache(ctx?.uuid));
+	const { postObjectActions } = useAppPublishers();
+	const [Post, setPost] = useState(postObjectActions.read(ctx?.uuid));
 	const { theme } = useAppTheme();
 
 	function onUpdate({ uuid }: { uuid: string }) {
-		setPost(postPub.readCache(uuid));
+		setPost(postObjectActions.read(uuid));
 	}
 
 	useEffect(() => {
 		onUpdate({ uuid: ctx.uuid });
-		postPub.subscribe(ctx.uuid, onUpdate);
+		postObjectActions.subscribe(ctx.uuid, onUpdate);
 		return () => {
-			postPub.unsubscribe(ctx.uuid, onUpdate);
+			postObjectActions.unsubscribe(ctx.uuid, onUpdate);
 		};
 	}, [ctx, stateId]);
 

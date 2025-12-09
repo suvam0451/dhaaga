@@ -1,14 +1,14 @@
-import {
-	AccountDetails,
-	AccountPfp,
-} from '../../../screens/accounts/fragments/AccountListingFragment';
 import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
 import {
 	Account,
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '@dhaaga/db';
-import { useAppDb } from '../../../hooks/utility/global-state-extractors';
+import { useAppDb } from '#/hooks/utility/global-state-extractors';
+import {
+	AccountDetails,
+	AccountPfp,
+} from '#/features/manage-accounts/AccountListingFragment';
 
 type AppAccountSelectionItemProps = {
 	style?: StyleProp<ViewStyle>;

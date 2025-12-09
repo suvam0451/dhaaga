@@ -1,92 +1,34 @@
-import { BasePubSubService } from './_base.pubisher';
-import type { PostObjectType } from '@dhaaga/bridge';
-import { KNOWN_SOFTWARE, ApiTargetInterface } from '@dhaaga/bridge';
+import { EventBus } from '@dhaaga/bridge';
+import type { PostObjectType, ApiTargetInterface } from '@dhaaga/bridge';
 import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '#/components/common/status/fragments/_shared.types';
-
-// FIXME: please refactor this mutator
-class Mutator {
-	private readonly client: ApiTargetInterface;
-
-	constructor(client: ApiTargetInterface) {
-		this.client = client;
-	}
-
-	async toggleLike(input: PostObjectType) {
-		return this.client.post
-			.toggleLike(input)
-			.then((res) => res.unwrapOrElse(input));
-	}
-
-	async toggleBookmark(input: PostObjectType) {
-		return this.client.post
-			.toggleBookmark(input)
-			.then((res) => res.unwrapOrElse(input));
-	}
-
-	async finalizeBookmarkState(input: PostObjectType): Promise<PostObjectType> {
-		return this.client.post.loadBookmarkState(input);
-	}
-
-	async toggleShare(input: PostObjectType): Promise<PostObjectType> {
-		return this.client.posts.toggleShare(input);
-	}
-
-	async addReaction(
-		input: PostObjectType,
-		reactionCode: string,
-	): Promise<PostObjectType> {
-		return this.client.post
-			.addReaction(input, reactionCode)
-			.then((res) => res.unwrapOrElse(input));
-	}
-
-	async removeReaction(
-		input: PostObjectType,
-		reactionCode: string,
-	): Promise<PostObjectType> {
-		return this.client.post
-			.removeReaction(input, reactionCode)
-			.then((res) => res.unwrapOrElse(input));
-	}
-}
-
-export enum POST_EVENT_ENUM {
-	UPDATE = 'postObjectChanged',
-}
+import { PostMutator } from '@dhaaga/bridge';
 
 /**
  * Responsible for mutating post objects,
  * as per requested operation and publishing
  * the updates to all subscribed data stores
  */
-export class PostPublisherService extends BasePubSubService {
+export class PostPublisherService extends EventBus {
 	private readonly cache: Map<string, PostObjectType>;
-	private readonly driver: KNOWN_SOFTWARE;
 	private readonly client: ApiTargetInterface;
-	private readonly mutator: Mutator;
 
-	constructor(driver: KNOWN_SOFTWARE, client: ApiTargetInterface) {
+	constructor(client: ApiTargetInterface) {
 		super();
-		this.driver = driver;
 		this.client = client;
 		this.cache = new Map();
 		if (!this.client) {
 			console.log('[WARN]: client empty');
 		}
-		this.mutator = new Mutator(this.client);
 	}
 
-	writeCache(uuid: string, data: PostObjectType) {
+	write(uuid: string, data: PostObjectType) {
 		this.cache.set(uuid, data);
-	}
-
-	readCache(uuid: string) {
+		this.publish(uuid);
 		return this.cache.get(uuid);
 	}
 
-	addIfNotExist(uuid: string, data: PostObjectType) {
-		if (!this.cache.get(uuid)) this.cache.set(uuid, data);
+	read(uuid: string) {
 		return this.cache.get(uuid);
 	}
 
@@ -95,38 +37,82 @@ export class PostPublisherService extends BasePubSubService {
 		const activeKeys = new Set();
 
 		// prune loose functions refs and event keys
-		for (const event in this.subscribers) {
-			if (this.subscribers.hasOwnProperty(event)) {
-				this.subscribers[event] = this.subscribers[event].filter(
-					(subscriber: unknown) => typeof subscriber === 'function',
-				);
-				if (this.subscribers[event].length === 0) {
-					delete this.subscribers[event];
-				} else {
-					activeKeys.add(event);
-				}
+		for (const uuid in this.subscriptions) {
+			const refs = this.subscriptions[uuid];
+			if (!refs) continue;
+
+			// Remove dead callbacks from WeakRefs
+			for (const ref of refs) {
+				if (!ref.deref()) refs.delete(ref);
+			}
+
+			// If no subscribers remain, delete the event
+			if (refs.size === 0) {
+				delete this.subscriptions[uuid];
+			} else {
+				activeKeys.add(uuid);
 			}
 		}
 
-		// prune orphan data
-		// @ts-ignore-next-line
-		for (let [key, value] of this.cache) {
+		// Remove cached posts with no active subscribers
+		for (const key of this.cache.keys()) {
 			if (!activeKeys.has(key)) this.cache.delete(key);
 		}
 	}
-	x;
+
+	/**
+	 * Log the number of items remaining and total subscription sizes
+	 */
+	private logStats(lastUuid: string) {
+		const totalSubscriptions = Object.keys(this.subscriptions).reduce(
+			(sum, key) => sum + (this.subscriptions[key]?.size || 0),
+			0,
+		);
+		console.log(
+			`[CLEANUP] Event "${lastUuid}" cleaned. Cache items: ${this.cache.size}, Total active subscriptions: ${totalSubscriptions}`,
+		);
+	}
+
+	/**
+	 * Clean up dead refs for a single UUID
+	 */
+	cleanupEvent(uuid: string) {
+		const refs = this.subscriptions[uuid];
+		if (!refs) return;
+
+		for (const ref of refs) {
+			if (!ref.deref()) refs.delete(ref);
+		}
+
+		if (refs.size === 0) {
+			delete this.subscriptions[uuid];
+			this.cache.delete(uuid);
+		}
+
+		// --- Logging ---
+		this.logStats(uuid);
+	}
+
+	publish(uuid: string) {
+		super.publish(uuid); // call EventBus publish
+		this.cleanupEvent(uuid); // clean only this uuid
+		if (!this.subscriptions[uuid]) this.cache.delete(uuid);
+	}
 
 	private async _bind(
 		uuid: string,
-		fn: Function,
+		fn: (
+			client: ApiTargetInterface,
+			input: PostObjectType,
+		) => Promise<PostObjectType>,
 		loader?: (flag: boolean) => void,
 	) {
-		const data = this.cache.get(uuid);
-		if (!data) return;
+		const state = this.cache.get(uuid);
+		if (!state) return;
 
 		try {
 			if (loader) loader(true);
-			const next = await fn.call(this.mutator, data);
+			const next = await fn.call(null, this.client, state);
 			this.cache.set(next.uuid, next);
 			this.publish(next.uuid);
 			if (loader) loader(false);
@@ -136,19 +122,19 @@ export class PostPublisherService extends BasePubSubService {
 	}
 
 	async toggleLike(uuid: string, loader?: (flag: boolean) => void) {
-		await this._bind(uuid, this.mutator.toggleLike, loader);
+		await this._bind(uuid, PostMutator.toggleLike, loader);
 	}
 
 	async toggleBookmark(uuid: string, loader?: (flag: boolean) => void) {
-		await this._bind(uuid, this.mutator.toggleBookmark, loader);
+		await this._bind(uuid, PostMutator.toggleBookmark, loader);
 	}
 
-	async finalizeBookmarkState(uuid: string, loader?: (flag: boolean) => void) {
-		await this._bind(uuid, this.mutator.finalizeBookmarkState, loader);
+	async loadBookmarkState(uuid: string, loader?: (flag: boolean) => void) {
+		await this._bind(uuid, PostMutator.loadBookmarkState, loader);
 	}
 
 	async toggleShare(uuid: string, loader?: (flag: boolean) => void) {
-		await this._bind(uuid, this.mutator.toggleShare, loader);
+		await this._bind(uuid, PostMutator.toggleShare, loader);
 	}
 
 	async addReaction(
@@ -156,10 +142,14 @@ export class PostPublisherService extends BasePubSubService {
 		reaction: Emoji,
 		loader?: (flag: boolean) => void,
 	) {
-		const data = this.cache.get(uuid);
-		if (!data) return;
+		const state = this.cache.get(uuid);
+		if (!state) return;
 		if (loader) loader(true);
-		const next = await this.mutator.addReaction(data, reaction.shortCode);
+		const next = await PostMutator.addReaction(
+			this.client,
+			state,
+			reaction.shortCode,
+		);
 		this.cache.set(next.uuid, next);
 		this.publish(next.uuid);
 		if (loader) loader(false);
@@ -173,8 +163,12 @@ export class PostPublisherService extends BasePubSubService {
 		const data = this.cache.get(uuid);
 		if (!data) return;
 		const next = reaction.me
-			? await this.mutator.removeReaction(data, reaction.name)
-			: await this.mutator.addReaction(data, reaction.name);
+			? await PostMutator.removeReaction(this.client, data, reaction.name)
+			: await PostMutator.addReaction(this.client, data, reaction.name);
+		if (!next)
+			throw new Error(
+				'[ERROR]: post mutator must return an object, toggleReaction',
+			);
 		this.cache.set(next.uuid, next);
 		this.publish(next.uuid);
 		if (loader) loader(false);

@@ -12,18 +12,18 @@ import useAutoSuggestion from './useAutoSuggestion';
 function useComposer() {
 	const { visible, ctx, stateId } = useAppBottomSheet();
 	const { state, dispatch } = useComposerCtx();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	useAutoSuggestion(state, dispatch);
 
 	useEffect(() => {
 		if (!visible) return;
 
-		if (ctx.uuid && postPub.readCache(ctx.uuid)) {
+		if (ctx.uuid && postObjectActions.read(ctx.uuid)) {
 			// set parent post
 			dispatch({
 				type: PostComposerReducerActionType.SET_PARENT,
 				payload: {
-					item: postPub.readCache(ctx.uuid),
+					item: postObjectActions.read(ctx.uuid),
 				},
 			});
 		} else {

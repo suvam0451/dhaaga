@@ -28,7 +28,7 @@ function PostButton() {
 	const { state } = useComposerCtx();
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 	const { show, setCtx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
@@ -52,7 +52,7 @@ function PostButton() {
 			 * 		to render the parent and root, as well
 			 */
 			const _newPostObject = PostParser.parse<unknown>(newPost, driver, server);
-			postPub.writeCache(_newPostObject.uuid, _newPostObject);
+			postObjectActions.write(_newPostObject.uuid, _newPostObject);
 			setCtx({ uuid: _newPostObject.uuid });
 			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			setLoading(false);
@@ -103,7 +103,7 @@ function PostButton() {
 
 			if (ActivityPubService.mastodonLike(driver)) {
 				const _data = PostParser.parse(data, driver, server);
-				postPub.writeCache(_data.uuid, _data);
+				postObjectActions.write(_data.uuid, _data);
 				setCtx({ uuid: _data.uuid });
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			} else {
@@ -112,7 +112,7 @@ function PostButton() {
 					driver,
 					server,
 				);
-				postPub.writeCache(_data.uuid, _data);
+				postObjectActions.write(_data.uuid, _data);
 				setCtx({ uuid: _data.uuid });
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
 			}

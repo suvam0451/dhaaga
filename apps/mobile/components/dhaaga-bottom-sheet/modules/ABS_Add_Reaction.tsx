@@ -3,32 +3,31 @@ import { Emoji } from './emoji-picker/emojiPickerReducer';
 import {
 	useAppBottomSheet,
 	useAppPublishers,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { useEffect, useState } from 'react';
 
 function ABS_Add_Reaction() {
 	const { ctx, hide } = useAppBottomSheet();
-	const { postPub } = useAppPublishers();
-	const [Post, setPost] = useState(postPub.readCache(ctx?.uuid));
+	const { postObjectActions } = useAppPublishers();
+	const [Post, setPost] = useState(null);
 
 	const [IsLoading, setIsLoading] = useState(false);
 
-	function refreshData({ uuid }: { uuid: string }) {
-		setPost(postPub.readCache(uuid));
-	}
-
 	useEffect(() => {
-		refreshData({ uuid: ctx?.uuid });
-		postPub.subscribe(ctx?.uuid, refreshData);
+		if (!ctx?.uuid) return;
+		function load({ uuid }: { uuid: string }) {
+			setPost(postObjectActions.read(uuid));
+		}
+		load(ctx?.uuid);
+		postObjectActions.subscribe(ctx?.uuid, load);
 		return () => {
-			postPub.unsubscribe(ctx?.uuid, refreshData);
+			postObjectActions.unsubscribe(ctx?.uuid, load);
 		};
-	}, [ctx]);
+	}, [ctx?.uuid]);
 
-	function onAccept(o: Emoji) {
-		postPub.addReaction(Post?.uuid, o, setIsLoading).finally(() => {
-			hide();
-		});
+	async function onAccept(o: Emoji) {
+		await postObjectActions.addReaction(Post?.uuid, o, setIsLoading);
+		hide();
 	}
 
 	function onCancel() {

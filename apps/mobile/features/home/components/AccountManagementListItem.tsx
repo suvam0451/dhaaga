@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
-import AccountListingFragment from '../../../screens/accounts/fragments/AccountListingFragment';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Account } from '@dhaaga/db';
+import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
+import AccountListingFragment from '#/features/manage-accounts/AccountListingFragment';
 
 type AccountListForSoftwareProps = {
 	data: Account[];

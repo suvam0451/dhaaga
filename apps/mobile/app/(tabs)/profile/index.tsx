@@ -1,7 +1,7 @@
 import { AppPagerView } from '#/ui/PagerView';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import AccountHome from '#/features/home/AccountHome';
-import AccountManagement from '#/features/home/AccountManagement';
+import AccountManagement from '#/features/manage-accounts/AccountManagement';
 import AppSettings from '#/features/settings/AppSettings';
 
 const renderScene = (index: number) => {

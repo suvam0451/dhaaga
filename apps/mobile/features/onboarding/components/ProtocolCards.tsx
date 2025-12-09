@@ -1,10 +1,10 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import SoftwareHeader from '../../../screens/accounts/fragments/SoftwareHeader';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { APP_ROUTING_ENUM } from '../../../utils/route-list';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { Pressable, StyleSheet, FlatList } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { AppText } from '#/components/lib/Text';
+import { APP_FONTS } from '#/styles/AppFonts';
+import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
 
 type ProtocolCardsProps = {
 	onSelectSetPagerId: (id: number) => void;

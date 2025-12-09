@@ -1,9 +1,4 @@
 import { View, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
-import {
-	AccountDetails,
-	AccountPfp,
-} from '#/screens/accounts/fragments/AccountListingFragment';
-import SoftwareHeader from '#/screens/accounts/fragments/SoftwareHeader';
 import { router } from 'expo-router';
 import {
 	Account,
@@ -24,6 +19,11 @@ import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppIcon } from '#/components/lib/Icon';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
 import RoutingUtils from '#/utils/routing.utils';
+import {
+	AccountDetails,
+	AccountPfp,
+} from '#/features/manage-accounts/AccountListingFragment';
+import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
 
 type ListItemProps = {
 	acct: Account;

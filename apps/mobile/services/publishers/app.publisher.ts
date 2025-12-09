@@ -1,4 +1,4 @@
-import { BasePubSubService } from './_base.pubisher';
+import { EventBus } from '@dhaaga/bridge';
 
 export enum APP_EVENT_ENUM {
 	ACCOUNT_LIST_CHANGED = 'accountListChanged',
@@ -6,4 +6,4 @@ export enum APP_EVENT_ENUM {
 	PROFILE_VISIBILITY_CHANGED = 'profileVisibilityChanged',
 }
 
-export class AppPublisherService extends BasePubSubService {}
+export class AppPublisherService extends EventBus {}

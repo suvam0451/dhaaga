@@ -42,7 +42,7 @@ class Mutator {
 		return this._applyReactionData(input, nextState);
 	}
 
-	async removeReaction(
+	static async removeReaction(
 		client: ApiTargetInterface,
 		input: PostObjectType,
 		reactionCode: string,
@@ -75,7 +75,7 @@ class Mutator {
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as result
 	 */
-	async toggleLike(
+	static async toggleLike(
 		client: ApiTargetInterface,
 		input: PostObjectType,
 	): Promise<PostObjectType> {
@@ -115,10 +115,11 @@ class Mutator {
 	/**
 	 * Toggles share for this post object and
 	 * return it with mutations, if successful
+	 * @param client
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as result
 	 */
-	async toggleShare(
+	static async toggleShare(
 		client: ApiTargetInterface,
 		input: PostObjectType,
 	): Promise<PostObjectType> {
@@ -172,10 +173,11 @@ class Mutator {
 	/**
 	 * Loads the bookmark state for misskey servers
 	 * where it needs to be lazy loaded
+	 * @param client
 	 * @param {PostObjectType} input post object
-	 * @returns {PostObjectType} wrapped as result
+	 * @returns {PostObjectType} wrapped as a result
 	 */
-	async loadBookmarkState(
+	static async loadBookmarkState(
 		client: ApiTargetInterface,
 		input: PostObjectType,
 	): Promise<PostObjectType> {
@@ -209,7 +211,7 @@ class Mutator {
 	 * @param {PostObjectType} input post object
 	 * @returns {PostObjectType} wrapped as a result
 	 */
-	async toggleBookmark(
+	static async toggleBookmark(
 		client: ApiTargetInterface,
 		input: PostObjectType,
 	): Promise<PostObjectType> {

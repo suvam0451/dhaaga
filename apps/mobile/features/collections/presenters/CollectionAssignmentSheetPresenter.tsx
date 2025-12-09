@@ -3,27 +3,27 @@ import {
 	useAppBottomSheet,
 	useAppDialog,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { usePostInteractor } from '../../_pubsub/interactors/usePostInteractor';
+} from '#/hooks/utility/global-state-extractors';
+import { usePostActions } from '#/hooks/pubsub/usePostActions';
 import { FlatList, View } from 'react-native';
 import AssignmentSheetBookmarkView from '../views/AssignmentSheetBookmarkView';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import { PostMiddleware } from '#/services/middlewares/post.middleware';
 import useCollectionAssignInteractor from '../interactors/useCollectionAssignInteractor';
 import { AccountCollection } from '@dhaaga/db';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import BookmarkUnsupported from '../components/BookmarkUnsupported';
 import CollectionItem from '../components/CollectionItem';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import AssignmentListControlView from '../../_shared/views/AssignmentListControlView';
 import { Fragment } from 'react';
-import { AppText } from '../../../components/lib/Text';
-import { appDimensions } from '../../../styles/dimensions';
+import { AppText } from '#/components/lib/Text';
+import { appDimensions } from '#/styles/dimensions';
 
 function CollectionAssignmentSheetPresenter() {
 	const { driver } = useAppApiClient();
 	const { ctx } = useAppBottomSheet();
-	const { post, toggleBookmark } = usePostInteractor(ctx?.uuid);
+	const { post, toggleBookmark } = usePostActions(ctx?.uuid);
 	const { show } = useAppDialog();
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);

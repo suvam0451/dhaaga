@@ -18,31 +18,16 @@ function PostActionButtonToggleBookmark() {
 	const { dto } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 
 	// helper functions
 	function _toggleBookmark() {
 		if (ActivityPubService.misskeyLike(driver)) {
-			postPub.finalizeBookmarkState(dto?.uuid).finally(() => {});
+			postObjectActions.loadBookmarkState(dto?.uuid);
 		}
 		setCtx({ uuid: dto?.uuid });
 		show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true);
 	}
-
-	/**
-	 * TODO: need to understand misskey's take
-	 * on bookmarks and why it is a separate API
-	 *
-	 * NOTE: disabled to not trigger rate limits
-	 */
-	// const { finalizeBookmarkState } = usePostActionsInterface();
-	// const [BookmarkStatePending, setBookmarkStatePending] = useState(false);
-	// useEffect(() => {
-	// 	setBookmarkStatePending(true);
-	// 	finalizeBookmarkState(id).finally(() => {
-	// 		setBookmarkStatePending(false);
-	// 	});
-	// }, [id]);
 
 	const FLAG = dto?.interaction?.bookmarked;
 

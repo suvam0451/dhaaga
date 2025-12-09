@@ -24,7 +24,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
 	const { theme } = useAppTheme();
-	const { postPub } = useAppPublishers();
+	const { postObjectActions } = useAppPublishers();
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -56,7 +56,11 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 			console.log('cannot react???');
 			return;
 		}
-		await postPub.toggleReaction(postItem.uuid, dto, setEmojiStateLoading);
+		await postObjectActions.toggleReaction(
+			postItem.uuid,
+			dto,
+			setEmojiStateLoading,
+		);
 
 		// FIXME: bring back quick reaction settings
 	}
