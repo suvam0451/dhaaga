@@ -1,10 +1,8 @@
 import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
 import type { Endpoints } from 'misskey-js/autogen/endpoint.js';
-import { MastoNotification } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
-import { LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 type MISSKEY_NOTIFICATION_TYPE =
@@ -49,16 +47,14 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		return { data: data as any };
 	}
 
-	async getUngrouped(query: NotificationGetQueryDto): LibraryPromise<{
-		data: MastoNotification[];
-		minId?: string | null;
-		maxId?: string | null;
-	}> {
+	async getUngrouped(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<Endpoints['i/notifications']['res']> {
 		const data = await this.client.client.request<
 			'i/notifications',
 			Endpoints['i/notifications']['req']
 		>('i/notifications', query as any);
-		return { data: { data: data as any } };
+		return { data: data };
 	}
 
 	async getMentions(query: NotificationGetQueryDto) {

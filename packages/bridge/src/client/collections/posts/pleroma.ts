@@ -67,9 +67,9 @@ export class PleromaStatusesRouter implements StatusesRoute {
 	 * Pleroma specific stuff
 	 */
 
-	async getReactions(id: string): Promise<LibraryResponse<MegaReaction[]>> {
+	async getReactions(id: string): Promise<MegaReaction[]> {
 		const data = await this.client.client.getEmojiReactions(id);
-		return { data: CasingUtil.camelCaseKeys(data.data) };
+		return CasingUtil.camelCaseKeys(data.data);
 	}
 
 	async getReactionDetails(

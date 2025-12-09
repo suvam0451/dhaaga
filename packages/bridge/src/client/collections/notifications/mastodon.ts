@@ -5,9 +5,7 @@ import {
 	MastoGroupedNotificationsResults,
 	MastoNotification,
 } from '#/types/mastojs.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
@@ -116,15 +114,8 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		return await this.mastoClient.lib.v1.conversations.$select(id).unread();
 	}
 
-	async markChatRemove(id: string): LibraryPromise<void> {
-		try {
-			const data = await this.mastoClient.lib.v1.conversations
-				.$select(id)
-				.remove();
-			return { data };
-		} catch (e) {
-			return errorBuilder(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	async markChatRemove(id: string): Promise<void> {
+		return await this.mastoClient.lib.v1.conversations.$select(id).remove();
 	}
 
 	async sendMessage() {

@@ -2,7 +2,6 @@ import { TagRoute } from './_interface.js';
 import { MegaTag } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
-import { LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 export class PleromaTagsRouter implements TagRoute {
@@ -24,18 +23,18 @@ export class PleromaTagsRouter implements TagRoute {
 		};
 	}
 
-	async follow(id: string): LibraryPromise<MegaTag> {
+	async follow(id: string): Promise<MegaTag> {
 		const data = await this.client.client.followTag(id);
-		return { data: data.data };
+		return data.data;
 	}
 
-	async get(id: string): LibraryPromise<MegaTag> {
+	async get(id: string): Promise<MegaTag> {
 		const data = await this.client.client.getTag(id);
-		return { data: data.data };
+		return data.data;
 	}
 
-	async unfollow(id: string): LibraryPromise<MegaTag> {
+	async unfollow(id: string): Promise<MegaTag> {
 		const data = await this.client.client.unfollowTag(id);
-		return { data: data.data };
+		return data.data;
 	}
 }

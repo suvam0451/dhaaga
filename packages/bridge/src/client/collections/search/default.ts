@@ -6,20 +6,24 @@ import {
 } from './_interface.js';
 import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
-import { LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
+import { AppBskyActorDefs } from '@atproto/api';
 
 export class DefaultSearchRouter implements SearchRoute {
 	async findUsers(
 		query: DhaagaJsUserSearchDTO,
-	): LibraryPromise<
-		MastoAccount[] | Endpoints['users/search']['res'] | MegaAccount[]
+	): PaginatedPromise<
+		| MastoAccount[]
+		| Endpoints['users/search']['res']
+		| MegaAccount[]
+		| AppBskyActorDefs.ProfileViewBasic[]
 	> {
 		return { data: [] };
 	}
 
 	async findPosts(
 		q: DhaagaJsPostSearchDTO,
-	): LibraryPromise<
+	): PaginatedPromise<
 		MastoStatus[] | Endpoints['notes/search']['res'] | MegaStatus[]
 	> {
 		return { data: [] };

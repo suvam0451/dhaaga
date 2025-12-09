@@ -5,8 +5,8 @@ import {
 } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	direct: FetchWrapper;
@@ -34,15 +34,14 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<Endpoints['notes/timeline']['res']> {
-		try {
-			return await this.client.client.request('notes/timeline', {
-				...query,
-			});
-		} catch (e: any) {
-			if (e.code) throw new Error(ApiErrorCode.UNAUTHORIZED);
-			throw new Error(ApiErrorCode.UNKNOWN_ERROR);
-		}
+	): PaginatedPromise<Endpoints['notes/timeline']['res']> {
+		const data = await this.client.client.request('notes/timeline', {
+			...query,
+		});
+		return {
+			data: data,
+			maxId: data.length > 0 ? data[data.length - 1].id : null,
+		};
 	}
 
 	/**
@@ -53,23 +52,29 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 		query: DhaagaJsTimelineQueryOptions & {
 			withReplies?: boolean | null;
 		},
-	): Promise<Endpoints['notes/global-timeline']['res']> {
+	): PaginatedPromise<Endpoints['notes/global-timeline']['res']> {
 		if (query?.local) {
-			return await this.client.client.request('notes/local-timeline', {
+			const data = await this.client.client.request('notes/local-timeline', {
 				...query,
 				allowPartial: true,
 				withBots: true,
 				local: undefined,
 			} as any);
+			return { data, maxId: data.length > 0 ? data[data.length - 1].id : null };
 		}
 		if (query?.social) {
-			return await this.client.client.request(
+			const data = await this.client.client.request(
 				'notes/hybrid-timeline',
 				query as any,
 			);
+			return { data, maxId: data.length > 0 ? data[data.length - 1].id : null };
 		} else {
 			// a.k.a. -- federated timeline
-			return await this.client.client.request('notes/global-timeline', query);
+			const data = await this.client.client.request(
+				'notes/global-timeline',
+				query,
+			);
+			return { data, maxId: data.length > 0 ? data[data.length - 1].id : null };
 		}
 	}
 
@@ -83,23 +88,25 @@ export class MisskeyTimelinesRouter implements TimelinesRoute {
 	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<Endpoints['notes/search-by-tag']['res']> {
-		return await this.client.client.request<
+	): PaginatedPromise<Endpoints['notes/search-by-tag']['res']> {
+		const data = await this.client.client.request<
 			'notes/search-by-tag',
 			Endpoints['notes/search-by-tag']['req']
 		>('notes/search-by-tag', {
 			tag: q,
 			...query,
 		});
+		return { data };
 	}
 
 	async list(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
 	): DriverTimelineGetApiResponse {
-		return await this.client.client.request<
+		const data = await this.client.client.request<
 			'notes/user-list-timeline',
 			Endpoints['notes/user-list-timeline']['req']
 		>('notes/user-list-timeline', { listId: q, ...query });
+		return { data };
 	}
 }

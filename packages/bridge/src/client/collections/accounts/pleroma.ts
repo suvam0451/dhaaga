@@ -1,13 +1,20 @@
 import {
+	AccountMutePostDto,
 	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
 } from './_interface.js';
-import { BaseAccountsRouter } from './default.js';
 import { GetPostsQueryDTO } from '../../types/_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
-import type { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
+import type {
+	MastoAccount,
+	MastoFamiliarFollowers,
+	MastoFeaturedTag,
+	MastoList,
+	MastoRelationship,
+	MastoStatus,
+} from '#/types/mastojs.types.js';
 import type {
 	MegaAccount,
 	MegaRelationship,
@@ -16,18 +23,14 @@ import type {
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder, MissUserDetailed } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
-export class PleromaAccountsRouter
-	extends BaseAccountsRouter
-	implements AccountRoute
-{
+export class PleromaAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;
 	client: MegalodonPleromaWrapper;
 
 	constructor(forwarded: FetchWrapper) {
-		super();
 		this.direct = forwarded;
 		this.client = MegalodonPleromaWrapper.create(
 			forwarded.baseUrl,
@@ -98,7 +101,7 @@ export class PleromaAccountsRouter
 		);
 	}
 
-	async follow(id: string): LibraryPromise<MegaRelationship> {
+	async follow(id: string): Promise<MegaRelationship> {
 		// Akkoma 400s on /follow with body
 		const data = await this.client.client.followAccount(id);
 		if (data.status !== 200) {
@@ -108,7 +111,7 @@ export class PleromaAccountsRouter
 		return { data: CasingUtil.camelCaseKeys(data.data) };
 	}
 
-	async unfollow(id: string): LibraryPromise<MegaRelationship> {
+	async unfollow(id: string): Promise<MegaRelationship> {
 		const data = await this.client.client.unfollowAccount(id);
 		if (data.status !== 200) {
 			return errorBuilder(data.statusText);
@@ -134,5 +137,44 @@ export class PleromaAccountsRouter
 			`/api/v1/accounts/${id}/following`,
 			rest,
 		);
+	}
+
+	block(id: string): Promise<MegaRelationship> {
+		throw new Error('Method not implemented.');
+	}
+
+	featuredTags(id: string): Promise<MastoFeaturedTag[]> {
+		throw new Error('Method not implemented.');
+	}
+
+	getLists(id: string): PaginatedPromise<MastoList[]> {
+		throw new Error('Method not implemented.');
+	}
+
+	knownFollowers(ids: string[]): Promise<MastoFamiliarFollowers[]> {
+		throw new Error('Method not implemented.');
+	}
+
+	mute(
+		id: string,
+		opts: AccountMutePostDto,
+	): Promise<MastoRelationship | MegaRelationship> {
+		throw new Error('Method not implemented.');
+	}
+
+	removeFollower(id: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+
+	resolveMany(ids: string[]): Promise<MastoAccount[] | MissUserDetailed[]> {
+		throw new Error('Method not implemented.');
+	}
+
+	unblock(id: string): Promise<MegaRelationship> {
+		throw new Error('Method not implemented.');
+	}
+
+	unmute(id: string): Promise<MastoRelationship | MegaRelationship> {
+		throw new Error('Method not implemented.');
 	}
 }

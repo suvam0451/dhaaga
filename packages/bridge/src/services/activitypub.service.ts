@@ -125,29 +125,19 @@ class ActivityPubService {
 		localState: boolean,
 		domain: KNOWN_SOFTWARE,
 	): Promise<-1 | 1 | null> {
-		if (ActivityPubService.misskeyLike(domain)) {
+		if (DriverService.supportsMisskeyApi(domain)) {
 			if (localState) {
-				const { error } = await (client as MisskeyApiAdapter).posts.unrenote(
-					id,
-				);
-				if (error) {
-					console.log('[WARN]: failed to remove boost', error);
-					return null;
-				}
+				await (client as MisskeyApiAdapter).posts.unrenote(id);
 				return -1;
 			} else {
-				const { error } = await (client as MisskeyApiAdapter).posts.renote({
+				await (client as MisskeyApiAdapter).posts.renote({
 					renoteId: id,
 					visibility: 'followers',
 					localOnly: true,
 				});
-				if (error) {
-					console.log('[WARN]: failed to boost', error);
-					return null;
-				}
 				return +1;
 			}
-		} else if (domain === KNOWN_SOFTWARE.MASTODON) {
+		} else if (DriverService.supportsMastoApiV2(domain)) {
 			if (localState) {
 				await (client as MastoApiAdapter).posts.removeBoost(id);
 				return -1;
@@ -157,21 +147,11 @@ class ActivityPubService {
 			}
 		} else {
 			if (localState) {
-				const { error } = await (client as PleromaApiAdapter).posts.removeBoost(
-					id,
-				);
-				if (error) {
-					console.log('[WARN]: failed to remove boost', error);
-					return null;
-				}
+				await (client as PleromaApiAdapter).posts.removeBoost(id);
 				return -1;
 			} else {
-				const { error } = await (client as PleromaApiAdapter).posts.boost(id);
-				if (error) {
-					console.log('[WARN]: failed to boost', error);
-					return null;
-				}
-				return 1;
+				await (client as PleromaApiAdapter).posts.boost(id);
+				return +1;
 			}
 		}
 	}
@@ -188,13 +168,7 @@ class ActivityPubService {
 		client: ApiTargetInterface,
 		id: string,
 	): Promise<boolean | null> {
-		const { data, error } = await (client as MisskeyApiAdapter).posts.getState(
-			id,
-		);
-		if (error) {
-			console.log('[WARN]: error fetching bookmarked state');
-			return null;
-		}
+		const data = await (client as MisskeyApiAdapter).posts.getState(id);
 		return data.isFavorited;
 	}
 }

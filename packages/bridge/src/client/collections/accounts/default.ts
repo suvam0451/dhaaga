@@ -22,7 +22,6 @@ import {
 } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
-import { LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 export abstract class BaseAccountsRouter implements AccountRoute {
@@ -35,7 +34,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 	follow(
 		id: string,
 		opts: FollowPostDto,
-	): LibraryPromise<
+	): Promise<
 		MastoRelationship | Endpoints['following/create']['res'] | MegaRelationship
 	> {
 		throw new Error('Method not implemented.');
@@ -43,7 +42,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 
 	unfollow(
 		id: string,
-	): LibraryPromise<
+	): Promise<
 		MastoRelationship | Endpoints['following/delete']['res'] | MegaRelationship
 	> {
 		throw new Error('Method not implemented.');
@@ -51,7 +50,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 
 	block(
 		id: string,
-	): LibraryPromise<
+	): Promise<
 		MastoRelationship | Endpoints['blocking/create']['res'] | MegaRelationship
 	> {
 		throw new Error('Method not implemented.');
@@ -59,7 +58,7 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 
 	unblock(
 		id: string,
-	): LibraryPromise<
+	): Promise<
 		MastoRelationship | Endpoints['blocking/delete']['res'] | MegaRelationship
 	> {
 		throw new Error('Method not implemented.');

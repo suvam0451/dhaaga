@@ -1,11 +1,11 @@
 import { Endpoints } from 'misskey-js';
-import {
+import type {
 	AppBskyActorSearchActorsTypeahead,
 	AppBskyFeedSearchPosts,
 } from '@atproto/api';
 import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
-import { LibraryPromise } from '#/types/index.js';
+import { PaginatedPromise } from '#/types/api-response.js';
 
 type MastoUnifiedSearchType = {
 	q: string;
@@ -42,7 +42,7 @@ type DhaagaJsPostSearchDTO = {
 interface SearchRoute {
 	findUsers(
 		q: DhaagaJsUserSearchDTO,
-	): LibraryPromise<
+	): PaginatedPromise<
 		| MastoAccount[]
 		| Endpoints['users/search']['res']
 		| MegaAccount[]
@@ -51,7 +51,7 @@ interface SearchRoute {
 
 	findPosts(
 		q: DhaagaJsPostSearchDTO,
-	): LibraryPromise<
+	): PaginatedPromise<
 		| MastoStatus[]
 		| Endpoints['notes/search']['res']
 		| MegaStatus[]

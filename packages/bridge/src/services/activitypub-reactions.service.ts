@@ -258,13 +258,10 @@ class ActivityPubReactionsService {
 				accounts: o.accountIds || [],
 			}));
 		} else if (ActivityPubService.misskeyLike(domain)) {
-			const { error } = await (
-				client as MisskeyApiAdapter
-			).posts.removeReaction(postId, reactionId);
-			if (error && error.code) {
-				console.log('[WARN]: failed to remove reaction', error);
-				return null;
-			}
+			await (client as MisskeyApiAdapter).posts.removeReaction(
+				postId,
+				reactionId,
+			);
 
 			return ActivityPubReactionsService.syncMisskeyReactionState(
 				client,
@@ -342,15 +339,7 @@ class ActivityPubReactionsService {
 			if (!MISSKEY_LOCAL_EX.test(reactionId)) {
 				reactionId = `:${reactionId}:`;
 			}
-			const { error } = await (client as MisskeyApiAdapter).posts.addReaction(
-				postId,
-				reactionId,
-			);
-
-			if (error) {
-				console.log('[WARN]: failed to add reaction', error);
-				return [];
-			}
+			await (client as MisskeyApiAdapter).posts.addReaction(postId, reactionId);
 
 			return ActivityPubReactionsService.syncMisskeyReactionState(
 				client,

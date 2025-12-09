@@ -12,7 +12,7 @@ import {
 } from '#/client/utils/api-wrappers.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { identifyBackendSoftware } from '#/client/utils/detect-software.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
 import { CustomEmojiObjectType } from '#/types/shared/reactions.js';
 
 type WelKnownNodeinfo = {
@@ -115,7 +115,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 		}
 	}
 
-	async getNodeInfo(urlLike: string): LibraryPromise<string> {
+	async getNodeInfo(urlLike: string): Promise<string> {
 		const controller = new AbortController();
 		const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -137,9 +137,9 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			);
 
 			if (!nodeType) return errorBuilder<string>(ApiErrorCode.UNKNOWN_ERROR);
-			return { data: nodeType.href };
+			return nodeType.href;
 		} catch (e) {
-			return errorBuilder<string>(ApiErrorCode.UNKNOWN_ERROR);
+			throw new Error(`Failed to fetch nodeinfo from ${urlLike}`);
 		} finally {
 			clearTimeout(timeoutId); // Clear the timeout
 		}
@@ -157,7 +157,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	 * Get the software and version this instance runs on
 	 * @param nodeinfoUrl the diaspora nodeinfo url
 	 */
-	async getSoftware(nodeinfoUrl: string): LibraryPromise<{
+	async getSoftware(nodeinfoUrl: string): Promise<{
 		software: string;
 		version: string | null;
 	}> {
@@ -171,10 +171,8 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			if (!response.ok) return errorBuilder(response.statusText);
 			const res = await response.json();
 			return {
-				data: {
-					software: res?.software?.name,
-					version: DefaultInstanceRouter.getVersion(res.version),
-				},
+				software: res?.software?.name,
+				version: DefaultInstanceRouter.getVersion(res.version),
 			};
 		} catch (e) {
 			return errorBuilder<{
@@ -242,7 +240,7 @@ export class DefaultInstanceRouter implements InstanceRoute {
 	async verifyCredentials(
 		urlLike: string,
 		token: string,
-	): LibraryPromise<MastoAccountCredentials> {
+	): Promise<MastoAccountCredentials> {
 		const res = await fetch(
 			`https://${urlLike}/api/v1/accounts/verify_credentials`,
 			{
@@ -254,6 +252,6 @@ export class DefaultInstanceRouter implements InstanceRoute {
 			},
 		);
 		if (!res.ok) return errorBuilder(res.statusText);
-		return { data: await res.json() };
+		return await res.json();
 	}
 }

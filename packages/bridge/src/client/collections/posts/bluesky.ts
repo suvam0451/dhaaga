@@ -13,7 +13,6 @@ import {
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
@@ -98,47 +97,29 @@ class BlueskyStatusesRouter implements StatusesRoute {
 
 	async getConvoForMembers(
 		members: string[],
-	): LibraryPromise<ChatBskyConvoGetConvoForMembers.Response> {
+	): Promise<ChatBskyConvoGetConvoForMembers.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.chat.bsky.convo.getConvoForMembers({
-				members,
-			});
-			return { data };
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
-		}
+		return await agent.chat.bsky.convo.getConvoForMembers({
+			members,
+		});
 	}
 
-	async getConvo(id: string): LibraryPromise<ChatBskyConvoGetConvo.Response> {
+	async getConvo(id: string): Promise<ChatBskyConvoGetConvo.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.chat.bsky.convo.getConvo({
-				convoId: id,
-			});
-			return { data };
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
-		}
+		return await agent.chat.bsky.convo.getConvo({
+			convoId: id,
+		});
 	}
 
 	async sendMessage(
 		id: string,
 		msg: string,
-	): LibraryPromise<ChatBskyConvoSendMessage.Response> {
+	): Promise<ChatBskyConvoSendMessage.Response> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			const data = await agent.chat.bsky.convo.sendMessage({
-				convoId: id,
-				message: { text: msg },
-			});
-			return { data };
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			return errorBuilder();
-		}
+		return agent.chat.bsky.convo.sendMessage({
+			convoId: id,
+			message: { text: msg },
+		});
 	}
 
 	/**

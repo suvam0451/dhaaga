@@ -1,22 +1,23 @@
-import { ApiErrorCode, LibraryResponse } from '#/types/result.types.js';
+import { ApiErrorCode } from '#/types/result.types.js';
 
 type ResultPage<T> = {
 	data: T;
 	maxId?: string | null;
 	minId?: string | null;
-	error?: Error;
+	hitsTotal?: number;
 };
 
 const defaultResultPage = {
 	data: [],
 	maxId: null,
 	minId: null,
+	hitsTotal: 0,
 };
 
 export type { ResultPage };
 export { defaultResultPage };
 
-export function errorBuilder<T>(error?: any): LibraryResponse<T> {
+export function errorBuilder<T>(error?: any): any {
 	return {
 		error: {
 			code: error?.code || ApiErrorCode.UNKNOWN_ERROR,
@@ -24,7 +25,7 @@ export function errorBuilder<T>(error?: any): LibraryResponse<T> {
 	};
 }
 
-export function notImplementedErrorBuilder<T>(): LibraryResponse<T> {
+export function notImplementedErrorBuilder<T>(): any {
 	return {
 		error: {
 			code: ApiErrorCode.UNKNOWN_ERROR,
@@ -36,5 +37,5 @@ export type PaginatedPromise<T> = Promise<{
 	data: T;
 	minId?: string | null;
 	maxId?: string | null;
+	hitsTotal?: number;
 }>;
-export type LibraryPromise<T> = Promise<LibraryResponse<T>>;

@@ -3,13 +3,8 @@ import {
 	DhaagaJsTimelineQueryOptions,
 	TimelinesRoute,
 } from './_interface.js';
-import {
-	AppBskyFeedDefs,
-	AppBskyFeedGetTimeline,
-	AppBskyFeedSearchPosts,
-} from '@atproto/api';
+import type { AppBskyFeedDefs } from '@atproto/api';
 import { AppAtpSessionData } from '#/types/atproto.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
@@ -28,14 +23,17 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	async hashtag(
 		q: string,
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<AppBskyFeedSearchPosts.OutputSchema> {
+	): PaginatedPromise<AppBskyFeedDefs.PostView[]> {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.app.bsky.feed.searchPosts({
 			q: q,
 			limit: query.limit,
 			cursor: query.maxId === null ? undefined : query.maxId,
 		});
-		return data.data;
+		return {
+			data: data.data.posts,
+			maxId: data.data.cursor,
+		};
 	}
 
 	hashtagAsGuest(
@@ -48,19 +46,15 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 
 	async home(
 		query: DhaagaJsTimelineQueryOptions,
-	): Promise<AppBskyFeedGetTimeline.Response> {
+	): PaginatedPromise<AppBskyFeedDefs.FeedViewPost[]> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			return await agent.getTimeline({
-				limit: query.limit || 10,
-				// 500 on passing null
-				cursor: query.maxId === null ? undefined : query.maxId,
-				algorithm: 'reverse-chronological',
-			});
-		} catch (e) {
-			console.log('[ERROR]: bluesky', e);
-			throw new Error(ApiErrorCode.UNKNOWN_ERROR);
-		}
+		const data = await agent.getTimeline({
+			limit: query.limit || 10,
+			// 500 on passing null
+			cursor: query.maxId === null ? undefined : query.maxId,
+			// algorithm: 'reverse-chronological',
+		});
+		return { data: data.data.feed, maxId: data.data.cursor };
 	}
 
 	list(

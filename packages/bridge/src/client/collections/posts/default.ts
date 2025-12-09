@@ -9,16 +9,13 @@ import {
 	DriverBookmarkStateResult,
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
-import { LibraryPromise } from '#/types/index.js';
 
 export class DefaultStatusesRouter implements StatusesRoute {
 	async getPost(id: string): Promise<MastoStatus> {
 		throw new Error('not supported by driver');
 	}
 
-	async create(
-		dto: DhaagaJsPostCreateDto,
-	): LibraryPromise<MastoScheduledStatus> {
+	async create(dto: DhaagaJsPostCreateDto): Promise<MastoScheduledStatus> {
 		throw new Error('not supported by driver');
 	}
 

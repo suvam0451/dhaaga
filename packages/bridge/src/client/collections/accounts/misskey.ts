@@ -15,7 +15,7 @@ import type {
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
-import { errorBuilder, LibraryPromise } from '#/types/index.js';
+import { errorBuilder } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 
 export class MisskeyAccountsRouter implements AccountRoute {
@@ -165,26 +165,18 @@ export class MisskeyAccountsRouter implements AccountRoute {
 		}
 	}
 
-	async renoteMute(id: string): LibraryPromise<{ renoteMuted: true }> {
-		try {
-			await this.client.client.request('renote-mute/create', {
-				userId: id,
-			});
-			return { data: { renoteMuted: true } };
-		} catch (e: any) {
-			throw new Error(e.code ?? e);
-		}
+	async renoteMute(id: string): Promise<{ renoteMuted: true }> {
+		await this.client.client.request('renote-mute/create', {
+			userId: id,
+		});
+		return { renoteMuted: true };
 	}
 
-	async renoteUnmute(id: string): LibraryPromise<{ renoteMuted: false }> {
-		try {
-			await this.client.client.request('renote-mute/delete', {
-				userId: id,
-			});
-			return { data: { renoteMuted: false } };
-		} catch (e: any) {
-			throw new Error(e.code ?? e);
-		}
+	async renoteUnmute(id: string): Promise<{ renoteMuted: false }> {
+		await this.client.client.request('renote-mute/delete', {
+			userId: id,
+		});
+		return { renoteMuted: false };
 	}
 
 	async likes(query: GetPostsQueryDTO): Promise<any> {
