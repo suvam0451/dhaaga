@@ -3,13 +3,13 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { PostResolver, TextParser } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
 import { ActivityPubService } from '@dhaaga/bridge';
-import { PostMentionObjectType } from '@dhaaga/bridge/dist/types';
+import type { PostMentionObjectType } from '@dhaaga/bridge';
 
 type Props = {
 	value: string;

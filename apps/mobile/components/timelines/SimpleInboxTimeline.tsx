@@ -10,7 +10,7 @@ import { FlatList, RefreshControl } from 'react-native';
 import { AppDivider } from '#/components/lib/Divider';
 
 type Props = {
-	queryResult: UseQueryResult<ResultPage<NotificationObjectType>, Error>;
+	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
 	Wrapper: ({ item }: { item: NotificationObjectType }) => any;
 };
 

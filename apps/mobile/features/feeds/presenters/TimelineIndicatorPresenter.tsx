@@ -1,15 +1,15 @@
-import { AppFeedObject } from '../../../types/app-feed.types';
 import useApiGetFeedDetails from '../../timelines/features/controller/interactors/useApiGetFeedDetails';
 import { View } from 'react-native';
-import { AppIcon } from '../../../components/lib/Icon';
+import { AppIcon } from '#/components/lib/Icon';
 import {
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+} from '#/hooks/utility/global-state-extractors';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import type { FeedObjectType } from '@dhaaga/bridge';
 
 type Props = {
-	item: AppFeedObject;
+	item: FeedObjectType;
 };
 
 /**

@@ -1,13 +1,14 @@
 import { Fragment, memo, useState } from 'react';
-import { APP_FONT } from '../../../../../styles/AppTheme';
+import { APP_FONT } from '#/styles/AppTheme';
 import { FontAwesome } from '@expo/vector-icons';
 import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
 } from '../../../../lib/Buttons';
+import { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 type SelectedEmojiActionButtonsProps = {
-	selection: InstanceApi_CustomEmojiDTO | null;
+	selection: CustomEmojiObjectType | null;
 	onSelect: (shortCode: string) => Promise<void>;
 	onCancel: () => void;
 };

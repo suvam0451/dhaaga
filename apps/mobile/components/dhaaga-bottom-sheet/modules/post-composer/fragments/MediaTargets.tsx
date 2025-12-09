@@ -161,12 +161,9 @@ function ComposeMediaTargets() {
 								borderRadius: 12,
 							}}
 						>
-							{/* @ts-ignore-next-line */}
 							<Image
 								source={{ uri: item.previewUrl || item.localUri }}
-								height={196}
-								width={128}
-								style={{ borderRadius: 12 }}
+								style={{ borderRadius: 12, height: 196, width: 128 }}
 							/>
 							<View
 								style={{

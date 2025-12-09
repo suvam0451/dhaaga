@@ -1,5 +1,5 @@
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import BrowsingHistoryEmpty from '#/components/svgs/BrowsingHistoryEmpty';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
@@ -8,7 +8,7 @@ import { FlatList } from 'react-native';
 
 function Page() {
 	const history = [];
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingFlashList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	const { theme } = useAppTheme();
 	return (
 		<>

@@ -16,7 +16,7 @@ import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
@@ -26,7 +26,7 @@ import { router } from 'expo-router';
 
 function TimelineIdle() {
 	const { theme } = useAppTheme();
-	const { animatedStyle } = useHideTopNavUsingReanimated();
+	const { animatedStyle } = useScrollHandleAnimatedList();
 
 	return (
 		<View

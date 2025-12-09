@@ -3,7 +3,7 @@ import {
 	useAccountManager,
 	useAppAcct,
 	useAppApiClient,
-} from '../../utility/global-state-extractors';
+} from './utility/global-state-extractors';
 import { UserParser } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
 
@@ -12,7 +12,7 @@ import type { UserObjectType } from '@dhaaga/bridge';
  * serializes the user object onto
  * the cache with fixed expiry
  */
-function useApiGetMyAccount() {
+function useApiMe() {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useAppAcct();
 	const { acctManager } = useAccountManager();
@@ -31,4 +31,4 @@ function useApiGetMyAccount() {
 	});
 }
 
-export default useApiGetMyAccount;
+export default useApiMe;

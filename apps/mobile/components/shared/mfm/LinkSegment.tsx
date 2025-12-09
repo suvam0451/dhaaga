@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import useLongLinkTextCollapse from '#/states/useLongLinkTextCollapse';
-import { useAppMfmContext } from '#/hooks/app/useAppMfmContext';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import TextUtils from '#/utils/text.utils';
@@ -20,7 +19,6 @@ type LinkProcessorProps = {
 function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
-	const { acceptTouch } = useAppMfmContext();
 
 	/**
 	 * in case displayName is not present,
@@ -37,7 +35,6 @@ function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 	);
 
 	function onTextPress() {
-		if (!acceptTouch) return;
 		setCtx({
 			linkUrl: url,
 			linkLabel: displayName || wwwRemoved,

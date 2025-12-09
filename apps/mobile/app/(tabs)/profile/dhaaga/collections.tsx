@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { AccountCollection } from '@dhaaga/db';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppText, SpecialText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
@@ -96,7 +96,7 @@ function ListView({
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingReanimated();
+	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 	return (
 		<>
 			<NavBar_Simple

@@ -12,7 +12,7 @@ import { queryOptions } from '@tanstack/react-query';
 
 const NOTIFICATION_PAGE_SIZE = 20;
 
-type NotificationPage = ResultPage<NotificationObjectType>;
+type NotificationPage = ResultPage<NotificationObjectType[]>;
 
 /**
  * Get Mentions

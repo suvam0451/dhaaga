@@ -59,7 +59,7 @@ function useApiGetChatMessages(roomId: string, maxId: string | undefined) {
 	const { driver, client, server } = useAppApiClient();
 
 	async function api(): Promise<GetChatMessagesResponse> {
-		const result = await client.notifications.getMessages(roomId);
+		const result = await client.notifications.getChats(roomId);
 		if (result.error) throw new Error(result.error.message);
 		switch (driver) {
 			case KNOWN_SOFTWARE.BLUESKY: {

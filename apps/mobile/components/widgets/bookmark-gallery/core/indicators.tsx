@@ -1,8 +1,7 @@
 import { StyleSheet, View, ViewStyle, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONT } from '../../../../styles/AppTheme';
-import { useBookmarkGalleryControllerContext } from '../../../../states/useBookmarkGalleryController';
-import { UUID } from 'bson';
+import { APP_FONT } from '#/styles/AppTheme';
+import { useBookmarkGalleryControllerContext } from '#/states/useBookmarkGalleryController';
 import { memo, useMemo } from 'react';
 
 type Props = {
@@ -18,7 +17,7 @@ export const UserSelectionIndicator = memo(function Foo({
 	onClick,
 	avatarUrl,
 	count,
-}: Props & { _id: UUID; avatarUrl: string; count: number }) {
+}: Props & { _id: any; avatarUrl: string; count: number }) {
 	const {
 		IsUserNoneSelected,
 		IsUserAllSelected,

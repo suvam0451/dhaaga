@@ -13,7 +13,7 @@ import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFi
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { appDimensions } from '#/styles/dimensions';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
+import useHideTopNavUsingFlashList from '#/hooks/anim/useScrollHandleFlatList';
 import { FlatList, RefreshControl } from 'react-native';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { SimpleTimelineProps } from '#/components/timelines/shared';

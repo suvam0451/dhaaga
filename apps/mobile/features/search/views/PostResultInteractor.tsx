@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
 import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
 import { PostSearchStateIndicator } from '#/features/search/components/StateIndicators';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -79,6 +80,8 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		loadMore,
 		TimelineState.items.length,
 	);
+
+	const {} = useScrollHandleAnimatedList(loadMore);
 
 	const [ContainerHeight, setContainerHeight] = useState(0);
 	function onLayout(event: any) {

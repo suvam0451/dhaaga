@@ -2,11 +2,11 @@ import { NotificationUserGroupType } from '@dhaaga/bridge';
 import { FlatList, Pressable, View } from 'react-native';
 import { ICON_SIZE, styles } from '../components/_common';
 import { Image } from 'expo-image';
-import { AppIcon } from '../../../components/lib/Icon';
+import { AppIcon } from '#/components/lib/Icon';
 
 type Props = {
 	items: NotificationUserGroupType[];
-	Header?: JSX.Element;
+	Header?: any;
 };
 const _ICON_SIZE = ICON_SIZE + 8;
 

@@ -6,14 +6,14 @@ import { appDimensions } from '#/styles/dimensions';
 import { SavedPostItem } from '#/components/common/status/LocalView/SavedPostItem';
 import { FlatList, RefreshControl } from 'react-native';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 function Content() {
 	const { theme } = useAppTheme();
 	const { state, onRefresh, IsRefreshing } = useCollectionDetailInteractor();
 
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingReanimated();
+	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 	return (
 		<>
 			<NavBar_Simple label={'Collection'} animatedStyle={animatedStyle} />

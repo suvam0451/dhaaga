@@ -1,4 +1,3 @@
-// @ts-ignore-next-line
 import TLDs from 'tlds';
 import { AppBskyRichtextFacet } from '@atproto/api';
 

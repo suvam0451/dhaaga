@@ -12,8 +12,8 @@ type Props = {
 	data: ProfileHas[];
 	onToggle: (profile: Profile) => void;
 	onAddNewProfile: () => void;
-	Header?: JSX.Element;
-	Footer?: JSX.Element;
+	Header?: any;
+	Footer?: any;
 };
 
 /**

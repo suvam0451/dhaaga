@@ -1,3 +1,4 @@
+import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import {
 	clamp,
 	useAnimatedScrollHandler,
@@ -14,7 +15,7 @@ const END_OF_CONTAINER_SCROLL_THRESHOLD = 40;
  * @param height
  * @param onEndReached
  */
-function useHideTopNavUsingReanimated(
+function useScrollHandleAnimatedList(
 	onEndReached: () => void = () => {},
 	height: number = 52,
 ) {
@@ -23,7 +24,9 @@ function useHideTopNavUsingReanimated(
 	// 0 = visible, -NAVBAR_HEIGHT = hidden
 	const navbarOffset = useSharedValue(0);
 
-	const scrollHandler = useAnimatedScrollHandler({
+	const scrollHandler: (
+		event: NativeSyntheticEvent<NativeScrollEvent>,
+	) => void = useAnimatedScrollHandler({
 		onScroll: (event) => {
 			/**
 			 * handle reaching the bottom of the container
@@ -72,4 +75,4 @@ function useHideTopNavUsingReanimated(
 	return { scrollHandler, animatedStyle };
 }
 
-export default useHideTopNavUsingReanimated;
+export default useScrollHandleAnimatedList;

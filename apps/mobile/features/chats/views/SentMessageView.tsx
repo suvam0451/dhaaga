@@ -1,10 +1,10 @@
 import { View, StyleSheet } from 'react-native';
 import { AppText } from '#/components/lib/Text';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import { AppMessageObject } from '#/types/app-message.types';
+import type { MessageObjectType } from '@dhaaga/bridge';
 
 type Props = {
-	item: AppMessageObject;
+	item: MessageObjectType;
 };
 
 function SentMessageView({ item }: Props) {

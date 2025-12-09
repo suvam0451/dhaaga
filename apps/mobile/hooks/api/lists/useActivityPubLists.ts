@@ -52,17 +52,13 @@ function useActivityPubLists() {
 			antennas: [],
 		};
 
-		const { data, error } = await client.lists.list();
-		if (error) {
-			console.log('[WARN]: error fetching lists');
-		} else {
-			retval.lists = data.map((o) => ({
-				id: o.id,
-				label: o.title || o.name,
-				isPublic: o.isPublic || false,
-				userIds: o.userIds || [],
-			}));
-		}
+		const data = await client.lists.list();
+		retval.lists = data.map((o) => ({
+			id: o.id,
+			label: o.title || o.name,
+			isPublic: o.isPublic || false,
+			userIds: o.userIds || [],
+		}));
 
 		if (
 			[
@@ -71,18 +67,14 @@ function useActivityPubLists() {
 				KNOWN_SOFTWARE.SHARKEY,
 			].includes(driver)
 		) {
-			const { data: antennaData, error: antennaError } = await (
+			const antennaData = await (
 				client as MisskeyApiAdapter
 			).lists.listAntennas();
 
-			if (antennaError) {
-				console.log('[WARN]: error fetching antennas');
-			} else {
-				retval.antennas = antennaData.map((o) => ({
-					id: o.id,
-					label: o.name,
-				}));
-			}
+			retval.antennas = antennaData.map((o) => ({
+				id: o.id,
+				label: o.name,
+			}));
 		}
 		return retval;
 	}

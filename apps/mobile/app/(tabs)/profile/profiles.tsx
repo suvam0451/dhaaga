@@ -18,7 +18,7 @@ import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -152,7 +152,7 @@ function Page() {
 		show(APP_BOTTOM_SHEET_ENUM.ADD_PROFILE, true);
 	}
 
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingReanimated();
+	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 	return (
 		<>
 			<NavBar_Simple label={'Manage Profiles'} animatedStyle={animatedStyle} />

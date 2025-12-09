@@ -1,11 +1,12 @@
 import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { Image } from 'expo-image';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 type SelectedEmojiPreviewProps = {
-	selection: InstanceApi_CustomEmojiDTO | null;
+	selection: CustomEmojiObjectType | null;
 };
 
 const SelectedEmojiPreview = memo(

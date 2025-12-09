@@ -9,9 +9,9 @@ import { Image } from 'expo-image';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { router } from 'expo-router';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
 import Animated from 'react-native-reanimated';
 import { useState } from 'react';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 
 type MyFeedItemProps = {
 	item: FeedObjectType;
@@ -62,7 +62,7 @@ function Page() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
 	const { data, refetch } = useApiGetMyFeeds();
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingFlashList();
+	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 
 	function onRefresh() {
 		setIsRefreshing(true);

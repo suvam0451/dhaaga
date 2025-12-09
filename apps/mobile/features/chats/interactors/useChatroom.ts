@@ -72,18 +72,11 @@ function useChatroom() {
 			text: msg,
 			facets: generateFacets(msg),
 		});
-		if (sentMessageResult.error) {
-			throw new Error(sentMessageResult.error.message);
-		}
 
 		dispatch({
 			type: ChatroomReducerActionType.APPEND_MESSAGE,
 			payload: {
-				message: ChatParser.parse<unknown>(
-					sentMessageResult.data,
-					driver,
-					server,
-				),
+				message: ChatParser.parse<unknown>(sentMessageResult, driver, server),
 			},
 		});
 	}

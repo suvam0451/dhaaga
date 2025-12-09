@@ -7,7 +7,7 @@ import {
 	useUserTimelineState,
 } from '@dhaaga/core';
 import { useEffect, useState } from 'react';
-import useHideTopNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { FlatList, RefreshControl } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
@@ -61,7 +61,7 @@ function SimpleUserTimeline({
 	}
 
 	const { scrollHandler, animatedStyle } =
-		useHideTopNavUsingFlashList(onEndReached);
+		useScrollHandleFlatList(onEndReached);
 
 	/**
 	 * NOTE: AT proto does not return a detailed view

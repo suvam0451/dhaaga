@@ -7,7 +7,7 @@ import { appDimensions } from '#/styles/dimensions';
 import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import Animated from 'react-native-reanimated';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 
 type TimelinePostListViewProps = {
 	items: PostObjectType[];
@@ -34,7 +34,7 @@ function TimelinePostListView({
 		}
 	}
 	const { scrollHandler, animatedStyle } =
-		useHideTopNavUsingReanimated(onEndReached);
+		useScrollHandleAnimatedList(onEndReached);
 
 	return (
 		<View

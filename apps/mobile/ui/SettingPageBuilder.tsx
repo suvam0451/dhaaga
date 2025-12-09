@@ -1,5 +1,5 @@
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { ScrollView } from 'react-native';
@@ -11,7 +11,7 @@ type Props = {
 
 function SettingPageBuilder({ label, children }: Props) {
 	const { theme } = useAppTheme();
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingReanimated();
+	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 
 	return (
 		<>

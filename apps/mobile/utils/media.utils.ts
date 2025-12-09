@@ -248,35 +248,35 @@ class MediaUtils {
 		});
 	}
 
-	static async downloadGifBlobToCache(gifId: string, type: 'giphy' | 'tenor') {
-		const gifDir = FileSystem.cacheDirectory + 'composerCache/';
-
-		// Checks if gif directory exists. If not, creates it
-		const dirInfo = await FileSystem.getInfoAsync(gifDir);
-		if (!dirInfo.exists) {
-			await FileSystem.makeDirectoryAsync(gifDir, { intermediates: true });
-		}
-
-		let url = null;
-		if (type === 'giphy') {
-			url = `https://media1.giphy.com/media/${gifId}/200.gif`;
-		} else if (type === 'tenor') {
-			url = `https://media1.tenor.com/${gifId}/200.gif`;
-		}
-
-		const download = FileSystem.createDownloadResumable(
-			url,
-			FileSystem.cacheDirectory + 'composer.gif',
-			{},
-		);
-
-		try {
-			const { uri } = await download.downloadAsync();
-			console.log('Finished downloading to ', uri);
-		} catch (e) {
-			console.error(e);
-		}
-	}
+	// static async downloadGifBlobToCache(gifId: string, type: 'giphy' | 'tenor') {
+	// 	const gifDir = FileSystem.cacheDirectory + 'composerCache/';
+	//
+	// 	// Checks if gif directory exists. If not, creates it
+	// 	const dirInfo = await FileSystem.getInfoAsync(gifDir);
+	// 	if (!dirInfo.exists) {
+	// 		await FileSystem.makeDirectoryAsync(gifDir, { intermediates: true });
+	// 	}
+	//
+	// 	let url = null;
+	// 	if (type === 'giphy') {
+	// 		url = `https://media1.giphy.com/media/${gifId}/200.gif`;
+	// 	} else if (type === 'tenor') {
+	// 		url = `https://media1.tenor.com/${gifId}/200.gif`;
+	// 	}
+	//
+	// 	const download = FileSystem.createDownloadResumable(
+	// 		url,
+	// 		FileSystem.cacheDirectory + 'composer.gif',
+	// 		{},
+	// 	);
+	//
+	// 	try {
+	// 		const { uri } = await download.downloadAsync();
+	// 		console.log('Finished downloading to ', uri);
+	// 	} catch (e) {
+	// 		console.error(e);
+	// 	}
+	// }
 }
 
 export default MediaUtils;

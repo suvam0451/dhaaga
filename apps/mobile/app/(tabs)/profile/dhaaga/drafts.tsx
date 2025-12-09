@@ -1,13 +1,13 @@
 import { AppText } from '#/components/lib/Text';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { FlatList, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 
 function Page() {
 	const { theme } = useAppTheme();
-	const { scrollHandler, animatedStyle } = useHideTopNavUsingReanimated();
+	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 
 	return (
 		<>

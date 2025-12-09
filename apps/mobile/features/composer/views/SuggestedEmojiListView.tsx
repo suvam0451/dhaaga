@@ -2,11 +2,11 @@ import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
 import { AppText } from '#/components/lib/Text';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import { CustomEmojiObject } from '@dhaaga/bridge';
+import { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 type Props = {
-	suggestions: CustomEmojiObject[];
-	onPick: (item: CustomEmojiObject) => void;
+	suggestions: CustomEmojiObjectType[];
+	onPick: (item: CustomEmojiObjectType) => void;
 };
 
 const EMOJI_ICON_SIZE = 24;

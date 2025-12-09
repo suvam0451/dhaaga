@@ -5,6 +5,10 @@ export enum APP_ROUTING_ENUM {
 	MASTODON_SERVER_SELECTION = '/profile/onboard/add-mastodon',
 	ATPROTO_SIGNIN = '/profile/onboard/add-bluesky',
 
+	// 1. Hub
+	HUB_ROOT = '/',
+	HUB_GUIDE = '/user-guide',
+
 	// 2. Feed
 	FEED_ROOT = '/feed',
 	FEED_GUIDE = '/feed/user-guide',

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import UserListItemView from '../../timelines/view/UserListItemView';
 import { appDimensions } from '#/styles/dimensions';
-import useHideTopNavUsingReanimated from '#/hooks/anim/useHideTopNavUsingReanimated';
+import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 
 function ProfileFollowersPresenter() {
@@ -34,7 +34,7 @@ function ProfileFollowersPresenter() {
 	}
 
 	const { scrollHandler, animatedStyle } =
-		useHideTopNavUsingReanimated(loadMore);
+		useScrollHandleAnimatedList(loadMore);
 
 	/**
 	 * NOTE: AT proto does not return a detailed view

@@ -3,32 +3,30 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppBottomSheet_TimelineReference,
-	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { Fragment, useEffect, useMemo, useRef } from 'react';
 import { TimelineFetchMode } from '@dhaaga/core';
 import OverviewView from '../views/OverviewView';
 import TagTimelineControlPresenter from './TagTimelineControlPresenter';
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
-import { AppDivider } from '../../../../../components/lib/Divider';
+import { AppDivider } from '#/components/lib/Divider';
 import MenuView from '../views/MenuView';
 import LocalTimelineControlPresenter from './LocalTimelineControlPresenter';
 import useTimelineControllerInteractor from '../interactors/useTimelineControllerInteractor';
 import UserTimelineControlPresenter from './UserTimelineControlPresenter';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import {
 	AtprotoApiAdapter,
 	AtprotoUtils,
 	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
-import { appDimensions } from '../../../../../styles/dimensions';
-import { LinkingUtils } from '../../../../../utils/linking.utils';
+import { appDimensions } from '#/styles/dimensions';
+import { LinkingUtils } from '#/utils/linking.utils';
 import SyncStatusPresenter from '../../../../feeds/presenters/SyncStatusPresenter';
 import ProfileFeedAssignInteractor from '../../../../app-profiles/interactors/ProfileFeedAssignInteractor';
 
 function Divider() {
-	const { theme } = useAppTheme();
 	return (
 		<AppDivider.Hard
 			style={{
@@ -269,7 +267,9 @@ function TimelineControllerSheetPresenter() {
 				AtprotoUtils.generateFeedUrl(
 					client as AtprotoApiAdapter,
 					draft.query.id,
-				).then((o) => o.tap(LinkingUtils.openURL));
+				).then((o) => {
+					LinkingUtils.openURL(o);
+				});
 				break;
 			}
 		}

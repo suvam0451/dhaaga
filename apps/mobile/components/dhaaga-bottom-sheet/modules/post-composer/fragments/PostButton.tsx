@@ -87,7 +87,7 @@ function PostButton() {
 		}
 
 		try {
-			const { data, error } = await client.statuses.create({
+			const { data, error } = await client.posts.create({
 				status: state.text,
 				visibleUserIds: [],
 				mastoVisibility: _visibility,

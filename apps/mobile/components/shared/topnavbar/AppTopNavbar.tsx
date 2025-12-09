@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { ScrollView, StyleProp, ViewStyle, View } from 'react-native';
 import TopNavbarGeneric from './fragments/TopNavbarGeneric';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import Animated from 'react-native-reanimated';
 
 export enum APP_TOPBAR_TYPE_ENUM {
@@ -17,7 +17,7 @@ export enum APP_TOPBAR_TYPE_ENUM {
 type AutoHideNavBarProps = {
 	title: string;
 	children: any;
-	translateY: Animated.AnimatedInterpolation<string | number>;
+	translateY: any;
 	type?: APP_TOPBAR_TYPE_ENUM;
 	onRefresh?: () => void;
 	contentContainerStyle?: StyleProp<ViewStyle>;

@@ -4,7 +4,7 @@ import { AppText, SpecialText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
-import useHideNavUsingFlashList from '#/hooks/anim/useHideTopNavUsingFlashList';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 export type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
@@ -12,7 +12,7 @@ export type UserGuideContainerProps = {
 };
 
 function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
-	const { scrollHandler, animatedStyle } = useHideNavUsingFlashList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	const { theme } = useAppTheme();
 
 	const sectionStyle: StyleProp<ViewStyle> = {

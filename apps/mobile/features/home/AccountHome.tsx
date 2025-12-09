@@ -18,7 +18,7 @@ import { SpecialText } from '#/components/lib/Text';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
 import DriverService, { AppModulesProps } from '#/services/driver.service';
-import useApiGetMyAccount from '#/hooks/api/accounts/useApiGetMyAccount';
+import useApiMe from '#/hooks/useApiMe';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
 import MyProfileNavbar from '#/components/shared/topnavbar/MyProfileNavbar';
@@ -34,7 +34,7 @@ function AccountHome() {
 	const { theme } = useAppTheme();
 	const { acct } = useAppAcct();
 	const { driver } = useAppApiClient();
-	const { refetch, data } = useApiGetMyAccount();
+	const { refetch, data } = useApiMe();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { session } = useAppActiveSession();

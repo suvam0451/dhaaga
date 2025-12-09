@@ -1,10 +1,13 @@
 import type { AppBskyFeedGetAuthorFeed } from '@atproto/api';
 import { queryOptions } from '@tanstack/react-query';
 import {
+	ActivityPubService,
 	ApiTargetInterface,
+	AtprotoApiAdapter,
 	defaultResultPage,
 	DriverService,
 	DriverUserFindQueryType,
+	MisskeyApiAdapter,
 	PostParser,
 } from '@dhaaga/bridge';
 import type {
@@ -113,6 +116,52 @@ export function userGalleryQueryOpts(
 	return queryOptions<ResultPage<PostObjectType[]>>({
 		queryKey: [`dhaaga/profile/gallery`, userId],
 		queryFn: () => api(client, userId),
+		enabled: !!client && !!userId,
+	});
+}
+
+export function userGetPinnedPosts(client: ApiTargetInterface, userId: string) {
+	async function api() {
+		/**
+		 * Misskey returns pinned notes as part of
+		 * UserDetailed object
+		 */
+
+		if (ActivityPubService.misskeyLike(client.driver)) {
+			const { data, error } = await (client as MisskeyApiAdapter).users.get(
+				userId,
+			);
+			if (error) throw new Error(error.message);
+			const _data = data as any;
+			return PostParser.parse<unknown[]>(
+				_data.pinnedNotes,
+				client.driver,
+				client.server!,
+			).slice(0, 10);
+		} else if (ActivityPubService.blueskyLike(client.driver)) {
+			return PostParser.parse<unknown[]>(
+				await (client as AtprotoApiAdapter).users.getPinnedPosts(userId),
+				client.driver,
+				client.server!,
+			).slice(0, 10);
+		} else {
+			const data = await client.users.getPosts(userId, {
+				limit: 10,
+				pinned: true,
+				userId,
+			});
+			return PostParser.parse<unknown[]>(
+				data as any,
+				client.driver,
+				client.server!,
+			).slice(0, 10);
+		}
+	}
+
+	// Post Queries
+	return queryOptions<PostObjectType[]>({
+		queryKey: ['dhaaga/user/pins', client.key, userId],
+		queryFn: api,
 		enabled: !!client && !!userId,
 	});
 }

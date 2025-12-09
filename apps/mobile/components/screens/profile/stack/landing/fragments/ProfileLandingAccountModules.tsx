@@ -46,7 +46,7 @@ function ProfileLandingAccountModules() {
 			<ActionButton
 				Icon={
 					<AntDesign
-						name="like1"
+						name="like"
 						size={ICON_SIZE}
 						color={theme.complementary.a0}
 					/>
