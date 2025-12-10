@@ -1,8 +1,6 @@
 import UserPinSearchResultControllerView from '../views/UserPinSearchResultController';
 import UserPinSearchResultView from '../views/UserPinSearchResultView';
 import { View, StyleSheet } from 'react-native';
-import { AppDivider } from '#/components/lib/Divider';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
 import { useProfileMutation } from '../../app-profiles/api/useProfileMutation';
 import { Profile } from '@dhaaga/db';
 import { useSocialHubUserPinStatus } from '../api/useSocialHubUserPinStatus';
@@ -15,7 +13,6 @@ type Props = {
 };
 
 function UserSearchResultPresenter({ profile, user, onChangeCallback }: Props) {
-	const { theme } = useAppTheme();
 	const { data, refetch } = useSocialHubUserPinStatus(profile, user);
 	const { toggleUserPin } = useProfileMutation();
 	function onToggle() {
@@ -30,14 +27,9 @@ function UserSearchResultPresenter({ profile, user, onChangeCallback }: Props) {
 			});
 	}
 	return (
-		<View>
-			<View style={styles.root}>
-				<UserPinSearchResultView user={user} />
-				<UserPinSearchResultControllerView active={data} toggle={onToggle} />
-			</View>
-			<AppDivider.Hard
-				style={{ marginVertical: 8, backgroundColor: theme.background.a40 }}
-			/>
+		<View style={styles.root}>
+			<UserPinSearchResultView user={user} />
+			<UserPinSearchResultControllerView active={data} toggle={onToggle} />
 		</View>
 	);
 }
@@ -49,5 +41,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		paddingLeft: 4,
 		paddingRight: 12,
+		alignItems: 'center',
 	},
 });

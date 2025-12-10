@@ -2,23 +2,24 @@ import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppIcon } from '../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { AppIcon } from '../../lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useEffect, useRef, useState } from 'react';
-import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
-import UserSearchResultPresenter from './UserSearchResultPresenter';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { useApiSearchUsers } from '#/hooks/api/useApiSearch';
+import UserSearchResultPresenter from '#/features/social-hub/presenters/UserSearchResultPresenter';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { ProfileService } from '@dhaaga/db';
+import { AppDividerSoft } from '#/ui/Divider';
 
 function UserAddSheetPresenter() {
 	const { theme } = useAppTheme();
 	const [SearchQuery, setSearchQuery] = useState(null);
 	const [debouncedQuery, setDebouncedQuery] = useState(null);
-	const { data } = useApiSearchUsers(debouncedQuery, null);
+	const { data } = useApiSearchUsers('followings', debouncedQuery, null);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 	const { ctx } = useAppBottomSheet();
 	const [Profile, setProfile] = useState(null);
@@ -118,6 +119,13 @@ function UserAddSheetPresenter() {
 					paddingBottom: 50 + 16,
 				}}
 				keyboardShouldPersistTaps={'always'}
+				ItemSeparatorComponent={() => (
+					<AppDividerSoft
+						style={{
+							marginVertical: 10,
+						}}
+					/>
+				)}
 			/>
 		</View>
 	);

@@ -39,7 +39,7 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 	const dispatch = usePostTimelineDispatch()!;
 
 	const queryResult = useQuery(
-		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct?.identifier, {
 			type: TimelineFetchMode.USER,
 			maxId: State.appliedMaxId,
 			sessionId: State.sessionId,

@@ -2,17 +2,17 @@ import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { FlatList, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import { useApiSearchFeeds } from '../../../hooks/api/useApiSearch';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useApiSearchFeeds } from '#/hooks/api/useApiSearch';
 import { useEffect, useRef, useState } from 'react';
 import { ProfileService } from '@dhaaga/db';
-import FeedSearchResultPresenter from './FeedSearchResultPresenter';
-import { AppIcon } from '../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import FeedSearchResultPresenter from '#/components/dhaaga-bottom-sheet/hub/FeedSearchResultPresenter';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { APP_FONTS } from '#/styles/AppFonts';
 
 function BskyFeedAddSheetPresenter() {
 	const { theme } = useAppTheme();

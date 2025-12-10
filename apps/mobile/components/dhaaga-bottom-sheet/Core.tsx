@@ -1,34 +1,34 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useAnimatedHeight from './modules/_api/useAnimatedHeight';
-import WithComposerContext from '../../features/composer/contexts/useComposerCtx';
-import ComposerPresenter from '../../features/composer/presenters/ComposerPresenter';
-import UserPeekSheetPresenter from '../../features/user-profiles/presenters/UserPeekSheetPresenter';
+import WithComposerContext from '#/features/composer/contexts/useComposerCtx';
+import ComposerPresenter from '#/features/composer/presenters/ComposerPresenter';
+import UserPeekSheetPresenter from '#/features/user-profiles/presenters/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from './modules/AppBottomSheetPostMoreActions';
 import ABS_Select_Account from './modules/ABS_Select_Account';
 import AppBottomSheetPickThemePack from './modules/theme-pack/AppBottomSheetPickThemePack';
 import ABS_Link_Preview from './modules/ABS_Link_Preview';
 import ABS_TagDetails from './modules/ABS_TagDetails';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import AppBottomSheetUserMoreActions from './modules/AppBottomSheetUserMoreActions';
 import {
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../hooks/utility/global-state-extractors';
-import TagAddSheetPresenter from '../../features/social-hub/presenters/TagAddSheetPresenter';
-import UserAddSheetPresenter from '../../features/social-hub/presenters/UserAddSheetPresenter';
+} from '#/hooks/utility/global-state-extractors';
+import TagAddSheetPresenter from '#/components/dhaaga-bottom-sheet/hub/TagAddSheetPresenter';
+import UserAddSheetPresenter from '#/components/dhaaga-bottom-sheet/hub/UserAddSheetPresenter';
 import ShowComments from './post-metrics/ShowComments';
 import ShowLikes from './post-metrics/ShowLikes';
 import ShowShares from './post-metrics/ShowShares';
 import ABS_Post_Preview from './modules/ABS_Post_Preview';
 import ABS_Add_Reaction from './modules/ABS_Add_Reaction';
 import ABS_Add_Profile from './modules/ABS_Add_Profile';
-import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
-import CollectionAssignmentSheetPresenter from '../../features/collections/presenters/CollectionAssignmentSheetPresenter';
-import TimelineControllerSheetPresenter from '../../features/timelines/features/controller/presenters/TimelineControllerSheetPresenter';
-import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
-import FeedAddSheetPresenter from '../../features/social-hub/presenters/FeedAddSheetPresenter';
-import MoreActionsSheetPresenter from '../../features/feeds/presenters/MoreActionsSheetPresenter';
+import { appDimensions, appVerticalIndex } from '#/styles/dimensions';
+import CollectionAssignmentSheetPresenter from '#/features/collections/presenters/CollectionAssignmentSheetPresenter';
+import TimelineControllerSheetPresenter from '#/features/timelines/features/controller/presenters/TimelineControllerSheetPresenter';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import FeedAddSheetPresenter from '#/features/social-hub/presenters/FeedAddSheetPresenter';
+import MoreActionsSheetPresenter from '#/features/feeds/presenters/MoreActionsSheetPresenter';
 import { Fragment } from 'react';
 import ShowReactionDetails from '#/components/dhaaga-bottom-sheet/post-metrics/ShowReactionDetails';
 
@@ -38,30 +38,20 @@ import ShowReactionDetails from '#/components/dhaaga-bottom-sheet/post-metrics/S
  */
 function Handle() {
 	const { theme } = useAppTheme();
-	const { visible, hide, broadcastEndSession } = useAppBottomSheet();
+	const { visible } = useAppBottomSheet();
 
 	return (
-		<Animated.View
-			style={{
-				position: 'absolute',
-				alignItems: 'center',
-				justifyContent: 'center',
-				left: '50%',
-				transform: [{ translateX: '-50%' }],
-				top: 10,
-				zIndex: 9000,
-			}}
-		>
-			<Animated.View
-				style={{
-					height: visible ? 3 : 0,
-					width: 42,
-					backgroundColor: theme.secondary.a50,
-					marginBottom: 16,
-					borderRadius: 16,
-				}}
+		<View style={styles.handleContainer}>
+			<View
+				style={[
+					styles.handleContent,
+					{
+						height: visible ? 3 : 0,
+						backgroundColor: theme.secondary.a50,
+					},
+				]}
 			/>
-		</Animated.View>
+		</View>
 	);
 }
 /**
@@ -73,9 +63,22 @@ function Factory() {
 	if (animating) return <View />;
 
 	switch (type) {
+		/**
+		 * Hub Area
+		 */
+		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
+			return <TagAddSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
+			return <UserAddSheetPresenter />;
+		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED:
+			return <FeedAddSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_PROFILE:
 		case APP_BOTTOM_SHEET_ENUM.APP_PROFILE:
 			return <ABS_Add_Profile />;
+
+		/**
+		 * Uncategorized
+		 */
 		case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
 			return (
 				<WithComposerContext>
@@ -104,12 +107,6 @@ function Factory() {
 			return <AppBottomSheetUserMoreActions />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK:
 			return <CollectionAssignmentSheetPresenter />;
-		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_TAG:
-			return <TagAddSheetPresenter />;
-		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER:
-			return <UserAddSheetPresenter />;
-		case APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED:
-			return <FeedAddSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES:
 			return <ShowComments />;
 		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES:
@@ -180,6 +177,20 @@ function AppBottomSheet() {
 }
 
 const styles = StyleSheet.create({
+	handleContainer: {
+		position: 'absolute',
+		alignItems: 'center',
+		justifyContent: 'center',
+		left: '50%',
+		transform: [{ translateX: '-50%' }],
+		top: 10,
+		zIndex: 9000,
+	},
+	handleContent: {
+		width: 42,
+		marginBottom: 16,
+		borderRadius: 16,
+	},
 	rootContainer: {
 		bottom: 0,
 		width: '100%',

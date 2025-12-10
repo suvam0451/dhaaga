@@ -12,7 +12,7 @@ export const APP_DEFAULT_COLOR_SCHEME: AppColorSchemeType = {
 		link: '#45a0be',
 	},
 	background: {
-		a0: '#121212',
+		a0: '#121212', // '#e8b578',
 		a10: '#121212',
 		a20: '#121212',
 		a30: '#121212',
@@ -89,8 +89,8 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			// #f5f4f6
 		},
 		background: {
-			a0: '#121212', // 7%
-			a10: '#171717', // 9%
+			a0: '#121212', // e8b578, '#121212', // 7%
+			a10: '#171717', // e8b578, 9%
 			a20: '#1c1c1c', // 11%
 			a30: '#212121', // 13%
 			a40: '#262626', // 15%
@@ -102,22 +102,6 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			emphasisC: '#9f9e9f', // 62%
 			low: '#5c5c5c',
 			misc: '#3d3d3d',
-		},
-		harmonyL: {
-			a0: '#f6ad97',
-			a10: '#f8b6a2',
-			a20: '#fabfad',
-			a30: '#fbc8b9',
-			a40: '#fdd1c4',
-			a50: '#fedad0',
-		},
-		harmonyR: {
-			a0: '#e0f697',
-			a10: '#e4f7a3',
-			a20: '#e8f8af',
-			a30: '#ebf9ba',
-			a40: '#effac6',
-			a50: '#f2fbd1',
 		},
 		reactions: {
 			active: '#303030',

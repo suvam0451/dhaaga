@@ -2,13 +2,12 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppPublishers,
-	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { withPostItemContext } from '../../../../containers/contexts/WithPostItemContext';
-import { AppToggleIcon } from '../../../../lib/Icon';
-import { appDimensions } from '../../../../../styles/dimensions';
 import { ActivityPubService } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import { Pressable } from 'react-native';
+import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
 
 /**
  * Bookmark toggle indicator button
@@ -16,7 +15,6 @@ import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
 function PostActionButtonToggleBookmark() {
 	const { driver } = useAppApiClient();
 	const { dto } = withPostItemContext();
-	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 	const { postObjectActions } = useAppPublishers();
 
@@ -32,20 +30,20 @@ function PostActionButtonToggleBookmark() {
 	const FLAG = dto?.interaction?.bookmarked;
 
 	return (
-		<AppToggleIcon
-			size={appDimensions.timelines.actionButtonSize}
-			flag={FLAG}
-			activeIconId={'bookmark'}
-			inactiveIconId={'bookmark-outline'}
-			inactiveTint={theme.secondary.a40}
-			activeTint={theme.primary.a0}
-			onPress={_toggleBookmark}
+		<Pressable
 			style={{
 				paddingVertical: 6,
 				marginRight: -6,
 				paddingHorizontal: 6,
 			}}
-		/>
+			onPress={_toggleBookmark}
+		>
+			{FLAG ? (
+				<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_ACTIVE} />
+			) : (
+				<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_INACTIVE} />
+			)}
+		</Pressable>
 	);
 }
 

@@ -3,8 +3,8 @@ import MediaItem from '#/ui/media/MediaItem';
 import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
 import { TextContentView } from '#/components/common/status/TextContentView';
-import { QuoteOrnament } from '#/features/post-view/components/Ornaments';
 import { PostObjectType } from '@dhaaga/bridge';
+import { QuotedPostBorderDecorations } from '#/skins/BorderDecorations';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -21,7 +21,7 @@ function StatusQuoted({ post }: Props) {
 		return <View />;
 	}
 	return (
-		<QuoteOrnament>
+		<QuotedPostBorderDecorations>
 			<PostCreatedBy style={{ marginBottom: SECTION_MARGIN_BOTTOM }} />
 			<MediaItem
 				attachments={post.content.media}
@@ -34,7 +34,7 @@ function StatusQuoted({ post }: Props) {
 				mentions={[]}
 				emojiMap={post.calculated.emojis}
 			/>
-		</QuoteOrnament>
+		</QuotedPostBorderDecorations>
 	);
 }
 

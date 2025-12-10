@@ -3,6 +3,7 @@ import { AppIcon } from '#/components/lib/Icon';
 import { AppText } from '#/components/lib/Text';
 import { View, StyleSheet } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
+import { AttachedLinkBorderDecorations } from '#/skins/BorderDecorations';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -28,72 +29,9 @@ export function PinOrnament({ isPinned }: PinOrnamentProps) {
 	);
 }
 
-export function QuoteOrnament({ children }: any) {
-	const { theme } = useAppTheme();
-
-	return (
-		<View
-			style={[
-				styles.quoteOrnamentRoot,
-				{
-					borderColor: theme.complementaryA.a0,
-					marginBottom: SECTION_MARGIN_BOTTOM * 1.5,
-				},
-			]}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginBottom: SECTION_MARGIN_BOTTOM,
-				}}
-			>
-				<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
-				<AppText.SemiBold
-					style={{
-						color: theme.complementary.a0,
-						marginLeft: 4,
-					}}
-				>
-					Quoted this Post
-				</AppText.SemiBold>
-			</View>
-			{children}
-		</View>
-	);
-}
-
 export function LinkAttachmentOrnament({ children }: any) {
-	const { theme } = useAppTheme();
-
 	return (
-		<View
-			style={[
-				styles.quoteOrnamentRoot,
-				{
-					borderColor: theme.complementaryA.a0,
-				},
-			]}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginBottom: SECTION_MARGIN_BOTTOM,
-				}}
-			>
-				<AppIcon id={'link-outline'} size={14} color={theme.complementary.a0} />
-				<AppText.SemiBold
-					style={{
-						color: theme.complementary.a0,
-						marginLeft: 4,
-					}}
-				>
-					Shared this Link
-				</AppText.SemiBold>
-			</View>
-			{children}
-		</View>
+		<AttachedLinkBorderDecorations>{children}</AttachedLinkBorderDecorations>
 	);
 }
 

@@ -8,20 +8,21 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useRef } from 'react';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
+} from '#/hooks/utility/global-state-extractors';
 import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
-import useAppNavigator from '../../../../states/useAppNavigator';
+import useAppNavigator from '#/states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import { RandomUtil, ActivityPubService } from '@dhaaga/bridge';
 import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
+import OriginalPosterDecoration from '#/skins/OriginalPosterDecoration';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
@@ -247,15 +248,7 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 					onPress={onAvatarClicked}
 					style={styles.authorAvatarContainer}
 				>
-					{/* @ts-ignore */}
-					<Image
-						style={{
-							flex: 1,
-							padding: 2,
-							borderRadius: TIMELINE_PFP_SIZE / 2,
-						}}
-						source={{ uri: STATUS_DTO.postedBy.avatarUrl }}
-					/>
+					<OriginalPosterDecoration uri={STATUS_DTO.postedBy.avatarUrl} />
 				</TouchableOpacity>
 			</View>
 

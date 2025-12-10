@@ -2,10 +2,10 @@ import type { PostLinkAttachmentObjectType } from '@dhaaga/bridge';
 import { Dimensions, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';
-import { LinkAttachmentOrnament } from '#/features/post-view/components/Ornaments';
 import { NativeTextMedium } from '#/ui/NativeText';
 import { BaseUrlNormalizationService } from '@dhaaga/bridge';
 import { AppDividerSoft } from '#/ui/Divider';
+import { AttachedLinkBorderDecorations } from '#/skins/BorderDecorations';
 
 type Props = {
 	items: PostLinkAttachmentObjectType[];
@@ -24,7 +24,7 @@ function PostLinkAttachments({ items }: Props) {
 	return (
 		<View>
 			{items.map((item: PostLinkAttachmentObjectType, i) => (
-				<LinkAttachmentOrnament key={i}>
+				<AttachedLinkBorderDecorations key={i}>
 					{item.bannerImageUrl ? (
 						<Image
 							source={{
@@ -55,7 +55,7 @@ function PostLinkAttachments({ items }: Props) {
 							{BaseUrlNormalizationService.stripHttps(item.url)}
 						</NativeTextMedium>
 					</View>
-				</LinkAttachmentOrnament>
+				</AttachedLinkBorderDecorations>
 			))}
 		</View>
 	);

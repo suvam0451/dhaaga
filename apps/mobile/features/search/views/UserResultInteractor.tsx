@@ -21,6 +21,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	const TimelineState = useUserTimelineState();
 	const TimelineDispatch = useUserTimelineDispatch();
 	const { data, fetchStatus, refetch } = useApiSearchUsers(
+		'suggested',
 		State.q,
 		TimelineState.appliedMaxId,
 	);

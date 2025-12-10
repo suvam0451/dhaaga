@@ -94,7 +94,7 @@ function Content() {
 	}, [State.feedType, State.query, State.opts, db, acct?.identifier]);
 
 	const queryResult = useQuery(
-		unifiedPostFeedQueryOptions(client, driver, server, acct.identifier, {
+		unifiedPostFeedQueryOptions(client, driver, server, acct?.identifier, {
 			type: State.feedType,
 			query: State.query,
 			opts: State.opts,

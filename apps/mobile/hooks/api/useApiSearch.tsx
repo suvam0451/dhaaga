@@ -1,18 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAppApiClient } from '../utility/global-state-extractors';
 import {
-	UserParser,
+	useAppAcct,
+	useAppApiClient,
+} from '../utility/global-state-extractors';
+import {
 	DriverService,
 	defaultResultPage,
 	FeedParser,
 	AtprotoApiAdapter,
-	ActivityPubService,
 } from '@dhaaga/bridge';
 import type {
 	UserObjectType,
 	FeedObjectType,
 	ResultPage,
 } from '@dhaaga/bridge';
+import { searchUsersQueryOpts } from '@dhaaga/react';
 
 type FeedResultPage = ResultPage<FeedObjectType[]>;
 
@@ -54,40 +56,18 @@ export function useApiSearchFeeds(q: string, maxId: string | null) {
 
 /**
  * Search and paginate through for users
+ * @param defaultTo
  * @param q query
  * @param maxId cursor
  */
-export function useApiSearchUsers(q: string, maxId: string | null) {
-	const { client, server, driver } = useAppApiClient();
-
-	async function api(): Promise<UserObjectType[]> {
-		const { data, error } = await client.search.findUsers({
-			maxId,
-			q,
-			limit: 10,
-			query: q,
-			type: 'accounts',
-			untilId: maxId,
-		});
-		if (error) {
-			console.log('[WARN]: error searching for posts', error.message);
-			throw new Error(error.message);
-		}
-		if (ActivityPubService.blueskyLike(driver)) {
-			return UserParser.parse<unknown[]>(
-				(data as any).data.actors as any[],
-				driver,
-				server,
-			);
-		} else {
-			return UserParser.parse<unknown[]>(data as any[], driver, server);
-		}
-	}
-
-	return useQuery<UserObjectType[]>({
-		queryKey: ['search/users', server, q, maxId],
-		queryFn: api,
-		enabled: client !== null && !!q,
-		initialData: [],
-	});
+export function useApiSearchUsers(
+	defaultTo: 'auto' | 'followings' | 'suggested',
+	q: string,
+	maxId: string | null,
+) {
+	const { client } = useAppApiClient();
+	const { acct } = useAppAcct();
+	return useQuery<UserObjectType[]>(
+		searchUsersQueryOpts(client, acct.identifier, defaultTo, q, maxId),
+	);
 }

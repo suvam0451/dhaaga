@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import {
 	NavbarButtonDefault,
 	NavbarButtonDisabledOnSignOut,
@@ -11,6 +10,7 @@ import {
 	useAppActiveSession,
 	useAppTheme,
 } from '#/hooks/utility/global-state-extractors';
+import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
 
 const BOTTOM_NAVBAR_HEIGHT = 50; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
@@ -54,15 +54,15 @@ export default function TabLayout() {
 					tabBarButton: NavbarButtonDefault,
 					tabBarIcon: ({ focused, color, size }) =>
 						focused ? (
-							<Ionicons
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_ACTIVE}
 								size={size + ICON_A_SIZE_OFFSET}
-								name="home"
 								color={color}
 							/>
 						) : (
-							<Ionicons
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_INACTIVE}
 								size={size + ICON_A_SIZE_OFFSET}
-								name="home-outline"
 								color={color}
 							/>
 						),
@@ -74,16 +74,16 @@ export default function TabLayout() {
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>
 						focused ? (
-							<Ionicons
-								name="newspaper"
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE}
 								size={size + ICON_B_SIZE_OFFSET}
-								color={!acct ? theme.background.a50 : color}
+								color={color}
 							/>
 						) : (
-							<Ionicons
-								name="newspaper-outline"
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_INACTIVE}
 								size={size + ICON_B_SIZE_OFFSET}
-								color={!acct ? theme.background.a50 : color}
+								color={color}
 							/>
 						),
 				}}
@@ -94,14 +94,14 @@ export default function TabLayout() {
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>
 						focused ? (
-							<Ionicons
-								name="compass"
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_ACTIVE}
 								size={size + ICON_C_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
 						) : (
-							<Ionicons
-								name="compass-outline"
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_INACTIVE}
 								size={size + ICON_C_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
@@ -115,14 +115,14 @@ export default function TabLayout() {
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>
 						focused ? (
-							<Ionicons
-								name="file-tray"
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_ACTIVE}
 								size={size + ICON_D_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
 						) : (
-							<Ionicons
-								name="file-tray-outline"
+							<DhaagaSkinnedIcon
+								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_INACTIVE}
 								size={size + ICON_D_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>

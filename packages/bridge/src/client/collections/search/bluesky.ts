@@ -51,6 +51,17 @@ class BlueskySearchRouter implements SearchRoute {
 
 	async findUsers(
 		q: DhaagaJsUserSearchDTO,
+	): PaginatedPromise<AppBskyActorDefs.ProfileView[]> {
+		const agent = getBskyAgent(this.dto);
+		const data = await agent.app.bsky.actor.searchActors({
+			q: q.q,
+			limit: q.limit || 8,
+		});
+		return { data: data.data.actors, maxId: null };
+	}
+
+	async findUsersTypeAhead(
+		q: DhaagaJsUserSearchDTO,
 	): PaginatedPromise<AppBskyActorDefs.ProfileViewBasic[]> {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.app.bsky.actor.searchActorsTypeahead({

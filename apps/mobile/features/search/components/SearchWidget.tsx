@@ -65,7 +65,7 @@ function SearchWidget({
 				rotation.value = withTiming(0, { duration: 200 });
 				containerWidth.value = withTiming(64, { duration: 200 });
 				isRotated.value = withTiming(0, { duration: 0 });
-				borderRadius.value = withTiming(50, { duration: 300 });
+				borderRadius.value = withTiming(16, { duration: 300 });
 			}, 260);
 		}
 
@@ -98,7 +98,7 @@ function SearchWidget({
 		return {
 			bottom: isRotated.value
 				? withTiming(0, { duration: 300 })
-				: withTiming(32, { duration: 180 }),
+				: withTiming(64, { duration: 180 }),
 		};
 	});
 
