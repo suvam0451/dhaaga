@@ -7,6 +7,7 @@ import { appDimensions } from '../../../../styles/dimensions';
 import { TextContentView } from '../TextContentView';
 import { AppText } from '../../../lib/Text';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
+import SantaWaveFromSleigh from '#/skins/christmas/decorators/SantaWaveFromSleigh';
 
 type Props = {
 	avatarUrl: string;
@@ -50,13 +51,17 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 						}}
 					/>
 				</View>
-				<TextContentView
-					tree={parsedDisplayName}
-					variant={'displayName'}
-					mentions={[]}
-					emojiMap={new Map()}
-					style={{ marginLeft: 6, flex: 1 }}
-				/>
+				<View style={{ marginLeft: 6, flex: 1, flexDirection: 'row' }}>
+					<TextContentView
+						tree={parsedDisplayName}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={new Map()}
+					/>
+					<View style={{ marginLeft: 6 }}>
+						<SantaWaveFromSleigh size={20} />
+					</View>
+				</View>
 				<AppText.Normal
 					style={{
 						color: theme.secondary.a20,
