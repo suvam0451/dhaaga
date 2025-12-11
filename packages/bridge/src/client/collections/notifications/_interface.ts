@@ -8,26 +8,10 @@ import type {
 	MastoNotification,
 } from '#/types/mastojs.types.js';
 import type { MegaNotification } from '#/types/megalodon.types.js';
-import type {
-	DriverNotificationType,
-	KNOWN_SOFTWARE,
-} from '#/client/utils/driver.js';
+import type { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { Endpoints } from 'misskey-js';
 import { PaginatedPromise } from '#/types/api-response.js';
-
-export type NotificationGetQueryDto = {
-	limit: number;
-	minId?: string;
-	maxId?: string; // doubles as untilId for misskey
-	accountId?: string; // restrict to notifications received from this account
-	types?: DriverNotificationType[];
-	excludeTypes?: DriverNotificationType[];
-	markAsRead?: boolean; // misskey
-	excludeType?: string[];
-	includeType?: string[];
-};
-
-export type Pleroma_Notification_Type = '';
+import { NotificationGetQueryDto } from '#/client/typings.js';
 
 export interface NotificationsRoute {
 	/**

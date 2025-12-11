@@ -14,14 +14,15 @@ import type {
 	MastoFeaturedTag,
 	MastoRelationship,
 } from '#/types/mastojs.types.js';
+import { AccountRoute } from './_interface.js';
 import {
 	AccountMutePostDto,
-	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
-} from './_interface.js';
-import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
+	FollowPostDto,
+	GetPostsQueryDTO,
+} from '../../typings.js';
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';

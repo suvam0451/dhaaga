@@ -13,7 +13,6 @@ import BlueskyTimelinesRouter from '../collections/timelines/bluesky.js';
 import BlueskyTrendsRouter from '../collections/trends/bluesky.js';
 import { AppAtpSessionData } from '../../types/atproto.js';
 import BlueskyFeedRouter from '../collections/feeds/bluesky.js';
-import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 import { getXrpcAgent } from '../../utils/atproto.js';
 
@@ -37,7 +36,6 @@ class Adapter implements ApiTargetInterface {
 	timelines: BlueskyTimelinesRouter;
 	trends: BlueskyTrendsRouter;
 	feeds: BlueskyFeedRouter;
-	user: UserRoute;
 
 	dto: AtprotoClientCreateDTO;
 
@@ -63,7 +61,6 @@ class Adapter implements ApiTargetInterface {
 		this.timelines = new BlueskyTimelinesRouter(this.dto);
 		this.trends = new BlueskyTrendsRouter(this.dto);
 		this.feeds = new BlueskyFeedRouter(this.dto);
-		this.user = new UserRoute(this.dto);
 	}
 
 	getAgent() {

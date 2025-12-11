@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Octicons from '@expo/vector-icons/Octicons';
-import { useAppTheme } from '../utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 export enum APP_POST_VISIBILITY {
 	PUBLIC = 'Public', // same in misskey

@@ -5,10 +5,9 @@ import {
 	ActivityPubService,
 	ActivityPubReactionsService,
 } from '@dhaaga/bridge';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '#/states/_global';
 import { UserParser } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 
 type ReactionDetails = {
 	id: string;
@@ -19,14 +18,9 @@ type ReactionDetails = {
 };
 
 function useGetReactionDetails(postId: string, reactionId: string) {
-	const { client, acct, driver, me } = useGlobalState(
-		useShallow((o) => ({
-			me: o.me,
-			driver: o.driver,
-			acct: o.acct,
-			client: o.router,
-		})),
-	);
+	const { client, driver } = useAppApiClient();
+	const { acct } = useActiveUserSession();
+	const { me } = useActiveUserSession();
 	const [Data, setData] = useState<ReactionDetails>(null);
 
 	async function api(): Promise<ReactionDetails> {
@@ -36,18 +30,12 @@ function useGetReactionDetails(postId: string, reactionId: string) {
 			acct?.server,
 		);
 		if (ActivityPubService.pleromaLike(driver)) {
-			const { data, error } = await (
-				client as PleromaApiAdapter
-			).posts.getReactions(postId);
-
-			if (error) {
-				return null;
-			}
-
+			const data = await (client as PleromaApiAdapter).posts.getReactions(
+				postId,
+			);
 			const match = data.find((o) => o.name === id);
-			if (!match) {
-				return null;
-			}
+			if (!match) return null;
+
 			return {
 				id: match.name,
 				count: match.count,

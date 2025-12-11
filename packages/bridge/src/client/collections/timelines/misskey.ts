@@ -1,12 +1,9 @@
-import {
-	DhaagaJsTimelineQueryOptions,
-	DriverTimelineGetApiResponse,
-	TimelinesRoute,
-} from './_interface.js';
+import { DriverTimelineGetApiResponse, TimelinesRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { DhaagaJsTimelineQueryOptions } from '#/client/typings.js';
 
 export class MisskeyTimelinesRouter implements TimelinesRoute {
 	direct: FetchWrapper;

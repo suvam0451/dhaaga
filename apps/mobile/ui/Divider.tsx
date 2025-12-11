@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { StyleProp, View, ViewStyle } from 'react-native';
 
 type Props = {

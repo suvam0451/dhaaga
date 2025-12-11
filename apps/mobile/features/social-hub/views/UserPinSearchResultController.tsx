@@ -1,6 +1,6 @@
-import { AppIcon } from '../../../components/lib/Icon';
+import { AppIcon } from '#/components/lib/Icon';
 import { Pressable } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	active: boolean;

@@ -6,12 +6,13 @@ import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppDivider } from '#/components/lib/Divider';
 import { Image } from 'expo-image';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { router } from 'expo-router';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import Animated from 'react-native-reanimated';
 import { useState } from 'react';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
+import { NativeTextSpecial } from '#/ui/NativeText';
 
 type MyFeedItemProps = {
 	item: FeedObjectType;
@@ -77,7 +78,7 @@ function Page() {
 				renderItem={({ item }) => <MyFeedItem item={item} />}
 				onScroll={scrollHandler}
 				ListHeaderComponent={
-					<SpecialText
+					<NativeTextSpecial
 						style={{
 							fontSize: 32,
 							marginHorizontal: 10,
@@ -85,7 +86,7 @@ function Page() {
 						}}
 					>
 						My Feeds
-					</SpecialText>
+					</NativeTextSpecial>
 				}
 				contentContainerStyle={{
 					marginTop: appDimensions.topNavbar.scrollViewTopPadding,

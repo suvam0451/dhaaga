@@ -5,7 +5,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { useCollectionDetailState } from '../contexts/CollectionDetailCtx';
 
 type ControlHeadersProps = {

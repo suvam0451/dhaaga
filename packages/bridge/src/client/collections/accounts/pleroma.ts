@@ -1,11 +1,11 @@
+import { AccountRoute } from './_interface.js';
 import {
 	AccountMutePostDto,
-	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
-} from './_interface.js';
-import { GetPostsQueryDTO } from '../../types/_interface.js';
+	GetPostsQueryDTO,
+} from '../../typings.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type {
 	MastoAccount,

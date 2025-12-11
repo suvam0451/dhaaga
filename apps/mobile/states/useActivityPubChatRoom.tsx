@@ -1,7 +1,6 @@
 import { PostTargetInterface, UserTargetInterface } from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
-import useGlobalState from './_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '#/states/global/hooks';
 
 type Type = {
 	participants: UserTargetInterface[];
@@ -63,12 +62,7 @@ function WithActivitypubChatRoomContext({
 	const [Tails, setTails] = useState([]);
 	const [Heads, setHeads] = useState([]);
 
-	const { client } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-			me: o.me,
-		})),
-	);
+	const { client } = useAppApiClient();
 
 	useEffect(() => {
 		if (!client) return;

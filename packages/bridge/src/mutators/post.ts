@@ -215,17 +215,26 @@ class Mutator {
 		client: ApiTargetInterface,
 		input: PostObjectType,
 	): Promise<PostObjectType> {
-		if (!DriverService.canBookmark(client.driver)) {
-			console.log('[WARN]: bookmarking not supported');
-			return input;
-		}
-
 		const target = PostInspector.getContentTarget(input);
+
+		if (DriverService.supportsAtProto(client.driver)) {
+			if (target.meta.uri === undefined || target.meta.cid === undefined) {
+				console.log(
+					'[WARN]: missing uri or cid for atproto post, skipping bookmarking]',
+				);
+				return input;
+			}
+		}
 
 		try {
 			const _state = target.interaction.bookmarked
 				? await client.posts.unBookmark(target.id)
-				: await client.posts.bookmark(target.id);
+				: DriverService.supportsAtProto(client.driver)
+					? await (client as AtprotoApiAdapter).posts.atProtoBookmark(
+							target.meta.uri!,
+							target.meta.cid!,
+						)
+					: await client.posts.bookmark(target.id);
 			const draft: PostObjectType = JSON.parse(JSON.stringify(input));
 
 			if (draft.id === target.id) {

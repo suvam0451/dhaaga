@@ -7,7 +7,7 @@ import {
 	useUserMasonryGalleryState,
 } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/states/global/hooks';
 import { useEffect } from 'react';
 import { Image } from 'expo-image';
 import Animated from 'react-native-reanimated';

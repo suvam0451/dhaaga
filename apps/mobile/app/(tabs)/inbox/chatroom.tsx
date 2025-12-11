@@ -6,14 +6,10 @@ import {
 	Animated,
 } from 'react-native';
 import { useState } from 'react';
-import AppTopNavbar, {
-	APP_TOPBAR_TYPE_ENUM,
-} from '#/components/shared/topnavbar/AppTopNavbar';
 import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
-import { AppText, SpecialText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
 import { AppDivider } from '#/components/lib/Divider';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import useChatroom from '#/features/chats/interactors/useChatroom';
@@ -23,6 +19,8 @@ import { appDimensions } from '#/styles/dimensions';
 import RecievedMessageView from '#/features/chats/views/RecievedMessageView';
 import SentMessageView from '#/features/chats/views/SentMessageView';
 import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge';
+import { NativeTextSpecial } from '#/ui/NativeText';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 
 type ParticipantsProps = {
 	accounts: UserObjectType[];
@@ -97,79 +95,74 @@ function Page() {
 
 	return (
 		<KeyboardAvoidingView>
-			<AppTopNavbar
-				title={`Chat`}
-				translateY={translateY}
-				type={APP_TOPBAR_TYPE_ENUM.GENERIC}
-			>
-				<Animated.FlatList
-					data={state.messages}
-					renderItem={({ item }: { item: MessageObjectType }) => (
-						<Message message={item} myId={myId} members={state.room?.members} />
-					)}
-					contentContainerStyle={{
-						paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
-					}}
-					style={{ marginTop: 'auto' }}
-					ListHeaderComponent={
-						<View
+			<NavBar_Simple label={'Chat'} />
+			<Animated.FlatList
+				data={state.messages}
+				renderItem={({ item }: { item: MessageObjectType }) => (
+					<Message message={item} myId={myId} members={state.room?.members} />
+				)}
+				contentContainerStyle={{
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
+				}}
+				style={{ marginTop: 'auto' }}
+				ListHeaderComponent={
+					<View
+						style={{
+							flexGrow: 1,
+							flex: 1,
+							marginBottom: 16,
+							marginLeft: 8,
+						}}
+					>
+						<NativeTextSpecial
 							style={{
-								flexGrow: 1,
-								flex: 1,
-								marginBottom: 16,
-								marginLeft: 8,
+								color: theme.secondary.a20,
+								fontSize: 28,
+								marginBottom: 12,
 							}}
 						>
-							<SpecialText
-								style={{
-									color: theme.secondary.a20,
-									fontSize: 28,
-									marginBottom: 12,
-								}}
-							>
-								Participants
-							</SpecialText>
-							<View style={{ marginBottom: 16 }}>
-								<Participants accounts={state.room?.members || []} />
-							</View>
-
-							<AppDivider.Hard
-								style={{ backgroundColor: '#363636', height: 0.5 }}
-							/>
+							Participants
+						</NativeTextSpecial>
+						<View style={{ marginBottom: 16 }}>
+							<Participants accounts={state.room?.members || []} />
 						</View>
-					}
-					onScroll={onScroll}
-				/>
 
-				<AppDivider.Hard style={{ backgroundColor: '#363636', height: 0.5 }} />
-				<View
-					style={[
-						styles.sendInterface,
-						{
-							height: Math.max(56, height),
-						},
-					]}
-				>
-					<View>
-						<AppIcon
-							id={'chevron-right'}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-							size={28}
+						<AppDivider.Hard
+							style={{ backgroundColor: '#363636', height: 0.5 }}
 						/>
 					</View>
-					<InputView
-						height={height}
-						setHeight={setHeight}
-						text={MessageText}
-						setText={setMessageText}
-					/>
-					<SendButtonView
-						isEnabled={true}
-						onSend={onSendMessage}
-						isSending={IsMessageLoading}
+				}
+				onScroll={onScroll}
+			/>
+
+			<AppDivider.Hard style={{ backgroundColor: '#363636', height: 0.5 }} />
+			<View
+				style={[
+					styles.sendInterface,
+					{
+						height: Math.max(56, height),
+					},
+				]}
+			>
+				<View>
+					<AppIcon
+						id={'chevron-right'}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+						size={28}
 					/>
 				</View>
-			</AppTopNavbar>
+				<InputView
+					height={height}
+					setHeight={setHeight}
+					text={MessageText}
+					setText={setMessageText}
+				/>
+				<SendButtonView
+					isEnabled={true}
+					onSend={onSendMessage}
+					isSending={IsMessageLoading}
+				/>
+			</View>
 		</KeyboardAvoidingView>
 	);
 }

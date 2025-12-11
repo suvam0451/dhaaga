@@ -3,7 +3,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import useAppSettings from '../interactors/useAppSettings';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppDivider } from '#/components/lib/Divider';
 import { APP_SETTING_KEY } from '#/services/settings.service';
 import { AppIcon } from '#/components/lib/Icon';

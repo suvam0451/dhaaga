@@ -1,12 +1,11 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
-import useGlobalState from './_global';
-import { useShallow } from 'zustand/react/shallow';
 import {
+	useActiveUserSession,
 	useAppDb,
-	useAppGlobalStateActions,
 	useHub,
-} from '../hooks/utility/global-state-extractors';
+	useSessionManagement,
+} from './global/hooks';
 import SettingsService, { APP_SETTING_KEY } from '../services/settings.service';
 import useAppSettings from '../features/settings/interactors/useAppSettings';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 function useAppSession() {
 	// the app will be covered with a splash screen until everything is loaded
 	const [AppReady, setAppReady] = useState(false);
-	const [AccountReady, setAccountReady] = useState(true);
 	const [ProfileReady, setProfileReady] = useState(false);
 
 	const db = useSQLiteContext();
@@ -32,14 +30,8 @@ function useAppSession() {
 	const { i18n } = useTranslation();
 
 	const { db: loadedDb } = useAppDb();
-	const { appInit, restoreSession } = useAppGlobalStateActions();
-	const { loadActiveProfile, profileManager } = useGlobalState(
-		useShallow((o) => ({
-			acct: o.acct,
-			loadActiveProfile: o.loadActiveProfile,
-			profileManager: o.profileSessionManager,
-		})),
-	);
+	const { appInit, restoreSession } = useSessionManagement();
+	const { acctManager } = useActiveUserSession();
 	const { loadAccounts } = useHub();
 
 	// load essential app data
@@ -60,18 +52,10 @@ function useAppSession() {
 		if (lang) i18n.changeLanguage(lang);
 	}, [loadedDb]);
 
-	// load essential account data
-	useEffect(() => {
-		setAccountReady(false);
-		if (!loadedDb) return;
-		loadActiveProfile();
-		setAccountReady(true);
-	}, [loadedDb]);
-
 	// load essential profile data
 	useEffect(() => {
-		if (!profileManager || ProfileReady) return;
-		profileManager
+		if (!acctManager || ProfileReady) return;
+		acctManager
 			.loadCustomEmojis(true)
 			.then(() => {
 				console.log('[NOTE]: loaded instance emojis');
@@ -82,13 +66,9 @@ function useAppSession() {
 			.finally(() => {
 				setProfileReady(true);
 			});
-	}, [profileManager]);
+	}, [acctManager]);
 
-	return {
-		appReady: AppReady,
-		accountReady: AccountReady,
-		profileReady: ProfileReady,
-	};
+	return AppReady;
 }
 
 export default useAppSession;

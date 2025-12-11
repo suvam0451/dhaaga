@@ -6,8 +6,8 @@ import {
 	StyleProp,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '../styles/AppFonts';
-import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
 import useLoadingMoreIndicatorState from '../states/useLoadingMoreIndicatorState';
 import { FetchStatus } from '@tanstack/react-query';
 

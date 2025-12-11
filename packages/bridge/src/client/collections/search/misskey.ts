@@ -1,12 +1,12 @@
-import {
-	DhaagaJsPostSearchDTO,
-	DhaagaJsUserSearchDTO,
-	SearchRoute,
-} from './_interface.js';
+import { SearchRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import {
+	DhaagaJsPostSearchDTO,
+	DhaagaJsUserSearchDTO,
+} from '#/client/typings.js';
 
 export class MisskeySearchRouter implements SearchRoute {
 	direct: FetchWrapper;

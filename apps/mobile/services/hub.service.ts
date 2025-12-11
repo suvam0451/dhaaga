@@ -1,7 +1,7 @@
 import { ProfilePinnedTimeline } from '@dhaaga/db';
 import { APP_PINNED_OBJECT_TYPE } from './driver.service';
 import { TimelineFetchMode } from '@dhaaga/core';
-import { APP_ICON_ENUM } from '../components/lib/Icon';
+import APP_ICON_ENUM from '../components/lib/Icon';
 import { TFunction } from 'i18next';
 import { LOCALIZATION_NAMESPACE } from '../types/app.types';
 

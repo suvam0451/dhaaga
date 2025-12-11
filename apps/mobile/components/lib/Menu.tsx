@@ -6,12 +6,12 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { APP_ICON_ENUM, AppIcon } from './Icon';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import APP_ICON_ENUM, { AppIcon } from './Icon';
+import { useAppTheme } from '#/states/global/hooks';
 import { Loader } from './Loader';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
-import { appDimensions } from '../../styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { appDimensions } from '#/styles/dimensions';
 import { AppText } from './Text';
 
 type AppMenuOptionType = {

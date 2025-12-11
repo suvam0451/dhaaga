@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import ChristmasMistleToe from '#/skins/christmas/ChristmasMistleToe';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';

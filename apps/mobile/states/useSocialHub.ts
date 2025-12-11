@@ -6,10 +6,7 @@ import {
 	ProfileService,
 } from '@dhaaga/db';
 import { produce } from 'immer';
-import {
-	useAppDb,
-	useAppPublishers,
-} from '../hooks/utility/global-state-extractors';
+import { useAppDb, useAppPublishers } from './global/hooks';
 import { APP_EVENT_ENUM } from '../services/publishers/app.publisher';
 
 enum REDUCER_ACTION {

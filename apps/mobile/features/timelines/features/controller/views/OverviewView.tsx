@@ -1,8 +1,8 @@
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../../../components/lib/Text';
+import { useAppTheme } from '#/states/global/hooks';
+import { AppText } from '#/components/lib/Text';
 import { StyleSheet, View } from 'react-native';
 import { Fragment } from 'react';
-import { appDimensions } from '../../../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 
 type Props = {
 	title: string;

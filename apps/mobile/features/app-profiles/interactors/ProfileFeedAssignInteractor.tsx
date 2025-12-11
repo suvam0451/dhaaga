@@ -3,10 +3,10 @@ import ProfileAssignmentPresenter from '../presenters/ProfileAssignmentPresenter
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppDb,
 	useAppDialog,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useProfileMutation } from '../api/useProfileMutation';
 import { Profile, ProfileService } from '@dhaaga/db';
 import useApiGetFeedDetails from '../../timelines/features/controller/interactors/useApiGetFeedDetails';
@@ -21,7 +21,7 @@ function ProfileFeedAssignInteractor({ uri, Header, Footer }: Props) {
 	const { data, refetch } = useProfileListFeedAssignment(uri);
 	const { show } = useAppDialog();
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { toggleFeedPin } = useProfileMutation();
 	const { data: feedData } = useApiGetFeedDetails(uri);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
@@ -35,12 +35,12 @@ function ProfileFeedAssignInteractor({ uri, Header, Footer }: Props) {
 					returnObjects: true,
 				}) as string[],
 			},
-			t(`hub.profileAdd.placeholder`),
-			(name: string) => {
-				if (!!name) {
-					ProfileService.addProfile(db, acct, name);
-					refetch();
-				}
+			{ $type: 'text-prompt', placeholder: t(`hub.profileAdd.placeholder`) },
+			(ctx) => {
+				if (ctx.$type !== 'text-prompt') return;
+				if (!ctx.userInput) return;
+				ProfileService.addProfile(db, acct, ctx.userInput.trim());
+				refetch();
 			},
 		);
 	}

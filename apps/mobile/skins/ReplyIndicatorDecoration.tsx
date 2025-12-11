@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { View } from 'react-native';
 import CandyCaneLine from '#/skins/christmas/decorators/ChristmasCandyCane';
 import { useState } from 'react';

@@ -1,9 +1,9 @@
 import { Profile } from '@dhaaga/db';
 import { FlatList, View } from 'react-native';
 import AssignmentListControlView from '../../_shared/views/AssignmentListControlView';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import CollectionItem from '../../collections/components/CollectionItem';
 import { Fragment } from 'react';
 

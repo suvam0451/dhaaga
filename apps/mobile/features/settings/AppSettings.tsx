@@ -7,7 +7,7 @@ import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '#/components/shared/topnavbar/AppTabLandingNavbar';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { CoffeeIconOnly } from './components/Coffee';
 import { LinkingUtils } from '#/utils/linking.utils';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';

@@ -9,10 +9,7 @@ import {
 import { useState } from 'react';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import {
-	useAppDialog,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppDialog, useAppTheme } from '#/states/global/hooks';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
@@ -21,10 +18,10 @@ import { AccountCollection } from '@dhaaga/db';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { AppIcon } from '#/components/lib/Icon';
-import { AppText, SpecialText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppCtaButton } from '#/components/lib/Buttons';
 import { appDimensions } from '#/styles/dimensions';
+import { NativeTextNormal, NativeTextSemiBold } from '#/ui/NativeText';
 
 type ListItemViewProps = {
 	item: AccountCollection;
@@ -49,21 +46,21 @@ function ListItemView({ onPress, onLongPress, item }: ListItemViewProps) {
 				<AppIcon id={'albums-outline'} size={24} color={theme.secondary.a20} />
 			</View>
 			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
-				<AppText.SemiBold
+				<NativeTextSemiBold
 					style={{
 						fontSize: 18,
 						color: theme.primary.a0,
 					}}
 				>
 					{item.alias}
-				</AppText.SemiBold>
-				<AppText.Normal
+				</NativeTextSemiBold>
+				<NativeTextNormal
 					style={{
 						color: theme.secondary.a20,
 					}}
 				>
 					{item.desc || t(`collections.fallbackDesc`)}
-				</AppText.Normal>
+				</NativeTextNormal>
 			</View>
 			<View style={{ flexGrow: 1 }} />
 			<AppIcon
@@ -124,17 +121,6 @@ function ListView({
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
 					paddingHorizontal: 10,
 				}}
-				ListHeaderComponent={
-					<SpecialText
-						style={{
-							marginVertical: 24,
-							fontSize: 32,
-							color: theme.primary.a0,
-						}}
-					>
-						{t(`collections.name`)}
-					</SpecialText>
-				}
 				ListFooterComponent={
 					<AppCtaButton label={t(`collections.addButton`)} onPress={onAdd} />
 				}
@@ -171,9 +157,11 @@ function Page() {
 				}) as string[],
 				actions: [],
 			},
-			t(`collection.add.placeholder`),
-			(text: string) => {
-				add(text);
+			{ $type: 'text-prompt', placeholder: t(`collection.add.placeholder`) },
+			(ctx) => {
+				if (ctx.$type !== 'text-prompt') return;
+				if (!ctx.userInput) return;
+				add(ctx.userInput.trim());
 				refetch();
 			},
 		);
@@ -207,10 +195,14 @@ function Page() {
 								}) as string[],
 								actions: [],
 							},
-							t(`collection.rename.placeholder`),
-							(text: string) => {
-								rename(id, text);
-								hide();
+							{
+								$type: 'text-prompt',
+								placeholder: t(`collection.rename.placeholder`),
+							},
+							(ctx) => {
+								if (ctx.$type !== 'text-prompt') return;
+								if (!ctx.userInput) return;
+								rename(id, ctx.userInput.trim());
 							},
 						);
 					},
@@ -226,10 +218,15 @@ function Page() {
 								}) as string[],
 								actions: [],
 							},
-							t(`collection.describe.placeholder`),
-							(text: string) => {
+							{
+								$type: 'text-prompt',
+								placeholder: t(`collection.describe.placeholder`),
+							},
+							(ctx) => {
+								if (ctx.$type !== 'text-prompt') return;
+								if (!ctx.userInput) return;
+								const text = ctx.userInput.trim();
 								describe(id, text);
-								hide();
 							},
 						);
 					},

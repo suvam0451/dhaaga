@@ -1,7 +1,7 @@
 import { AppText } from '#/components/lib/Text';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { View } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 function Page() {
 	const { theme } = useAppTheme();

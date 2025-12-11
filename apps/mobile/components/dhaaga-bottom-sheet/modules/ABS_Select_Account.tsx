@@ -5,19 +5,19 @@ import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '@dhaaga/db';
-import useGlobalState from '#/states/_global';
+import useGlobalState from '#/states/global/store';
 import { useShallow } from 'zustand/react/shallow';
-import { useAppListAccounts } from '#/hooks/db/useAppListAccounts';
+import { useAccountsDb } from '#/hooks/db/useAccountsDb';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppGlobalStateActions,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppIcon } from '#/components/lib/Icon';
-import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 import RoutingUtils from '#/utils/routing.utils';
 import {
 	AccountDetails,
@@ -118,7 +118,7 @@ function ListItem({ acct }: ListItemProps) {
 
 function ABS_Select_Account() {
 	const { stateId, hide } = useAppBottomSheet();
-	const { data } = useAppListAccounts(stateId);
+	const { data } = useAccountsDb(stateId);
 
 	function onPressManageAccount() {
 		hide();

@@ -1,11 +1,8 @@
 import { Text } from 'react-native';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { RandomUtil } from '@dhaaga/bridge';
 import { AppText } from '../../lib/Text';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	value: string;

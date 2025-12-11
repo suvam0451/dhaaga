@@ -1,9 +1,9 @@
 import { View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { AppText } from '#/components/lib/Text';
+import { useAppTheme } from '#/states/global/hooks';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 function FeatureNotAvailable() {
 	const { theme } = useAppTheme();

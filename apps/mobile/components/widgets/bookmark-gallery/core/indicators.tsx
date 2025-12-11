@@ -109,8 +109,6 @@ export const UserSelectionIndicator = memo(function Foo({
 	);
 });
 
-export function TagSelectionIndicator({ isSelected, onClick }: Props) {}
-
 const base: ViewStyle = {
 	height: USER_SELECTION_BUBBLE_SIZE,
 	width: USER_SELECTION_BUBBLE_SIZE,

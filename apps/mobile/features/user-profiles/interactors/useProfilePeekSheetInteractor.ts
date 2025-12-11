@@ -1,7 +1,4 @@
-import {
-	useAppApiClient,
-	useAppBottomSheet,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient, useAppBottomSheet } from '#/states/global/hooks';
 import { useEffect, useState } from 'react';
 import { userProfileQueryOpts } from '@dhaaga/react';
 import { DriverUserFindQueryType } from '@dhaaga/bridge';

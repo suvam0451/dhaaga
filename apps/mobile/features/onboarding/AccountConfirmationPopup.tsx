@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppText } from '#/components/lib/Text';

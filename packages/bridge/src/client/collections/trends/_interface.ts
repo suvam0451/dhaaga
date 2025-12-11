@@ -1,4 +1,4 @@
-import { GetTrendingDTO } from '../../types/_interface.js';
+import { GetTrendingDTO } from '../../typings.js';
 import { Endpoints } from 'misskey-js';
 import {
 	MastoStatus,

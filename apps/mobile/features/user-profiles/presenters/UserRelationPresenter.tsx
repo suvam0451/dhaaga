@@ -1,7 +1,7 @@
 import useRelationInteractor from '../interactors/useRelationInteractor';
 import { View } from 'react-native';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
-import { useAppDialog } from '#/hooks/utility/global-state-extractors';
+import { useAppDialog } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { CurrentRelationView } from '#/components/lib/Buttons';

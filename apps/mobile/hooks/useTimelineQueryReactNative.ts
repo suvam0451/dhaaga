@@ -2,10 +2,7 @@ import { AppTimelineQuery } from '#/features/timelines/api/useTimelineController
 import { useQuery } from '@tanstack/react-query';
 import { DhaagaJsTimelineQueryOptions } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '@dhaaga/core';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 
 type TimelineQueryParams = {
@@ -25,7 +22,7 @@ type TimelineQueryParams = {
  */
 function useTimelineQueryReactNative(params: TimelineQueryParams) {
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery(
 		unifiedPostFeedQueryOptions(

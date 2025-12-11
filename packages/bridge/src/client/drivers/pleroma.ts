@@ -1,5 +1,5 @@
 import { ApiTargetInterface } from '../index.js';
-import { RestClientCreateDTO } from '../types/_interface.js';
+import { RestClientCreateDTO } from '../typings.js';
 import { PleromaInstanceRouter } from '../collections/servers/pleroma.js';
 import { PleromaAccountsRouter } from '../collections/accounts/pleroma.js';
 import { PleromaStatusesRouter } from '../collections/posts/pleroma.js';
@@ -12,7 +12,6 @@ import { PleromaMeRouter } from '../collections/me/pleroma.js';
 import { PleromaMediaRoute } from '../collections/media/pleroma.js';
 import { PleromaListsRoute } from '../collections/lists/pleroma.js';
 import FetchWrapper from '../utils/fetch.js';
-import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
@@ -32,7 +31,6 @@ class Adapter implements ApiTargetInterface {
 	me: PleromaMeRouter;
 	media: PleromaMediaRoute;
 	lists: PleromaListsRoute;
-	user: UserRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -54,7 +52,6 @@ class Adapter implements ApiTargetInterface {
 		this.me = new PleromaMeRouter(this.fetch);
 		this.media = new PleromaMediaRoute(this.fetch);
 		this.lists = new PleromaListsRoute(this.fetch);
-		this.user = new UserRoute(this);
 	}
 }
 

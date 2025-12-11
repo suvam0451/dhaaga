@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
+import APP_ICON_ENUM, { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';

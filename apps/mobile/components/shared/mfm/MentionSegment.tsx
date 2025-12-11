@@ -1,15 +1,15 @@
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { PostResolver, TextParser } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
 import { ActivityPubService } from '@dhaaga/bridge';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	value: string;
@@ -22,7 +22,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const parsed = TextParser.mentionTextToHandle(
 		value,

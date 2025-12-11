@@ -1,13 +1,13 @@
 import useAppVisibility, {
 	APP_POST_VISIBILITY,
-} from '../../../hooks/app/useVisibility';
+} from '#/hooks/app/useVisibility';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import { useAppDialog } from '../../../hooks/utility/global-state-extractors';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { useAppDialog } from '#/states/global/hooks';
 import { useComposerCtx } from '../contexts/useComposerCtx';
 import PostVisibilityView from '../views/PostVisibilityView';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 function VisibilityPresenter() {
 	const { state, dispatch } = useComposerCtx();

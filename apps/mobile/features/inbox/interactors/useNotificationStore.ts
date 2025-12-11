@@ -5,7 +5,7 @@ import {
 	useInboxState,
 	useInboxDispatch,
 } from '@dhaaga/core';
-import { useAppAcct } from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession } from '#/states/global/hooks';
 import { useEffect } from 'react';
 
 /**
@@ -16,7 +16,7 @@ function useNotificationStore() {
 	const { lastId, loadNext, MaxId, reset: resetPaginator } = useAppPaginator();
 	const state = useInboxState();
 	const dispatch = useInboxDispatch();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	useEffect(() => {
 		reset();

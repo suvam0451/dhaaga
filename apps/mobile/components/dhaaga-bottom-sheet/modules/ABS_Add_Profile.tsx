@@ -7,11 +7,11 @@ import {
 	useAppDb,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { AppText } from '../../lib/Text';
 import { AppTextInput } from '../../lib/TextInput';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
-import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 
 type AS_Add_Profile_Select_AccountProps = {
 	accts: Account[];

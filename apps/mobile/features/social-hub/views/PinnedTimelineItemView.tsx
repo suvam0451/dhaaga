@@ -1,12 +1,12 @@
 import { Account, AccountService } from '@dhaaga/db';
-import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppDb,
 	useAppDialog,
 	useAppGlobalStateActions,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import useAppNavigator from '#/states/useAppNavigator';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -37,7 +37,7 @@ function PinnedTimelineItemView({
 }: Props) {
 	const { theme } = useAppTheme();
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { restoreSession } = useAppGlobalStateActions();
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();

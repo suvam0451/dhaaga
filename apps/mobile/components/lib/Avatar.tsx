@@ -1,18 +1,16 @@
-import { memo } from 'react';
 import { Image } from 'expo-image';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { Account } from '@dhaaga/db';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type AppAvatarProps = {
 	uri: string;
 	size?: number;
 };
 
-export const AppAvatar = memo(({ uri, size }: AppAvatarProps) => {
+export function AppAvatar({ uri, size }: AppAvatarProps) {
 	return (
-		// @ts-ignore-next-line
 		<Image
 			source={{ uri: uri }}
 			style={{
@@ -24,7 +22,7 @@ export const AppAvatar = memo(({ uri, size }: AppAvatarProps) => {
 			}}
 		/>
 	);
-});
+}
 
 type SocialHubAvatarCircleProps = {
 	size?: number;

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	style?: StyleProp<ViewStyle>;

@@ -1,8 +1,8 @@
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -32,7 +32,7 @@ type Props = {
 function ContentView({ userId, onScroll, headerHeight }: Props) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { theme } = useAppTheme();
 
 	const State = usePostTimelineState()!;

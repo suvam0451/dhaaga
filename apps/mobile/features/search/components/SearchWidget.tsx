@@ -7,11 +7,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Dimensions, Pressable, StyleSheet, TextInput } from 'react-native';
 import { useRef, useState } from 'react';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Feather } from '@expo/vector-icons';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const BUTTON_SIZE = 50;

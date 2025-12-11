@@ -1,9 +1,9 @@
 import { useLocalSearchParams } from 'expo-router';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useEffect } from 'react';
 import {
 	PostTimelineStateAction,
@@ -18,7 +18,7 @@ import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 function DataView() {
 	const { db } = useAppDb();
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const params = useLocalSearchParams();
 	const id: string = params['uri'] as string;

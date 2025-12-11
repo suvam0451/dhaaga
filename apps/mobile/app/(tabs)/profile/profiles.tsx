@@ -7,7 +7,7 @@ import {
 	useAppDialog,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '#/components/lib/Text';
@@ -16,9 +16,9 @@ import { AppIcon } from '#/components/lib/Icon';
 import { AppAccountSelectionItem } from '#/components/common/app/Account';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type ProfileFragmentProps = {
 	acct: Account;

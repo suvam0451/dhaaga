@@ -1,4 +1,4 @@
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import {
 	Pressable,
 	StyleProp,
@@ -6,7 +6,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { AppThemingUtil } from '../../../../utils/theming.util';
+import { AppThemingUtil } from '#/utils/theming.util';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { AppText } from '../../../lib/Text';
 

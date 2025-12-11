@@ -5,19 +5,19 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { Alert, Dimensions, Pressable, StyleSheet, View } from 'react-native';
-import useGlobalState from '../../states/_global';
+import useGlobalState from '#/states/global/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useEffect, useState } from 'react';
 import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
 import { Image } from 'expo-image';
 import { AppIcon } from '../lib/Icon';
-import { useImageAutoHeight } from '../../hooks/app/useImageDims';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useImageAutoHeight } from '#/hooks/app/useImageDims';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '../lib/Text';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { LinkingUtils } from '../../utils/linking.utils';
-import { AppDownloadService } from '../../services/app.service';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { LinkingUtils } from '#/utils/linking.utils';
+import { AppDownloadService } from '#/services/app.service';
 import { RandomUtil } from '@dhaaga/bridge';
 
 type StatSectionProps = {
@@ -183,7 +183,7 @@ function ImageInspectModal() {
 	useEffect(() => {
 		if (!visible) return;
 
-		const obj = appSession.storage.getPostForMediaInspect();
+		const obj = appSession.appManager.storage.getPostForMediaInspect();
 		if (!obj) {
 			hide();
 			return;

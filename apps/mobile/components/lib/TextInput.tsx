@@ -1,6 +1,6 @@
 import { StyleProp, TextInput, TextStyle, StyleSheet } from 'react-native';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
+import { APP_FONTS } from '#/styles/AppFonts';
 
 type AppTextInput_SingleLineProps = {
 	value: string;

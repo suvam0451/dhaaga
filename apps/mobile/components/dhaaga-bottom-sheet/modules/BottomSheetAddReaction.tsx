@@ -7,18 +7,15 @@ import emojiPickerReducer, {
 	Emoji,
 	EMOJI_PICKER_REDUCER_ACTION,
 } from './emoji-picker/emojiPickerReducer';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
 import EmojiPickerSearchResults from './emoji-picker/fragments/EmojiPickerSearchResults';
 import EmojiPickerCategoryList from './emoji-picker/fragments/EmojiPickerCategoryList';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '../../../hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 
 function BottomSheetAddReaction() {
 	const { driver } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 	const lastSubdomain = useRef(null);

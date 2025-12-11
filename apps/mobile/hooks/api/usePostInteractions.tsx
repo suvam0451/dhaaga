@@ -1,4 +1,4 @@
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/states/global/hooks';
 import type {
 	UserObjectType,
 	PostObjectType,

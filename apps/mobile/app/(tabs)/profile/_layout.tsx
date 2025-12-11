@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router/stack';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 function AccountsScreen() {
 	const { theme } = useAppTheme();

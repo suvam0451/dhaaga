@@ -1,7 +1,4 @@
-import {
-	useAccountManager,
-	useAppApiClient,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAccountManager, useAppApiClient } from '#/states/global/hooks';
 import {
 	AutoFillPromptType,
 	AutoFillResultsType,

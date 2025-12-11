@@ -1,7 +1,7 @@
 import { View, StyleSheet, FlatList } from 'react-native';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
-import { AppText } from './Text';
-import { appDimensions } from '../../styles/dimensions';
+import { useAppTheme } from '#/states/global/hooks';
+import { appDimensions } from '#/styles/dimensions';
+import { NativeTextSemiBold } from '#/ui/NativeText';
 
 type Props = {
 	label?: string;
@@ -50,7 +50,7 @@ function ControlSegmentView({
 	return (
 		<View style={styles.root}>
 			{label && (
-				<AppText.SemiBold
+				<NativeTextSemiBold
 					style={[
 						styles.label,
 						{
@@ -59,7 +59,7 @@ function ControlSegmentView({
 					]}
 				>
 					{label}
-				</AppText.SemiBold>
+				</NativeTextSemiBold>
 			)}
 			<FlatList
 				data={buttons}
@@ -76,7 +76,7 @@ function ControlSegmentView({
 						]}
 						onTouchEnd={o.onClick}
 					>
-						<AppText.SemiBold
+						<NativeTextSemiBold
 							style={{
 								color: selection.has(o.lookupId)
 									? _activeForeground
@@ -84,7 +84,7 @@ function ControlSegmentView({
 							}}
 						>
 							{o.label}
-						</AppText.SemiBold>
+						</NativeTextSemiBold>
 					</View>
 				)}
 			/>

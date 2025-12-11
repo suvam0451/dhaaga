@@ -4,7 +4,7 @@ import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '@dhaaga/db';
-import { useAppDb } from '#/hooks/utility/global-state-extractors';
+import { useAppDb } from '#/states/global/hooks';
 import {
 	AccountDetails,
 	AccountPfp,

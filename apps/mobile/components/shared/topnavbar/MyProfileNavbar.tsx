@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { APP_ICON_ENUM, AppIcon } from '../../lib/Icon';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_FONTS } from '#/styles/AppFonts';
+import APP_ICON_ENUM, { AppIcon } from '../../lib/Icon';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 
 type AccountGreetingNavbarProps = {
 	menuItems: {

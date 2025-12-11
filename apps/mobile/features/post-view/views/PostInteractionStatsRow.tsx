@@ -5,17 +5,14 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '#/components/lib/Text';
 import { PostObjectType } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { PostInspector } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type StatItemProps = {
 	count: number;

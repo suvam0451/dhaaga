@@ -1,9 +1,8 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import Header from '../components/Header';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 function LandingPageView() {
 	const { theme } = useAppTheme();

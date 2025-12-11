@@ -6,10 +6,10 @@ import {
 	usePostTimelineState,
 } from '@dhaaga/core';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { RefreshControl, StyleProp, ViewStyle } from 'react-native';
 import Animated, {
 	ScrollHandlerProcessed,
@@ -32,7 +32,7 @@ type Props = {
 function ContentView({ userId, onScroll, headerHeight }: Props) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { theme } = useAppTheme();
 
 	const State = usePostTimelineState()!;

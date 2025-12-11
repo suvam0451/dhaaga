@@ -10,16 +10,10 @@ import {
 import { getXrpcAgent } from '#/utils/atproto.js';
 import { notImplementedErrorBuilder } from '#/types/api-response.js';
 import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
-
-type SubscriptionUpdateResult = Promise<{
-	success: boolean;
-	subscribed: boolean;
-}>;
-
-type PinStatusUpdateResult = Promise<{
-	success: boolean;
-	pinned: boolean;
-}>;
+import {
+	PinStatusUpdateResult,
+	SubscriptionUpdateResult,
+} from '#/client/typings.js';
 
 type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 

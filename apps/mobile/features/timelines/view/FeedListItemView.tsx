@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Image, useImage } from 'expo-image';
 import { Pressable, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';

@@ -6,10 +6,7 @@ import {
 	useDiscoverState,
 } from '@dhaaga/core';
 import { getSearchTabs } from '@dhaaga/db';
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import { NativeTextH1, NativeTextMedium } from '#/ui/NativeText';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';

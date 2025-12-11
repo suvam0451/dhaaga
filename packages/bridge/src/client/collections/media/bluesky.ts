@@ -1,4 +1,5 @@
-import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
+import { MediaRoute } from './_interface.js';
+import { DhaagaJsMediaCreateDTO } from '#/client/typings.js';
 
 class BlueskyMediaRouter implements MediaRoute {
 	create(dto: DhaagaJsMediaCreateDTO): Promise<any> {

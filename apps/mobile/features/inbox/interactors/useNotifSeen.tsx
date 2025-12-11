@@ -7,10 +7,9 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import { useAppNotificationBadge } from '../../../hooks/app/useAppNotificationBadge';
+import { useAppNotificationBadge } from '#/hooks/app/useAppNotificationBadge';
 import * as Haptics from 'expo-haptics';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '#/states/global/hooks';
 
 type Type = {
 	Seen: Set<string>;
@@ -39,11 +38,7 @@ type Props = {
 function WithAppNotifSeenContext({ children }: Props) {
 	const { setNotificationCount, vibrationOn } = useAppNotificationBadge();
 	const [UnseenCount, setUnseenCount] = useState(0);
-	const { client } = useGlobalState(
-		useShallow((o) => ({
-			client: o.router,
-		})),
-	);
+	const { client } = useAppApiClient();
 
 	useEffect(() => {
 		setNotificationCount(UnseenCount);

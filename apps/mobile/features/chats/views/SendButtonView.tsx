@@ -1,7 +1,7 @@
 import { Pressable, View } from 'react-native';
-import { Loader } from '../../../components/lib/Loader';
+import { Loader } from '#/components/lib/Loader';
 import { FontAwesome } from '@expo/vector-icons';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	onSend: () => void;

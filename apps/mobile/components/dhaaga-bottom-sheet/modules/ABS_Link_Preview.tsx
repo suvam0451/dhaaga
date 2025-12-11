@@ -1,4 +1,3 @@
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import AppLoadingIndicator from '../../error-screen/AppLoadingIndicator';
@@ -11,14 +10,12 @@ import { AppIcon } from '../../lib/Icon';
 import { AppDivider } from '../../lib/Divider';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { LinkingUtils } from '#/utils/linking.utils';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import BottomSheetActionMenuBuilder from '#/ui/BottomSheetActionMenuBuilder';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type OpenGraphParsingState = {
 	key: string | null;
@@ -91,7 +88,7 @@ function ParsingFailedView({
 
 function ABS_Link_Preview() {
 	const { theme } = useAppTheme();
-	const { ctx, stateId, visible, type } = useAppBottomSheet();
+	const { ctx, stateId, visible, type, hide } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
 	const [SavedToClipboard, setSavedToClipboard] = useState(false);
@@ -103,10 +100,9 @@ function ABS_Link_Preview() {
 	function placeholder() {}
 
 	useEffect(() => {
-		if (INACTIVE || !!ctx?.linkUrl) return;
+		if (ctx.$type !== 'link-preview') return hide();
 		setSavedToClipboard(false);
-
-		ValueRef.current = ctx?.linkUrl;
+		ValueRef.current = ctx.url;
 	}, [stateId]);
 
 	const domain = useMemo(() => {

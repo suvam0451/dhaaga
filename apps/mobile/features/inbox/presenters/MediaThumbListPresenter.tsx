@@ -3,7 +3,7 @@ import { appDimensions } from '#/styles/dimensions';
 import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import MediaThumbView from '../view/MediaThumbView';
-import { useAppDialog } from '#/hooks/utility/global-state-extractors';
+import { useAppDialog } from '#/states/global/hooks';
 
 type Props = {
 	items: PostMediaAttachmentType[];

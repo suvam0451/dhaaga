@@ -12,14 +12,14 @@ import { LinkingUtils } from '#/utils/linking.utils';
 import { useAtProtoAuth, useDhaagaAuthFormControl } from '@dhaaga/react';
 import { AppFormTextInput } from '#/components/lib/FormInput';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppDb,
 	useAppGlobalStateActions,
 	useAppManager,
 	useAppPublishers,
 	useAppTheme,
 	useHub,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { router } from 'expo-router';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { AccountService } from '@dhaaga/db';
@@ -41,7 +41,7 @@ function AtProto() {
 	} = useAtProtoAuth();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { restoreSession } = useAppGlobalStateActions();
 	const { appSub } = useAppPublishers();
 	const { loadAccounts } = useHub();
@@ -104,13 +104,13 @@ function ActivityPub() {
 	function onProcessRequest() {
 		if (!appManager) return;
 		cachedClientTokens.current =
-			appManager.storage.getAtprotoServerClientTokens(Instance);
+			appManager.appManager.storage.getAtprotoServerClientTokens(Instance);
 		resolve().then((result) => {
 			if (result.strategy !== 'activitypub') return;
 
 			const { clientId, clientSecret, signInUrl, instance, software } =
 				result.params;
-			appManager.storage.setAtprotoServerClientTokens(
+			appManager.appManager.storage.setAtprotoServerClientTokens(
 				instance,
 				clientId,
 				clientSecret,

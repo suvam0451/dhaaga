@@ -5,7 +5,7 @@ import { TextContentView } from '#/components/common/status/TextContentView';
 import useProfilePeekSheetInteractor from '../interactors/useProfilePeekSheetInteractor';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '#/components/lib/Text';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Image } from 'expo-image';
 import ProfileStatPresenter from './ProfileStatPresenter';
 import { Skeleton } from '#/ui/Skeleton';

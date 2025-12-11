@@ -4,19 +4,19 @@ import { ImpactFeedbackStyle } from 'expo-haptics';
 import { Pressable, View, StyleSheet } from 'react-native';
 import PostActionButtonToggleBookmark from '#/components/common/status/fragments/modules/PostActionButtonToggleBookmark';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 import { AppToggleIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
 import { ActivityPubService, PostInspector } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionStatsRow';
 import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 /**
  * Press this to toggle sharing status
@@ -143,7 +143,7 @@ function SettingsButton() {
 	const { dto: item } = withPostItemContext();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const _target = PostInspector.getContentTarget(item);
 	if (_target.postedBy.id !== acct.identifier) return <View />;

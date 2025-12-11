@@ -1,22 +1,17 @@
 import { Fragment, memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ActivityPubService } from '@dhaaga/bridge';
-import useGlobalState from '../../../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '#/states/global/hooks';
 
 /**
  * These will be shown for Misskey accounts
  */
 const MyMisskeyAccountFeatures = memo(() => {
-	const { driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
 
 	if (!ActivityPubService.misskeyLike(driver)) return <View />;
 

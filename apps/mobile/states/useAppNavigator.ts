@@ -1,10 +1,7 @@
 import { router, useNavigation } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '../hooks/utility/global-state-extractors';
-import { APP_ROUTING_ENUM } from '../utils/route-list';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 
 /**
  * Hook to correctly navigate
@@ -13,7 +10,7 @@ import { APP_ROUTING_ENUM } from '../utils/route-list';
 function useAppNavigator() {
 	const { driver } = useAppApiClient();
 	const navigator = useNavigation();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	function toHome() {
 		// probably in the bottom sheet

@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import CollectionItem from '../components/CollectionItem';
-import { appDimensions } from '../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type AssignmentSheetBookmarkViewProps = {
 	bookmarked: boolean;

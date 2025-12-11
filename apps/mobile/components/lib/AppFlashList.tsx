@@ -15,15 +15,15 @@ import {
 	ProfilePinnedTimeline,
 	ProfilePinnedUser,
 } from '@dhaaga/db';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Image } from 'expo-image';
 import { AppText } from './Text';
-import { AppChatRoom } from '../../services/chat.service';
+import { AppChatRoom } from '#/services/chat.service';
 import { AppDivider } from './Divider';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from './Icon';
 import { router } from 'expo-router';
-import { APP_ROUTING_ENUM } from '../../utils/route-list';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
 
 export function Chatroom_Item({ item }: { item: AppChatRoom }) {
 	const [MemberAvatar, setMemberAvatar] = useState<UserObjectType>(null);

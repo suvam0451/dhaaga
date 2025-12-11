@@ -10,13 +10,13 @@ import {
 	ViewStyle,
 	TextStyle,
 } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import * as Haptics from 'expo-haptics';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from './Text';
-import { appDimensions } from '../../styles/dimensions';
-import appStyles from '../../styles/AppStyles';
+import { appDimensions } from '#/styles/dimensions';
+import appStyles from '#/styles/AppStyles';
 
 const BUTTON_KINDS = [
 	'primary',

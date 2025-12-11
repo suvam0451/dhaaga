@@ -10,7 +10,6 @@ function LocalTimelineControlPresenter() {
 		onFeedOptAllSelected,
 		onMediaOptSelected,
 		onMediaOptAllSelected,
-		State,
 	} = useTimelineControllerInteractor();
 	return (
 		<View style={{ paddingHorizontal: 12 }}>

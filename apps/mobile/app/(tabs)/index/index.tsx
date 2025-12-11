@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { StatusBar, StyleProp, View, ViewStyle } from 'react-native';
-import SocialHubPresenter from '#/features/social-hub/presenters/SocialHubPresenter';
+import HubPage from '#/features/social-hub/HubPage';
 import { Account } from '@dhaaga/db';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppTheme,
 	useHub,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -142,7 +142,7 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 }
 
 function Screen() {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { loadAccounts } = useHub();
 
 	useEffect(() => {
@@ -150,7 +150,7 @@ function Screen() {
 	}, [acct]);
 
 	if (!acct) return <SignedOutScreen />;
-	return <SocialHubPresenter />;
+	return <HubPage />;
 }
 
 export default Screen;

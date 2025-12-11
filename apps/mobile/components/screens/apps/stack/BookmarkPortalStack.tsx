@@ -2,7 +2,7 @@ import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AppButtonVariantA } from '../../../lib/Buttons';
 import { memo, useState } from 'react';
-import { APP_FONT, APP_THEME } from '../../../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
@@ -10,9 +10,7 @@ import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
 } from '../../../hooks/tasks/useSyncWithProgress';
 import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { APP_FONTS } from '#/styles/AppFonts';
 
 export function BookmarkNeverSyncedPrompt() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(

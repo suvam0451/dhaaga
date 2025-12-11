@@ -1,10 +1,9 @@
 import { View, StyleSheet } from 'react-native';
-import HideOnKeyboardVisibleContainer from '../containers/HideOnKeyboardVisibleContainer';
 import { Asset, useAssets } from 'expo-asset';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '../lib/Text';
-import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import Animated, {
 	useSharedValue,
@@ -13,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { AppButtonVariantA } from '../lib/Buttons';
+import { HideWhileKeyboardActive } from '#/ui/Containers';
 
 type OnboardingCtaBannerProps = {
 	titleText: string;
@@ -33,7 +33,7 @@ function OnboardingSignInBanner({
 	platformSelected = true,
 	onPlatformSelectionReset,
 }: OnboardingCtaBannerProps) {
-	const [assets, error] = useAssets([require('../../assets/dhaaga/icon.png')]);
+	const [assets, error] = useAssets([require('#/assets/dhaaga/icon.png')]);
 	const { theme } = useAppTheme();
 	const split = useSharedValue(0); // 0 = singles, 1 = split
 
@@ -75,7 +75,7 @@ function OnboardingSignInBanner({
 
 	return (
 		<View style={{ marginBottom: 32 }}>
-			<HideOnKeyboardVisibleContainer>
+			<HideWhileKeyboardActive>
 				<View style={styles.logoArrayContainer}>
 					<Ionicons
 						name={'close-outline'}
@@ -116,7 +116,7 @@ function OnboardingSignInBanner({
 						// contentFit={'cover'}
 					/>
 				</View>
-			</HideOnKeyboardVisibleContainer>
+			</HideWhileKeyboardActive>
 			{platformSelected && (
 				<View>
 					<AppText.Medium

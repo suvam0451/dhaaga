@@ -1,7 +1,4 @@
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import {
 	useDiscoverState,
 	useDiscoverDispatch,

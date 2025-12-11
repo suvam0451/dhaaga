@@ -4,8 +4,7 @@ import {
 	TagType,
 } from '@dhaaga/bridge';
 import { createContext, useContext, useEffect, useState } from 'react';
-import useGlobalState from './_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useAppApiClient } from '#/states/global/hooks';
 
 type Type = {
 	tag: TagTargetInterface;
@@ -38,11 +37,7 @@ type Props = {
  * Wrap ActivityPub tag objects with this
  */
 function WithActivitypubTagContext({ tag, children }: Props) {
-	const { driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
 
 	const [Value, setValue] = useState<TagTargetInterface | null>(
 		ActivityPubTagAdapter(null, driver),

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import useHookLoadingState from '#/states/useHookLoadingState';
 import {
 	MastoApiAdapter,
 	MisskeyApiAdapter,
@@ -8,7 +7,7 @@ import {
 } from '@dhaaga/bridge';
 import ActivitypubRelationService from '#/services/approto/activitypub-relation.service';
 import { AppBskyActorGetProfile } from '@atproto/api';
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/states/global/hooks';
 import { ActivityPubService } from '@dhaaga/bridge';
 
 const defaultValue = {
@@ -45,7 +44,6 @@ const defaultValue = {
  */
 function useRelationInteractor(id: string) {
 	const { client, driver } = useAppApiClient();
-	const { State, forceUpdate } = useHookLoadingState();
 
 	const [IsLoading, setIsLoading] = useState(false);
 	const [Relation, setRelation] = useState(defaultValue);
@@ -167,7 +165,6 @@ function useRelationInteractor(id: string) {
 			}
 		}
 		setIsLoading(false);
-		forceUpdate();
 	}
 
 	async function refetch() {
@@ -179,7 +176,6 @@ function useRelationInteractor(id: string) {
 				.then(setMastoRelation)
 				.finally(() => {
 					setIsLoading(false);
-					forceUpdate();
 				});
 		} else if (ActivityPubService.misskeyLike(driver)) {
 			(client as MisskeyApiAdapter).users
@@ -187,7 +183,6 @@ function useRelationInteractor(id: string) {
 				.then(setMisskeyRelation)
 				.finally(() => {
 					setIsLoading(false);
-					forceUpdate();
 				});
 		} else if (ActivityPubService.blueskyLike(driver)) {
 			(client as AtprotoApiAdapter).users
@@ -195,13 +190,11 @@ function useRelationInteractor(id: string) {
 				.then(setBlueskyRelation)
 				.then(() => {
 					setIsLoading(false);
-					forceUpdate();
 				});
 		}
 	}
 
 	return {
-		relationState: State,
 		data: Relation,
 		refetch,
 		setRelation: set,

@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import MediaThumbnail from '../../../../../ui/media/Thumb';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import MediaThumbnail from '#/ui/media/Thumb';
+import { useAppTheme } from '#/states/global/hooks';
 
 type FlashListItemProps = {
 	selected: boolean;

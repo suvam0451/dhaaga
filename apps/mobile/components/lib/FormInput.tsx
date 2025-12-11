@@ -1,7 +1,7 @@
-import { APP_ICON_ENUM, AppIcon } from './Icon';
+import APP_ICON_ENUM, { AppIcon } from './Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '../../utils/theming.util';
 import { APP_FONTS } from '../../styles/AppFonts';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '../../states/global/hooks';
 import { TextInput, View, StyleSheet } from 'react-native';
 
 type AppFormInputProps = {

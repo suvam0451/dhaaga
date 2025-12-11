@@ -7,18 +7,17 @@ import {
 import { FlatList, StyleSheet } from 'react-native';
 import PinnedUserView from '../views/PinnedUserView';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppDb,
 	useAppDialog,
-} from '../../../hooks/utility/global-state-extractors';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import useAppNavigator from '../../../states/useAppNavigator';
-import { APP_PINNED_OBJECT_TYPE } from '../../../services/driver.service';
+	useAppGlobalStateActions,
+} from '#/states/global/hooks';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
+import useAppNavigator from '#/states/useAppNavigator';
+import { APP_PINNED_OBJECT_TYPE } from '#/services/driver.service';
 import * as Haptics from 'expo-haptics';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -35,13 +34,9 @@ function UserListPresenter({
 	parentAcct,
 	onLongPressUser,
 }: Props) {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { db } = useAppDb();
-	const { loadApp } = useGlobalState(
-		useShallow((o) => ({
-			loadApp: o.loadApp,
-		})),
-	);
+	const { restoreSession } = useAppGlobalStateActions();
 	const { show, hide } = useAppDialog();
 	const { toTimelineViaPin } = useAppNavigator();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -52,7 +47,7 @@ function UserListPresenter({
 				DialogBuilderService.toSwitchActiveAccount(() => {
 					AccountService.select(db, parentAcct);
 					try {
-						loadApp().then(() => {
+						restoreSession().then(() => {
 							hide();
 							toTimelineViaPin(item.id, 'user');
 						});

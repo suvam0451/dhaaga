@@ -1,11 +1,11 @@
-import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput } from 'react-native';
 import { memo, useRef } from 'react';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
+import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 const ComposerTextInput = memo(function Foo() {
 	const { theme } = useAppTheme();

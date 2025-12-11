@@ -10,7 +10,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import Animated, {
 	measure,
 	MeasuredDimensions,

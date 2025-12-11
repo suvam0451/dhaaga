@@ -1,10 +1,7 @@
 import { Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 function ComposeButton() {
 	const { theme } = useAppTheme();

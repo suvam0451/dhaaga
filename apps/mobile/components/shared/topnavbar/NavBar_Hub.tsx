@@ -6,7 +6,7 @@ import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { useHub } from '#/hooks/utility/global-state-extractors';
+import { useHub } from '#/states/global/hooks';
 import Animated, {
 	FadeOut,
 	FadeInLeft,

@@ -1,5 +1,5 @@
 import { StyleProp, View, ViewStyle, FlatList } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText, SpecialText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';

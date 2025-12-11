@@ -1,10 +1,10 @@
 import { View, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
-import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { DatetimeUtil } from '../../../utils/datetime.utils';
+import { AppText } from '#/components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { DatetimeUtil } from '#/utils/datetime.utils';
 import type { MessageObjectType } from '@dhaaga/bridge';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 const MINI_AVATAR_SIZE = 28;
 

@@ -1,4 +1,4 @@
-import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
+import { StatusesRoute } from './_interface.js';
 import type {
 	MastoAccount,
 	MastoContext,
@@ -11,6 +11,7 @@ import {
 	DriverLikeStateResult,
 } from '#/types/driver.types.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 
 export class MastodonStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;

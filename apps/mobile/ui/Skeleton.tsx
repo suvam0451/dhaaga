@@ -19,7 +19,7 @@ import type {
 	ViewStyle,
 } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import { useAppTheme } from '../states/global/hooks';
 
 /**
  * Constants

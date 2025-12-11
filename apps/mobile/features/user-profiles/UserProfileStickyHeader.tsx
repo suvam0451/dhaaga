@@ -1,7 +1,7 @@
-import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
 import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 const TAB_BAR_HEIGHT = 56;
 const ICON_SIZE = 32;

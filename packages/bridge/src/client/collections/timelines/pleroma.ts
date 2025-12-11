@@ -1,12 +1,9 @@
-import {
-	DriverTimelineGetApiResponse,
-	DhaagaJsTimelineQueryOptions,
-	TimelinesRoute,
-} from './_interface.js';
+import { DriverTimelineGetApiResponse, TimelinesRoute } from './_interface.js';
 import { DefaultTimelinesRouter } from './default.js';
 import { CasingUtil } from '#/utils/casing.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
+import { DhaagaJsTimelineQueryOptions } from '#/client/typings.js';
 
 export class PleromaTimelinesRouter
 	extends DefaultTimelinesRouter

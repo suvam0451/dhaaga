@@ -3,11 +3,11 @@ import useCollectionDetailInteractor from '#/features/collections/interactors/us
 import CollectionEmpty from '#/features/collections/components/CollectionEmpty';
 import CollectionDetailWidget from '#/features/collections/components/CollectionDetailWidget';
 import { appDimensions } from '#/styles/dimensions';
-import { SavedPostItem } from '#/components/common/status/LocalView/SavedPostItem';
+import { SavedPostItemView } from '#/features/collections/SavedPostItemView';
 import { FlatList, RefreshControl } from 'react-native';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 function Content() {
 	const { theme } = useAppTheme();
@@ -23,7 +23,7 @@ function Content() {
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
 				}}
 				data={state.results}
-				renderItem={({ item }) => <SavedPostItem item={item} />}
+				renderItem={({ item }) => <SavedPostItemView item={item} />}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
 				}

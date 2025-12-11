@@ -1,6 +1,6 @@
 import { Text, StyleSheet } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';

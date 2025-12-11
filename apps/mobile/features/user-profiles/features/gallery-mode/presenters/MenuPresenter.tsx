@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
-import { AppIcon } from '../../../../../components/lib/Icon';
-import { AppText } from '../../../../../components/lib/Text';
+import { AppIcon } from '#/components/lib/Icon';
+import { AppText } from '#/components/lib/Text';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../../../styles/dimensions';
+import { useAppTheme } from '#/states/global/hooks';
+import { appDimensions } from '#/styles/dimensions';
 import type { PostObjectType } from '@dhaaga/bridge';
 
 type Props = {

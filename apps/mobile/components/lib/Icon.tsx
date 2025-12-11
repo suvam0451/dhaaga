@@ -22,14 +22,13 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import Entypo from '@expo/vector-icons/Entypo';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../hooks/utility/global-state-extractors';
-import { APP_BOTTOM_SHEET_ENUM } from '../../states/_global';
-import { AppText } from './Text';
+} from '../../states/global/hooks';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
-export type APP_ICON_ENUM =
+type APP_ICON_ENUM =
 	| 'add'
 	| 'add-circle-outline'
 	| 'albums-outline'
@@ -39,6 +38,8 @@ export type APP_ICON_ENUM =
 	| 'back'
 	| 'bookmark'
 	| 'bookmark-outline'
+	| 'bookmarks'
+	| 'bookmarks-outline'
 	| 'block'
 	| 'browser'
 	| 'cog'
@@ -122,6 +123,7 @@ export type APP_ICON_ENUM =
 	| 'warning-outline'
 	| 'mute-outline'
 	| 'unmute-outline';
+export default APP_ICON_ENUM;
 
 type AppIconType = {
 	id: APP_ICON_ENUM;
@@ -220,7 +222,7 @@ export function NavbarButtonDisabledOnSignOut({
 	onLongPress,
 	children,
 }: any) {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	function onLongPressAction(e: any) {
 		if (!acct) return;
@@ -257,7 +259,7 @@ export function ProfileTabNavbarIconButton({
 	children,
 }: any) {
 	const { show } = useAppBottomSheet();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	function onLongPressAction(e: any) {
 		e.preventDefault();
@@ -289,7 +291,7 @@ export function ProfileTabNavbarIcon({
 	sizeOffset,
 }: NavigationIconType) {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	if (!acct)
 		return (
@@ -445,6 +447,24 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="bookmark-outline"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'bookmarks':
+				return (
+					<Ionicons
+						name="bookmarks"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'bookmarks-outline':
+				return (
+					<Ionicons
+						name="bookmarks-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}
@@ -1044,7 +1064,7 @@ export function AppIcon({
 				);
 			case 'search':
 				return (
-					<AntDesign
+					<Ionicons
 						name="search"
 						size={_size}
 						color={_color}

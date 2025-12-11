@@ -15,7 +15,7 @@ import { appDimensions } from '#/styles/dimensions';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useScrollHandleFlatList';
 import { FlatList, RefreshControl } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
@@ -135,6 +135,13 @@ function SimplePostTimeline({
 				ItemSeparatorComponent={() => (
 					<AppDividerSoft style={{ marginVertical: 10 }} />
 				)}
+				/**
+				 * Memory tweaks (since Dhaaga is designed
+				 * only for a brick phone form factor)
+				 */
+				initialNumToRender={3}
+				maxToRenderPerBatch={6}
+				windowSize={7}
 			/>
 			<TimelineLoadingIndicator
 				numItems={State.items.length}

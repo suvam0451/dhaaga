@@ -1,7 +1,7 @@
 import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Ionicons } from '@expo/vector-icons';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';
 import ChristmasBellOutline from '#/skins/christmas/navbar/ChristmasBellOutline';
@@ -60,181 +60,274 @@ type DhaagaSkinnedIconProps = {
 const ACTION_BUTTON_SIZE = appDimensions.timelines.actionButtonSize;
 
 function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
-	const { theme } = useAppTheme();
+	const { theme, skin } = useAppTheme();
 	const ACTIVE_TINT = theme.primary.a0;
 	const INACTIVE_TINT = theme.secondary.a40;
 	switch (id) {
-		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_ACTIVE:
-			return (
-				<View style={{ height: ACTION_BUTTON_SIZE, width: ACTION_BUTTON_SIZE }}>
-					<ChristmasGlovesFilledOutline color={ACTIVE_TINT} />
-				</View>
-			);
-			return (
-				<Ionicons
-					name="bookmarks-outline"
-					size={ACTION_BUTTON_SIZE}
-					color={ACTIVE_TINT}
-					style={{
-						paddingVertical: 6,
-						marginRight: -6,
-						paddingHorizontal: 6,
-					}}
-				/>
-			);
-		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_INACTIVE:
-			return (
-				<View style={{ height: ACTION_BUTTON_SIZE, width: ACTION_BUTTON_SIZE }}>
-					<ChristmasGlovesOutline color={INACTIVE_TINT} />
-				</View>
-			);
-			return (
-				<Ionicons
-					name="bookmarks"
-					size={ACTION_BUTTON_SIZE}
-					color={theme.secondary.a40}
-					style={{
-						paddingVertical: 6,
-						marginRight: -6,
-						paddingHorizontal: 6,
-					}}
-				/>
-			);
-		case DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_ACTIVE:
-			return (
-				<View>
-					<ChristmasGiftBoxFilledOutline size={size} color={ACTIVE_TINT} />
-				</View>
-			);
-			return (
-				<AppIcon id={'heart'} color={ACTIVE_TINT} size={ACTION_BUTTON_SIZE} />
-			);
-		case DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_INACTIVE:
-			return (
-				<View style={{ width: ACTION_BUTTON_SIZE, height: ACTION_BUTTON_SIZE }}>
-					<ChristmasGiftBoxOutline color={INACTIVE_TINT} />
-				</View>
-			);
-			return (
-				<AppIcon
-					id={'heart-outline'}
-					color={INACTIVE_TINT}
-					size={ACTION_BUTTON_SIZE}
-				/>
-			);
-		case DHAAGA_SKINNED_ICON_ID.POST_REPLY_BUTTON:
-			return (
-				<View
-					style={{
-						width: ACTION_BUTTON_SIZE + 4,
-						height: ACTION_BUTTON_SIZE + 4,
-						marginBottom: -6,
-					}}
-				>
-					<ChristmasMessage color={INACTIVE_TINT} />
-				</View>
-			);
-		case DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_ACTIVE:
-			return <ChristmasReindeerFilledOutline size={ACTION_BUTTON_SIZE + 2} />;
-			return (
-				<AppIcon
-					id={'sync-outline'}
-					color={ACTIVE_TINT}
-					size={ACTION_BUTTON_SIZE}
-				/>
-			);
-		case DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_INACTIVE:
-			return (
-				<ChristmasReindeerOutline
-					size={ACTION_BUTTON_SIZE + 2}
-					color={INACTIVE_TINT}
-				/>
-			);
-			return (
-				<AppIcon
-					id={'sync-outline'}
-					color={INACTIVE_TINT}
-					size={ACTION_BUTTON_SIZE}
-				/>
-			);
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_ACTIVE:
-			return (
-				<View
-					style={{
-						width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-						height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-					}}
-				>
-					<ChristmasTeapotFilledOutline size={size} color={color} />
-				</View>
-			);
-			return <Ionicons name="home" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_INACTIVE:
-			return (
-				<View
-					style={{
-						width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-						height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-					}}
-				>
-					<ChristmasTeapotOutline size={size} color={color} />
-				</View>
-			);
-			return <Ionicons name="home-outline" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE:
-			return (
-				<View
-					style={{
-						width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-						height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-					}}
-				>
-					<ChristmasMufflersFilledOutline size={size} color={color} />
-				</View>
-			);
-			return <Ionicons name="newspaper" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_INACTIVE:
-			return (
-				<View
-					style={{
-						width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-						height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-					}}
-				>
-					<ChristmasMufflersOutline size={size} color={color} />
-				</View>
-			);
-			return <Ionicons name="newspaper-outline" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_ACTIVE:
-			return <ChristmasScarfFilledOutline size={size} color={color} />;
-			return <Ionicons name="compass" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_INACTIVE:
-			return <ChristmasScarfOutline size={size} color={color} />;
-			return <Ionicons name="compass-outline" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_ACTIVE:
-			return (
-				<View
-					style={{
-						width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-						height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-					}}
-				>
-					<ChristmasBellFilledOutline size={size} color={color} />
-				</View>
-			);
-			return <Ionicons name="file-tray" size={size} color={color} />;
-		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_INACTIVE:
-			return (
-				<View
-					style={{
-						width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-						height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
-					}}
-				>
-					<ChristmasBellOutline size={size} color={color} />
-				</View>
-			);
-			return <Ionicons name="file-tray-outline" size={size} color={color} />;
+		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{ height: ACTION_BUTTON_SIZE, width: ACTION_BUTTON_SIZE }}
+						>
+							<ChristmasGlovesFilledOutline color={ACTIVE_TINT} />
+						</View>
+					);
+				default:
+					return (
+						<Ionicons
+							name="bookmarks"
+							size={ACTION_BUTTON_SIZE}
+							color={ACTIVE_TINT}
+							style={{
+								paddingVertical: 6,
+								marginRight: -6,
+								paddingHorizontal: 6,
+							}}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{ height: ACTION_BUTTON_SIZE, width: ACTION_BUTTON_SIZE }}
+						>
+							<ChristmasGlovesOutline color={INACTIVE_TINT} />
+						</View>
+					);
+				default:
+					return (
+						<AppIcon
+							id="bookmarks-outline"
+							color={INACTIVE_TINT}
+							size={ACTION_BUTTON_SIZE}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View>
+							<ChristmasGiftBoxFilledOutline size={size} color={ACTIVE_TINT} />
+						</View>
+					);
+				default:
+					return (
+						<AppIcon
+							id={'heart'}
+							color={ACTIVE_TINT}
+							size={ACTION_BUTTON_SIZE}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{ width: ACTION_BUTTON_SIZE, height: ACTION_BUTTON_SIZE }}
+						>
+							<ChristmasGiftBoxOutline color={INACTIVE_TINT} />
+						</View>
+					);
+				default:
+					return (
+						<AppIcon
+							id={'heart-outline'}
+							color={INACTIVE_TINT}
+							size={ACTION_BUTTON_SIZE}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.POST_REPLY_BUTTON: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: ACTION_BUTTON_SIZE + 4,
+								height: ACTION_BUTTON_SIZE + 4,
+								marginBottom: -6,
+							}}
+						>
+							<ChristmasMessage color={INACTIVE_TINT} />
+						</View>
+					);
+				default:
+					return (
+						<AppIcon
+							id={'message'}
+							color={INACTIVE_TINT}
+							size={ACTION_BUTTON_SIZE}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<ChristmasReindeerFilledOutline size={ACTION_BUTTON_SIZE + 2} />
+					);
+				default:
+					return (
+						<AppIcon
+							id={'sync-outline'}
+							color={ACTIVE_TINT}
+							size={ACTION_BUTTON_SIZE}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<ChristmasReindeerOutline
+							size={ACTION_BUTTON_SIZE + 2}
+							color={INACTIVE_TINT}
+						/>
+					);
+				default:
+					return (
+						<AppIcon
+							id={'sync-outline'}
+							color={INACTIVE_TINT}
+							size={ACTION_BUTTON_SIZE}
+						/>
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+								height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+							}}
+						>
+							<ChristmasTeapotFilledOutline size={size} color={color} />
+						</View>
+					);
+				default:
+					return <Ionicons name="home" size={size} color={color} />;
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+								height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+							}}
+						>
+							<ChristmasTeapotOutline size={size} color={color} />
+						</View>
+					);
+				default:
+					return <Ionicons name="home-outline" size={size} color={color} />;
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+								height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+							}}
+						>
+							<ChristmasMufflersFilledOutline size={size} color={color} />
+						</View>
+					);
+				default:
+					return <Ionicons name="newspaper" size={size} color={color} />;
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+								height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+							}}
+						>
+							<ChristmasMufflersOutline size={size} color={color} />
+						</View>
+					);
+				default:
+					return (
+						<Ionicons name="newspaper-outline" size={size} color={color} />
+					);
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return <ChristmasScarfFilledOutline size={size} color={color} />;
+				default:
+					return <Ionicons name="compass" size={size} color={color} />;
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return <ChristmasScarfOutline size={size} color={color} />;
+				default:
+					return <Ionicons name="compass-outline" size={size} color={color} />;
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_ACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+								height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+							}}
+						>
+							<ChristmasBellFilledOutline size={size} color={color} />
+						</View>
+					);
+				default:
+					return <Ionicons name="file-tray" size={size} color={color} />;
+			}
+		}
+		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_INACTIVE: {
+			switch (skin) {
+				case 'winter':
+					return (
+						<View
+							style={{
+								width: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+								height: size + WINTER_THEME_NAVBAR_ICON_ADJUSTMENT,
+							}}
+						>
+							<ChristmasBellOutline size={size} color={color} />
+						</View>
+					);
+				default:
+					return (
+						<Ionicons name="file-tray-outline" size={size} color={color} />
+					);
+			}
+		}
 		default:
 			return <View />;
 	}

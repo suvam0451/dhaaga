@@ -1,14 +1,6 @@
 import { DriveFile } from 'misskey-js/autogen/models.js';
 import { MastoMediaAttachment } from '#/types/mastojs.types.js';
-
-export type DhaagaJsMediaCreateDTO = {
-	file: Blob;
-	filename?: string;
-	force: boolean;
-	uri: string;
-	name: string;
-	type: string;
-};
+import { DhaagaJsMediaCreateDTO } from '#/client/typings.js';
 
 export interface MediaRoute {
 	create(

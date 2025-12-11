@@ -2,7 +2,7 @@ import {
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useEffect, useState } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import WithAppStatusItemContext from '../../containers/contexts/WithPostItemContext';

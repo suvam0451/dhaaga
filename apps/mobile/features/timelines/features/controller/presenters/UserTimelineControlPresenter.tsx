@@ -1,9 +1,9 @@
-import ControlSegmentView from '../../../../../components/lib/ControlSegmentView';
+import ControlSegmentView from '#/components/lib/ControlSegmentView';
 import { View } from 'react-native';
-import { InlineCheckboxView } from '../../../../../components/lib/Checkboxes';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../../../styles/dimensions';
-import { AppText } from '../../../../../components/lib/Text';
+import { InlineCheckboxView } from '#/components/lib/Checkboxes';
+import { useAppTheme } from '#/states/global/hooks';
+import { appDimensions } from '#/styles/dimensions';
+import { AppText } from '#/components/lib/Text';
 
 type Props = {
 	onClickHideReply: () => void;

@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import useScrollMoreOnPageEnd from '../../../states/useScrollMoreOnPageEnd';
-import { useAppDb } from '../../../hooks/utility/global-state-extractors';
+import { useAppDb } from '../../../hooks/utility/hooks';
 import WithAutoHideTopNavBar from '../../../components/containers/WithAutoHideTopNavBar';
 import { PostTimelinePresenter } from '../../../features/timelines/presenters/PostTimelinePresenter';
 import { useEffect, useState } from 'react';

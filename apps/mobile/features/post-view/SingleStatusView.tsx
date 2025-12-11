@@ -1,8 +1,6 @@
 import { Fragment, useState } from 'react';
 import useAppNavigator from '#/states/useAppNavigator';
-import WithAppStatusItemContext, {
-	withPostItemContext,
-} from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 import { Pressable, View } from 'react-native';
 import ExplainOutput from '#/components/common/explanation/ExplainOutput';
 import MediaItem from '#/ui/media/MediaItem';
@@ -10,10 +8,7 @@ import EmojiReactions from '#/components/common/status/fragments/EmojiReactions'
 import PostContentWarning from './PostContentWarning';
 import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
-import {
-	useAppTheme,
-	useImageInspect,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppTheme, useImageInspect } from '#/states/global/hooks';
 import PostActionRow from '#/features/post-view/views/PostActionRow';
 import { AppText } from '#/components/lib/Text';
 import StatusQuoted from '#/features/post-view/views/StatusQuoted';
@@ -91,7 +86,7 @@ function SingleStatusView({
 	const spoilerText = _target.meta.cw;
 
 	function onGalleryInspect() {
-		appSession.storage.setPostForMediaInspect(dto as any);
+		appSession.appManager.storage.setPostForMediaInspect(dto as any);
 		showInspector(true);
 	}
 

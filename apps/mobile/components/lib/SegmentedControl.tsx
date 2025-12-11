@@ -7,9 +7,9 @@ import {
 	ViewStyle,
 	Text,
 } from 'react-native';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { APP_ICON_ENUM, AppIcon } from './Icon';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import APP_ICON_ENUM, { AppIcon } from './Icon';
+import { useAppTheme } from '#/states/global/hooks';
 
 type AppSegmentedControlProps = {
 	items: {

@@ -77,7 +77,7 @@ export class AppSessionService {
 			...payload,
 			clientId: acct.id,
 		});
-		const { data } = await client.me.getMe();
+		const data = await client.me.getMe();
 		const obj: UserObjectType = UserParser.parse(
 			data,
 			acct.driver,

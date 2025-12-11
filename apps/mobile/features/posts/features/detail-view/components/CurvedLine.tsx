@@ -1,5 +1,5 @@
 import Svg, { Path } from 'react-native-svg';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 function CurvedLine(props) {
 	const { theme } = useAppTheme();

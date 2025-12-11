@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '../../components/lib/Icon';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 
 type WithCwTextProps = {

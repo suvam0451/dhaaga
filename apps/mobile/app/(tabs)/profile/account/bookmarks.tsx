@@ -4,16 +4,13 @@ import {
 	usePostTimelineState,
 } from '@dhaaga/core';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { useQuery } from '@tanstack/react-query';
 import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 
 function PageContent() {
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const State = usePostTimelineState()!;
 

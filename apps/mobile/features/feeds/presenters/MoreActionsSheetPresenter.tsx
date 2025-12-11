@@ -4,7 +4,7 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { Image } from 'expo-image';
@@ -13,56 +13,28 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { StatItem } from '../../post-view/views/PostInteractionStatsRow';
 import ProfileFeedAssignInteractor from '../../app-profiles/interactors/ProfileFeedAssignInteractor';
 import MenuView from '../../timelines/features/controller/views/MenuView';
-import { LinkingUtils } from '#/utils/linking.utils';
-import { AppDivider } from '#/components/lib/Divider';
-import { AtprotoApiAdapter, AtprotoUtils } from '@dhaaga/bridge';
 import type { FeedObjectType } from '@dhaaga/bridge';
-
-function Divider() {
-	const { theme } = useAppTheme();
-	return (
-		<AppDivider.Hard
-			style={{
-				marginHorizontal: 10,
-				marginVertical: appDimensions.timelines.sectionBottomMargin * 2,
-				backgroundColor: '#363636',
-			}}
-		/>
-	);
-}
+import { AppDividerHard } from '#/ui/Divider';
+import { LinkingUtils } from '#/utils/linking.utils';
 
 const FEED_AVATAR_SIZE = 42;
 
 function MoreActionsSheetPresenter() {
-	const { client } = useAppApiClient();
-	const [Uri, setUri] = useState<string>(null);
 	const [Feed, setFeed] = useState<FeedObjectType>(null);
 	const { ctx, stateId } = useAppBottomSheet();
 	const { theme } = useAppTheme();
+	const { client } = useAppApiClient();
 
 	useEffect(() => {
-		if (ctx?.feedUri) setUri(ctx?.feedUri);
-		if (ctx?.feed) setFeed(ctx?.feed);
+		setFeed(ctx.$type === 'atproto-feed-options' ? ctx.feed : null);
 	}, [stateId]);
 
 	if (!Feed) return <View />;
 
-	async function onOpenInBrowser() {
-		try {
-			const url = await AtprotoUtils.generateFeedUrl(
-				client as AtprotoApiAdapter,
-				Uri,
-			);
-			LinkingUtils.openURL(url);
-		} catch (e: any) {
-			console.log(e);
-		}
-	}
-
 	return (
 		<View style={{ flex: 1 }}>
 			<ProfileFeedAssignInteractor
-				uri={Uri}
+				uri={Feed.uri}
 				Header={
 					<Fragment>
 						<View
@@ -77,7 +49,6 @@ function MoreActionsSheetPresenter() {
 								paddingHorizontal: 10,
 							}}
 						>
-							{/*@ts-ignore-next-line*/}
 							<Image
 								source={{ uri: Feed.avatar }}
 								style={{
@@ -122,14 +93,18 @@ function MoreActionsSheetPresenter() {
 									nextCounts={[]}
 								/>
 							</View>
-							<SyncStatusPresenter uri={Uri} />
-							<Divider />
+							<SyncStatusPresenter uri={Feed.uri} />
+							<AppDividerHard />
 						</View>
 					</Fragment>
 				}
 				Footer={
 					<View style={{ marginBottom: 32 }}>
-						<MenuView onOpenInBrowser={onOpenInBrowser} />
+						<MenuView
+							onOpenInBrowser={() => {
+								LinkingUtils.openAtProtoFeed(client, Feed.uri);
+							}}
+						/>
 					</View>
 				}
 			/>

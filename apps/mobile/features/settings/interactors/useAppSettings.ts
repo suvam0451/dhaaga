@@ -1,6 +1,6 @@
-import { APP_SETTING_KEY } from '../../../services/settings.service';
+import { APP_SETTING_KEY } from '#/services/settings.service';
 import { AppSettingService, AppSettingType } from '@dhaaga/db';
-import { useAppDb } from '../../../hooks/utility/global-state-extractors';
+import { useAppDb } from '#/states/global/hooks';
 import { useState } from 'react';
 import { RandomUtil } from '@dhaaga/bridge';
 

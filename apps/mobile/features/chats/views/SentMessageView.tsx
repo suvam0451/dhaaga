@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { AppText } from '#/components/lib/Text';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import type { MessageObjectType } from '@dhaaga/bridge';
 
 type Props = {

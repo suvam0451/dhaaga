@@ -1,18 +1,12 @@
-import {
-	Animated as RN_Animated,
-	RefreshControl,
-	StyleSheet,
-	View,
-} from 'react-native';
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import ProfileLandingAccountOverview from '#/components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppActiveSession,
 	useAppApiClient,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
-import { APP_ICON_ENUM } from '#/components/lib/Icon';
+} from '#/states/global/hooks';
+import APP_ICON_ENUM from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { SpecialText } from '#/components/lib/Text';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
@@ -30,9 +24,8 @@ import AccountLoadError from '#/features/home/views/AccountLoadError';
 import AccountMissingError from '#/features/home/views/AccountMissingError';
 
 function AccountHome() {
-	const { onScroll } = useScrollMoreOnPageEnd();
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { driver } = useAppApiClient();
 	const { refetch, data } = useApiMe();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
@@ -96,8 +89,7 @@ function AccountHome() {
 
 	return (
 		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
-			<RN_Animated.ScrollView
-				onScroll={onScroll}
+			<ScrollView
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
 				}
@@ -148,7 +140,7 @@ function AccountHome() {
 						marginHorizontal: 8,
 					}}
 				/>
-			</RN_Animated.ScrollView>
+			</ScrollView>
 		</View>
 	);
 }

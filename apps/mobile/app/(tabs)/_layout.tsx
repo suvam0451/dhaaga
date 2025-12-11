@@ -6,10 +6,10 @@ import {
 	ProfileTabNavbarIconButton,
 } from '#/components/lib/Icon';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppActiveSession,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
 
 const BOTTOM_NAVBAR_HEIGHT = 50; // Range: 42 to 52
@@ -25,7 +25,7 @@ const ICON_E_SIZE_OFFSET = 8;
 
 export default function TabLayout() {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
 	return (

@@ -1,7 +1,7 @@
 import useBookmarkGalleryBuilder, {
 	GalleryTagAggregationItem,
 	GalleryUserAggregationItem,
-} from '../hooks/realm/useBookmarkGalleryBuilder';
+} from '../hooks/db/useBookmarkGalleryBuilder';
 import {
 	createContext,
 	useCallback,

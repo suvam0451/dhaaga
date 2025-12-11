@@ -1,4 +1,4 @@
-import { RestClientCreateDTO } from '../types/_interface.js';
+import { RestClientCreateDTO } from '../typings.js';
 import { MastodonInstanceRouter } from '../collections/servers/mastodon.js';
 import { MastodonAccountsRouter } from '../collections/accounts/mastodon.js';
 import { MastodonStatusesRouter } from '../collections/posts/mastodon.js';
@@ -13,7 +13,6 @@ import { MastodonListRoute } from '../collections/lists/mastodon.js';
 import { MastodonProfileRouter } from '../collections/profile/mastodon.js';
 import { ApiTargetInterface } from '../index.js';
 import FetchWrapper from '../utils/fetch.js';
-import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
@@ -34,7 +33,6 @@ class Adapter implements ApiTargetInterface {
 	media: MastodonMediaRoute;
 	lists: MastodonListRoute;
 	profile: MastodonProfileRouter;
-	user: UserRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -57,7 +55,6 @@ class Adapter implements ApiTargetInterface {
 		this.media = new MastodonMediaRoute(this.fetch);
 		this.lists = new MastodonListRoute(this.fetch);
 		this.profile = new MastodonProfileRouter(this.fetch);
-		this.user = new UserRoute(this);
 	}
 }
 

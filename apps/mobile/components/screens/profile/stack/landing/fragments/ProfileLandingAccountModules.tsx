@@ -1,12 +1,12 @@
 import { memo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { APP_FONT } from '../../../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 const ICON_SIZE = 24;
 

@@ -3,17 +3,14 @@ import {
 	TimelineFetchMode,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 import { useQuery } from '@tanstack/react-query';
 
 function ContentView() {
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const State = usePostTimelineState()!;
 

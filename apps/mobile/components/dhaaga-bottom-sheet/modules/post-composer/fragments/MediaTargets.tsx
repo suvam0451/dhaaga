@@ -1,13 +1,13 @@
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
+import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import {
 	useAppApiClient,
 	useAppDialog,
 	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { Image } from 'expo-image';
-import { PostComposerReducerActionType } from '../../../../../features/composer/reducers/composer.reducer';
+import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppText } from '../../../../lib/Text';
@@ -55,9 +55,14 @@ function ComposeMediaTargets() {
 					'Submit empty string to remove.',
 				],
 			},
-			state.medias[idx].remoteAlt || 'Enter new alt text',
-			(text: string) => {
-				altInputCallback(idx, text);
+			{
+				$type: 'text-prompt',
+				placeholder: state.medias[idx].remoteAlt || 'Enter new alt text',
+			},
+			(ctx) => {
+				if (ctx.$type !== 'text-prompt') return;
+				if (!ctx.userInput) return;
+				altInputCallback(idx, ctx.userInput.trim());
 			},
 		);
 	}

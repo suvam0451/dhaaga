@@ -5,10 +5,11 @@ import type {
 	ChatBskyConvoListConvos,
 	Facet,
 } from '@atproto/api';
-import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
+import { NotificationsRoute } from './_interface.js';
 import type { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { NotificationGetQueryDto } from '#/client/typings.js';
 
 class BlueskyNotificationsRouter implements NotificationsRoute {
 	dto: AppAtpSessionData;

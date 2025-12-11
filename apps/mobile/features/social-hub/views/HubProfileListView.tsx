@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
-import {
-	useAppTheme,
-	useHub,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme, useHub } from '#/states/global/hooks';
 import { FlatList, Pressable, View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 
 type Props = {
 	onPressAddProfile: () => void;

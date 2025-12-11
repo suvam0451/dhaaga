@@ -1,7 +1,7 @@
 import { Pressable, View, StyleSheet } from 'react-native';
-import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
+import { AppText } from '#/components/lib/Text';
 
 type CollectionItemProps = {
 	active: boolean;

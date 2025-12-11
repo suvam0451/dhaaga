@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import { APP_POST_VISIBILITY } from '../../../../../hooks/app/useVisibility';
+import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
+import { APP_POST_VISIBILITY } from '#/hooks/app/useVisibility';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ActivityPubService } from '@dhaaga/bridge';
-import AtprotoComposerService from '../../../../../services/atproto/atproto-compose';
+import AtprotoComposerService from '#/services/atproto/atproto-compose';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { Loader } from '../../../../lib/Loader';
 import { AtprotoApiAdapter } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../../states/_global';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { PostParser } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 /**
  * Click to Post!

@@ -18,22 +18,6 @@ function useLoadingMoreIndicatorState({
 	additionalLoadingStates,
 }: Props) {
 	/**
-	 * It just makes sure the loading indicator ticks
-	 * for a bit more, while the posts are being loaded
-	 * in the background for user.
-	 *
-	 * Fast scrolling, especially in longer lists will
-	 * cause app to lag
-	 */
-	// const forceLoadingState =
-	// 	additionalLoadingStates !== undefined ? additionalLoadingStates : false;
-	// const overallLoading = fetchStatus === 'fetching' || forceLoadingState;
-	// const loading = useSkeletonSmoothTransition(overallLoading, {
-	// 	condition: fetchStatus === 'idle' || forceLoadingState,
-	// 	preventLoadingForCondition: false,
-	// });
-
-	/**
 	 * 	show the loading indicator for an extended
 	 * 	amount of time
 	 */
@@ -60,20 +44,6 @@ function useLoadingMoreIndicatorState({
 		visible: fetchStatus !== 'idle',
 		loading: fetchStatus === 'fetching',
 	};
-
-	// return useMemo(() => {
-	// 	if (extendedLoading) {
-	// 		return {
-	// 			visible: true,
-	// 			loading: true,
-	// 		};
-	// 	} else {
-	// 		return {
-	// 			visible: false,
-	// 			loading: false,
-	// 		};
-	// 	}
-	// }, [extendedLoading]);
 }
 
 export default useLoadingMoreIndicatorState;

@@ -4,10 +4,7 @@ import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
 } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import {
-	useAppActiveSession,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppActiveSession, useAppTheme } from '#/states/global/hooks';
 import { router } from 'expo-router';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';

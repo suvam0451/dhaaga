@@ -11,7 +11,7 @@ import MailArt from '#/components/svgs/Mail';
 import PartyPopperArt from '#/components/svgs/PartyPopper';
 import BearRoadSign from '#/components/svgs/BearRoadSign';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { useEffect, useRef, useState } from 'react';
 import {
 	Directions,

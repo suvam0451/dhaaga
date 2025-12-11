@@ -1,9 +1,9 @@
-import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppDivider } from '../../../components/lib/Divider';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
+import { AppDivider } from '#/components/lib/Divider';
 import { Fragment } from 'react';
 import { View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 
 function Divider() {
 	const { theme } = useAppTheme();

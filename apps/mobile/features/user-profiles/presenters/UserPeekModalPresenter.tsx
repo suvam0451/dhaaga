@@ -7,18 +7,18 @@ import {
 } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { userProfileQueryOpts } from '@dhaaga/react';
-import { APP_KNOWN_MODAL } from '../../../states/_global';
 import {
 	useAppApiClient,
 	useAppModalState,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import useAppNavigator from '../../../states/useAppNavigator';
+} from '#/states/global/hooks';
+import useAppNavigator from '#/states/useAppNavigator';
 import useUserPeekInteractor from '../interactors/useUserPeekInteractor';
 import TaperedArrow from '../components/TaperedArrow';
 import Backdrop from '../components/Backdrop';
 import UserPeekModalContentView from '../view/UserPeekModalContentView';
 import { Fragment } from 'react';
+import { APP_KNOWN_MODAL } from '#/states/global/store';
 
 /**
  * Shows

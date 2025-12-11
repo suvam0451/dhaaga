@@ -3,23 +3,19 @@ import { AccountRoute } from '../collections/accounts/_interface.js';
 import { StatusesRoute } from '../collections/posts/_interface.js';
 import { TrendsRoute } from '../collections/trends/_interface.js';
 import { NotificationsRoute } from '../collections/notifications/_interface.js';
-import {
-	DhaagaJsTimelineQueryOptions,
-	TimelinesRoute,
-} from '../collections/timelines/_interface.js';
+import { TimelinesRoute } from '../collections/timelines/_interface.js';
 import { TagRoute } from '../collections/tags/_interface.js';
-import {
-	DhaagaJsPostSearchDTO,
-	DhaagaJsUserSearchDTO,
-	SearchRoute,
-} from '../collections/search/_interface.js';
+import { SearchRoute } from '../collections/search/_interface.js';
 import { MeRoute } from '../collections/me/_interface.js';
 import { MediaRoute } from '../collections/media/_interface.js';
 import { ListsRoute } from '../collections/lists/_interface.js';
 import { ProfileRoute } from '../collections/profile/_interface.js';
-// mutators
-import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
+import {
+	DhaagaJsPostSearchDTO,
+	DhaagaJsTimelineQueryOptions,
+	DhaagaJsUserSearchDTO,
+} from '#/client/typings.js';
 
 interface ApiTargetInterface {
 	driver: KNOWN_SOFTWARE | string;
@@ -44,8 +40,6 @@ interface ApiTargetInterface {
 	me: MeRoute;
 	media: MediaRoute;
 	lists: ListsRoute;
-	// mutators
-	user: UserRoute;
 }
 
 export type {

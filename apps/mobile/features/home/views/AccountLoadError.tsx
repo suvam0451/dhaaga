@@ -8,7 +8,7 @@ import {
 	useAppActiveSession,
 	useAppGlobalStateActions,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { router } from 'expo-router';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';

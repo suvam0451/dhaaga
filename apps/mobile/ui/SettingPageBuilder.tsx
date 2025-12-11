@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';

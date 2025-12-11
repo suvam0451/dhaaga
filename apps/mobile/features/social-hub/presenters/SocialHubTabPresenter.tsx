@@ -1,19 +1,19 @@
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppBottomSheet,
 	useAppDb,
 	useAppDialog,
 	useAppGlobalStateActions,
 	useAppTheme,
 	useHub,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useEffect, useReducer, useState } from 'react';
 import {
 	socialHubTabReducer as reducer,
 	socialHubTabReducerActionType as ACTION,
 	socialHubTabReducerDefault as reducerDefault,
-} from '../../../states/interactors/social-hub-tab.reducer';
-import { RefreshControl, ScrollView, View } from 'react-native';
+} from '#/states/interactors/social-hub-tab.reducer';
+import { RefreshControl, ScrollView } from 'react-native';
 import HubProfileListView from '../views/HubProfileListView';
 import FeedListPresenter from './FeedListPresenter';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
@@ -29,10 +29,10 @@ import TagListPresenter from './TagListPresenter';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
 import ComposeButton from '#/components/widgets/ComposeButton';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	// account left join guaranteed
@@ -52,7 +52,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { loadAccounts } = useHub();
 	const { profiles, selectProfile } = useHub();
 	const { setCtx, show: showSheet } = useAppBottomSheet();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { restoreSession } = useAppGlobalStateActions();
 	const { t } = useTranslation([
 		LOCALIZATION_NAMESPACE.DIALOGS,
@@ -87,30 +87,36 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const parentAcct = ProfileService.getOwnerAccount(db, profile);
 
 	function onPressAddFeed() {
-		setCtx({ profileId: profile.id, onChange: refresh });
-		showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED, true);
+		showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_FEED, true, {
+			$type: 'profile-id',
+			profileId: profile.id,
+			callback: refresh,
+		});
 	}
 
 	function onPressAddUser() {
-		if (parentAcct.id !== acct.id) {
-			show(
-				DialogBuilderService.toSwitchActiveAccount(() => {
-					AccountService.select(db, parentAcct);
-					try {
-						restoreSession().then(() => {
-							hide();
-							setCtx({ profileId: profile.id, onChange: refresh });
-							showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
-						});
-					} catch (e) {
-						hide();
-					}
-				}),
-			);
-		} else {
-			setCtx({ profileId: profile.id, onChange: refresh });
-			showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
-		}
+		showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true, {
+			$type: 'profile-id',
+			profileId: profile.id,
+			callback: refresh,
+		});
+
+		// if (parentAcct.id !== acct.id) {
+		// show(
+		// 	DialogBuilderService.toSwitchActiveAccount(() => {
+		// 		AccountService.select(db, parentAcct);
+		// 		try {
+		// 			restoreSession().then(() => {
+		// 				hide();
+		// 				setCtx({ profileId: profile.id, onChange: refresh });
+		// 				showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
+		// 			});
+		// 		} catch (e) {
+		// 			hide();
+		// 		}
+		// 	}),
+		// );
+		// }
 	}
 
 	function onPressAddTag() {
@@ -122,9 +128,10 @@ function SocialHubTabPresenter({ profile }: Props) {
 				}) as string[],
 				actions: [],
 			},
-			t(`hub.tagAdd.placeholder`),
-			(text: string) => {
-				ProfilePinnedTagService.add(db, acct, profile, text);
+			{ $type: 'text-prompt', placeholder: t(`hub.tagAdd.placeholder`) },
+			(ctx) => {
+				if (ctx.$type !== 'text-prompt') return;
+				ProfilePinnedTagService.add(db, acct, profile, ctx.userInput as string);
 				refresh();
 			},
 		);
@@ -170,13 +177,16 @@ function SocialHubTabPresenter({ profile }: Props) {
 									returnObjects: true,
 								}) as string[],
 							},
-							t(`hub.tagRename.placeholder`),
-							(name: string) => {
-								if (!!name) {
-									ProfilePinnedTagService.renameById(db, pinnedTag.id, name);
-									hide();
-									refresh();
-								}
+							{
+								$type: 'text-prompt',
+								placeholder: t(`hub.tagRename.placeholder`),
+							},
+							(ctx) => {
+								if (ctx.$type !== 'text-prompt') return;
+								if (!ctx.userInput) return;
+								const name = (ctx.userInput as string).trim();
+								ProfilePinnedTagService.renameById(db, pinnedTag.id, name);
+								refresh();
 							},
 						);
 					},
@@ -203,12 +213,13 @@ function SocialHubTabPresenter({ profile }: Props) {
 					returnObjects: true,
 				}) as string[],
 			},
-			t(`hub.profileAdd.placeholder`),
-			(name: string) => {
-				if (!!name) {
-					ProfileService.addProfile(db, parentAcct, name);
-					loadAccounts();
-				}
+			{ $type: 'text-prompt', placeholder: t(`hub.profileAdd.placeholder`) },
+			(ctx) => {
+				if (ctx.$type !== 'text-prompt') return;
+				if (!ctx.userInput) return;
+				const name = (ctx.userInput as string).trim();
+				ProfileService.addProfile(db, parentAcct, name);
+				loadAccounts();
 			},
 		);
 	}
@@ -246,13 +257,16 @@ function SocialHubTabPresenter({ profile }: Props) {
 										returnObjects: true,
 									}) as string[],
 								},
-								t(`hub.profileRename.placeholder`),
-								(name: string) => {
-									if (!!name) {
-										ProfileService.renameProfileById(db, profileId, name);
-										hide();
-										loadAccounts();
-									}
+								{
+									$type: 'text-prompt',
+									placeholder: t(`hub.profileRename.placeholder`),
+								},
+								(ctx) => {
+									if (ctx.$type !== 'text-prompt') return;
+									if (!ctx.userInput) return;
+									const name = (ctx.userInput as string).trim();
+									ProfileService.renameProfileById(db, profileId, name);
+									loadAccounts();
 								},
 							);
 						},
@@ -277,13 +291,16 @@ function SocialHubTabPresenter({ profile }: Props) {
 										returnObjects: true,
 									}) as string[],
 								},
-								t(`hub.profileRename.placeholder`),
-								(name: string) => {
-									if (!!name) {
-										ProfileService.renameProfileById(db, profileId, name);
-										hide();
-										loadAccounts();
-									}
+								{
+									$type: 'text-prompt',
+									placeholder: t(`hub.profileRename.placeholder`),
+								},
+								(ctx) => {
+									if (ctx.$type !== 'text-prompt') return;
+									if (!ctx.userInput) return;
+									const name = (ctx.userInput as string).trim();
+									ProfileService.renameProfileById(db, profileId, name);
+									loadAccounts();
 								},
 							);
 						},

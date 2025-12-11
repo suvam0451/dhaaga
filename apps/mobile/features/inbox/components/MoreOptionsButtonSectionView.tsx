@@ -1,8 +1,8 @@
 import { Pressable } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
-import { DatetimeUtil } from '../../../utils/datetime.utils';
-import { AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { AppText } from '#/components/lib/Text';
+import { DatetimeUtil } from '#/utils/datetime.utils';
+import { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	createdAt: Date | string;

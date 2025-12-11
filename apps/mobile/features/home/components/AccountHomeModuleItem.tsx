@@ -1,5 +1,5 @@
-import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';

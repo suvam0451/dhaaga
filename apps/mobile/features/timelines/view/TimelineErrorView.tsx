@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 

@@ -1,18 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import PostButton from './PostButton';
-import {
-	useAppAcct,
-	useAppTheme,
-} from '../../../../../hooks/utility/global-state-extractors';
-import { PostMiddleware } from '../../../../../services/middlewares/post.middleware';
-import { appDimensions } from '../../../../../styles/dimensions';
+import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
+import { PostMiddleware } from '#/services/middlewares/post.middleware';
+import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '../../../../lib/Text';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
-import useComposer from '../../../../../features/composer/interactors/useComposer';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import useComposer from '#/states/app/useComposer';
 
 /**
  * Indicates in which context this reply is being composed
@@ -44,7 +41,6 @@ function ReplyIndicator() {
 					marginLeft: 6,
 				}}
 			>
-				{/*@ts-ignore-next-line*/}
 				<Image
 					source={{ uri: _target.postedBy.avatarUrl }}
 					style={{ width: 24, height: 24, borderRadius: 8 }}
@@ -73,7 +69,7 @@ function ReplyIndicator() {
  */
 function ComposerTopMenu() {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return (
 		<View

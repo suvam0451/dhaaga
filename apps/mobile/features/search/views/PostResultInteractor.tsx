@@ -12,8 +12,7 @@ import WithAppStatusItemContext from '#/components/containers/contexts/WithPostI
 import PostTimelineEntryView from '../../post-item/PostTimelineEntryView';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
-import useListEndReachedJs from '#/hooks/app/useListEndReachedJs';
+import { useAppApiClient } from '#/states/global/hooks';
 import { PostSearchStateIndicator } from '#/features/search/components/StateIndicators';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import Animated from 'react-native-reanimated';
@@ -77,10 +76,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		});
 	}
 
-	const { onScroll } = useListEndReachedJs(
-		loadMore,
-		TimelineState.items.length,
-	);
+	const { scrollHandler } = useScrollHandleAnimatedList();
 
 	const {} = useScrollHandleAnimatedList(loadMore);
 
@@ -104,7 +100,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 					</WithAppStatusItemContext>
 				)}
 				style={{ flex: 1 }}
-				onScroll={onScroll}
+				onScroll={scrollHandler}
 				scrollEventThrottle={64}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />

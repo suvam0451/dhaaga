@@ -1,10 +1,10 @@
 import { FAB_MENU_ICON_SIZE, FabModuleProps } from './_common';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONT } from '#/styles/AppTheme';
 import { FabMenuItemText } from '../fragments/FabMenuItemIcon';
 import { FabMenuItemFactory } from '../fragments/FabMenuItemFactory';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../../states/_global';
-import { useAppBottomSheet } from '../../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet } from '#/states/global/hooks';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 const MENU_ITEM_LABEL = 'Create Post';
 

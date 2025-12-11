@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE, MisskeyApiAdapter } from '@dhaaga/bridge';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 
 export type AppListDto = {
 	id: string;
@@ -32,13 +31,8 @@ const DEFAULT = {
  */
 function useActivityPubLists() {
 	const [Data, setData] = useState<ActivityPubListsListingDto>(DEFAULT);
-	const { client, acct, driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-			client: o.router,
-			acct: o.acct,
-		})),
-	);
+	const { client, driver } = useAppApiClient();
+	const { acct } = useActiveUserSession();
 
 	useEffect(() => {
 		setData(DEFAULT);

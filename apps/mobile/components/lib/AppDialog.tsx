@@ -6,18 +6,15 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import {
-	useAppDialog,
-	useAppTheme,
-} from '../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { useAppDialog, useAppTheme } from '#/states/global/hooks';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
-import { appDimensions, appVerticalIndex } from '../../styles/dimensions';
+import { appDimensions, appVerticalIndex } from '#/styles/dimensions';
 import { AppText } from './Text';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type DialogOptionsProps = {
 	label: string;
@@ -80,20 +77,30 @@ function DialogOption({ label, onPress, variant, style }: DialogOptionsProps) {
  * @constructor
  */
 export function AppDialog() {
-	const { visible, hide, state, textSeed, textSubmitCallback, stateId } =
-		useAppDialog();
+	const {
+		visible,
+		hide,
+		title,
+		description,
+		state,
+		actions,
+		stateId,
+		setState,
+		submit,
+	} = useAppDialog();
 	const { theme } = useAppTheme();
-	const [Input, setInput] = useState(null);
+	const [Input, setUserInput] = useState(null);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	useEffect(() => {
-		setInput('');
-	}, [stateId, textSeed]);
-
-	const IS_TXT_MODE =
-		textSeed !== null && textSeed !== undefined && !!textSubmitCallback;
+		if (!state) return;
+		if (state.$type === 'text-prompt') setUserInput('');
+	}, [stateId]);
 
 	if (!visible) return <View />;
+
+	const IS_TXT_MODE = state?.$type === 'text-prompt';
+
 	return (
 		<Fragment>
 			<Pressable style={styles.backdrop} onPress={hide} />
@@ -112,10 +119,10 @@ export function AppDialog() {
 					<AppText.SemiBold
 						style={[styles.modalTitle, { color: theme.primary.a0 }]}
 					>
-						{state.title}
+						{title}
 					</AppText.SemiBold>
 
-					{state.description.map((text, i) => (
+					{description.map((text, i) => (
 						<AppText.Medium
 							forwardedKey={i}
 							style={[
@@ -131,8 +138,8 @@ export function AppDialog() {
 					))}
 					{IS_TXT_MODE && (
 						<AppTextInput.SingleLine
-							placeholder={textSeed}
-							onChangeText={setInput}
+							placeholder={state.placeholder}
+							onChangeText={setUserInput}
 							value={Input}
 							style={{
 								fontSize: 16,
@@ -147,7 +154,7 @@ export function AppDialog() {
 				</View>
 
 				{/* ---- Additional Dialog Options ---- */}
-				{state.actions.map((action, i) => (
+				{actions.map((action, i) => (
 					<DialogOption
 						key={i}
 						label={action.label}
@@ -161,8 +168,11 @@ export function AppDialog() {
 					<DialogOption
 						label={t(`dialogs.saveOption`)}
 						onPress={async () => {
-							textSubmitCallback(Input);
-							hide();
+							setState({
+								...state,
+								userInput: Input,
+							});
+							submit();
 						}}
 						variant={'default'}
 					/>

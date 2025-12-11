@@ -1,8 +1,5 @@
-import {
-	useAppManager,
-	useAppModalState,
-} from '../../../hooks/utility/global-state-extractors';
-import { APP_KNOWN_MODAL } from '../../../states/_global';
+import { useAppManager, useAppModalState } from '#/states/global/hooks';
+import { APP_KNOWN_MODAL } from '#/states/global/store';
 import { useEffect, useState } from 'react';
 import { Dimensions } from 'react-native';
 
@@ -30,7 +27,7 @@ function useUserPeekInteractor() {
 			return;
 		}
 
-		const data = appManager.storage.getUserPeekModalData();
+		const data = appManager.appManager.storage.getUserPeekModalData();
 		if (!data) return;
 		if (data.measurement.y >= height / 2) {
 			setPosition({

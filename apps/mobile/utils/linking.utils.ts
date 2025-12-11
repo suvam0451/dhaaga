@@ -1,6 +1,11 @@
 import * as Linking from 'expo-linking';
 import * as Clipboard from 'expo-clipboard';
 import { Share } from 'react-native';
+import {
+	ApiTargetInterface,
+	AtprotoApiAdapter,
+	AtprotoUtils,
+} from '@dhaaga/bridge';
 
 export class LinkingUtils {
 	static async saveToClipboard(content: string) {
@@ -16,6 +21,18 @@ export class LinkingUtils {
 			});
 		} catch (e) {
 			console.log('[WARN]: could not open link externally');
+		}
+	}
+
+	static async openAtProtoFeed(client: ApiTargetInterface, uri: string) {
+		try {
+			const url = await AtprotoUtils.generateFeedUrl(
+				client as AtprotoApiAdapter,
+				uri,
+			);
+			LinkingUtils.openURL(url);
+		} catch (e: any) {
+			console.log(e);
 		}
 	}
 

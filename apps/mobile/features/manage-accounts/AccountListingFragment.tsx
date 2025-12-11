@@ -20,7 +20,7 @@ import {
 	useAppGlobalStateActions,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { useTranslation } from 'react-i18next';

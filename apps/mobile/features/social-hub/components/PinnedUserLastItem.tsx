@@ -1,10 +1,7 @@
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { Pressable, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 const PINNED_USER_BOX_SIZE = 64 + (3 + 1.75) * 2;
 

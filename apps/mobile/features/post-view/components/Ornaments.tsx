@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppText } from '#/components/lib/Text';
 import { View, StyleSheet } from 'react-native';

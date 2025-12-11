@@ -1,5 +1,5 @@
 import { Pressable, View } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';

@@ -7,9 +7,9 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import BottomSheetActionMenuBuilder from '#/ui/BottomSheetActionMenuBuilder';
-import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 
 function ABS_TagDetails() {
 	const [TagName, setTagName] = useState(null);

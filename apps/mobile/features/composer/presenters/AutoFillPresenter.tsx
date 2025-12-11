@@ -4,10 +4,10 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from 'react-native-reanimated';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import SuggestedUserListView from '../views/SuggestedUserListView';
 import SuggestedEmojiListView from '../views/SuggestedEmojiListView';
-import useComposer from '../interactors/useComposer';
+import useComposer from '#/states/app/useComposer';
 
 function AutoFillPresenter() {
 	const { theme } = useAppTheme();

@@ -11,7 +11,6 @@ import { DefaultMeRouter } from '../collections/me/default.js';
 import { DefaultMediaRoute } from '../collections/media/default.js';
 import { DefaultListRoute } from '../collections/lists/default.js';
 import { DefaultProfileRouter } from '../collections/profile/default.js';
-import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
@@ -31,7 +30,6 @@ class Adapter implements ApiTargetInterface {
 	media: DefaultMediaRoute;
 	lists: DefaultListRoute;
 	profile: DefaultProfileRouter;
-	user: UserRoute;
 
 	constructor() {
 		this.driver = KNOWN_SOFTWARE.UNKNOWN;
@@ -49,7 +47,6 @@ class Adapter implements ApiTargetInterface {
 		this.media = new DefaultMediaRoute();
 		this.lists = new DefaultListRoute();
 		this.profile = new DefaultProfileRouter();
-		this.user = new UserRoute(this);
 	}
 }
 
