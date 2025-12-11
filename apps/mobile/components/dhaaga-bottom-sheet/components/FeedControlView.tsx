@@ -1,5 +1,4 @@
 import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
-import { AppText } from '#/components/lib/Text';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Fragment } from 'react';
 import FeedControlSheetActions from '#/components/dhaaga-bottom-sheet/components/FeedControlSheetActions';
@@ -7,7 +6,11 @@ import { AppDividerSoft } from '#/ui/Divider';
 import { LinkingUtils } from '#/utils/linking.utils';
 import { PostTimelineStateType } from '@dhaaga/core';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
-import { NativeTextMedium, NativeTextSemiBold } from '#/ui/NativeText';
+import {
+	NativeTextMedium,
+	NativeTextNormal,
+	NativeTextSemiBold,
+} from '#/ui/NativeText';
 import FeedControlSelections from '#/components/dhaaga-bottom-sheet/components/FeedControlSelections';
 
 type SUPPORTED_FEED_QUERY_CATEGORIES =
@@ -87,8 +90,8 @@ function FeedControlView({
 				}}
 			>
 				{description.map((item, i) => (
-					<AppText.Normal
-						forwardedKey={i}
+					<NativeTextNormal
+						key={i}
 						style={[
 							styles.desc,
 							{
@@ -97,7 +100,7 @@ function FeedControlView({
 						]}
 					>
 						{item}
-					</AppText.Normal>
+					</NativeTextNormal>
 				))}
 				<AppDividerSoft style={{ marginVertical: 8 }} />
 				<FeedControlSelections supported={supportedFilters ?? []} />

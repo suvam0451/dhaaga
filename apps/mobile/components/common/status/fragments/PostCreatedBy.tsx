@@ -212,16 +212,21 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	const UserDivRef = useRef(null);
 
 	function onAvatarClicked() {
+		let ctx = null;
 		if (ActivityPubService.blueskyLike(driver)) {
-			setCtx({
+			ctx = {
+				$type: 'user-preview',
+				use: 'did',
 				did: PostInspector.getContentTarget(dto)?.postedBy?.id,
-			});
+			};
 		} else {
-			setCtx({
+			ctx = {
+				$type: 'user-preview',
+				use: 'userId',
 				userId: PostInspector.getContentTarget(dto)?.postedBy?.id,
-			});
+			};
 		}
-		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
+		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true, ctx);
 
 		// UserDivRef.current.measureInWindow((x, y, width, height) => {
 		// 	appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.id, {

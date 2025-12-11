@@ -2,71 +2,92 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import ProfileAvatar from '#/components/common/user/fragments/ProfileAvatar';
 import UserRelationPresenter from './UserRelationPresenter';
 import { TextContentView } from '#/components/common/status/TextContentView';
-import useProfilePeekSheetInteractor from '../interactors/useProfilePeekSheetInteractor';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '#/components/lib/Text';
-import { useAppTheme } from '#/states/global/hooks';
+import {
+	useAppApiClient,
+	useAppBottomSheet,
+	useAppTheme,
+} from '#/states/global/hooks';
 import { Image } from 'expo-image';
 import ProfileStatPresenter from './ProfileStatPresenter';
 import { Skeleton } from '#/ui/Skeleton';
+import { userProfileQueryOpts } from '@dhaaga/react';
+import { useQuery } from '@tanstack/react-query';
+import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
+import BearError from '#/components/svgs/BearError';
 
+function Placeholder() {
+	return (
+		<View style={[styles.root, { overflow: 'hidden' }]}>
+			<Skeleton height={128} width={'100%'} style={{ marginBottom: 12 }} />
+			<Skeleton
+				height={42}
+				width={'75%'}
+				style={{
+					marginLeft: 'auto',
+					marginBottom: 12,
+					marginHorizontal: 10,
+				}}
+			/>
+			<View
+				style={{
+					flexDirection: 'row',
+					paddingHorizontal: 10,
+					marginBottom: 16,
+				}}
+			>
+				<Skeleton
+					height={42}
+					width={'60%'}
+					style={{ marginLeft: 'auto', flex: 1 }}
+				/>
+				<Skeleton
+					height={42}
+					width={'20%'}
+					style={{ marginLeft: 12, marginBottom: 8 }}
+				/>
+			</View>
+			{/*text*/}
+			<Skeleton
+				height={20}
+				width={'100%'}
+				style={{ marginLeft: 12, marginBottom: 8 }}
+			/>
+			<Skeleton
+				height={20}
+				width={'100%'}
+				style={{ marginLeft: 12, marginBottom: 8 }}
+			/>
+			<Skeleton
+				height={20}
+				width={'40%'}
+				style={{ marginLeft: 12, marginBottom: 8 }}
+			/>
+		</View>
+	);
+}
 /**
  * This bottom sheet will show a preview
  * of the selected user's profile.
  */
 function UserPeekSheetPresenter() {
-	const { data: acct, isLoading, isFetching } = useProfilePeekSheetInteractor();
+	const { client } = useAppApiClient();
+	const { ctx } = useAppBottomSheet();
+	const { data, error, isLoading, isFetching } = useQuery(
+		userProfileQueryOpts(client, ctx?.$type === 'user-preview' ? ctx : null),
+	);
 	const { theme } = useAppTheme();
 
-	if (isLoading || isFetching || !acct)
+	if (error)
 		return (
-			<View style={[styles.root, { overflow: 'hidden' }]}>
-				<Skeleton height={128} width={'100%'} style={{ marginBottom: 12 }} />
-				<Skeleton
-					height={42}
-					width={'75%'}
-					style={{
-						marginLeft: 'auto',
-						marginBottom: 12,
-						marginHorizontal: 10,
-					}}
-				/>
-				<View
-					style={{
-						flexDirection: 'row',
-						paddingHorizontal: 10,
-						marginBottom: 16,
-					}}
-				>
-					<Skeleton
-						height={42}
-						width={'60%'}
-						style={{ marginLeft: 'auto', flex: 1 }}
-					/>
-					<Skeleton
-						height={42}
-						width={'20%'}
-						style={{ marginLeft: 12, marginBottom: 8 }}
-					/>
-				</View>
-				{/*text*/}
-				<Skeleton
-					height={20}
-					width={'100%'}
-					style={{ marginLeft: 12, marginBottom: 8 }}
-				/>
-				<Skeleton
-					height={20}
-					width={'100%'}
-					style={{ marginLeft: 12, marginBottom: 8 }}
-				/>
-				<Skeleton
-					height={20}
-					width={'40%'}
-					style={{ marginLeft: 12, marginBottom: 8 }}
-				/>
-			</View>
+			<ErrorPageBuilder
+				stickerArt={<BearError />}
+				errorMessage={'Failed to load profile data'}
+				errorDescription={error.message}
+			/>
 		);
+	if (isLoading || isFetching || !data) return <Placeholder />;
 
 	return (
 		<ScrollView
@@ -75,9 +96,8 @@ function UserPeekSheetPresenter() {
 				paddingBottom: 16,
 			}}
 		>
-			{acct?.banner ? (
-				// @ts-ignore-next-line
-				<Image source={{ uri: acct?.banner }} style={styles.banner} />
+			{data?.banner ? (
+				<Image source={{ uri: data?.banner }} style={styles.banner} />
 			) : (
 				<View style={styles.bannerReplacement} />
 			)}
@@ -85,22 +105,22 @@ function UserPeekSheetPresenter() {
 				<ProfileAvatar
 					containerStyle={styles.avatarContainer}
 					imageStyle={styles.avatarImageContainer}
-					uri={acct?.avatarUrl}
+					uri={data?.avatarUrl}
 				/>
 				<ProfileStatPresenter
-					acctId={acct.id}
-					followerCount={acct.stats.followers}
-					followingCount={acct.stats.following}
-					postCount={acct.stats.posts}
+					acctId={data.id}
+					followerCount={data.stats.followers}
+					followingCount={data.stats.following}
+					postCount={data.stats.posts}
 				/>
 			</View>
 			<View style={styles.sectionB}>
 				<View style={{ flex: 1 }}>
 					<TextContentView
-						tree={acct.parsedDisplayName}
+						tree={data.parsedDisplayName}
 						variant={'displayName'}
 						mentions={[]}
-						emojiMap={acct.calculated.emojis}
+						emojiMap={data.calculated.emojis}
 					/>
 					<AppText.Medium
 						numberOfLines={1}
@@ -110,16 +130,16 @@ function UserPeekSheetPresenter() {
 							maxWidth: 196,
 						}}
 					>
-						{acct?.handle}
+						{data?.handle}
 					</AppText.Medium>
 				</View>
-				<UserRelationPresenter userId={acct?.id} />
+				<UserRelationPresenter userId={data?.id} />
 			</View>
 			<TextContentView
-				tree={acct?.parsedDescription}
+				tree={data?.parsedDescription}
 				variant={'bodyContent'}
 				mentions={[]}
-				emojiMap={acct?.calculated?.emojis}
+				emojiMap={data?.calculated?.emojis}
 				style={{ paddingHorizontal: 10 }}
 			/>
 		</ScrollView>

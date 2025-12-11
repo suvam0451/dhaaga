@@ -1,5 +1,5 @@
 import {
-	DhaagaJsTimelineQueryOptions,
+	DriverUserFindQueryType,
 	FeedObjectType,
 	RandomUtil,
 } from '@dhaaga/bridge';
@@ -53,10 +53,9 @@ type AppStateBottomSheetContextType =
 			$type: 'tag-preview';
 			tagId: string;
 	  }
-	| {
+	| ({
 			$type: 'user-preview';
-			userId: string;
-	  }
+	  } & DriverUserFindQueryType)
 	| {
 			$type: 'mentioned-user-preview';
 			mentionString: string;

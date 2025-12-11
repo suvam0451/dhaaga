@@ -96,6 +96,29 @@ class ActivitypubHelper {
 		}
 		return '';
 	}
+
+	/**
+	 * ActivityPub handle to webfinger
+	 * lookup compatible object
+	 * @param handle handle resolved by app
+	 * @param server home server
+	 */
+	static splitHandle(handle: string, server: string) {
+		const splits = handle.split('@');
+		if (splits.length === 3) {
+			return {
+				username: splits[1],
+				host: server === splits[2] ? null : splits[1],
+				handle,
+			};
+		} else if (splits.length === 2) {
+			return {
+				username: splits[1],
+				host: null,
+				handle,
+			};
+		}
+	}
 }
 
 export default ActivitypubHelper;

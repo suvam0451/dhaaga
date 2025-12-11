@@ -36,8 +36,8 @@ export function TimelineStateIndicator({
 	const { isFetched, error, isRefetching } = queryResult;
 	if (State.items.length === 0 && (isRefetching || !isFetched))
 		return <PostSkeleton containerHeight={containerHeight} />;
-	if (State.items.length === 0) return <TimelineEmptyView />;
 	if (error) return <TimelineErrorView error={error} />;
+	if (State.items.length === 0) return <TimelineEmptyView />;
 	return <View />;
 }
 
