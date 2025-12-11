@@ -15,7 +15,7 @@ function CollectionEmpty() {
 				style={{
 					fontSize: 24,
 					marginBottom: 12,
-					color: theme.primary.a0,
+					color: theme.primary,
 				}}
 			>
 				{t(`collections.emptyTitle`)}

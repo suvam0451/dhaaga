@@ -64,7 +64,7 @@ function PinnedUserView({ item, onPress, onLongPress }: Props) {
 					style={{
 						borderRadius: '100%',
 						overflow: 'hidden',
-						borderColor: theme.complementary.a0,
+						borderColor: theme.complementary,
 						opacity: 0.78,
 					}}
 				>

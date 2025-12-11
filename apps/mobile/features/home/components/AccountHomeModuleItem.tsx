@@ -37,7 +37,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 				</View>
 				<NativeTextH6
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					color={theme.complementary.a0}
+					color={theme.complementary}
 				>
 					{label}
 				</NativeTextH6>

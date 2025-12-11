@@ -19,7 +19,7 @@ function PostVisibilityView({ label, Icon, onPress }: Props) {
 					style={[
 						styles.choiceText,
 						{
-							color: theme.complementary.a0,
+							color: theme.complementary,
 						},
 					]}
 				>

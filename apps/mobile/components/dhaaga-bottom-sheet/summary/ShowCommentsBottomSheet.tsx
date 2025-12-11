@@ -1,17 +1,14 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
-import {
-	useAppBottomSheet,
-	useAppPublishers,
-	useAppTheme,
-} from '#/states/global/hooks';
+import { FlatList, View } from 'react-native';
+import { useAppBottomSheet } from '#/states/global/hooks';
 import { useApiGetPostComments } from '#/hooks/api/usePostInteractions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
+import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
+import BearError from '#/components/svgs/BearError';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 function ShowCommentsBottomSheet() {
-	const { theme } = useAppTheme();
-	const { ctx, stateId, hide } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
+	const { ctx } = useAppBottomSheet();
 
 	const [MaxId, setMaxId] = useState(null);
 
@@ -19,41 +16,27 @@ function ShowCommentsBottomSheet() {
 		ctx.$type === 'post-id' ? ctx.postId : null,
 		MaxId,
 	);
-	console.log(data);
 
-	return <View />;
 	return (
-		<ScrollView contentContainerStyle={{ padding: 10 }}>
-			<Text style={[styles.sheetTitle, { color: theme.secondary.a10 }]}>
-				{title}
-			</Text>
-			{desc.map((o, i) => (
-				<Text
-					key={i}
-					style={[styles.sheetDesc, { color: theme.secondary.a30 }]}
-				>
-					{o}
-				</Text>
-			))}
-		</ScrollView>
+		<FlatList
+			ListHeaderComponent={
+				<BottomSheetMenu title={'Comments'} variant={'clear'} />
+			}
+			data={data?.data}
+			renderItem={({ item }) => (
+				<View>
+					<NativeTextMedium>{item.avatarUrl}</NativeTextMedium>
+				</View>
+			)}
+			ListEmptyComponent={
+				<ErrorPageBuilder
+					stickerArt={<BearError />}
+					errorMessage={error?.message}
+					errorDescription={'Failed to load comments'}
+				/>
+			}
+		/>
 	);
 }
 
 export default ShowCommentsBottomSheet;
-
-const styles = StyleSheet.create({
-	sheetTitle: {
-		fontSize: 28,
-		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-		marginTop: 48,
-		marginBottom: 24,
-	},
-	sheetDesc: {
-		fontSize: 16,
-		textAlign: 'center',
-		marginBottom: 8,
-		maxWidth: 256,
-		alignSelf: 'center',
-	},
-});

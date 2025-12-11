@@ -39,7 +39,7 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 					maxWidth: '100%',
 				}}
 			>
-				<AppIcon id={'retweet'} size={18} color={theme.complementary.a0} />
+				<AppIcon id={'retweet'} size={18} color={theme.complementary} />
 				<View>
 					<Image
 						source={avatarUrl}

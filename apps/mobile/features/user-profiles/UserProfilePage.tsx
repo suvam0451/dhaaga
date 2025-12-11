@@ -61,8 +61,8 @@ export function UserProfilePage() {
 
 	function onMoreOptionsPressed() {
 		if (!acct) return;
-		appManager.appManager.storage.setUserId(acct.id);
-		appManager.appManager.storage.setUserObject(acct);
+		appManager.storage.setUserId(acct.id);
+		appManager.storage.setUserObject(acct);
 		show(APP_BOTTOM_SHEET_ENUM.MORE_USER_ACTIONS, true);
 	}
 

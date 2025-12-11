@@ -16,7 +16,7 @@ import HubAddUserBottomSheet from '#/components/dhaaga-bottom-sheet/hub/HubAddUs
 import ShowCommentsBottomSheet from '#/components/dhaaga-bottom-sheet/summary/ShowCommentsBottomSheet';
 import ShowLikesBottomSheet from '#/components/dhaaga-bottom-sheet/summary/ShowLikesBottomSheet';
 import ShowSharesBottomSheet from '#/components/dhaaga-bottom-sheet/summary/ShowSharesBottomSheet';
-import ABS_Post_Preview from '#/components/dhaaga-bottom-sheet/modules/ABS_Post_Preview';
+import AuthoredPostPreviewBottomSheet from '#/components/dhaaga-bottom-sheet/composer/AuthoredPostPreviewBottomSheet';
 import ABS_Add_Reaction from '#/components/dhaaga-bottom-sheet/modules/ABS_Add_Reaction';
 import ABS_Add_Profile from '#/components/dhaaga-bottom-sheet/modules/ABS_Add_Profile';
 import { appDimensions, appVerticalIndex } from '#/styles/dimensions';
@@ -109,7 +109,7 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES:
 			return <ShowSharesBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.POST_PREVIEW:
-			return <ABS_Post_Preview />;
+			return <AuthoredPostPreviewBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_REACTION:
 			return <ABS_Add_Reaction />;
 

@@ -29,7 +29,7 @@ export function ToggleReplyVisibility({
 	if (!enabled) return <View />;
 
 	const EXPANDED_COLOR = AppThemingUtil.getThreadColorForDepth(0);
-	const COLLAPSED_COLOR = theme.complementary.a0;
+	const COLLAPSED_COLOR = theme.complementary;
 
 	return (
 		<Pressable style={[styles.actionButton, style]} onPress={onPress}>
@@ -44,7 +44,7 @@ export function ToggleReplyVisibility({
 				style={{
 					color: expanded
 						? AppThemingUtil.getThreadColorForDepth(0)
-						: theme.complementary.a0,
+						: theme.complementary,
 				}}
 			>
 				{count} replies
@@ -64,7 +64,7 @@ export function ToggleMediaVisibility({
 	if (!enabled) return <View />;
 
 	const EXPANDED_COLOR = AppThemingUtil.getThreadColorForDepth(0);
-	const COLLAPSED_COLOR = theme.complementary.a0;
+	const COLLAPSED_COLOR = theme.complementary;
 
 	return (
 		<Pressable style={[styles.actionButton, style]} onPress={onPress}>

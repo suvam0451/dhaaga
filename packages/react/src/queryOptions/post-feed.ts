@@ -165,7 +165,7 @@ export function unifiedPostFeedQueryOptions(
 					withRenotes: !opts?.excludeReblogs,
 					withReplies: !opts?.excludeReplies,
 				});
-				return createResultBatch(result);
+				return createResultBatch(result.data, result.maxId);
 			}
 			case TimelineFetchMode.HASHTAG: {
 				const result = await client.timelines.hashtag(_id!, _query);

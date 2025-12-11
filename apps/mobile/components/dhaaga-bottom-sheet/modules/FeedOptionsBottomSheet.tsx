@@ -1,13 +1,12 @@
-import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
-import { Fragment, useMemo } from 'react';
+import {
+	useActiveUserSession,
+	useAppApiClient,
+	useAppBottomSheet,
+} from '#/states/global/hooks';
 import { TimelineFetchMode } from '@dhaaga/core';
-import OverviewView from '#/features/timelines/features/controller/views/OverviewView';
-import TagTimelineControlPresenter from '#/features/timelines/features/controller/presenters/TagTimelineControlPresenter';
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
-import MenuView from '#/features/timelines/features/controller/views/MenuView';
-import LocalTimelineControlPresenter from '#/features/timelines/features/controller/presenters/LocalTimelineControlPresenter';
-import useTimelineControllerInteractor from '#/features/timelines/features/controller/interactors/useTimelineControllerInteractor';
-import UserTimelineControlPresenter from '#/features/timelines/features/controller/presenters/UserTimelineControlPresenter';
+import FeedControlView from '#/components/dhaaga-bottom-sheet/components/FeedControlView';
+import { View, StyleSheet } from 'react-native';
+import FeedControlSheetActions from '#/components/dhaaga-bottom-sheet/components/FeedControlSheetActions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import {
@@ -21,198 +20,22 @@ import ProfileFeedAssignInteractor from '#/features/app-profiles/interactors/Pro
 import { AppDividerHard } from '#/ui/Divider';
 
 function FeedOptionsBottomSheet() {
-	const { draft } = useAppBottomSheet_TimelineReference();
+	const { ctx } = useAppBottomSheet();
 	const { acct } = useActiveUserSession();
 	const { driver, client } = useAppApiClient();
-	const {
-		onFeedOptSelected,
-		FeedOpt,
-		MediaOpt,
-		onMediaOptSelected,
-		onMediaOptAllSelected,
-		HideReposts,
-		HideReplies,
-		broadcastChanges,
-		setHideReposts,
-		setHideReplies,
-		onFeedOptAllSelected,
-	} = useTimelineControllerInteractor();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
-	function onClickHideReply() {
-		setHideReplies((o) => !o);
-	}
+	if (ctx.$type !== 'set-feed-options') return <View />;
 
-	function onClickHideReblog() {
-		setHideReposts((o) => !o);
-	}
-
-	const Comp = useMemo(() => {
-		switch (draft.feedType) {
-			case TimelineFetchMode.LOCAL: {
-				return (
-					<Fragment>
-						<OverviewView
-							title={t(`timelines.infoSheet.infoLocal.label`)}
-							subtitle={acct?.server}
-							description={
-								t(`timelines.infoSheet.infoLocal.description`, {
-									returnObjects: true,
-								}) as string[]
-							}
-						/>
-						<AppDividerHard />
-						<LocalTimelineControlPresenter />
-					</Fragment>
-				);
-			}
-			case TimelineFetchMode.BUBBLE:
-				return (
-					<OverviewView
-						title={t(`timelines.infoSheet.infoBubble.label`)}
-						subtitle={acct?.server}
-						description={
-							t(`timelines.infoSheet.infoBubble.description`, {
-								returnObjects: true,
-							}) as string[]
-						}
-					/>
-				);
-			case TimelineFetchMode.HOME:
-				return (
-					<OverviewView
-						title={t(`timelines.infoSheet.infoHome.label`)}
-						subtitle={acct?.server}
-						description={
-							t(`timelines.infoSheet.infoHome.description`, {
-								returnObjects: true,
-							}) as string[]
-						}
-					/>
-				);
-			case TimelineFetchMode.USER: {
-				return (
-					<Fragment>
-						<OverviewView
-							title={t(`timelines.infoSheet.infoUser.label`)}
-							subtitle={draft?.query?.label}
-							description={
-								t(`timelines.infoSheet.infoUser.description`, {
-									returnObjects: true,
-								}) as string[]
-							}
-						/>
-						<AppDividerHard />
-						<UserTimelineControlPresenter
-							onClickHideReblog={onClickHideReblog}
-							onClickHideReply={onClickHideReply}
-							MediaOpt={MediaOpt}
-							hash={State}
-							HideReplies={HideReplies}
-							HideReposts={HideReposts}
-							onMediaOptSelected={onMediaOptSelected}
-							onMediaOptAllSelected={onMediaOptAllSelected}
-						/>
-					</Fragment>
-				);
-			}
-			case TimelineFetchMode.SOCIAL:
-				return (
-					<OverviewView
-						title={t(`timelines.infoSheet.infoSocial.label`)}
-						subtitle={draft?.query?.label}
-						description={
-							t(`timelines.infoSheet.infoSocial.description`, {
-								returnObjects: true,
-							}) as string[]
-						}
-					/>
-				);
-			case TimelineFetchMode.HASHTAG: {
-				return (
-					<Fragment>
-						<OverviewView
-							title={t(`timelines.infoSheet.infoHashtag.label`)}
-							subtitle={draft?.query?.label}
-							description={
-								t(`timelines.infoSheet.infoHashtag.description`, {
-									returnObjects: true,
-								}) as string[]
-							}
-						/>
-						<AppDividerHard />
-						<TagTimelineControlPresenter
-							MediaOpt={MediaOpt}
-							onMediaOptSelected={onMediaOptSelected}
-							onMediaOptAllSelected={onMediaOptAllSelected}
-							hash={State}
-							FeedOpt={FeedOpt}
-							onFeedOptSelected={onFeedOptSelected}
-							onFeedOptAllSelected={onFeedOptAllSelected}
-						/>
-					</Fragment>
-				);
-			}
-			case TimelineFetchMode.FEED:
-				return (
-					<Fragment>
-						<OverviewView
-							title={t(`timelines.infoSheet.infoFeed.label`)}
-							subtitle={draft?.query?.label}
-							description={
-								t(`timelines.infoSheet.infoFeed.description`, {
-									returnObjects: true,
-								}) as string[]
-							}
-						/>
-						<SyncStatusPresenter uri={draft?.query?.id} />
-					</Fragment>
-				);
-			case TimelineFetchMode.FEDERATED:
-				return (
-					<OverviewView
-						title={
-							[KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(driver)
-								? 'Known Network'
-								: t(`timelines.infoSheet.infoPublic.label`)
-						}
-						subtitle={acct?.server}
-						description={
-							t(`timelines.infoSheet.infoPublic.description`, {
-								returnObjects: true,
-							}) as string[]
-						}
-					/>
-				);
-			case TimelineFetchMode.LIST: {
-				return (
-					<OverviewView
-						title={t(`timelines.infoSheet.infoList.label`)}
-						subtitle={acct?.server}
-						description={
-							t(`timelines.infoSheet.infoList.description`, {
-								returnObjects: true,
-							}) as string[]
-						}
-					/>
-				);
-			}
-			default: {
-				return (
-					<View>
-						<Text>Unsupported timeline type</Text>
-					</View>
-				);
-			}
-		}
-	}, [draft.feedType]);
+	const query = ctx.query;
 
 	function onOpenInBrowser() {
-		switch (draft.feedType) {
+		if (ctx.$type !== 'set-feed-options') return;
+		switch (ctx.feedType) {
 			case 'Feed': {
 				AtprotoUtils.generateFeedUrl(
 					client as AtprotoApiAdapter,
-					draft.query.id,
+					ctx.query.id,
 				).then((o) => {
 					LinkingUtils.openURL(o);
 				});
@@ -221,58 +44,175 @@ function FeedOptionsBottomSheet() {
 		}
 	}
 
-	const BottomComp = useMemo(() => {
-		switch (draft.feedType) {
-			case TimelineFetchMode.FEED:
-				return (
-					<ProfileFeedAssignInteractor
-						uri={draft?.query?.id}
-						Header={
-							<View>
-								<OverviewView
-									title={t(`timelines.infoSheet.infoFeed.label`)}
-									subtitle={draft?.query?.label}
-									description={
-										t(`timelines.infoSheet.infoFeed.description`, {
-											returnObjects: true,
-										}) as string[]
-									}
-								/>
-								<View style={{ marginHorizontal: 12 }}>
-									<SyncStatusPresenter uri={draft?.query?.id} />
-								</View>
-								<AppDividerHard />
+	switch (ctx.feedType) {
+		case TimelineFetchMode.FEED:
+			return (
+				<ProfileFeedAssignInteractor
+					uri={query.id}
+					Header={
+						<View>
+							<FeedControlView
+								title={t(`timelines.infoSheet.infoFeed.label`)}
+								subtitle={query.label}
+								description={
+									t(`timelines.infoSheet.infoFeed.description`, {
+										returnObjects: true,
+									}) as string[]
+								}
+								context={ctx}
+								supportedFilters={[]}
+							/>
+							<View style={{ marginHorizontal: 12 }}>
+								<SyncStatusPresenter uri={query.id} />
 							</View>
-						}
-						Footer={
-							<View style={{ marginBottom: 32 }}>
-								<AppDividerHard />
-								<MenuView onOpenInBrowser={onOpenInBrowser} />
-							</View>
-						}
-					/>
-				);
-			default:
-				return undefined;
+							<AppDividerHard />
+						</View>
+					}
+					Footer={
+						<View style={{ marginBottom: 32 }}>
+							<AppDividerHard />
+							<FeedControlSheetActions
+								onShare={() => {}}
+								onPinToggle={() => {}}
+								isPinned={false}
+								onOpenInBrowser={onOpenInBrowser}
+							/>
+						</View>
+					}
+				/>
+			);
+		case TimelineFetchMode.LOCAL:
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoLocal.label`)}
+					subtitle={acct?.server}
+					description={
+						t(`timelines.infoSheet.infoLocal.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={['source', 'media_only']}
+				/>
+			);
+		case TimelineFetchMode.HOME:
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoHome.label`)}
+					subtitle={acct?.server}
+					description={
+						t(`timelines.infoSheet.infoHome.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={[
+						'source',
+						'media_only',
+						'reply_control',
+						'repost_control',
+					]}
+				/>
+			);
+		case TimelineFetchMode.BUBBLE: {
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoBubble.label`)}
+					subtitle={acct?.server}
+					description={
+						t(`timelines.infoSheet.infoBubble.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={[]}
+				/>
+			);
 		}
-	}, [draft.feedType, draft?.query]);
-
-	if (BottomComp) return <View style={{ flex: 1 }}>{BottomComp}</View>;
-
-	return (
-		<ScrollView contentContainerStyle={styles.scrollViewContainer}>
-			{Comp}
-			<AppDividerHard />
-			<MenuView onOpenInBrowser={onOpenInBrowser} />
-		</ScrollView>
-	);
+		case TimelineFetchMode.USER:
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoUser.label`)}
+					subtitle={query.label}
+					description={
+						t(`timelines.infoSheet.infoUser.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={['media_only', 'reply_control', 'repost_control']}
+				/>
+			);
+		case TimelineFetchMode.SOCIAL:
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoSocial.label`)}
+					subtitle={query.label}
+					description={
+						t(`timelines.infoSheet.infoSocial.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={[]}
+				/>
+			);
+		case TimelineFetchMode.HASHTAG:
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoHashtag.label`)}
+					subtitle={query?.label}
+					description={
+						t(`timelines.infoSheet.infoHashtag.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={['source', 'media_only']}
+				/>
+			);
+		case TimelineFetchMode.FEDERATED:
+			return (
+				<FeedControlView
+					title={
+						[KNOWN_SOFTWARE.PLEROMA, KNOWN_SOFTWARE.AKKOMA].includes(driver)
+							? 'Known Network'
+							: t(`timelines.infoSheet.infoPublic.label`)
+					}
+					subtitle={acct?.server}
+					description={
+						t(`timelines.infoSheet.infoPublic.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={['source', 'media_only']}
+				/>
+			);
+		case TimelineFetchMode.LIST:
+			return (
+				<FeedControlView
+					title={t(`timelines.infoSheet.infoList.label`)}
+					subtitle={acct?.server}
+					description={
+						t(`timelines.infoSheet.infoList.description`, {
+							returnObjects: true,
+						}) as string[]
+					}
+					context={ctx}
+					supportedFilters={[]}
+				/>
+			);
+		default:
+			throw new Error(`Unknown feed type: ${ctx.feedType}`);
+	}
 }
 
 export default FeedOptionsBottomSheet;
 
 const styles = StyleSheet.create({
 	scrollViewContainer: {
-		// flex: 1,
 		paddingBottom: 32,
+		paddingHorizontal: 10,
 	},
 });

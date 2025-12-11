@@ -61,7 +61,7 @@ export function AppMenuItem({
 			}}
 			onPress={onPress}
 		>
-			<AppIcon id={appIconId} size={24} color={theme.complementary.a0} />
+			<AppIcon id={appIconId} size={24} color={theme.complementary} />
 			<View
 				style={{
 					marginLeft: 12,
@@ -249,10 +249,10 @@ export class AppBottomSheetMenu {
 						paddingVertical: 8,
 					}}
 				>
-					<AppIcon id={'chevron-left'} color={theme.complementary.a0} />
+					<AppIcon id={'chevron-left'} color={theme.complementary} />
 					<Text
 						style={{
-							color: theme.complementary.a0,
+							color: theme.complementary,
 							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							fontSize: 16,
 						}}
@@ -293,7 +293,7 @@ export class AppBottomSheetMenu {
 					>
 						<AppText.Medium
 							style={{
-								color: nextEnabled ? theme.primary.a0 : theme.secondary.a20,
+								color: nextEnabled ? theme.primary : theme.secondary.a20,
 								fontSize: 16,
 								textAlign: 'right',
 								marginLeft: 'auto',

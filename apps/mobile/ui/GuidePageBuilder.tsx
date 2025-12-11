@@ -37,7 +37,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 						<SpecialText
 							style={[
 								{
-									color: theme.primary.a0,
+									color: theme.primary,
 									marginBottom: 8,
 								},
 							]}

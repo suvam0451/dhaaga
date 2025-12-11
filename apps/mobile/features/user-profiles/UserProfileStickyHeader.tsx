@@ -25,7 +25,7 @@ function UserProfileStickyHeader({
 	animatedStyle,
 }: Props) {
 	const { theme } = useAppTheme();
-	const ACTIVE_TINT = theme.primary.a20;
+	const ACTIVE_TINT = theme.primary;
 	const INACTIVE_TINT = theme.secondary.a30;
 
 	return (

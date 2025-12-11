@@ -52,7 +52,7 @@ function NavBar_Feed({ animatedStyle }: Props) {
 			true,
 			{
 				$type: 'set-feed-options',
-				...State.opts,
+				...State,
 			},
 			() => {
 				if (ctx.$type !== 'set-feed-options') return;
@@ -88,7 +88,7 @@ function NavBar_Feed({ animatedStyle }: Props) {
 					}}
 				>
 					<Text
-						style={[styles.label, { color: theme.primary.a0, fontSize: 24 }]}
+						style={[styles.label, { color: theme.primary, fontSize: 24 }]}
 						numberOfLines={1}
 					>
 						{_label || 'Unknown'}
@@ -99,7 +99,7 @@ function NavBar_Feed({ animatedStyle }: Props) {
 							marginTop: 2,
 						}}
 					>
-						<AppIcon id={'chevron-down'} color={theme.primary.a0} size={20} />
+						<AppIcon id={'chevron-down'} color={theme.primary} size={20} />
 					</View>
 				</View>
 

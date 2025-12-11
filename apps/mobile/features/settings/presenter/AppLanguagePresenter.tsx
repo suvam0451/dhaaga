@@ -39,9 +39,7 @@ function AppLanguagePresenter() {
 									style={{
 										fontSize: 18,
 										color:
-											item.code === lang
-												? theme.primary.a0
-												: theme.complementary.a0,
+											item.code === lang ? theme.primary : theme.complementary,
 										marginBottom: 2,
 									}}
 									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
@@ -57,7 +55,7 @@ function AppLanguagePresenter() {
 									<AppIcon
 										id={'checkmark-circle'}
 										size={32}
-										color={theme.primary.a0}
+										color={theme.primary}
 										containerStyle={{ paddingRight: 8 }}
 									/>
 								)}

@@ -52,7 +52,7 @@ function ABS_TagDetails() {
 							#
 						</AppText.Normal>
 						<AppText.Medium
-							style={{ fontSize: 20, marginLeft: 3, color: theme.primary.a0 }}
+							style={{ fontSize: 20, marginLeft: 3, color: theme.primary }}
 						>
 							{data?.getName() ?? TagName}
 						</AppText.Medium>

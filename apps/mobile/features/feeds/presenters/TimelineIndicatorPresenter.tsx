@@ -33,7 +33,7 @@ function TimelineIndicatorPresenter({ item }: Props) {
 		<AppIcon
 			id={'checkmark-circle'}
 			size={32}
-			color={theme.primary.a0}
+			color={theme.primary}
 			containerStyle={{ padding: 6 }}
 			onPress={onMoreOptionsPressed}
 		/>

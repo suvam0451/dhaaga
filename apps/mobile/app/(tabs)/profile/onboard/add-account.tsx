@@ -104,13 +104,13 @@ function ActivityPub() {
 	function onProcessRequest() {
 		if (!appManager) return;
 		cachedClientTokens.current =
-			appManager.appManager.storage.getAtprotoServerClientTokens(Instance);
+			appManager.storage.getAtprotoServerClientTokens(Instance);
 		resolve().then((result) => {
 			if (result.strategy !== 'activitypub') return;
 
 			const { clientId, clientSecret, signInUrl, instance, software } =
 				result.params;
-			appManager.appManager.storage.setAtprotoServerClientTokens(
+			appManager.storage.setAtprotoServerClientTokens(
 				instance,
 				clientId,
 				clientSecret,

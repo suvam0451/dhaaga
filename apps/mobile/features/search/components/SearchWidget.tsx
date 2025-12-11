@@ -116,7 +116,7 @@ function SearchWidget({
 						backgroundColor:
 							!IsWidgetExpanded && !!SearchTerm
 								? 'rgba(160, 160, 160, 0.28)'
-								: theme.primary.a0,
+								: theme.primary,
 						// right: CONTAINER_PADDING,
 						borderRadius: 16,
 					},

@@ -49,7 +49,7 @@ function ReplyIndicator() {
 					style={[
 						{
 							maxWidth: 208,
-							color: theme.complementary.a0,
+							color: theme.complementary,
 							marginLeft: 6,
 						},
 					]}

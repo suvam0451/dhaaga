@@ -102,7 +102,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						style={{
 							fontSize: 16,
-							color: profile.visible ? theme.primary.a0 : theme.secondary.a50,
+							color: profile.visible ? theme.primary : theme.secondary.a50,
 							marginRight: 8,
 						}}
 					>
@@ -199,7 +199,7 @@ function Page() {
 				>
 					<View
 						style={{
-							backgroundColor: theme.primary.a0,
+							backgroundColor: theme.primary,
 							padding: 8,
 							borderRadius: 8,
 							maxWidth: 128,

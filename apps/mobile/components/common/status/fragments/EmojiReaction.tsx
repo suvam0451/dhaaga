@@ -31,7 +31,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 					{
 						backgroundColor: theme.reactions.active,
 						borderWidth: 2,
-						borderColor: theme.primary.a0,
+						borderColor: theme.primary,
 					},
 				];
 			} else {

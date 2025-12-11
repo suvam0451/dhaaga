@@ -41,7 +41,7 @@ export default function TabLayout() {
 						height: BOTTOM_NAVBAR_HEIGHT,
 					},
 					tabBarIconStyle: BOTTOM_NAVBAR_ICON_STYLE,
-					tabBarActiveTintColor: theme.primary.a0,
+					tabBarActiveTintColor: theme.primary,
 					tabBarInactiveTintColor: theme.secondary.a50,
 					tabBarShowLabel: false,
 					headerShown: false,

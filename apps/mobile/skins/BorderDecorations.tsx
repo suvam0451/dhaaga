@@ -19,10 +19,10 @@ export function QuotedPostBorderDecorations({ children }: { children: any }) {
 					marginBottom: SECTION_MARGIN_BOTTOM,
 				}}
 			>
-				<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
+				<AppIcon id={'quote'} size={14} color={theme.complementary} />
 				<NativeTextSemiBold
 					style={{
-						color: theme.complementary.a0,
+						color: theme.complementary,
 						marginLeft: 4,
 					}}
 				>
@@ -57,10 +57,10 @@ export function AttachedLinkBorderDecorations({ children }: { children: any }) {
 					marginBottom: SECTION_MARGIN_BOTTOM,
 				}}
 			>
-				<AppIcon id={'quote'} size={14} color={theme.complementary.a0} />
+				<AppIcon id={'quote'} size={14} color={theme.complementary} />
 				<NativeTextSemiBold
 					style={{
-						color: theme.complementary.a0,
+						color: theme.complementary,
 						marginLeft: 4,
 					}}
 				>

@@ -100,7 +100,7 @@ function PinnedTimelineItemView({
 					<NativeTextH6
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{
-							color: theme.complementary.a0,
+							color: theme.complementary,
 						}}
 						numberOfLines={1}
 					>

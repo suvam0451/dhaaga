@@ -30,7 +30,7 @@ function Header() {
 export function Footer({ hideVersion }: { hideVersion?: boolean }) {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-	const ICON_COLOR = theme.complementary.a0;
+	const ICON_COLOR = theme.complementary;
 	const ICON_SIZE = 32;
 
 	return (
@@ -91,7 +91,7 @@ export function Footer({ hideVersion }: { hideVersion?: boolean }) {
 			{!hideVersion && (
 				<AppText.SemiBold
 					style={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						textAlign: 'center',
 						fontSize: 16,
 					}}
@@ -161,7 +161,7 @@ function SettingCategoryListItem({
 
 function SettingCategoryList() {
 	const { theme } = useAppTheme();
-	const SETTING_CATEGORY_ICON_COLOR = theme.primary.a10;
+	const SETTING_CATEGORY_ICON_COLOR = theme.primary;
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SETTINGS]);
 
 	const items = [

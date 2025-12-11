@@ -27,7 +27,7 @@ function PinnedTagView({ item, onPress, onLongPress }: Props) {
 					{
 						fontSize: 16,
 						flexShrink: 1,
-						color: theme.complementary.a0,
+						color: theme.complementary,
 					},
 				]}
 			>

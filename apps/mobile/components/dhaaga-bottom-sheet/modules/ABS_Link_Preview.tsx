@@ -51,7 +51,7 @@ function ParsingFailedView({
 		<View style={{ marginTop: 48 }}>
 			<Text
 				style={{
-					color: theme.complementary.a0,
+					color: theme.complementary,
 					fontSize: 20,
 					marginHorizontal: 10,
 					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
@@ -179,7 +179,7 @@ function ABS_Link_Preview() {
 					text={domain}
 					maxLines={1}
 					textStyle={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						fontSize: 16,
 						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					}}

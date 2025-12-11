@@ -15,7 +15,7 @@ function SentMessageView({ item }: Props) {
 			style={[
 				styles.msgContainer,
 				{
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 				},
 			]}
 		>

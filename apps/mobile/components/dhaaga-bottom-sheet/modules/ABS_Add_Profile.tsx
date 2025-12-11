@@ -75,7 +75,7 @@ function ABS_Add_Profile_Name_Profile({
 			>
 				<View
 					style={{
-						backgroundColor: theme.primary.a0,
+						backgroundColor: theme.primary,
 						padding: 8,
 						borderRadius: 8,
 						maxWidth: 128,

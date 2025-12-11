@@ -41,7 +41,7 @@ function BookmarkBottomSheet() {
 						/>
 						<AppText.Medium
 							style={{
-								color: theme.complementary.a0,
+								color: theme.complementary,
 								textAlign: 'center',
 								marginVertical: appDimensions.timelines.sectionBottomMargin,
 								marginBottom: appDimensions.timelines.sectionBottomMargin * 4,
@@ -62,7 +62,7 @@ function BookmarkBottomSheet() {
 							active={item.has}
 							activeIconId={'checkmark-circle'}
 							inactiveIconId={'add-circle-outline'}
-							activeTint={theme.primary.a0}
+							activeTint={theme.primary}
 							inactiveTint={theme.secondary.a30}
 							label={item.alias}
 							desc={item.desc || t(`collections.fallbackDesc`)}

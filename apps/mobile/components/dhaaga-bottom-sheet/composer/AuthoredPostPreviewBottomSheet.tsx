@@ -4,17 +4,15 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { useEffect, useState } from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import WithAppStatusItemContext from '../../containers/contexts/WithPostItemContext';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { APP_FONTS } from '#/styles/AppFonts';
-import useAppNavigator from '#/states/useAppNavigator';
 
-function ABS_Post_Preview() {
-	const { ctx, stateId, hide } = useAppBottomSheet();
-	const { toPost } = useAppNavigator();
+function AuthoredPostPreviewBottomSheet() {
+	const { ctx, stateId } = useAppBottomSheet();
 	const { postObjectActions } = useAppPublishers();
-	const [Post, setPost] = useState(postObjectActions.read(ctx?.uuid));
+	const [Post, setPost] = useState(null);
 	const { theme } = useAppTheme();
 
 	function onUpdate({ uuid }: { uuid: string }) {
@@ -22,17 +20,14 @@ function ABS_Post_Preview() {
 	}
 
 	useEffect(() => {
-		onUpdate({ uuid: ctx.uuid });
-		postObjectActions.subscribe(ctx.uuid, onUpdate);
+		if (ctx.$type !== 'post-preview') return;
+		const postId = ctx.postId;
+		onUpdate({ uuid: postId });
+		postObjectActions.subscribe(postId, onUpdate);
 		return () => {
-			postObjectActions.unsubscribe(ctx.uuid, onUpdate);
+			postObjectActions.unsubscribe(postId, onUpdate);
 		};
-	}, [ctx, stateId]);
-
-	function onBrowsePress() {
-		toPost(Post.id);
-		hide();
-	}
+	}, [stateId]);
 
 	return (
 		<ScrollView
@@ -61,7 +56,7 @@ function ABS_Post_Preview() {
 				{/*	style={[*/}
 				{/*		styles.buttonContainer,*/}
 				{/*		{*/}
-				{/*			backgroundColor: theme.complementary.a0,*/}
+				{/*			backgroundColor: theme.complementary,*/}
 				{/*		},*/}
 				{/*	]}*/}
 				{/*	onPress={onBrowsePress}*/}
@@ -101,15 +96,4 @@ function ABS_Post_Preview() {
 	);
 }
 
-export default ABS_Post_Preview;
-
-const styles = StyleSheet.create({
-	buttonContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingHorizontal: 12,
-		borderRadius: 8,
-		paddingVertical: 8,
-		maxHeight: 36,
-	},
-});
+export default AuthoredPostPreviewBottomSheet;

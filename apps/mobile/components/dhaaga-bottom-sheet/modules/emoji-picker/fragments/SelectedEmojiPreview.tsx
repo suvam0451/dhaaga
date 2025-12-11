@@ -39,7 +39,7 @@ const SelectedEmojiPreview = memo(
 				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri: selection.url }} style={styles.emojiContainer} />
 				<Text
-					style={[styles.emojiDesc, { color: theme.complementary.a0 }]}
+					style={[styles.emojiDesc, { color: theme.complementary }]}
 					numberOfLines={1}
 				>
 					{selection.shortCode}

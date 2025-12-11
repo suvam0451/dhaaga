@@ -18,7 +18,7 @@ function Page() {
 				{t(`discover.moreSoon.firstHalf`, {
 					ns: LOCALIZATION_NAMESPACE.CORE,
 				})}
-				<Text style={{ color: theme.complementary.a0 }}>
+				<Text style={{ color: theme.complementary }}>
 					{t(`discover.moreSoon.secondHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,
 					})}

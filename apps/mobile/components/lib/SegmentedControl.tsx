@@ -56,7 +56,7 @@ export function AppSegmentedControl({
 						<View
 							key={i}
 							style={{
-								backgroundColor: index === i ? theme.primary.a0 : '#444',
+								backgroundColor: index === i ? theme.primary : '#444',
 								borderRadius: 24,
 								padding: 8,
 								paddingHorizontal: 14,
@@ -96,7 +96,7 @@ export function AppInstagramTabControl({
 	const { theme } = useAppTheme();
 	const ICON_SIZE = 32;
 
-	const ACTIVE_TINT = theme.primary.a20;
+	const ACTIVE_TINT = theme.primary;
 	const INACTIVE_TINT = theme.secondary.a30;
 
 	return (

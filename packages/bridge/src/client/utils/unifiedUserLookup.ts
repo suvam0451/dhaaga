@@ -9,6 +9,7 @@ import { UserParser } from '#/parsers/index.js';
 import { DriverService } from '#/services/driver.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import { AppBskyActorGetProfile } from '@atproto/api';
+import type { UserObjectType } from '#/types/index.js';
 
 const DriverWebfingerSchema = z.object({
 	username: z.string(),
@@ -46,10 +47,10 @@ type DriverUserFindQueryType = z.infer<typeof userFindQuerySchema>;
 export { userFindQuerySchema };
 export type { DriverWebfingerType, DriverUserFindQueryType };
 
-export async function lookup(
+export async function unifiedUserLookup(
 	client: ApiTargetInterface,
 	query: DriverUserFindQueryType,
-) {
+): Promise<UserObjectType> {
 	const driver = client.driver;
 	const server = client.server!;
 

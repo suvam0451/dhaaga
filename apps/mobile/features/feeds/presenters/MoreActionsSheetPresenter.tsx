@@ -12,7 +12,7 @@ import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { StatItem } from '../../post-view/views/PostInteractionStatsRow';
 import ProfileFeedAssignInteractor from '../../app-profiles/interactors/ProfileFeedAssignInteractor';
-import MenuView from '../../timelines/features/controller/views/MenuView';
+import FeedControlSheetActions from '#/components/dhaaga-bottom-sheet/components/FeedControlSheetActions';
 import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppDividerHard } from '#/ui/Divider';
 import { LinkingUtils } from '#/utils/linking.utils';
@@ -69,7 +69,7 @@ function MoreActionsSheetPresenter() {
 									by{' '}
 									<AppText.Medium
 										style={{ fontSize: 14 }}
-										color={theme.complementary.a0}
+										color={theme.complementary}
 									>
 										{Feed.creator.handle}
 									</AppText.Medium>
@@ -100,10 +100,13 @@ function MoreActionsSheetPresenter() {
 				}
 				Footer={
 					<View style={{ marginBottom: 32 }}>
-						<MenuView
+						<FeedControlSheetActions
 							onOpenInBrowser={() => {
 								LinkingUtils.openAtProtoFeed(client, Feed.uri);
 							}}
+							onShare={() => {}}
+							onPinToggle={() => {}}
+							isPinned={false}
 						/>
 					</View>
 				}

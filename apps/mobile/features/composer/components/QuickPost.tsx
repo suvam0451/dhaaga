@@ -25,7 +25,7 @@ function QuickPost({ onPress, style }: Props) {
 		>
 			<Pressable
 				style={{
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					alignSelf: 'center',
 					minWidth: 128,
 					maxWidth: 244,

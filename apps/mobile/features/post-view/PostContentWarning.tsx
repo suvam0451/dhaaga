@@ -33,7 +33,7 @@ function PostContentWarning({ show, setShow, cw }: WithCwTextProps) {
 				style={{
 					width: 8,
 					height: '100%',
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					borderTopStartRadius: 6,
 					borderBottomLeftRadius: 6,
 				}}
@@ -67,7 +67,7 @@ function PostContentWarning({ show, setShow, cw }: WithCwTextProps) {
 				style={{
 					width: 8,
 					height: '100%',
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					borderTopEndRadius: 6,
 					borderBottomEndRadius: 6,
 				}}

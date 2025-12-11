@@ -24,11 +24,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: t(`quickPost.visibility.public`),
 					icon: (
-						<FontAwesome6
-							name="globe"
-							size={16}
-							color={theme.complementary.a0}
-						/>
+						<FontAwesome6 name="globe" size={16} color={theme.complementary} />
 					),
 				};
 			}
@@ -37,11 +33,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: t(`quickPost.visibility.unlisted`),
 					icon: (
-						<FontAwesome5
-							name="home"
-							size={16}
-							color={theme.complementary.a0}
-						/>
+						<FontAwesome5 name="home" size={16} color={theme.complementary} />
 					),
 				};
 			}
@@ -49,11 +41,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: t(`quickPost.visibility.private`),
 					icon: (
-						<FontAwesome5
-							name="lock"
-							size={16}
-							color={theme.complementary.a0}
-						/>
+						<FontAwesome5 name="lock" size={16} color={theme.complementary} />
 					),
 				};
 			}
@@ -61,7 +49,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				return {
 					text: t(`quickPost.visibility.direct`),
 					icon: (
-						<Octicons name="mention" size={16} color={theme.complementary.a0} />
+						<Octicons name="mention" size={16} color={theme.complementary} />
 					),
 				};
 			}

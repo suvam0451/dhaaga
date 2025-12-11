@@ -7,6 +7,7 @@ import {
 	AppStateImmerGetObject,
 	AppStateImmerSetObject,
 } from '#/states/global/typings';
+import { PostTimelineStateType } from '@dhaaga/core';
 
 /**
  * App crashes on moving to a different file...
@@ -60,7 +61,7 @@ type AppStateBottomSheetContextType =
 			$type: 'mentioned-user-preview';
 			mentionString: string;
 	  }
-	| ({ $type: 'set-feed-options' } & DhaagaJsTimelineQueryOptions)
+	| ({ $type: 'set-feed-options' } & PostTimelineStateType)
 	| {
 			$type: 'link-preview';
 			url: string;
@@ -94,6 +95,8 @@ export type AppStateBottomSheetState = {
 	startHash: string;
 	endHash: string;
 	hasChanges: boolean;
+
+	initialContext: AppStateBottomSheetContextType | null;
 	/**
 	 * context passed to the bottom sheet.
 	 *
@@ -146,6 +149,7 @@ function createBottomSheetSlice(
 		hasChanges: false,
 		context: null,
 		callback: null,
+		initialContext: null,
 
 		// timeline: {
 		// 	draftState: null,
@@ -180,6 +184,7 @@ function createBottomSheetSlice(
 			set((state) => {
 				if (type) state.bottomSheet.type = type;
 				if (reset) state.bottomSheet.stateId = RandomUtil.nanoId();
+				state.bottomSheet.initialContext = context ?? null;
 				state.bottomSheet.context = context ?? null;
 				state.bottomSheet.callback = callback ?? null;
 				state.bottomSheet.visible = true;
@@ -205,6 +210,7 @@ function createBottomSheetSlice(
 				state.bottomSheet.visible = false;
 				state.bottomSheet.callback = null;
 				state.bottomSheet.context = null;
+				state.bottomSheet.initialContext = null;
 			});
 		},
 	};

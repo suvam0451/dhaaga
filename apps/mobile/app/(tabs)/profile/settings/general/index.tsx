@@ -48,9 +48,9 @@ function Page() {
 			<View
 				style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
 			>
-				<AppIcon id={'language'} size={28} color={theme.primary.a0} />
+				<AppIcon id={'language'} size={28} color={theme.primary} />
 				<NativeTextMedium
-					style={{ fontSize: 18, color: theme.primary.a0, marginLeft: 6 }}
+					style={{ fontSize: 18, color: theme.primary, marginLeft: 6 }}
 				>
 					{t(`general.language.S_Language`)}
 				</NativeTextMedium>
@@ -87,7 +87,7 @@ function Page() {
 			{/*		{t(`general.language.L_translatorMode`)}*/}
 			{/*	</NativeTextMedium>*/}
 			{/*	<View style={{ flex: 1 }} />*/}
-			{/*	<AppIcon id={'info'} color={theme.complementary.a0} size={28} />*/}
+			{/*	<AppIcon id={'info'} color={theme.complementary} size={28} />*/}
 			{/*	<AppSettingBooleanToggle*/}
 			{/*		isChecked={IsChecked}*/}
 			{/*		onPress={toggleCheck}*/}
@@ -97,9 +97,9 @@ function Page() {
 			<View
 				style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
 			>
-				<AppIcon id={'language'} size={28} color={theme.primary.a0} />
+				<AppIcon id={'language'} size={28} color={theme.primary} />
 				<NativeTextMedium
-					style={{ fontSize: 18, color: theme.primary.a0, marginLeft: 6 }}
+					style={{ fontSize: 18, color: theme.primary, marginLeft: 6 }}
 				>
 					{t(`general.timelines.S_Timelines`)}
 				</NativeTextMedium>
@@ -133,7 +133,7 @@ function Page() {
 				<AppIcon
 					id={'flash'}
 					containerStyle={{ marginLeft: 6 }}
-					color={theme.complementary.a0}
+					color={theme.complementary}
 				/>
 				<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
 					Hide
@@ -145,7 +145,7 @@ function Page() {
 				{t(`discover.moreSoon.firstHalf`, {
 					ns: LOCALIZATION_NAMESPACE.CORE,
 				})}
-				<Text style={{ color: theme.complementary.a0 }}>
+				<Text style={{ color: theme.complementary }}>
 					{t(`discover.moreSoon.secondHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,
 					})}

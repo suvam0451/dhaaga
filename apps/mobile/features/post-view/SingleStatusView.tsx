@@ -48,7 +48,7 @@ function PostFullDetails({ dto }: PostFullDetailsProps) {
 				marginHorizontal: 6,
 			}}
 		>
-			<AppText.Medium style={{ color: theme.complementary.a0 }}>
+			<AppText.Medium style={{ color: theme.complementary }}>
 				{new Date(POST.createdAt).toLocaleString()}
 			</AppText.Medium>
 		</View>

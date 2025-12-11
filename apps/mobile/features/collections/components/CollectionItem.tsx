@@ -54,7 +54,7 @@ function CollectionItem({
 			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
 				<AppText.Medium
 					style={{
-						color: active ? theme.primary.a0 : theme.secondary.a10,
+						color: active ? theme.primary : theme.secondary.a10,
 						fontSize: 18,
 						marginBottom: 4,
 					}}

@@ -40,7 +40,6 @@ export function useActiveProfile() {
 	return useGlobalState(
 		useShallow((o) => ({
 			profile: o.userSession.profile,
-			// profileManager: o.userSession.profileManager,
 		})),
 	);
 }
@@ -66,7 +65,8 @@ export function useAppDb() {
 export function useAppManager() {
 	return useGlobalState(
 		useShallow((o) => ({
-			appManager: o.appSession,
+			appManager: o.appSession.appManager,
+			loadAccount: o.appSession.loadAccount,
 		})),
 	);
 }
@@ -75,6 +75,14 @@ export function useAccountManager() {
 	return useGlobalState(
 		useShallow((o) => ({
 			acctManager: o.userSession.acctManager,
+		})),
+	);
+}
+
+export function useProfileManager() {
+	return useGlobalState(
+		useShallow((o) => ({
+			profileManager: o.userSession.profileManager,
 		})),
 	);
 }

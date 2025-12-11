@@ -25,7 +25,7 @@ function PostActionButtonToggleLike() {
 				flag={FLAG}
 				activeIconId={'heart'}
 				inactiveIconId={'heart-outline'}
-				activeTint={theme.primary.a0}
+				activeTint={theme.primary}
 				inactiveTint={theme.secondary.a10}
 				size={appDimensions.timelines.actionButtonSize}
 				style={{

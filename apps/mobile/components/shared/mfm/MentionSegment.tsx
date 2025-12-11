@@ -38,7 +38,8 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			const ctx = PostResolver.mentionItemsToWebfinger(parsed?.text, mentions);
 			console.log(ctx, parsed?.text, mentions);
 			if (ctx) {
-				setCtx(ctx);
+				// FIXME: correct the typing
+				setCtx({$type: "user-preview", userId:});
 			}
 		} else {
 			setCtx({
@@ -53,7 +54,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			<AppText.Normal
 				style={{
 					fontFamily,
-					color: parsed.me ? theme.primary.a0 : theme.complementary.a0,
+					color: parsed.me ? theme.primary : theme.complementary,
 				}}
 				onPress={onPress}
 			>

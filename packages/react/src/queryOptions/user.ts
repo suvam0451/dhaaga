@@ -14,6 +14,7 @@ import type {
 	ResultPage,
 	UserObjectType,
 } from '@dhaaga/bridge';
+import { unifiedUserLookup } from '@dhaaga/bridge';
 
 /**
  * GET user profile
@@ -22,9 +23,12 @@ export function userProfileQueryOpts(
 	client: ApiTargetInterface,
 	query: DriverUserFindQueryType,
 ) {
+	async function api() {
+		return unifiedUserLookup(client, query.use);
+	}
 	return queryOptions<UserObjectType>({
 		queryKey: [client.key, 'dhaaga/user', query],
-		queryFn: () => client.user.findOne(query),
+		queryFn: api,
 		enabled: !!client,
 	});
 }

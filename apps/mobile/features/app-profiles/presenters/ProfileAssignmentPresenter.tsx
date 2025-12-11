@@ -49,7 +49,7 @@ function ProfileAssignmentPresenter({
 						active={item.has}
 						activeIconId={'checkmark-circle'}
 						inactiveIconId={'add-circle-outline'}
-						activeTint={theme.primary.a0}
+						activeTint={theme.primary}
 						inactiveTint={theme.secondary.a30}
 						label={item.name}
 						desc={t(`collections.fallbackDesc`)}

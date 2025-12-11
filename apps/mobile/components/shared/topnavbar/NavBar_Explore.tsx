@@ -55,7 +55,7 @@ function NavBar_Explore({
 						}}
 					>
 						<NativeTextH1
-							color={item.id === selectedItemId ? theme.primary.a0 : undefined}
+							color={item.id === selectedItemId ? theme.primary : undefined}
 						>
 							{item.label}
 						</NativeTextH1>

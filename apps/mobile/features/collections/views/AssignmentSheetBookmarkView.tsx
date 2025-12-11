@@ -34,7 +34,7 @@ function AssignmentSheetBookmarkView({
 				activeIconId={'bookmark'}
 				inactiveIconId={'bookmark-outline'}
 				active={bookmarked}
-				activeTint={theme.primary.a0}
+				activeTint={theme.primary}
 				inactiveTint={TIP_TEXT_COLOR}
 				onPress={() => {
 					toggleBookmark();

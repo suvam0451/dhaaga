@@ -27,7 +27,7 @@ function SendButtonView({ isSending, onSend, isEnabled }: Props) {
 		<Pressable
 			style={{
 				marginLeft: 12,
-				backgroundColor: isEnabled ? theme.primary.a0 : theme.secondary.a50,
+				backgroundColor: isEnabled ? theme.primary : theme.secondary.a50,
 				padding: 10,
 				borderRadius: 32,
 			}}

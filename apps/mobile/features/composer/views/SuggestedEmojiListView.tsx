@@ -42,7 +42,7 @@ function SuggestedEmojiListView({ suggestions, onPick }: Props) {
 						}}
 					/>
 					<AppText.Medium
-						style={[styles.emojiText, { color: theme.complementary.a0 }]}
+						style={[styles.emojiText, { color: theme.complementary }]}
 					>
 						{item.shortCode}
 					</AppText.Medium>

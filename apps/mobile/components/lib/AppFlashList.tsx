@@ -76,7 +76,7 @@ export function Chatroom_Item({ item }: { item: AppChatRoom }) {
 						numberOfLines={1}
 					>
 						{LatestMessageMe ? (
-							<AppText.Normal style={{ color: theme.primary.a0 }}>
+							<AppText.Normal style={{ color: theme.primary }}>
 								You:{' '}
 							</AppText.Normal>
 						) : (

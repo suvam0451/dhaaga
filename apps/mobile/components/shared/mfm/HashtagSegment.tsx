@@ -11,13 +11,15 @@ type Props = {
 
 function HashtagSegment({ value }: Props) {
 	const { theme } = useAppTheme();
-	const { setCtx, show } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 
 	const _value = decodeURI(value.replace('#', '')); // atproto
 
 	function onPress() {
-		setCtx({ tag: _value });
-		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
+		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true, {
+			$type: 'tag-preview',
+			tagId: _value,
+		});
 	}
 
 	const k = RandomUtil.nanoId();
@@ -35,7 +37,7 @@ function HashtagSegment({ value }: Props) {
 			<AppText.Normal
 				onPress={onPress}
 				style={{
-					color: theme.complementary.a0,
+					color: theme.complementary,
 				}}
 			>
 				{_value}

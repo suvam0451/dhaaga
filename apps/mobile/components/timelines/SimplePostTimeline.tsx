@@ -22,6 +22,7 @@ import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { DefinedUseQueryResult } from '@tanstack/react-query';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import { AppDividerSoft } from '#/ui/Divider';
+import TimelineEmptyView from '#/features/timelines/view/TimelineEmptyView';
 
 export function TimelineStateIndicator({
 	queryResult,
@@ -35,6 +36,7 @@ export function TimelineStateIndicator({
 	const { isFetched, error, isRefetching } = queryResult;
 	if (State.items.length === 0 && (isRefetching || !isFetched))
 		return <PostSkeleton containerHeight={containerHeight} />;
+	if (State.items.length === 0) return <TimelineEmptyView />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <View />;
 }

@@ -117,7 +117,7 @@ export function AppDialog() {
 					style={{ paddingHorizontal: 24, marginBottom: MARGIN_BOTTOM * 2 }}
 				>
 					<AppText.SemiBold
-						style={[styles.modalTitle, { color: theme.primary.a0 }]}
+						style={[styles.modalTitle, { color: theme.primary }]}
 					>
 						{title}
 					</AppText.SemiBold>
@@ -145,7 +145,7 @@ export function AppDialog() {
 								fontSize: 16,
 								textAlign: 'center',
 								fontFamily: APP_FONTS.ROBOTO_500,
-								color: theme.primary.a0,
+								color: theme.primary,
 								textDecorationLine: 'none',
 								paddingVertical: 20,
 							}}

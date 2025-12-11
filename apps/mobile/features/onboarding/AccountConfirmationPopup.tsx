@@ -24,7 +24,7 @@ function UserDataPreview({
 		<View
 			style={{
 				padding: 8,
-				backgroundColor: theme.primary.a20, // '#E5FFDA',
+				backgroundColor: theme.primary, // '#E5FFDA',
 				borderRadius: 12,
 				flexDirection: 'row',
 				alignItems: 'center',

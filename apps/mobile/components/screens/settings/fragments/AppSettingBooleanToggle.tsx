@@ -46,9 +46,7 @@ function AppSettingBooleanToggle({ isChecked, onPress, style }: Props) {
 					{
 						borderTopLeftRadius: 0,
 						borderBottomLeftRadius: 0,
-						backgroundColor: isChecked
-							? theme.primary.a0
-							: theme.background.a30,
+						backgroundColor: isChecked ? theme.primary : theme.background.a30,
 					},
 				]}
 			>

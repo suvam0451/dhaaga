@@ -1,6 +1,5 @@
 import { RandomUtil } from '@dhaaga/bridge';
 import {
-	AppDialogButtonAction,
 	AppGlobalState,
 	AppStateImmerSetObject,
 } from '#/states/global/typings';
@@ -23,6 +22,21 @@ type AppStateAppDialogContext =
 	  }
 	| null;
 
+export type AppDialogButtonAction = {
+	// label that appears on the button
+	label: string;
+	// action to perform on press
+	onPress: () => Promise<void>;
+	// variant of the button (impacts theming)
+	variant?:
+		| 'default'
+		| 'switch'
+		| 'important'
+		| 'dismiss'
+		| 'warning'
+		| 'destructive';
+	selected?: boolean;
+};
 export type AppStateAppDialogState = {
 	title: string;
 	description: string[];

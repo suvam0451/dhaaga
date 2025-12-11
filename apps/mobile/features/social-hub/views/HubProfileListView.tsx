@@ -66,7 +66,7 @@ function HubProfileListView({
 								textAlign: 'center',
 								fontSize: 18,
 								color:
-									pageIndex === index ? theme.primary.a0 : theme.secondary.a20,
+									pageIndex === index ? theme.primary : theme.secondary.a20,
 							}}
 						>
 							{item.label}

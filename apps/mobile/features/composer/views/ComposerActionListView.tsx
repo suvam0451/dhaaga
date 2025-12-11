@@ -59,8 +59,8 @@ function ComposerActionListView({
 }: Props) {
 	const { theme } = useAppTheme();
 
-	const DEFAULT_COLOR = theme.complementary.a0;
-	const ACTIVE_COLOR = theme.primary.a0;
+	const DEFAULT_COLOR = theme.complementary;
+	const ACTIVE_COLOR = theme.primary;
 
 	return (
 		<View style={styles.root}>

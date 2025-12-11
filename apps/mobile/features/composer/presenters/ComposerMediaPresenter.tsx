@@ -119,7 +119,7 @@ function ComposerMediaPresenter() {
 					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 						<AppIcon
 							id={'images'}
-							color={theme.primary.a0}
+							color={theme.primary}
 							onPress={trigger}
 							size={28}
 							containerStyle={{ paddingHorizontal: 8 }}

@@ -149,7 +149,7 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 							margin: 'auto',
 							fontSize: 15,
 						}}
-						color={theme.primary.a0}
+						color={theme.primary}
 					>
 						Show Profile
 					</AppText.SemiBold>

@@ -50,7 +50,7 @@ function ActionButton({
 			>
 				<AppText.Medium
 					style={{
-						color: active ? theme.primary.a0 : theme.secondary.a10,
+						color: active ? theme.primary : theme.secondary.a10,
 						fontSize: 18,
 					}}
 				>
@@ -116,7 +116,7 @@ function MorePostActionsPresenter({
 				<ActionButton
 					Icon={
 						<AppIcon
-							color={IS_BOOKMARKED ? theme.primary.a0 : theme.secondary.a10}
+							color={IS_BOOKMARKED ? theme.primary : theme.secondary.a10}
 							id={'bookmark'}
 							size={24}
 						/>
@@ -132,7 +132,7 @@ function MorePostActionsPresenter({
 					Icon={
 						<AppIcon
 							id={IS_LIKED ? 'heart' : 'heart-outline'}
-							color={IS_LIKED ? theme.primary.a0 : theme.secondary.a10}
+							color={IS_LIKED ? theme.primary : theme.secondary.a10}
 						/>
 					}
 					active={IS_LIKED}

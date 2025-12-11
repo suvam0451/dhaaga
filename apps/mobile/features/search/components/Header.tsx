@@ -121,7 +121,7 @@ function Header() {
 								<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
 									Search Term:{' '}
 								</NativeTextMedium>
-								<NativeTextMedium style={{ color: theme.primary.a0 }}>
+								<NativeTextMedium style={{ color: theme.primary }}>
 									{State.q}
 								</NativeTextMedium>
 							</NativeTextMedium>

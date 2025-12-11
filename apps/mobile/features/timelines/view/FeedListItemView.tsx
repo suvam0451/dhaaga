@@ -55,7 +55,7 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 						by{' '}
 						<NativeTextMedium
 							style={{ fontSize: 14 }}
-							color={theme.complementary.a0}
+							color={theme.complementary}
 						>
 							{item.creator.handle}
 						</NativeTextMedium>

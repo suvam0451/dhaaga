@@ -3,6 +3,7 @@ import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppManager,
+	useProfileManager,
 } from '#/states/global/hooks';
 import { View } from 'react-native';
 import { ProfilePinnedUserService } from '@dhaaga/db';
@@ -14,13 +15,14 @@ function AppBottomSheetUserMoreActions() {
 	const currentTargetObj = useRef<UserObjectType>(null);
 	const { stateId } = useAppBottomSheet();
 	const { appManager } = useAppManager();
+	const { profileManager } = useProfileManager();
 
 	const [IsPinnedForProfile, setIsPinnedForProfile] = useState(false);
 
 	const { db } = useAppDb();
 	useEffect(() => {
-		const userId = appManager.appManager.storage.getUserId();
-		const userObj = appManager.appManager.storage.getUserObject();
+		const userId = appManager.storage.getUserId();
+		const userObj = appManager.storage.getUserObject();
 		if (!userId) {
 			currentTargetId.current = null;
 			currentTargetObj.current = null;
@@ -65,7 +67,7 @@ function AppBottomSheetUserMoreActions() {
 			{/*		<AppIcon*/}
 			{/*			id={'pin-octicons'}*/}
 			{/*			size={24}*/}
-			{/*			color={theme.complementary.a0}*/}
+			{/*			color={theme.complementary}*/}
 			{/*			onPress={() => {}}*/}
 			{/*		/>*/}
 			{/*	}*/}

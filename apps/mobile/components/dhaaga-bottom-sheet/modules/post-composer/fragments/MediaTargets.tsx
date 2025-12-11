@@ -134,7 +134,7 @@ function ComposeMediaTargets() {
 								<AppIcon
 									id={'checkmark-done-outline'}
 									size={22}
-									color={theme.primary.a0}
+									color={theme.primary}
 								/>
 							);
 							break;
@@ -144,7 +144,7 @@ function ComposeMediaTargets() {
 								<AppIcon
 									id={'cloud-upload-outline'}
 									size={22}
-									color={theme.complementary.a0}
+									color={theme.complementary}
 								/>
 							);
 							break;
@@ -189,8 +189,8 @@ function ComposeMediaTargets() {
 												state.medias[index].remoteAlt ===
 													state.medias[index].localAlt &&
 												!!state.medias[index].remoteAlt
-													? theme.primary.a0
-													: theme.complementary.a0,
+													? theme.primary
+													: theme.complementary,
 										}}
 									>
 										ALT

@@ -115,3 +115,4 @@ export type {
 
 export { postObjectSchema } from './types/shared/post.js';
 export { BaseUrlNormalizationService } from './utils/urls.js';
+export { unifiedUserLookup } from '#/client/utils/unifiedUserLookup.js';

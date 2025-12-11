@@ -131,7 +131,7 @@ function OnboardingSignInBanner({
 					</AppText.Medium>
 					<AppText.Medium
 						style={{
-							color: theme.complementary.a0,
+							color: theme.complementary,
 							fontSize: 18,
 							textAlign: 'center',
 						}}

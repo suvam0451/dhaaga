@@ -38,7 +38,7 @@ function AssignmentListControlView({
 			<Pressable onPress={onPressAddNew}>
 				<AppText.Medium
 					style={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						fontSize: 16,
 					}}
 				>

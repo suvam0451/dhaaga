@@ -25,7 +25,7 @@ function ProfileStatItemView({ count, label, onPress }: Props) {
 	}
 	return (
 		<Pressable style={[{}, styles.touchContainer]} onPress={_onPress}>
-			<NativeTextH6 style={{ color: theme.complementary.a0 }}>
+			<NativeTextH6 style={{ color: theme.complementary }}>
 				{util(count)}
 			</NativeTextH6>
 			<AppText.Medium

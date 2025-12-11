@@ -35,7 +35,7 @@ function RecievedMessageView({ item, avatarUrl }: Props) {
 				style={[
 					styles.messageContentBox,
 					{
-						backgroundColor: theme.complementary.a0,
+						backgroundColor: theme.complementary,
 					},
 				]}
 			>

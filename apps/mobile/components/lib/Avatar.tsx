@@ -57,7 +57,7 @@ export function SocialHubAvatarCircle({
 					backgroundColor: theme.palette.bg,
 					borderStyle: 'dashed',
 					borderWidth: 1.5,
-					borderColor: theme.primary.a0,
+					borderColor: theme.primary,
 					flexDirection: 'row',
 					alignItems: 'center',
 					borderRadius: 20,
@@ -66,7 +66,7 @@ export function SocialHubAvatarCircle({
 				<AppAvatar uri={acct?.avatarUrl} size={size} />
 				<Text
 					style={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						marginLeft: 8,
 						marginRight: 12,
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,

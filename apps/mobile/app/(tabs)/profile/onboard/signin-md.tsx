@@ -103,7 +103,7 @@ function MastodonSignInStack() {
 								style={[
 									appStyling.button,
 									{
-										backgroundColor: theme.primary.a0,
+										backgroundColor: theme.primary,
 									},
 								]}
 								onPress={onPressConfirm}

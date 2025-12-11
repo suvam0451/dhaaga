@@ -6,12 +6,11 @@ import { NativeTextSemiBold } from '#/ui/NativeText';
 type Props = {
 	label?: string;
 	buttons: {
-		lookupId: string;
+		id: string;
 		label: string;
 		onClick: () => void;
 	}[];
-	selection: Set<string>;
-	hash: string;
+	selection: string;
 	activeForeground?: string;
 	activeBackground?: string;
 	inactiveForeground?: string;
@@ -43,7 +42,7 @@ function ControlSegmentView({
 	const { theme } = useAppTheme();
 
 	const _activeForeground = activeForeground || 'black';
-	const _activeBackground = activeBackground || theme.primary.a0;
+	const _activeBackground = activeBackground || theme.primary;
 	const _inactiveForeground = inactiveForeground || theme.secondary.a20;
 	const _inactiveBackground = inactiveBackground || '#2c2c2c';
 
@@ -69,18 +68,16 @@ function ControlSegmentView({
 						style={[
 							styles.buttonContainer,
 							{
-								backgroundColor: selection.has(o.lookupId)
-									? _activeBackground
-									: _inactiveBackground,
+								backgroundColor:
+									selection === o.id ? _activeBackground : _inactiveBackground,
 							},
 						]}
 						onTouchEnd={o.onClick}
 					>
 						<NativeTextSemiBold
 							style={{
-								color: selection.has(o.lookupId)
-									? _activeForeground
-									: _inactiveForeground,
+								color:
+									selection === o.id ? _activeForeground : _inactiveForeground,
 							}}
 						>
 							{o.label}

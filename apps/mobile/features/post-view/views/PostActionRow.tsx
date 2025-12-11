@@ -25,7 +25,6 @@ function ShareButton() {
 	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
 	const { postObjectActions } = useAppPublishers();
-	const { theme } = useAppTheme();
 	const { driver } = useAppApiClient();
 
 	async function onPress() {
@@ -101,11 +100,13 @@ function LikeButton() {
  */
 function CommentButton() {
 	const { dto: item } = withPostItemContext();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 
 	function onPress() {
-		setCtx({ uuid: item.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true, {
+			$type: 'compose-reply',
+			parentPostId: item.id,
+		});
 	}
 
 	return (
@@ -118,11 +119,13 @@ function CommentButton() {
 function ReactButton() {
 	const { dto: item } = withPostItemContext();
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 
 	function onPress() {
-		setCtx({ uuid: item.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.ADD_REACTION, true);
+		show(APP_BOTTOM_SHEET_ENUM.ADD_REACTION, true, {
+			$type: 'post-id',
+			postId: item.id,
+		});
 	}
 
 	return (
@@ -130,7 +133,7 @@ function ReactButton() {
 			flag={false}
 			activeIconId={'smiley'}
 			inactiveIconId={'smiley-outline'}
-			activeTint={theme.primary.a0}
+			activeTint={theme.primary}
 			inactiveTint={theme.secondary.a40}
 			size={appDimensions.timelines.actionButtonSize}
 			style={styles.actionButton}
@@ -142,15 +145,17 @@ function ReactButton() {
 function SettingsButton() {
 	const { dto: item } = withPostItemContext();
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 	const { acct } = useActiveUserSession();
 
 	const _target = PostInspector.getContentTarget(item);
 	if (_target.postedBy.id !== acct.identifier) return <View />;
 
 	function onPress() {
-		setCtx({ uuid: item.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.ADD_REACTION, true);
+		show(APP_BOTTOM_SHEET_ENUM.ADD_REACTION, true, {
+			$type: 'post-id',
+			postId: item.id,
+		});
 	}
 
 	return (
@@ -158,8 +163,8 @@ function SettingsButton() {
 			flag={false}
 			activeIconId={'settings'}
 			inactiveIconId={'settings-outline'}
-			activeTint={theme.primary.a0}
-			inactiveTint={theme.primary.a0}
+			activeTint={theme.primary}
+			inactiveTint={theme.primary}
 			size={appDimensions.timelines.actionButtonSize}
 			style={styles.actionButton}
 			onPress={onPress}

@@ -117,7 +117,7 @@ export function AuthorItemView({
 					{DatetimeUtil.timeAgo(createdAt)}
 				</AppText.Normal>
 				{extraData?.interaction?.liked ? (
-					<AppIcon id={'heart'} size={28} color={theme.primary.a0} />
+					<AppIcon id={'heart'} size={28} color={theme.primary} />
 				) : (
 					<View />
 				)}

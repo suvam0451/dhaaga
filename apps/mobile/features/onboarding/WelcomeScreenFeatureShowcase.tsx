@@ -139,7 +139,7 @@ function WelcomeScreenFeatureShowcase() {
 							const backgroundColor = interpolateColor(
 								animatedIndex.value,
 								[i - 1, i, i + 1],
-								[theme.secondary.a50, theme.primary.a10, theme.secondary.a50],
+								[theme.secondary.a50, theme.primary, theme.secondary.a50],
 							);
 
 							return { width, backgroundColor };

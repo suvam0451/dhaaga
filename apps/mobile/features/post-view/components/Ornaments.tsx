@@ -16,10 +16,10 @@ export function PinOrnament({ isPinned }: PinOrnamentProps) {
 	if (!isPinned) return <View />;
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
+			<AppIcon id={'pin'} size={20} color={theme.complementary} />
 			<AppText.Medium
 				style={{
-					color: theme.complementary.a0,
+					color: theme.complementary,
 					marginLeft: 6,
 				}}
 			>

@@ -11,7 +11,7 @@ function FeatureNotAvailable() {
 	return (
 		<View style={{ marginHorizontal: 32, marginTop: 64 }}>
 			<AppText.Medium
-				style={{ textAlign: 'center', fontSize: 28, color: theme.primary.a0 }}
+				style={{ textAlign: 'center', fontSize: 28, color: theme.primary }}
 			>
 				{t(`features.notAvailable.title`)}
 			</AppText.Medium>

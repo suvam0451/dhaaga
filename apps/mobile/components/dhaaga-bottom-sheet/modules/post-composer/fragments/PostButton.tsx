@@ -29,7 +29,7 @@ function PostButton() {
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { postObjectActions } = useAppPublishers();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	async function onClick() {
@@ -53,8 +53,10 @@ function PostButton() {
 			 */
 			const _newPostObject = PostParser.parse<unknown>(newPost, driver, server);
 			postObjectActions.write(_newPostObject.uuid, _newPostObject);
-			setCtx({ uuid: _newPostObject.uuid });
-			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true, {
+				$type: 'post-preview',
+				postId: _newPostObject.id,
+			});
 			setLoading(false);
 			return;
 		}
@@ -104,8 +106,10 @@ function PostButton() {
 			if (ActivityPubService.mastodonLike(driver)) {
 				const _data = PostParser.parse(data, driver, server);
 				postObjectActions.write(_data.uuid, _data);
-				setCtx({ uuid: _data.uuid });
-				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true, {
+					$type: 'post-preview',
+					postId: _data.id,
+				});
 			} else {
 				const _data = PostParser.parse<unknown>(
 					(data as any).createdNote,
@@ -113,8 +117,10 @@ function PostButton() {
 					server,
 				);
 				postObjectActions.write(_data.uuid, _data);
-				setCtx({ uuid: _data.uuid });
-				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true);
+				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true, {
+					$type: 'post-preview',
+					postId: _data.id,
+				});
 			}
 		} catch (e) {
 		} finally {
@@ -132,7 +138,7 @@ function PostButton() {
 	return (
 		<TouchableOpacity
 			style={{
-				backgroundColor: theme.primary.a0,
+				backgroundColor: theme.primary,
 				flexDirection: 'row',
 				alignItems: 'center',
 				paddingHorizontal: 12,

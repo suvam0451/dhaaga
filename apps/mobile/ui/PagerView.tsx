@@ -67,7 +67,7 @@ function Chip({ active, label, onLayout, onPress }: ChipProps) {
 	};
 	const animStyle = useAnimatedStyle(() => {
 		return {
-			color: withTiming(active ? theme.primary.a0 : theme.secondary.a30, {
+			color: withTiming(active ? theme.primary : theme.secondary.a30, {
 				duration: ANIMATION_DURATION,
 			}),
 		};

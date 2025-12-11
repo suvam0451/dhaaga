@@ -48,7 +48,7 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 				style={[
 					styles.noReactionAvailableSectionB,
 					{
-						backgroundColor: theme.complementary.a10,
+						backgroundColor: theme.complementary,
 					},
 				]}
 				onPress={onBack}
@@ -169,7 +169,7 @@ const EmojiPickerBottomSheet = memo(
 							>
 								<Text
 									style={{
-										color: theme.complementary.a0,
+										color: theme.complementary,
 										fontSize: 16,
 										fontFamily: APP_FONTS.INTER_500_MEDIUM,
 									}}

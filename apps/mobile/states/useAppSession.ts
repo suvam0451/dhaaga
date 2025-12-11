@@ -1,7 +1,7 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
 import {
-	useActiveUserSession,
+	useAccountManager,
 	useAppDb,
 	useHub,
 	useSessionManagement,
@@ -31,7 +31,7 @@ function useAppSession() {
 
 	const { db: loadedDb } = useAppDb();
 	const { appInit, restoreSession } = useSessionManagement();
-	const { acctManager } = useActiveUserSession();
+	const { acctManager } = useAccountManager();
 	const { loadAccounts } = useHub();
 
 	// load essential app data

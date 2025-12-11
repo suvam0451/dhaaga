@@ -61,7 +61,7 @@ const ACTION_BUTTON_SIZE = appDimensions.timelines.actionButtonSize;
 
 function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 	const { theme, skin } = useAppTheme();
-	const ACTIVE_TINT = theme.primary.a0;
+	const ACTIVE_TINT = theme.primary;
 	const INACTIVE_TINT = theme.secondary.a40;
 	switch (id) {
 		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_ACTIVE: {

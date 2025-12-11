@@ -42,7 +42,7 @@ const ComposerSpoiler = memo(() => {
 				style={[
 					styles.textInput,
 					{
-						color: theme.complementary.a0,
+						color: theme.complementary,
 					},
 				]}
 				onChange={onChange}

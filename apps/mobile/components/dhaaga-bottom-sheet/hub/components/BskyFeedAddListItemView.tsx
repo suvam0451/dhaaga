@@ -50,7 +50,7 @@ function BskyFeedAddListItemView({ profile, feed, onChangeCallback }: Props) {
 					</NativeTextMedium>
 					<NativeTextMedium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-						style={{ fontSize: 13, color: theme.complementary.a0 }}
+						style={{ fontSize: 13, color: theme.complementary }}
 					>
 						{feed.likeCount} {t(`noun.like`, { count: feed.likeCount })} @
 						{feed.creator.handle}
@@ -58,11 +58,7 @@ function BskyFeedAddListItemView({ profile, feed, onChangeCallback }: Props) {
 				</View>
 				<Pressable onPress={onToggle}>
 					{data ? (
-						<AppIcon
-							id={'checkmark-circle'}
-							size={32}
-							color={theme.primary.a0}
-						/>
+						<AppIcon id={'checkmark-circle'} size={32} color={theme.primary} />
 					) : (
 						<AppIcon
 							id={'add-circle-outline'}

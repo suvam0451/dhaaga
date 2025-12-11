@@ -33,7 +33,7 @@ function LandingPageView() {
 					]}
 				>
 					{t(`discover.moreSoon.firstHalf`)}{' '}
-					<Text style={{ color: theme.complementary.a0 }}>
+					<Text style={{ color: theme.complementary }}>
 						{t(`discover.moreSoon.secondHalf`)}
 					</Text>
 				</Text>

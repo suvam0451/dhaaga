@@ -49,7 +49,7 @@ function ListItemView({ onPress, onLongPress, item }: ListItemViewProps) {
 				<NativeTextSemiBold
 					style={{
 						fontSize: 18,
-						color: theme.primary.a0,
+						color: theme.primary,
 					}}
 				>
 					{item.alias}
