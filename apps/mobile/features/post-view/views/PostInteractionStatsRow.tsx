@@ -5,17 +5,14 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '#/components/lib/Text';
 import { PostObjectType } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { PostInspector } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type StatItemProps = {
 	count: number;
@@ -45,7 +42,7 @@ export function StatItem({
 }: StatItemProps) {
 	const { theme } = useAppTheme();
 	const formatted = util(count);
-	const color = me ? theme.primary.a0 : theme.complementary.a0;
+	const color = me ? theme.primary : theme.complementary;
 
 	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
 	if (count === 0) return <View />;
@@ -88,7 +85,7 @@ type PostStatsProps = {
  * @constructor
  */
 function PostInteractionStatsRow({ style, dto }: PostStatsProps) {
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
 	const LIKE_COUNT = dto.stats.likeCount;
@@ -102,20 +99,24 @@ function PostInteractionStatsRow({ style, dto }: PostStatsProps) {
 	if (LIKE_COUNT < 1 && REPLY_COUNT < 1 && SHARE_COUNT < 1) return <View />;
 
 	function onPressLikeCounter() {
-		setCtx({
-			uuid: dto.uuid,
+		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES, true, {
+			$type: 'post-id',
+			postId: dto.id,
 		});
-		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_LIKES, true);
 	}
 
 	function onPressShareCounter() {
-		setCtx({ uuid: dto.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES, true);
+		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_SHARES, true, {
+			$type: 'post-id',
+			postId: dto.id,
+		});
 	}
 
 	function onPressCommentCounter() {
-		setCtx({ uuid: dto.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES, true);
+		show(APP_BOTTOM_SHEET_ENUM.POST_SHOW_REPLIES, true, {
+			$type: 'post-id',
+			postId: dto.id,
+		});
 	}
 
 	if (!LIKE_COUNT && !SHARE_COUNT && !REPLY_COUNT) return <View />;

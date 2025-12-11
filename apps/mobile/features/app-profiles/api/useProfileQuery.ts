@@ -1,8 +1,8 @@
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useQuery } from '@tanstack/react-query';
 import {
 	Profile,
@@ -18,7 +18,7 @@ export type ProfileAssigned = Profile & {
 
 export function useProfileListFeedAssignment(uri: string) {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery<ProfileAssigned[]>({
 		queryKey: ['db', 'profiles/feed-assign', acct?.id, uri],
@@ -35,7 +35,7 @@ export function useProfileListFeedAssignment(uri: string) {
 
 export function useProfileListUserAssignment(userId: string) {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { server } = useAppApiClient();
 
 	return useQuery<ProfileAssigned[]>({
@@ -53,7 +53,7 @@ export function useProfileListUserAssignment(userId: string) {
 
 export function useProfileListTagAssignment(name: string) {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery<ProfileAssigned[]>({
 		queryKey: ['db', 'profiles/tag-assign', acct?.id, name],

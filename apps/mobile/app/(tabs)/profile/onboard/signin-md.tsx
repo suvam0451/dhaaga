@@ -1,6 +1,5 @@
-import { View, Alert, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import TitleOnlyNoScrollContainer from '#/components/containers/TitleOnlyNoScrollContainer';
-import HideOnKeyboardVisibleContainer from '#/components/containers/HideOnKeyboardVisibleContainer';
 import { useLocalSearchParams } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import PleromaPasteToken from '#/features/onboarding/components/PleromaPasteToken';
@@ -10,13 +9,14 @@ import {
 	useAppPublishers,
 	useAppTheme,
 	useHub,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { useActivityPubAuth } from '@dhaaga/react';
 import AccountDbService from '#/services/db/account-db.service';
 import appStyling from '#/styles/AppStyles';
 import { AppAuthWebView } from '#/components/lib/WebView';
 import RoutingUtils from '#/utils/routing.utils';
+import { HideWhileKeyboardActive } from '#/ui/Containers';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
@@ -66,7 +66,7 @@ function MastodonSignInStack() {
 				onNavigationStateChange={RNWebviewStateChangeCallback}
 			/>
 			{_domain === KNOWN_SOFTWARE.MASTODON ? (
-				<HideOnKeyboardVisibleContainer
+				<HideWhileKeyboardActive
 					style={{ marginHorizontal: 12, marginTop: 'auto', height: 'auto' }}
 				>
 					{code && (
@@ -103,7 +103,7 @@ function MastodonSignInStack() {
 								style={[
 									appStyling.button,
 									{
-										backgroundColor: theme.primary.a0,
+										backgroundColor: theme.primary,
 									},
 								]}
 								onPress={onPressConfirm}
@@ -120,13 +120,13 @@ function MastodonSignInStack() {
 							</TouchableOpacity>
 						</View>
 					)}
-				</HideOnKeyboardVisibleContainer>
+				</HideWhileKeyboardActive>
 			) : (
 				<View style={{ marginHorizontal: 12 }}>
 					<View style={{ marginBottom: 36, paddingBottom: 16 }}>
-						<HideOnKeyboardVisibleContainer style={{ marginVertical: 16 }}>
+						<HideWhileKeyboardActive style={{ marginVertical: 16 }}>
 							<Text>Step 3: Confirm your account</Text>
-						</HideOnKeyboardVisibleContainer>
+						</HideWhileKeyboardActive>
 						<PleromaPasteToken domain={_domain} setCode={setCode} />
 						{code ? (
 							<View>
@@ -139,7 +139,7 @@ function MastodonSignInStack() {
 							<View></View>
 						)}
 
-						<HideOnKeyboardVisibleContainer>
+						<HideWhileKeyboardActive>
 							<TouchableOpacity
 								disabled={!code}
 								style={[
@@ -152,7 +152,7 @@ function MastodonSignInStack() {
 							>
 								Proceed
 							</TouchableOpacity>
-						</HideOnKeyboardVisibleContainer>
+						</HideWhileKeyboardActive>
 					</View>
 				</View>
 			)}

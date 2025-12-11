@@ -1,6 +1,6 @@
 import type { FeedObjectType } from '@dhaaga/bridge';
 import { Profile, ProfilePinnedTimelineService } from '@dhaaga/db';
-import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import { useQuery } from '@tanstack/react-query';
 
 export function useSocialHubFeedPinStatus(
@@ -8,7 +8,7 @@ export function useSocialHubFeedPinStatus(
 	feed: FeedObjectType,
 ) {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery<boolean>({
 		queryKey: ['hub/pin/timeline', profile.id, feed.uri],

@@ -1,11 +1,11 @@
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { StyleProp, Text, TextStyle } from 'react-native';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppTextVariant,
 	AppThemingUtil,
-} from '../../utils/theming.util';
+} from '#/utils/theming.util';
 import { RandomUtil } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 
@@ -27,6 +27,17 @@ type AppTextProps = {
 	onTextLayout?: (e: any) => void;
 };
 
+/**
+ * @deprecated
+ * @param forwardedKey
+ * @param keygen
+ * @param style
+ * @param color
+ * @param children
+ * @param numberOfLines
+ * @param emphasis
+ * @constructor
+ */
 export function SpecialText({
 	forwardedKey,
 	keygen,

@@ -4,14 +4,11 @@ import {
 	KNOWN_SOFTWARE,
 	TagTargetInterface,
 } from '@dhaaga/bridge';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '../utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 
 export function useApiGetTagInterface(query: string) {
 	const { client, driver } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	// Queries
 	return useQuery<TagTargetInterface>({

@@ -1,6 +1,6 @@
 import { Animated, RefreshControl } from 'react-native';
-import { appDimensions } from '../../../styles/dimensions';
-import { SavedPostItem } from '../../../components/common/status/LocalView/SavedPostItem';
+import { appDimensions } from '#/styles/dimensions';
+import { SavedPostItemView } from '../SavedPostItemView';
 import { CollectionDataViewPostEntry } from '../reducers/collection-detail.reducer';
 
 type Props = {
@@ -22,7 +22,7 @@ function CollectionDetailView({
 				paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
 			}}
 			data={items}
-			renderItem={({ item }) => <SavedPostItem item={item} />}
+			renderItem={({ item }) => <SavedPostItemView item={item} />}
 			refreshControl={
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}

@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { ICON_SIZE } from '../components/_common';
 import { DatetimeUtil } from '#/utils/datetime.utils';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { TextContentView } from '#/components/common/status/TextContentView';
 import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
@@ -117,7 +117,7 @@ export function AuthorItemView({
 					{DatetimeUtil.timeAgo(createdAt)}
 				</AppText.Normal>
 				{extraData?.interaction?.liked ? (
-					<AppIcon id={'heart'} size={28} color={theme.primary.a0} />
+					<AppIcon id={'heart'} size={28} color={theme.primary} />
 				) : (
 					<View />
 				)}

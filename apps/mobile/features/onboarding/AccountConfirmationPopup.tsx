@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppText } from '#/components/lib/Text';
@@ -24,7 +24,7 @@ function UserDataPreview({
 		<View
 			style={{
 				padding: 8,
-				backgroundColor: theme.primary.a20, // '#E5FFDA',
+				backgroundColor: theme.primary, // '#E5FFDA',
 				borderRadius: 12,
 				flexDirection: 'row',
 				alignItems: 'center',

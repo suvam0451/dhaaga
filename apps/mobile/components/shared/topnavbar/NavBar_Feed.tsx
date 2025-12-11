@@ -6,24 +6,26 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import TimelineWidgetModal from '../../widgets/timelines/core/Modal';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { router } from 'expo-router';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { LocalizationService } from '#/services/localization.service';
-import { usePostTimelineState, usePostTimelineDispatch } from '@dhaaga/core';
+import {
+	usePostTimelineState,
+	usePostTimelineDispatch,
+	PostTimelineStateAction,
+} from '@dhaaga/core';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
-	useAppBottomSheet_TimelineReference,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import Animated from 'react-native-reanimated';
 import { TOP_NAVBAR_MENU_ICON_SIZE } from '#/components/shared/topnavbar/settings';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	animatedStyle?: StyleProp<ViewStyle>;
@@ -39,15 +41,27 @@ type Props = {
 function NavBar_Feed({ animatedStyle }: Props) {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet();
-	const { attach } = useAppBottomSheet_TimelineReference();
+	const { show, ctx } = useAppBottomSheet();
 
 	const State = usePostTimelineState();
 	const dispatch = usePostTimelineDispatch();
 
 	function onViewTimelineController() {
-		attach(State, dispatch);
-		show(APP_BOTTOM_SHEET_ENUM.TIMELINE_CONTROLLER);
+		show(
+			APP_BOTTOM_SHEET_ENUM.FEED_SETTINGS,
+			true,
+			{
+				$type: 'set-feed-options',
+				...State,
+			},
+			() => {
+				if (ctx.$type !== 'set-feed-options') return;
+				dispatch({
+					type: PostTimelineStateAction.SET_QUERY_OPTS,
+					payload: ctx,
+				});
+			},
+		);
 	}
 
 	function onUserGuidePress() {
@@ -69,14 +83,12 @@ function NavBar_Feed({ animatedStyle }: Props) {
 						alignItems: 'center',
 						height: '100%',
 						flex: 1,
-						// justifyContent: 'center',
 						marginLeft: 16,
 						maxWidth: '40%',
 					}}
-					// onPress={onIconPress}
 				>
 					<Text
-						style={[styles.label, { color: theme.primary.a0, fontSize: 24 }]}
+						style={[styles.label, { color: theme.primary, fontSize: 24 }]}
 						numberOfLines={1}
 					>
 						{_label || 'Unknown'}
@@ -87,7 +99,7 @@ function NavBar_Feed({ animatedStyle }: Props) {
 							marginTop: 2,
 						}}
 					>
-						<AppIcon id={'chevron-down'} color={theme.primary.a0} size={20} />
+						<AppIcon id={'chevron-down'} color={theme.primary} size={20} />
 					</View>
 				</View>
 
@@ -126,7 +138,6 @@ function NavBar_Feed({ animatedStyle }: Props) {
 						/>
 					</Pressable>
 				</View>
-				<TimelineWidgetModal />
 			</View>
 		</Animated.View>
 	);

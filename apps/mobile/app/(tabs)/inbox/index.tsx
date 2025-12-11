@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import MentionPresenter from '#/features/inbox/presenters/MentionPresenter';
 import ChatroomPresenter from '#/features/inbox/presenters/ChatroomPresenter';
 import SocialUpdatePresenter from '#/features/inbox/presenters/SocialUpdatePresenter';

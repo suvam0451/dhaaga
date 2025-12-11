@@ -1,6 +1,6 @@
 import type { UserObjectType } from '@dhaaga/bridge';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import {
 	UserTimelineStateAction,
 	useUserTimelineDispatch,

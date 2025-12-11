@@ -1,7 +1,7 @@
 import { Pressable, View, StyleSheet } from 'react-native';
-import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
+import { AppText } from '#/components/lib/Text';
 
 type CollectionItemProps = {
 	active: boolean;
@@ -54,7 +54,7 @@ function CollectionItem({
 			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
 				<AppText.Medium
 					style={{
-						color: active ? theme.primary.a0 : theme.secondary.a10,
+						color: active ? theme.primary : theme.secondary.a10,
 						fontSize: 18,
 						marginBottom: 4,
 					}}

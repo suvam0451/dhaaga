@@ -1,18 +1,16 @@
-import { memo } from 'react';
 import { Image } from 'expo-image';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { Account } from '@dhaaga/db';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type AppAvatarProps = {
 	uri: string;
 	size?: number;
 };
 
-export const AppAvatar = memo(({ uri, size }: AppAvatarProps) => {
+export function AppAvatar({ uri, size }: AppAvatarProps) {
 	return (
-		// @ts-ignore-next-line
 		<Image
 			source={{ uri: uri }}
 			style={{
@@ -24,7 +22,7 @@ export const AppAvatar = memo(({ uri, size }: AppAvatarProps) => {
 			}}
 		/>
 	);
-});
+}
 
 type SocialHubAvatarCircleProps = {
 	size?: number;
@@ -59,7 +57,7 @@ export function SocialHubAvatarCircle({
 					backgroundColor: theme.palette.bg,
 					borderStyle: 'dashed',
 					borderWidth: 1.5,
-					borderColor: theme.primary.a0,
+					borderColor: theme.primary,
 					flexDirection: 'row',
 					alignItems: 'center',
 					borderRadius: 20,
@@ -68,7 +66,7 @@ export function SocialHubAvatarCircle({
 				<AppAvatar uri={acct?.avatarUrl} size={size} />
 				<Text
 					style={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						marginLeft: 8,
 						marginRight: 12,
 						fontFamily: APP_FONTS.INTER_500_MEDIUM,

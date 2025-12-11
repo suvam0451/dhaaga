@@ -4,7 +4,6 @@ import {
 	ActivityPubService,
 	ApiTargetInterface,
 	AtprotoApiAdapter,
-	defaultResultPage,
 	DriverService,
 	DriverUserFindQueryType,
 	MisskeyApiAdapter,
@@ -15,6 +14,7 @@ import type {
 	ResultPage,
 	UserObjectType,
 } from '@dhaaga/bridge';
+import { unifiedUserLookup } from '@dhaaga/bridge';
 
 /**
  * GET user profile
@@ -23,9 +23,12 @@ export function userProfileQueryOpts(
 	client: ApiTargetInterface,
 	query: DriverUserFindQueryType,
 ) {
+	async function api() {
+		return unifiedUserLookup(client, query.use);
+	}
 	return queryOptions<UserObjectType>({
 		queryKey: [client.key, 'dhaaga/user', query],
-		queryFn: () => client.user.findOne(query),
+		queryFn: api,
 		enabled: !!client,
 	});
 }
@@ -35,19 +38,18 @@ export function userFollowsQueryOpts(
 	userId: string,
 	maxId: string | null,
 ) {
-	return queryOptions({
+	async function api() {
+		return client.users.getFollowings({
+			id: userId,
+			limit: 15,
+			maxId,
+			allowPartial: true,
+		});
+	}
+	return queryOptions<ResultPage<UserObjectType[]>>({
 		queryKey: ['dhaaga/user/follows', client.key, userId, maxId],
-		queryFn: () =>
-			client.user
-				.getFollows({
-					id: userId,
-					limit: 10,
-					maxId,
-					allowPartial: true,
-				})
-				.then((o) => o.unwrapOrElse(defaultResultPage)),
+		queryFn: api,
 		enabled: !!client,
-		initialData: defaultResultPage,
 	});
 }
 
@@ -56,19 +58,19 @@ export function userFollowersQueryOpts(
 	acctId: string,
 	maxId: string | null,
 ) {
-	return queryOptions({
+	async function api() {
+		return client.users.getFollowers({
+			id: acctId,
+			limit: 10,
+			maxId,
+			allowPartial: true,
+		});
+	}
+
+	return queryOptions<ResultPage<UserObjectType[]>>({
 		queryKey: [client.key, 'dhaaga/user/followers', acctId, maxId],
-		queryFn: () =>
-			client.user
-				.getFollowers({
-					id: acctId,
-					limit: 10,
-					maxId,
-					allowPartial: true,
-				})
-				.then((o) => o.unwrapOrElse(defaultResultPage)),
+		queryFn: api,
 		enabled: !!client,
-		initialData: defaultResultPage,
 	});
 }
 

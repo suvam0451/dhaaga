@@ -1,5 +1,5 @@
-import { APP_ICON_ENUM, AppIcon } from '#/components/lib/Icon';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
@@ -37,7 +37,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 				</View>
 				<NativeTextH6
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					color={theme.complementary.a0}
+					color={theme.complementary}
 				>
 					{label}
 				</NativeTextH6>

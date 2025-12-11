@@ -2,14 +2,10 @@ import { AppButtonVariantA, AppButtonVariantDestructive } from '../lib/Buttons';
 import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
 } from '../hooks/tasks/useSyncWithProgress';
-import { RneuiDialogProps } from './_types';
 import { ActivityIndicator, View, Text } from 'react-native';
 import { APP_FONT } from '../../styles/AppTheme';
 
-function BookmarkGalleryAdvanced({
-	IsVisible,
-	setIsVisible,
-}: RneuiDialogProps) {
+function BookmarkGalleryAdvanced() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
 		ACTIVITYPUB_SYNC_TASK.BOOKMARK_SYNC,
 		{},

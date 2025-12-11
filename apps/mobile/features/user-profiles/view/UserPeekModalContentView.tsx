@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '#/components/lib/Text';
@@ -149,7 +149,7 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 							margin: 'auto',
 							fontSize: 15,
 						}}
-						color={theme.primary.a0}
+						color={theme.primary}
 					>
 						Show Profile
 					</AppText.SemiBold>

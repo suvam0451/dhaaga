@@ -1,10 +1,8 @@
-import { appDimensions } from '../../../styles/dimensions';
-import { AppText } from '../../../components/lib/Text';
+import { appDimensions } from '#/styles/dimensions';
+import { AppText } from '#/components/lib/Text';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
+import { APP_FONTS } from '#/styles/AppFonts';
 
 type Props = {
 	onPressAddNew: () => void;
@@ -40,7 +38,7 @@ function AssignmentListControlView({
 			<Pressable onPress={onPressAddNew}>
 				<AppText.Medium
 					style={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						fontSize: 16,
 					}}
 				>

@@ -8,12 +8,11 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useRef } from 'react';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
 import useAppNavigator from '#/states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
@@ -23,6 +22,7 @@ import { AppText } from '../../../lib/Text';
 import { RandomUtil, ActivityPubService } from '@dhaaga/bridge';
 import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
 import OriginalPosterDecoration from '#/skins/OriginalPosterDecoration';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 

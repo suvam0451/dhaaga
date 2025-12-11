@@ -1,7 +1,7 @@
 import { Pressable, View } from 'react-native';
-import { Loader } from '../../../components/lib/Loader';
+import { Loader } from '#/components/lib/Loader';
 import { FontAwesome } from '@expo/vector-icons';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	onSend: () => void;
@@ -27,7 +27,7 @@ function SendButtonView({ isSending, onSend, isEnabled }: Props) {
 		<Pressable
 			style={{
 				marginLeft: 12,
-				backgroundColor: isEnabled ? theme.primary.a0 : theme.secondary.a50,
+				backgroundColor: isEnabled ? theme.primary : theme.secondary.a50,
 				padding: 10,
 				borderRadius: 32,
 			}}

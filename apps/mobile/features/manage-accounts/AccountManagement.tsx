@@ -4,11 +4,7 @@ import { useEffect, useState } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AccountManagementListItem from '../home/components/AccountManagementListItem';
 import { Account, AccountService } from '@dhaaga/db';
-import {
-	useAppDb,
-	useAppPublishers,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppDb, useAppPublishers, useAppTheme } from '#/states/global/hooks';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { useTranslation } from 'react-i18next';

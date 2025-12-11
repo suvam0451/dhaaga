@@ -10,7 +10,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import Animated, {
 	measure,
 	MeasuredDimensions,
@@ -67,7 +67,7 @@ function Chip({ active, label, onLayout, onPress }: ChipProps) {
 	};
 	const animStyle = useAnimatedStyle(() => {
 		return {
-			color: withTiming(active ? theme.primary.a0 : theme.secondary.a30, {
+			color: withTiming(active ? theme.primary : theme.secondary.a30, {
 				duration: ANIMATION_DURATION,
 			}),
 		};

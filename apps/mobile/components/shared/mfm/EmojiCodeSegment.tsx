@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { Image, ImageErrorEventData, ImageLoadEventData } from 'expo-image';
 import { type CustomEmojiObjectType, RandomUtil } from '@dhaaga/bridge';
-import useGlobalState from '#/states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppThemingUtil,
 } from '#/utils/theming.util';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	value: string;
@@ -24,12 +21,7 @@ function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
 	const [ReactionData, setReactionData] = useState<CustomEmojiObjectType>(null);
 	const [EmojiWidth, setEmojiWidth] = useState(EMOJI_HEIGHT);
 	const { theme } = useAppTheme();
-	const { acctManager } = useGlobalState(
-		useShallow((o) => ({
-			acctManager: o.acctManager,
-		})),
-	);
-	const { dto } = withPostItemContext();
+	const { acctManager } = useActiveUserSession();
 
 	let color = AppThemingUtil.getColorForEmphasis(
 		theme.complementaryB,

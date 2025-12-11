@@ -6,10 +6,7 @@ import {
 	useDiscoverState,
 } from '@dhaaga/core';
 import { getSearchTabs } from '@dhaaga/db';
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import { NativeTextH1, NativeTextMedium } from '#/ui/NativeText';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
@@ -124,7 +121,7 @@ function Header() {
 								<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
 									Search Term:{' '}
 								</NativeTextMedium>
-								<NativeTextMedium style={{ color: theme.primary.a0 }}>
+								<NativeTextMedium style={{ color: theme.primary }}>
 									{State.q}
 								</NativeTextMedium>
 							</NativeTextMedium>

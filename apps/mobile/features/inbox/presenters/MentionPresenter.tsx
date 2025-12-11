@@ -4,7 +4,7 @@ import useNotificationStore from '../interactors/useNotificationStore';
 import { TouchableOpacity, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { AppIcon } from '#/components/lib/Icon';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import type { NotificationObjectType } from '@dhaaga/bridge';
 import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
 

@@ -15,13 +15,14 @@ import { appDimensions } from '#/styles/dimensions';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import useHideTopNavUsingFlashList from '#/hooks/anim/useScrollHandleFlatList';
 import { FlatList, RefreshControl } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { SimpleTimelineProps } from '#/components/timelines/shared';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { DefinedUseQueryResult } from '@tanstack/react-query';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import { AppDividerSoft } from '#/ui/Divider';
+import TimelineEmptyView from '#/features/timelines/view/TimelineEmptyView';
 
 export function TimelineStateIndicator({
 	queryResult,
@@ -35,6 +36,7 @@ export function TimelineStateIndicator({
 	const { isFetched, error, isRefetching } = queryResult;
 	if (State.items.length === 0 && (isRefetching || !isFetched))
 		return <PostSkeleton containerHeight={containerHeight} />;
+	if (State.items.length === 0) return <TimelineEmptyView />;
 	if (error) return <TimelineErrorView error={error} />;
 	return <View />;
 }
@@ -135,6 +137,13 @@ function SimplePostTimeline({
 				ItemSeparatorComponent={() => (
 					<AppDividerSoft style={{ marginVertical: 10 }} />
 				)}
+				/**
+				 * Memory tweaks (since Dhaaga is designed
+				 * only for a brick phone form factor)
+				 */
+				initialNumToRender={3}
+				maxToRenderPerBatch={6}
+				windowSize={7}
 			/>
 			<TimelineLoadingIndicator
 				numItems={State.items.length}

@@ -204,17 +204,11 @@ class AtprotoComposerService {
 		text: string,
 	): Promise<MessageView> {
 		if (!id) {
-			const { data: room, error: roomError } =
-				await client.posts.getConvoForMembers(members);
-			if (roomError) return null;
+			const room = await client.posts.getConvoForMembers(members);
 			id = room.data.convo.id;
 		}
 
-		const { data: msgData, error: msgError } = await client.posts.sendMessage(
-			id,
-			text,
-		);
-		if (msgError) return null;
+		const msgData = await client.posts.sendMessage(id, text);
 		return msgData.data;
 	}
 }

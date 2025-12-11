@@ -1,5 +1,5 @@
 import { AppPagerView } from '#/ui/PagerView';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import AccountHome from '#/features/home/AccountHome';
 import AccountManagement from '#/features/manage-accounts/AccountManagement';
 import AppSettings from '#/features/settings/AppSettings';

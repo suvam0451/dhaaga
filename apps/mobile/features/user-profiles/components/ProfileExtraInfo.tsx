@@ -1,10 +1,8 @@
-import { memo } from 'react';
 import { View } from 'react-native';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import ProfileModuleFactory from './ProfileModuleFactory';
-import useGlobalState from '#/states/_global';
-import { useShallow } from 'zustand/react/shallow';
 import type { UserObjectType } from '@dhaaga/bridge';
+import { useAppApiClient } from '#/states/global/hooks';
 
 type ExtraInformationFieldProps = {
 	label: string;
@@ -14,7 +12,7 @@ type ExtraInformationFieldProps = {
 
 const ADDITIONAL_INFO_MAX_LABEL_WIDTH = 96;
 
-const ExtraInformationField = memo(function Foo({
+function ExtraInformationField({
 	label,
 	value,
 	last,
@@ -38,7 +36,7 @@ const ExtraInformationField = memo(function Foo({
 			{/*</View>*/}
 		</View>
 	);
-});
+}
 
 type UserProfileExtraInformationProps = {
 	acct: UserObjectType;
@@ -47,11 +45,7 @@ type UserProfileExtraInformationProps = {
 function UserProfileExtraInformation({
 	acct,
 }: UserProfileExtraInformationProps) {
-	const { driver } = useGlobalState(
-		useShallow((o) => ({
-			driver: o.driver,
-		})),
-	);
+	const { driver } = useAppApiClient();
 	if (driver === KNOWN_SOFTWARE.BLUESKY) return <View />;
 
 	const FIELDS = acct?.meta?.fields || [];

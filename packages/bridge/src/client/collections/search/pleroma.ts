@@ -1,9 +1,10 @@
-import { DhaagaJsUserSearchDTO, SearchRoute } from './_interface.js';
+import { SearchRoute } from './_interface.js';
 import type { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { DhaagaJsUserSearchDTO } from '#/client/typings.js';
 
 export class PleromaSearchRouter implements SearchRoute {
 	direct: FetchWrapper;

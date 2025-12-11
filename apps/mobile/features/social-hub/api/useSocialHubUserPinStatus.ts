@@ -1,6 +1,6 @@
 import { Profile, ProfilePinnedUserService } from '@dhaaga/db';
 import { useQuery } from '@tanstack/react-query';
-import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import type { UserObjectType } from '@dhaaga/bridge';
 
 export function useSocialHubUserPinStatus(
@@ -8,7 +8,7 @@ export function useSocialHubUserPinStatus(
 	user: UserObjectType,
 ) {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	return useQuery<boolean>({
 		queryKey: ['hub/pin/user', profile?.id, user?.id],
 		queryFn: () => {

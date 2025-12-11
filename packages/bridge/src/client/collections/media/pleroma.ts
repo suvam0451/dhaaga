@@ -1,8 +1,9 @@
-import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
+import { MediaRoute } from './_interface.js';
 import { MastoMediaAttachment } from '#/types/mastojs.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MegalodonPleromaWrapper } from '#/client/utils/api-wrappers.js';
 import { CasingUtil } from '#/utils/casing.js';
+import { DhaagaJsMediaCreateDTO } from '#/client/typings.js';
 
 export class PleromaMediaRoute implements MediaRoute {
 	direct: FetchWrapper;

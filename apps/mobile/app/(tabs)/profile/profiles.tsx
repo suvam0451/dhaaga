@@ -7,7 +7,7 @@ import {
 	useAppDialog,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '#/components/lib/Text';
@@ -16,9 +16,9 @@ import { AppIcon } from '#/components/lib/Icon';
 import { AppAccountSelectionItem } from '#/components/common/app/Account';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -102,7 +102,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						style={{
 							fontSize: 16,
-							color: profile.visible ? theme.primary.a0 : theme.secondary.a50,
+							color: profile.visible ? theme.primary : theme.secondary.a50,
 							marginRight: 8,
 						}}
 					>
@@ -199,7 +199,7 @@ function Page() {
 				>
 					<View
 						style={{
-							backgroundColor: theme.primary.a0,
+							backgroundColor: theme.primary,
 							padding: 8,
 							borderRadius: 8,
 							maxWidth: 128,

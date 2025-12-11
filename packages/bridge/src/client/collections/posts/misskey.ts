@@ -1,4 +1,4 @@
-import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
+import { StatusesRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MissContext, MissNote } from '#/types/misskey-js.types.js';
@@ -11,6 +11,7 @@ import {
 import { getHumanReadableError } from '#/utils/errors.js';
 import { errorBuilder } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 
 type RenoteCreateDTO = {
 	localOnly: boolean;

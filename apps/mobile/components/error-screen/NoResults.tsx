@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { APP_FONT } from '../../styles/AppTheme';
-import { APP_FONTS } from '../../styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { memo } from 'react';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type NoResultsProps = {
 	text: string;

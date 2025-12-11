@@ -3,7 +3,7 @@ import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { FlatList, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 function Page() {
 	const { theme } = useAppTheme();

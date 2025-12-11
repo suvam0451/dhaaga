@@ -1,7 +1,7 @@
 import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
 import { AppText } from '#/components/lib/Text';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 type Props = {
@@ -42,7 +42,7 @@ function SuggestedEmojiListView({ suggestions, onPick }: Props) {
 						}}
 					/>
 					<AppText.Medium
-						style={[styles.emojiText, { color: theme.complementary.a0 }]}
+						style={[styles.emojiText, { color: theme.complementary }]}
 					>
 						{item.shortCode}
 					</AppText.Medium>

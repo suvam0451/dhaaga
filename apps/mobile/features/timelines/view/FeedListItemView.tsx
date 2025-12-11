@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Image, useImage } from 'expo-image';
 import { Pressable, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
@@ -55,7 +55,7 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 						by{' '}
 						<NativeTextMedium
 							style={{ fontSize: 14 }}
-							color={theme.complementary.a0}
+							color={theme.complementary}
 						>
 							{item.creator.handle}
 						</NativeTextMedium>

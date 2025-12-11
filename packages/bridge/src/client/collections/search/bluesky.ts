@@ -1,8 +1,4 @@
-import {
-	DhaagaJsPostSearchDTO,
-	DhaagaJsUserSearchDTO,
-	SearchRoute,
-} from './_interface.js';
+import { SearchRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import {
 	AppBskyActorDefs,
@@ -17,6 +13,10 @@ import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { errorBuilder } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import {
+	DhaagaJsPostSearchDTO,
+	DhaagaJsUserSearchDTO,
+} from '#/client/typings.js';
 
 class BlueskySearchRouter implements SearchRoute {
 	dto: AppAtpSessionData;

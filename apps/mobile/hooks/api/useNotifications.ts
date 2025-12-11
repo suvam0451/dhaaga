@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '../utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import {
 	getChatNotificationsQueryOpts,
 	getMentionNotificationsQueryOpts,
@@ -17,7 +14,7 @@ import {
  */
 function useApiGetMentionUpdates(maxId?: string | null) {
 	const { driver, client, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery(
 		getMentionNotificationsQueryOpts(
@@ -35,7 +32,7 @@ function useApiGetMentionUpdates(maxId?: string | null) {
  */
 function useApiGetChatUpdates() {
 	const { driver, client, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery(
 		getChatNotificationsQueryOpts(client, driver, server, acct.identifier),
@@ -50,7 +47,7 @@ function useApiGetChatUpdates() {
  */
 function useApiGetSocialUpdates(maxId?: string | null) {
 	const { driver, client, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery(
 		getSocialNotificationsQueryOpts(
@@ -69,7 +66,7 @@ function useApiGetSocialUpdates(maxId?: string | null) {
  * @param maxId
  */
 function useApiGetSubscriptionUpdates(maxId?: string | null) {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { driver, client, server } = useAppApiClient();
 
 	return useQuery(

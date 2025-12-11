@@ -1,4 +1,5 @@
-import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
+import { NotificationsRoute } from './_interface.js';
+import { NotificationGetQueryDto } from '#/client/typings.js';
 
 export class DefaultNotificationsRouter implements NotificationsRoute {
 	async getAllNotifications(): Promise<any> {

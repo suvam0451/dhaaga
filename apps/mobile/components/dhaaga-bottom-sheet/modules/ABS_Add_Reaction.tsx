@@ -1,32 +1,19 @@
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import { Emoji } from './emoji-picker/emojiPickerReducer';
-import {
-	useAppBottomSheet,
-	useAppPublishers,
-} from '#/hooks/utility/global-state-extractors';
-import { useEffect, useState } from 'react';
+import { useAppBottomSheet } from '#/states/global/hooks';
+import { useState } from 'react';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
 
 function ABS_Add_Reaction() {
 	const { ctx, hide } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
-	const [Post, setPost] = useState(null);
 
+	const { addReaction } = usePostEventBusActions(
+		ctx.$type === 'post-id' ? ctx.postId : null,
+	);
 	const [IsLoading, setIsLoading] = useState(false);
 
-	useEffect(() => {
-		if (!ctx?.uuid) return;
-		function load({ uuid }: { uuid: string }) {
-			setPost(postObjectActions.read(uuid));
-		}
-		load(ctx?.uuid);
-		postObjectActions.subscribe(ctx?.uuid, load);
-		return () => {
-			postObjectActions.unsubscribe(ctx?.uuid, load);
-		};
-	}, [ctx?.uuid]);
-
 	async function onAccept(o: Emoji) {
-		await postObjectActions.addReaction(Post?.uuid, o, setIsLoading);
+		await addReaction(o, setIsLoading);
 		hide();
 	}
 

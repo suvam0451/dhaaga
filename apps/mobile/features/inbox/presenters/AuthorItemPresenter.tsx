@@ -1,9 +1,8 @@
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import {
 	useAccountManager,
 	useAppBottomSheet,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { useMemo } from 'react';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -17,6 +16,7 @@ import { LocalizationService } from '#/services/localization.service';
 import { AppIcon } from '#/components/lib/Icon';
 import useAppNavigator from '#/states/useAppNavigator';
 import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	user: PostAuthorType | UserObjectType;

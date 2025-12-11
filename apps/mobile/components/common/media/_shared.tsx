@@ -3,10 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import {
-	useAppDialog,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppDialog, useAppTheme } from '#/states/global/hooks';
 import { AppText } from '../../lib/Text';
 
 type Props = {

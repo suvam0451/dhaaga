@@ -1,9 +1,9 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, View, StyleSheet } from 'react-native';
-import { AppIcon } from '../../../components/lib/Icon';
+import { AppIcon } from '#/components/lib/Icon';
 import { Ionicons } from '@expo/vector-icons';
-import { AppText } from '../../../components/lib/Text';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { AppText } from '#/components/lib/Text';
+import { APP_FONTS } from '#/styles/AppFonts';
 
 const ICON_SIZE = 26;
 
@@ -59,8 +59,8 @@ function ComposerActionListView({
 }: Props) {
 	const { theme } = useAppTheme();
 
-	const DEFAULT_COLOR = theme.complementary.a0;
-	const ACTIVE_COLOR = theme.primary.a0;
+	const DEFAULT_COLOR = theme.complementary;
+	const ACTIVE_COLOR = theme.primary;
 
 	return (
 		<View style={styles.root}>

@@ -1,3 +1,3 @@
-import Page from '../../../../features/posts/features/detail-view/PostDetailView';
+import Page from '#/features/post-thread-view/PostThreadView';
 
 export default Page;

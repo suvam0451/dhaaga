@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppText } from '#/components/lib/Text';
 import { View, StyleSheet } from 'react-native';
@@ -16,10 +16,10 @@ export function PinOrnament({ isPinned }: PinOrnamentProps) {
 	if (!isPinned) return <View />;
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			<AppIcon id={'pin'} size={20} color={theme.complementary.a0} />
+			<AppIcon id={'pin'} size={20} color={theme.complementary} />
 			<AppText.Medium
 				style={{
-					color: theme.complementary.a0,
+					color: theme.complementary,
 					marginLeft: 6,
 				}}
 			>

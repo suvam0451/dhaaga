@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import type { CustomEmojiObjectType } from '@dhaaga/bridge';
-import AccountSessionManager from '#/services/session/account-session.service';
+import AccountSessionManager from '#/states/sessions/account-session.service';
 
 export type Emoji = {
 	shortCode: string;

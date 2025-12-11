@@ -1,8 +1,8 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, StyleProp, View, ViewStyle } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type Props = {
 	onPress: () => void;
@@ -25,7 +25,7 @@ function QuickPost({ onPress, style }: Props) {
 		>
 			<Pressable
 				style={{
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					alignSelf: 'center',
 					minWidth: 128,
 					maxWidth: 244,

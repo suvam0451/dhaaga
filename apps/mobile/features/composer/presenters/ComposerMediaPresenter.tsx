@@ -1,27 +1,27 @@
 import { View, StyleSheet } from 'react-native';
 import { useComposerCtx } from '../contexts/useComposerCtx';
-import ComposeMediaTargets from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/MediaTargets';
+import ComposeMediaTargets from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/MediaTargets';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
-import { AppBottomSheetMenu } from '../../../components/lib/Menu';
+} from '#/states/global/hooks';
+import { AppBottomSheetMenu } from '#/components/lib/Menu';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
-import { AppIcon } from '../../../components/lib/Icon';
-import MediaUtils from '../../../utils/media.utils';
+import { AppIcon } from '#/components/lib/Icon';
+import MediaUtils from '#/utils/media.utils';
 import { ACCOUNT_METADATA_KEY, AccountMetadataService } from '@dhaaga/db';
-import ActivityPubProviderService from '../../../services/activitypub-provider.service';
+import ActivityPubProviderService from '#/services/activitypub-provider.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import useComposer from '../interactors/useComposer';
-import { AppText } from '../../../components/lib/Text';
+import useComposer from '../../../states/app/useComposer';
+import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 function ComposerMediaPresenter() {
 	const { driver } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { db } = useAppDb();
 	const { state, dispatch } = useComposerCtx();
 	const { theme } = useAppTheme();
@@ -119,7 +119,7 @@ function ComposerMediaPresenter() {
 					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
 						<AppIcon
 							id={'images'}
-							color={theme.primary.a0}
+							color={theme.primary}
 							onPress={trigger}
 							size={28}
 							containerStyle={{ paddingHorizontal: 8 }}

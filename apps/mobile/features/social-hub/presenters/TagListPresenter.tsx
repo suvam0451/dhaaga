@@ -2,16 +2,16 @@ import { Account, ProfilePinnedTag, AccountService } from '@dhaaga/db';
 import { StyleSheet, View } from 'react-native';
 import PinnedTagView from '../views/PinnedTagView';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppDb,
 	useAppDialog,
 	useAppGlobalStateActions,
-} from '../../../hooks/utility/global-state-extractors';
-import useAppNavigator from '../../../states/useAppNavigator';
+} from '#/states/global/hooks';
+import useAppNavigator from '#/states/useAppNavigator';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type Props = {
 	items: ProfilePinnedTag[];
@@ -26,7 +26,7 @@ function TagListPresenter({
 	onPressAddTag,
 	onLongPressTag,
 }: Props) {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { db } = useAppDb();
 	const { restoreSession } = useAppGlobalStateActions();
 	const { show, hide } = useAppDialog();

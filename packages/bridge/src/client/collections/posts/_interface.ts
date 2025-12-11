@@ -17,39 +17,7 @@ import {
 } from '#/types/driver.types.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 import { Endpoints } from 'misskey-js';
-
-export type DhaagaJsPostCreateDto = {
-	inReplyToId: null | string;
-	language: string;
-	mediaIds: string[];
-	poll?: any;
-	sensitive: boolean;
-	spoilerText?: string;
-	status: string;
-	mastoVisibility?: 'direct' | 'public' | 'unlisted' | 'private';
-
-	// misskey
-	misskeyVisibility?: 'public' | 'home' | 'followers' | 'specified';
-	visibleUserIds?: string[];
-
-	// cw?: string | null
-	localOnly: boolean;
-	reactionAcceptance?:
-		| null
-		| 'likeOnly'
-		| 'likeOnlyForRemote'
-		| 'nonSensitiveOnly'
-		| 'nonSensitiveOnlyForLocalLikeOnlyForRemote'; // lang: string;
-	// replyId?: string | null;
-	// renoteId?: string | null;
-	// channelId?: string | null;
-	// text?: string | null;
-
-	// what do these evn do ???
-	// noExtractMentions?: boolean;
-	// noExtractHashtags?: boolean;
-	// noExtractEmojis?: boolean;
-};
+import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 
 export interface StatusesRoute {
 	getPost(

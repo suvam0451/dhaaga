@@ -6,11 +6,11 @@ import {
 	usePostTimelineState,
 } from '@dhaaga/core';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 import { useEffect } from 'react';
@@ -56,7 +56,7 @@ function TimelineIdle() {
 function Content() {
 	const { db } = useAppDb();
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const State = usePostTimelineState()!;
 	const dispatch = usePostTimelineDispatch()!;

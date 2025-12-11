@@ -1,8 +1,9 @@
-import { DhaagaJsMediaCreateDTO, MediaRoute } from './_interface.js';
+import { MediaRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { getHumanReadableError } from '#/utils/errors.js';
+import { DhaagaJsMediaCreateDTO } from '#/client/typings.js';
 
 export class MisskeyMediaRouter implements MediaRoute {
 	direct: FetchWrapper;

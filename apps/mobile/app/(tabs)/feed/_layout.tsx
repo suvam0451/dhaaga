@@ -1,13 +1,10 @@
 import { Stack } from 'expo-router/stack';
-import {
-	useAppAcct,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
 import { Redirect } from 'expo-router';
 
 function DiscoverScreen() {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	if (!acct) return <Redirect href={'/'} />;
 	return (

@@ -1,8 +1,8 @@
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppIcon } from '../../../components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { useAppTheme } from '#/states/global/hooks';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 
 type Props = {
 	label: string;

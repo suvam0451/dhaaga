@@ -68,10 +68,10 @@ export type AppColorSchemeType = {
 		inactive: string;
 		highlight: string;
 	};
-	primary: ColorRangeType; // hue - 30
+	primary: string; // hue - 30
 	harmonyL?: ColorRangeType; // hue + 30
 	harmonyR?: ColorRangeType; // hue + 180 (Complementary, Required)
-	complementary: ColorRangeType; // hue - 150 (Split Complementary)
+	complementary: string; // hue - 150 (Split Complementary)
 	complementaryA: ColorRangeType | null; // hue + 150 (Split Complementary)
 	complementaryB?: ColorRangeType;
 

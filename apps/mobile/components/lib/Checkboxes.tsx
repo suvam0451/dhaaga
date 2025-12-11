@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from './Text';
 import { AppIcon } from './Icon';
 
@@ -18,7 +18,7 @@ export function InlineCheckboxView({ label, checked, onClick }: Props) {
 	const { theme } = useAppTheme();
 
 	const _activeForeground = 'black';
-	const _activeBackground = theme.complementary.a0;
+	const _activeBackground = theme.complementary;
 	const _inactiveForeground = theme.secondary.a20;
 	const _inactiveBackground = '#2c2c2c';
 

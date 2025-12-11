@@ -5,15 +5,15 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
-	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { AppDivider } from '#/components/lib/Divider';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { DriverService, PostInspector } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
 
 function ActionButton({
 	Icon,
@@ -50,7 +50,7 @@ function ActionButton({
 			>
 				<AppText.Medium
 					style={{
-						color: active ? theme.primary.a0 : theme.secondary.a10,
+						color: active ? theme.primary : theme.secondary.a10,
 						fontSize: 18,
 					}}
 				>
@@ -79,11 +79,10 @@ function MorePostActionsPresenter({
 	setEditMode: Dispatch<SetStateAction<'root' | 'emoji'>>;
 	item: PostObjectType;
 }) {
-	const { postObjectActions } = useAppPublishers();
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const _target = PostInspector.getContentTarget(item);
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 
 	const IS_BOOKMARKED = _target?.interaction.bookmarked;
 	const IS_LIKED = PostInspector.isLiked(_target);
@@ -99,21 +98,16 @@ function MorePostActionsPresenter({
 		}
 	}
 
+	const { toggleLike, toggleBookmark } = usePostEventBusActions(item.uuid);
 	function onClickAddReaction() {
 		setEditMode('emoji');
 	}
 
-	async function onClickToggleLike() {
-		postObjectActions.toggleLike(item.uuid);
-	}
-
-	async function onClickToggleBookmark() {
-		postObjectActions.toggleBookmark(item.uuid);
-	}
-
 	function onReply() {
-		setCtx({ uuid: _target.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true);
+		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true, {
+			$type: 'compose-reply',
+			parentPostId: _target.uuid,
+		});
 	}
 
 	return (
@@ -122,7 +116,7 @@ function MorePostActionsPresenter({
 				<ActionButton
 					Icon={
 						<AppIcon
-							color={IS_BOOKMARKED ? theme.primary.a0 : theme.secondary.a10}
+							color={IS_BOOKMARKED ? theme.primary : theme.secondary.a10}
 							id={'bookmark'}
 							size={24}
 						/>
@@ -130,7 +124,7 @@ function MorePostActionsPresenter({
 					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
 					active={IS_BOOKMARKED}
 					desc={'Save this post for later'}
-					onClick={onClickToggleBookmark}
+					onClick={toggleBookmark}
 				/>
 			)}
 			{DriverService.canLike(driver) && (
@@ -138,13 +132,13 @@ function MorePostActionsPresenter({
 					Icon={
 						<AppIcon
 							id={IS_LIKED ? 'heart' : 'heart-outline'}
-							color={IS_LIKED ? theme.primary.a0 : theme.secondary.a10}
+							color={IS_LIKED ? theme.primary : theme.secondary.a10}
 						/>
 					}
 					active={IS_LIKED}
 					label={IS_LIKED ? 'Remove Like' : 'Add Like'}
 					desc={'Your likes are public'}
-					onClick={onClickToggleLike}
+					onClick={toggleLike}
 				/>
 			)}
 			{DriverService.canReact(driver) && (

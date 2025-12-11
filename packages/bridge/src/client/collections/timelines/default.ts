@@ -1,8 +1,5 @@
-import {
-	DriverTimelineGetApiResponse,
-	DhaagaJsTimelineQueryOptions,
-	TimelinesRoute,
-} from './_interface.js';
+import { DriverTimelineGetApiResponse, TimelinesRoute } from './_interface.js';
+import { DhaagaJsTimelineQueryOptions } from '#/client/typings.js';
 
 export class DefaultTimelinesRouter implements TimelinesRoute {
 	home(query: DhaagaJsTimelineQueryOptions): DriverTimelineGetApiResponse {

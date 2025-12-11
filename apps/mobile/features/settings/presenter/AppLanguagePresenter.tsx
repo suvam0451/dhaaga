@@ -3,7 +3,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import useAppSettings from '../interactors/useAppSettings';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppDivider } from '#/components/lib/Divider';
 import { APP_SETTING_KEY } from '#/services/settings.service';
 import { AppIcon } from '#/components/lib/Icon';
@@ -39,9 +39,7 @@ function AppLanguagePresenter() {
 									style={{
 										fontSize: 18,
 										color:
-											item.code === lang
-												? theme.primary.a0
-												: theme.complementary.a0,
+											item.code === lang ? theme.primary : theme.complementary,
 										marginBottom: 2,
 									}}
 									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
@@ -57,7 +55,7 @@ function AppLanguagePresenter() {
 									<AppIcon
 										id={'checkmark-circle'}
 										size={32}
-										color={theme.primary.a0}
+										color={theme.primary}
 										containerStyle={{ paddingRight: 8 }}
 									/>
 								)}

@@ -1,4 +1,4 @@
-import { NotificationGetQueryDto, NotificationsRoute } from './_interface.js';
+import { NotificationsRoute } from './_interface.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import {
 	MastoConversation,
@@ -7,6 +7,7 @@ import {
 } from '#/types/mastojs.types.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { NotificationGetQueryDto } from '#/client/typings.js';
 
 export class MastodonNotificationsRouter implements NotificationsRoute {
 	direct: FetchWrapper;

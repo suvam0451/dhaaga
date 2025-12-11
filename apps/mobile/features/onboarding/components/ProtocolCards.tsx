@@ -1,4 +1,4 @@
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { Pressable, StyleSheet, FlatList } from 'react-native';

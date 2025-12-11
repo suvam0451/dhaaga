@@ -5,10 +5,10 @@ import {
 } from '../api/useApiGetChats';
 import { AccountMetadataService } from '@dhaaga/db';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useEffect, useReducer } from 'react';
 import {
 	chatroomReducer,
@@ -20,7 +20,7 @@ import { ChatParser } from '@dhaaga/bridge';
 
 function useChatroom() {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { driver, client, server } = useAppApiClient();
 
 	const [State, dispatch] = useReducer(chatroomReducer, chatroomReducerDefault);

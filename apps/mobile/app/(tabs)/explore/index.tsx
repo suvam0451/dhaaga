@@ -14,11 +14,11 @@ import {
 	useDiscoverState,
 } from '@dhaaga/core';
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppActiveSession,
 	useAppApiClient,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import SearchWidget from '#/features/search/components/SearchWidget';
 import { getSearchTabs } from '@dhaaga/db';
 import SearchResults from '#/features/search/SearchResults';
@@ -80,7 +80,7 @@ const Content = forwardRef((props, ref) => {
 
 function Page() {
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 	const [SearchTerm, setSearchTerm] = useState(null);
 	const childRef = useRef(null);

@@ -1,6 +1,15 @@
 import * as Linking from 'expo-linking';
 import * as Clipboard from 'expo-clipboard';
+import * as Sharing from 'expo-sharing';
 import { Share } from 'react-native';
+import {
+	AtprotoApiAdapter,
+	AtprotoUtils,
+	BaseUrlNormalizationService,
+	DriverService,
+	ApiTargetInterface,
+} from '@dhaaga/bridge';
+import type { PostTimelineStateType } from '@dhaaga/core';
 
 export class LinkingUtils {
 	static async saveToClipboard(content: string) {
@@ -16,6 +25,18 @@ export class LinkingUtils {
 			});
 		} catch (e) {
 			console.log('[WARN]: could not open link externally');
+		}
+	}
+
+	static async openAtProtoFeed(client: ApiTargetInterface, uri: string) {
+		try {
+			const url = await AtprotoUtils.generateFeedUrl(
+				client as AtprotoApiAdapter,
+				uri,
+			);
+			LinkingUtils.openURL(url);
+		} catch (e: any) {
+			console.log(e);
 		}
 	}
 
@@ -64,5 +85,66 @@ export class LinkingUtils {
 			message: imageUrl,
 			title: 'Share this image with your friends',
 		});
+	}
+
+	private static async _generateFeedUrl(
+		client: ApiTargetInterface,
+		state: PostTimelineStateType,
+	): Promise<string> {
+		const server = `${BaseUrlNormalizationService.appendHttps(client.server)}`;
+		switch (state.feedType) {
+			case 'Feed': {
+				return AtprotoUtils.generateFeedUrl(
+					client as AtprotoApiAdapter,
+					state.query.id,
+				);
+			}
+			case 'Home': {
+				return `${server}/home`;
+			}
+			case 'Local': {
+				return `${server}/public/local`;
+			}
+			case 'Federated':
+				return `${server}/public`;
+			case 'User': {
+				if (DriverService.supportsMastoApiV1(client.driver)) {
+					// TODO: resolve handle for mastodon
+				} else {
+					return `${server}/${state.query.id}`;
+				}
+			}
+		}
+	}
+
+	static async openFeedInBrowser(
+		client: ApiTargetInterface,
+		state: PostTimelineStateType,
+	) {
+		try {
+			const url = await LinkingUtils._generateFeedUrl(client, state);
+			LinkingUtils.openURL(url);
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+	static async shareFeed(
+		client: ApiTargetInterface,
+		state: PostTimelineStateType,
+	) {
+		try {
+			const url = await LinkingUtils._generateFeedUrl(client, state);
+			if (Sharing.isAvailableAsync()) {
+				Sharing.shareAsync(url, {
+					dialogTitle: 'Share this timeline with your friends!',
+				});
+			} else {
+				console.log('[WARN]: sharing not available on this device');
+			}
+			LinkingUtils.openURL(url);
+		} catch (e) {
+			console.log(e);
+		}
 	}
 }

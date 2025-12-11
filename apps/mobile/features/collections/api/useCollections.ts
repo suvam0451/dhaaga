@@ -1,7 +1,4 @@
-import {
-	useAppAcct,
-	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppDb } from '../../../states/global/hooks';
 import {
 	AccountCollectionService,
 	AccountCollection,
@@ -14,7 +11,7 @@ import type { PostObjectType } from '@dhaaga/bridge';
  * collection records
  */
 function useCollections() {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { db } = useAppDb();
 
 	function add(text: string) {

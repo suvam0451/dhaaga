@@ -1,6 +1,6 @@
 import { Animated, StyleSheet } from 'react-native';
 import TopNavbarGeneric from '../shared/topnavbar/fragments/TopNavbarGeneric';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type AutoHideNavBarProps = {
 	title: string;

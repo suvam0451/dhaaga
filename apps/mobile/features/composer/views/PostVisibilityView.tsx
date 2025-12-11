@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppText } from '../../../components/lib/Text';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
+import { AppText } from '#/components/lib/Text';
 
 type Props = {
 	label: string;
@@ -19,7 +19,7 @@ function PostVisibilityView({ label, Icon, onPress }: Props) {
 					style={[
 						styles.choiceText,
 						{
-							color: theme.complementary.a0,
+							color: theme.complementary,
 						},
 					]}
 				>

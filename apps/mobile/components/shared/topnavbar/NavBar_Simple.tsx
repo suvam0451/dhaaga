@@ -1,6 +1,6 @@
 import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import TopNavbarBackButton from '#/components/shared/topnavbar/fragments/TopNavbarBackButton';
 import { AppText } from '#/components/lib/Text';
 import Animated from 'react-native-reanimated';

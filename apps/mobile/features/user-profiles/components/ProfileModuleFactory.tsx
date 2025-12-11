@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import {
 	StyleProp,
 	StyleSheet,
@@ -7,12 +7,11 @@ import {
 	ViewStyle,
 	Text,
 } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { APP_FONT } from '../../../styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Animated from 'react-native-reanimated';
-import { useShallow } from 'zustand/react/shallow';
-import useGlobalState from '../../../states/_global';
+import { useAppTheme } from '#/states/global/hooks';
 
 type ProfileModuleFactoryProps = {
 	label: string;
@@ -26,65 +25,56 @@ type ProfileModuleFactoryProps = {
  * Container and shared logic
  * for profile module blocks
  */
-const ProfileModuleFactory = memo(
-	({
-		label,
-		subtext,
-		children,
-		style,
-		disabled,
-	}: ProfileModuleFactoryProps) => {
-		const [IsExpanded, setIsExpanded] = useState(false);
-		const { theme } = useGlobalState(
-			useShallow((o) => ({
-				theme: o.colorScheme,
-			})),
-		);
+function ProfileModuleFactory({
+	label,
+	subtext,
+	children,
+	style,
+	disabled,
+}: ProfileModuleFactoryProps) {
+	const [IsExpanded, setIsExpanded] = useState(false);
+	const { theme } = useAppTheme();
 
-		console.log(IsExpanded);
-		return (
-			<View style={style}>
-				<TouchableOpacity
-					onPress={() => {
-						if (!disabled) {
-							setIsExpanded(!IsExpanded);
-						}
-					}}
-				>
-					<View
-						style={[styles.root, { backgroundColor: theme.palette.menubar }]}
+	return (
+		<View style={style}>
+			<TouchableOpacity
+				onPress={() => {
+					if (!disabled) {
+						setIsExpanded(!IsExpanded);
+					}
+				}}
+			>
+				<View style={[styles.root, { backgroundColor: theme.palette.menubar }]}>
+					<Text
+						style={{
+							fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
+							color: theme.textColor.high,
+							flexGrow: 1,
+						}}
 					>
-						<Text
-							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-								color: theme.textColor.high,
-								flexGrow: 1,
-							}}
-						>
-							{label}{' '}
-							<Text style={{ color: theme.textColor.medium }}>({subtext})</Text>
-						</Text>
-						<Ionicons
-							name={IsExpanded ? 'chevron-down' : 'chevron-forward'}
-							size={24}
-							color={APP_FONT.MEDIUM_EMPHASIS}
-						/>
-					</View>
-				</TouchableOpacity>
-				<Animated.View
-					style={[
-						{
-							display: IsExpanded ? 'flex' : 'none',
-						},
-						styles.hiddenSection,
-					]}
-				>
-					{children}
-				</Animated.View>
-			</View>
-		);
-	},
-);
+						{label}{' '}
+						<Text style={{ color: theme.textColor.medium }}>({subtext})</Text>
+					</Text>
+					<Ionicons
+						name={IsExpanded ? 'chevron-down' : 'chevron-forward'}
+						size={24}
+						color={APP_FONT.MEDIUM_EMPHASIS}
+					/>
+				</View>
+			</TouchableOpacity>
+			<Animated.View
+				style={[
+					{
+						display: IsExpanded ? 'flex' : 'none',
+					},
+					styles.hiddenSection,
+				]}
+			>
+				{children}
+			</Animated.View>
+		</View>
+	);
+}
 
 export default ProfileModuleFactory;
 

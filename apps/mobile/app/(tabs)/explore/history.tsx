@@ -1,6 +1,6 @@
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import BrowsingHistoryEmpty from '#/components/svgs/BrowsingHistoryEmpty';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import { appDimensions } from '#/styles/dimensions';

@@ -1,6 +1,6 @@
 import { memo, useEffect, useReducer, useRef, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '../../../../styles/AppFonts';
+import { APP_FONTS } from '#/styles/AppFonts';
 import emojiPickerReducer, {
 	defaultValue,
 	Emoji,
@@ -9,11 +9,11 @@ import emojiPickerReducer, {
 import EmojiPickerSearchResults from './fragments/EmojiPickerSearchResults';
 import {
 	useAccountManager,
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../../styles/dimensions';
+} from '#/states/global/hooks';
+import { appDimensions } from '#/styles/dimensions';
 import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
 import { AppBottomSheetMenu } from '../../../lib/Menu';
 import { AppTextInput } from '../../../lib/TextInput';
@@ -48,7 +48,7 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 				style={[
 					styles.noReactionAvailableSectionB,
 					{
-						backgroundColor: theme.complementary.a10,
+						backgroundColor: theme.complementary,
 					},
 				]}
 				onPress={onBack}
@@ -65,7 +65,7 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 const EmojiPickerBottomSheet = memo(
 	({ onAccept, onCancel, isProcessing }: EmojiPickerBottomSheetProps) => {
 		const { driver } = useAppApiClient();
-		const { acct } = useAppAcct();
+		const { acct } = useActiveUserSession();
 		const { acctManager } = useAccountManager();
 		const { theme } = useAppTheme();
 		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
@@ -169,7 +169,7 @@ const EmojiPickerBottomSheet = memo(
 							>
 								<Text
 									style={{
-										color: theme.complementary.a0,
+										color: theme.complementary,
 										fontSize: 16,
 										fontFamily: APP_FONTS.INTER_500_MEDIUM,
 									}}

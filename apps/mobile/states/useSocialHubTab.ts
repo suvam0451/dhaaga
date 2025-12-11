@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import {
 	ProfilePinnedTag,
 	ProfilePinnedTimeline,
@@ -9,8 +9,7 @@ import {
 	ProfilePinnedUserService,
 	ProfilePinnedTimelineService,
 } from '@dhaaga/db';
-import AppSessionManager from '../services/session/app-session.service';
-import ProfileSessionManager from '../services/session/profile-session.service';
+import AppSessionManager from './sessions/app-session.service';
 
 export type SocialHubTabPinData = {
 	timelines: ProfilePinnedTimeline[];
@@ -71,14 +70,12 @@ function useSocialHubTab(appManager: AppSessionManager, profile: Profile) {
 
 	const [Data, dispatch] = useReducer(reducer, reducerDefault);
 
-	const Manager = useRef<ProfileSessionManager>(null);
 	useEffect(() => {
 		if (!appManager || !appManager.db || !profile) {
 			setOwnerProfile(null);
 			return;
 		}
 
-		Manager.current = new ProfileSessionManager(appManager.db);
 		setOwnerProfile(profile);
 
 		dispatch({

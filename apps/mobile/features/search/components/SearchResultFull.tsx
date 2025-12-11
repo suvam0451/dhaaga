@@ -1,7 +1,4 @@
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import {
 	useDiscoverState,
 	useDiscoverDispatch,
@@ -62,7 +59,7 @@ function WidgetExpanded() {
 				>
 					<AppText.Medium
 						style={{
-							color: State.tab === o ? theme.primary.a0 : theme.secondary.a20,
+							color: State.tab === o ? theme.primary : theme.secondary.a20,
 							fontSize: 18,
 							textAlign: 'center',
 						}}

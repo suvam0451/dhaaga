@@ -6,7 +6,7 @@ import Animated, {
 	withTiming,
 } from 'react-native-reanimated';
 import { NativeTextH1 } from '#/ui/NativeText';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type DropdownProps = {
 	items: { id: string; label: string; onSelect: () => void }[];
@@ -55,7 +55,7 @@ function NavBar_Explore({
 						}}
 					>
 						<NativeTextH1
-							color={item.id === selectedItemId ? theme.primary.a0 : undefined}
+							color={item.id === selectedItemId ? theme.primary : undefined}
 						>
 							{item.label}
 						</NativeTextH1>

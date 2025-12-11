@@ -1,5 +1,5 @@
 import { TrendsRoute } from './_interface.js';
-import { GetTrendingDTO } from '#/client/types/_interface.js';
+import { GetTrendingDTO } from '#/client/typings.js';
 import {
 	MastoStatus,
 	MastoTag,

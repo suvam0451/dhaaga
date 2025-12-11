@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import useAppNavigator from '#/states/useAppNavigator';
 import type { PostObjectType } from '@dhaaga/bridge';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/states/global/hooks';
 import { TextContentView } from '../../../../common/status/TextContentView';
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
 

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import styles from './styles';
 import TopNavbarBackButton from './TopNavbarBackButton';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '../../../lib/Text';
 
 type HeadersProps = {

@@ -9,7 +9,7 @@ import MediaUtils from '#/utils/media.utils';
 import { appDimensions } from '#/styles/dimensions';
 import CanvasPresenter from './CanvasPresenter';
 import MenuPresenter from './MenuPresenter';
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/states/global/hooks';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 

@@ -1,13 +1,13 @@
 import { Endpoints } from 'misskey-js';
-import {
-	DhaagaJsPostSearchDTO,
-	DhaagaJsUserSearchDTO,
-	SearchRoute,
-} from './_interface.js';
+import { SearchRoute } from './_interface.js';
 import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 import { AppBskyActorDefs } from '@atproto/api';
+import {
+	DhaagaJsPostSearchDTO,
+	DhaagaJsUserSearchDTO,
+} from '#/client/typings.js';
 
 export class DefaultSearchRouter implements SearchRoute {
 	async findUsers(

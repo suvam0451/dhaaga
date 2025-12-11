@@ -12,10 +12,9 @@ import {
 	useAppBottomSheet,
 	useAppManager,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { TextContentView } from '#/components/common/status/TextContentView';
 import Navbar_UserDetail from '#/components/shared/topnavbar/Navbar_UserDetail';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -31,6 +30,7 @@ import { useRef, useState } from 'react';
 import UserProfilePostsView from '#/features/user-profiles/UserProfilePostsView';
 import UserProfileStickyHeader from '#/features/user-profiles/UserProfileStickyHeader';
 import UserProfileMiscellaneous from '#/features/user-profiles/UserProfileMiscellaneous';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 const TABS = ['gallery', 'pin-octicons', 'gallery', 'gallery'];

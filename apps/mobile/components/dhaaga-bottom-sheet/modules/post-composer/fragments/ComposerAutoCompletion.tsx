@@ -9,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import TextEditorService from '#/services/text-editor.service';
 import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import type { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 function ComposerAutoCompletion() {

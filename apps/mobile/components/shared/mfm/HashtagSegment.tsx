@@ -1,11 +1,8 @@
 import { Text } from 'react-native';
-import { APP_BOTTOM_SHEET_ENUM } from '../../../states/_global';
 import { RandomUtil } from '@dhaaga/bridge';
 import { AppText } from '../../lib/Text';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	value: string;
@@ -14,13 +11,15 @@ type Props = {
 
 function HashtagSegment({ value }: Props) {
 	const { theme } = useAppTheme();
-	const { setCtx, show } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 
 	const _value = decodeURI(value.replace('#', '')); // atproto
 
 	function onPress() {
-		setCtx({ tag: _value });
-		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true);
+		show(APP_BOTTOM_SHEET_ENUM.HASHTAG, true, {
+			$type: 'tag-preview',
+			tagId: _value,
+		});
 	}
 
 	const k = RandomUtil.nanoId();
@@ -38,7 +37,7 @@ function HashtagSegment({ value }: Props) {
 			<AppText.Normal
 				onPress={onPress}
 				style={{
-					color: theme.complementary.a0,
+					color: theme.complementary,
 				}}
 			>
 				{_value}

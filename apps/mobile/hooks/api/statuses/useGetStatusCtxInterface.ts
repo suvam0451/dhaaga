@@ -5,10 +5,7 @@ import statusContextReducer, {
 	defaultAppStatusContext,
 	STATUS_CONTEXT_REDUCER_ACTION,
 } from './statusContextReducer';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '../../utility/global-state-extractors';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import {
 	postDetailsInterfaceQueryOpts,
 	postHierarchyQueryOpts,
@@ -20,7 +17,7 @@ import {
  */
 function useGetStatusCtxInterface(id: string) {
 	const { client, driver } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const [postDetailResult, postHierarchyResult] = useQueries({
 		queries: [
 			postDetailsInterfaceQueryOpts(client, driver, id),

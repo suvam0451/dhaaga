@@ -1,6 +1,6 @@
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { TouchableOpacity, View } from 'react-native';
-import { AppText } from '../../../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 import { useState } from 'react';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';

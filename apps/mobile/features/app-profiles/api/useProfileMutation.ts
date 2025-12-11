@@ -1,4 +1,4 @@
-import { useAppDb } from '#/hooks/utility/global-state-extractors';
+import { useAppDb } from '#/states/global/hooks';
 import { useMutation } from '@tanstack/react-query';
 import {
 	Profile,

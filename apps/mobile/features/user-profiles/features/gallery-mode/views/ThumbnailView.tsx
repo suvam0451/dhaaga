@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import MediaThumbnail from '../../../../../ui/media/Thumb';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import MediaThumbnail from '#/ui/media/Thumb';
+import { useAppTheme } from '#/states/global/hooks';
 
 type FlashListItemProps = {
 	selected: boolean;
@@ -28,7 +28,7 @@ function ThumbnailView({
 		<View
 			style={{
 				marginHorizontal: 2,
-				borderColor: SELECTED ? theme.primary.a0 : theme.background.a50,
+				borderColor: SELECTED ? theme.primary : theme.background.a50,
 				borderWidth: 1.5,
 				borderRadius: 8,
 			}}

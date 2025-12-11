@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	item: ProfilePinnedUser;
@@ -64,7 +64,7 @@ function PinnedUserView({ item, onPress, onLongPress }: Props) {
 					style={{
 						borderRadius: '100%',
 						overflow: 'hidden',
-						borderColor: theme.complementary.a0,
+						borderColor: theme.complementary,
 						opacity: 0.78,
 					}}
 				>

@@ -1,17 +1,17 @@
 import { useMemo } from 'react';
-import { ScrollView, View } from 'react-native';
-import ComposerTextInput from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerText';
-import ComposerSpoiler from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerSpoiler';
+import { View } from 'react-native';
+import ComposerTextInput from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerText';
+import ComposerSpoiler from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerSpoiler';
 import { useComposerCtx } from '../contexts/useComposerCtx';
 import ComposerMediaPresenter from './ComposerMediaPresenter';
-import EmojiPickerBottomSheet from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/EmojiPickerBottomSheet';
-import ComposerTopMenu from '../../../components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerTopMenu';
-import TextEditorService from '../../../services/text-editor.service';
-import { useAppBottomSheet } from '../../../hooks/utility/global-state-extractors';
-import { Emoji } from '../../../components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
+import EmojiPickerBottomSheet from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/EmojiPickerBottomSheet';
+import ComposerTopMenu from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerTopMenu';
+import TextEditorService from '#/services/text-editor.service';
+import { useAppBottomSheet } from '#/states/global/hooks';
+import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import BottomMenuPresenter from './BottomMenuPresenter';
-import useComposer from '../interactors/useComposer';
+import useComposer from '#/states/app/useComposer';
 
 function ComposerPresenter() {
 	const { visible } = useAppBottomSheet();

@@ -1,13 +1,10 @@
 import { StyleSheet } from 'react-native';
 import useLongLinkTextCollapse from '#/states/useLongLinkTextCollapse';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import TextUtils from '#/utils/text.utils';
-import {
-	useAppBottomSheet,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { NativeTextMedium } from '#/ui/NativeText';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type LinkProcessorProps = {
 	url: string;

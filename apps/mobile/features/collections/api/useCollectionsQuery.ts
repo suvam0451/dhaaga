@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-	useAppAcct,
-	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import {
 	AccountCollection,
 	AccountSavedPost,
@@ -16,7 +13,7 @@ import { useState } from 'react';
 export function useCollectionListInteractor() {
 	const [IsLoading, setIsLoading] = useState(false);
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { add, rename, describe, remove } = useCollections();
 
 	const queryData = useQuery<AccountCollection[]>({
@@ -79,7 +76,7 @@ export type CollectionHasSavedPost = AccountCollection & {
  */
 export function useDbSavedPostStatus(id: string) {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	return useQuery<CollectionHasSavedPost[]>({
 		queryKey: ['db', 'collections/post-assign', acct?.id, id],

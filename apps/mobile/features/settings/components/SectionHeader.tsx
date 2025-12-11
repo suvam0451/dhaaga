@@ -1,9 +1,9 @@
-import { APP_ICON_ENUM, AppIcon } from '../../../components/lib/Icon';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
-import { AppDivider } from '../../../components/lib/Divider';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
+import { useAppTheme } from '#/states/global/hooks';
+import { AppDivider } from '#/components/lib/Divider';
 import { Fragment } from 'react';
 import { View } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
+import { AppText } from '#/components/lib/Text';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -31,9 +31,9 @@ function SectionHeader({ label, iconId }: Props) {
 			<View
 				style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
 			>
-				<AppIcon id={iconId} size={28} color={theme.primary.a0} />
+				<AppIcon id={iconId} size={28} color={theme.primary} />
 				<AppText.Medium
-					style={{ fontSize: 18, color: theme.primary.a0, marginLeft: 6 }}
+					style={{ fontSize: 18, color: theme.primary, marginLeft: 6 }}
 				>
 					{label}
 				</AppText.Medium>

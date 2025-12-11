@@ -4,10 +4,7 @@ import { View } from 'react-native';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
 import { TextContentView } from '#/components/common/status/TextContentView';
-import {
-	useAppApiClient,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
 import { QuotedPostBorderDecorations } from '#/skins/BorderDecorations';
 

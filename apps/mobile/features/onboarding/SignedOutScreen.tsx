@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { useAssets } from 'expo-asset';

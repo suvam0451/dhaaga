@@ -4,15 +4,12 @@ import {
 	AccountCollectionService,
 	AccountSavedPostService,
 } from '@dhaaga/db';
-import {
-	useAppAcct,
-	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import type { PostObjectType } from '@dhaaga/bridge';
 
 export function useDbCollections() {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const queryClient = useQueryClient();
 
 	const rename = useMutation({

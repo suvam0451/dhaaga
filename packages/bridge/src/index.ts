@@ -1,3 +1,10 @@
+import {
+	AccountMutePostDto,
+	AccountRouteStatusQueryDto,
+	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
+} from '#/client/typings.js';
+
 export {
 	type ApiTargetInterface,
 	AtprotoApiAdapter,
@@ -17,12 +24,6 @@ import PostAdapterBase from './implementors/status/default.js';
 import MastoApiPostAdapter from './implementors/status/mastodon.js';
 import MisskeyApiPostAdapter from './implementors/status/misskey.js';
 import ActivitypubHelper from './services/activitypub.js';
-import {
-	AccountMutePostDto,
-	AccountRouteStatusQueryDto,
-	BookmarkGetQueryDTO,
-	FollowerGetQueryDTO,
-} from './client/collections/accounts/_interface.js';
 // used to read viewer
 import AtprotoPostAdapter from './implementors/status/bluesky.js';
 import { DriverService } from './services/driver.js';
@@ -67,8 +68,6 @@ export {
 	type TagType,
 } from './implementors/tag/_interface.js';
 
-export type { DhaagaJsTimelineQueryOptions } from './client/collections/timelines/_interface.js';
-
 export type { MfmNode } from './services/index.js';
 export { AtprotoPostService, AtprotoFeedService } from './services/index.js';
 
@@ -109,7 +108,11 @@ export { defaultResultPage, type ResultPage } from './types/api-response.js';
 
 export * from './types/shared/_exports.js';
 
-export type { GetPostsQueryDTO } from '#/client/types/_interface.js';
+export type {
+	GetPostsQueryDTO,
+	DhaagaJsTimelineQueryOptions,
+} from '#/client/typings.js';
 
 export { postObjectSchema } from './types/shared/post.js';
 export { BaseUrlNormalizationService } from './utils/urls.js';
+export { unifiedUserLookup } from '#/client/utils/unifiedUserLookup.js';

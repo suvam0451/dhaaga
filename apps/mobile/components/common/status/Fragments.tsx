@@ -1,12 +1,12 @@
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { AppText } from '../../lib/Text';
 import { StyleSheet, View } from 'react-native';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { appDimensions } from '../../../styles/dimensions';
-import { DatetimeUtil } from '../../../utils/datetime.utils';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { appDimensions } from '#/styles/dimensions';
+import { DatetimeUtil } from '#/utils/datetime.utils';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { TextContentView } from './TextContentView';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 type PostedByTextOneLineProps = {
 	parsedText: AppParsedTextNodes;

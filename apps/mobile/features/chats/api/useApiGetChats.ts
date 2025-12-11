@@ -1,10 +1,10 @@
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useQuery } from '@tanstack/react-query';
-import ChatService, { AppChatRoom } from '../../../services/chat.service';
+import ChatService, { AppChatRoom } from '#/services/chat.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { ChatBskyConvoGetConvo, ChatBskyConvoGetMessages } from '@atproto/api';
 import { AccountMetadataService } from '@dhaaga/db';
@@ -18,7 +18,7 @@ import type { MessageObjectType } from '@dhaaga/bridge';
  */
 function useApiGetChatroom(roomId: string) {
 	const { driver, client, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { db } = useAppDb();
 
 	async function api(): Promise<AppChatRoom> {

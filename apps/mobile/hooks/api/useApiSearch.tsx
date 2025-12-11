@@ -1,19 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-	useAppAcct,
-	useAppApiClient,
-} from '../utility/global-state-extractors';
-import {
-	DriverService,
-	defaultResultPage,
-	FeedParser,
-	AtprotoApiAdapter,
-} from '@dhaaga/bridge';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import type {
-	UserObjectType,
 	FeedObjectType,
 	ResultPage,
+	UserObjectType,
 } from '@dhaaga/bridge';
+import { AtprotoApiAdapter, DriverService } from '@dhaaga/bridge';
 import { searchUsersQueryOpts } from '@dhaaga/react';
 
 type FeedResultPage = ResultPage<FeedObjectType[]>;
@@ -33,24 +25,13 @@ export function useApiSearchFeeds(q: string, maxId: string | null) {
 	return useQuery<FeedResultPage>({
 		queryKey: ['search/feeds', server, q, maxId],
 		queryFn: async () => {
-			if (!q) return defaultResultPage;
-			const { data, error } = await (
-				client as AtprotoApiAdapter
-			).search.findFeeds({
+			return (client as AtprotoApiAdapter).search.findFeeds({
 				limit: 5,
 				query: q,
 				cursor: maxId,
 			});
-			if (error) return defaultResultPage;
-			console.log(data);
-			return {
-				...defaultResultPage,
-				items: FeedParser.parse<unknown[]>(data.feeds, driver, server),
-				maxId: data.cursor,
-			};
 		},
 		enabled: !!client && DriverService.supportsAtProto(driver),
-		initialData: defaultResultPage,
 	});
 }
 
@@ -66,7 +47,7 @@ export function useApiSearchUsers(
 	maxId: string | null,
 ) {
 	const { client } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	return useQuery<UserObjectType[]>(
 		searchUsersQueryOpts(client, acct.identifier, defaultTo, q, maxId),
 	);

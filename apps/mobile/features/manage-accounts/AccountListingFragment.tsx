@@ -20,7 +20,7 @@ import {
 	useAppGlobalStateActions,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { DialogBuilderService } from '#/services/dialog-builder.service';
 import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import { useTranslation } from 'react-i18next';
@@ -46,7 +46,7 @@ export function AccountPfp({ url, selected, onClicked }: AccountPfpProps) {
 				width: 48,
 				borderRadius: 8,
 				borderWidth: 1.5,
-				borderColor: selected ? theme.primary.a10 : 'gray',
+				borderColor: selected ? theme.primary : 'gray',
 			}}
 			onPress={onClicked}
 		>
@@ -64,7 +64,7 @@ export function AccountPfp({ url, selected, onClicked }: AccountPfpProps) {
 					},
 					styles.selectedIndicator,
 					{
-						backgroundColor: theme.primary.a10,
+						backgroundColor: theme.primary,
 					},
 				]}
 			/>
@@ -113,7 +113,7 @@ export function AccountDetails({
 			<Text
 				style={{
 					fontFamily: APP_FONTS.INTER_500_MEDIUM,
-					color: selected ? theme.primary.a0 : theme.complementary.a0,
+					color: selected ? theme.primary : theme.complementary,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
@@ -211,7 +211,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 						<Text
 							style={{
 								fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-								color: theme.primary.a0,
+								color: theme.primary,
 								fontSize: 16,
 								paddingRight: 8,
 							}}

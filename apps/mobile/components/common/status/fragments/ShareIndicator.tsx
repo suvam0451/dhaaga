@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import { Image } from 'expo-image';
 import { AppIcon } from '../../../lib/Icon';
-import { DatetimeUtil } from '../../../../utils/datetime.utils';
-import { useAppTheme } from '../../../../hooks/utility/global-state-extractors';
-import { appDimensions } from '../../../../styles/dimensions';
+import { DatetimeUtil } from '#/utils/datetime.utils';
+import { useAppTheme } from '#/states/global/hooks';
+import { appDimensions } from '#/styles/dimensions';
 import { TextContentView } from '../TextContentView';
 import { AppText } from '../../../lib/Text';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
@@ -39,7 +39,7 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 					maxWidth: '100%',
 				}}
 			>
-				<AppIcon id={'retweet'} size={18} color={theme.complementary.a0} />
+				<AppIcon id={'retweet'} size={18} color={theme.complementary} />
 				<View>
 					<Image
 						source={avatarUrl}

@@ -1,11 +1,12 @@
+import { AccountRoute } from './_interface.js';
 import {
 	AccountMutePostDto,
-	AccountRoute,
 	AccountRouteStatusQueryDto,
 	BookmarkGetQueryDTO,
 	FollowerGetQueryDTO,
-} from './_interface.js';
-import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
+	FollowPostDto,
+	GetPostsQueryDTO,
+} from '../../typings.js';
 import { Endpoints } from 'misskey-js';
 import {
 	MastoAccount,

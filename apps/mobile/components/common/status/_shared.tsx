@@ -3,7 +3,7 @@ import {
 	useAppBottomSheet,
 	useAppPublishers,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { ActivityPubService } from '@dhaaga/bridge';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { AppIcon } from '../../lib/Icon';
@@ -11,9 +11,10 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { Fragment } from 'react';
 import { AccountSavedPost } from '@dhaaga/db';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import { AppText } from '../../lib/Text';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
 
 type PostMoreOptionsButtonProps = {
 	post: PostObjectType;
@@ -78,7 +79,7 @@ export function SavedPostMoreOptionsButton({
 	const { postObjectActions } = useAppPublishers();
 
 	function onPress() {
-		setCtx({ uuid: post.uuid });
+		setCtx({ $type: 'post-id', postId: post.uuid });
 		// show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
 	}
 
@@ -105,15 +106,18 @@ export function SavedPostMoreOptionsButton({
  */
 export function MiniMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
+	const { show } = useAppBottomSheet();
+
+	const { loadBookmarkState } = usePostEventBusActions(post?.uuid);
 
 	function onPress() {
 		if (ActivityPubService.misskeyLike(driver)) {
-			postObjectActions.loadBookmarkState(post?.uuid).finally(() => {});
+			loadBookmarkState();
 		}
-		setCtx({ uuid: post.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
+		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true, {
+			$type: 'post-id',
+			postId: post.id,
+		});
 	}
 
 	return (

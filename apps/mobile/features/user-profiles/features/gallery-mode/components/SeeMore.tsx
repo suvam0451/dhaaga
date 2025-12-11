@@ -1,7 +1,7 @@
 import { View } from 'react-native';
-import { AppText } from '../../../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../../../utils/theming.util';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { AppText } from '#/components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { useAppTheme } from '#/states/global/hooks';
 
 function SeeMore() {
 	const { theme } = useAppTheme();

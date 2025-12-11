@@ -1,7 +1,7 @@
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, StyleSheet } from 'react-native';
-import { AppText } from '../../../components/lib/Text';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { AppText } from '#/components/lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { NativeTextH6 } from '#/ui/NativeText';
 
 function util(o: number): string {
@@ -25,7 +25,7 @@ function ProfileStatItemView({ count, label, onPress }: Props) {
 	}
 	return (
 		<Pressable style={[{}, styles.touchContainer]} onPress={_onPress}>
-			<NativeTextH6 style={{ color: theme.complementary.a0 }}>
+			<NativeTextH6 style={{ color: theme.complementary }}>
 				{util(count)}
 			</NativeTextH6>
 			<AppText.Medium

@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
-import { APP_FONTS } from '../../../../../../styles/AppFonts';
-import { useAppTheme } from '../../../../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
 
 function SocialHubThemePicker() {
 	const { theme } = useAppTheme();

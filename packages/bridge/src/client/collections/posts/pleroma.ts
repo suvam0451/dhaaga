@@ -1,4 +1,4 @@
-import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
+import { StatusesRoute } from './_interface.js';
 import {
 	MegaReaction,
 	MegaScheduledStatus,
@@ -18,6 +18,7 @@ import {
 import { getHumanReadableError } from '#/utils/errors.js';
 import { PaginatedPromise } from '#/types/api-response.js';
 import type { MastoAccount, MastoStatus } from '#/types/index.js';
+import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 
 export class PleromaStatusesRouter implements StatusesRoute {
 	direct: FetchWrapper;

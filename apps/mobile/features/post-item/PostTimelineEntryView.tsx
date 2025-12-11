@@ -48,7 +48,6 @@ function PostTimelineEntryView({
 	showFullDetails,
 }: StatusItemProps) {
 	const { dto } = withPostItemContext();
-
 	if (!dto) return <View />;
 	if (dto.meta.isBoost) {
 		// Quote Boost

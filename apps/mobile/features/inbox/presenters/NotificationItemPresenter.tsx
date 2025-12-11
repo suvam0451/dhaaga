@@ -7,7 +7,7 @@ import BoostNotificationFragment from '../components/BoostNotificationFragment';
 import FollowReqAcceptNotificationFragment from '../components/FollowReqAccepNotificationFragment';
 import ReactionNotificationFragment from '../components/ReactionNotificationFragment';
 import FollowPresenter from './FollowPresenter';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import GroupedFollowPresenter from './GroupedFollowPresenter';
 import GroupedPostInteractionPresenter from './GroupedPostInteractionPresenter';

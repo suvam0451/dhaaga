@@ -6,12 +6,12 @@ import {
 } from '@dhaaga/core';
 import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
 import useTimelineQueryReactNative from '#/hooks/useTimelineQueryReactNative';
-import { useAppAcct, useAppDb } from '#/hooks/utility/global-state-extractors';
+import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import { useEffect } from 'react';
 
 function Content() {
 	const { db } = useAppDb();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	// state management
 	const State = usePostTimelineState();

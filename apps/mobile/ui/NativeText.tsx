@@ -3,7 +3,7 @@ import {
 	AppTextVariant,
 	AppThemingUtil,
 } from '#/utils/theming.util';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { StyleProp, TextStyle, Text } from 'react-native';
 
 type Props = {
@@ -15,6 +15,35 @@ type Props = {
 	onTextLayout?: (e: any) => void;
 	onPress?: () => void;
 };
+
+export function NativeTextNormal({
+	style,
+	color,
+	children,
+	numberOfLines,
+	emphasis,
+	onTextLayout,
+	onPress,
+}: Props) {
+	const { theme } = useAppTheme();
+	let _color =
+		color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
+
+	let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
+		AppTextVariant.BODY_NORMAL,
+	);
+
+	return (
+		<Text
+			style={[_baseStyling, { color: _color }, style]}
+			onTextLayout={onTextLayout}
+			numberOfLines={numberOfLines}
+			onPress={onPress}
+		>
+			{children}
+		</Text>
+	);
+}
 
 export function NativeTextMedium({
 	style,
@@ -125,6 +154,40 @@ export function NativeTextH6({
 		color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
 
 	let _baseStyling = AppThemingUtil.getBaseStylingForVariant(AppTextVariant.H6);
+
+	return (
+		<Text
+			style={[
+				_baseStyling,
+				{
+					color: _color,
+				},
+				style,
+			]}
+			numberOfLines={numberOfLines}
+			onPress={onPress}
+		>
+			{children}
+		</Text>
+	);
+}
+
+export function NativeTextSpecial({
+	style,
+	color,
+	children,
+	numberOfLines,
+	emphasis,
+	onPress,
+}: Props) {
+	const { theme } = useAppTheme();
+
+	let _color =
+		color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
+
+	let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
+		AppTextVariant.SPECIAL,
+	);
 
 	return (
 		<Text

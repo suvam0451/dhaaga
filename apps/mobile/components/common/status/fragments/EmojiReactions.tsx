@@ -2,17 +2,16 @@ import { Fragment, memo, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
 import EmojiReaction from './EmojiReaction';
-import { APP_FONT } from '../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../styles/AppFonts';
-import useGlobalState from '../../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
+import { APP_FONT } from '#/styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { appDimensions } from '../../../../styles/dimensions';
+import { appDimensions } from '#/styles/dimensions';
 import type { PostObjectType } from '@dhaaga/bridge';
 import {
+	useActiveUserSession,
 	useAppApiClient,
 	useAppTheme,
-} from '../../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
@@ -26,12 +25,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	const { theme } = useAppTheme();
 	const { driver } = useAppApiClient();
 
-	const { acctManager } = useGlobalState(
-		useShallow((o) => ({
-			acctManager: o.acctManager,
-		})),
-	);
-
+	const { acctManager } = useActiveUserSession();
 	function onShowMoreToggle() {
 		setAllEmojisExpanded((o) => !o);
 	}

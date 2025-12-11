@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '../../components/lib/Icon';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 
 type WithCwTextProps = {
@@ -33,7 +33,7 @@ function PostContentWarning({ show, setShow, cw }: WithCwTextProps) {
 				style={{
 					width: 8,
 					height: '100%',
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					borderTopStartRadius: 6,
 					borderBottomLeftRadius: 6,
 				}}
@@ -67,7 +67,7 @@ function PostContentWarning({ show, setShow, cw }: WithCwTextProps) {
 				style={{
 					width: 8,
 					height: '100%',
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					borderTopEndRadius: 6,
 					borderBottomEndRadius: 6,
 				}}

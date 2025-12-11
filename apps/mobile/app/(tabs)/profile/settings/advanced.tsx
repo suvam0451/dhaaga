@@ -1,6 +1,6 @@
 import { Text, StyleSheet } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
@@ -18,7 +18,7 @@ function Page() {
 				{t(`discover.moreSoon.firstHalf`, {
 					ns: LOCALIZATION_NAMESPACE.CORE,
 				})}
-				<Text style={{ color: theme.complementary.a0 }}>
+				<Text style={{ color: theme.complementary }}>
 					{t(`discover.moreSoon.secondHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,
 					})}

@@ -1,6 +1,6 @@
 import type { UserObjectType } from '@dhaaga/bridge';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { Image, useImage } from 'expo-image';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';

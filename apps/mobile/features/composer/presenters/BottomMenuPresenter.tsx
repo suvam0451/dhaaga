@@ -2,7 +2,7 @@ import {
 	useAppApiClient,
 	useAppDialog,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { useComposerCtx } from '../contexts/useComposerCtx';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import { Fragment } from 'react';
@@ -10,14 +10,14 @@ import AutoFillPresenter from './AutoFillPresenter';
 import { View } from 'react-native';
 import ComposerActionListView from '../views/ComposerActionListView';
 import { ActivityPubService } from '@dhaaga/bridge';
-import { AppService } from '../../../services/app.service';
+import { AppService } from '#/services/app.service';
 import PostVisibilityView from '../views/PostVisibilityView';
 import useAppVisibility, {
 	APP_POST_VISIBILITY,
-} from '../../../hooks/app/useVisibility';
-import { DialogBuilderService } from '../../../services/dialog-builder.service';
+} from '#/hooks/app/useVisibility';
+import { DialogBuilderService } from '#/services/dialog-builder.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 
 function BottomMenuPresenter() {

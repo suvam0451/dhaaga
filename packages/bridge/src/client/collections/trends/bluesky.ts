@@ -1,5 +1,5 @@
 import { TrendsRoute } from './_interface.js';
-import { GetTrendingDTO } from '#/client/types/_interface.js';
+import { GetTrendingDTO } from '#/client/typings.js';
 import { MastoStatus, MastoTrendLink } from '#/types/mastojs.types.js';
 import { getXrpcAgent } from '#/utils/atproto.js';
 import {

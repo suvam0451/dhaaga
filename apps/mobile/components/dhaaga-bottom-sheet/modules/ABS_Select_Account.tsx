@@ -5,19 +5,17 @@ import {
 	ACCOUNT_METADATA_KEY,
 	AccountMetadataService,
 } from '@dhaaga/db';
-import useGlobalState from '#/states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { useAppListAccounts } from '#/hooks/db/useAppListAccounts';
+import { useAccountsDb } from '#/hooks/db/useAccountsDb';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import {
 	useAppBottomSheet,
 	useAppDb,
-	useAppGlobalStateActions,
+	useAppManager,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppIcon } from '#/components/lib/Icon';
-import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/BottomSheetMenu';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 import RoutingUtils from '#/utils/routing.utils';
 import {
 	AccountDetails,
@@ -31,12 +29,7 @@ type ListItemProps = {
 
 function ListItem({ acct }: ListItemProps) {
 	const { db } = useAppDb();
-	const { restoreSession } = useAppGlobalStateActions();
-	const { selectAccount } = useGlobalState(
-		useShallow((o) => ({
-			selectAccount: o.selectAccount,
-		})),
-	);
+	const { loadAccount } = useAppManager();
 	const { hide, refresh } = useAppBottomSheet();
 	const { theme } = useAppTheme();
 
@@ -52,10 +45,10 @@ function ListItem({ acct }: ListItemProps) {
 	);
 
 	async function onSelect() {
-		selectAccount(acct);
-		restoreSession();
-		refresh();
-		hide();
+		loadAccount(acct).finally(() => {
+			refresh();
+			hide();
+		});
 	}
 
 	if (!acct) return <View />;
@@ -105,7 +98,7 @@ function ListItem({ acct }: ListItemProps) {
 					}}
 				>
 					{acct.selected ? (
-						<AppIcon id={'checkbox'} size={28} color={theme.primary.a0} />
+						<AppIcon id={'checkbox'} size={28} color={theme.primary} />
 					) : (
 						<View />
 					)}
@@ -118,7 +111,7 @@ function ListItem({ acct }: ListItemProps) {
 
 function ABS_Select_Account() {
 	const { stateId, hide } = useAppBottomSheet();
-	const { data } = useAppListAccounts(stateId);
+	const { data } = useAccountsDb(stateId);
 
 	function onPressManageAccount() {
 		hide();

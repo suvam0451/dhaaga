@@ -1,10 +1,10 @@
 import { Text } from 'react-native';
 import { RandomUtil } from '@dhaaga/bridge';
-import { useAppTheme } from '../../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppThemingUtil,
-} from '../../../utils/theming.util';
+} from '#/utils/theming.util';
 import { AppText } from '../../lib/Text';
 
 type Props = {

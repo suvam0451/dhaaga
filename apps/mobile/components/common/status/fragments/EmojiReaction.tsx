@@ -11,10 +11,7 @@ import EmojiReactionImage from './EmojiReactionImage';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
-import {
-	useAppPublishers,
-	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+import { useAppPublishers, useAppTheme } from '#/states/global/hooks';
 import { Loader } from '#/components/lib/Loader';
 import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
 
@@ -34,7 +31,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 					{
 						backgroundColor: theme.reactions.active,
 						borderWidth: 2,
-						borderColor: theme.primary.a0,
+						borderColor: theme.primary,
 					},
 				];
 			} else {

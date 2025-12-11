@@ -6,24 +6,24 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import useGlobalState from '../../../states/_global';
-import { useShallow } from 'zustand/react/shallow';
-import { APP_FONTS } from '../../../styles/AppFonts';
-import { AppIcon } from '../../../components/lib/Icon';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { AppIcon } from '#/components/lib/Icon';
 import { router } from 'expo-router';
 import AppTabLandingNavbar, {
 	APP_LANDING_PAGE_TYPE,
-} from '../../../components/shared/topnavbar/AppTabLandingNavbar';
+} from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { useState } from 'react';
 import { AccountService } from '@dhaaga/db';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import {
-	useAppAcct,
+	useActiveUserSession,
+	useAppDb,
+	useAppGlobalStateActions,
 	useAppTheme,
-} from '../../../hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import ProtocolCards from '../components/ProtocolCards';
 
 type AddAccountLandingFragmentProps = {
@@ -85,13 +85,9 @@ type AppNoAccountProps = {
 function AddAccountPresenter({ tab }: AppNoAccountProps) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
-	const { acct } = useAppAcct();
-	const { db, loadApp } = useGlobalState(
-		useShallow((o) => ({
-			db: o.db,
-			loadApp: o.loadApp,
-		})),
-	);
+	const { acct } = useActiveUserSession();
+	const { db } = useAppDb();
+	const { restoreSession } = useAppGlobalStateActions();
 
 	function onRefresh() {
 		setIsRefreshing(true);
@@ -99,7 +95,7 @@ function AddAccountPresenter({ tab }: AppNoAccountProps) {
 			// possibly locked because of the added/deleted account
 			if (!acct) {
 				AccountService.ensureAccountSelection(db);
-				loadApp();
+				restoreSession();
 				setIsRefreshing(false);
 			}
 		} catch (e) {

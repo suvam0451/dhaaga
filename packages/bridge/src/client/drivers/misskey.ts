@@ -1,4 +1,4 @@
-import { RestClientCreateDTO } from '../types/_interface.js';
+import { RestClientCreateDTO } from '../typings.js';
 import { MisskeyInstanceRouter } from '../collections/servers/misskey.js';
 import { MisskeyAccountsRouter } from '../collections/accounts/misskey.js';
 import { MisskeyStatusesRouter } from '../collections/posts/misskey.js';
@@ -12,7 +12,6 @@ import { MisskeyMediaRouter } from '../collections/media/misskey.js';
 import { MisskeyListsRoute } from '../collections/lists/misskey.js';
 import FetchWrapper from '../utils/fetch.js';
 import { ApiTargetInterface } from '../index.js';
-import { UserRoute } from '../shared/wrapper.js';
 import { KNOWN_SOFTWARE } from '../utils/driver.js';
 
 class Adapter implements ApiTargetInterface {
@@ -32,7 +31,6 @@ class Adapter implements ApiTargetInterface {
 	me: MisskeyMeRouter;
 	media: MisskeyMediaRouter;
 	lists: MisskeyListsRoute;
-	user: UserRoute;
 
 	constructor(
 		driver: KNOWN_SOFTWARE | string,
@@ -55,7 +53,6 @@ class Adapter implements ApiTargetInterface {
 		this.me = new MisskeyMeRouter(this.fetch);
 		this.media = new MisskeyMediaRouter(this.fetch);
 		this.lists = new MisskeyListsRoute(this.fetch);
-		this.user = new UserRoute(this);
 	}
 }
 

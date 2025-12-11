@@ -1,6 +1,6 @@
 import { Animated, Easing, StyleSheet } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 
 const CURVE = Easing.bezier(0.41, -0.15, 0.56, 1.21);
 const AMPLITUDE = 4;
@@ -13,7 +13,7 @@ export function Loader() {
 	const opacity = useRef(new Animated.Value(0)).current;
 	const colors = [
 		theme.complementaryA.a0,
-		theme.complementary.a0,
+		theme.complementary,
 		theme.complementaryB.a0,
 	];
 

@@ -1,14 +1,14 @@
-import {
-	DhaagaJsUserSearchDTO,
-	MastoUnifiedSearchType,
-	SearchRoute,
-} from './_interface.js';
+import { SearchRoute } from './_interface.js';
 import { MastoAccount, MastoStatus, MastoTag } from '#/types/mastojs.types.js';
 import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MastoJsWrapper } from '#/client/utils/api-wrappers.js';
 import { errorBuilder } from '#/types/index.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import {
+	DhaagaJsUserSearchDTO,
+	MastoUnifiedSearchType,
+} from '#/client/typings.js';
 
 export class MastodonSearchRouter implements SearchRoute {
 	direct: FetchWrapper;

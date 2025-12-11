@@ -1,5 +1,12 @@
 import { Endpoints } from 'misskey-js';
-import { FollowPostDto, GetPostsQueryDTO } from '../../types/_interface.js';
+import {
+	AccountMutePostDto,
+	AccountRouteStatusQueryDto,
+	BookmarkGetQueryDTO,
+	FollowerGetQueryDTO,
+	FollowPostDto,
+	GetPostsQueryDTO,
+} from '../../typings.js';
 import type {
 	AppBskyActorDefs,
 	AppBskyActorGetProfile,
@@ -24,46 +31,6 @@ import type { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 
 import { PaginatedPromise } from '#/types/api-response.js';
-
-export type BookmarkGetQueryDTO = {
-	limit: number;
-	maxId?: string;
-	minId?: string;
-};
-
-export type FollowerGetQueryDTO = {
-	allowPartial: boolean;
-	limit: number;
-	id: string;
-	maxId: string | null;
-};
-
-type DefaultPaginationParams = {
-	// masto.js
-	readonly maxId?: string | null;
-	readonly sinceId?: string | null;
-	readonly minId?: string | null;
-	readonly limit?: number | null;
-};
-
-type ListAccountStatusesParams = DefaultPaginationParams & {
-	// masto.js
-	readonly onlyMedia?: boolean | null;
-	readonly pinned?: boolean | null;
-	readonly excludeReplies?: boolean | null;
-	readonly excludeReblogs?: boolean | null;
-	readonly tagged?: string | null;
-};
-
-export type AccountRouteStatusQueryDto = ListAccountStatusesParams &
-	Endpoints['users/notes']['req'] & {
-		bskyFilter?: 'posts_with_media';
-	};
-
-export type AccountMutePostDto = {
-	notifications: boolean;
-	duration: number;
-};
 
 export interface AccountRoute {
 	/**

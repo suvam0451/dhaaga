@@ -4,11 +4,8 @@ import { Emoji } from './emoji-picker/emojiPickerReducer';
 import MorePostActionsPresenter from '#/features/timelines/presenters/MorePostActionsPresenter';
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
-import {
-	useAppApiClient,
-	useAppBottomSheet,
-} from '#/hooks/utility/global-state-extractors';
-import { usePostActions } from '#/hooks/pubsub/usePostActions';
+import { useAppApiClient, useAppBottomSheet } from '#/states/global/hooks';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
 import { appDimensions } from '#/styles/dimensions';
 
 function AppBottomSheetPostMoreActions() {
@@ -16,11 +13,13 @@ function AppBottomSheetPostMoreActions() {
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
 	const { client, driver } = useAppApiClient();
 
-	const { post } = usePostActions(ctx?.uuid);
+	const { post } = usePostEventBusActions(
+		ctx.$type === 'post-id' ? ctx.postId : null,
+	);
 
 	useEffect(() => {
 		setEditMode('root');
-	}, [ctx.uuid, stateId]);
+	}, [stateId]);
 
 	const [Loading, setLoading] = useState(false);
 

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SimpleUserTimeline from '#/components/timelines/SimpleUserTimeline';
-import { useAppApiClient } from '#/hooks/utility/global-state-extractors';
+import { useAppApiClient } from '#/states/global/hooks';
 import { userFollowsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';

@@ -1,12 +1,9 @@
-import {
-	DriverTimelineGetApiResponse,
-	DhaagaJsTimelineQueryOptions,
-	TimelinesRoute,
-} from './_interface.js';
+import { DriverTimelineGetApiResponse, TimelinesRoute } from './_interface.js';
 import type { AppBskyFeedDefs } from '@atproto/api';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { DhaagaJsTimelineQueryOptions } from '#/client/typings.js';
 
 type FeedGetQueryDto = {
 	feed: string;

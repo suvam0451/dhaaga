@@ -1,17 +1,19 @@
 import { useEffect, useMemo } from 'react';
 import { StatusBar, StyleProp, View, ViewStyle } from 'react-native';
-import SocialHubPresenter from '#/features/social-hub/presenters/SocialHubPresenter';
+import HubPage from '#/features/social-hub/HubPage';
 import { Account } from '@dhaaga/db';
 import {
-	useAppAcct,
+	useActiveUserSession,
+	useAppActiveSession,
 	useAppTheme,
 	useHub,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
 import { NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
+import SessionLoadingScreen from '#/features/onboarding/SessionLoadingScreen';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -45,7 +47,7 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 				position: 'relative',
 			}}
 		>
-			<StatusBar barStyle="light-content" backgroundColor={theme.primary.a0} />
+			<StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 			<View style={{ flexGrow: 1 }}>
 				<NativeTextH6
 					numberOfLines={1}
@@ -56,7 +58,7 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 				</NativeTextH6>
 				<NativeTextMedium
 					style={{
-						color: theme.primary.a0,
+						color: theme.primary,
 						maxWidth: '80%',
 					}}
 					numberOfLines={1}
@@ -142,15 +144,21 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 }
 
 function Screen() {
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
+	const { session } = useAppActiveSession();
 	const { loadAccounts } = useHub();
 
 	useEffect(() => {
 		loadAccounts();
 	}, [acct]);
 
-	if (!acct) return <SignedOutScreen />;
-	return <SocialHubPresenter />;
+	if (!acct) {
+		if (session.state === 'no-account' || session.state === 'invalid')
+			return <SignedOutScreen />;
+		else if (session.state === 'idle' || session.state === 'loading')
+			return <SessionLoadingScreen />;
+	}
+	return <HubPage />;
 }
 
 export default Screen;

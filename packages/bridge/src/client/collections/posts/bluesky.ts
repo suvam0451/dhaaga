@@ -1,4 +1,4 @@
-import { DhaagaJsPostCreateDto, StatusesRoute } from './_interface.js';
+import { StatusesRoute } from './_interface.js';
 import {
 	AppBskyActorDefs,
 	AppBskyFeedDefs,
@@ -14,6 +14,7 @@ import {
 } from '#/types/driver.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { PaginatedPromise } from '#/types/api-response.js';
+import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 
 class BlueskyStatusesRouter implements StatusesRoute {
 	dto: AtpSessionData;
@@ -23,7 +24,24 @@ class BlueskyStatusesRouter implements StatusesRoute {
 	}
 
 	bookmark(id: string): DriverBookmarkStateResult {
-		return Promise.resolve(undefined) as any;
+		throw new Error('incorrect method. please use atProtoBookmark');
+	}
+
+	async atProtoBookmark(uri: string, cid: string): DriverBookmarkStateResult {
+		const agent = getXrpcAgent(this.dto);
+		await agent.app.bsky.bookmark.createBookmark({
+			cid,
+			uri,
+		});
+		return { state: true };
+	}
+
+	async unBookmark(uri: string): DriverBookmarkStateResult {
+		const agent = getXrpcAgent(this.dto);
+		await agent.app.bsky.bookmark.deleteBookmark({
+			uri,
+		});
+		return { state: false };
 	}
 
 	async create(dto: DhaagaJsPostCreateDto): Promise<{
@@ -89,10 +107,6 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		const agent = getBskyAgent(this.dto);
 		await agent.deleteLike(uri);
 		return { state: false };
-	}
-
-	unBookmark(id: string): DriverBookmarkStateResult {
-		return Promise.resolve(undefined) as any;
 	}
 
 	async getConvoForMembers(

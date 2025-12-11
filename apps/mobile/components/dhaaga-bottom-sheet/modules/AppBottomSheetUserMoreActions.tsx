@@ -4,7 +4,7 @@ import {
 	useAppDb,
 	useAppManager,
 	useProfileManager,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { View } from 'react-native';
 import { ProfilePinnedUserService } from '@dhaaga/db';
 import { AppMenuItem } from '../../lib/Menu';
@@ -67,7 +67,7 @@ function AppBottomSheetUserMoreActions() {
 			{/*		<AppIcon*/}
 			{/*			id={'pin-octicons'}*/}
 			{/*			size={24}*/}
-			{/*			color={theme.complementary.a0}*/}
+			{/*			color={theme.complementary}*/}
 			{/*			onPress={() => {}}*/}
 			{/*		/>*/}
 			{/*	}*/}

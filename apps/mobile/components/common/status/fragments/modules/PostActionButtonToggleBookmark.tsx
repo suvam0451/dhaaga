@@ -2,12 +2,12 @@ import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppPublishers,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { withPostItemContext } from '../../../../containers/contexts/WithPostItemContext';
 import { ActivityPubService } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { Pressable } from 'react-native';
 import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 /**
  * Bookmark toggle indicator button
@@ -15,16 +15,18 @@ import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
 function PostActionButtonToggleBookmark() {
 	const { driver } = useAppApiClient();
 	const { dto } = withPostItemContext();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 	const { postObjectActions } = useAppPublishers();
 
 	// helper functions
-	function _toggleBookmark() {
+	async function _toggleBookmark() {
+		show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true, {
+			$type: 'post-id',
+			postId: dto?.id,
+		});
 		if (ActivityPubService.misskeyLike(driver)) {
 			postObjectActions.loadBookmarkState(dto?.uuid);
 		}
-		setCtx({ uuid: dto?.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.ADD_BOOKMARK, true);
 	}
 
 	const FLAG = dto?.interaction?.bookmarked;

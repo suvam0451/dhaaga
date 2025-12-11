@@ -5,7 +5,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { useCollectionDetailState } from '../contexts/CollectionDetailCtx';
 
 type ControlHeadersProps = {
@@ -29,7 +29,7 @@ function ControlHeaders({
 				style={[
 					styles.userContainer,
 					{
-						borderColor: allSelected ? theme.primary.a0 : theme.secondary.a50,
+						borderColor: allSelected ? theme.primary : theme.secondary.a50,
 					},
 				]}
 				onPress={onAllSelect}
@@ -46,7 +46,7 @@ function ControlHeaders({
 					<AppText.Medium
 						style={{
 							textAlign: 'center',
-							color: allSelected ? theme.primary.a0 : theme.secondary.a10,
+							color: allSelected ? theme.primary : theme.secondary.a10,
 						}}
 					>
 						ALL
@@ -58,7 +58,7 @@ function ControlHeaders({
 				style={[
 					styles.userContainer,
 					{
-						borderColor: noneSelected ? theme.primary.a0 : theme.secondary.a50,
+						borderColor: noneSelected ? theme.primary : theme.secondary.a50,
 					},
 				]}
 				onPress={onNoneSelect}
@@ -75,7 +75,7 @@ function ControlHeaders({
 					<AppText.SemiBold
 						style={{
 							textAlign: 'center',
-							color: noneSelected ? theme.primary.a0 : theme.secondary.a10,
+							color: noneSelected ? theme.primary : theme.secondary.a10,
 						}}
 					>
 						NONE
@@ -115,7 +115,7 @@ function CollectionDetailWidget() {
 					>
 						<AppText.SemiBold
 							style={{
-								color: theme.primary.a0,
+								color: theme.primary,
 								marginBottom: appDimensions.timelines.sectionBottomMargin,
 								fontFamily: APP_FONTS.INTER_500_MEDIUM,
 								fontSize: 16,

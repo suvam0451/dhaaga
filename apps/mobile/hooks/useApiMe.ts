@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import {
 	useAccountManager,
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
-} from './utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { UserParser } from '@dhaaga/bridge';
 import type { UserObjectType } from '@dhaaga/bridge';
 
@@ -14,7 +14,7 @@ import type { UserObjectType } from '@dhaaga/bridge';
  */
 function useApiMe() {
 	const { client, driver, server } = useAppApiClient();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 	const { acctManager } = useAccountManager();
 
 	// Queries

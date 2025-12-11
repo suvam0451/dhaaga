@@ -1,15 +1,15 @@
 import {
-	useAppAcct,
+	useActiveUserSession,
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
-} from '#/hooks/utility/global-state-extractors';
+} from '#/states/global/hooks';
 import { PostResolver, TextParser } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/_global';
 import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
 import { ActivityPubService } from '@dhaaga/bridge';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
+import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
 	value: string;
@@ -22,7 +22,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
-	const { acct } = useAppAcct();
+	const { acct } = useActiveUserSession();
 
 	const parsed = TextParser.mentionTextToHandle(
 		value,
@@ -38,12 +38,13 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			const ctx = PostResolver.mentionItemsToWebfinger(parsed?.text, mentions);
 			console.log(ctx, parsed?.text, mentions);
 			if (ctx) {
-				setCtx(ctx);
+				// FIXME: correct the typing
+				// setCtx({$type: "user-preview", userId:});
 			}
 		} else {
-			setCtx({
-				did: link,
-			});
+			// setCtx({
+			// 	did: link,
+			// });
 		}
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
@@ -53,7 +54,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			<AppText.Normal
 				style={{
 					fontFamily,
-					color: parsed.me ? theme.primary.a0 : theme.complementary.a0,
+					color: parsed.me ? theme.primary : theme.complementary,
 				}}
 				onPress={onPress}
 			>

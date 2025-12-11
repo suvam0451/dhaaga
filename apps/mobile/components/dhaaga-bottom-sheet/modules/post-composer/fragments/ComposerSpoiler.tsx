@@ -6,12 +6,12 @@ import {
 	TextInputChangeEventData,
 	View,
 } from 'react-native';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
-import { PostComposerReducerActionType } from '../../../../../features/composer/reducers/composer.reducer';
-import { useAppTheme } from '../../../../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
+import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
+import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
-import { LOCALIZATION_NAMESPACE } from '../../../../../types/app.types';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 const ComposerSpoiler = memo(() => {
 	const { theme } = useAppTheme();
@@ -42,7 +42,7 @@ const ComposerSpoiler = memo(() => {
 				style={[
 					styles.textInput,
 					{
-						color: theme.complementary.a0,
+						color: theme.complementary,
 					},
 				]}
 				onChange={onChange}

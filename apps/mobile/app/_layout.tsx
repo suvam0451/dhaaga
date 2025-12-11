@@ -2,20 +2,19 @@ import { Stack } from 'expo-router/stack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar, View } from 'react-native';
+import { LogBox, StatusBar, View } from 'react-native';
 import { Fragment, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import { LogBox } from 'react-native';
 import { enableMapSet } from 'immer';
 import { SQLiteProvider } from 'expo-sqlite';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { usePathname } from 'expo-router';
 import { migrateDbIfNeeded } from '@dhaaga/db';
-import AppBottomSheet from '../components/dhaaga-bottom-sheet/Core';
+import AppBottomSheet from '../components/dhaaga-bottom-sheet/components/Core';
 import useAppSession from '../states/useAppSession';
 import ImageInspectModal from '../components/modals/ImageInspectModal';
 import { AppDialog } from '../components/lib/AppDialog';
-import { useAppTheme } from '../hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import WithAppAssetsContext from '../hooks/app/useAssets';
 import polyfills from '#/utils/polyfills';
 
@@ -41,28 +40,10 @@ const IGNORED_LOGS = [
 LogBox.ignoreLogs(IGNORED_LOGS);
 LogBox.ignoreAllLogs(true);
 
-// Workaround for Expo 45
-// if (__DEV__) {
-// 	const withoutIgnored =
-// 		(logger: any) =>
-// 		(...args: any[]) => {
-// 			const output = args.join(' ');
-//
-// 			if (!IGNORED_LOGS.some((log) => output.includes(log))) {
-// 				logger(...args);
-// 			}
-// 		};
-//
-// 	console.log = withoutIgnored(console.log);
-// 	console.info = withoutIgnored(console.info);
-// 	console.warn = withoutIgnored(console.warn);
-// 	console.error = withoutIgnored(console.error);
-// }
-
 function App() {
 	const { theme } = useAppTheme();
 	const pathname = usePathname();
-	const { appReady } = useAppSession();
+	const appReady = useAppSession();
 	const [IsRendered, setIsRendered] = useState(false);
 
 	/**

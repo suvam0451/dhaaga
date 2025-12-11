@@ -10,13 +10,13 @@ import {
 	ViewStyle,
 	TextStyle,
 } from 'react-native';
-import { APP_FONT, APP_THEME } from '../../styles/AppTheme';
+import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import * as Haptics from 'expo-haptics';
-import { APP_FONTS } from '../../styles/AppFonts';
-import { useAppTheme } from '../../hooks/utility/global-state-extractors';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from './Text';
-import { appDimensions } from '../../styles/dimensions';
-import appStyles from '../../styles/AppStyles';
+import { appDimensions } from '#/styles/dimensions';
+import appStyles from '#/styles/AppStyles';
 
 const BUTTON_KINDS = [
 	'primary',
@@ -80,7 +80,7 @@ export function AppButtonVariantA({
 				appStyles.button,
 				{
 					backgroundColor:
-						variant === 'secondary' ? theme.background.a40 : theme.primary.a0,
+						variant === 'secondary' ? theme.background.a40 : theme.primary,
 					opacity: disabled ? 0.5 : 1,
 				},
 				style,
@@ -255,7 +255,7 @@ export function AppButtonBottomSheetAction({
 }: AppButtonBottomSheetActionProps) {
 	const { theme } = useAppTheme();
 	const bgColor: Record<APP_BOTTOM_SHEET_ACTION_CATEGORY, string> = {
-		[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: theme.complementary.a0,
+		[APP_BOTTOM_SHEET_ACTION_CATEGORY.CANCEL]: theme.complementary,
 		[APP_BOTTOM_SHEET_ACTION_CATEGORY.PROGRESS]:
 			APP_THEME.REPLY_THREAD_COLOR_SWATCH[0],
 	};
@@ -319,7 +319,7 @@ export function AppCtaButton({ label, onPress, style }: AppCtaButtonProps) {
 		>
 			<View
 				style={{
-					backgroundColor: theme.primary.a0,
+					backgroundColor: theme.primary,
 					padding: 8,
 					borderRadius: 8,
 					paddingHorizontal: 16,
@@ -359,7 +359,7 @@ export function CurrentRelationView({
 	const bgColor: Record<ButtonVariant, string> = {
 		blank: 'transparent',
 		error: 'red',
-		cta: theme.primary.a0,
+		cta: theme.primary,
 		info: theme.background.a20,
 		warn: 'orange',
 		warm: 'transparent',
@@ -369,9 +369,9 @@ export function CurrentRelationView({
 		blank: 'transparent',
 		error: 'red',
 		cta: 'black',
-		info: theme.complementary.a0,
+		info: theme.complementary,
 		warn: 'orange',
-		warm: theme.primary.a0,
+		warm: theme.primary,
 	};
 
 	if (variant === 'blank') return <View style={[styles.button, style]} />;

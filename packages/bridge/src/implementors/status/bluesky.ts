@@ -349,7 +349,7 @@ class AtprotoPostAdapter implements PostTargetInterface {
 	getQuote = () => null;
 
 	// Bookmarks
-	getIsBookmarked = () => false;
+	getIsBookmarked = () => this.getViewer()?.bookmarked ?? false;
 }
 
 export default AtprotoPostAdapter;

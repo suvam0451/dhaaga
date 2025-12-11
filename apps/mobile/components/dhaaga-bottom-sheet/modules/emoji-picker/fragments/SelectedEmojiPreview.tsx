@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { Image } from 'expo-image';
-import { useAppTheme } from '#/hooks/utility/global-state-extractors';
+import { useAppTheme } from '#/states/global/hooks';
 import { CustomEmojiObjectType } from '@dhaaga/bridge';
 
 type SelectedEmojiPreviewProps = {
@@ -39,7 +39,7 @@ const SelectedEmojiPreview = memo(
 				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri: selection.url }} style={styles.emojiContainer} />
 				<Text
-					style={[styles.emojiDesc, { color: theme.complementary.a0 }]}
+					style={[styles.emojiDesc, { color: theme.complementary }]}
 					numberOfLines={1}
 				>
 					{selection.shortCode}
