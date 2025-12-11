@@ -39,12 +39,12 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			console.log(ctx, parsed?.text, mentions);
 			if (ctx) {
 				// FIXME: correct the typing
-				setCtx({$type: "user-preview", userId:});
+				// setCtx({$type: "user-preview", userId:});
 			}
 		} else {
-			setCtx({
-				did: link,
-			});
+			// setCtx({
+			// 	did: link,
+			// });
 		}
 		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
