@@ -37,7 +37,7 @@ export type AppModalStateBase = {
 };
 
 export type AppPubSubState = {
-	postObjectActions: PostPublisherService;
+	postHub: PostPublisherService;
 	userPub: PostPublisherService;
 	appSub: AppPublisherService;
 };

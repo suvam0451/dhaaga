@@ -11,11 +11,11 @@ import { Pressable } from 'react-native';
 function PostActionButtonToggleLike() {
 	const { dto } = withPostItemContext();
 	const { theme } = useAppTheme();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 	const [IsLoading, setIsLoading] = useState(false);
 
 	function onPress() {
-		postObjectActions.toggleLike(dto.uuid, setIsLoading);
+		postEventBus.toggleLike(dto.uuid, setIsLoading);
 	}
 
 	const FLAG = dto.interaction.liked;

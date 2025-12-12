@@ -53,7 +53,7 @@ function useSocialHub() {
 	});
 	const [IsLoading, setIsLoading] = useState(false);
 	const { db } = useAppDb();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 
 	function refresh() {
 		if (!db) return;
@@ -70,12 +70,10 @@ function useSocialHub() {
 	}
 
 	useEffect(() => {
-		appSub.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
-		// appSub.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, refresh);
+		appEventBus.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		refresh();
 		return () => {
-			appSub.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
-			// appSub.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, refresh);
+			appEventBus.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		};
 	}, [db]);
 

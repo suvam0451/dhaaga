@@ -1,7 +1,7 @@
 import { AddAccountLandingFragment } from '#/features/onboarding/presenters/AddAccountPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { useAssets } from 'expo-asset';
 import {
@@ -43,7 +43,7 @@ function AtProto() {
 	const { db } = useAppDb();
 	const { acct } = useActiveUserSession();
 	const { restoreSession } = useAppGlobalStateActions();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { loadAccounts } = useHub();
 
 	async function onSubmit() {
@@ -61,7 +61,7 @@ function AtProto() {
 				AccountService.ensureAccountSelection(db);
 				restoreSession();
 			}
-			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
 			RoutingUtils.toAccountManagement();
 		});

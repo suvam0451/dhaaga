@@ -16,7 +16,7 @@ import AppTabLandingNavbar, {
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 	const [Data, setData] = useState<Account[]>([]);
 	const [Refreshing, setRefreshing] = useState(false);
@@ -40,9 +40,9 @@ function SelectAccountStack() {
 
 	useEffect(() => {
 		refresh();
-		appSub.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
+		appEventBus.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		return () => {
-			appSub.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
+			appEventBus.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		};
 	}, [db]);
 

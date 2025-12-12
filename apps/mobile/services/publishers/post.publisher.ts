@@ -116,7 +116,8 @@ export class PostPublisherService extends EventBus {
 			this.publish(next.uuid);
 			if (loader) loader(false);
 		} catch (e) {
-			loader(false);
+			// console.log(e);
+			if (loader) loader(false);
 		}
 	}
 

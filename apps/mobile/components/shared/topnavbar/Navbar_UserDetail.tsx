@@ -13,10 +13,6 @@ type UserViewNavbarProps = {
 function Navbar_UserDetail({}: UserViewNavbarProps) {
 	const MENU_ITEMS = [
 		{
-			iconId: 'cog' as APP_ICON_ENUM,
-			onPress: () => {},
-		},
-		{
 			iconId: 'user-guide' as APP_ICON_ENUM,
 			onPress: () => {},
 		},
@@ -35,7 +31,8 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 					style={{
 						padding: appDimensions.topNavbar.padding * 2,
 						marginLeft: appDimensions.topNavbar.marginLeft,
-						backgroundColor: 'rgba(40, 40, 40, 0.56)',
+						backgroundColor: 'rgba(40, 40, 40, 0.64)',
+						borderRadius: '100%',
 					}}
 					onPress={onPressBack}
 				>
@@ -53,7 +50,8 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 						style={{
 							padding: appDimensions.topNavbar.padding * 2,
 							marginLeft: appDimensions.topNavbar.marginLeft,
-							backgroundColor: 'rgba(40, 40, 40, 0.75)',
+							backgroundColor: 'rgba(40, 40, 40, 0.64)',
+							borderRadius: '100%',
 						}}
 						onPress={onPress}
 					>

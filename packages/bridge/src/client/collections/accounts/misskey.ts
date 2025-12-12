@@ -31,14 +31,20 @@ export class MisskeyAccountsRouter implements AccountRoute {
 	async getPosts(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): Promise<Endpoints['users/notes']['res']> {
-		return this.client.client.request<
+	): PaginatedPromise<Endpoints['users/notes']['res']> {
+		const data = await this.client.client.request<
 			'users/notes',
 			Endpoints['users/notes']['req']
 		>('users/notes', {
 			...query,
 			withFiles: !!query.onlyMedia ? query.onlyMedia : undefined,
 		});
+
+		return {
+			data,
+			maxId: data.length > 0 ? data[data.length - 1].id : null,
+			minId: data.length > 0 ? data[0].id : null,
+		};
 	}
 
 	async relationships(ids: string[]): Promise<MastoRelationship[]> {

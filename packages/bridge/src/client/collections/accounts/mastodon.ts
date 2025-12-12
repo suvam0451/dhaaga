@@ -82,8 +82,15 @@ export class MastodonAccountsRouter implements AccountRoute {
 	async getPosts(
 		id: string,
 		query: AccountRouteStatusQueryDto,
-	): Promise<MastoStatus[]> {
-		return this.client.lib.v1.accounts.$select(id).statuses.list(query);
+	): PaginatedPromise<MastoStatus[]> {
+		const data = await this.client.lib.v1.accounts
+			.$select(id)
+			.statuses.list(query);
+		return {
+			data,
+			maxId: data.length > 0 ? data[data.length - 1]?.id : null,
+			minId: data.length > 0 ? data[0]?.id : null,
+		};
 	}
 
 	async get(id: string): Promise<MastoAccount> {

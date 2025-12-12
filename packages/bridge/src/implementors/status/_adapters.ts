@@ -27,6 +27,15 @@ export function ActivitypubStatusAdapter(
 		if (status?.['$type'] === 'app.bsky.feed.defs#blockedPost')
 			return null as any;
 
+		/**
+		 * has post, reply, reason objects
+		 *
+		 * // Context provided by feed generator that may be passed back alongside interactions.
+		 * feedContext
+		 */
+		if (status.$type === 'app.bsky.feed.defs#feedViewPost') {
+		}
+
 		return new AtprotoPostAdapter(
 			status?.post
 				? {

@@ -94,7 +94,7 @@ function ABS_Add_Profile_Name_Profile({
 function ABS_Add_Profile() {
 	const { db } = useAppDb();
 	const { stateId, hide } = useAppBottomSheet();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const [Data, setData] = useState<Account[]>([]);
 	const [SelectedAcct, setSelectedAcct] = useState(null);
 
@@ -119,7 +119,7 @@ function ABS_Add_Profile() {
 		if (!name) return;
 
 		ProfileService.addProfile(db, SelectedAcct, name);
-		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
+		appEventBus.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
 		hide();
 	}
 

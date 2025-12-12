@@ -9,7 +9,7 @@ import useAutoSuggestion from '#/features/composer/interactors/useAutoSuggestion
 function useComposer() {
 	const { ctx, stateId } = useAppBottomSheet();
 	const { state, dispatch } = useComposerCtx();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 	useAutoSuggestion(state, dispatch);
 
 	// set parent post (if any)
@@ -19,7 +19,7 @@ function useComposer() {
 		dispatch({
 			type: PostComposerReducerActionType.SET_PARENT,
 			payload: {
-				item: postId ? postObjectActions.read(postId) : null,
+				item: postId ? postEventBus.read(postId) : null,
 			},
 		});
 	}, [stateId]);

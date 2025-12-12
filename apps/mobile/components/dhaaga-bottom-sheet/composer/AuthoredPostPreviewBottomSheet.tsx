@@ -11,21 +11,21 @@ import { APP_FONTS } from '#/styles/AppFonts';
 
 function AuthoredPostPreviewBottomSheet() {
 	const { ctx, stateId } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 	const [Post, setPost] = useState(null);
 	const { theme } = useAppTheme();
 
 	function onUpdate({ uuid }: { uuid: string }) {
-		setPost(postObjectActions.read(uuid));
+		setPost(postEventBus.read(uuid));
 	}
 
 	useEffect(() => {
 		if (ctx.$type !== 'post-preview') return;
 		const postId = ctx.postId;
 		onUpdate({ uuid: postId });
-		postObjectActions.subscribe(postId, onUpdate);
+		postEventBus.subscribe(postId, onUpdate);
 		return () => {
-			postObjectActions.unsubscribe(postId, onUpdate);
+			postEventBus.unsubscribe(postId, onUpdate);
 		};
 	}, [stateId]);
 

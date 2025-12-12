@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext } from 'react';
 import type { PostObjectType } from '@dhaaga/bridge';
-import { useAppPublishers } from '#/states/global/hooks';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBusActions';
 
 type Type = {
 	dto: PostObjectType;
@@ -35,26 +35,12 @@ type Props = {
  * @constructor
  */
 function WithAppStatusItemContext({ children, dto }: Props) {
-	const { postObjectActions } = useAppPublishers();
-	const [Post, setPost] = useState(null);
-
-	useEffect(() => {
-		if (!dto || !postObjectActions) return;
-
-		function update({ uuid }) {
-			setPost(postObjectActions.read(uuid));
-		}
-		setPost(postObjectActions.write(dto.uuid, dto));
-		postObjectActions.subscribe(dto.uuid, update);
-		return () => {
-			postObjectActions.unsubscribe(dto.uuid, update);
-		};
-	}, [dto.uuid]);
+	const { post } = usePostEventBusStore(dto);
 
 	return (
 		<AppStatusItemContext.Provider
 			value={{
-				dto: Post,
+				dto: post,
 			}}
 		>
 			{children}

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, TextInput } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
 import { memo, useRef } from 'react';
 import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
@@ -20,26 +20,28 @@ const ComposerTextInput = memo(function Foo() {
 	}
 
 	return (
-		<ScrollView style={{ flex: 1 }} onTouchStart={onSectionTouched}>
-			<TextInput
-				ref={ref}
-				autoCapitalize={'none'}
-				multiline={true}
-				placeholder={t(`composer.quickPostCta`)}
-				placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
-				style={[
-					styles.textInput,
-					{
-						color: theme.secondary.a10,
-					},
-				]}
-				onChange={onChange}
-				onSelectionChange={onSelectionChange}
-				scrollEnabled={true}
-			>
-				{state.text}
-			</TextInput>
-		</ScrollView>
+		<Pressable style={{ flex: 1, height: '100%' }} onPress={onSectionTouched}>
+			<ScrollView style={{ flex: 1 }}>
+				<TextInput
+					ref={ref}
+					autoCapitalize={'none'}
+					multiline={true}
+					placeholder={t(`composer.quickPostCta`)}
+					placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
+					style={[
+						styles.textInput,
+						{
+							color: theme.secondary.a10,
+						},
+					]}
+					onChange={onChange}
+					onSelectionChange={onSelectionChange}
+					scrollEnabled={true}
+				>
+					{state.text}
+				</TextInput>
+			</ScrollView>
+		</Pressable>
 	);
 });
 

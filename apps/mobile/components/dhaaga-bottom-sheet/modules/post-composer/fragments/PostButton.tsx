@@ -28,7 +28,7 @@ function PostButton() {
 	const { state } = useComposerCtx();
 	const { client, driver, server } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 	const { show } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
@@ -52,7 +52,7 @@ function PostButton() {
 			 * 		to render the parent and root, as well
 			 */
 			const _newPostObject = PostParser.parse<unknown>(newPost, driver, server);
-			postObjectActions.write(_newPostObject.uuid, _newPostObject);
+			postEventBus.write(_newPostObject.uuid, _newPostObject);
 			show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true, {
 				$type: 'post-preview',
 				postId: _newPostObject.id,
@@ -105,7 +105,7 @@ function PostButton() {
 
 			if (ActivityPubService.mastodonLike(driver)) {
 				const _data = PostParser.parse(data, driver, server);
-				postObjectActions.write(_data.uuid, _data);
+				postEventBus.write(_data.uuid, _data);
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true, {
 					$type: 'post-preview',
 					postId: _data.id,
@@ -116,7 +116,7 @@ function PostButton() {
 					driver,
 					server,
 				);
-				postObjectActions.write(_data.uuid, _data);
+				postEventBus.write(_data.uuid, _data);
 				show(APP_BOTTOM_SHEET_ENUM.POST_PREVIEW, true, {
 					$type: 'post-preview',
 					postId: _data.id,

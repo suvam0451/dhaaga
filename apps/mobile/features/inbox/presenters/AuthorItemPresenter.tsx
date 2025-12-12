@@ -36,7 +36,7 @@ function AuthorItemPresenter({
 	noIcon,
 }: Props) {
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 	const { acctManager } = useAccountManager();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { toProfile } = useAppNavigator();
@@ -158,6 +158,7 @@ function AuthorItemPresenter({
 	function onAvatarPressed() {
 		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, {
 			$type: 'user-preview',
+			use: 'userId',
 			userId: user.id,
 		});
 	}

@@ -73,7 +73,6 @@ function PinnedTimelineItemView({
 				>
 					<View style={styles.tiltedIconContainer}>
 						{avatar ? (
-							// @ts-ignore-next-line
 							<Image
 								source={{ uri: avatar }}
 								style={{

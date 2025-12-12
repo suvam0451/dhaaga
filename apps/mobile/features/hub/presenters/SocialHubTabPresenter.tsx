@@ -22,7 +22,6 @@ import {
 	ProfileService,
 	ProfilePinnedUserService,
 	ProfilePinnedTagService,
-	AccountService,
 } from '@dhaaga/db';
 import UserListPresenter from './UserListPresenter';
 import TagListPresenter from './TagListPresenter';
@@ -51,9 +50,8 @@ function SocialHubTabPresenter({ profile }: Props) {
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
 	const { profiles, selectProfile } = useHub();
-	const { setCtx, show: showSheet } = useAppBottomSheet();
+	const { show: showSheet } = useAppBottomSheet();
 	const { acct } = useActiveUserSession();
-	const { restoreSession } = useAppGlobalStateActions();
 	const { t } = useTranslation([
 		LOCALIZATION_NAMESPACE.DIALOGS,
 		LOCALIZATION_NAMESPACE.CORE,

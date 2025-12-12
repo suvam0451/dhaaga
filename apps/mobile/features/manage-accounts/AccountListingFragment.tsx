@@ -126,7 +126,7 @@ export function AccountDetails({
 
 function AccountListingFragment({ acct, onListChange }: Props) {
 	const { theme } = useAppTheme();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { show, hide } = useAppDialog();
 	const { db } = useAppDb();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
@@ -192,14 +192,14 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 						url={avatar!}
 						onClicked={() => {
 							AccountService.select(db, acct);
-							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 							restoreSession();
 						}}
 					/>
 					<AccountDetails
 						onClicked={() => {
 							AccountService.select(db, acct);
-							appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+							appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 							restoreSession();
 						}}
 						selected={acct.selected as boolean}

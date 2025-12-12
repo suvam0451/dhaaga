@@ -1,13 +1,12 @@
 import { ActivityIndicator, View, Text } from 'react-native';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
-import { APP_FONT } from '../../../../styles/AppTheme';
+import { APP_FONT } from '#/styles/AppTheme';
 import WithBookmarkGalleryControllerContext, {
 	useBookmarkGalleryControllerContext,
-} from '../../../../states/useBookmarkGalleryController';
+} from '#/states/useBookmarkGalleryController';
 import BookmarkGalleryWidgetExpanded from '../../../widgets/bookmark-gallery/core/floatingWidget';
-import useScrollMoreOnPageEnd from '../../../../states/useScrollMoreOnPageEnd';
-import WithScrollOnRevealContext from '../../../../states/useScrollOnReveal';
+import WithScrollOnRevealContext from '#/states/useScrollOnReveal';
 import { memo, useEffect, useRef } from 'react';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 
 function LoadingState() {
 	return (
@@ -119,23 +118,20 @@ function PostList({ onScroll, resetPosition }: Props) {
 
 function Core() {
 	const { posts, loadMore } = useBookmarkGalleryControllerContext();
-	const { onScroll, translateY, resetPosition } = useScrollMoreOnPageEnd({
-		itemCount: posts.length,
-		loadNextPage: loadMore,
-	});
 
 	return (
-		<WithAutoHideTopNavBar title={'Bookmark Gallery'} translateY={translateY}>
+		<>
+			<NavBar_Simple label={'Bookmark Gallery'} />
 			<View
 				style={{
 					height: '100%',
 					display: 'flex',
 				}}
 			>
-				<PostList onScroll={onScroll} resetPosition={resetPosition} />
+				{/*<PostList onScroll={onScroll} resetPosition={resetPosition} />*/}
 				<BookmarkGalleryWidgetExpanded />
 			</View>
-		</WithAutoHideTopNavBar>
+		</>
 	);
 }
 

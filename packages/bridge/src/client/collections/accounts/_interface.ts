@@ -11,7 +11,7 @@ import type {
 	AppBskyActorDefs,
 	AppBskyActorGetProfile,
 	AppBskyBookmarkDefs,
-	AppBskyFeedGetAuthorFeed,
+	AppBskyFeedDefs,
 	AppBskyGraphDefs,
 } from '@atproto/api';
 import type {
@@ -99,11 +99,10 @@ export interface AccountRoute {
 	getPosts(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<
+	): PaginatedPromise<
 		| MastoStatus[]
 		| Endpoints['users/notes']['res']
-		| AppBskyFeedGetAuthorFeed.Response
-		| any[]
+		| AppBskyFeedDefs.FeedViewPost[]
 	>;
 
 	get(

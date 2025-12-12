@@ -27,13 +27,13 @@ type PostMoreOptionsButtonProps = {
  */
 export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
+	const { show } = useAppBottomSheet();
+	const { postEventBus } = useAppPublishers();
 	const { theme } = useAppTheme();
 
 	function onPress() {
 		if (ActivityPubService.misskeyLike(driver)) {
-			postObjectActions.loadBookmarkState(post?.uuid);
+			postEventBus.loadBookmarkState(post?.uuid);
 		}
 		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true, {
 			$type: 'post-id',

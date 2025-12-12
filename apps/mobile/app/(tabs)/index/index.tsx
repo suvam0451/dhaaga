@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { StatusBar, StyleProp, View, ViewStyle } from 'react-native';
-import HubPage from '#/features/social-hub/HubPage';
 import { Account } from '@dhaaga/db';
 import {
 	useActiveUserSession,
@@ -14,6 +13,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
 import { NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
 import SessionLoadingScreen from '#/features/onboarding/SessionLoadingScreen';
+import HubPage from '#/features/hub/HubPage';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',

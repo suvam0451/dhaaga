@@ -16,7 +16,7 @@ function PostActionButtonToggleBookmark() {
 	const { driver } = useAppApiClient();
 	const { dto } = withPostItemContext();
 	const { show } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 
 	// helper functions
 	async function _toggleBookmark() {
@@ -25,7 +25,7 @@ function PostActionButtonToggleBookmark() {
 			postId: dto?.id,
 		});
 		if (ActivityPubService.misskeyLike(driver)) {
-			postObjectActions.loadBookmarkState(dto?.uuid);
+			postEventBus.loadBookmarkState(dto?.uuid);
 		}
 	}
 

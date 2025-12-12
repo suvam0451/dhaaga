@@ -263,10 +263,6 @@ export class DialogBuilderService {
 			}) as string[],
 			actions: [
 				{
-					label: t(`account.moreActions.syncOption`),
-					onPress: onSync,
-				},
-				{
 					label: t(`account.moreActions.removeOption`),
 					onPress: onDeleteAttempt,
 					variant: 'destructive',

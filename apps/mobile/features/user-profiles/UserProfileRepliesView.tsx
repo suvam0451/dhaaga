@@ -47,6 +47,7 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 				id: userId,
 				label: 'N/A',
 			},
+			opts: { bskyFilter: 'posts_with_replies' },
 		}),
 	);
 	const { fetchStatus, data, status, refetch } = queryResult;

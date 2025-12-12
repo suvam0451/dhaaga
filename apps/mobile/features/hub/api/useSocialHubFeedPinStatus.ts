@@ -11,7 +11,7 @@ export function useSocialHubFeedPinStatus(
 	const { acct } = useActiveUserSession();
 
 	return useQuery<boolean>({
-		queryKey: ['hub/pin/timeline', profile.id, feed.uri],
+		queryKey: ['hub/pin/timeline', profile?.id, feed.uri],
 		queryFn: () => {
 			return ProfilePinnedTimelineService.isPinnedForProfile(
 				db,
@@ -20,6 +20,7 @@ export function useSocialHubFeedPinStatus(
 				feed.uri,
 			);
 		},
+		enabled: !!profile,
 		initialData: false,
 	});
 }

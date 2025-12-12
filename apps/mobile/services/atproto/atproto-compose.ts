@@ -1,10 +1,15 @@
 import { AtprotoApiAdapter } from '@dhaaga/bridge';
 import { MessageView } from '@atproto/api/dist/client/types/chat/bsky/convo/defs';
-import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
-import { generateFacets } from '../../utils/atproto-facets.utils';
-import { BlobRef, Facet, AppBskyRichtextFacet, Agent } from '@atproto/api';
-import { PostComposerReducerStateType } from '../../features/composer/reducers/composer.reducer';
-import MediaUtils from '../../utils/media.utils';
+import { generateFacets } from '#/utils/atproto-facets.utils';
+import {
+	BlobRef,
+	Facet,
+	AppBskyRichtextFacet,
+	Agent,
+	AppBskyFeedDefs,
+} from '@atproto/api';
+import { PostComposerReducerStateType } from '#/features/composer/reducers/composer.reducer';
+import MediaUtils from '#/utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
 import { PostInspector } from '@dhaaga/bridge';
 
@@ -33,8 +38,7 @@ export type AtprotoReplyEmbed = {
 
 class AtprotoComposerService {
 	private static async getPost(client: AtprotoApiAdapter, uri: string) {
-		const data = await client.posts.getPost(uri);
-		return data.data.thread as ThreadViewPost;
+		return client.posts.getPost(uri);
 	}
 
 	/**
@@ -48,12 +52,7 @@ class AtprotoComposerService {
 		record: AtProtoPostRecordType,
 	) {
 		const agent = client.getAgent();
-		try {
-			return await agent.post(record);
-		} catch (e) {
-			console.log('[WARN]: failed to create post:', record, e);
-			return null;
-		}
+		return await agent.post(record);
 	}
 
 	static async resolveMentions(agent: Agent, items: Facet[]) {
@@ -86,7 +85,7 @@ class AtprotoComposerService {
 	static async postUsingReducerState(
 		client: AtprotoApiAdapter,
 		state: PostComposerReducerStateType,
-	): Promise<ThreadViewPost> {
+	): Promise<AppBskyFeedDefs.PostView> {
 		const agent = client.getAgent();
 
 		let record: Partial<AppBskyFeedPost.Record> &

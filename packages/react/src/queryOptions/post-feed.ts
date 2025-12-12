@@ -178,8 +178,8 @@ export function unifiedPostFeedQueryOptions(
 			case TimelineFetchMode.USER: {
 				if (!_query || _query.userId === undefined)
 					throw new Error('missing userId');
-				const result = await client.users.getPosts(_id!, _query as any);
-				return createResultBatch(result);
+				const data = await client.users.getPosts(_id!, _query as any);
+				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.SOCIAL: {
 				const result = await client.timelines.public({

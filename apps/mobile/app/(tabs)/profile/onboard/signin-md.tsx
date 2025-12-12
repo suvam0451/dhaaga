@@ -20,7 +20,7 @@ import { HideWhileKeyboardActive } from '#/ui/Containers';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
 
@@ -52,7 +52,7 @@ function MastodonSignInStack() {
 			userData,
 		);
 		if (upsertResult) {
-			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
 			RoutingUtils.toAccountManagement();
 		}

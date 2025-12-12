@@ -52,10 +52,16 @@ function BottomMenuPresenter() {
 					selected: false,
 				},
 				{
-					label: 'Everyone',
+					label: 'Anyone',
 					variant: 'switch',
 					onPress: async () => {},
 					selected: true,
+				},
+				{
+					label: 'Your Followers',
+					variant: 'switch',
+					onPress: async () => {},
+					selected: false,
 				},
 				{
 					label: 'Nobody',
@@ -64,13 +70,13 @@ function BottomMenuPresenter() {
 					selected: false,
 				},
 				{
-					label: 'Mentioned Users',
+					label: 'People you Mention',
 					variant: 'switch',
 					onPress: async () => {},
 					selected: false,
 				},
 				{
-					label: 'Followed Users',
+					label: 'People you Follow',
 					variant: 'switch',
 					onPress: async () => {},
 					selected: false,
@@ -134,12 +140,14 @@ function BottomMenuPresenter() {
 					canUseCw={!ActivityPubService.blueskyLike(driver)}
 					canUseMedia={true}
 					canUseVideo={
-						ActivityPubService.blueskyLike(driver) &&
-						!AppService.isLiteEdition()
+						false
+						// ActivityPubService.blueskyLike(driver) &&
+						// !AppService.isLiteEdition()
 					}
 					canUseGif={
-						ActivityPubService.blueskyLike(driver) &&
-						!AppService.isLiteEdition()
+						false
+						// ActivityPubService.blueskyLike(driver) &&
+						// !AppService.isLiteEdition()
 					}
 					canUseCustomEmoji={
 						ActivityPubService.pleromaLike(driver) ||

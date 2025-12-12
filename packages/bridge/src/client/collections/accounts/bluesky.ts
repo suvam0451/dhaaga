@@ -2,8 +2,8 @@ import type {
 	AppBskyActorDefs,
 	AppBskyActorGetProfile,
 	AppBskyBookmarkDefs,
+	AppBskyFeedDefs,
 	AppBskyFeedGetActorLikes,
-	AppBskyFeedGetAuthorFeed,
 	AppBskyGraphDefs,
 	ComAtprotoIdentityResolveHandle,
 } from '@atproto/api';
@@ -182,17 +182,15 @@ class BlueskyAccountsRouter implements AccountRoute {
 	async getPosts(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<AppBskyFeedGetAuthorFeed.Response> {
+	): PaginatedPromise<AppBskyFeedDefs.FeedViewPost[]> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			return await agent.getAuthorFeed({
-				actor: id,
-				filter: params.bskyFilter,
-				limit: params.limit,
-			});
-		} catch (e: any) {
-			throw new Error(e);
-		}
+		const data = await agent.getAuthorFeed({
+			actor: id,
+			filter: params.bskyFilter,
+			limit: params.limit,
+			cursor: params.maxId === null ? undefined : params.maxId,
+		});
+		return { data: data.data.feed, maxId: data.data.cursor };
 	}
 
 	unblock(id: string): Promise<Promise<MastoRelationship>> {

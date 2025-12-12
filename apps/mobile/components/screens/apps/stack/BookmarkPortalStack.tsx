@@ -140,10 +140,10 @@ export function BookmarkSyncedPrompt() {
 				{/*	? formatRelative(new Date(), primaryAcct?.bookmarksLastSyncedAt)*/}
 				{/*	: ''}*/}
 			</Text>
-			<BookmarkGalleryAdvanced
-				IsVisible={BookmarkGallerySettingDialogVisible}
-				setIsVisible={setBookmarkGallerySettingDialogVisible}
-			/>
+			{/*<BookmarkGalleryAdvanced*/}
+			{/*	IsVisible={BookmarkGallerySettingDialogVisible}*/}
+			{/*	setIsVisible={setBookmarkGallerySettingDialogVisible}*/}
+			{/*/>*/}
 		</View>
 	);
 }

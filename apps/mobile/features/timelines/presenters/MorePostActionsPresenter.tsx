@@ -7,13 +7,14 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { AppText } from '#/components/lib/Text';
-import { AppDivider } from '#/components/lib/Divider';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { DriverService, PostInspector } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import { AppDividerSoft } from '#/ui/Divider';
+import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
+import { HapticUtils } from '#/utils/haptics';
 
 function ActionButton({
 	Icon,
@@ -48,16 +49,16 @@ function ActionButton({
 					paddingRight: 4,
 				}}
 			>
-				<AppText.Medium
+				<NativeTextMedium
 					style={{
 						color: active ? theme.primary : theme.secondary.a10,
 						fontSize: 18,
 					}}
 				>
 					{label}
-				</AppText.Medium>
+				</NativeTextMedium>
 				{desc && (
-					<AppText.Normal
+					<NativeTextNormal
 						style={{
 							color: theme.secondary.a20,
 							flexWrap: 'wrap',
@@ -65,7 +66,7 @@ function ActionButton({
 						}}
 					>
 						{desc}
-					</AppText.Normal>
+					</NativeTextNormal>
 				)}
 			</View>
 		</TouchableOpacity>
@@ -124,7 +125,9 @@ function MorePostActionsPresenter({
 					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
 					active={IS_BOOKMARKED}
 					desc={'Save this post for later'}
-					onClick={toggleBookmark}
+					onClick={() => {
+						toggleBookmark(HapticUtils.medium);
+					}}
 				/>
 			)}
 			{DriverService.canLike(driver) && (
@@ -137,8 +140,10 @@ function MorePostActionsPresenter({
 					}
 					active={IS_LIKED}
 					label={IS_LIKED ? 'Remove Like' : 'Add Like'}
-					desc={'Your likes are public'}
-					onClick={toggleLike}
+					desc={'Your likes are visible to everyone'}
+					onClick={() => {
+						toggleLike(HapticUtils.medium);
+					}}
 				/>
 			)}
 			{DriverService.canReact(driver) && (
@@ -176,7 +181,7 @@ function MorePostActionsPresenter({
 				label={'Repost'}
 				onClick={() => {}}
 			/>
-			<AppDivider.Hard
+			<AppDividerSoft
 				style={{ backgroundColor: '#323232', marginVertical: 4 }}
 			/>
 			<ActionButton
@@ -184,31 +189,20 @@ function MorePostActionsPresenter({
 					<AppIcon id={'share'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 				}
 				active={IS_SHARED}
-				label={IS_SHARED ? 'Remove Share' : 'Share'}
+				label={'Copy or Share Link'}
+				desc={'Opens the sharing sheet'}
 				onClick={() => {}}
 			/>
 
-			<AppDivider.Hard
+			<AppDividerSoft
 				style={{ backgroundColor: '#323232', marginVertical: 4 }}
 			/>
 			<ActionButton
 				Icon={
-					<AppIcon
-						id={'external-link'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
+					<AppIcon id={'browser'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A10} />
 				}
 				label={'Open in Browser'}
-				onClick={() => {}}
-			/>
-			<ActionButton
-				Icon={
-					<AppIcon
-						id={'external-link'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				}
-				label={'Open Original in Browser'}
+				desc={'View in external browser'}
 				onClick={() => {}}
 			/>
 		</Fragment>

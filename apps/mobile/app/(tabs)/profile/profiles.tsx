@@ -1,5 +1,4 @@
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { useEffect, useState } from 'react';
 import {
 	useAppBottomSheet,
@@ -28,11 +27,11 @@ type ProfileFragmentProps = {
 function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	const { theme } = useAppTheme();
 	const { show, hide } = useAppDialog();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 
 	async function _onDone() {
-		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
+		appEventBus.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
 		hide();
 	}
 	async function onUnhide() {
@@ -124,11 +123,10 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 function Page() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const [Data, setData] = useState<Account[]>([]);
-	const { translateY } = useScrollMoreOnPageEnd();
 	const { db } = useAppDb();
 	const { theme } = useAppTheme();
 	const { show, stateId } = useAppBottomSheet();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 
 	function init() {
 		setIsRefreshing(true);
@@ -142,9 +140,9 @@ function Page() {
 
 	useEffect(() => {
 		init();
-		appSub.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
+		appEventBus.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
 		return () => {
-			appSub.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
+			appEventBus.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
 		};
 	}, [stateId]);
 

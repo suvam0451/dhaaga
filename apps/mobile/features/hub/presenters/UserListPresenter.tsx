@@ -15,10 +15,10 @@ import {
 import { DialogBuilderService } from '#/services/dialog-builder.service';
 import useAppNavigator from '#/states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '#/services/driver.service';
-import * as Haptics from 'expo-haptics';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
+import { HapticUtils } from '#/utils/haptics';
 
 type Props = {
 	profile: Profile;
@@ -81,7 +81,7 @@ function UserListPresenter({
 	}
 
 	function onLongPress(item: ProfilePinnedUser) {
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+		HapticUtils.medium();
 		onLongPressUser(item);
 	}
 

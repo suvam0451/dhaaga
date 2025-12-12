@@ -17,7 +17,7 @@ function MisskeySignInStack() {
 
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 
 	const {
 		RNWebviewStateChangeCallback,
@@ -39,7 +39,7 @@ function MisskeySignInStack() {
 		);
 		if (upsertResult) {
 			Alert.alert('Account Added. Refresh if any screen feels outdated.');
-			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
 			router.replace(APP_ROUTING_ENUM.PROFILE_TAB);
 		} else {
