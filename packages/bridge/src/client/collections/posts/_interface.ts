@@ -1,7 +1,7 @@
 import {
 	AppBskyActorDefs,
 	AppBskyFeedDefs,
-	AppBskyFeedGetPostThread,
+	AppBskyUnspeccedGetPostThreadV2,
 } from '@atproto/api';
 import {
 	type MastoAccount,
@@ -22,9 +22,7 @@ import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 export interface StatusesRoute {
 	getPost(
 		id: string,
-	): Promise<
-		MastoStatus | MegaStatus | MissNote | AppBskyFeedGetPostThread.Response
-	>;
+	): Promise<MastoStatus | MegaStatus | MissNote | AppBskyFeedDefs.PostView>;
 
 	bookmark(id: string): DriverBookmarkStateResult;
 
@@ -42,7 +40,10 @@ export interface StatusesRoute {
 	getPostContext(
 		id: string,
 		limit?: number,
-	): Promise<MastoContext | MissContext | AppBskyFeedGetPostThread.Response>;
+		sort?: 'newest' | 'oldest' | 'top',
+	): Promise<
+		MastoContext | MissContext | AppBskyUnspeccedGetPostThreadV2.OutputSchema
+	>;
 
 	create(dto: DhaagaJsPostCreateDto): Promise<
 		| MastoScheduledStatus

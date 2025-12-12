@@ -2,7 +2,7 @@ import { StatusesRoute } from './_interface.js';
 import {
 	AppBskyActorDefs,
 	AppBskyFeedDefs,
-	AppBskyFeedGetPostThread,
+	AppBskyUnspeccedGetPostThreadV2,
 	AtpSessionData,
 	ChatBskyConvoGetConvo,
 	ChatBskyConvoGetConvoForMembers,
@@ -64,16 +64,19 @@ class BlueskyStatusesRouter implements StatusesRoute {
 		}
 	}
 
-	async getPost(id: string): Promise<AppBskyFeedGetPostThread.Response> {
+	async getPost(uri: string): Promise<AppBskyFeedDefs.PostView> {
 		const agent = getBskyAgent(this.dto);
 		/**
 		 * could not figure out how to resolve
 		 * repo/rkey for agent.getPost
 		 */
-		return agent.getPostThread({
-			uri: id,
-			depth: 1,
-		});
+		const data = await agent.getPostThread({ uri, depth: 0 });
+		if (data.data.thread.$type !== 'app.bsky.feed.defs#threadViewPost') {
+			throw new Error(
+				'Current version of Dhaaga is unable to handle Blocked or Missing posts :(',
+			);
+		}
+		return (data.data.thread as any).post;
 	}
 
 	async getPosts(ids: string[]): Promise<AppBskyFeedDefs.PostView[]> {
@@ -87,12 +90,16 @@ class BlueskyStatusesRouter implements StatusesRoute {
 	async getPostContext(
 		id: string,
 		limit?: number,
-	): Promise<AppBskyFeedGetPostThread.Response> {
-		const agent = getBskyAgent(this.dto);
-		return agent.getPostThread({
-			uri: id,
-			depth: limit || 10,
+		sort?: string,
+	): Promise<AppBskyUnspeccedGetPostThreadV2.OutputSchema> {
+		const agent = getXrpcAgent(this.dto);
+		const data = await agent.app.bsky.unspecced.getPostThreadV2({
+			anchor: id,
+			branchingFactor: 1,
+			below: 10,
+			sort: 'top',
 		});
+		return data.data;
 	}
 
 	async like(uri: string, cid?: string): DriverLikeStateResult {

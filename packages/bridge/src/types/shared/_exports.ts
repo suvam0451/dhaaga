@@ -17,6 +17,7 @@ export type {
 	PostMediaAttachmentType,
 	ActivityPubReactionStateType,
 	PostMentionObjectType,
+	DhaagaPostThreadInterfaceType,
 } from './post.js';
 export type { CustomEmojiObjectType } from './reactions.js';
 export type { UserObjectType } from './user.js';

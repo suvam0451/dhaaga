@@ -67,7 +67,7 @@ class Parser {
 		const { data, error, success } = appMessageObjectSchema.safeParse(exported);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
-			console.log('[INFO]: generated object', exported);
+			console.log('[INFO]: input object', input);
 			input.print();
 			return null;
 		}

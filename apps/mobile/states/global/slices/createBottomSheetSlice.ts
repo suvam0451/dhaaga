@@ -1,6 +1,7 @@
 import {
 	DriverUserFindQueryType,
 	FeedObjectType,
+	type PostLinkAttachmentObjectType,
 	RandomUtil,
 } from '@dhaaga/bridge';
 import {
@@ -21,7 +22,7 @@ export enum APP_BOTTOM_SHEET_ENUM {
 	MORE_USER_ACTIONS = 'MoreUserActions',
 	MORE_FEED_ACTIONS = 'MoreFeedActions',
 	NA = 'N/A',
-	PROFILE_PEEK = 'ProfilePeek',
+	USER_PREVIEW = 'ProfilePeek',
 	REACTION_DETAILS = 'ReactionDetails',
 	SELECT_ACCOUNT = 'SelectAccount',
 	STATUS_COMPOSER = 'StatusComposer',
@@ -63,7 +64,7 @@ type AppStateBottomSheetContextType =
 	| ({ $type: 'set-feed-options' } & PostTimelineStateType)
 	| {
 			$type: 'link-preview';
-			url: string;
+			linkAttachment: PostLinkAttachmentObjectType;
 	  }
 	| {
 			$type: 'atproto-feed-options';

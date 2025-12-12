@@ -1,21 +1,21 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import ProfileAvatar from '#/components/common/user/fragments/ProfileAvatar';
-import UserRelationPresenter from './UserRelationPresenter';
+import UserRelationPresenter from '#/features/user-profiles/presenters/UserRelationPresenter';
 import { TextContentView } from '#/components/common/status/TextContentView';
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '#/components/lib/Text';
 import {
 	useAppApiClient,
 	useAppBottomSheet,
 	useAppTheme,
 } from '#/states/global/hooks';
 import { Image } from 'expo-image';
-import ProfileStatPresenter from './ProfileStatPresenter';
+import ProfileStatPresenter from '#/features/user-profiles/presenters/ProfileStatPresenter';
 import { Skeleton } from '#/ui/Skeleton';
 import { userProfileQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 function Placeholder() {
 	return (
@@ -67,6 +67,7 @@ function Placeholder() {
 		</View>
 	);
 }
+
 /**
  * This bottom sheet will show a preview
  * of the selected user's profile.
@@ -112,6 +113,7 @@ function UserPeekSheetPresenter() {
 					followerCount={data.stats.followers}
 					followingCount={data.stats.following}
 					postCount={data.stats.posts}
+					isPreview
 				/>
 			</View>
 			<View style={styles.sectionB}>
@@ -122,7 +124,7 @@ function UserPeekSheetPresenter() {
 						mentions={[]}
 						emojiMap={data.calculated.emojis}
 					/>
-					<AppText.Medium
+					<NativeTextMedium
 						numberOfLines={1}
 						style={{
 							color: theme.secondary.a40,
@@ -131,7 +133,7 @@ function UserPeekSheetPresenter() {
 						}}
 					>
 						{data?.handle}
-					</AppText.Medium>
+					</NativeTextMedium>
 				</View>
 				<UserRelationPresenter userId={data?.id} />
 			</View>
@@ -184,15 +186,6 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		marginTop: -24,
 		marginLeft: 6,
-	},
-	relationManagerSection: {
-		flexDirection: 'row',
-		flexGrow: 1,
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		paddingHorizontal: 8,
-		marginLeft: 4,
-		marginRight: 8,
 	},
 	sectionB: {
 		flexDirection: 'row',

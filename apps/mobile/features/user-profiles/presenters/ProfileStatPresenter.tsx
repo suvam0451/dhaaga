@@ -9,6 +9,7 @@ type Props = {
 	followingCount: number;
 	followerCount: number;
 	style?: StyleProp<ViewStyle>;
+	isPreview?: boolean;
 };
 
 function ProfileStatPresenter({
@@ -17,6 +18,7 @@ function ProfileStatPresenter({
 	followingCount,
 	followerCount,
 	style,
+	isPreview,
 }: Props) {
 	const { toFollows, toFollowers, toUserPosts } = useAppNavigator();
 
@@ -25,21 +27,21 @@ function ProfileStatPresenter({
 			count: postCount,
 			label: 'Posts',
 			onPress: () => {
-				toUserPosts(acctId);
+				if (!isPreview) toUserPosts(acctId);
 			},
 		},
 		{
 			count: followingCount,
 			label: 'Following',
 			onPress: () => {
-				toFollows(acctId);
+				if (!isPreview) toFollows(acctId);
 			},
 		},
 		{
 			count: followerCount,
 			label: 'Followers',
 			onPress: () => {
-				toFollowers(acctId);
+				if (!isPreview) toFollowers(acctId);
 			},
 		},
 	];

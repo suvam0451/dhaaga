@@ -156,10 +156,10 @@ function AuthorItemPresenter({
 	}, [notificationType, extraData, acctManager]);
 
 	function onAvatarPressed() {
-		setCtx({
+		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, {
+			$type: 'user-preview',
 			userId: user.id,
 		});
-		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
 	}
 
 	function onUserPressed() {

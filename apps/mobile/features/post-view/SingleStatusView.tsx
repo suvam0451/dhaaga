@@ -103,6 +103,7 @@ function SingleStatusView({
 					style={{
 						flex: 1,
 					}}
+					post={dto}
 				/>
 				{!isPreview && <PostMoreOptionsButton post={_target} />}
 			</View>

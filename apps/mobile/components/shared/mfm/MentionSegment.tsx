@@ -46,7 +46,7 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 			// 	did: link,
 			// });
 		}
-		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
+		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true);
 	}
 
 	return (
