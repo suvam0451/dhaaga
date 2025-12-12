@@ -8,6 +8,7 @@ import {
 	DriverUserFindQueryType,
 	MisskeyApiAdapter,
 	PostParser,
+	UserParser,
 } from '@dhaaga/bridge';
 import type {
 	PostObjectType,
@@ -49,13 +50,21 @@ export function userFollowsQueryOpts(
 	userId: string,
 	maxId: string | null,
 ) {
-	async function api() {
-		return client.users.getFollowings({
+	async function api(): Promise<ResultPage<UserObjectType[]>> {
+		const data = await client.users.getFollowings({
 			id: userId,
 			limit: 15,
 			maxId,
 			allowPartial: true,
 		});
+		return {
+			...data,
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+		};
 	}
 	return queryOptions<ResultPage<UserObjectType[]>>({
 		queryKey: ['dhaaga/user/follows', client.key, userId, maxId],
@@ -70,12 +79,21 @@ export function userFollowersQueryOpts(
 	maxId: string | null,
 ) {
 	async function api() {
-		return client.users.getFollowers({
+		const data = await client.users.getFollowers({
 			id: acctId,
 			limit: 10,
 			maxId,
 			allowPartial: true,
 		});
+
+		return {
+			...data,
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+		};
 	}
 
 	return queryOptions<ResultPage<UserObjectType[]>>({
@@ -141,10 +159,7 @@ export function userGetPinnedPosts(client: ApiTargetInterface, userId: string) {
 		 */
 
 		if (ActivityPubService.misskeyLike(client.driver)) {
-			const { data, error } = await (client as MisskeyApiAdapter).users.get(
-				userId,
-			);
-			if (error) throw new Error(error.message);
+			const data = await (client as MisskeyApiAdapter).users.get(userId);
 			const _data = data as any;
 			return PostParser.parse<unknown[]>(
 				_data.pinnedNotes,

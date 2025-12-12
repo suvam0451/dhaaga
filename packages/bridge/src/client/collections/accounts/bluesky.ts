@@ -25,13 +25,12 @@ import {
 } from '../../typings.js';
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { errorBuilder } from '#/types/index.js';
-import { PaginatedPromise } from '#/types/api-response.js';
+import { ApiErrorCode, PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;

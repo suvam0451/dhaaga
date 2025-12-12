@@ -1,11 +1,10 @@
 import { TagRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import type { MastoTag } from '#/types/mastojs.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { errorBuilder } from '#/types/index.js';
-import { PaginatedPromise } from '#/types/api-response.js';
+import { ApiErrorCode, PaginatedPromise } from '#/types/api-response.js';
 
 export class MisskeyTagsRouter implements TagRoute {
 	direct: FetchWrapper;

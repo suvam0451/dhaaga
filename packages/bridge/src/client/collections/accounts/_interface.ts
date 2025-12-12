@@ -150,16 +150,12 @@ export interface AccountRoute {
 	getFollowers(
 		query: FollowerGetQueryDTO,
 	): PaginatedPromise<
-		| MastoAccount[]
-		| Endpoints['users/followers']['res']
-		| AppBskyActorDefs.ProfileView[]
+		MastoAccount[] | MissUserDetailed[] | AppBskyActorDefs.ProfileView[]
 	>;
 
 	getFollowings(
 		query: FollowerGetQueryDTO,
 	): PaginatedPromise<
-		| MastoAccount[]
-		| Endpoints['users/followers']['res']
-		| AppBskyActorDefs.ProfileView[]
+		MastoAccount[] | MissUserDetailed[] | AppBskyActorDefs.ProfileView[]
 	>;
 }

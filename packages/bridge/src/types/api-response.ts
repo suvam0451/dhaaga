@@ -1,5 +1,3 @@
-import { ApiErrorCode } from '#/types/result.types.js';
-
 type ResultPage<T> = {
 	data: T;
 	maxId?: string | null;
@@ -16,6 +14,21 @@ const defaultResultPage = {
 
 export type { ResultPage };
 export { defaultResultPage };
+
+export enum ApiErrorCode {
+	UNAUTHORIZED = 'E_UNAUTHORIZED',
+	INCOMPATIBLE_DRIVER = 'E_INCOMPATIBLE_DRIVER',
+	INSTANCE_SOFTWARE_DETECTION_FAILED = 'INSTANCE_SOFTWARE_DETECTION_FAILED',
+	DEFAULT_CLIENT = 'E_DEFAULT_CLIENT',
+	FEATURE_UNSUPPORTED = 'E_FEATURE_UNSUPPORTED',
+	UNKNOWN_ERROR = 'E_UNKNOWN_ERROR',
+	OPERATION_UNSUPPORTED = 'E_OPERATION_UNSUPPORTED',
+	REMOTE_SERVER_ERROR = 'E_REMOTE_SERVER_ERROR',
+	INVALID_INPUT = 'E_INVALID_INPUT',
+
+	// Parser
+	PARSING_FAILED = 'E_PARSING_FAILED',
+}
 
 export function errorBuilder<T>(error?: any): any {
 	return {

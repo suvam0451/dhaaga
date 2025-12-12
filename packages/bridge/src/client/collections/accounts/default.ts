@@ -128,25 +128,11 @@ export abstract class BaseAccountsRouter implements AccountRoute {
 		throw new Error('Method not implemented.');
 	}
 
-	async getFollowers(query: FollowerGetQueryDTO): Promise<
-		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-	> {
+	async getFollowers(query: FollowerGetQueryDTO): PaginatedPromise<any> {
 		throw new Error('Method not implemented.');
 	}
 
-	async getFollowings(query: FollowerGetQueryDTO): Promise<
-		| { data: MastoAccount[]; minId?: string | null; maxId?: string | null }
-		| {
-				data: Endpoints['users/followers']['res'];
-				minId?: string | null;
-				maxId?: string | null;
-		  }
-	> {
+	async getFollowings(query: FollowerGetQueryDTO): PaginatedPromise<any> {
 		throw new Error('Method not implemented.');
 	}
 }

@@ -41,7 +41,7 @@ export interface NotificationsRoute {
 		| any
 	>;
 
-	getChats(driver: KNOWN_SOFTWARE): PaginatedPromise<any>;
+	getChats(roomId: string): PaginatedPromise<any>;
 
 	getSocialUpdates(
 		query: NotificationGetQueryDto,

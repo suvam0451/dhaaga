@@ -14,10 +14,9 @@ import type {
 	MastoRelationship,
 } from '#/types/mastojs.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import { errorBuilder } from '#/types/index.js';
-import { PaginatedPromise } from '#/types/api-response.js';
+import { ApiErrorCode, PaginatedPromise } from '#/types/api-response.js';
 
 export class MisskeyAccountsRouter implements AccountRoute {
 	direct: FetchWrapper;
@@ -227,34 +226,32 @@ export class MisskeyAccountsRouter implements AccountRoute {
 
 	async getFollowers(
 		query: FollowerGetQueryDTO,
-	): PaginatedPromise<Endpoints['users/followers']['res']> {
-		try {
-			const data = await this.client.client.request('users/followers', {
-				allowPartial: true,
-				limit: query.limit,
-				userId: query.id,
-				untilId: !!query.maxId ? query.maxId : undefined,
-			});
-			return { data };
-		} catch (e: any) {
-			throw new Error(e.code ?? e);
-		}
+	): PaginatedPromise<MissUserDetailed[]> {
+		const data = await this.client.client.request('users/followers', {
+			allowPartial: true,
+			limit: query.limit,
+			userId: query.id,
+			untilId: !!query.maxId ? query.maxId : undefined,
+		});
+		return {
+			data: data.map((o) => o.follower) as unknown as MissUserDetailed[] as any,
+			maxId: data.length > 0 ? data[data.length - 1].followerId : null,
+		};
 	}
 
 	async getFollowings(
 		query: FollowerGetQueryDTO,
-	): PaginatedPromise<Endpoints['users/following']['res']> {
-		try {
-			const data = await this.client.client.request('users/following', {
-				allowPartial: true,
-				limit: query.limit,
-				userId: query.id,
-				untilId: !!query.maxId ? query.maxId : undefined,
-			});
-			return { data };
-		} catch (e: any) {
-			throw new Error(e.code ?? e);
-		}
+	): PaginatedPromise<MissUserDetailed[]> {
+		const data = await this.client.client.request('users/following', {
+			allowPartial: true,
+			limit: query.limit,
+			userId: query.id,
+			untilId: !!query.maxId ? query.maxId : undefined,
+		});
+		return {
+			data: data.map((o) => o.followee) as unknown as MissUserDetailed[] as any,
+			maxId: data.length > 0 ? data[data.length - 1].followerId : null,
+		};
 	}
 
 	async mute() {}

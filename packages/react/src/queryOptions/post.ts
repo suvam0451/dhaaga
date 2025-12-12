@@ -6,13 +6,21 @@ import {
 	PostParser,
 	ResultPage,
 	UserObjectType,
+	UserParser,
 } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
+import type { AppBskyUnspeccedGetPostThreadV2 } from '@atproto/api';
 
 export function postGetQueryOpts(client: ApiTargetInterface, postId: string) {
 	async function api(): Promise<PostObjectType> {
 		const data = await client.posts.getPost(postId);
-		return PostParser.parse<unknown>(data, client.driver, client.server!);
+		const parsed = PostParser.parse<unknown>(
+			data,
+			client.driver,
+			client.server!,
+		);
+		if (!parsed) throw new Error(`failed to parse post ${postId}`);
+		return parsed;
 	}
 
 	return queryOptions<PostObjectType>({
@@ -31,8 +39,9 @@ export function postHierarchyQueryOpts(
 
 		// handled by context solver, instead
 		if (DriverService.supportsAtProto(client.driver)) {
+			const _data = data as AppBskyUnspeccedGetPostThreadV2.OutputSchema;
 			return {
-				ancestors: data.thread
+				ancestors: _data.thread
 					.filter((o: any) => o.depth < 0)
 					.map((o: any) => ({
 						depth: o.depth,
@@ -41,7 +50,7 @@ export function postHierarchyQueryOpts(
 							client.driver,
 						),
 					})),
-				descendants: data.thread
+				descendants: _data.thread
 					.filter((o: any) => o.depth > 0)
 					.map((o: any) => ({
 						depth: o.depth,
@@ -82,7 +91,7 @@ export function postLikesQueryOpts(client: ApiTargetInterface, postId: string) {
 	async function api(): Promise<ResultPage<UserObjectType[]>> {
 		const data = await client.posts.getLikedBy(postId);
 		return {
-			data: PostParser.parse<unknown[]>(
+			data: UserParser.parse<unknown[]>(
 				data.data,
 				client.driver,
 				client.server!,
