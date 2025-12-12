@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
 import { TextContentView } from '#/components/common/status/TextContentView';
-import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
+import { useAppApiClient } from '#/states/global/hooks';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
 import { QuotedPostBorderDecorations } from '#/skins/BorderDecorations';
 
@@ -15,7 +15,6 @@ type Props = {
 function InboxItemBoostedFrom({ post }: Props) {
 	const { toPost } = useAppNavigator();
 	const { driver } = useAppApiClient();
-	const { theme } = useAppTheme();
 
 	if (!post) return <View />;
 

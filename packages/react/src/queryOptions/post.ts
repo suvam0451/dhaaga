@@ -1,27 +1,22 @@
 import {
 	ApiTargetInterface,
+	type DhaagaPostThreadInterfaceType,
 	DriverService,
-	KNOWN_SOFTWARE,
+	PostObjectType,
 	PostParser,
-	PostTargetInterface,
 	ResultPage,
 	UserObjectType,
 } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
-export function postDetailsInterfaceQueryOpts(
-	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
-	postId: string,
-) {
-	async function api(): Promise<PostTargetInterface> {
-		if (!client) throw new Error('_client not initialized');
+export function postGetQueryOpts(client: ApiTargetInterface, postId: string) {
+	async function api(): Promise<PostObjectType> {
 		const data = await client.posts.getPost(postId);
-		return PostParser.rawToInterface<unknown>(data, driver);
+		return PostParser.parse<unknown>(data, client.driver, client.server!);
 	}
 
-	return queryOptions<PostTargetInterface>({
-		queryKey: ['post/view', postId],
+	return queryOptions<PostObjectType>({
+		queryKey: ['dhaaga/post/view', postId],
 		queryFn: api,
 		enabled: client && postId !== undefined,
 	});
@@ -29,32 +24,54 @@ export function postDetailsInterfaceQueryOpts(
 
 export function postHierarchyQueryOpts(
 	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
 	postId: string,
 ) {
 	async function api() {
-		const { data, error } = await client.posts.getPostContext(postId);
-		if (error) return null;
+		const data = await client.posts.getPostContext(postId);
 
 		// handled by context solver, instead
-		if (DriverService.supportsAtProto(driver)) return data as any;
-
-		return {
-			ancestors: PostParser.rawToInterface<unknown[]>(
-				(data as any).ancestors,
-				driver,
-			),
-			descendants: PostParser.rawToInterface<unknown[]>(
-				(data as any).descendants,
-				driver,
-			),
-		};
+		if (DriverService.supportsAtProto(client.driver)) {
+			return {
+				ancestors: data.thread
+					.filter((o: any) => o.depth < 0)
+					.map((o: any) => ({
+						depth: o.depth,
+						post: PostParser.rawToInterface<unknown>(
+							o.value.post,
+							client.driver,
+						),
+					})),
+				descendants: data.thread
+					.filter((o: any) => o.depth > 0)
+					.map((o: any) => ({
+						depth: o.depth,
+						post: PostParser.rawToInterface<unknown>(
+							o.value.post,
+							client.driver,
+						),
+					})),
+			};
+		} else {
+			return {
+				ancestors: (data as any).ancestors.map((o: any) => ({
+					depth: -1,
+					post: PostParser.rawToInterface<unknown[]>(
+						(data as any).ancestors,
+						client.driver,
+					),
+				})),
+				descendants: (data as any).ancestors.map((o: any) => ({
+					depth: 1,
+					post: PostParser.rawToInterface<unknown[]>(
+						(data as any).descendants,
+						client.driver,
+					),
+				})),
+			};
+		}
 	}
 
-	return queryOptions<{
-		ancestors: PostTargetInterface[];
-		descendants: PostTargetInterface[];
-	}>({
+	return queryOptions<DhaagaPostThreadInterfaceType>({
 		queryKey: ['dhaaga/post/context', postId],
 		queryFn: api,
 		enabled: !!client && postId !== undefined,

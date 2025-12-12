@@ -1,33 +1,37 @@
 import { useState } from 'react';
-import { View } from 'react-native';
-import MediaItem from '../../../../../ui/media/MediaItem';
+import { TouchableOpacity, View } from 'react-native';
+import MediaItem from '#/ui/media/MediaItem';
 import ReplyOwner from '../components/ReplyOwner';
 import ReplyToReplyItemPresenter from './ReplyToReplyItemPresenter';
-import { useAppStatusContextDataContext } from '../../../../../hooks/api/statuses/WithAppStatusContextData';
-import { AppThemingUtil } from '../../../../../utils/theming.util';
-import { appDimensions } from '../../../../../styles/dimensions';
+import { AppThemingUtil } from '#/utils/theming.util';
+import { appDimensions } from '#/styles/dimensions';
 import {
 	ToggleMediaVisibility,
 	ToggleReplyVisibility,
-} from '../../../../../components/common/status/DetailView/_shared';
-import { MiniMoreOptionsButton } from '../../../../../components/common/status/_shared';
-import WithAppStatusItemContext from '../../../../../components/containers/contexts/WithPostItemContext';
-import { TextContentView } from '../../../../../components/common/status/TextContentView';
+} from '#/components/common/status/DetailView/_shared';
+import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import { TextContentView } from '#/components/common/status/TextContentView';
+import { usePostThreadState } from '@dhaaga/react';
+import { AppIcon } from '#/components/lib/Icon';
+import { NativeTextNormal } from '#/ui/NativeText';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 type PostReplyProps = {
-	lookupId: string;
+	postId: string;
 	colors: string[];
 };
 
-function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
-	const { data, getChildren } = useAppStatusContextDataContext();
+function Content({ postId, colors }: PostReplyProps) {
+	const data = usePostThreadState();
 	const [IsMediaShown, setIsMediaShown] = useState(false);
 	const [IsThreadShown, setIsThreadShown] = useState(false);
 
-	const dto = data.lookup.get(lookupId);
-	const children = getChildren(lookupId);
+	const dto = data.lookup.get(postId);
+	const children = (data.children.get(postId) ?? []).map((childId) =>
+		data.lookup.get(childId),
+	);
 
 	const replyCount = dto.stats.replyCount;
 	const mediaCount = dto.content.media.length;
@@ -43,14 +47,23 @@ function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 	const DEPTH_COLOR = AppThemingUtil.getThreadColorForDepth(0);
 
 	return (
-		<View
-			style={{ paddingHorizontal: 10, marginBottom: SECTION_MARGIN_BOTTOM }}
-		>
+		<View style={{ paddingHorizontal: 10 }}>
 			<WithAppStatusItemContext dto={dto}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+				<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
 					<ReplyOwner dto={dto} style={{ flex: 1 }} />
-					{/*<MiniReplyButton post={dto} />*/}
-					<MiniMoreOptionsButton post={dto} />
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							marginLeft: 32,
+						}}
+					>
+						<NativeTextNormal style={{ marginRight: 2 }}>
+							{dto.stats.likeCount}
+						</NativeTextNormal>
+						<AppIcon id={'heart'} size={16} />
+					</View>
+					{/*<MiniMoreOptionsButton post={dto} />*/}
 				</View>
 
 				<TextContentView
@@ -58,9 +71,6 @@ function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 					variant={'bodyContent'}
 					mentions={dto.calculated.mentions as any}
 					emojiMap={dto.calculated.emojis}
-					style={{
-						marginBottom: SECTION_MARGIN_BOTTOM,
-					}}
 				/>
 				{IsMediaShown && (
 					<MediaItem
@@ -69,6 +79,7 @@ function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 						style={{
 							marginBottom: SECTION_MARGIN_BOTTOM,
 						}}
+						onPress={() => {}}
 					/>
 				)}
 				<View
@@ -95,20 +106,51 @@ function ReplyItemPresenter({ lookupId, colors }: PostReplyProps) {
 			</WithAppStatusItemContext>
 			{/*	Reply Thread*/}
 			{IsThreadShown && (
-				<View>
+				<>
 					{children.map((o, i) => (
 						<ReplyToReplyItemPresenter
 							key={i}
 							colors={[...colors, DEPTH_COLOR]}
-							lookupId={o.id}
+							postId={o.id}
 							depth={1}
-							last={i === children.length - 1}
 						/>
 					))}
-				</View>
+				</>
 			)}
 		</View>
 	);
 }
 
-export default ReplyItemPresenter;
+function ReplyItem({ postId, colors }: PostReplyProps) {
+	function renderRightActions(progress, dragX) {
+		return (
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'sync-outline'} size={32} />
+				</TouchableOpacity>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'chatbox-outline'} size={32} />
+				</TouchableOpacity>
+				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
+					<AppIcon id={'heart'} size={32} />
+				</TouchableOpacity>
+			</View>
+		);
+	}
+	return (
+		<Swipeable
+			renderRightActions={renderRightActions}
+			overshootLeft={false}
+			overshootFriction={8}
+		>
+			<Content postId={postId} colors={colors} />
+		</Swipeable>
+	);
+}
+
+export default ReplyItem;

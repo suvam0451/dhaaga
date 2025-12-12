@@ -4,6 +4,7 @@ import type { mastodon } from 'masto';
 import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
+import { AppBskyFeedDefs } from '@atproto/api';
 
 export type Status = mastodon.v1.Status | Note | null | undefined;
 export type StatusArray = Status[];
@@ -50,7 +51,7 @@ interface PostTargetInterface {
 
 	getRepostedStatus(): PostTargetInterface | null | undefined;
 
-	getRepostedStatusRaw(): Status;
+	getRepostedStatusRaw(): Status | AppBskyFeedDefs.PostView;
 
 	/**
 	 * --- Post Hierarchy | BEGIN ---

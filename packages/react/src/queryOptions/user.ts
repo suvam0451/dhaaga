@@ -1,6 +1,7 @@
 import type { AppBskyFeedGetAuthorFeed } from '@atproto/api';
 import { queryOptions } from '@tanstack/react-query';
 import {
+	ActivitypubHelper,
 	ActivityPubService,
 	ApiTargetInterface,
 	AtprotoApiAdapter,
@@ -24,12 +25,23 @@ export function userProfileQueryOpts(
 	query: DriverUserFindQueryType,
 ) {
 	async function api() {
-		return unifiedUserLookup(client, query.use);
+		if (query.use === 'handle') {
+			const webfinger = ActivitypubHelper.splitHandle(
+				query.handle,
+				client.server!,
+			);
+			if (!webfinger)
+				throw new Error(
+					`failed to resolve webfinger from handle -> ${query.handle}`,
+				);
+			query = { use: 'webfinger', webfinger };
+		}
+		return unifiedUserLookup(client, query);
 	}
 	return queryOptions<UserObjectType>({
 		queryKey: [client.key, 'dhaaga/user', query],
 		queryFn: api,
-		enabled: !!client,
+		enabled: !!client && !!query,
 	});
 }
 

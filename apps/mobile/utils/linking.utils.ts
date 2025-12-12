@@ -136,13 +136,18 @@ export class LinkingUtils {
 		try {
 			const url = await LinkingUtils._generateFeedUrl(client, state);
 			if (Sharing.isAvailableAsync()) {
-				Sharing.shareAsync(url, {
-					dialogTitle: 'Share this timeline with your friends!',
+				// Sharing.shareAsync(url, {
+				// 	dialogTitle: 'Share this timeline with your friends!',
+				// });
+				await Share.share({
+					message: url,
+					url, // iOS uses this field
+					title: 'Share this timeline with your friends!',
 				});
 			} else {
 				console.log('[WARN]: sharing not available on this device');
 			}
-			LinkingUtils.openURL(url);
+			// LinkingUtils.openURL(url);
 		} catch (e) {
 			console.log(e);
 		}

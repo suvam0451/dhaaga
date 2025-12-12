@@ -13,11 +13,10 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { withPostItemContext } from '../../../containers/contexts/WithPostItemContext';
 import useAppNavigator from '#/states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
 import { TextContentView } from '../TextContentView';
-import type { AppParsedTextNodes } from '@dhaaga/bridge';
+import type { AppParsedTextNodes, PostObjectType } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import { RandomUtil, ActivityPubService } from '@dhaaga/bridge';
 import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
@@ -196,15 +195,16 @@ export function SavedPostCreatedBy({
 
 type OriginalPosterProps = {
 	style?: StyleProp<ViewStyle>;
+	// pass by reference to avoid incorrect author
+	post: PostObjectType;
 };
 
 /**
  * This is the author indicator for
  * the bottom-most post item
  */
-function PostCreatedBy({ style }: OriginalPosterProps) {
+function PostCreatedBy({ style, post: dto }: OriginalPosterProps) {
 	const { show, setCtx } = useAppBottomSheet();
-	const { dto } = withPostItemContext();
 	const STATUS_DTO = PostInspector.getContentTarget(dto);
 	const { toProfile } = useAppNavigator();
 	const { driver } = useAppApiClient();
@@ -212,16 +212,21 @@ function PostCreatedBy({ style }: OriginalPosterProps) {
 	const UserDivRef = useRef(null);
 
 	function onAvatarClicked() {
+		let ctx = null;
 		if (ActivityPubService.blueskyLike(driver)) {
-			setCtx({
+			ctx = {
+				$type: 'user-preview',
+				use: 'did',
 				did: PostInspector.getContentTarget(dto)?.postedBy?.id,
-			});
+			};
 		} else {
-			setCtx({
+			ctx = {
+				$type: 'user-preview',
+				use: 'userId',
 				userId: PostInspector.getContentTarget(dto)?.postedBy?.id,
-			});
+			};
 		}
-		show(APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK, true);
+		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, ctx);
 
 		// UserDivRef.current.measureInWindow((x, y, width, height) => {
 		// 	appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.id, {

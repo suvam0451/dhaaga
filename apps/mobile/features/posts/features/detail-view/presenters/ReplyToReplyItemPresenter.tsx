@@ -1,23 +1,20 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Fragment, useState } from 'react';
 import ReplyOwner from '../components/ReplyOwner';
-import { useAppStatusContextDataContext } from '../../../../../hooks/api/statuses/WithAppStatusContextData';
-import { AppThemingUtil } from '../../../../../utils/theming.util';
-import { appDimensions } from '../../../../../styles/dimensions';
-import { ToggleReplyVisibility } from '../../../../../components/common/status/DetailView/_shared';
-import {
-	MiniMoreOptionsButton,
-	MiniReplyButton,
-} from '../../../../../components/common/status/_shared';
-import WithAppStatusItemContext from '../../../../../components/containers/contexts/WithPostItemContext';
-import { TextContentView } from '../../../../../components/common/status/TextContentView';
-import CurvedLine from '../components/CurvedLine';
+import { AppThemingUtil } from '#/utils/theming.util';
+import { appDimensions } from '#/styles/dimensions';
+import { ToggleReplyVisibility } from '#/components/common/status/DetailView/_shared';
+import { MiniMoreOptionsButton } from '#/components/common/status/_shared';
+import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import { TextContentView } from '#/components/common/status/TextContentView';
+import { usePostThreadState } from '@dhaaga/react';
+import { NativeTextNormal } from '#/ui/NativeText';
+import { AppIcon } from '#/components/lib/Icon';
 
 type PostReplyToReplyProps = {
 	colors: string[];
-	lookupId: string;
+	postId: string;
 	depth: number;
-	last: boolean;
 };
 
 type PostReplyToReplyContentProps = {
@@ -30,7 +27,7 @@ type PostReplyToReplyContentProps = {
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
-const INDICATOR_LINE_SPACING = 10;
+const INDICATOR_LINE_SPACING = 4;
 
 function PostReplyToReplyContent({
 	lookupId,
@@ -38,7 +35,7 @@ function PostReplyToReplyContent({
 	setIsReplyThreadVisible,
 	style,
 }: PostReplyToReplyContentProps) {
-	const { data } = useAppStatusContextDataContext();
+	const data = usePostThreadState();
 
 	const dto = data.lookup.get(lookupId);
 
@@ -50,21 +47,30 @@ function PostReplyToReplyContent({
 	}
 
 	return (
-		<View
-			style={[
-				{
-					width: '100%',
-					paddingTop: 8,
-					paddingHorizontal: 8,
-				},
-				style,
-			]}
-		>
+		<View style={[{ flex: 1 }, style]}>
 			<WithAppStatusItemContext dto={dto}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'flex-start',
+						flex: 1,
+					}}
+				>
 					<ReplyOwner dto={dto} style={{ flex: 1 }} />
-					<MiniReplyButton post={dto} />
-					<MiniMoreOptionsButton post={dto} />
+					{/*<MiniMoreOptionsButton post={dto} />*/}
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							marginLeft: 32,
+							flexShrink: 1,
+						}}
+					>
+						<NativeTextNormal style={{ marginRight: 2 }}>
+							{dto.stats.likeCount}
+						</NativeTextNormal>
+						<AppIcon id={'heart'} size={16} />
+					</View>
 				</View>
 				{/* Some magical numbers to get rid of overflow */}
 				<TextContentView
@@ -90,17 +96,25 @@ function PostReplyToReplyContent({
 
 function ReplyToReplyItemPresenter({
 	colors,
-	lookupId,
+	postId,
 	depth,
-	last,
 }: PostReplyToReplyProps) {
-	const { getChildren } = useAppStatusContextDataContext();
-	const children = getChildren(lookupId);
+	const data = usePostThreadState();
+	const children = (data.children.get(postId) ?? []).map((childId) =>
+		data.lookup.get(childId),
+	);
 	const [IsReplyThreadVisible, setIsReplyThreadVisible] = useState(false);
 	const depthIndicator = AppThemingUtil.getThreadColorForDepth(depth + 1);
 	return (
-		<Fragment>
-			<View style={[styles.container]}>
+		<>
+			<View
+				style={[
+					styles.container,
+					{
+						paddingLeft: depth * 4 + 8,
+					},
+				]}
+			>
 				{colors.map((o, i) => (
 					<View
 						key={i}
@@ -108,46 +122,32 @@ function ReplyToReplyItemPresenter({
 							styles.contextLine,
 							{
 								backgroundColor: o,
-								height:
-									i === colors.length - 1 && last && !IsReplyThreadVisible
-										? 4
-										: '100%',
+								left: i * 4,
 							},
 						]}
 					/>
 				))}
-				<View
-					style={{
-						position: 'absolute',
-						left: (colors.length - 1) * (INDICATOR_LINE_SPACING + 2),
-						zIndex: -1,
-					}}
-				>
-					<CurvedLine color={colors[colors.length - 1]} />
-				</View>
-
 				<PostReplyToReplyContent
 					color={depthIndicator}
-					lookupId={lookupId}
+					lookupId={postId}
 					IsReplyThreadVisible={IsReplyThreadVisible}
 					setIsReplyThreadVisible={setIsReplyThreadVisible}
-					style={{ marginLeft: -INDICATOR_LINE_SPACING }}
+					style={{ paddingTop: 8 }}
 				/>
 			</View>
 			{IsReplyThreadVisible && (
-				<View>
+				<>
 					{children.map((o, i) => (
 						<ReplyToReplyItemPresenter
 							key={i}
 							colors={[...colors, depthIndicator]}
-							lookupId={o.id}
-							depth={1}
-							last={i === children.length - 1}
+							postId={o.id}
+							depth={depth + 1}
 						/>
 					))}
-				</View>
+				</>
 			)}
-		</Fragment>
+		</>
 	);
 }
 
@@ -155,14 +155,15 @@ export default ReplyToReplyItemPresenter;
 
 const styles = StyleSheet.create({
 	container: {
-		display: 'flex',
 		flexDirection: 'row',
+		// marginLeft: 6,
+		flex: 1,
+		position: 'relative',
 		width: '100%',
-		marginLeft: 6,
 	},
 	contextLine: {
 		height: '100%',
+		position: 'absolute',
 		width: 2,
-		marginRight: INDICATOR_LINE_SPACING,
 	},
 });

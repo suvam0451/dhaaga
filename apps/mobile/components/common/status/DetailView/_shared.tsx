@@ -33,11 +33,11 @@ export function ToggleReplyVisibility({
 
 	return (
 		<Pressable style={[styles.actionButton, style]} onPress={onPress}>
-			<View style={{ width: 24 }}>
+			<View style={{ width: 16, marginRight: 4 }}>
 				{expanded ? (
-					<FontAwesome6 name="square-minus" size={20} color={EXPANDED_COLOR} />
+					<FontAwesome6 name="square-minus" size={16} color={EXPANDED_COLOR} />
 				) : (
-					<FontAwesome6 name="plus-square" size={20} color={COLLAPSED_COLOR} />
+					<FontAwesome6 name="plus-square" size={16} color={COLLAPSED_COLOR} />
 				)}
 			</View>
 			<AppText.Medium
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingHorizontal: 8,
 		marginLeft: -10,
-		paddingVertical: 6,
+		paddingBottom: 6,
 		borderRadius: 8,
 	},
 });

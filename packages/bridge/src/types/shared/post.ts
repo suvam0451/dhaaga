@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { postLinkAttachmentObjectSchema } from '#/types/shared/link-attachments.js';
+import { PostTargetInterface } from '#/implementors/index.js';
 
 const ActivityPubReactionStateSchema = z.array(
 	z.object({
@@ -164,6 +165,17 @@ const mentionObjectSchema = z.object({
 
 type PostMentionObjectType = z.infer<typeof mentionObjectSchema>;
 
+type DhaagaPostThreadInterfaceType = {
+	ancestors: {
+		id: string;
+		depth: number;
+		post: PostTargetInterface;
+	}[];
+	descendants: { id: string; depth: number; post: PostTargetInterface }[];
+	rootInterface?: { id: string; depth: number; post: PostTargetInterface };
+	rootObject?: PostObjectType;
+};
+
 export { postObjectSchema };
 export type {
 	PostRootObjectType,
@@ -173,4 +185,5 @@ export type {
 	PostMediaAttachmentType,
 	ActivityPubReactionStateType,
 	PostMentionObjectType,
+	DhaagaPostThreadInterfaceType,
 };

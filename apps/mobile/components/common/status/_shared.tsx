@@ -35,8 +35,10 @@ export function PostMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 		if (ActivityPubService.misskeyLike(driver)) {
 			postObjectActions.loadBookmarkState(post?.uuid);
 		}
-		setCtx({ uuid: post.uuid });
-		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
+		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true, {
+			$type: 'post-id',
+			postId: post.uuid,
+		});
 	}
 
 	return (
@@ -74,13 +76,12 @@ type SavedPostMoreOptionsButtonProps = {
 export function SavedPostMoreOptionsButton({
 	post,
 }: SavedPostMoreOptionsButtonProps) {
-	const { driver } = useAppApiClient();
-	const { show, setCtx } = useAppBottomSheet();
-	const { postObjectActions } = useAppPublishers();
-
+	const { show } = useAppBottomSheet();
 	function onPress() {
-		setCtx({ $type: 'post-id', postId: post.uuid });
-		// show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true);
+		show(APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS, true, {
+			$type: 'post-id',
+			postId: post.uuid,
+		});
 	}
 
 	return (
@@ -133,7 +134,7 @@ export function MiniMoreOptionsButton({ post }: PostMoreOptionsButtonProps) {
 				<AppIcon
 					id={'more-options-vertical'}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-					size={20}
+					size={16}
 					onPress={onPress}
 				/>
 			</View>
@@ -194,7 +195,6 @@ const styles = StyleSheet.create({
 		paddingTop: 4,
 	},
 	statusMoreOptionsButton: {
-		height: '100%',
 		paddingTop: 4,
 		paddingLeft: 4,
 	},

@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated';
 import useBottomSheetHeight from '#/hooks/anim/useBottomSheetHeight';
 import WithComposerContext from '#/features/composer/contexts/useComposerCtx';
 import ComposerPresenter from '#/features/composer/presenters/ComposerPresenter';
-import UserPeekSheetPresenter from '#/features/user-profiles/presenters/UserPeekSheetPresenter';
+import UserPeekSheetPresenter from '#/components/dhaaga-bottom-sheet/preview/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from '../modules/AppBottomSheetPostMoreActions';
 import ABS_Select_Account from '../modules/ABS_Select_Account';
 import ThemeSelectBottomSheet from '../modules/ThemeSelectBottomSheet';
@@ -80,7 +80,7 @@ function Factory() {
 					<ComposerPresenter />
 				</WithComposerContext>
 			);
-		case APP_BOTTOM_SHEET_ENUM.PROFILE_PEEK:
+		case APP_BOTTOM_SHEET_ENUM.USER_PREVIEW:
 			return <UserPeekSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
 			return <AppBottomSheetPostMoreActions />;

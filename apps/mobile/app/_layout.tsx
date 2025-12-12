@@ -21,7 +21,11 @@ import polyfills from '#/utils/polyfills';
 import '../i18n/_loader';
 import 'fast-text-encoding';
 import { useNativeKeyboardAnimation } from '#/hooks/useNativeKeyboardAnimation'; // needed by atproto
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, {
+	configureReanimatedLogger,
+	ReanimatedLogLevel,
+	useAnimatedStyle,
+} from 'react-native-reanimated';
 
 enableMapSet();
 polyfills();
@@ -31,7 +35,6 @@ polyfills();
  */
 const IGNORED_LOGS = [
 	'Found screens with the same name nested inside one another',
-	"[Reanimated] Reading from `value` during component render. Please ensure that you don't access the `value` property nor use `get` method of a shared value while React is rendering a component.",
 	'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
 	'Text strings must be rendered within a <Text> component.',
 	"[Error: Call to function 'ExpoImage.loadAsync' has been rejected.\n" +
@@ -39,6 +42,12 @@ const IGNORED_LOGS = [
 ];
 LogBox.ignoreLogs(IGNORED_LOGS);
 LogBox.ignoreAllLogs(true);
+
+// This is the default configuration
+configureReanimatedLogger({
+	level: ReanimatedLogLevel.warn,
+	strict: false, // Reanimated runs in strict mode by default
+});
 
 function App() {
 	const { theme } = useAppTheme();

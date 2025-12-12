@@ -9,16 +9,39 @@ import { NativeTextSemiBold } from '#/ui/NativeText';
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 export function QuotedPostBorderDecorations({ children }: { children: any }) {
-	const { theme } = useAppTheme();
+	const { theme, skin } = useAppTheme();
+	if (skin === 'winter')
+		return (
+			<View>
+				<View style={styles.container}>
+					<AppIcon id={'quote'} size={14} color={theme.complementary} />
+					<NativeTextSemiBold
+						style={{
+							color: theme.complementary,
+							marginLeft: 4,
+						}}
+					>
+						Quoted this Post
+					</NativeTextSemiBold>
+				</View>
+				<View style={styles.inner}>
+					<View>
+						<ChristmasMistleToe
+							style={{
+								position: 'absolute',
+								right: -16,
+								top: -10,
+								transform: [{ rotate: '145deg' }],
+							}}
+						/>
+					</View>
+					{children}
+				</View>
+			</View>
+		);
 	return (
 		<View>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginBottom: SECTION_MARGIN_BOTTOM,
-				}}
-			>
+			<View style={styles.container}>
 				<AppIcon id={'quote'} size={14} color={theme.complementary} />
 				<NativeTextSemiBold
 					style={{
@@ -29,17 +52,15 @@ export function QuotedPostBorderDecorations({ children }: { children: any }) {
 					Quoted this Post
 				</NativeTextSemiBold>
 			</View>
-			<View style={styles.inner}>
-				<View>
-					<ChristmasMistleToe
-						style={{
-							position: 'absolute',
-							right: -16,
-							top: -10,
-							transform: [{ rotate: '145deg' }],
-						}}
-					/>
-				</View>
+			<View
+				style={[
+					styles.inner,
+					{
+						borderColor: theme.complementary,
+						borderWidth: 2.5,
+					},
+				]}
+			>
 				{children}
 			</View>
 		</View>
@@ -47,16 +68,39 @@ export function QuotedPostBorderDecorations({ children }: { children: any }) {
 }
 
 export function AttachedLinkBorderDecorations({ children }: { children: any }) {
-	const { theme } = useAppTheme();
+	const { theme, skin } = useAppTheme();
+	if (skin === 'winter')
+		return (
+			<View>
+				<View style={styles.container}>
+					<AppIcon id={'quote'} size={14} color={theme.complementary} />
+					<NativeTextSemiBold
+						style={{
+							color: theme.complementary,
+							marginLeft: 4,
+						}}
+					>
+						Shared this Link
+					</NativeTextSemiBold>
+				</View>
+				<View style={styles.inner}>
+					<ChristmasMistleToe
+						style={{
+							position: 'absolute',
+							right: -4,
+							top: '100%',
+							marginTop: -36,
+							transform: [{ rotate: '-135deg' }],
+						}}
+					/>
+					{children}
+				</View>
+			</View>
+		);
+
 	return (
 		<View>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginBottom: SECTION_MARGIN_BOTTOM,
-				}}
-			>
+			<View style={styles.container}>
 				<AppIcon id={'quote'} size={14} color={theme.complementary} />
 				<NativeTextSemiBold
 					style={{
@@ -67,17 +111,15 @@ export function AttachedLinkBorderDecorations({ children }: { children: any }) {
 					Shared this Link
 				</NativeTextSemiBold>
 			</View>
-			<View style={styles.inner}>
-				<View>
-					<ChristmasMistleToe
-						style={{
-							position: 'absolute',
-							right: -2,
-							top: 2,
-							transform: [{ rotate: '145deg' }],
-						}}
-					/>
-				</View>
+			<View
+				style={[
+					styles.inner,
+					{
+						borderColor: theme.complementary,
+						borderWidth: 2.5,
+					},
+				]}
+			>
 				{children}
 			</View>
 		</View>
@@ -85,6 +127,11 @@ export function AttachedLinkBorderDecorations({ children }: { children: any }) {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: SECTION_MARGIN_BOTTOM,
+	},
 	inner: {
 		paddingHorizontal: 10,
 		paddingVertical: 4,
@@ -93,5 +140,6 @@ const styles = StyleSheet.create({
 		borderColor: '#0d7a00',
 		borderStyle: 'dashed',
 		marginBottom: SECTION_MARGIN_BOTTOM,
+		position: 'relative',
 	},
 });

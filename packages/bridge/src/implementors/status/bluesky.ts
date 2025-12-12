@@ -7,7 +7,12 @@ import {
 	EmbedViewProcessor_Video,
 	LinkEmbedProcessor_External,
 } from '../media-attachment/bluesky.js';
-import { AppBskyRichtextFacet } from '@atproto/api';
+import {
+	AppBskyEmbedRecord,
+	AppBskyEmbedRecordWithMedia,
+	AppBskyFeedDefs,
+	AppBskyRichtextFacet,
+} from '@atproto/api';
 import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
 
 type BlueskyRichTextFacet = {
@@ -27,7 +32,7 @@ type BlueskyRichTextFacet = {
 };
 
 class AtprotoPostAdapter implements PostTargetInterface {
-	post: any; // PostView;
+	post: AppBskyFeedDefs.PostView; // PostView;
 	reply: any; // ReplyRef
 	reason: any; // ReasonRepost
 
@@ -58,11 +63,11 @@ class AtprotoPostAdapter implements PostTargetInterface {
 	getViewer = () => this.post.viewer;
 
 	hasQuoteAvailable(): boolean {
-		return this.post.embed && this.isQuote();
+		return this.isQuote();
 	}
 
 	getQuoteRaw(): null | undefined {
-		return this.post.embed!.record;
+		return (this.post.embed as any)!.record;
 	}
 
 	getRaw = () => this.post;
@@ -99,46 +104,43 @@ class AtprotoPostAdapter implements PostTargetInterface {
 			});
 		} else if (this.isQuote()) {
 			if (this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view') {
+				const _embed = this.post.embed as AppBskyEmbedRecordWithMedia.View;
 				return new AtprotoPostAdapter({
-					post: (this.post.embed as any)?.record?.record as any,
+					post: _embed.record.record,
 					reason: null as any,
 					reply: null as any,
 				});
 			} else {
 				return new AtprotoPostAdapter({
-					post: this.post.embed?.record as any,
+					post: (this.post.embed as any)?.record,
 					reason: null as any,
 					reply: null as any,
 				});
 			}
 		}
-		// if (this.reason.reply) {
-		// 	// TODO: type checking required
-		// 	// typeof this.parent === PostView
-		// 	return new BlueskyStatusAdapter(this.parent);
-		// }
 		return null;
 	}
 
-	getRepostedStatusRaw() {
+	getRepostedStatusRaw(): any {
 		if (this.isShare()) {
 			/**
-			 * by stripping reason/reply, we avoid recursive call
-			 *
-			 * DOWNSIDES: reply is not shown for reposted object
+			 * by returning only the post-record
+			 * and stripping reason/reply records,
+			 * we avoid calling this function recursively
 			 */
-			const { post, ...rest } = this;
-			// strip repost/reply information
-			return { post } as any;
+			return { post: this.post };
 		}
 		if (this.isQuote()) {
-			switch ((this.post.embed as any)?.$type) {
+			switch (this.post.embed!.$type) {
 				case 'app.bsky.embed.recordWithMedia#view': {
+					const _embed = this.post.embed as AppBskyEmbedRecordWithMedia.View;
+
 					// also has record?.media object
-					return { post: (this.post.embed?.record as any)?.record } as any;
+					return { post: _embed.record.record };
 				}
 				case 'app.bsky.embed.record#view': {
-					return { post: this.post.embed?.record } as any;
+					const _embed = this.post.embed as AppBskyEmbedRecord.View;
+					return { post: _embed.record };
 				}
 				default:
 					return null;
@@ -163,7 +165,10 @@ class AtprotoPostAdapter implements PostTargetInterface {
 		if (this.isShare()) return null;
 
 		// TODO: handle quotes
-		return (this.post?.record as any)?.text || (this.post?.value as any)?.text;
+		return (
+			(this.post?.record as any)?.text ||
+			((this.post as any)?.value as any)?.text
+		);
 	}
 
 	getFacets() {
@@ -180,8 +185,9 @@ class AtprotoPostAdapter implements PostTargetInterface {
 	}
 
 	isQuote = () =>
-		this.post.embed?.$type === 'app.bsky.embed.record#view' ||
-		this.post.embed?.$type === 'app.bsky.embed.recordWithMedia#view';
+		this.post.embed !== undefined &&
+		(this.post.embed.$type === 'app.bsky.embed.record#view' ||
+			this.post.embed.$type === 'app.bsky.embed.recordWithMedia#view');
 	isShare = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 
 	isReposted = () => this.isShare() || this.isQuote();
@@ -247,28 +253,28 @@ class AtprotoPostAdapter implements PostTargetInterface {
 			}
 		}
 
-		if (this.post.$type === 'app.bsky.embed.record#viewRecord') {
-			// this handles an original post attached to a quote post
-			const embeds = this.post.embeds as any;
-
-			if (embeds && Array.isArray(embeds)) {
-				const attachments = [];
-
-				for (const embed of embeds) {
-					if (EmbedViewProcessor_ImagesView.isCompatible(embed))
-						attachments.push(...EmbedViewProcessor_ImagesView.compile(embed));
-
-					if (EmbedViewProcessor_Video.isCompatible(embed))
-						attachments.push(...EmbedViewProcessor_Video.compile(embed));
-				}
-				return attachments;
-			}
-		} else if (
-			// FIXME: how to extract images for quote posts
-			(this.reason as any)?.$type === 'app.bsky.feed.defs#reasonRepost'
-		) {
-			return [];
-		}
+		// if (this.post.$type === 'app.bsky.embed.record#viewRecord') {
+		// 	// this handles an original post attached to a quote post
+		// 	const embeds = this.post.embeds as any;
+		//
+		// 	if (embeds && Array.isArray(embeds)) {
+		// 		const attachments = [];
+		//
+		// 		for (const embed of embeds) {
+		// 			if (EmbedViewProcessor_ImagesView.isCompatible(embed))
+		// 				attachments.push(...EmbedViewProcessor_ImagesView.compile(embed));
+		//
+		// 			if (EmbedViewProcessor_Video.isCompatible(embed))
+		// 				attachments.push(...EmbedViewProcessor_Video.compile(embed));
+		// 		}
+		// 		return attachments;
+		// 	}
+		// } else if (
+		// 	// FIXME: how to extract images for quote posts
+		// 	(this.reason as any)?.$type === 'app.bsky.feed.defs#reasonRepost'
+		// ) {
+		// 	return [];
+		// }
 
 		return [];
 	}
@@ -323,7 +329,7 @@ class AtprotoPostAdapter implements PostTargetInterface {
 	isReply = () => !!this.reply;
 
 	getParentStatusId(): string | null | undefined {
-		return null;
+		return (this.post.record as any).reply?.parent?.uri ?? null;
 	}
 
 	getUserIdParentStatusUserId(): string | null | undefined {
