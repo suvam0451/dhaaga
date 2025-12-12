@@ -13,9 +13,10 @@ import PostTimelineEntryView from '../../post-item/PostTimelineEntryView';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/states/global/hooks';
-import { PostSearchStateIndicator } from '#/features/search/components/StateIndicators';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import Animated from 'react-native-reanimated';
+import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
+import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 
 type ResultInteractorProps = {
 	onDataLoaded: (isEmpty: boolean) => void;
@@ -106,9 +107,12 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
 				}
 				ListEmptyComponent={
-					<PostSearchStateIndicator
+					<TimelineQueryStatusIndicator
+						numItems={TimelineState.items.length}
+						renderSkeleton={() => (
+							<PostSkeleton containerHeight={ContainerHeight} />
+						)}
 						queryResult={queryResult}
-						containerHeight={ContainerHeight}
 					/>
 				}
 			/>

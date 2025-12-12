@@ -1,77 +1,77 @@
-import type { UserObjectType } from '@dhaaga/bridge';
-import { SimpleTimelineProps } from '#/components/timelines/shared';
+import { AppTimelineRendererProps } from '#/components/timelines/shared';
 import { useAppTheme } from '#/states/global/hooks';
-import {
-	UserTimelineStateAction,
-	useUserTimelineDispatch,
-	useUserTimelineState,
-} from '@dhaaga/core';
+import { useUserTimelineState } from '@dhaaga/core';
 import { useEffect, useState } from 'react';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { FlatList, RefreshControl } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
-import UserListItemView from '#/features/timelines/view/UserListItemView';
+import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
+import PostSkeleton from '#/ui/skeletons/PostSkeleton';
+import { AppDividerSoft } from '#/ui/Divider';
+import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 
-function SimpleUserTimeline({
-	timelineLabel,
+function AppTimeline({
+	items,
+	label,
 	queryResult,
 	skipTimelineInit,
-}: SimpleTimelineProps<UserObjectType[]>) {
+	fnLoadNextPage,
+	fnLoadMore,
+	fnReset,
+	renderItem,
+	feedSwitcherEnabled,
+}: AppTimelineRendererProps) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
 	const State = useUserTimelineState();
-	const dispatch = useUserTimelineDispatch();
 
 	useEffect(() => {
 		if (skipTimelineInit) return;
-		dispatch({
-			type: UserTimelineStateAction.RESET,
-		});
+		fnReset();
 	}, []);
 
 	const { fetchStatus, data, status, refetch } = queryResult;
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || status !== 'success') return;
-		dispatch({
-			type: UserTimelineStateAction.APPEND,
-			payload: data,
-		});
+		fnLoadNextPage(data);
 	}, [fetchStatus]);
 
 	function onRefresh() {
 		setIsRefreshing(true);
-		dispatch({
-			type: UserTimelineStateAction.RESET,
-		});
+		fnReset();
 		refetch().finally(() => setIsRefreshing(false));
-	}
-
-	function loadMore() {
-		dispatch({
-			type: UserTimelineStateAction.REQUEST_LOAD_MORE,
-		});
 	}
 
 	function onEndReached() {
 		if (State.items.length > 0 && fetchStatus !== 'fetching') {
-			loadMore();
+			fnLoadMore();
 		}
 	}
 
 	const { scrollHandler, animatedStyle } =
 		useScrollHandleFlatList(onEndReached);
 
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
 	/**
 	 * NOTE: AT proto does not return a detailed view
 	 */
 	return (
 		<>
-			<NavBar_Simple label={timelineLabel} animatedStyle={animatedStyle} />
+			{feedSwitcherEnabled ? (
+				<NavBar_Feed animatedStyle={animatedStyle} />
+			) : (
+				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+			)}
 			<FlatList
-				data={State.items}
-				renderItem={({ item }) => <UserListItemView item={item} />}
+				onLayout={onLayout}
+				data={items}
+				renderItem={renderItem}
 				onScroll={scrollHandler}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
@@ -81,9 +81,21 @@ function SimpleUserTimeline({
 					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
 				}
 				style={{ backgroundColor: theme.background.a0 }}
+				ListEmptyComponent={
+					<TimelineQueryStatusIndicator
+						queryResult={queryResult}
+						numItems={items.length}
+						renderSkeleton={() => (
+							<PostSkeleton containerHeight={ContainerHeight} />
+						)}
+					/>
+				}
+				ItemSeparatorComponent={() => (
+					<AppDividerSoft style={{ marginVertical: 10 }} />
+				)}
 			/>
 		</>
 	);
 }
 
-export default SimpleUserTimeline;
+export default AppTimeline;

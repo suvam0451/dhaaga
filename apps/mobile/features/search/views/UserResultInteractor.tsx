@@ -7,8 +7,8 @@ import {
 	useUserTimelineState,
 } from '@dhaaga/core';
 import { FlatList, RefreshControl, View } from 'react-native';
-import { TimelineLoadingIndicator } from '../../../ui/LoadingIndicator';
-import UserListItemView from '#/features/timelines/view/UserListItemView';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
+import UserListItemDetailedView from '#/features/timelines/view/UserListItemDetailedView';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type ResultInteractorProps = {
@@ -81,7 +81,7 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		>
 			<FlatList
 				data={TimelineState.items}
-				renderItem={({ item }) => <UserListItemView item={item} />}
+				renderItem={({ item }) => <UserListItemDetailedView item={item} />}
 				onScroll={scrollHandler}
 				scrollEventThrottle={16}
 				refreshControl={

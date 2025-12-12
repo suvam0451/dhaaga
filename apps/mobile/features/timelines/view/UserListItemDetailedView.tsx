@@ -58,7 +58,7 @@ type Props = {
 	item: UserObjectType;
 };
 
-function UserListItemView({ item }: Props) {
+function UserListItemDetailedView({ item }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -153,7 +153,7 @@ function UserListItemViewBsky(props: Props) {}
 /**
  * exclude banner and stats
  */
-export default UserListItemView;
+export default UserListItemDetailedView;
 
 const styles = StyleSheet.create({
 	userResultContainer: {

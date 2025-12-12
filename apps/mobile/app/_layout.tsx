@@ -96,7 +96,7 @@ function App() {
 					backgroundColor={theme.background.a0}
 					translucent={true}
 				/>
-				<View style={{ flex: 1 }}>
+				<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
 					<Stack
 						initialRouteName={'(tabs)'}
 						screenOptions={{
@@ -128,14 +128,14 @@ export default function Page() {
 		<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
 			{/* API Caching -- Tanstack */}
 			<QueryClientProvider client={queryClient}>
-				{/* Asset Loader */}
-				<WithAppAssetsContext>
-					<GestureHandlerRootView>
-						<KeyboardProvider>
+				<GestureHandlerRootView>
+					<KeyboardProvider>
+						{/* Asset Loader */}
+						<WithAppAssetsContext>
 							<App />
-						</KeyboardProvider>
-					</GestureHandlerRootView>
-				</WithAppAssetsContext>
+						</WithAppAssetsContext>
+					</KeyboardProvider>
+				</GestureHandlerRootView>
 			</QueryClientProvider>
 		</SQLiteProvider>
 	);

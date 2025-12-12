@@ -50,7 +50,6 @@ export function AccountPfp({ url, selected, onClicked }: AccountPfpProps) {
 			}}
 			onPress={onClicked}
 		>
-			{/*@ts-ignore-next-line*/}
 			<Image
 				style={styles.image}
 				source={{ uri: url }}
@@ -98,7 +97,7 @@ export function AccountDetails({
 				}}
 				numberOfLines={1}
 			>
-				{displayName || ' '}
+				{displayName ? displayName : ' '}
 			</Text>
 			<Text
 				style={{
