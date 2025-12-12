@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import ShareIndicator from '../../components/common/status/fragments/ShareIndicator';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import SingleStatusView from '../post-view/SingleStatusView';
 import { ReplyIndicator } from '../../components/common/status/ListView/_shared';
 import ParentPost from '../../components/common/status/fragments/ParentPost';

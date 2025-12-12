@@ -11,7 +11,7 @@ type Props = {
 };
 
 /**
- * Container for the AI prompt output
+ * Container for the translation output
  * @param text
  * @param fromLang
  * @param toLang

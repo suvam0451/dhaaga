@@ -8,7 +8,7 @@ import {
 } from '@dhaaga/core';
 import { useEffect, useState } from 'react';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { appDimensions } from '#/styles/dimensions';

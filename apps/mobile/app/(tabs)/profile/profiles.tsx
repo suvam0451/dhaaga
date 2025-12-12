@@ -9,7 +9,6 @@ import {
 } from '#/states/global/hooks';
 import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppAccountSelectionItem } from '#/components/common/app/Account';
@@ -18,6 +17,11 @@ import { DialogFactory } from '#/utils/dialog-factory';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import {
+	NativeTextMedium,
+	NativeTextNormal,
+	NativeTextSemiBold,
+} from '#/ui/NativeText';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -97,7 +101,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 							containerStyle={{ marginRight: 8 }}
 						/>
 					)}
-					<AppText.Medium
+					<NativeTextMedium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						style={{
 							fontSize: 16,
@@ -106,7 +110,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 						}}
 					>
 						{profile.name}
-					</AppText.Medium>
+					</NativeTextMedium>
 					<AppIcon
 						id={'ellipsis-v'}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
@@ -170,18 +174,18 @@ function Page() {
 						marginVertical: 20,
 					}}
 				>
-					<AppText.Medium
+					<NativeTextMedium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{ fontSize: 16, textAlign: 'center' }}
 					>
 						Add, remove and order your profiles.
-					</AppText.Medium>
-					<AppText.Normal
+					</NativeTextMedium>
+					<NativeTextNormal
 						style={{ textAlign: 'center' }}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 					>
 						Requires an app restart to be reflected in the hub.
-					</AppText.Normal>
+					</NativeTextNormal>
 				</View>
 
 				{Data.map((acct, i) => (
@@ -204,11 +208,11 @@ function Page() {
 							alignSelf: 'center',
 						}}
 					>
-						<AppText.SemiBold
+						<NativeTextSemiBold
 							style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
 						>
 							Add Profile
-						</AppText.SemiBold>
+						</NativeTextSemiBold>
 					</View>
 				</Pressable>
 			</ScrollView>

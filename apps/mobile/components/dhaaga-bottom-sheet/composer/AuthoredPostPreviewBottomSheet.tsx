@@ -5,7 +5,7 @@ import {
 } from '#/states/global/hooks';
 import { useEffect, useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
-import WithAppStatusItemContext from '../../containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '../../containers/WithPostItemContext';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { APP_FONTS } from '#/styles/AppFonts';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AppToggleIcon } from '../../../../lib/Icon';
-import { withPostItemContext } from '../../../../containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '../../../../containers/WithPostItemContext';
 import { useAppPublishers, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import { Pressable } from 'react-native';

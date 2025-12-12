@@ -4,7 +4,7 @@ import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppTheme } from '#/states/global/hooks';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { appDimensions } from '#/styles/dimensions';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import Animated from 'react-native-reanimated';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';

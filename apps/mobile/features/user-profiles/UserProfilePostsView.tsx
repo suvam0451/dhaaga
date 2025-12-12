@@ -9,7 +9,7 @@ import {
 	usePostTimelineState,
 } from '@dhaaga/core';
 import { ScrollHandlerProcessed, SharedValue } from 'react-native-reanimated';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { StyleProp, ViewStyle } from 'react-native';

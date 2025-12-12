@@ -10,7 +10,7 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import { AppToggleIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
 import { ActivityPubService, PostInspector } from '@dhaaga/bridge';

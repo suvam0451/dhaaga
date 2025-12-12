@@ -8,7 +8,7 @@ import {
 } from '@dhaaga/core';
 import { RefreshControl, View } from 'react-native';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import PostTimelineEntryView from '../../post-item/PostTimelineEntryView';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';

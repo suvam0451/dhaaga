@@ -1,5 +1,4 @@
 import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
-import WithAutoHideTopNavBar from '../../../containers/WithAutoHideTopNavBar';
 import { AppButtonVariantA } from '../../../lib/Buttons';
 import { memo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
@@ -9,8 +8,8 @@ import { router } from 'expo-router';
 import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
 } from '../../../hooks/tasks/useSyncWithProgress';
-import BookmarkGalleryAdvanced from '../../../dialogs/BookmarkGalleryAdvanced';
 import { APP_FONTS } from '#/styles/AppFonts';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 
 export function BookmarkNeverSyncedPrompt() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(
@@ -157,7 +156,8 @@ const BookmarkPortalStack = memo(() => {
 	// 	: null;
 
 	return (
-		<WithAutoHideTopNavBar title={'Bookmark Viewer'}>
+		<>
+			<NavBar_Simple label={'Bookmark Viewer'} />
 			<View style={style.sectionContainer}>
 				<Text style={style.texStyle}>
 					Bookmark Gallery
@@ -184,7 +184,7 @@ const BookmarkPortalStack = memo(() => {
 					loading={false}
 				/>
 			</View>
-		</WithAutoHideTopNavBar>
+		</>
 	);
 });
 
