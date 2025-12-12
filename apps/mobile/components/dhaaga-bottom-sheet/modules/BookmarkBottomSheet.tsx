@@ -1,5 +1,8 @@
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import {
+	usePostEventBusActions,
+	usePostEventBusStore,
+} from '#/hooks/pubsub/usePostEventBusActions';
 import { FlatList, View } from 'react-native';
 import AssignmentSheetBookmarkView from '#/features/collections/views/AssignmentSheetBookmarkView';
 import { PostMiddleware } from '#/services/middlewares/post.middleware';
@@ -16,9 +19,9 @@ function BookmarkBottomSheet() {
 	const { ctx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
-	const { post, toggleBookmark } = usePostEventBusActions(
-		ctx.$type === 'post-id' ? ctx.postId : null,
-	);
+	const postId = ctx.$type === 'post-id' ? ctx.postId : null;
+	const { post } = usePostEventBusStore(postId);
+	const { toggleBookmark } = usePostEventBusActions(postId);
 	const { data, toggle, onRequestAddNewCollection } = useDbAddPostToCollection(
 		PostMiddleware.getContentTarget(post)?.id,
 	);

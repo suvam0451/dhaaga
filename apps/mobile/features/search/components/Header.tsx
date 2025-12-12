@@ -50,6 +50,9 @@ function Header() {
 			},
 		}));
 
+		/**
+		 * Explore tab is default for all drivers
+		 */
 		return [
 			{
 				id: 'explore',

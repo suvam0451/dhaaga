@@ -13,8 +13,8 @@ import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppAccountSelectionItem } from '#/components/common/app/Account';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
+import { DialogFactory } from '#/utils/dialog-factory';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
@@ -47,7 +47,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	}
 
 	async function onRemove() {
-		show(DialogBuilderService.confirmProfileDeletion(onRemoveConfirm));
+		show(DialogFactory.confirmProfileDeletion(onRemoveConfirm));
 	}
 
 	async function onMoveDown() {}
@@ -59,7 +59,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 
 	function onPressProfileMoreOptions() {
 		show(
-			DialogBuilderService.profileActions(0, 10, !profile.visible, {
+			DialogFactory.profileActions(0, 10, !profile.visible, {
 				onUnhide,
 				onMoveUp,
 				onRemove,
@@ -70,7 +70,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	}
 
 	function onDefaultProfileIndicatorPressed() {
-		show(DialogBuilderService.defaultProfileIndication());
+		show(DialogFactory.defaultProfileIndication());
 	}
 
 	return (

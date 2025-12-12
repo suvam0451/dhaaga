@@ -56,8 +56,9 @@ export class BaseStorageManager {
 		try {
 			const parsed = JSON.parse(saved);
 			const { success, error, data } = savedObjectWithExpiry.safeParse(parsed);
+			console.log('zod results', success, error, data.updatedAt, invalidAfter);
 			if (error) return null;
-			if (data.updatedAt < invalidAfter) return null;
+			if (new Date(data.updatedAt) < new Date(invalidAfter)) return null;
 			return data.value;
 		} catch (e) {
 			return null;

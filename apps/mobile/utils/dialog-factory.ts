@@ -19,10 +19,10 @@ type ActionType = {
  * to any of these functions. it disables the
  * loader animation
  */
-export class DialogBuilderService {
+export class DialogFactory {
 	/**
 	 * Indicate to the user that their focused profile
-	 * is a protected one
+	 * is protected
 	 */
 	static defaultProfileIndication(): AppDialogInstanceState {
 		return {

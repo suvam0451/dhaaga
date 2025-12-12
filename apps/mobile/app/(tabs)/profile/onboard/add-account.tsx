@@ -27,7 +27,7 @@ import AccountDbService from '#/services/db/account-db.service';
 import { BackHandler } from 'react-native';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import RoutingUtils from '#/utils/routing.utils';
 
 function AtProto() {

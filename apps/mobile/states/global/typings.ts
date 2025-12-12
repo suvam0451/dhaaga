@@ -1,5 +1,5 @@
-import { PostPublisherService } from '#/services/publishers/post.publisher';
-import { AppPublisherService } from '#/services/publishers/app.publisher';
+import { PostPublisherService } from '#/states/event-bus/post.publisher';
+import { AppPublisherService } from '#/states/event-bus/app.publisher';
 import { Profile } from '@dhaaga/db';
 import {
 	AppStateUserSessionActions,

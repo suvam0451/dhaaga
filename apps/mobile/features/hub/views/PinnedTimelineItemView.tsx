@@ -8,7 +8,7 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import useAppNavigator from '#/states/useAppNavigator';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { DialogFactory } from '#/utils/dialog-factory';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { appDimensions } from '#/styles/dimensions';
@@ -45,7 +45,7 @@ function PinnedTimelineItemView({
 	function onPress() {
 		if (account.id !== acct.id) {
 			show(
-				DialogBuilderService.toSwitchActiveAccount(() => {
+				DialogFactory.toSwitchActiveAccount(() => {
 					AccountService.select(db, account);
 					restoreSession().then(() => {
 						hide();

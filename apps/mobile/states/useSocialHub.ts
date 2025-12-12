@@ -7,7 +7,7 @@ import {
 } from '@dhaaga/db';
 import { produce } from 'immer';
 import { useAppDb, useAppPublishers } from './global/hooks';
-import { APP_EVENT_ENUM } from '../services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 
 enum REDUCER_ACTION {
 	INIT = 'init',

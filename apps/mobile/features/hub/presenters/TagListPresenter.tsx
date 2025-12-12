@@ -2,7 +2,7 @@ import { Account, ProfilePinnedTag, AccountService } from '@dhaaga/db';
 import { StyleSheet, View } from 'react-native';
 import PinnedTagView from '../views/PinnedTagView';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { DialogFactory } from '#/utils/dialog-factory';
 import {
 	useActiveUserSession,
 	useAppDb,
@@ -36,7 +36,7 @@ function TagListPresenter({
 	function onPress(item: ProfilePinnedTag) {
 		if (parentAcct.id !== acct.id) {
 			show(
-				DialogBuilderService.toSwitchActiveAccount(() => {
+				DialogFactory.toSwitchActiveAccount(() => {
 					AccountService.select(db, parentAcct);
 					try {
 						restoreSession().then(() => {

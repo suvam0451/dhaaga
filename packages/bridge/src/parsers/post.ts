@@ -14,6 +14,7 @@ import {
 	postObjectSchema,
 	PostObjectType,
 } from '#/types/shared/post.js';
+import { PostMiddleware } from '@dhaaga/mobile/services/middlewares/post.middleware.js';
 
 /**
  * The Parser class provides a set of static methods to handle tasks such as
@@ -311,6 +312,11 @@ class Inspector {
 	static isShared(input: PostObjectType) {
 		if (!input) return false;
 		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
+	}
+
+	static isBookmarked(input: PostObjectType) {
+		const _target = PostMiddleware.getContentTarget(input);
+		return _target.interaction.bookmarked;
 	}
 }
 

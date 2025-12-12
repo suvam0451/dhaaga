@@ -15,7 +15,7 @@ import PostVisibilityView from '../views/PostVisibilityView';
 import useAppVisibility, {
 	APP_POST_VISIBILITY,
 } from '#/hooks/app/useVisibility';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { DialogFactory } from '#/utils/dialog-factory';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
@@ -86,9 +86,7 @@ function BottomMenuPresenter() {
 	}
 
 	function handleVisibilityUpdate() {
-		show(
-			DialogBuilderService.changePostVisibility_ActivityPub(t, setVisibility),
-		);
+		show(DialogFactory.changePostVisibility_ActivityPub(t, setVisibility));
 	}
 
 	function showVisibilityMenu() {

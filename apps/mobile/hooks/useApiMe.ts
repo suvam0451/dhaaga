@@ -23,11 +23,11 @@ function useApiMe() {
 		queryFn: async () => {
 			const data = await client.me.getMe();
 			const _value = UserParser.parse(data, driver, server);
-			if (acctManager) acctManager.storage.setProfile(acct?.uuid, _value);
+			if (acctManager) acctManager.storage.setMyUserData(acct?.id, _value);
 			return _value;
 		},
 		enabled: !!client && !!acct,
-		initialData: acctManager?.storage?.getProfile(acct?.uuid)?.value,
+		initialData: acctManager?.storage?.getMyUserData(acct?.id),
 	});
 }
 

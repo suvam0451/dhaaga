@@ -84,9 +84,11 @@ function Page() {
 	const { session } = useAppActiveSession();
 	const [SearchTerm, setSearchTerm] = useState(null);
 	const childRef = useRef(null);
+	const { acctManager } = useActiveUserSession();
 
 	function onSearch() {
 		childRef.current?.onSearch(SearchTerm);
+		acctManager;
 	}
 
 	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;

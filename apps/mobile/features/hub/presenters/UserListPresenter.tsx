@@ -12,7 +12,7 @@ import {
 	useAppDialog,
 	useAppGlobalStateActions,
 } from '#/states/global/hooks';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { DialogFactory } from '#/utils/dialog-factory';
 import useAppNavigator from '#/states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '#/services/driver.service';
 import HubTabSectionContainer from '../components/HubTabSectionContainer';
@@ -44,7 +44,7 @@ function UserListPresenter({
 	function onPress(item: ProfilePinnedUser) {
 		if (parentAcct.id !== acct.id) {
 			show(
-				DialogBuilderService.toSwitchActiveAccount(() => {
+				DialogFactory.toSwitchActiveAccount(() => {
 					AccountService.select(db, parentAcct);
 					try {
 						restoreSession().then(() => {

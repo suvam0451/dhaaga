@@ -21,8 +21,8 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { DialogFactory } from '#/utils/dialog-factory';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
@@ -134,12 +134,12 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 
 	function onMoreActions() {
 		show(
-			DialogBuilderService.appAccountMoreActions(
+			DialogFactory.appAccountMoreActions(
 				t,
 				async () => {},
 				async () => {
 					show(
-						DialogBuilderService.deleteAccountConfirm(t, async () => {
+						DialogFactory.deleteAccountConfirm(t, async () => {
 							AccountService.removeById(db, acct.id);
 							restoreSession();
 							hide();

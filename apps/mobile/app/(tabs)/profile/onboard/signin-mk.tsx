@@ -1,13 +1,13 @@
 import { Alert } from 'react-native';
 import { useMiauthLogin } from '@dhaaga/react';
 import { router, useLocalSearchParams } from 'expo-router';
-import TitleOnlyNoScrollContainer from '#/components/containers/TitleOnlyNoScrollContainer';
 import AccountConfirmationPopup from '#/features/onboarding/AccountConfirmationPopup';
 import AccountDbService from '#/services/db/account-db.service';
 import { useAppDb, useAppPublishers, useHub } from '#/states/global/hooks';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { AppAuthWebView } from '#/components/lib/WebView';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 
 function MisskeySignInStack() {
 	const params = useLocalSearchParams();
@@ -47,7 +47,8 @@ function MisskeySignInStack() {
 	}
 
 	return (
-		<TitleOnlyNoScrollContainer headerTitle={`Misskey Sign-In`}>
+		<>
+			<NavBar_Simple label={'Misskey Sign-In'} />
 			<AppAuthWebView
 				uri={_signInUrl}
 				isBlurred={completed}
@@ -63,7 +64,7 @@ function MisskeySignInStack() {
 					}
 				/>
 			)}
-		</TitleOnlyNoScrollContainer>
+		</>
 	);
 }
 
