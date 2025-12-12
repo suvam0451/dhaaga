@@ -39,7 +39,7 @@
 		"react-dom": "19.1.0"
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20251211.1",
+		"@typescript/native-preview": "^7.0.0-dev.20251212.1",
 		"prettier": "^3.7.4"
 	},
 	"type": "module"

@@ -1,18 +1,16 @@
 import { Props, styles } from './_common';
 import { View } from 'react-native';
-import { DriverNotificationType } from '@dhaaga/bridge';
-import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
-import { AppDivider } from '../../../components/lib/Divider';
+import { DriverNotificationType, PostInspector } from '@dhaaga/bridge';
+import { NotificationPostPeek } from '#/components/screens/notifications/landing/fragments/NotificationPostPeek';
 import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
-import ShareIndicator from '../../../components/common/status/fragments/ShareIndicator';
-import { PostMiddleware } from '../../../services/middlewares/post.middleware';
+import ShareIndicator from '#/components/common/status/fragments/ShareIndicator';
 
 function StatusAlertNotificationFragment({ item }: Props) {
 	const post = item.post;
 
 	const IS_BOOST = post.meta.isBoost;
 
-	const target = PostMiddleware.getContentTarget(post);
+	const target = PostInspector.getContentTarget(post);
 
 	const user = target.postedBy;
 

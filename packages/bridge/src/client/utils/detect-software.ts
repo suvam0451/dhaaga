@@ -52,7 +52,7 @@ async function getInstanceSoftware(
 	const controllerA = new AbortController();
 	const controllerB = new AbortController();
 	const timeoutA = setTimeout(() => controllerA.abort(), 5000);
-	let timeoutB: NodeJS.Timeout | null = null;
+	let timeoutB: any = null;
 
 	try {
 		const result = await fetch(
