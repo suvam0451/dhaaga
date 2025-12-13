@@ -1,4 +1,3 @@
-import { ApiTargetInterface } from '@dhaaga/bridge';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { fetch } from 'expo/fetch';
 import { File } from 'expo-file-system';
@@ -7,19 +6,6 @@ import { File } from 'expo-file-system';
  * Wrapper service to invoke provider functions
  */
 class ActivityPubProviderService {
-	static async getStatusContext(client: ApiTargetInterface, id: string) {
-		return client.posts.getPostContext(id);
-	}
-
-	static async getStatus(client: ApiTargetInterface, id: string) {
-		return client.posts.getPost(id);
-	}
-
-	static async getStatusAsArray(client: ApiTargetInterface, id: string) {
-		const status = await client.posts.getPost(id);
-		return [status];
-	}
-
 	static async uploadFile(
 		subdomain: string,
 		fileUri: string,

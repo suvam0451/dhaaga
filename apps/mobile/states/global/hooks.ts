@@ -131,9 +131,9 @@ export function useHub() {
 export function useAppPublishers() {
 	return useGlobalState(
 		useShallow((o) => ({
-			postObjectActions: o.userSession.postEventBus,
-			userPub: o.userSession.userEventBug,
-			appSub: o.appSession.appEventBus,
+			postEventBus: o.userSession.postEventBus,
+			userEventBus: o.userSession.userEventBug,
+			appEventBus: o.appSession.appEventBus,
 		})),
 	);
 }

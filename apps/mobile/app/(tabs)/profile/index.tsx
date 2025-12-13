@@ -1,13 +1,13 @@
 import { AppPagerView } from '#/ui/PagerView';
 import { useAppTheme } from '#/states/global/hooks';
-import AccountHome from '#/features/home/AccountHome';
+import MyHome from '#/features/home/MyHome';
 import AccountManagement from '#/features/manage-accounts/AccountManagement';
 import AppSettings from '#/features/settings/AppSettings';
 
 const renderScene = (index: number) => {
 	switch (index) {
 		case 0:
-			return <AccountHome />;
+			return <MyHome />;
 		case 1:
 			return <AccountManagement />;
 		case 2:

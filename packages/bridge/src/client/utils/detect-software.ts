@@ -1,5 +1,5 @@
-import { ApiErrorCode } from '#/types/result.types.js';
 import { BaseUrlNormalizationService } from '#/utils/urls.js';
+import { ApiErrorCode } from '#/types/api-response.js';
 
 const NODEINFO_10 = 'http://nodeinfo.diaspora.software/ns/schema/1.0';
 const NODEINFO_20 = 'http://nodeinfo.diaspora.software/ns/schema/2.0';
@@ -52,7 +52,7 @@ async function getInstanceSoftware(
 	const controllerA = new AbortController();
 	const controllerB = new AbortController();
 	const timeoutA = setTimeout(() => controllerA.abort(), 5000);
-	let timeoutB: NodeJS.Timeout | null = null;
+	let timeoutB: any = null;
 
 	try {
 		const result = await fetch(

@@ -4,7 +4,7 @@
 		"target": "ESNext",
 		"module": "NodeNext",
 		"jsx": "react-jsx",
-		"moduleResolution": "NodeNext",
+		"moduleResolution": "nodenext",
 		"verbatimModuleSyntax": false,
 		"moduleDetection": "force",
 		"esModuleInterop": true,

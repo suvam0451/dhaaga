@@ -7,7 +7,7 @@ import {
 } from '@dhaaga/db';
 import { produce } from 'immer';
 import { useAppDb, useAppPublishers } from './global/hooks';
-import { APP_EVENT_ENUM } from '../services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 
 enum REDUCER_ACTION {
 	INIT = 'init',
@@ -53,7 +53,7 @@ function useSocialHub() {
 	});
 	const [IsLoading, setIsLoading] = useState(false);
 	const { db } = useAppDb();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 
 	function refresh() {
 		if (!db) return;
@@ -70,12 +70,10 @@ function useSocialHub() {
 	}
 
 	useEffect(() => {
-		appSub.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
-		// appSub.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, refresh);
+		appEventBus.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		refresh();
 		return () => {
-			appSub.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
-			// appSub.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, refresh);
+			appEventBus.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		};
 	}, [db]);
 

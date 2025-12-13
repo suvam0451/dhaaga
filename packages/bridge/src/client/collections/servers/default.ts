@@ -4,7 +4,6 @@ import {
 	MastoAccountCredentials,
 	MastoTranslation,
 } from '#/types/mastojs.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import {
 	MastoJsWrapper,
 	MegalodonGoToSocialWrapper,
@@ -14,6 +13,7 @@ import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { identifyBackendSoftware } from '#/client/utils/detect-software.js';
 import { errorBuilder } from '#/types/index.js';
 import { CustomEmojiObjectType } from '#/types/shared/reactions.js';
+import { ApiErrorCode } from '#/types/api-response.js';
 
 type WelKnownNodeinfo = {
 	links: {

@@ -6,66 +6,43 @@ import { EmojiDto } from '#/components/common/status/fragments/_shared.types';
 
 /**
  * Helps perform updates on a post
- * stored on the event bus. Also,
- * manages subscription and unsubscription.
+ * stored on the event bus. Any UI
+ * components subscribed to that post-object using
+ * usePostEventBusStore will receive an update
  *
- * @param input pass the object directly for
- * timeline listings and use uuid for bottom
- * sheets, dialogs and such.
+ * @param input id of the post on the bus
  */
-export function usePostEventBusActions(input: string | PostObjectType) {
-	const { postObjectActions } = useAppPublishers();
-	const [Post, setPost] = useState<PostObjectType>(
-		postObjectActions.read(typeof input === 'string' ? input : null),
-	);
-
-	/**
-	 * Subscribe to updates on the post object
-	 * via the event bus.
-	 */
-	useEffect(() => {
-		const uuid = typeof input === 'string' ? input : input?.uuid;
-		if (!uuid) return;
-
-		function update({ uuid }: { uuid: string }) {
-			setPost(postObjectActions.read(uuid));
-		}
-		update({ uuid });
-		postObjectActions.subscribe(uuid, update);
-		return () => {
-			postObjectActions.unsubscribe(uuid, update);
-		};
-	}, [input]);
+export function usePostEventBusActions(input: string) {
+	const { postEventBus } = useAppPublishers();
 
 	function toggleBookmark(loader?: (flag: boolean) => void) {
-		postObjectActions.toggleBookmark(Post?.uuid, loader);
+		postEventBus.toggleBookmark(input, loader);
 	}
 
 	function toggleLike(loader?: (flag: boolean) => void) {
-		postObjectActions.toggleLike(Post?.uuid, loader);
+		postEventBus.toggleLike(input, loader);
 	}
 
 	function loadBookmarkState(loader?: (flag: boolean) => void) {
-		postObjectActions.loadBookmarkState(Post?.uuid, loader);
+		postEventBus.loadBookmarkState(input, loader);
 	}
 
 	function toggleShare(loader?: (flag: boolean) => void) {
-		postObjectActions.toggleShare(Post?.uuid, loader);
+		postEventBus.toggleShare(input, loader);
 	}
 
 	function addReaction(reaction: Emoji, loader?: (flag: boolean) => void) {
-		postObjectActions.addReaction(Post?.uuid, reaction, loader);
+		postEventBus.addReaction(input, reaction, loader);
 	}
 
 	function toggleReaction(
 		reaction: EmojiDto,
 		loader?: (flag: boolean) => void,
 	) {
-		postObjectActions.toggleReaction(Post?.uuid, reaction, loader);
+		postEventBus.toggleReaction(input, reaction, loader);
 	}
 
 	return {
-		post: Post,
 		toggleBookmark,
 		toggleLike,
 		loadBookmarkState,
@@ -73,4 +50,47 @@ export function usePostEventBusActions(input: string | PostObjectType) {
 		toggleReaction,
 		addReaction,
 	};
+}
+
+/**
+ * Registers and deregisters a post-object
+ * on the event bus.
+ *
+ * NOTE: Only use this hook once per context or
+ * isolated UI element, as it creates
+ * copies of the post in memory (useState)
+ *
+ * @param input
+ */
+export function usePostEventBusStore(input: string | PostObjectType) {
+	const { postEventBus } = useAppPublishers();
+	const [Post, setPost] = useState<PostObjectType>(
+		postEventBus.read(typeof input === 'string' ? input : null),
+	);
+
+	/**
+	 * Subscribe to updates on the post-object
+	 * via the event bus.
+	 */
+	useEffect(() => {
+		if (!input) return;
+		const uuid = typeof input === 'string' ? input : input?.uuid;
+		if (!uuid) return;
+
+		function update({ uuid }: { uuid: string }) {
+			setPost(postEventBus.read(uuid));
+		}
+
+		if (typeof input !== 'string') {
+			setPost(postEventBus.write(uuid, input));
+		} else {
+			update({ uuid });
+		}
+		postEventBus.subscribe(uuid, update);
+		return () => {
+			postEventBus.unsubscribe(uuid, update);
+		};
+	}, [input]);
+
+	return { post: Post };
 }

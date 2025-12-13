@@ -3,18 +3,32 @@ import {
 	Account,
 	KnownServer,
 	KnownServerService,
+	AccountService,
+	ProfileService,
+	AccountMetadataService,
+	ACCOUNT_METADATA_KEY,
 } from '@dhaaga/db';
 import { BaseStorageManager } from './_shared';
 import {
 	ActivityPubReactionsService,
 	ActivityPubReactionStateType,
+	ApiTargetInterface,
 	BaseApiAdapter,
+	DriverService,
 	KNOWN_SOFTWARE,
+	UserParser,
 } from '@dhaaga/bridge';
+import type { AtpSessionData } from '@atproto/api';
 import type { UserObjectType, CustomEmojiObjectType } from '@dhaaga/bridge';
+import { SearchHistoryItemType } from '#/states/sessions/app-session.service';
+import { BskyPreferences } from '@atproto/api';
+import { AtProtoAuthService } from '@dhaaga/bridge/auth';
+import AccountMetadataDbService from '#/services/db/account-metadata-db.service';
 
 enum KEY {
-	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/account/:uuid',
+	APP_ACCOUNT_USER_OBJECT_CACHE = 'app/_cache/acct/:id/me',
+	SEARCH_RESULTS_TARGET = 'app/_cache/acct/:id/searchHistory',
+	ATPROTO_USER_PREFERENCES = 'app/_cache/acct/:id/atProtoUserPreferences',
 }
 
 class Storage extends BaseStorageManager {
@@ -32,16 +46,66 @@ class Storage extends BaseStorageManager {
 		});
 	}
 
-	getProfile(acctUuid: string) {
-		return this.getJson<{
-			updatedAt: string;
-			value: UserObjectType;
-		}>(KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid));
+	/**
+	 * Search history
+	 */
+
+	setSearchHistory(acct: Account, value: SearchHistoryItemType[]) {
+		if (value.length > 50) {
+			return this.setJson(
+				KEY.SEARCH_RESULTS_TARGET.toString().replace('id', acct.id.toString()),
+				value.slice(0, 50),
+			);
+		}
 	}
 
-	setProfile(acctUuid: string, data: UserObjectType) {
+	getSearchHistory(acct: Account): SearchHistoryItemType[] {
+		return (
+			this.getJson<SearchHistoryItemType[]>(
+				KEY.SEARCH_RESULTS_TARGET.toString().replace(':id', acct.id.toString()),
+			) ?? []
+		);
+	}
+
+	setAtProtoUserPreferences(acct: Account, value: BskyPreferences) {
+		return this.setJson(
+			KEY.ATPROTO_USER_PREFERENCES.toString().replace(
+				':id',
+				acct.id.toString(),
+			),
+			value,
+		);
+	}
+
+	getAtProtoUserPreferences(acct: Account): BskyPreferences | null {
+		return this.getJson<BskyPreferences>(
+			KEY.ATPROTO_USER_PREFERENCES.toString().replace(
+				':id',
+				acct.id.toString(),
+			),
+		);
+	}
+
+	getMyUserData(acctId: number) {
+		// 6h expiry
+		const sixHoursBefore = new Date();
+		sixHoursBefore.setHours(sixHoursBefore.getHours() - 6);
+
+		return this.getJsonWithExpiry<UserObjectType>(
+			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(
+				':id',
+				acctId.toString(),
+			),
+			sixHoursBefore,
+		);
+	}
+
+	setMyUserData(acctId: number, data: UserObjectType) {
 		this.setJsonWithExpiry(
-			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(':uuid', acctUuid),
+			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(
+				':id',
+				acctId.toString(),
+			),
 			data,
 		);
 	}
@@ -213,6 +277,80 @@ class AccountSessionManager {
 			}
 		}
 		return KnownServerService.getByUrl(this.db, server);
+	}
+
+	/**
+	 * load the app session for a given account
+	 * record on the database
+	 * @param db
+	 */
+	async restoreAppSession(db: DataSource): Promise<{
+		acct: Account;
+		client: ApiTargetInterface;
+		me: UserObjectType;
+	}> {
+		const acct = AccountService.getSelected(db);
+		ProfileService.getActiveProfile(db, acct);
+
+		let payload:
+			| { instance: string; token: string }
+			| (AtpSessionData & { subdomain: string; pdsUrl: string })
+			| null = null;
+
+		// Bluesky is built different
+		if (acct.driver === KNOWN_SOFTWARE.BLUESKY) {
+			let session = AccountMetadataDbService.getAtProtoSession(db, acct);
+			if (!session) {
+				console.log('[WARN]: no session found for account', acct);
+				throw new Error(
+					`no session found for account ${acct.username}@${acct.server}`,
+				);
+			}
+
+			const resumeResult = await AtProtoAuthService.resumeSession(session);
+			if (resumeResult === null)
+				throw new Error('failed to resume atproto session!');
+
+			const _sess: AtpSessionData = resumeResult.nextSession;
+			const _pdsUrl = resumeResult.pdsUrl;
+
+			// save the updated session object
+			AccountMetadataDbService.setAtProtoSession(db, acct, _sess);
+
+			payload = {
+				..._sess,
+				subdomain: acct.server,
+				pdsUrl: _pdsUrl,
+			};
+		} else {
+			const token = AccountMetadataService.getKeyValueForAccountSync(
+				db,
+				acct,
+				ACCOUNT_METADATA_KEY.ACCESS_TOKEN,
+			);
+
+			payload = {
+				instance: acct.server,
+				token: token!,
+			};
+		}
+		const client = DriverService.generateApiClient(acct.driver, acct.server, {
+			...payload,
+			clientId: acct.id,
+		});
+
+		let cachedMe = this.storage.getMyUserData(acct.id);
+		if (!cachedMe) {
+			console.log('[INFO]: cached user data missing/outdated. re-fetching...');
+			const meObject = await client.me.getMe();
+			console.log(meObject);
+			cachedMe = UserParser.parse(meObject, acct.driver, acct.server);
+			this.storage.setMyUserData(acct.id, cachedMe);
+		} else {
+			console.log('[INFO]: using cached user data.');
+		}
+
+		return { acct, client, me: cachedMe };
 	}
 }
 

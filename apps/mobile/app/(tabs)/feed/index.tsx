@@ -12,7 +12,7 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
@@ -105,8 +105,8 @@ function Content() {
 
 	if (State.feedType === TimelineFetchMode.IDLE) return <TimelineIdle />;
 	return (
-		<SimplePostTimeline
-			timelineLabel={null}
+		<PostTimelineView
+			label={null}
 			queryResult={queryResult}
 			feedSwitcherEnabled
 		/>
@@ -120,4 +120,5 @@ function Page() {
 		</PostTimelineCtx>
 	);
 }
+
 export default Page;

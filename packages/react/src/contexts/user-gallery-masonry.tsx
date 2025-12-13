@@ -81,14 +81,16 @@ function reducer(state: State, action: Actions): State {
 			const bundleCopy = Array.from(state.bundles);
 
 			return produce(state, (draft) => {
-				console.log(action.payload);
 				for (const item of action.payload.data as PostObjectType[]) {
 					if (draft.seen.has(item.id)) continue;
 					draft.seen.add(item.id);
 					copy.push(item);
 
 					for (const media of item.content.media) {
-						if (!MediaAttachmentViewer.isImage(media)) continue;
+						if (!MediaAttachmentViewer.isImage(media)) {
+							console.log('skipping media item in masonry view', media);
+							continue;
+						}
 						bundleCopy.push({ media, post: item });
 					}
 				}
@@ -116,7 +118,8 @@ function reducer(state: State, action: Actions): State {
 						counter = 0;
 					}
 				}
-
+				if (nextLeftPage.length > 0)
+					nextSplits.push({ left: nextLeftPage, right: nextRightPage });
 				draft.items = nextSplits;
 			});
 		}

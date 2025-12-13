@@ -1,6 +1,7 @@
 <!-- SOCIALS -->
+[![Static Badge](https://img.shields.io/badge/Sponsor-My%20Work-f79a13)](https://suvam.io/sponsor)
 [![Discord](https://img.shields.io/discord/1131212086446391430?logo=discord&style=flat&label=Chat)](https://discord.gg/kMp5JA9jwD)
-[![Static Badge](https://img.shields.io/badge/Sponsor-Me-f79a13)](https://suvam.io/sponsor)
+[![Static Badge](https://img.shields.io/badge/Dhaaga%20On-Bluesky-58a5d9?logo=bluesky)](https://bsky.app/profile/dhaaga.app)
 <!-- SOCIALS -->
 
 <img width="64"
@@ -48,34 +49,45 @@ switching apps or websites.
 - 💬 Ergonomic post/reply composer
 - 🏕️ Powerful offline capabilities
 - 🦉 Dark mode by default
-- 👌 Out of the box one-handed mode support
+- 👌 Tuned Out-of-the-box for one-handed operation
 - 🥳 Fun, Free (💰) and FOSS
 
 > [!TIP]
 >
-> This app only implements selected features from your server.</br>
-> Feel free to request anything extra you need!
+> Dhaaga is designed for day-to-day SNS activities only.</br>
+> Some platform-specific features *(e.g. - admin tools, granular settings)* 
+> may be missing.</br>
+> For more details, see [compatibility](https://suvam.io/dhaaga/compatibility)
 
 ## 💁 About
 
-Dhaaga is an indie side project I’ve been working on.
+Dhaaga is a passion project I’ve been building over the weekends since 2024.
 
-It lets you connect with your friends from various platforms using a
-single app! It also boasts many useful features, tweaks and QoL improvements
-to make your SNS experience cozy ☕ and fun 🥳
+I wanted to create an SNS app that is: 
 
-I'd love to hear about your experience with the app! Come say hi~ 🤗
+* MUST be fun to use and daily drive.
+* Efficient by principle and elegant by design.
+
+With the powerful and extensible `@dhaaga/bridge` library at its heart, 
+I proudly present Dhaaga as an ergonomic and feature-rich SNS client 
+with rich, first-class support for various SNS platforms, as well as unique
+client-side features like Social Hub™, Collections™ and Inbox Categories™.
+
+And above all else, after months of effort, I can proudly say that it has 
+earned my "fun to use" seal of approval 🙂
+
+I enjoy every hour working on it. And, I'd love to hear about your 
+experience using this app, as well! Come say hi~ 🤗
 
 [Bluesky](https://bsky.app/profile/suvam.io) |
 [Mastodon](https://mastodon.social/@suvam) |
 [Misskey](https://misskey.io/@suvam0451) |
 [X](https://x.com/suvam0451)
 
-Btw, the word **'Dhaaga (धागा)'** means 'thread' or
-'string' in Hindi.
-It carries deep symbolic significance,
-representing *connection, unity and bonding*.
+By the way, **'Dhaaga (धागा)'** translates to 'thread' or 'string' in Hindi.
+In cultural contexts, it symbolizes representing *connection, continuity, 
+and bonds*.
 
 ---
 
-© 2025 Debashish Patra and contributors.
+© 2025 Debashish Patra

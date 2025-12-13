@@ -13,7 +13,7 @@ import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppPublishers, useAppTheme } from '#/states/global/hooks';
 import { Loader } from '#/components/lib/Loader';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 
 function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	const { dto: postItem } = withPostItemContext();
@@ -21,7 +21,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	// TODO: use this to show loading animation in place
 	const [EmojiStateLoading, setEmojiStateLoading] = useState(false);
 	const { theme } = useAppTheme();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 
 	const CONTAINER_STYLE = useMemo(() => {
 		if (dto.interactable) {
@@ -53,11 +53,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 			console.log('cannot react???');
 			return;
 		}
-		await postObjectActions.toggleReaction(
-			postItem.uuid,
-			dto,
-			setEmojiStateLoading,
-		);
+		await postEventBus.toggleReaction(postItem.uuid, dto, setEmojiStateLoading);
 
 		// FIXME: bring back quick reaction settings
 	}

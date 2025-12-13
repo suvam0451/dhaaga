@@ -9,13 +9,13 @@ import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useEffect, useRef, useState } from 'react';
 import { useApiSearchUsers } from '#/hooks/api/useApiSearch';
-import UserSearchResultPresenter from '#/features/social-hub/presenters/UserSearchResultPresenter';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { ProfileService } from '@dhaaga/db';
 import { AppDividerSoft } from '#/ui/Divider';
 import BottomSheetMenu from '../components/BottomSheetMenu';
 import { useApiGetMyFollowings } from '#/hooks/api/useMy';
+import UserSearchResultPresenter from '#/features/hub/presenters/UserSearchResultPresenter';
 
 function HubAddUserBottomSheet() {
 	const { theme } = useAppTheme();

@@ -46,6 +46,7 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_GOODIE_HUT = '/profile/settings/dhaaga',
 	SETTINGS_TAB_DIGITAL_WELLBEING = '/profile/settings/wellbeing',
 	SETTINGS_TAB_ADVANCED = '/profile/settings/advanced',
+	SETTINGS_PLANS = '/profile/plans',
 
 	SETTINGS_GENERAL_APP_LANGUAGE = '/profile/settings/general/app-language',
 	CHATROOM = '/inbox/chatroom',

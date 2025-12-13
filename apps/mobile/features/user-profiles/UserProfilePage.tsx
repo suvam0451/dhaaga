@@ -31,6 +31,8 @@ import UserProfilePostsView from '#/features/user-profiles/UserProfilePostsView'
 import UserProfileStickyHeader from '#/features/user-profiles/UserProfileStickyHeader';
 import UserProfileMiscellaneous from '#/features/user-profiles/UserProfileMiscellaneous';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { DriverService } from '@dhaaga/bridge';
+import UserProfileRepliesView from '#/features/user-profiles/UserProfileRepliesView';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 const TABS = ['gallery', 'pin-octicons', 'gallery', 'gallery'];
@@ -43,10 +45,15 @@ export function UserProfilePage() {
 	const { theme } = useAppTheme();
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { data: acct, error } = useQuery(
-		userProfileQueryOpts(client, {
-			use: 'userId',
-			userId: id,
-		}),
+		userProfileQueryOpts(
+			client,
+			DriverService.supportsAtProto(client.driver)
+				? { use: 'did', did: id }
+				: {
+						use: 'userId',
+						userId: id,
+					},
+		),
 	);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 
@@ -138,7 +145,6 @@ export function UserProfilePage() {
 							animatedStyle={listPadding}
 							headerHeight={headerHeight}
 						/>
-						{/*<ProfileGalleryModePresenter userId={profileId} />*/}
 					</View>
 				);
 			case 1:
@@ -149,19 +155,11 @@ export function UserProfilePage() {
 							flex: 1,
 						}}
 					>
-						<Animated.FlatList
-							style={[{ flex: 1, backgroundColor: 'blue' }, listPadding]}
+						<UserProfileRepliesView
+							userId={profileId}
 							onScroll={onScroll}
-							data={['foo', 'bar', 'nyx', 'nyx', 'nyx']}
-							renderItem={({ item }) => (
-								<View
-									style={{
-										height: 200,
-										width: '100%',
-										backgroundColor: 'blue',
-									}}
-								></View>
-							)}
+							animatedStyle={listPadding}
+							headerHeight={headerHeight}
 						/>
 					</View>
 				);
@@ -172,6 +170,7 @@ export function UserProfilePage() {
 							userId={profileId}
 							onScroll={onScroll}
 							animatedStyle={listPadding}
+							headerHeight={headerHeight}
 						/>
 					</View>
 				);
@@ -188,9 +187,11 @@ export function UserProfilePage() {
 		}
 	}
 
-	if (error || !acct)
+	if (error)
 		return <View style={{ flex: 1, backgroundColor: theme.background.a0 }} />;
 
+	if (!acct)
+		return <View style={{ flex: 1, backgroundColor: theme.background.a0 }} />;
 	return (
 		<View
 			style={{

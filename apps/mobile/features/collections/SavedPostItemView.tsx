@@ -32,7 +32,7 @@ export function SavedPostItemView({ item }: SavedPostItemProps) {
 					user={item.item.savedUser}
 					authoredAt={item.item.authoredAt}
 				/>
-				<SavedPostMoreOptionsButton post={item.item} />
+				<SavedPostMoreOptionsButton postId={item.item.uuid} />
 			</View>
 			<LocalMediaItem items={item.item.medias} />
 			<TextContentView

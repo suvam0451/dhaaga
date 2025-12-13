@@ -6,12 +6,11 @@ import {
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { useQuery } from '@tanstack/react-query';
-import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 
-function PageContent() {
+function Generator() {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useActiveUserSession();
-
 	const State = usePostTimelineState()!;
 
 	const queryResult = useQuery(
@@ -22,18 +21,13 @@ function PageContent() {
 		}),
 	);
 
-	return (
-		<SimplePostTimeline
-			timelineLabel={'My Bookmarks'}
-			queryResult={queryResult}
-		/>
-	);
+	return <PostTimelineView label={'My Bookmarks'} queryResult={queryResult} />;
 }
 
 function Page() {
 	return (
 		<PostTimelineCtx>
-			<PageContent />
+			<Generator />
 		</PostTimelineCtx>
 	);
 }

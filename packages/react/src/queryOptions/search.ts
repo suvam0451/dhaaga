@@ -1,5 +1,4 @@
 import {
-	ApiTargetInterface,
 	AtprotoApiAdapter,
 	defaultResultPage,
 	DriverService,
@@ -13,6 +12,7 @@ import type {
 	PostObjectType,
 	FeedObjectType,
 	ResultPage,
+	ApiTargetInterface,
 } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
@@ -28,18 +28,14 @@ export function searchFeedsQueryOpts(
 ) {
 	async function api(): Promise<FeedResultPage> {
 		if (!q) return defaultResultPage;
-		const { data, error } = await (
-			client as AtprotoApiAdapter
-		).search.findFeeds({
-			limit: 5,
+		const data = await (client as AtprotoApiAdapter).search.findFeeds({
+			limit: 10,
 			query: q,
 			cursor: maxId,
 		});
-		if (error) return defaultResultPage;
 		return {
-			...defaultResultPage,
-			data: FeedParser.parse<unknown[]>(data.feeds, driver, server),
-			maxId: data.cursor as any,
+			data: FeedParser.parse<unknown[]>(data.data, driver, server),
+			maxId: data.maxId,
 		};
 	}
 
@@ -89,11 +85,15 @@ export function searchPostsQueryOpts(
 			return {
 				...defaultResultPage,
 				maxId: _data.maxId,
-				data: PostParser.parse<unknown[]>(_data.data, driver, server),
+				data: PostParser.parse<unknown[]>(_data.data as any, driver, server),
 			};
 		}
 
-		const _posts = PostParser.parse<unknown[]>(data as any[], driver, server);
+		const _posts = PostParser.parse<unknown[]>(
+			data as unknown as any[],
+			driver,
+			server,
+		);
 
 		let __maxId = null;
 		if (FALLBACK_TO_OFFSET) {

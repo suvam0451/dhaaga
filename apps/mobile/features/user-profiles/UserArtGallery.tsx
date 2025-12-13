@@ -1,4 +1,11 @@
-import { View, Dimensions, FlatList } from 'react-native';
+import {
+	View,
+	Dimensions,
+	FlatList,
+	RefreshControl,
+	StyleProp,
+	ViewStyle,
+} from 'react-native';
 import {
 	userGalleryQueryOpts,
 	UserMasonryGalleryCtx,
@@ -8,19 +15,24 @@ import {
 } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/states/global/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
-import Animated from 'react-native-reanimated';
+import Animated, {
+	ScrollHandlerProcessed,
+	SharedValue,
+} from 'react-native-reanimated';
 
 type Props = {
 	userId: string;
-	onScroll: any;
-	animatedStyle: any;
+	onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
+	animatedStyle: StyleProp<ViewStyle>;
+	headerHeight: SharedValue<number>;
 };
 
-function Content({ userId, onScroll, animatedStyle }: Props) {
+function Content({ userId, onScroll, headerHeight }: Props) {
+	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { client } = useAppApiClient();
-	const { data, fetchStatus, error } = useQuery(
+	const { data, fetchStatus, error, refetch } = useQuery(
 		userGalleryQueryOpts(client, userId),
 	);
 
@@ -30,6 +42,14 @@ function Content({ userId, onScroll, animatedStyle }: Props) {
 	useEffect(() => {
 		dispatch({ type: UserMasonryGalleryStateAction.INIT });
 	}, []);
+
+	function onRefresh() {
+		setIsRefreshing(true);
+		dispatch({
+			type: UserMasonryGalleryStateAction.INIT,
+		});
+		refetch().finally(() => setIsRefreshing(false));
+	}
 
 	useEffect(() => {
 		if (fetchStatus !== 'fetching' && !error) {
@@ -42,13 +62,14 @@ function Content({ userId, onScroll, animatedStyle }: Props) {
 
 	const WIDTH = (Dimensions.get('window').width - 20) / 2;
 
+	// console.log(Object.keys(data.data));
 	return (
 		<Animated.FlatList
 			data={State.items}
 			onScroll={onScroll}
 			renderItem={({ item }) => (
 				<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1, alignItems: 'center' }}>
 						<FlatList
 							data={item.left}
 							renderItem={({ item }) => (
@@ -66,7 +87,7 @@ function Content({ userId, onScroll, animatedStyle }: Props) {
 							ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
 						/>
 					</View>
-					<View style={{ flex: 1 }}>
+					<View style={{ flex: 1, alignItems: 'center' }}>
 						<FlatList
 							data={item.right}
 							renderItem={({ item }) => (
@@ -86,19 +107,32 @@ function Content({ userId, onScroll, animatedStyle }: Props) {
 					</View>
 				</View>
 			)}
+			ListHeaderComponent={
+				<Animated.View style={{ height: headerHeight.value }} />
+			}
 			ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
-			style={[{ flex: 1 }, animatedStyle]}
+			contentContainerStyle={{ paddingTop: 16 }}
+			style={[{ flex: 1 }]}
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+			}
 		/>
 	);
 }
 
-function UserArtGallery({ userId, onScroll, animatedStyle }: Props) {
+function UserArtGallery({
+	userId,
+	onScroll,
+	animatedStyle,
+	headerHeight,
+}: Props) {
 	return (
 		<UserMasonryGalleryCtx>
 			<Content
 				userId={userId}
 				onScroll={onScroll}
 				animatedStyle={animatedStyle}
+				headerHeight={headerHeight}
 			/>
 		</UserMasonryGalleryCtx>
 	);

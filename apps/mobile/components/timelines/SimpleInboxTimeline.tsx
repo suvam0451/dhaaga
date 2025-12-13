@@ -6,8 +6,9 @@ import Header from '#/features/inbox/components/Header';
 import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { StateIndicator } from '#/features/inbox/components/StateIndicator';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import { FlatList, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import { AppDivider } from '#/components/lib/Divider';
+import { FlashList } from '@shopify/flash-list';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
@@ -42,7 +43,7 @@ function SimpleInboxTimeline({ queryResult, Wrapper }: Props) {
 
 	return (
 		<>
-			<FlatList
+			<FlashList
 				onLayout={onLayout}
 				data={state.items}
 				renderItem={({ item }) => <Wrapper item={item} />}

@@ -5,7 +5,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import AccountManagementListItem from '../home/components/AccountManagementListItem';
 import { Account, AccountService } from '@dhaaga/db';
 import { useAppDb, useAppPublishers, useAppTheme } from '#/states/global/hooks';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -16,7 +16,7 @@ import AppTabLandingNavbar, {
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 	const [Data, setData] = useState<Account[]>([]);
 	const [Refreshing, setRefreshing] = useState(false);
@@ -39,10 +39,11 @@ function SelectAccountStack() {
 	}
 
 	useEffect(() => {
+		if (!appEventBus) return;
 		refresh();
-		appSub.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
+		appEventBus.subscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		return () => {
-			appSub.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
+			appEventBus.unsubscribe(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED, refresh);
 		};
 	}, [db]);
 

@@ -1,5 +1,5 @@
 import type { UserObjectType } from '@dhaaga/bridge';
-import UserListItemView from '../../timelines/view/UserListItemView';
+import UserListItemDetailedView from '../../timelines/view/UserListItemDetailedView';
 import { Animated, RefreshControl, StyleProp, ViewStyle } from 'react-native';
 
 type Props<T> = {
@@ -22,7 +22,7 @@ export function UserListView({
 	return (
 		<Animated.FlatList
 			data={items}
-			renderItem={({ item }) => <UserListItemView item={item} />}
+			renderItem={({ item }) => <UserListItemDetailedView item={item} />}
 			onScroll={onScroll}
 			ListHeaderComponent={ListHeaderComponent}
 			scrollEventThrottle={16}

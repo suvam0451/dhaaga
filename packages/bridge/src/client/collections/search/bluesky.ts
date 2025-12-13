@@ -8,11 +8,10 @@ import {
 } from '@atproto/api';
 import { MastoStatus } from '#/types/mastojs.types.js';
 import { MegaStatus } from '#/types/megalodon.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { errorBuilder } from '#/types/index.js';
-import { PaginatedPromise } from '#/types/api-response.js';
+import { ApiErrorCode, PaginatedPromise } from '#/types/api-response.js';
 import {
 	DhaagaJsPostSearchDTO,
 	DhaagaJsUserSearchDTO,

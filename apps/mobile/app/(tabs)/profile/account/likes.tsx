@@ -5,7 +5,7 @@ import {
 } from '@dhaaga/core';
 import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 import { useQuery } from '@tanstack/react-query';
 
 function ContentView() {
@@ -22,9 +22,7 @@ function ContentView() {
 		}),
 	);
 
-	return (
-		<SimplePostTimeline timelineLabel={'My Likes'} queryResult={queryResult} />
-	);
+	return <PostTimelineView label={'My Likes'} queryResult={queryResult} />;
 }
 
 function Page() {

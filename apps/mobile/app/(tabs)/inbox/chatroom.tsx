@@ -6,7 +6,6 @@ import {
 	Animated,
 } from 'react-native';
 import { useState } from 'react';
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { Image } from 'expo-image';
 import { AppDivider } from '#/components/lib/Divider';
 import { useAppTheme } from '#/states/global/hooks';
@@ -72,10 +71,6 @@ function Page() {
 
 	const [height, setHeight] = useState(40); // Initial height
 	const [IsMessageLoading, setIsMessageLoading] = useState(false);
-	const { translateY, onScroll } = useScrollMoreOnPageEnd({
-		itemCount: 0,
-		loadNextPage: () => {},
-	});
 
 	const { state, myId, sendMessage } = useChatroom();
 	/**
@@ -132,7 +127,6 @@ function Page() {
 						/>
 					</View>
 				}
-				onScroll={onScroll}
 			/>
 
 			<AppDivider.Hard style={{ backgroundColor: '#363636', height: 0.5 }} />

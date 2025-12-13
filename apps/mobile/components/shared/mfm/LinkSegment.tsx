@@ -33,8 +33,12 @@ function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 
 	function onTextPress() {
 		setCtx({
-			linkUrl: url,
-			linkLabel: displayName || wwwRemoved,
+			$type: 'link-preview',
+			linkAttachment: {
+				url: url,
+				title: displayName || wwwRemoved,
+				description: 'N/A',
+			},
 		});
 		show(APP_BOTTOM_SHEET_ENUM.LINK, true);
 	}

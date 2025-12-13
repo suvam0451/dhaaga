@@ -3,13 +3,13 @@ import { Image } from 'expo-image';
 import { APP_FONTS } from '#/styles/AppFonts';
 import PostButton from './PostButton';
 import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
-import { PostMiddleware } from '#/services/middlewares/post.middleware';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from '../../../../lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import useComposer from '#/states/app/useComposer';
+import { PostInspector } from '@dhaaga/bridge';
 
 /**
  * Indicates in which context this reply is being composed
@@ -21,7 +21,7 @@ function ReplyIndicator() {
 
 	if (!state.parent) return <View />;
 
-	const _target = PostMiddleware.getContentTarget(state.parent);
+	const _target = PostInspector.getContentTarget(state.parent);
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 			<AppText.Medium

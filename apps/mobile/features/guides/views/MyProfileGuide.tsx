@@ -19,13 +19,6 @@ function Page() {
 			answers: t(`myAccount.aPageIntro`, NS_OBJ) as unknown as string[],
 		},
 		{
-			question: t(`myAccount.qHowAddSwitchAccount`, NS),
-			answers: t(
-				`myAccount.aHowAddSwitchAccount`,
-				NS_OBJ,
-			) as unknown as string[],
-		},
-		{
 			question: t(`myAccount.qHowEditAccountDetails`, NS),
 			answers: t(
 				`myAccount.aHowEditAccountDetails`,

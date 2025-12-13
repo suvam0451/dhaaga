@@ -21,7 +21,17 @@ import {
  * data for various protocols, and parsing API responses.
  */
 class Parser {
-	static export(
+	/**
+	 * This is the actual internal parser
+	 * implementation. It converts an interface
+	 * to a post-object.
+	 *
+	 * @param input
+	 * @param domain
+	 * @param subdomain
+	 * @private
+	 */
+	private static _export(
 		input: PostTargetInterface,
 		domain: string,
 		subdomain: string,
@@ -154,6 +164,14 @@ class Parser {
 		}
 	}
 
+	/**
+	 * converts an interface to a post object
+	 *
+	 * PostTargetInterface -> PostObjectType
+	 * @param input
+	 * @param driver
+	 * @param server
+	 */
 	static interfaceToJson(
 		input: PostTargetInterface,
 		{
@@ -193,13 +211,13 @@ class Parser {
 					 * 	"reply" object, instead of root. へんですね?
 					 */
 					{
-						...Parser.export(input, driver, server)!,
+						...Parser._export(input, driver, server)!,
 						boostedFrom: sharedFrom,
 						replyTo,
 						rootPost: root,
 					}
 				: {
-						...Parser.export(input, driver, server)!,
+						...Parser._export(input, driver, server)!,
 						boostedFrom: sharedFrom,
 					};
 
@@ -311,6 +329,11 @@ class Inspector {
 	static isShared(input: PostObjectType) {
 		if (!input) return false;
 		return !!input.atProto?.viewer?.repost || input.interaction.boosted;
+	}
+
+	static isBookmarked(input: PostObjectType) {
+		const _target = Inspector.getContentTarget(input);
+		return _target.interaction.bookmarked;
 	}
 }
 

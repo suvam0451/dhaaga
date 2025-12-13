@@ -1,5 +1,4 @@
 import { ApiTargetInterface, KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import ActivityPubAdapterService from './activitypub-adapter.service';
 import { Dispatch, SetStateAction } from 'react';
 import { SQLiteDatabase } from 'expo-sqlite';
 import { Account } from '@dhaaga/db';
@@ -48,10 +47,10 @@ class BookmarkBrowserService {
 				_data = _data.map((o: any) => o.note);
 			}
 
-			const statusIs = ActivityPubAdapterService.adaptManyStatuses(
-				_data,
-				primaryAcct.driver,
-			);
+			// const statusIs = ActivityPubAdapterService.adaptManyStatuses(
+			// 	_data,
+			// 	primaryAcct.driver,
+			// );
 
 			// db.write(() => {
 			// 	for (const statusI of statusIs) {

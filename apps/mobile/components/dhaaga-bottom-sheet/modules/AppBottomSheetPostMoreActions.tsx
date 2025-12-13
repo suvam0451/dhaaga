@@ -5,7 +5,7 @@ import MorePostActionsPresenter from '#/features/timelines/presenters/MorePostAc
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import { useAppApiClient, useAppBottomSheet } from '#/states/global/hooks';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBusActions';
 import { appDimensions } from '#/styles/dimensions';
 
 function AppBottomSheetPostMoreActions() {
@@ -13,7 +13,7 @@ function AppBottomSheetPostMoreActions() {
 	const [EditMode, setEditMode] = useState<'root' | 'emoji'>('root');
 	const { client, driver } = useAppApiClient();
 
-	const { post } = usePostEventBusActions(
+	const { post } = usePostEventBusStore(
 		ctx.$type === 'post-id' ? ctx.postId : null,
 	);
 

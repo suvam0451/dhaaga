@@ -16,6 +16,12 @@ export class LinkingUtils {
 		await Clipboard.setStringAsync(content);
 	}
 
+	static shareUrl(url: string) {
+		Share.share({
+			url,
+			title: 'Share this link with your friends',
+		});
+	}
 	static openURL(url: string) {
 		try {
 			Linking.openURL(url).then((success) => {

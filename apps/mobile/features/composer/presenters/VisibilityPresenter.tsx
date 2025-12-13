@@ -2,7 +2,7 @@ import useAppVisibility, {
 	APP_POST_VISIBILITY,
 } from '#/hooks/app/useVisibility';
 import { PostComposerReducerActionType } from '../reducers/composer.reducer';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { DialogFactory } from '#/utils/dialog-factory';
 import { useAppDialog } from '#/states/global/hooks';
 import { useComposerCtx } from '../contexts/useComposerCtx';
 import PostVisibilityView from '../views/PostVisibilityView';
@@ -26,9 +26,7 @@ function VisibilityPresenter() {
 	}
 
 	function showVisibilityPicker() {
-		show(
-			DialogBuilderService.changePostVisibility_ActivityPub(t, setVisibility),
-		);
+		show(DialogFactory.changePostVisibility_ActivityPub(t, setVisibility));
 	}
 
 	return (

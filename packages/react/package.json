@@ -7,19 +7,17 @@
 	},
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
-	"dependencies": {
+	"peerDependencies": {
 		"@dhaaga/bridge": "*",
-		"@tanstack/react-query": "^5.89.0",
-		"immer": "^11.0.1"
+		"@tanstack/react-query": "*",
+		"immer": "*",
+		"react": "*"
 	},
 	"devDependencies": {
 		"@testing-library/react": "^16.3.0",
 		"@vitejs/plugin-react": "^5.1.2",
 		"jsdom": "^27.3.0",
 		"vitest": "^4.0.15"
-	},
-	"peerDependencies": {
-		"react": ">=19.1.0"
 	},
 	"scripts": {
 		"build": "tsgo -p ./tsconfig.json",

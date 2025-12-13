@@ -54,15 +54,15 @@ export class PleromaAccountsRouter implements AccountRoute {
 	}
 
 	async getPosts(id: string, query: AccountRouteStatusQueryDto): Promise<any> {
-		try {
-			const data = await this.client.client.getAccountStatuses(
-				id,
-				CasingUtil.snakeCaseKeys(query) as any,
-			);
-			return CasingUtil.camelCaseKeys(data.data);
-		} catch (e: any) {
-			throw new Error(e);
-		}
+		const data = await this.client.client.getAccountStatuses(
+			id,
+			CasingUtil.snakeCaseKeys(query) as any,
+		);
+		return {
+			data: CasingUtil.camelCaseKeys(data.data),
+			maxId: null,
+			minId: null,
+		};
 	}
 
 	async relationships(ids: string[]): Promise<MegaRelationship[]> {

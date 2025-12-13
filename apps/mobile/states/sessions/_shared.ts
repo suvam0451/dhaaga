@@ -57,7 +57,7 @@ export class BaseStorageManager {
 			const parsed = JSON.parse(saved);
 			const { success, error, data } = savedObjectWithExpiry.safeParse(parsed);
 			if (error) return null;
-			if (data.updatedAt < invalidAfter) return null;
+			if (new Date(data.updatedAt) < new Date(invalidAfter)) return null;
 			return data.value;
 		} catch (e) {
 			return null;

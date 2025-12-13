@@ -10,7 +10,7 @@ import {
 	useAppPublishers,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import { AppToggleIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
 import { ActivityPubService, PostInspector } from '@dhaaga/bridge';
@@ -24,11 +24,11 @@ import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetS
 function ShareButton() {
 	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 	const { driver } = useAppApiClient();
 
 	async function onPress() {
-		await postObjectActions.toggleShare(item.uuid, setIsLoading);
+		await postEventBus.toggleShare(item.uuid, setIsLoading);
 		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
@@ -64,10 +64,10 @@ function ShareButton() {
 function LikeButton() {
 	const { dto: item } = withPostItemContext();
 	const [IsLoading, setIsLoading] = useState(false);
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 
 	async function onPress() {
-		await postObjectActions.toggleLike(item.uuid, setIsLoading);
+		await postEventBus.toggleLike(item.uuid, setIsLoading);
 		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 

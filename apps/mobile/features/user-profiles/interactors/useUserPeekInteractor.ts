@@ -27,7 +27,7 @@ function useUserPeekInteractor() {
 			return;
 		}
 
-		const data = appManager.appManager.storage.getUserPeekModalData();
+		const data = appManager.storage.getUserPeekModalData();
 		if (!data) return;
 		if (data.measurement.y >= height / 2) {
 			setPosition({

@@ -2,8 +2,8 @@ import type {
 	AppBskyActorDefs,
 	AppBskyActorGetProfile,
 	AppBskyBookmarkDefs,
+	AppBskyFeedDefs,
 	AppBskyFeedGetActorLikes,
-	AppBskyFeedGetAuthorFeed,
 	AppBskyGraphDefs,
 	ComAtprotoIdentityResolveHandle,
 } from '@atproto/api';
@@ -25,13 +25,12 @@ import {
 } from '../../typings.js';
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { errorBuilder } from '#/types/index.js';
-import { PaginatedPromise } from '#/types/api-response.js';
+import { ApiErrorCode, PaginatedPromise } from '#/types/api-response.js';
 
 class BlueskyAccountsRouter implements AccountRoute {
 	dto: AppAtpSessionData;
@@ -182,17 +181,15 @@ class BlueskyAccountsRouter implements AccountRoute {
 	async getPosts(
 		id: string,
 		params: AccountRouteStatusQueryDto,
-	): Promise<AppBskyFeedGetAuthorFeed.Response> {
+	): PaginatedPromise<AppBskyFeedDefs.FeedViewPost[]> {
 		const agent = getBskyAgent(this.dto);
-		try {
-			return await agent.getAuthorFeed({
-				actor: id,
-				filter: params.bskyFilter,
-				limit: params.limit,
-			});
-		} catch (e: any) {
-			throw new Error(e);
-		}
+		const data = await agent.getAuthorFeed({
+			actor: id,
+			filter: params.bskyFilter,
+			limit: params.limit,
+			cursor: params.maxId === null ? undefined : params.maxId,
+		});
+		return { data: data.data.feed, maxId: data.data.cursor };
 	}
 
 	unblock(id: string): Promise<Promise<MastoRelationship>> {

@@ -9,7 +9,7 @@ import { produce } from 'immer';
 import { RandomUtil } from '#/utils/index.js';
 import { MastoGroupedNotificationsResults } from '#/types/index.js';
 import { AppBskyNotificationListNotifications } from '@atproto/api';
-import { AtprotoApiAdapter } from '#/client/index.js';
+import { ApiTargetInterface, AtprotoApiAdapter } from '#/client/index.js';
 import { ResultPage } from '#/types/api-response.js';
 
 class Parser {
@@ -26,7 +26,7 @@ class Parser {
 		driver: KNOWN_SOFTWARE,
 		server: string,
 		category: 'mentions' | 'chat' | 'social' | 'updates',
-	): ResultPage<NotificationObjectType> {
+	): ResultPage<NotificationObjectType[]> {
 		return {
 			data: input.data.map((o: any) => {
 				return {
@@ -215,7 +215,7 @@ class Parser {
 		data: any,
 		driver: KNOWN_SOFTWARE,
 		server: string,
-	): ResultPage<NotificationObjectType> {
+	): ResultPage<NotificationObjectType[]> {
 		return {
 			data: data.data
 				.map((o: any) => {
@@ -276,7 +276,7 @@ class Parser {
 	 */
 	static async parseForBluesky(
 		data: ResultPage<AppBskyNotificationListNotifications.Notification[]>,
-		client: AtprotoApiAdapter,
+		client: ApiTargetInterface,
 		driver: KNOWN_SOFTWARE,
 		server: string,
 	): Promise<ResultPage<NotificationObjectType[]>> {
@@ -301,7 +301,7 @@ class Parser {
 		});
 
 		const uris = results.map((o) => o.uri);
-		const posts = await client.posts.getPosts(uris);
+		const posts = await (client as AtprotoApiAdapter).posts.getPosts(uris);
 		const parsed = PostParser.parse<unknown[]>(posts, driver, server);
 
 		results = results.map((o) => ({

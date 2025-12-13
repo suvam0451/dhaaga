@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react';
 import useAppNavigator from '#/states/useAppNavigator';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import { Pressable, View } from 'react-native';
-import ExplainOutput from '#/components/common/explanation/ExplainOutput';
+import ExplainOutput from '#/features/post-item/components/ExplainOutput';
 import MediaItem from '#/ui/media/MediaItem';
 import EmojiReactions from '#/components/common/status/fragments/EmojiReactions';
 import PostContentWarning from './PostContentWarning';
@@ -103,9 +103,14 @@ function SingleStatusView({
 					style={{
 						flex: 1,
 					}}
-					post={dto}
+					post={_target}
 				/>
-				{!isPreview && <PostMoreOptionsButton post={_target} />}
+				{!isPreview && (
+					<PostMoreOptionsButton
+						postId={_target.id}
+						createdAt={_target.createdAt}
+					/>
+				)}
 			</View>
 
 			{isSensitive ? (

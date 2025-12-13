@@ -1,6 +1,6 @@
 import useRelationInteractor from '../interactors/useRelationInteractor';
 import { View } from 'react-native';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { DialogFactory } from '#/utils/dialog-factory';
 import { useAppDialog } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +30,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlySentRequestMoreActions(
+						DialogFactory.currentlySentRequestMoreActions(
 							t,
 							() => {
 								refetch().finally(() => {
@@ -55,7 +55,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyUnrelatedMoreActions(t, () => {
+						DialogFactory.currentlyUnrelatedMoreActions(t, () => {
 							follow().finally(() => {
 								hide();
 							});
@@ -74,7 +74,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyFollowingMoreActions(t, () => {
+						DialogFactory.currentlyFollowingMoreActions(t, () => {
 							unfollow().finally(() => {
 								hide();
 							});
@@ -93,7 +93,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyFollowedMoreActions(t, () => {
+						DialogFactory.currentlyFollowedMoreActions(t, () => {
 							follow().finally(() => {
 								hide();
 							});
@@ -112,7 +112,7 @@ function UserRelationPresenter({ userId }: RelationshipButtonCoreProps) {
 				loading={relationLoading}
 				onPress={() => {
 					show(
-						DialogBuilderService.currentlyFriendsMoreActions(t, () => {
+						DialogFactory.currentlyFriendsMoreActions(t, () => {
 							unfollow().finally(() => {
 								hide();
 							});

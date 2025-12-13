@@ -7,9 +7,9 @@ import {
 } from '#/client/index.js';
 import { UserParser } from '#/parsers/index.js';
 import { DriverService } from '#/services/driver.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { AppBskyActorGetProfile } from '@atproto/api';
 import type { UserObjectType } from '#/types/index.js';
+import { ApiErrorCode } from '#/types/api-response.js';
 
 const DriverWebfingerSchema = z.object({
 	username: z.string(),

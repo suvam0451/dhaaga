@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AppToggleIcon } from '../../../../lib/Icon';
-import { withPostItemContext } from '../../../../containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '../../../../containers/WithPostItemContext';
 import { useAppPublishers, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import { Pressable } from 'react-native';
@@ -11,11 +11,11 @@ import { Pressable } from 'react-native';
 function PostActionButtonToggleLike() {
 	const { dto } = withPostItemContext();
 	const { theme } = useAppTheme();
-	const { postObjectActions } = useAppPublishers();
+	const { postEventBus } = useAppPublishers();
 	const [IsLoading, setIsLoading] = useState(false);
 
 	function onPress() {
-		postObjectActions.toggleLike(dto.uuid, setIsLoading);
+		postEventBus.toggleLike(dto.uuid, setIsLoading);
 	}
 
 	const FLAG = dto.interaction.liked;

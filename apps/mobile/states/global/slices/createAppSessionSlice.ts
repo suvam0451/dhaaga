@@ -1,4 +1,4 @@
-import { AppPublisherService } from '#/services/publishers/app.publisher';
+import { AppPublisherService } from '#/states/event-bus/app.publisher';
 import { Account, AccountService, DataSource } from '@dhaaga/db';
 import AppSessionManager from '#/states/sessions/app-session.service';
 import { SQLiteDatabase } from 'expo-sqlite';

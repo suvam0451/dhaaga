@@ -5,9 +5,6 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import { Ionicons } from '@expo/vector-icons';
-import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
-import { useState } from 'react';
 import {
 	TOP_NAVBAR_BOTTOM_PADDING,
 	TOP_NAVBAR_MENU_ICON_SIZE,
@@ -84,32 +81,10 @@ function AppTabLandingNavbar({
 		? dropdownItems.find((i) => i.id === dropdownSelectedId)?.label
 		: navbarLabel[type];
 
-	const [DropdownOpen, setDropdownOpen] = useState(false);
-
-	function toggleDropdown() {
-		setDropdownOpen((o) => !o);
-	}
-
-	function closeDropdown() {
-		setDropdownOpen(false);
-	}
-
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
-				<Pressable style={styles.labelArea} onPress={toggleDropdown}>
-					<NativeTextH1>{NAVBAR_LABEL}</NativeTextH1>
-					{hasDropdown ? (
-						<Ionicons
-							name="chevron-down"
-							style={{ marginLeft: 6, paddingTop: 4 }}
-							size={24}
-							color={'white'}
-						/>
-					) : (
-						<View />
-					)}
-				</Pressable>
+				<NativeTextH1>{NAVBAR_LABEL}</NativeTextH1>
 				<View style={{ flexDirection: 'row' }}>
 					{menuItems.map(({ iconId, disabled, onPress }, i) => (
 						<Pressable key={i} style={styles.menuButton} onPress={onPress}>
@@ -127,16 +102,6 @@ function AppTabLandingNavbar({
 					))}
 				</View>
 			</View>
-			{hasDropdown ? (
-				<NavBar_Explore
-					isOpen={DropdownOpen}
-					close={closeDropdown}
-					items={dropdownItems!}
-					selectedItemId={dropdownSelectedId}
-				/>
-			) : (
-				<View />
-			)}
 		</View>
 	);
 }

@@ -1,5 +1,4 @@
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
-import useScrollMoreOnPageEnd from '#/states/useScrollMoreOnPageEnd';
 import { useEffect, useState } from 'react';
 import {
 	useAppBottomSheet,
@@ -10,15 +9,19 @@ import {
 } from '#/states/global/hooks';
 import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppAccountSelectionItem } from '#/components/common/app/Account';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
-import { DialogBuilderService } from '#/services/dialog-builder.service';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
+import { DialogFactory } from '#/utils/dialog-factory';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import {
+	NativeTextMedium,
+	NativeTextNormal,
+	NativeTextSemiBold,
+} from '#/ui/NativeText';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -28,11 +31,11 @@ type ProfileFragmentProps = {
 function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	const { theme } = useAppTheme();
 	const { show, hide } = useAppDialog();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 
 	async function _onDone() {
-		appSub.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
+		appEventBus.publish(APP_EVENT_ENUM.PROFILE_LIST_CHANGED);
 		hide();
 	}
 	async function onUnhide() {
@@ -48,7 +51,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	}
 
 	async function onRemove() {
-		show(DialogBuilderService.confirmProfileDeletion(onRemoveConfirm));
+		show(DialogFactory.confirmProfileDeletion(onRemoveConfirm));
 	}
 
 	async function onMoveDown() {}
@@ -60,7 +63,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 
 	function onPressProfileMoreOptions() {
 		show(
-			DialogBuilderService.profileActions(0, 10, !profile.visible, {
+			DialogFactory.profileActions(0, 10, !profile.visible, {
 				onUnhide,
 				onMoveUp,
 				onRemove,
@@ -71,7 +74,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 	}
 
 	function onDefaultProfileIndicatorPressed() {
-		show(DialogBuilderService.defaultProfileIndication());
+		show(DialogFactory.defaultProfileIndication());
 	}
 
 	return (
@@ -98,7 +101,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 							containerStyle={{ marginRight: 8 }}
 						/>
 					)}
-					<AppText.Medium
+					<NativeTextMedium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 						style={{
 							fontSize: 16,
@@ -107,7 +110,7 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 						}}
 					>
 						{profile.name}
-					</AppText.Medium>
+					</NativeTextMedium>
 					<AppIcon
 						id={'ellipsis-v'}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
@@ -124,11 +127,10 @@ function ProfileFragment({ profile, acct }: ProfileFragmentProps) {
 function Page() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const [Data, setData] = useState<Account[]>([]);
-	const { translateY } = useScrollMoreOnPageEnd();
 	const { db } = useAppDb();
 	const { theme } = useAppTheme();
 	const { show, stateId } = useAppBottomSheet();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 
 	function init() {
 		setIsRefreshing(true);
@@ -142,9 +144,9 @@ function Page() {
 
 	useEffect(() => {
 		init();
-		appSub.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
+		appEventBus.subscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
 		return () => {
-			appSub.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
+			appEventBus.unsubscribe(APP_EVENT_ENUM.PROFILE_LIST_CHANGED, init);
 		};
 	}, [stateId]);
 
@@ -172,18 +174,18 @@ function Page() {
 						marginVertical: 20,
 					}}
 				>
-					<AppText.Medium
+					<NativeTextMedium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{ fontSize: 16, textAlign: 'center' }}
 					>
 						Add, remove and order your profiles.
-					</AppText.Medium>
-					<AppText.Normal
+					</NativeTextMedium>
+					<NativeTextNormal
 						style={{ textAlign: 'center' }}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 					>
 						Requires an app restart to be reflected in the hub.
-					</AppText.Normal>
+					</NativeTextNormal>
 				</View>
 
 				{Data.map((acct, i) => (
@@ -206,11 +208,11 @@ function Page() {
 							alignSelf: 'center',
 						}}
 					>
-						<AppText.SemiBold
+						<NativeTextSemiBold
 							style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
 						>
 							Add Profile
-						</AppText.SemiBold>
+						</NativeTextSemiBold>
 					</View>
 				</Pressable>
 			</ScrollView>

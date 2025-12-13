@@ -4,7 +4,6 @@ import {
 	MegaScheduledStatus,
 	MegaStatus,
 } from '#/types/megalodon.types.js';
-import { LibraryResponse } from '#/types/result.types.js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import {
 	MastoJsWrapper,

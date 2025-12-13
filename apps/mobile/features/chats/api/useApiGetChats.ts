@@ -23,7 +23,6 @@ function useApiGetChatroom(roomId: string) {
 
 	async function api(): Promise<AppChatRoom> {
 		const result = await client.notifications.getChat(roomId);
-		if (result.error) throw new Error(result.error.message);
 		switch (driver) {
 			case KNOWN_SOFTWARE.BLUESKY: {
 				const myDid = AccountMetadataService.getAccountDid(db, acct);
@@ -60,7 +59,6 @@ function useApiGetChatMessages(roomId: string, maxId: string | undefined) {
 
 	async function api(): Promise<GetChatMessagesResponse> {
 		const result = await client.notifications.getChats(roomId);
-		if (result.error) throw new Error(result.error.message);
 		switch (driver) {
 			case KNOWN_SOFTWARE.BLUESKY: {
 				const _data: ChatBskyConvoGetMessages.OutputSchema = result.data;

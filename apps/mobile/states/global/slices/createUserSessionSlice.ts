@@ -6,12 +6,11 @@ import {
 	KNOWN_SOFTWARE,
 	type UserObjectType,
 } from '@dhaaga/bridge';
-import { AppSessionService } from '#/services/app-session.service';
 import {
 	AppStateImmerGetObject,
 	AppStateImmerSetObject,
 } from '#/states/global/typings';
-import { PostPublisherService } from '#/services/publishers/post.publisher';
+import { PostPublisherService } from '#/states/event-bus/post.publisher';
 
 export type AppStateUserSessionState = {
 	state: 'idle' | 'loading' | 'valid' | 'invalid' | 'no-account';
@@ -139,10 +138,10 @@ function createUserSessionSlice(
 			const x = new ProfileSessionManager(get().appSession.db!);
 			if (!x.acct || !x.profile) return;
 
+			const acctManager = new AccountSessionManager(_db, acct);
+
 			try {
-				const { acct, router, me } =
-					await AppSessionService.restoreAppSession(_db);
-				console.log('restored app session', acct, me);
+				const { acct, client, me } = await acctManager.restoreAppSession(_db);
 
 				/**
 				 * Success State
@@ -155,15 +154,14 @@ function createUserSessionSlice(
 						acct,
 						me: me,
 						logs: [],
-						client: router,
-						driver: router.driver,
-						server: router.server,
-						acctManager: new AccountSessionManager(_db, acct),
+						client: client,
+						driver: client.driver,
+						server: client.server,
+						acctManager,
 						profileManager: new ProfileSessionManager(_db),
-
-						postEventBus: new PostPublisherService(router),
-						userEventBug: new PostPublisherService(router),
-						tagEventBus: new PostPublisherService(router),
+						postEventBus: new PostPublisherService(client),
+						userEventBug: new PostPublisherService(client),
+						tagEventBus: new PostPublisherService(client),
 					};
 				});
 			} catch (e) {

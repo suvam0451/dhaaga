@@ -9,7 +9,7 @@ import {
 	ToggleMediaVisibility,
 	ToggleReplyVisibility,
 } from '#/components/common/status/DetailView/_shared';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import { TextContentView } from '#/components/common/status/TextContentView';
 import { usePostThreadState } from '@dhaaga/react';
 import { AppIcon } from '#/components/lib/Icon';

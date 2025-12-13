@@ -2,7 +2,6 @@ import { StatusesRoute } from './_interface.js';
 import { Endpoints } from 'misskey-js';
 import FetchWrapper from '#/client/utils/fetch.js';
 import type { MissContext, MissNote } from '#/types/misskey-js.types.js';
-import { ApiErrorCode } from '#/types/result.types.js';
 import { MisskeyJsWrapper } from '#/client/utils/api-wrappers.js';
 import {
 	DriverBookmarkStateResult,
@@ -10,7 +9,7 @@ import {
 } from '#/types/driver.types.js';
 import { getHumanReadableError } from '#/utils/errors.js';
 import { errorBuilder } from '#/types/index.js';
-import { PaginatedPromise } from '#/types/api-response.js';
+import { ApiErrorCode, PaginatedPromise } from '#/types/api-response.js';
 import { DhaagaJsPostCreateDto } from '#/client/typings.js';
 
 type RenoteCreateDTO = {

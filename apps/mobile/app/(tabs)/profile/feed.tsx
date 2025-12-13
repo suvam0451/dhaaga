@@ -13,7 +13,7 @@ import {
 } from '@dhaaga/core';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
-import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 
 function DataView() {
 	const { db } = useAppDb();
@@ -56,8 +56,8 @@ function DataView() {
 	);
 
 	return (
-		<SimplePostTimeline
-			timelineLabel={State?.query?.label ?? 'Custom Feed'}
+		<PostTimelineView
+			label={State?.query?.label ?? 'Custom Feed'}
 			queryResult={queryResult}
 			skipTimelineInit
 		/>

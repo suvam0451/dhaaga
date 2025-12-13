@@ -1,5 +1,6 @@
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
 import { Skeleton } from '#/ui/Skeleton';
+import { useMappingHelper } from '@shopify/flash-list';
 
 /**
  * Height: 308
@@ -27,12 +28,20 @@ function Node() {
 }
 
 function PostSkeleton({ containerHeight }: { containerHeight: number }) {
+	const { getMappingKey } = useMappingHelper();
+
 	const NUM_NODES = containerHeight ? Math.floor(containerHeight / 310) : 0;
 
 	if (NUM_NODES === 0) return <View style={{ height: '100%' }} />;
 
 	return (
-		<FlatList data={Array(NUM_NODES).fill(null)} renderItem={() => <Node />} />
+		<>
+			{Array(NUM_NODES)
+				.fill(null)
+				.map((_, i) => (
+					<Node key={getMappingKey(i, i)} />
+				))}
+		</>
 	);
 }
 

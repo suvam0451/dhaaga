@@ -1,4 +1,5 @@
 import {
+	useAppApiClient,
 	useAppBottomSheet,
 	useAppDb,
 	useAppTheme,
@@ -16,6 +17,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { AppDividerSoft } from '#/ui/Divider';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 import useApiGetMyFeeds from '#/hooks/api/useFeeds';
+import { DriverService } from '@dhaaga/bridge';
 
 function BskyFeedAddSheetPresenter() {
 	const { theme } = useAppTheme();
@@ -25,7 +27,8 @@ function BskyFeedAddSheetPresenter() {
 	const { data } = useApiSearchFeeds(debouncedQuery, null);
 	const { data: defaultData } = useApiGetMyFeeds();
 	const [Profile, setProfile] = useState(null);
-	const { ctx, stateId } = useAppBottomSheet();
+	const { ctx, stateId, visible } = useAppBottomSheet();
+	const { client } = useAppApiClient();
 	const { db } = useAppDb();
 
 	const TextInputRef = useRef<TextInput>(null);
@@ -33,6 +36,12 @@ function BskyFeedAddSheetPresenter() {
 	useEffect(() => {
 		if (ctx.$type !== 'profile-id' || !ctx.profileId) return;
 		setProfile(ProfileService.getById(db, ctx.profileId));
+		const id = setTimeout(() => {
+			if (visible && DriverService.supportsAtProto(client.driver)) {
+				TextInputRef?.current?.focus();
+			}
+		}, 200);
+		return () => clearTimeout(id);
 	}, [stateId]);
 
 	useEffect(() => {

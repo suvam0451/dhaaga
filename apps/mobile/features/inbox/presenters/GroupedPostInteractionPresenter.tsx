@@ -1,11 +1,11 @@
 import { View } from 'react-native';
-import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { NotificationPostPeek } from '../components/NotificationPostPeek';
 import { Props } from '../components/_common';
-import { AppText } from '../../../components/lib/Text';
-import { AppDivider } from '../../../components/lib/Divider';
+import { AppText } from '#/components/lib/Text';
+import { AppDivider } from '#/components/lib/Divider';
 import GroupedUsersItemView from '../view/GroupedUsersItemView';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { MoreOptionsButtonSectionView } from '../components/MoreOptionsButtonSectionView';
 
 function GroupedPostInteractionPresenter({ item }: Props) {

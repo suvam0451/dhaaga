@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { Props, styles } from './_common';
-import { NotificationPostPeek } from '../../../components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { NotificationPostPeek } from './NotificationPostPeek';
 import { AppDivider } from '../../../components/lib/Divider';
 import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
 

@@ -1,5 +1,10 @@
 const PROXY_SERVICE_BASE_URL = 'https://suvam.io/api';
 
+/**
+ * @deprecated oauth is currently not supported.
+ *
+ * keep this code for later, though
+ */
 class Service {
 	/**
 	 * Obtain the redirect url to use for oauth
@@ -9,7 +14,7 @@ class Service {
 	 * See https://github.com/bluesky-social/atproto/tree/main/packages/oauth/oauth-client-node#from-a-native-application
 	 *
 	 * By right, this can be done fully client-side. But the current
-	 * implementation of oauth-client-node is very restrictive,
+	 * implementation of oauth-client-node is very restrictive
 	 * when it comes to react-native
 	 *
 	 * @param handle of the user logging in

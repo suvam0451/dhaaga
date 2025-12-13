@@ -1,4 +1,4 @@
-name: 'Build Lite Edition'
+name: 'Lite Edition'
 
 on:
   push:

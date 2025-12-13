@@ -17,7 +17,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect, useState } from 'react';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { useQuery } from '@tanstack/react-query';
@@ -47,6 +47,7 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 				id: userId,
 				label: 'N/A',
 			},
+			opts: { bskyFilter: 'posts_with_replies' },
 		}),
 	);
 	const { fetchStatus, data, status, refetch } = queryResult;

@@ -4,7 +4,7 @@ import {
 	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import SimplePostTimeline from '#/components/timelines/SimplePostTimeline';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 import useTimelineQueryReactNative from '#/hooks/useTimelineQueryReactNative';
 import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import { useEffect } from 'react';
@@ -43,8 +43,8 @@ function Content() {
 	});
 
 	return (
-		<SimplePostTimeline
-			timelineLabel={'My Posts'}
+		<PostTimelineView
+			label={'My Posts'}
 			queryResult={queryResult}
 			skipTimelineInit
 		/>
