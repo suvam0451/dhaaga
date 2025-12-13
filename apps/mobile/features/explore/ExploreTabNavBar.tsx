@@ -15,14 +15,14 @@ import {
 	TOP_NAVBAR_MENU_ICON_SIZE,
 	TOP_NAVBAR_TOP_PADDING,
 } from '#/components/shared/topnavbar/settings';
-import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
+import ExploreTabNavBarCollapsedSection from '#/features/explore/components/ExploreTabNavBarCollapsedSection';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 
-function Header() {
+function ExploreTabNavBar() {
 	const { theme } = useAppTheme();
 	const { driver } = useAppApiClient();
 	const State = useDiscoverState();
@@ -119,7 +119,7 @@ function Header() {
 						/>
 					</View>
 					{State.q ? (
-						<View style={{ marginTop: 8 }}>
+						<View style={{ marginTop: 4 }}>
 							<NativeTextMedium>
 								<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
 									Search Term:{' '}
@@ -137,7 +137,6 @@ function Header() {
 				<View
 					style={{
 						flexDirection: 'row',
-						// marginVertical: 'auto',
 						alignItems: 'flex-start',
 					}}
 				>
@@ -158,7 +157,7 @@ function Header() {
 				</View>
 			</View>
 
-			<NavBar_Explore
+			<ExploreTabNavBarCollapsedSection
 				isOpen={DropdownOpen}
 				close={closeDropdown}
 				items={explorePageTabs() ?? []}
@@ -168,7 +167,7 @@ function Header() {
 	);
 }
 
-export default Header;
+export default ExploreTabNavBar;
 
 const styles = StyleSheet.create({
 	container: {
@@ -183,7 +182,8 @@ const styles = StyleSheet.create({
 	labelArea: {
 		justifyContent: 'center',
 		flexGrow: 1,
-		paddingVertical: TOP_NAVBAR_TOP_PADDING,
+		paddingTop: TOP_NAVBAR_TOP_PADDING,
+		marginBottom: appDimensions.topNavbar.padding,
 	},
 	menuButton: {
 		padding: appDimensions.topNavbar.padding,

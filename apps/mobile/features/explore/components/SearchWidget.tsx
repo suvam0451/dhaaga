@@ -98,14 +98,13 @@ function SearchWidget({
 		return {
 			bottom: isRotated.value
 				? withTiming(0, { duration: 300 })
-				: withTiming(64, { duration: 180 }),
+				: withTiming(42, { duration: 180 }),
 		};
 	});
 
 	const { theme } = useAppTheme();
 	return (
 		<Animated.View style={[styles.root, rootStyle]}>
-			{/*{IsWidgetExpanded && <WidgetExpanded />}*/}
 			<Animated.View
 				style={[
 					styles.button,
@@ -117,7 +116,6 @@ function SearchWidget({
 							!IsWidgetExpanded && !!SearchTerm
 								? 'rgba(160, 160, 160, 0.28)'
 								: theme.primary,
-						// right: CONTAINER_PADDING,
 						borderRadius: 16,
 					},
 				]}
@@ -167,7 +165,6 @@ export default SearchWidget;
 const styles = StyleSheet.create({
 	root: {
 		position: 'absolute',
-		bottom: 0, // 32
 		width: '100%',
 	},
 	container: {

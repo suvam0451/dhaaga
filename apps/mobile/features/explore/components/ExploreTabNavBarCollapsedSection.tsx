@@ -15,7 +15,9 @@ type DropdownProps = {
 	close: () => void;
 };
 
-function NavBar_Explore({
+const ITEM_HEIGHT = 48;
+
+function ExploreTabNavBarCollapsedSection({
 	items,
 	isOpen,
 	close,
@@ -35,7 +37,7 @@ function NavBar_Explore({
 
 	const animatedStyle = useAnimatedStyle(() => {
 		return {
-			height: withTiming(open.value === 1 ? items.length * 45 : 0, {
+			height: withTiming(open.value === 1 ? items.length * ITEM_HEIGHT : 0, {
 				duration: 300,
 			}),
 			opacity: open.value,
@@ -66,26 +68,15 @@ function NavBar_Explore({
 	);
 }
 
-export default NavBar_Explore;
+export default ExploreTabNavBarCollapsedSection;
 
 const styles = StyleSheet.create({
 	container: {
-		width: '100%',
-		alignSelf: 'center',
+		overflow: 'hidden',
 		zIndex: 99,
-	},
-	header: {
-		backgroundColor: '#eee',
-		padding: 15,
-		borderRadius: 6,
-		elevation: 2,
-	},
-	headerText: {
-		fontSize: 16,
 	},
 	item: {
 		justifyContent: 'center',
-		borderBottomWidth: 0.3,
-		paddingVertical: 8,
+		height: ITEM_HEIGHT,
 	},
 });

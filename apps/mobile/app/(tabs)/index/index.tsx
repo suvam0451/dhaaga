@@ -13,7 +13,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
 import { NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
 import SessionLoadingScreen from '#/features/onboarding/SessionLoadingScreen';
-import HubPage from '#/features/hub/HubPage';
+import HubTab from '#/features/hub/HubTab';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -147,6 +147,7 @@ function Screen() {
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 	const { loadAccounts } = useHub();
+	const { profiles, pageIndex } = useHub();
 
 	useEffect(() => {
 		loadAccounts();
@@ -158,7 +159,8 @@ function Screen() {
 		else if (session.state === 'idle' || session.state === 'loading')
 			return <SessionLoadingScreen />;
 	}
-	return <HubPage />;
+	if (profiles?.length === 0) return <View />;
+	return <HubTab profile={profiles[pageIndex]} />;
 }
 
 export default Screen;

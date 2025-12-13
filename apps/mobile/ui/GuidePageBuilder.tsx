@@ -5,6 +5,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { NativeTextNormal, NativeTextSpecial } from '#/ui/NativeText';
 
 export type UserGuideContainerProps = {
 	questionnaire: { question: string; answers: string[] }[];
@@ -34,7 +35,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 				onScroll={scrollHandler}
 				renderItem={({ item }) => (
 					<View style={sectionStyle}>
-						<SpecialText
+						<NativeTextSpecial
 							style={[
 								{
 									color: theme.primary,
@@ -43,11 +44,10 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 							]}
 						>
 							{item.question}
-						</SpecialText>
+						</NativeTextSpecial>
 						{item.answers.map((answer, i) => (
-							<AppText.Normal
+							<NativeTextNormal
 								key={i}
-								forwardedKey={i}
 								style={{
 									color: theme.secondary.a10,
 									fontSize: 14,
@@ -56,7 +56,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
 							>
 								{answer}
-							</AppText.Normal>
+							</NativeTextNormal>
 						))}
 					</View>
 				)}

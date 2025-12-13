@@ -3,7 +3,6 @@ import {
 	useAppBottomSheet,
 	useAppDb,
 	useAppDialog,
-	useAppGlobalStateActions,
 	useAppTheme,
 	useHub,
 } from '#/states/global/hooks';
@@ -14,8 +13,8 @@ import {
 	socialHubTabReducerDefault as reducerDefault,
 } from '#/states/interactors/social-hub-tab.reducer';
 import { RefreshControl, ScrollView } from 'react-native';
-import HubProfileListView from '../views/HubProfileListView';
-import FeedListPresenter from './FeedListPresenter';
+import HubProfileListView from './views/HubProfileListView';
+import HubPinnedFeedList from './components/HubPinnedFeedList';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
 import NavBar_Hub from '#/components/shared/topnavbar/NavBar_Hub';
 import {
@@ -23,8 +22,8 @@ import {
 	ProfilePinnedUserService,
 	ProfilePinnedTagService,
 } from '@dhaaga/db';
-import UserListPresenter from './UserListPresenter';
-import TagListPresenter from './TagListPresenter';
+import HubPinnedUserList from './components/HubPinnedUserList';
+import HubPinnedTagList from './components/HubPinnedTagList';
 import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
@@ -41,7 +40,7 @@ type Props = {
  * Tabs in the Social Hub interface
  * represent a unique profile each
  */
-function SocialHubTabPresenter({ profile }: Props) {
+function HubTab({ profile }: Props) {
 	const { db } = useAppDb();
 	const [State, dispatch] = useReducer(reducer, reducerDefault);
 	const { theme } = useAppTheme();
@@ -347,14 +346,14 @@ function SocialHubTabPresenter({ profile }: Props) {
 				<NavBar_Hub acct={parentAcct} />
 
 				{/* --- Pinned Timelines --- */}
-				<FeedListPresenter
+				<HubPinnedFeedList
 					account={State.acct}
 					items={State.pins.timelines}
 					onPressAddFeed={onPressAddFeed}
 				/>
 
 				{/* --- Pinned Users --- */}
-				<UserListPresenter
+				<HubPinnedUserList
 					parentAcct={State.acct}
 					items={State.pins.users}
 					profile={profile}
@@ -363,7 +362,7 @@ function SocialHubTabPresenter({ profile }: Props) {
 				/>
 
 				{/* --- Pinned Tags --- */}
-				<TagListPresenter
+				<HubPinnedTagList
 					items={State.pins.tags}
 					parentAcct={State.acct}
 					onPressAddTag={onPressAddTag}
@@ -381,4 +380,4 @@ function SocialHubTabPresenter({ profile }: Props) {
 	);
 }
 
-export default SocialHubTabPresenter;
+export default HubTab;

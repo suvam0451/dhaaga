@@ -4,7 +4,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
-function LandingPageView() {
+function LandingPage() {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
@@ -50,7 +50,7 @@ function LandingPageView() {
 	);
 }
 
-export default LandingPageView;
+export default LandingPage;
 
 const styles = StyleSheet.create({
 	bodyText: {

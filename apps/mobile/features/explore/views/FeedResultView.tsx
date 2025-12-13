@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useFeedTimelineDispatch, useFeedTimelineState } from '@dhaaga/core';
+import {
+	FeedTimelineCtx,
+	useFeedTimelineDispatch,
+	useFeedTimelineState,
+} from '@dhaaga/core';
 import { useApiSearchFeeds } from '#/hooks/api/useApiSearch';
 import { ACTION, FeedTimelineStateAction } from '@dhaaga/core';
 import { FlatList, RefreshControl, View } from 'react-native';
@@ -8,11 +12,7 @@ import FeedListItemView from '../../timelines/view/FeedListItemView';
 import NoResults from '#/components/error-screen/NoResults';
 import { useDiscoverState } from '@dhaaga/core';
 
-type FeedResultInteractorProps = {
-	onDataLoaded: (isEmpty: boolean) => void;
-};
-
-function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
+function Generator() {
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
 	const feedState = useFeedTimelineState();
@@ -44,11 +44,7 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	}
 
 	useEffect(() => {
-		if (!data) {
-			onDataLoaded(true);
-			return;
-		}
-		onDataLoaded(false);
+		if (!data) return;
 		if (data.data.length === 0) return;
 
 		dispatch({
@@ -78,4 +74,12 @@ function FeedResultInteractor({ onDataLoaded }: FeedResultInteractorProps) {
 	);
 }
 
-export default FeedResultInteractor;
+function FeedResultView() {
+	return (
+		<FeedTimelineCtx>
+			<Generator />
+		</FeedTimelineCtx>
+	);
+}
+
+export default FeedResultView;

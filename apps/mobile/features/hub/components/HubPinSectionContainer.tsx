@@ -11,7 +11,7 @@ type Props = {
 	onPressAdd: () => void;
 };
 
-function HubTabSectionContainer({ style, children, label, onPressAdd }: Props) {
+function HubPinSectionContainer({ style, children, label, onPressAdd }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
@@ -49,12 +49,13 @@ function HubTabSectionContainer({ style, children, label, onPressAdd }: Props) {
 	);
 }
 
-export default HubTabSectionContainer;
+export default HubPinSectionContainer;
 
 const styles = StyleSheet.create({
 	root: {
 		marginHorizontal: 8,
 		flexShrink: 1,
+		marginTop: 16,
 	},
 	sectionLabel: {
 		flex: 1,

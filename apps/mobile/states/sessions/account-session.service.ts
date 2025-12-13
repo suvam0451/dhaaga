@@ -91,12 +91,6 @@ class Storage extends BaseStorageManager {
 		const sixHoursBefore = new Date();
 		sixHoursBefore.setHours(sixHoursBefore.getHours() - 6);
 
-		console.log(
-			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(
-				':id',
-				acctId.toString(),
-			),
-		);
 		return this.getJsonWithExpiry<UserObjectType>(
 			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(
 				':id',
@@ -107,12 +101,6 @@ class Storage extends BaseStorageManager {
 	}
 
 	setMyUserData(acctId: number, data: UserObjectType) {
-		console.log(
-			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(
-				':id',
-				acctId.toString(),
-			),
-		);
 		this.setJsonWithExpiry(
 			KEY.APP_ACCOUNT_USER_OBJECT_CACHE.toString().replace(
 				':id',

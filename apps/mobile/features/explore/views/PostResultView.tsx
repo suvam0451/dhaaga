@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SEARCH_RESULT_TAB } from '#/services/driver.service';
 import {
+	PostTimelineCtx,
 	PostTimelineStateAction,
 	useDiscoverState,
 	usePostTimelineDispatch,
@@ -18,11 +19,7 @@ import Animated from 'react-native-reanimated';
 import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 
-type ResultInteractorProps = {
-	onDataLoaded: (isEmpty: boolean) => void;
-};
-
-function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
+function Generator() {
 	const { client, driver, server } = useAppApiClient();
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
@@ -54,7 +51,6 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	}, [State.tab]);
 
 	useEffect(() => {
-		onDataLoaded(false);
 		TimelineDispatch({
 			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
@@ -77,9 +73,7 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 		});
 	}
 
-	const { scrollHandler } = useScrollHandleAnimatedList();
-
-	const {} = useScrollHandleAnimatedList(loadMore);
+	const { scrollHandler } = useScrollHandleAnimatedList(loadMore);
 
 	const [ContainerHeight, setContainerHeight] = useState(0);
 	function onLayout(event: any) {
@@ -124,4 +118,12 @@ function PostResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	);
 }
 
-export default PostResultInteractor;
+function PostResultView() {
+	return (
+		<PostTimelineCtx>
+			<Generator />
+		</PostTimelineCtx>
+	);
+}
+
+export default PostResultView;

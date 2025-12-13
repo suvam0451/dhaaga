@@ -19,10 +19,10 @@ import {
 	useAppApiClient,
 	useAppTheme,
 } from '#/states/global/hooks';
-import SearchWidget from '#/features/search/components/SearchWidget';
+import SearchWidget from '#/features/explore/components/SearchWidget';
 import { getSearchTabs } from '@dhaaga/db';
-import SearchResults from '#/features/search/SearchResults';
-import Header from '#/features/search/components/Header';
+import SearchResultView from '#/features/explore/SearchResultView';
+import ExploreTabNavBar from '#/features/explore/ExploreTabNavBar';
 
 /**
  * Renders the results of a
@@ -72,8 +72,8 @@ const Content = forwardRef((props, ref) => {
 
 	return (
 		<>
-			<Header />
-			<SearchResults />
+			<ExploreTabNavBar />
+			<SearchResultView />
 		</>
 	);
 });
@@ -84,11 +84,9 @@ function Page() {
 	const { session } = useAppActiveSession();
 	const [SearchTerm, setSearchTerm] = useState(null);
 	const childRef = useRef(null);
-	const { acctManager } = useActiveUserSession();
 
 	function onSearch() {
 		childRef.current?.onSearch(SearchTerm);
-		acctManager;
 	}
 
 	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;

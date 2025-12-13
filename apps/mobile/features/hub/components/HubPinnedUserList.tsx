@@ -15,7 +15,7 @@ import {
 import { DialogFactory } from '#/utils/dialog-factory';
 import useAppNavigator from '#/states/useAppNavigator';
 import { APP_PINNED_OBJECT_TYPE } from '#/services/driver.service';
-import HubTabSectionContainer from '../components/HubTabSectionContainer';
+import HubPinSectionContainer from './HubPinSectionContainer';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { HapticUtils } from '#/utils/haptics';
@@ -28,7 +28,7 @@ type Props = {
 	onLongPressUser: (item: ProfilePinnedUser) => void;
 };
 
-function UserListPresenter({
+function HubPinnedUserList({
 	onPressAddUser,
 	items,
 	parentAcct,
@@ -86,9 +86,8 @@ function UserListPresenter({
 	}
 
 	return (
-		<HubTabSectionContainer
+		<HubPinSectionContainer
 			label={t(`hub.section.users`)}
-			style={styles.root}
 			onPressAdd={onPressAddUser}
 		>
 			<FlatList
@@ -102,15 +101,8 @@ function UserListPresenter({
 					/>
 				)}
 			/>
-		</HubTabSectionContainer>
+		</HubPinSectionContainer>
 	);
 }
 
-export default UserListPresenter;
-
-const styles = StyleSheet.create({
-	root: {
-		marginTop: 16,
-		marginHorizontal: 8,
-	},
-});
+export default HubPinnedUserList;

@@ -1,10 +1,10 @@
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
 import { Account, ProfilePinnedTimeline } from '@dhaaga/db';
 import { HubService } from '#/services/hub.service';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import PinnedTimelineItemView from '../views/PinnedTimelineItemView';
-import HubTabSectionContainer from '../components/HubTabSectionContainer';
+import HubPinSectionContainer from './HubPinSectionContainer';
 
 type SocialHubPinnedTimelinesProps = {
 	account: Account;
@@ -12,7 +12,7 @@ type SocialHubPinnedTimelinesProps = {
 	onPressAddFeed: () => void;
 };
 
-function FeedListPresenter({
+function HubPinnedFeedList({
 	items,
 	account,
 	onPressAddFeed,
@@ -21,9 +21,11 @@ function FeedListPresenter({
 	const destinations = HubService.resolveTimelineDestinations(t, items);
 
 	return (
-		<HubTabSectionContainer
+		<HubPinSectionContainer
 			label={t(`hub.section.feeds`)}
-			style={styles.root}
+			style={{
+				marginTop: 8,
+			}}
 			onPressAdd={onPressAddFeed}
 		>
 			<FlatList
@@ -41,15 +43,8 @@ function FeedListPresenter({
 					/>
 				)}
 			/>
-		</HubTabSectionContainer>
+		</HubPinSectionContainer>
 	);
 }
 
-export default FeedListPresenter;
-
-const styles = StyleSheet.create({
-	root: {
-		marginTop: 16,
-		marginHorizontal: 8,
-	},
-});
+export default HubPinnedFeedList;

@@ -1,15 +1,14 @@
 import { AppTimelineRendererProps } from '#/components/timelines/shared';
 import { useAppTheme } from '#/states/global/hooks';
-import { useUserTimelineState } from '@dhaaga/core';
 import { useEffect, useState } from 'react';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import { FlatList, RefreshControl } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import { AppDividerSoft } from '#/ui/Divider';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
+import { FlashList } from '@shopify/flash-list';
 
 function AppTimeline({
 	items,
@@ -24,7 +23,6 @@ function AppTimeline({
 }: AppTimelineRendererProps) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
-	const State = useUserTimelineState();
 
 	useEffect(() => {
 		if (skipTimelineInit) return;
@@ -45,9 +43,7 @@ function AppTimeline({
 	}
 
 	function onEndReached() {
-		if (State.items.length > 0 && fetchStatus !== 'fetching') {
-			fnLoadMore();
-		}
+		fnLoadMore();
 	}
 
 	const { scrollHandler, animatedStyle } =
@@ -56,6 +52,10 @@ function AppTimeline({
 	const [ContainerHeight, setContainerHeight] = useState(0);
 	function onLayout(event: any) {
 		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
+	function onListLoad(info: { elapsedTimeInMs: number }) {
+		console.log('[INFO]: loaded items in', info.elapsedTimeInMs, 'ms');
 	}
 
 	/**
@@ -68,7 +68,7 @@ function AppTimeline({
 			) : (
 				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
 			)}
-			<FlatList
+			<FlashList
 				onLayout={onLayout}
 				data={items}
 				renderItem={renderItem}
@@ -76,10 +76,10 @@ function AppTimeline({
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
 				}}
-				scrollEventThrottle={64}
-				refreshControl={
-					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
-				}
+				scrollEventThrottle={16}
+				onRefresh={onRefresh}
+				refreshing={IsRefreshing}
+				progressViewOffset={52}
 				style={{ backgroundColor: theme.background.a0 }}
 				ListEmptyComponent={
 					<TimelineQueryStatusIndicator
@@ -93,6 +93,9 @@ function AppTimeline({
 				ItemSeparatorComponent={() => (
 					<AppDividerSoft style={{ marginVertical: 10 }} />
 				)}
+				removeClippedSubviews={true}
+				keyExtractor={(item) => item.id}
+				onLoad={onListLoad}
 			/>
 		</>
 	);

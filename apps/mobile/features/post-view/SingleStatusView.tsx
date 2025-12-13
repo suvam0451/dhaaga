@@ -103,9 +103,14 @@ function SingleStatusView({
 					style={{
 						flex: 1,
 					}}
-					post={dto}
+					post={_target}
 				/>
-				{!isPreview && <PostMoreOptionsButton post={_target} />}
+				{!isPreview && (
+					<PostMoreOptionsButton
+						postId={_target.id}
+						createdAt={_target.createdAt}
+					/>
+				)}
 			</View>
 
 			{isSensitive ? (

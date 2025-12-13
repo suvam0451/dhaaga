@@ -1,7 +1,7 @@
 import { Account, ProfilePinnedTag, AccountService } from '@dhaaga/db';
 import { StyleSheet, View } from 'react-native';
 import PinnedTagView from '../views/PinnedTagView';
-import HubTabSectionContainer from '../components/HubTabSectionContainer';
+import HubPinSectionContainer from './HubPinSectionContainer';
 import { DialogFactory } from '#/utils/dialog-factory';
 import {
 	useActiveUserSession,
@@ -20,7 +20,7 @@ type Props = {
 	onLongPressTag: (pinnedTag: ProfilePinnedTag) => void;
 };
 
-function TagListPresenter({
+function HubPinnedTagList({
 	items,
 	parentAcct,
 	onPressAddTag,
@@ -60,14 +60,14 @@ function TagListPresenter({
 	}
 
 	return (
-		<HubTabSectionContainer
+		<HubPinSectionContainer
 			label={t(`hub.section.tags`)}
 			style={{
 				marginTop: 16,
 			}}
 			onPressAdd={onPressAddTag}
 		>
-			<View style={styles.pinnedTagListContainer}>
+			<View style={styles.root}>
 				{items.map((tag, i) => (
 					<PinnedTagView
 						key={i}
@@ -77,18 +77,14 @@ function TagListPresenter({
 					/>
 				))}
 			</View>
-		</HubTabSectionContainer>
+		</HubPinSectionContainer>
 	);
 }
 
-export default TagListPresenter;
+export default HubPinnedTagList;
 
 const styles = StyleSheet.create({
 	root: {
-		marginTop: 16,
-		marginHorizontal: 8,
-	},
-	pinnedTagListContainer: {
 		flexWrap: 'wrap',
 		display: 'flex',
 		flexDirection: 'row',

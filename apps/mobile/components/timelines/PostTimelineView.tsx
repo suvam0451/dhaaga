@@ -32,9 +32,14 @@ function PostTimelineView(props: AppTimelineProps) {
 	}
 
 	function fnLoadMore() {
-		dispatch({
-			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
-		});
+		if (
+			State.items.length > 0 &&
+			props.queryResult.fetchStatus !== 'fetching'
+		) {
+			dispatch({
+				type: PostTimelineStateAction.REQUEST_LOAD_MORE,
+			});
+		}
 	}
 
 	return (

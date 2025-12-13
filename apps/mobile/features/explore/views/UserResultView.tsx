@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useDiscoverState } from '@dhaaga/core';
-import { useApiSearchUsers } from '../../../hooks/api/useApiSearch';
+import { useDiscoverState, UserTimelineCtx } from '@dhaaga/core';
+import { useApiSearchUsers } from '#/hooks/api/useApiSearch';
 import {
 	UserTimelineStateAction,
 	useUserTimelineDispatch,
@@ -11,11 +11,7 @@ import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import UserListItemDetailedView from '#/features/timelines/view/UserListItemDetailedView';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
-type ResultInteractorProps = {
-	onDataLoaded: (isEmpty: boolean) => void;
-};
-
-function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
+function Generator() {
 	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
 	const TimelineState = useUserTimelineState();
@@ -43,12 +39,6 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	}
 
 	useEffect(() => {
-		if (!data) {
-			onDataLoaded(true);
-			return;
-		}
-		onDataLoaded(false);
-
 		if (data.length === 0) return;
 
 		let maxId = (TimelineState.items.length + data.length).toString();
@@ -96,4 +86,12 @@ function UserResultInteractor({ onDataLoaded }: ResultInteractorProps) {
 	);
 }
 
-export default UserResultInteractor;
+function UserResultView() {
+	return (
+		<UserTimelineCtx>
+			<Generator />
+		</UserTimelineCtx>
+	);
+}
+
+export default UserResultView;
