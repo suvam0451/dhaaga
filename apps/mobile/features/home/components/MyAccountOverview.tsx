@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import ProfileAvatar from '../../../../../common/user/fragments/ProfileAvatar';
-import ProfileStatView from '../../../../../../features/user-profiles/view/ProfileStatView';
+import ProfileAvatar from '../../../components/common/user/fragments/ProfileAvatar';
+import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import type { UserObjectType } from '@dhaaga/bridge';
 
 type ProfileAndSettingsProp = {
@@ -11,7 +11,6 @@ type ProfileAndSettingsProp = {
 function ProfileAndSettings({ user: data }: ProfileAndSettingsProp) {
 	return (
 		<View>
-			{/*@ts-ignore-next-line*/}
 			<Image
 				source={{ uri: data?.banner }}
 				style={{

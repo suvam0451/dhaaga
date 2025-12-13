@@ -1,5 +1,5 @@
 import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
-import { AppButtonVariantA } from '../../../lib/Buttons';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { memo, useState } from 'react';
 import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -7,7 +7,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
 import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
-} from '../../../hooks/tasks/useSyncWithProgress';
+} from '#/components/hooks/tasks/useSyncWithProgress';
 import { APP_FONTS } from '#/styles/AppFonts';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 

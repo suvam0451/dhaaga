@@ -83,6 +83,7 @@ export function NativeTextSemiBold({
 	numberOfLines,
 	emphasis,
 	onPress,
+	onTextLayout,
 }: Props) {
 	const { theme } = useAppTheme();
 
@@ -104,6 +105,7 @@ export function NativeTextSemiBold({
 			]}
 			numberOfLines={numberOfLines}
 			onPress={onPress}
+			onLayout={onTextLayout}
 		>
 			{children}
 		</Text>

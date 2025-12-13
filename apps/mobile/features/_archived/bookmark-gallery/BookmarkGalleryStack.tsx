@@ -3,7 +3,7 @@ import { APP_FONT } from '#/styles/AppTheme';
 import WithBookmarkGalleryControllerContext, {
 	useBookmarkGalleryControllerContext,
 } from '#/states/useBookmarkGalleryController';
-import BookmarkGalleryWidgetExpanded from '../../../widgets/bookmark-gallery/core/floatingWidget';
+import BookmarkGalleryWidgetExpanded from '#/components/widgets/bookmark-gallery/core/floatingWidget';
 import WithScrollOnRevealContext from '#/states/useScrollOnReveal';
 import { memo, useEffect, useRef } from 'react';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';

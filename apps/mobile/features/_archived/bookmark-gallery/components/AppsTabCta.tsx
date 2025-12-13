@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { View, Text } from 'react-native';
-import { APP_FONT } from '../../../../../styles/AppTheme';
-import { APP_FONTS } from '../../../../../styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
+import { APP_FONTS } from '#/styles/AppFonts';
 
 const AppsTabCta = memo(() => {
 	return (

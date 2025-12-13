@@ -1,7 +1,7 @@
 import { Props, styles } from './_common';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
 import { DriverNotificationType } from '@dhaaga/bridge';
-import { NotificationPostPeek } from '#/components/screens/notifications/landing/fragments/NotificationPostPeek';
+import { NotificationPostPeek } from '#/features/inbox/components/NotificationPostPeek';
 import { View } from 'react-native';
 import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
 import InboxItemBoostedFrom from '#/features/inbox/components/InboxItemBoostedFrom';

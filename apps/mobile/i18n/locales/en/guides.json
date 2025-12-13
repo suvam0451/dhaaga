@@ -112,27 +112,26 @@
 		]
 	},
 	"myAccount": {
-		"label": "Guide (My Account)",
+		"label": "Guide (Home)",
 		"qPageIntro": "What does this page do?",
 		"aPageIntro": [
-			"This is your account overview!",
+			"Consider this your account overview page.",
 			"You can access most of your server's features, as well as Dhaaga special features from here."
 		],
-		"qHowAddSwitchAccount": "How can I add/switch accounts?",
+		"qHowAddSwitchAccount": "How to switch accounts?",
 		"aHowAddSwitchAccount": [
 			"To switch, long press the 5th tab (works from anywhere).",
 			"To add, either use the above or go to Settings -> Accounts -> Add"
 		],
-		"qHowEditAccountDetails": "How can I edit my account details?",
+		"qHowEditAccountDetails": "Can I edit my account details?",
 		"aHowEditAccountDetails": [
-			"Editing avatar and banner etc. has to be done using websites (for now).",
-			"Since Dhaaga focuses on browsing and chat use cases, such features are slow to be added."
+			"You would have to use your SNS websites for that.",
+			"Dhaaga supports tens of platforms. Implementing infrequently accessed features will slow down development and increase maintenance efforts."
 		],
-		"qProfileOutOfSync": "My profile is out of sync",
+		"qProfileOutOfSync": "My information is out of sync",
 		"aProfileOutOfSync": [
-			"If something feels out of sync (e.g. - counters, avatar, banner etc),",
-			"Try to pull down and refresh this page. It is designed to fix most sync issues.",
-			"If the issue persists, please report it to the developer."
+			"Just pull down and refresh your account overview (home) page. Dhaaga is designed to be a highly network efficient and offline first client.",
+			"This applies to most account information (i.e. - counters, avatar, banner etc). Also applies to some other server side settings (e.g.- NSFW, filters etc.)."
 		]
 	},
 	"settings": {

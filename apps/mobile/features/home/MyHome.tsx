@@ -1,5 +1,10 @@
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import ProfileLandingAccountOverview from '#/components/screens/profile/stack/landing/fragments/ProfileLandingAccountOverview';
+import {
+	Pressable,
+	RefreshControl,
+	ScrollView,
+	StyleSheet,
+	View,
+} from 'react-native';
 import {
 	useActiveUserSession,
 	useAppActiveSession,
@@ -8,7 +13,6 @@ import {
 } from '#/states/global/hooks';
 import APP_ICON_ENUM from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { SpecialText } from '#/components/lib/Text';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
 import DriverService, { AppModulesProps } from '#/services/driver.service';
@@ -22,8 +26,10 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import AccountLoadError from '#/features/home/views/AccountLoadError';
 import AccountMissingError from '#/features/home/views/AccountMissingError';
+import MyAccountOverview from '#/features/home/components/MyAccountOverview';
+import { NativeTextSemiBold, NativeTextSpecial } from '#/ui/NativeText';
 
-function AccountHome() {
+function MyHome() {
 	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { driver } = useAppApiClient();
@@ -60,21 +66,21 @@ function AccountHome() {
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.SPECIAL_FEATURE_COLLECTION_LIST,
 		},
-		// {
-		// 	label: t(`profile.appFeatures.drafts.label`),
-		// 	desc: t(`profile.appFeatures.drafts.desc`),
-		// 	iconId: 'layers-outline',
-		// 	to: APP_ROUTING_ENUM.MY_DRAFTS,
-		// },
+		{
+			label: t(`profile.appFeatures.drafts.label`),
+			desc: t(`profile.appFeatures.drafts.desc`),
+			iconId: 'layers-outline',
+			to: APP_ROUTING_ENUM.MY_DRAFTS,
+		},
+		{
+			label: 'Skins',
+			desc: 'Fun stuff',
+			iconId: 'layers-outline',
+			to: APP_ROUTING_ENUM.MY_DRAFTS,
+		},
 	];
 
 	const MENU_ITEMS = [
-		// {
-		// 	iconId: 'cog' as APP_ICON_ENUM,
-		// 	onPress: () => {
-		// 		router.navigate(APP_ROUTING_ENUM.SETTINGS_PAGE);
-		// 	},
-		// },
 		{
 			iconId: 'user-guide' as APP_ICON_ENUM,
 			onPress: () => {
@@ -95,7 +101,7 @@ function AccountHome() {
 				}
 			>
 				<MyProfileNavbar menuItems={MENU_ITEMS} />
-				<ProfileLandingAccountOverview user={data} />
+				<MyAccountOverview user={data} />
 				<View style={{ marginVertical: 4 }} />
 				<TimeOfDayGreeting acct={acct} />
 				<View style={{ marginVertical: 12 }} />
@@ -117,12 +123,34 @@ function AccountHome() {
 					}}
 				/>
 				<View style={{ marginVertical: 8 }} />
-				<SpecialText
-					style={styles.sectionHeader}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						marginRight: 16,
+					}}
 				>
-					{t(`profile.appFeatures.sectionLabel`)}
-				</SpecialText>
+					<NativeTextSpecial
+						style={styles.sectionHeader}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					>
+						{t(`profile.appFeatures.sectionLabel`)}
+					</NativeTextSpecial>
+					<Pressable
+						style={{
+							borderWidth: 1.5,
+							borderRadius: 8,
+							backgroundColor: theme.background.a50,
+							paddingVertical: 6,
+							paddingHorizontal: 16,
+						}}
+						onPress={() => {
+							router.navigate(APP_ROUTING_ENUM.SETTINGS_PLANS);
+						}}
+					>
+						<NativeTextSemiBold style={{}}>FREE</NativeTextSemiBold>
+					</Pressable>
+				</View>
 				<Animated.FlatList
 					data={appModules}
 					numColumns={2}
@@ -145,7 +173,7 @@ function AccountHome() {
 	);
 }
 
-export default AccountHome;
+export default MyHome;
 
 const styles = StyleSheet.create({
 	sectionHeader: {
@@ -153,5 +181,6 @@ const styles = StyleSheet.create({
 		fontSize: 32,
 		lineHeight: 32,
 		marginVertical: 16,
+		flex: 1,
 	},
 });

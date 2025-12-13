@@ -3,7 +3,7 @@ import useAppNavigator from '#/states/useAppNavigator';
 import type { PostObjectType } from '@dhaaga/bridge';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
 import { useAppApiClient } from '#/states/global/hooks';
-import { TextContentView } from '../../../../common/status/TextContentView';
+import { TextContentView } from '../../../components/common/status/TextContentView';
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
 
 type Props = {
