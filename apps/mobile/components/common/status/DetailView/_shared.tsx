@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { AppThemingUtil } from '#/utils/theming.util';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { AppText } from '../../../lib/Text';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 type ToggleReplyVisibilityProps = {
 	enabled: boolean;
@@ -40,7 +40,7 @@ export function ToggleReplyVisibility({
 					<FontAwesome6 name="plus-square" size={16} color={COLLAPSED_COLOR} />
 				)}
 			</View>
-			<AppText.Medium
+			<NativeTextMedium
 				style={{
 					color: expanded
 						? AppThemingUtil.getThreadColorForDepth(0)
@@ -48,7 +48,7 @@ export function ToggleReplyVisibility({
 				}}
 			>
 				{count} replies
-			</AppText.Medium>
+			</NativeTextMedium>
 		</Pressable>
 	);
 }
@@ -76,13 +76,13 @@ export function ToggleMediaVisibility({
 				/>
 			</View>
 			{expanded ? (
-				<AppText.Medium style={{ color: EXPANDED_COLOR, marginLeft: 4 }}>
+				<NativeTextMedium style={{ color: EXPANDED_COLOR, marginLeft: 4 }}>
 					Shown ({count})
-				</AppText.Medium>
+				</NativeTextMedium>
 			) : (
-				<AppText.Medium style={{ color: COLLAPSED_COLOR, marginLeft: 4 }}>
+				<NativeTextMedium style={{ color: COLLAPSED_COLOR, marginLeft: 4 }}>
 					Hidden ({count})
-				</AppText.Medium>
+				</NativeTextMedium>
 			)}
 		</Pressable>
 	);

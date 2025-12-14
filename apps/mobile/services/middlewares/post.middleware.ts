@@ -172,33 +172,6 @@ class PostMiddleware {
 			}
 		}
 	}
-
-	/**
-	 * Since the share item itself
-	 * is a protocol object, the underlying
-	 * post target with the actual content needs to
-	 * be extracted out
-	 * @param input post object, possibly the original
-	 * root level object
-	 *
-	 *  - Shares -> Returns boostedFrom
-	 *  - Quotes -> Returns the object itself
-	 */
-	static getContentTarget(input: PostObjectType): PostObjectType {
-		if (!input) {
-			console.log('[WARN]: trying to obtain target post for', input);
-			return input;
-		}
-		if (input.meta.isBoost && !input.boostedFrom) {
-			console.log('[WARN]: original object not available for a repost', input);
-			return input;
-		}
-		return input.meta.isBoost
-			? input.content.raw || input.content.media.length > 0
-				? input
-				: input.boostedFrom
-			: input;
-	}
 }
 
 export { PostMiddleware };

@@ -1,7 +1,7 @@
 import { AddAccountLandingFragment } from '#/features/onboarding/presenters/AddAccountPresenter';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { useAssets } from 'expo-asset';
 import {
@@ -27,7 +27,7 @@ import AccountDbService from '#/services/db/account-db.service';
 import { BackHandler } from 'react-native';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import RoutingUtils from '#/utils/routing.utils';
 
 function AtProto() {
@@ -43,7 +43,7 @@ function AtProto() {
 	const { db } = useAppDb();
 	const { acct } = useActiveUserSession();
 	const { restoreSession } = useAppGlobalStateActions();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { loadAccounts } = useHub();
 
 	async function onSubmit() {
@@ -61,7 +61,7 @@ function AtProto() {
 				AccountService.ensureAccountSelection(db);
 				restoreSession();
 			}
-			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
 			RoutingUtils.toAccountManagement();
 		});

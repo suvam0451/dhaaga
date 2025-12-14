@@ -1,9 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import TitleOnlyNoScrollContainer from '#/components/containers/TitleOnlyNoScrollContainer';
 import { useLocalSearchParams } from 'expo-router';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import PleromaPasteToken from '#/features/onboarding/components/PleromaPasteToken';
-import { APP_EVENT_ENUM } from '#/services/publishers/app.publisher';
 import {
 	useAppDb,
 	useAppPublishers,
@@ -17,10 +15,12 @@ import appStyling from '#/styles/AppStyles';
 import { AppAuthWebView } from '#/components/lib/WebView';
 import RoutingUtils from '#/utils/routing.utils';
 import { HideWhileKeyboardActive } from '#/ui/Containers';
+import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
-	const { appSub } = useAppPublishers();
+	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
 
@@ -52,14 +52,15 @@ function MastodonSignInStack() {
 			userData,
 		);
 		if (upsertResult) {
-			appSub.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
+			appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
 			RoutingUtils.toAccountManagement();
 		}
 	}
 
 	return (
-		<TitleOnlyNoScrollContainer headerTitle={`Mastodon Sign-In`}>
+		<>
+			<NavBar_Simple label={`Mastodon Sign-In`} />
 			<AppAuthWebView
 				uri={_signInUrl}
 				isBlurred={!!code}
@@ -156,7 +157,7 @@ function MastodonSignInStack() {
 					</View>
 				</View>
 			)}
-		</TitleOnlyNoScrollContainer>
+		</>
 	);
 }
 

@@ -5,6 +5,8 @@ import {
 } from '#/utils/theming.util';
 import { useAppTheme } from '#/states/global/hooks';
 import { StyleProp, TextStyle, Text } from 'react-native';
+import { APP_FONTS } from '#/styles/AppFonts';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
 	color?: string;
@@ -81,6 +83,7 @@ export function NativeTextSemiBold({
 	numberOfLines,
 	emphasis,
 	onPress,
+	onTextLayout,
 }: Props) {
 	const { theme } = useAppTheme();
 
@@ -102,6 +105,7 @@ export function NativeTextSemiBold({
 			]}
 			numberOfLines={numberOfLines}
 			onPress={onPress}
+			onLayout={onTextLayout}
 		>
 			{children}
 		</Text>
@@ -172,6 +176,18 @@ export function NativeTextH6({
 	);
 }
 
+/**
+ * BABES_NEUE font for the original square aesthetics
+ *
+ * May break styling for non-english languages
+ * @param style
+ * @param color
+ * @param children
+ * @param numberOfLines
+ * @param emphasis
+ * @param onPress
+ * @constructor
+ */
 export function NativeTextSpecial({
 	style,
 	color,
@@ -181,6 +197,7 @@ export function NativeTextSpecial({
 	onPress,
 }: Props) {
 	const { theme } = useAppTheme();
+	const { i18n } = useTranslation();
 
 	let _color =
 		color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
@@ -189,12 +206,17 @@ export function NativeTextSpecial({
 		AppTextVariant.SPECIAL,
 	);
 
+	const FONT_INCOMPATIBLE = ['jp'].includes(i18n.language);
 	return (
 		<Text
 			style={[
 				_baseStyling,
 				{
 					color: _color,
+					fontFamily: FONT_INCOMPATIBLE
+						? APP_FONTS.ROBOTO_500
+						: APP_FONTS.BEBAS_NEUE_400,
+					fontSize: FONT_INCOMPATIBLE ? 18 : 22,
 				},
 				style,
 			]}

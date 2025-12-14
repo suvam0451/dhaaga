@@ -1,4 +1,3 @@
-import type { AppBskyFeedGetAuthorFeed } from '@atproto/api';
 import { queryOptions } from '@tanstack/react-query';
 import {
 	ActivitypubHelper,
@@ -9,6 +8,7 @@ import {
 	DriverUserFindQueryType,
 	MisskeyApiAdapter,
 	PostParser,
+	UserParser,
 } from '@dhaaga/bridge';
 import type {
 	PostObjectType,
@@ -50,13 +50,21 @@ export function userFollowsQueryOpts(
 	userId: string,
 	maxId: string | null,
 ) {
-	async function api() {
-		return client.users.getFollowings({
+	async function api(): Promise<ResultPage<UserObjectType[]>> {
+		const data = await client.users.getFollowings({
 			id: userId,
 			limit: 15,
 			maxId,
 			allowPartial: true,
 		});
+		return {
+			...data,
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+		};
 	}
 	return queryOptions<ResultPage<UserObjectType[]>>({
 		queryKey: ['dhaaga/user/follows', client.key, userId, maxId],
@@ -71,12 +79,21 @@ export function userFollowersQueryOpts(
 	maxId: string | null,
 ) {
 	async function api() {
-		return client.users.getFollowers({
+		const data = await client.users.getFollowers({
 			id: acctId,
 			limit: 10,
 			maxId,
 			allowPartial: true,
 		});
+
+		return {
+			...data,
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+		};
 	}
 
 	return queryOptions<ResultPage<UserObjectType[]>>({
@@ -86,47 +103,47 @@ export function userFollowersQueryOpts(
 	});
 }
 
-async function api(
-	client: ApiTargetInterface,
-	userId: string,
-): Promise<ResultPage<PostObjectType[]>> {
-	const result = await client.users.getPosts(userId, {
-		limit: 10,
-		userId,
-		onlyMedia: true,
-		excludeReblogs: true,
-		// misskey
-		allowPartial: true,
-		withFiles: true,
-		withRenotes: false,
-		withReplies: false,
-		// bluesky
-		bskyFilter: DriverService.supportsAtProto(client.driver)
-			? 'posts_with_media'
-			: undefined,
-	});
-
-	const data = DriverService.supportsAtProto(client.driver)
-		? PostParser.parse<unknown[]>(
-				(result as AppBskyFeedGetAuthorFeed.Response).data.feed,
-				client.driver,
-				client.server!,
-			).filter((o) => !o.meta.isReply)
-		: PostParser.parse<unknown[]>(
-				result as any[],
-				client.driver,
-				client.server!,
-			);
-
-	return {
-		data,
-	};
-}
-
 export function userGalleryQueryOpts(
 	client: ApiTargetInterface,
 	userId: string,
 ) {
+	async function api(
+		client: ApiTargetInterface,
+		userId: string,
+	): Promise<ResultPage<PostObjectType[]>> {
+		const result = await client.users.getPosts(userId, {
+			limit: 10,
+			userId,
+			onlyMedia: true,
+			excludeReblogs: true,
+			// misskey
+			allowPartial: true,
+			withFiles: true,
+			withRenotes: false,
+			withReplies: false,
+			// bluesky
+			bskyFilter: DriverService.supportsAtProto(client.driver)
+				? 'posts_with_media'
+				: undefined,
+		});
+
+		const data = DriverService.supportsAtProto(client.driver)
+			? PostParser.parse<unknown[]>(
+					result.data.map((o: any) => o.post),
+					client.driver,
+					client.server!,
+				)
+			: PostParser.parse<unknown[]>(
+					result.data as any[],
+					client.driver,
+					client.server!,
+				);
+
+		return {
+			data,
+		};
+	}
+
 	return queryOptions<ResultPage<PostObjectType[]>>({
 		queryKey: [`dhaaga/profile/gallery`, userId],
 		queryFn: () => api(client, userId),
@@ -142,10 +159,7 @@ export function userGetPinnedPosts(client: ApiTargetInterface, userId: string) {
 		 */
 
 		if (ActivityPubService.misskeyLike(client.driver)) {
-			const { data, error } = await (client as MisskeyApiAdapter).users.get(
-				userId,
-			);
-			if (error) throw new Error(error.message);
+			const data = await (client as MisskeyApiAdapter).users.get(userId);
 			const _data = data as any;
 			return PostParser.parse<unknown[]>(
 				_data.pinnedNotes,

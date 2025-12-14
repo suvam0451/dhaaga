@@ -80,11 +80,6 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 							name="bookmarks"
 							size={ACTION_BUTTON_SIZE}
 							color={ACTIVE_TINT}
-							style={{
-								paddingVertical: 6,
-								marginRight: -6,
-								paddingHorizontal: 6,
-							}}
 						/>
 					);
 			}
@@ -103,8 +98,8 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 					return (
 						<AppIcon
 							id="bookmarks-outline"
-							color={INACTIVE_TINT}
 							size={ACTION_BUTTON_SIZE}
+							color={INACTIVE_TINT}
 						/>
 					);
 			}
@@ -164,7 +159,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 				default:
 					return (
 						<AppIcon
-							id={'message'}
+							id={'chatbox-outline'}
 							color={INACTIVE_TINT}
 							size={ACTION_BUTTON_SIZE}
 						/>

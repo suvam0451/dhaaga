@@ -1,13 +1,11 @@
 import { useAppTheme } from '#/states/global/hooks';
 import { StyleProp, Text, TextStyle } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import {
 	APP_COLOR_PALETTE_EMPHASIS,
 	AppTextVariant,
 	AppThemingUtil,
 } from '#/utils/theming.util';
 import { RandomUtil } from '@dhaaga/bridge';
-import { useTranslation } from 'react-i18next';
 
 type AppTextProps = {
 	forwardedKey?: any;
@@ -26,58 +24,6 @@ type AppTextProps = {
 	emphasis?: APP_COLOR_PALETTE_EMPHASIS;
 	onTextLayout?: (e: any) => void;
 };
-
-/**
- * @deprecated
- * @param forwardedKey
- * @param keygen
- * @param style
- * @param color
- * @param children
- * @param numberOfLines
- * @param emphasis
- * @constructor
- */
-export function SpecialText({
-	forwardedKey,
-	keygen,
-	style,
-	color,
-	children,
-	numberOfLines,
-	emphasis,
-}: AppTextProps) {
-	const { theme } = useAppTheme();
-	const { i18n } = useTranslation();
-
-	let _color =
-		color || AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
-	let _baseStyling = AppThemingUtil.getBaseStylingForVariant(
-		AppTextVariant.SPECIAL,
-	);
-
-	const FONT_INCOMPATIBLE = ['jp'].includes(i18n.language);
-	return (
-		<Text
-			key={keygen ? RandomUtil.nanoId() : forwardedKey}
-			style={[
-				_baseStyling,
-				{
-					color: _color,
-					fontFamily: FONT_INCOMPATIBLE
-						? APP_FONTS.ROBOTO_500
-						: APP_FONTS.BEBAS_NEUE_400,
-					fontSize: FONT_INCOMPATIBLE ? 18 : 22,
-				},
-				style,
-			]}
-			numberOfLines={numberOfLines}
-			textBreakStrategy={'simple'}
-		>
-			{children}
-		</Text>
-	);
-}
 
 export class AppText {
 	static Medium({

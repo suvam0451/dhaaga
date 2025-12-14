@@ -1,4 +1,3 @@
-import { useSocialHubFeedPinStatus } from '#/features/social-hub/api/useSocialHubFeedPinStatus';
 import { Profile } from '@dhaaga/db';
 import { useProfileMutation } from '#/features/app-profiles/api/useProfileMutation';
 import { Pressable, View, StyleSheet } from 'react-native';
@@ -11,6 +10,7 @@ import { useAppTheme } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { NativeTextMedium } from '#/ui/NativeText';
+import { useSocialHubFeedPinStatus } from '#/features/hub/api/useSocialHubFeedPinStatus';
 
 type Props = {
 	profile: Profile;

@@ -81,7 +81,6 @@ function getChatNotificationsQueryOpts(
 ) {
 	async function api(): Promise<any[]> {
 		const result = await client.notifications.getChats(driver);
-		if (result.error) throw new Error(result.error.message);
 
 		// const _data: ChatBskyConvoListConvos.OutputSchema = result.data;
 		// return ChatService.resolveAtProtoChat(db, _data, acct, driver, server);
@@ -114,7 +113,7 @@ function getSocialNotificationsQueryOpts(
 	acctIdentifier: string,
 	maxId?: string,
 ) {
-	async function api() {
+	async function api(): Promise<NotificationPage> {
 		const result = await client.notifications.getSocialUpdates({
 			limit: NOTIFICATION_PAGE_SIZE,
 			maxId,
@@ -163,7 +162,7 @@ function getSubscriptionNotificationsQueryOpts(
 	acctIdentifier: string,
 	maxId?: string,
 ) {
-	async function api() {
+	async function api(): Promise<ResultPage<NotificationObjectType[]>> {
 		if (ActivityPubService.misskeyLike(driver)) {
 			const result = await (
 				client as MisskeyApiAdapter

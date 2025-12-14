@@ -46,6 +46,14 @@ export type UserPeekModalDataType = z.infer<typeof userPeekModalDataSchema>;
  * ---- Storage Interfaces ----
  */
 
+const searchHistoryItemSchema = z.object({
+	searchTerm: z.string(),
+	frequency: z.number().default(0),
+	resultCount: z.number().default(0),
+});
+
+export type SearchHistoryItemType = z.infer<typeof searchHistoryItemSchema>;
+
 class Storage extends BaseStorageManager {
 	getUserId() {
 		return this.get(APP_CACHE_KEY.USER_ID_TARGET);

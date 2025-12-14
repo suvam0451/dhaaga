@@ -1,10 +1,10 @@
 import { Fragment } from 'react';
-import ShareIndicator from '../../components/common/status/fragments/ShareIndicator';
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import ShareIndicator from '#/components/common/status/fragments/ShareIndicator';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import SingleStatusView from '../post-view/SingleStatusView';
-import { ReplyIndicator } from '../../components/common/status/ListView/_shared';
-import ParentPost from '../../components/common/status/fragments/ParentPost';
-import { PostContainer } from '../../components/common/status/_shared';
+import { ReplyIndicator } from '#/components/common/status/ListView/_shared';
+import ParentPost from '#/components/common/status/fragments/ParentPost';
+import { PostContainer } from '#/components/common/status/_shared';
 import { View } from 'react-native';
 
 /**
@@ -49,6 +49,7 @@ function PostTimelineEntryView({
 }: StatusItemProps) {
 	const { dto } = withPostItemContext();
 	if (!dto) return <View />;
+
 	if (dto.meta.isBoost) {
 		// Quote Boost
 		if (!!dto.content.raw || dto.content.media.length > 0) {

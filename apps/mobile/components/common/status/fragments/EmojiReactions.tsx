@@ -1,4 +1,4 @@
-import { Fragment, memo, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
 import EmojiReaction from './EmojiReaction';
@@ -12,6 +12,7 @@ import {
 	useAppApiClient,
 	useAppTheme,
 } from '#/states/global/hooks';
+import { DriverService } from '@dhaaga/bridge';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
@@ -19,7 +20,7 @@ type EmojiReactionsProps = {
 	dto: PostObjectType;
 };
 
-const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
+function EmojiReactions({ dto }: EmojiReactionsProps) {
 	const [Emojis, setEmojis] = useState<EmojiDto[]>([]);
 	const [AllEmojisExpanded, setAllEmojisExpanded] = useState(false);
 	const { theme } = useAppTheme();
@@ -40,7 +41,11 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 	}, [dto.stats.reactions, dto.calculated.reactionEmojis, acctManager]);
 
 	// mastodon does not support emojis
-	if (driver === KNOWN_SOFTWARE.MASTODON) return <Fragment />;
+	if (
+		driver === KNOWN_SOFTWARE.MASTODON ||
+		DriverService.supportsAtProto(driver)
+	)
+		return <Fragment />;
 
 	const ShownEmojis = AllEmojisExpanded
 		? Emojis
@@ -81,7 +86,7 @@ const EmojiReactions = memo(({ dto }: EmojiReactionsProps) => {
 			)}
 		</View>
 	);
-});
+}
 
 const styles = StyleSheet.create({
 	showAllEmojiButtonContainer: {

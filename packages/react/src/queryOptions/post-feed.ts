@@ -79,18 +79,11 @@ export function unifiedPostFeedQueryOptions(
 	 * @param maxId
 	 */
 	function generateMaxId(
-		data: any,
+		data: any[],
 		maxId?: string | null,
 	): string | null | undefined {
 		if (maxId) return maxId;
-
-		if (DriverService.supportsAtProto(driver)) {
-			if (data.posts !== undefined) return data.cursor;
-			const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
-			return _payload.data.cursor;
-		} else {
-			return data[data.length - 1]?.id;
-		}
+		return data.length > 0 ? data[data.length - 1]?.id : null;
 	}
 
 	function getPageFromResult(result: any) {
@@ -178,8 +171,8 @@ export function unifiedPostFeedQueryOptions(
 			case TimelineFetchMode.USER: {
 				if (!_query || _query.userId === undefined)
 					throw new Error('missing userId');
-				const result = await client.users.getPosts(_id!, _query as any);
-				return createResultBatch(result);
+				const data = await client.users.getPosts(_id!, _query as any);
+				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.SOCIAL: {
 				const result = await client.timelines.public({
@@ -194,8 +187,12 @@ export function unifiedPostFeedQueryOptions(
 						_query,
 					);
 					return {
-						data: PostParser.parse<unknown[]>(result as any[], driver, server),
-						maxId: generateMaxId(result),
+						data: PostParser.parse<unknown[]>(
+							result.data as any[],
+							driver,
+							server,
+						),
+						maxId: generateMaxId(result.data),
 						minId: null,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
@@ -216,8 +213,7 @@ export function unifiedPostFeedQueryOptions(
 				return getPageFromResult(result);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
-				const { data, error } = await client.users.bookmarks(_query);
-				if (error) return defaultResultPage;
+				const data = await client.users.bookmarks(_query);
 				return createResultBatch(data.data, data?.maxId);
 			}
 			case TimelineFetchMode.FEED: {

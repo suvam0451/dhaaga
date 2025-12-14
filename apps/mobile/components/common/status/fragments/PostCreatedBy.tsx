@@ -19,7 +19,7 @@ import { TextContentView } from '../TextContentView';
 import type { AppParsedTextNodes, PostObjectType } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import { RandomUtil, ActivityPubService } from '@dhaaga/bridge';
-import { TextNodeParser, PostInspector } from '@dhaaga/bridge';
+import { TextNodeParser } from '@dhaaga/bridge';
 import OriginalPosterDecoration from '#/skins/OriginalPosterDecoration';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
@@ -169,7 +169,6 @@ export function SavedPostCreatedBy({
 						flexShrink: 1,
 					}}
 				>
-					{/* @ts-ignore */}
 					<Image
 						style={{
 							flex: 1,
@@ -177,6 +176,7 @@ export function SavedPostCreatedBy({
 							borderRadius: TIMELINE_PFP_SIZE / 2,
 						}}
 						source={{ uri: user.avatarUrl }}
+						onError={() => {}}
 					/>
 				</TouchableOpacity>
 			</View>
@@ -201,11 +201,10 @@ type OriginalPosterProps = {
 
 /**
  * This is the author indicator for
- * the bottom-most post item
+ * the bottom-most post-item
  */
-function PostCreatedBy({ style, post: dto }: OriginalPosterProps) {
-	const { show, setCtx } = useAppBottomSheet();
-	const STATUS_DTO = PostInspector.getContentTarget(dto);
+function PostCreatedBy({ style, post }: OriginalPosterProps) {
+	const { show } = useAppBottomSheet();
 	const { toProfile } = useAppNavigator();
 	const { driver } = useAppApiClient();
 
@@ -217,13 +216,13 @@ function PostCreatedBy({ style, post: dto }: OriginalPosterProps) {
 			ctx = {
 				$type: 'user-preview',
 				use: 'did',
-				did: PostInspector.getContentTarget(dto)?.postedBy?.id,
+				did: post?.postedBy?.id,
 			};
 		} else {
 			ctx = {
 				$type: 'user-preview',
 				use: 'userId',
-				userId: PostInspector.getContentTarget(dto)?.postedBy?.id,
+				userId: post?.postedBy?.id,
 			};
 		}
 		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, ctx);
@@ -243,7 +242,7 @@ function PostCreatedBy({ style, post: dto }: OriginalPosterProps) {
 	}
 
 	function onProfileClicked() {
-		toProfile(PostInspector.getContentTarget(dto)?.postedBy?.id);
+		toProfile(post?.postedBy?.id);
 	}
 
 	return (
@@ -253,17 +252,17 @@ function PostCreatedBy({ style, post: dto }: OriginalPosterProps) {
 					onPress={onAvatarClicked}
 					style={styles.authorAvatarContainer}
 				>
-					<OriginalPosterDecoration uri={STATUS_DTO.postedBy.avatarUrl} />
+					<OriginalPosterDecoration uri={post.postedBy.avatarUrl} />
 				</TouchableOpacity>
 			</View>
 
 			<OriginalPosterPostedByFragment
 				onClick={onProfileClicked}
-				displayNameParsed={STATUS_DTO.postedBy.parsedDisplayName}
-				handle={STATUS_DTO.postedBy.handle}
-				postedAt={new Date(STATUS_DTO.createdAt)}
-				visibility={STATUS_DTO.visibility}
-				emojiMap={STATUS_DTO.calculated.emojis}
+				displayNameParsed={post.postedBy.parsedDisplayName}
+				handle={post.postedBy.handle}
+				postedAt={new Date(post.createdAt)}
+				visibility={post.visibility}
+				emojiMap={post.calculated.emojis}
 			/>
 		</View>
 	);

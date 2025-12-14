@@ -15,6 +15,7 @@ import {
 	usePostTimelineState,
 	usePostTimelineDispatch,
 	PostTimelineStateAction,
+	TimelineFetchMode,
 } from '@dhaaga/core';
 import {
 	useAppApiClient,
@@ -33,7 +34,7 @@ type Props = {
 
 /**
  * A custom navbar that invokes
- * the timeline switcher, when
+ * the timeline switcher when
  * the label is clicked
  *
  * NOTE: ScrollView not included
@@ -109,20 +110,24 @@ function NavBar_Feed({ animatedStyle }: Props) {
 						{ justifyContent: 'flex-end', paddingRight: 8 },
 					]}
 				>
-					<Pressable
-						style={{
-							padding: appDimensions.topNavbar.padding,
-							marginLeft: appDimensions.topNavbar.marginLeft,
-						}}
-						onPress={onViewTimelineController}
-					>
-						<AppIcon
-							id={'filter-outline'}
-							size={TOP_NAVBAR_MENU_ICON_SIZE}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+					{State.feedType === TimelineFetchMode.IDLE ? (
+						<View />
+					) : (
+						<Pressable
+							style={{
+								padding: appDimensions.topNavbar.padding,
+								marginLeft: appDimensions.topNavbar.marginLeft,
+							}}
 							onPress={onViewTimelineController}
-						/>
-					</Pressable>
+						>
+							<AppIcon
+								id={'filter-outline'}
+								size={TOP_NAVBAR_MENU_ICON_SIZE}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+								onPress={onViewTimelineController}
+							/>
+						</Pressable>
+					)}
 					<Pressable
 						style={{
 							padding: appDimensions.topNavbar.padding,

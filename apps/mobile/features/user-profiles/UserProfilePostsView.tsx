@@ -1,8 +1,4 @@
-import {
-	useActiveUserSession,
-	useAppApiClient,
-	useAppTheme,
-} from '#/states/global/hooks';
+import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -12,15 +8,13 @@ import {
 	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import Animated, {
-	ScrollHandlerProcessed,
-	SharedValue,
-} from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
-import WithAppStatusItemContext from '#/components/containers/contexts/WithPostItemContext';
+import { ScrollHandlerProcessed, SharedValue } from 'react-native-reanimated';
+import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
-import { RefreshControl, StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
+import UserProfileModuleBuilder from '#/features/user-profiles/components/UserProfileModuleBuilder';
+import { useEffect } from 'react';
 
 type Props = {
 	userId: string;
@@ -29,11 +23,9 @@ type Props = {
 	headerHeight: SharedValue<number>;
 };
 
-function ContentView({ userId, onScroll, headerHeight }: Props) {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
+function ContentView({ userId, onScroll, animatedStyle, headerHeight }: Props) {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useActiveUserSession();
-	const { theme } = useAppTheme();
 
 	const State = usePostTimelineState()!;
 	const dispatch = usePostTimelineDispatch()!;
@@ -43,34 +35,49 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 			type: TimelineFetchMode.USER,
 			maxId: State.appliedMaxId,
 			sessionId: State.sessionId,
+			limit: 10,
 			query: {
 				id: userId,
 				label: 'N/A',
 			},
+			opts: {
+				bskyFilter: 'posts_no_replies',
+			},
 		}),
 	);
-	const { fetchStatus, data, status, refetch } = queryResult;
 
 	useEffect(() => {
-		if (fetchStatus === 'fetching' || status !== 'success') return;
+		dispatch({
+			type: PostTimelineStateAction.RESET,
+		});
+	}, []);
+
+	function onEndReachedDispatch() {
+		dispatch({
+			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
+		});
+	}
+
+	function onModuleResetDispatch() {
+		dispatch({
+			type: PostTimelineStateAction.RESET,
+		});
+	}
+
+	function onDataLoadedDispatch(data: any) {
 		dispatch({
 			type: PostTimelineStateAction.APPEND_RESULTS,
 			payload: data,
 		});
-	}, [fetchStatus]);
-
-	function onRefresh() {
-		setIsRefreshing(true);
-		dispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-		refetch().finally(() => setIsRefreshing(false));
 	}
 
 	return (
-		<Animated.FlatList
-			data={State.items}
-			onScroll={onScroll}
+		<UserProfileModuleBuilder
+			queryResult={queryResult}
+			onListEndReached={onEndReachedDispatch}
+			onDataLoaded={onDataLoadedDispatch}
+			onModuleReset={onModuleResetDispatch}
+			items={State.items}
 			renderItem={({ item }) => (
 				<WithAppStatusItemContext dto={item}>
 					<TimelineFilter_EmojiCrash>
@@ -78,14 +85,10 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 					</TimelineFilter_EmojiCrash>
 				</WithAppStatusItemContext>
 			)}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
-			}
-			ListHeaderComponent={
-				<Animated.View style={{ height: headerHeight.value }} />
-			}
-			contentContainerStyle={{ paddingTop: 16 }}
-			style={[{ backgroundColor: theme.background.a0 }]}
+			onScroll={onScroll}
+			paddingTop={32}
+			headerHeight={headerHeight}
+			animatedStyle={animatedStyle}
 		/>
 	);
 }

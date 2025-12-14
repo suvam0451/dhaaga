@@ -77,13 +77,13 @@ export default function TabLayout() {
 							<DhaagaSkinnedIcon
 								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE}
 								size={size + ICON_B_SIZE_OFFSET}
-								color={color}
+								color={!acct ? theme.background.a50 : color}
 							/>
 						) : (
 							<DhaagaSkinnedIcon
 								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_INACTIVE}
 								size={size + ICON_B_SIZE_OFFSET}
-								color={color}
+								color={!acct ? theme.background.a50 : color}
 							/>
 						),
 				}}

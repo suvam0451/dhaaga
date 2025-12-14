@@ -1,8 +1,10 @@
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import {
+	usePostEventBusActions,
+	usePostEventBusStore,
+} from '#/hooks/pubsub/usePostEventBusActions';
 import { FlatList, View } from 'react-native';
 import AssignmentSheetBookmarkView from '#/features/collections/views/AssignmentSheetBookmarkView';
-import { PostMiddleware } from '#/services/middlewares/post.middleware';
 import useDbAddPostToCollection from '#/states/db/useDbAddPostToCollection';
 import CollectionItem from '#/features/collections/components/CollectionItem';
 import { useTranslation } from 'react-i18next';
@@ -10,22 +12,23 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import AssignmentListControlView from '#/features/_shared/views/AssignmentListControlView';
 import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
+import { PostInspector } from '@dhaaga/bridge';
 
 function BookmarkBottomSheet() {
 	const { theme } = useAppTheme();
 	const { ctx } = useAppBottomSheet();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 
-	const { post, toggleBookmark } = usePostEventBusActions(
-		ctx.$type === 'post-id' ? ctx.postId : null,
-	);
+	const postId = ctx.$type === 'post-id' ? ctx.postId : null;
+	const { post } = usePostEventBusStore(postId);
+	const { toggleBookmark } = usePostEventBusActions(postId);
 	const { data, toggle, onRequestAddNewCollection } = useDbAddPostToCollection(
-		PostMiddleware.getContentTarget(post)?.id,
+		PostInspector.getContentTarget(post)?.id,
 	);
 
 	if (!post) return <View />;
 
-	const _target = PostMiddleware.getContentTarget(post);
+	const _target = PostInspector.getContentTarget(post);
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
 
 	return (

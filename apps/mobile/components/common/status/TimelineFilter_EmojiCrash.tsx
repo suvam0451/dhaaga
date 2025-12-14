@@ -1,4 +1,4 @@
-import { withPostItemContext } from '#/components/containers/contexts/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import { AppText } from '#/components/lib/Text';
 import { View } from 'react-native';
 
