@@ -7,8 +7,10 @@ import {
 } from '@dhaaga/core';
 import { AppTimelineProps } from '#/components/timelines/shared';
 import { JSXElementConstructor, ReactElement } from 'react';
+import { useAppApiClient } from '#/states/global/hooks';
+import { DriverService } from '@dhaaga/bridge';
 
-function _userTimelineView(
+function _UserTimelineView(
 	props: AppTimelineProps & {
 		renderItem: ({
 			item,
@@ -48,20 +50,30 @@ function _userTimelineView(
 	);
 }
 
-export function UserDetailedTimelineView(props: AppTimelineProps) {
+function _UserDetailedTimelineView(props: AppTimelineProps) {
 	return (
-		<_userTimelineView
+		<_UserTimelineView
 			{...props}
 			renderItem={({ item }) => <UserListItemDetailedView item={item} />}
 		/>
 	);
 }
 
-export function UserPartialTimelineView(props: AppTimelineProps) {
+function _UserPartialTimelineView(props: AppTimelineProps) {
 	return (
-		<_userTimelineView
+		<_UserTimelineView
 			{...props}
 			renderItem={({ item }) => <UserListItemDetailedView item={item} />}
 		/>
+	);
+}
+
+export function UserTimelineView(props: AppTimelineProps) {
+	const { driver } = useAppApiClient();
+
+	return DriverService.supportsAtProto(driver) ? (
+		<_UserPartialTimelineView {...props} />
+	) : (
+		<_UserDetailedTimelineView {...props} />
 	);
 }

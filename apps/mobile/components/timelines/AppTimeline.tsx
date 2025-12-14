@@ -9,6 +9,9 @@ import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import { AppDividerSoft } from '#/ui/Divider';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import { FlashList } from '@shopify/flash-list';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
+import { View } from 'react-native';
+import ExploreTabNavBar from '#/features/explore/ExploreTabNavBar';
 
 function AppTimeline({
 	items,
@@ -19,7 +22,9 @@ function AppTimeline({
 	fnLoadMore,
 	fnReset,
 	renderItem,
-	feedSwitcherEnabled,
+	navbarType,
+	NavBar,
+	flatListKey,
 }: AppTimelineRendererProps) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
@@ -63,11 +68,19 @@ function AppTimeline({
 	 */
 	return (
 		<>
-			{feedSwitcherEnabled ? (
+			{navbarType === 'none' ? <View /> : <View />}
+			{navbarType === 'custom' ? NavBar : <View />}
+			{navbarType === 'unified' ? (
 				<NavBar_Feed animatedStyle={animatedStyle} />
 			) : (
-				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+				<View />
 			)}
+			{navbarType === 'simple' ? (
+				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+			) : (
+				<View />
+			)}
+			{navbarType === 'inbox' ? <ExploreTabNavBar /> : <View />}
 			<FlashList
 				onLayout={onLayout}
 				data={items}
@@ -96,6 +109,11 @@ function AppTimeline({
 				removeClippedSubviews={true}
 				keyExtractor={(item) => item.id}
 				onLoad={onListLoad}
+				key={flatListKey}
+			/>
+			<TimelineLoadingIndicator
+				numItems={items.length}
+				networkFetchStatus={fetchStatus}
 			/>
 		</>
 	);

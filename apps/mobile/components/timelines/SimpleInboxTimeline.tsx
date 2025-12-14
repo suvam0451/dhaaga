@@ -9,6 +9,7 @@ import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { RefreshControl } from 'react-native';
 import { AppDivider } from '#/components/lib/Divider';
 import { FlashList } from '@shopify/flash-list';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
@@ -41,6 +42,11 @@ function SimpleInboxTimeline({ queryResult, Wrapper }: Props) {
 		});
 	}
 
+	// return <PostTimelineView
+	//
+	// 	navbarType={"custom"} NavBar={() => <Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
+	// flatListKey={"inbox/mentions"}
+	// />
 	return (
 		<>
 			<FlashList

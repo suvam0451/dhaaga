@@ -4,7 +4,7 @@ import type {
 	UserObjectType,
 } from '@dhaaga/bridge';
 import { UseQueryResult } from '@tanstack/react-query';
-import { JSXElementConstructor, ReactElement } from 'react';
+import { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
 export type AppTimelineProps<T = PostObjectType | UserObjectType> = {
 	label: string;
@@ -15,6 +15,26 @@ export type AppTimelineProps<T = PostObjectType | UserObjectType> = {
 	 */
 	skipTimelineInit?: boolean;
 	feedSwitcherEnabled?: boolean;
+	progressViewOffset?: number;
+
+	navbarType:
+		| 'none'
+		| 'simple'
+		| 'sticky'
+		| 'custom'
+		| 'unified'
+		| 'inbox'
+		| 'explore';
+	/**
+	 * The typeof header to show.
+	 *
+	 * - none: no header (you must have your own header)
+	 * - custom: a custom header component (pass as prop)
+	 * - unified: a unified header component (/feed/index page only)
+	 * - 'inbox: default to 'custom' if feedSwitcherEnabled is true, otherwise 'none'
+	 */
+	NavBar?: () => ReactNode;
+	flatListKey: string;
 };
 
 export type AppTimelineRendererProps<T = any> = AppTimelineProps<T> & {

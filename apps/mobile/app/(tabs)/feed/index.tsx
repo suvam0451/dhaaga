@@ -108,7 +108,8 @@ function Content() {
 		<PostTimelineView
 			label={null}
 			queryResult={queryResult}
-			feedSwitcherEnabled
+			navbarType={'unified'}
+			flatListKey={'unified-feed'}
 		/>
 	);
 }

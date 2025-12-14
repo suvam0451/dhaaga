@@ -48,7 +48,7 @@ export function useApiSearchUsers(
 ) {
 	const { client } = useAppApiClient();
 	const { acct } = useActiveUserSession();
-	return useQuery<UserObjectType[]>(
+	return useQuery<ResultPage<UserObjectType[]>>(
 		searchUsersQueryOpts(client, acct.identifier, defaultTo, q, maxId),
 	);
 }

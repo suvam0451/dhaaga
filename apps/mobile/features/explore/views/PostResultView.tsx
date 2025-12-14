@@ -1,30 +1,18 @@
-import { useEffect, useState } from 'react';
 import { SEARCH_RESULT_TAB } from '#/services/driver.service';
 import {
 	PostTimelineCtx,
-	PostTimelineStateAction,
 	useDiscoverState,
-	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import { RefreshControl, View } from 'react-native';
-import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import PostTimelineEntryView from '../../post-item/PostTimelineEntryView';
 import { searchPostsQueryOpts } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/states/global/hooks';
-import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
-import Animated from 'react-native-reanimated';
-import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
-import PostSkeleton from '#/ui/skeletons/PostSkeleton';
+import PostTimelineView from '#/components/timelines/PostTimelineView';
 
 function Generator() {
 	const { client, driver, server } = useAppApiClient();
-	const [Refreshing, setRefreshing] = useState(false);
 	const State = useDiscoverState();
 	const TimelineState = usePostTimelineState();
-	const TimelineDispatch = usePostTimelineDispatch();
 	const queryResult = useQuery(
 		searchPostsQueryOpts(
 			client,
@@ -35,86 +23,14 @@ function Generator() {
 			State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
 		),
 	);
-	const { data, fetchStatus, refetch } = queryResult;
-
-	useEffect(() => {
-		TimelineDispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-	}, [State.q]);
-
-	useEffect(() => {
-		TimelineDispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-		refetch();
-	}, [State.tab]);
-
-	useEffect(() => {
-		TimelineDispatch({
-			type: PostTimelineStateAction.APPEND_RESULTS,
-			payload: data,
-		});
-	}, [fetchStatus]);
-
-	function loadMore() {
-		TimelineDispatch({
-			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
-		});
-	}
-
-	function onRefresh() {
-		setRefreshing(true);
-		TimelineDispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-		refetch().finally(() => {
-			setRefreshing(false);
-		});
-	}
-
-	const { scrollHandler } = useScrollHandleAnimatedList(loadMore);
-
-	const [ContainerHeight, setContainerHeight] = useState(0);
-	function onLayout(event: any) {
-		setContainerHeight(event.nativeEvent.layout.height);
-	}
 
 	return (
-		<View
-			style={{
-				flex: 1,
-			}}
-		>
-			<Animated.FlatList
-				onLayout={onLayout}
-				data={TimelineState.items}
-				renderItem={({ item }) => (
-					<WithAppStatusItemContext dto={item}>
-						<PostTimelineEntryView />
-					</WithAppStatusItemContext>
-				)}
-				style={{ flex: 1 }}
-				onScroll={scrollHandler}
-				scrollEventThrottle={64}
-				refreshControl={
-					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
-				}
-				ListEmptyComponent={
-					<TimelineQueryStatusIndicator
-						numItems={TimelineState.items.length}
-						renderSkeleton={() => (
-							<PostSkeleton containerHeight={ContainerHeight} />
-						)}
-						queryResult={queryResult}
-					/>
-				}
-			/>
-			<TimelineLoadingIndicator
-				numItems={TimelineState.items.length}
-				networkFetchStatus={fetchStatus}
-			/>
-		</View>
+		<PostTimelineView
+			label={null}
+			queryResult={queryResult}
+			navbarType={'none'}
+			flatListKey={'explore/posts'}
+		/>
 	);
 }
 

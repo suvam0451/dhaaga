@@ -1,6 +1,5 @@
 import {
 	AtprotoApiAdapter,
-	defaultResultPage,
 	DriverService,
 	FeedParser,
 	KNOWN_SOFTWARE,
@@ -27,7 +26,6 @@ export function searchFeedsQueryOpts(
 	maxId?: string,
 ) {
 	async function api(): Promise<FeedResultPage> {
-		if (!q) return defaultResultPage;
 		const data = await (client as AtprotoApiAdapter).search.findFeeds({
 			limit: 10,
 			query: q,
@@ -83,7 +81,6 @@ export function searchPostsQueryOpts(
 		if (DriverService.supportsAtProto(driver)) {
 			const _data = data;
 			return {
-				...defaultResultPage,
 				maxId: _data.maxId,
 				data: PostParser.parse<unknown[]>(_data.data as any, driver, server),
 			};
@@ -120,7 +117,6 @@ export function searchPostsQueryOpts(
 		queryKey: ['search/posts', server, q, maxId, sort],
 		queryFn: api,
 		enabled: client !== null && !!q,
-		initialData: defaultResultPage,
 	});
 }
 
@@ -131,7 +127,7 @@ export function searchUsersQueryOpts(
 	q: string,
 	maxId?: string,
 ) {
-	async function api(): Promise<UserObjectType[]> {
+	async function api(): Promise<ResultPage<UserObjectType[]>> {
 		// TODO: if q is empty, find us a list of recommended users
 		const data = await client.search.findUsers({
 			maxId,
@@ -142,24 +138,27 @@ export function searchUsersQueryOpts(
 			untilId: maxId,
 		});
 		if (DriverService.supportsAtProto(client.driver)) {
-			return UserParser.parse<unknown[]>(
-				data.data,
-				client.driver,
-				client.server!,
-			);
+			return {
+				data: UserParser.parse<unknown[]>(
+					data.data,
+					client.driver,
+					client.server!,
+				),
+			};
 		} else {
-			return UserParser.parse<unknown[]>(
-				data.data,
-				client.driver,
-				client.server!,
-			);
+			return {
+				data: UserParser.parse<unknown[]>(
+					data.data,
+					client.driver,
+					client.server!,
+				),
+			};
 		}
 	}
 
-	return queryOptions<UserObjectType[]>({
+	return queryOptions<ResultPage<UserObjectType[]>>({
 		queryKey: ['dhaaga/search/users', acctIdentifier, q, maxId],
 		queryFn: api,
 		enabled: !!client,
-		initialData: [],
 	});
 }

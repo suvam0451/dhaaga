@@ -1,4 +1,10 @@
-import { Pressable, View, StyleSheet } from 'react-native';
+import {
+	Pressable,
+	View,
+	StyleSheet,
+	ViewStyle,
+	StyleProp,
+} from 'react-native';
 import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
@@ -12,6 +18,7 @@ type CollectionItemProps = {
 	label: string;
 	desc: string;
 	onPress: () => void;
+	style?: StyleProp<ViewStyle>;
 };
 
 /**
@@ -36,11 +43,12 @@ function CollectionItem({
 	inactiveIconId,
 	activeIconId,
 	onPress,
+	style,
 }: CollectionItemProps) {
 	const { theme } = useAppTheme();
 
 	return (
-		<View style={styles.root}>
+		<View style={[styles.root, style]}>
 			<View
 				style={{
 					padding: 16,
@@ -96,7 +104,6 @@ export default CollectionItem;
 const styles = StyleSheet.create({
 	root: {
 		flexDirection: 'row',
-		marginBottom: 16,
 		alignItems: 'center',
 		paddingRight: 4,
 	},
