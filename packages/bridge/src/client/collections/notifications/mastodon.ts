@@ -99,7 +99,7 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		};
 	}
 
-	async getChat(): PaginatedPromise<any> {
+	async getChatDetails(): PaginatedPromise<any> {
 		throw new Error('method not implemented');
 	}
 

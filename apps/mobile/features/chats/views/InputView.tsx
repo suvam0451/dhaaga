@@ -25,8 +25,8 @@ function InputView({ setHeight, text, setText }: Props) {
 				multiline={true}
 				placeholderTextColor={theme.secondary.a30}
 				onContentSizeChange={(e) => {
-					const _height = e.nativeEvent.contentSize.height;
-					setHeight(Math.min(MAX_HEIGHT, _height)); // Update height based on content
+					// const _height = e.nativeEvent.contentSize.height;
+					// setHeight(Math.min(MAX_HEIGHT, _height)); // Update height based on content
 				}}
 				onChangeText={setText}
 				value={text}
@@ -41,8 +41,8 @@ function InputView({ setHeight, text, setText }: Props) {
 					marginLeft: 6,
 					color: theme.secondary.a20,
 					fontFamily: APP_FONTS.ROBOTO_400,
-					height: 'auto',
-					maxHeight: 192,
+					// height: 'auto',
+					// maxHeight: 192,
 				}}
 			/>
 		</View>

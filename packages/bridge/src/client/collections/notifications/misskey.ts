@@ -80,7 +80,7 @@ export class MisskeyNotificationsRouter implements NotificationsRoute {
 		return { data: { data: data as any } };
 	}
 
-	async getChat(): PaginatedPromise<any> {
+	async getChatDetails(): PaginatedPromise<any> {
 		throw new Error('method not implemented');
 	}
 

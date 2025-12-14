@@ -1,5 +1,6 @@
 export * from './chat.js';
 export * from './feed.js';
+export * from './message.js';
 export * from './notification.js';
 export * from './notification-grouped.js';
 export * from './post.js';

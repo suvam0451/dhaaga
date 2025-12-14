@@ -1,11 +1,5 @@
-import {
-	FlatList,
-	View,
-	KeyboardAvoidingView,
-	StyleSheet,
-	Animated,
-} from 'react-native';
-import { useState } from 'react';
+import { FlatList, View, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
 import { AppDivider } from '#/components/lib/Divider';
 import { useAppTheme } from '#/states/global/hooks';
@@ -16,10 +10,24 @@ import SendButtonView from '#/features/chats/views/SendButtonView';
 import InputView from '#/features/chats/views/InputView';
 import { appDimensions } from '#/styles/dimensions';
 import RecievedMessageView from '#/features/chats/views/RecievedMessageView';
-import SentMessageView from '#/features/chats/views/SentMessageView';
 import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge';
-import { NativeTextSpecial } from '#/ui/NativeText';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import {
+	useApiGetChatMessages,
+	useApiGetChatroom,
+} from '#/features/chats/api/useApiGetChats';
+import { useLocalSearchParams } from 'expo-router';
+import {
+	ChatroomCtx,
+	ChatroomStateAction,
+	useChatroomDispatch,
+	useChatroomState,
+} from '@dhaaga/react';
+import { FlashList } from '@shopify/flash-list';
+import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
+import PostSkeleton from '#/ui/skeletons/PostSkeleton';
+import { useNativeKeyboardOffset } from '#/ui/hooks/useNativeKeyboardOffset';
+import Animated from 'react-native-reanimated';
 
 type ParticipantsProps = {
 	accounts: UserObjectType[];
@@ -33,7 +41,6 @@ function Participants({ accounts }: ParticipantsProps) {
 			data={accounts}
 			renderItem={({ item }: { item: UserObjectType }) => (
 				<View style={{ padding: 4 }}>
-					{/*@ts-ignore-next-line*/}
 					<Image
 						source={{ uri: item.avatarUrl }}
 						style={{
@@ -50,29 +57,46 @@ function Participants({ accounts }: ParticipantsProps) {
 
 type MessageProps = {
 	message: MessageObjectType;
-	members: UserObjectType[];
-	myId: string;
 };
 
-function Message({ message, members, myId }: MessageProps) {
-	if (!message?.sender?.id) return <View />;
-
-	const sender = members.find((o) => o.id === message.sender.id);
-	if (!sender) return <View />;
-
-	if (message.sender.id === myId) return <SentMessageView item={message} />;
-
-	return <RecievedMessageView avatarUrl={sender.avatarUrl} item={message} />;
+function Message({ message }: MessageProps) {
+	return <RecievedMessageView avatarUrl={null} item={message} />;
 }
 
-function Page() {
+function Generator() {
 	const { theme } = useAppTheme();
 	const [MessageText, setMessageText] = useState(null);
+
+	const params = useLocalSearchParams();
+	const roomId: string = params['roomId'] as string;
 
 	const [height, setHeight] = useState(40); // Initial height
 	const [IsMessageLoading, setIsMessageLoading] = useState(false);
 
-	const { state, myId, sendMessage } = useChatroom();
+	const { data: RoomData } = useApiGetChatroom(roomId);
+	const queryResult = useApiGetChatMessages(roomId, undefined);
+	const { data: nextMessages, fetchStatus, error } = queryResult;
+
+	const State = useChatroomState();
+	const dispatch = useChatroomDispatch();
+
+	useEffect(() => {
+		dispatch({
+			type: ChatroomStateAction.RESET,
+		});
+	}, []);
+
+	const { hiddenViewStyle } = useNativeKeyboardOffset(20, 20);
+
+	useEffect(() => {
+		if (fetchStatus === 'fetching' || !!error) return;
+		dispatch({
+			type: ChatroomStateAction.APPEND_PAGE,
+			payload: nextMessages,
+		});
+	}, [fetchStatus, error]);
+
+	const { state, sendMessage } = useChatroom();
 	/**
 	 * Send the message
 	 */
@@ -88,76 +112,94 @@ function Page() {
 			});
 	}
 
-	return (
-		<KeyboardAvoidingView>
-			<NavBar_Simple label={'Chat'} />
-			<Animated.FlatList
-				data={state.messages}
-				renderItem={({ item }: { item: MessageObjectType }) => (
-					<Message message={item} myId={myId} members={state.room?.members} />
-				)}
-				contentContainerStyle={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
-				}}
-				style={{ marginTop: 'auto' }}
-				ListHeaderComponent={
-					<View
-						style={{
-							flexGrow: 1,
-							flex: 1,
-							marginBottom: 16,
-							marginLeft: 8,
-						}}
-					>
-						<NativeTextSpecial
-							style={{
-								color: theme.secondary.a20,
-								fontSize: 28,
-								marginBottom: 12,
-							}}
-						>
-							Participants
-						</NativeTextSpecial>
-						<View style={{ marginBottom: 16 }}>
-							<Participants accounts={state.room?.members || []} />
-						</View>
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
 
-						<AppDivider.Hard
-							style={{ backgroundColor: '#363636', height: 0.5 }}
+	return (
+		<View style={{ flex: 1 }}>
+			<View style={{ flex: 1 }}>
+				<NavBar_Simple label={'Chat'} />
+				<FlatList
+					onLayout={onLayout}
+					data={State.items}
+					renderItem={({ item }) => <Message message={item} />}
+					contentContainerStyle={{
+						paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
+					}}
+					style={{ flex: 1, backgroundColor: theme.background.a0 }}
+					ListHeaderComponent={
+						<View
+							style={{
+								flexGrow: 1,
+								flex: 1,
+								marginBottom: 16,
+								marginLeft: 8,
+							}}
+						></View>
+					}
+					ListEmptyComponent={
+						<TimelineQueryStatusIndicator
+							queryResult={queryResult}
+							numItems={State.items.length}
+							renderSkeleton={() => (
+								<PostSkeleton containerHeight={ContainerHeight} />
+							)}
+						/>
+					}
+				/>
+
+				<AppDivider.Hard style={{ backgroundColor: '#363636', height: 0.5 }} />
+
+				<View
+					style={[
+						styles.sendInterface,
+						{
+							position: 'absolute',
+							bottom: 0,
+							backgroundColor: theme.background.a0,
+						},
+					]}
+				>
+					<View style={{ height: 'auto' }}>
+						<AppIcon
+							id={'chevron-right'}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+							size={28}
 						/>
 					</View>
-				}
-			/>
-
-			<AppDivider.Hard style={{ backgroundColor: '#363636', height: 0.5 }} />
-			<View
-				style={[
-					styles.sendInterface,
-					{
-						height: Math.max(56, height),
-					},
-				]}
-			>
-				<View>
-					<AppIcon
-						id={'chevron-right'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-						size={28}
+					<InputView
+						height={height}
+						setHeight={setHeight}
+						text={MessageText}
+						setText={setMessageText}
+					/>
+					<SendButtonView
+						isEnabled={true}
+						onSend={onSendMessage}
+						isSending={IsMessageLoading}
 					/>
 				</View>
-				<InputView
-					height={height}
-					setHeight={setHeight}
-					text={MessageText}
-					setText={setMessageText}
-				/>
-				<SendButtonView
-					isEnabled={true}
-					onSend={onSendMessage}
-					isSending={IsMessageLoading}
-				/>
 			</View>
-		</KeyboardAvoidingView>
+			<Animated.View
+				style={[{ backgroundColor: theme.background.a0 }, hiddenViewStyle]}
+			/>
+		</View>
+	);
+}
+
+function Page() {
+	const { hiddenViewStyle } = useNativeKeyboardOffset(20, 20);
+	const { theme } = useAppTheme();
+	return (
+		<View style={{ flex: 1, height: '100%' }}>
+			<View style={{ flex: 1 }}>
+				<ChatroomCtx>
+					<Generator />
+				</ChatroomCtx>
+			</View>
+		</View>
 	);
 }
 

@@ -60,6 +60,8 @@ function DataView() {
 			label={State?.query?.label ?? 'Custom Feed'}
 			queryResult={queryResult}
 			skipTimelineInit
+			navbarType={'unified'}
+			flatListKey={'unified-feed'}
 		/>
 	);
 }

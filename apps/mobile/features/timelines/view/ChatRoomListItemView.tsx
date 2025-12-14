@@ -1,14 +1,11 @@
 import type { ChatRoomObjectType } from '@dhaaga/bridge';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import useApiMe from '#/hooks/useApiMe';
 import { Image } from 'expo-image';
-import {
-	NativeTextMedium,
-	NativeTextNormal,
-	NativeTextSemiBold,
-} from '#/ui/NativeText';
+import { NativeTextNormal, NativeTextSemiBold } from '#/ui/NativeText';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useAppTheme } from '#/states/global/hooks';
+import RoutingUtils from '#/utils/routing.utils';
 
 type Props = {
 	room: ChatRoomObjectType;
@@ -21,8 +18,12 @@ function ChatRoomListItemView({ room }: Props) {
 	if (!data) return <View />;
 	const partner = room.members.find((o) => o.id !== data.id);
 
+	function onPress() {
+		RoutingUtils.toChatroom(room.id);
+	}
+
 	return (
-		<View>
+		<Pressable onPress={onPress}>
 			<View
 				style={{
 					flexDirection: 'row',
@@ -45,7 +46,7 @@ function ChatRoomListItemView({ room }: Props) {
 					>
 						@{partner.handle}
 					</NativeTextNormal>
-					{room.lastMessage.sender.id === data.id ? (
+					{room.lastMessage.senderId === data.id ? (
 						<View>
 							<NativeTextNormal
 								style={{ marginTop: 6, flex: 1 }}
@@ -77,7 +78,7 @@ function ChatRoomListItemView({ room }: Props) {
 					</View>
 				))}
 			</View>
-		</View>
+		</Pressable>
 	);
 }
 export default ChatRoomListItemView;

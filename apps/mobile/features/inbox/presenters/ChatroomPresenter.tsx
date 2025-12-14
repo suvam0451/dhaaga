@@ -2,7 +2,6 @@ import { Fragment, useState } from 'react';
 import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { useApiGetChatUpdates } from '#/hooks/api/useNotifications';
 import { RefreshControl } from 'react-native';
-import { AppFlashList } from '#/components/lib/AppFlashList';
 import { useAppApiClient } from '#/states/global/hooks';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import Header from '../components/Header';

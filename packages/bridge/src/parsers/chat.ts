@@ -5,6 +5,7 @@ import {
 } from '#/types/shared/chat.js';
 import { ChatBskyConvoDefs } from '@atproto/api';
 import { ApiTargetInterface } from '#/client/index.js';
+import { MessageParser } from '#/parsers/message.js';
 
 class Parser {
 	private static _bundle(
@@ -14,7 +15,6 @@ class Parser {
 		if (!input) return null;
 		if (client.driver !== KNOWN_SOFTWARE.BLUESKY) return null;
 
-		console.log(input.lastMessage);
 		return {
 			id: input.id,
 			members: input.members.map((o) => ({
@@ -25,30 +25,7 @@ class Parser {
 			})),
 			unreadCount: input.unreadCount,
 			muting: input.muted,
-			lastMessage: {
-				id: (input.lastMessage as any).id,
-				content: {
-					raw:
-						input.lastMessage?.$type === 'chat.bsky.convo.defs#messageView'
-							? (input.lastMessage as any).text
-							: null,
-				},
-				sender: {
-					id: (input.lastMessage as any)?.sender?.did,
-				},
-				facets: (input.lastMessage as any)?.facets ?? [],
-				embed: null,
-				reactions:
-					(input.lastMessage as any)?.reactions?.map((o: any) => ({
-						value: o.value,
-						senderId: o.sender?.did,
-						createdAt: new Date(o.createdAt),
-					})) ?? [],
-				createdAt: new Date((input.lastMessage as any).sentAt), // it has to be present, right?
-				deleted:
-					input.lastMessage?.$type ===
-					'chat.bsky.convo.defs#deletedMessageView',
-			},
+			lastMessage: MessageParser.parse(input.lastMessage, client),
 		};
 	}
 

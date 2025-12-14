@@ -25,9 +25,7 @@ import { z } from 'zod';
 
 const appMessageObjectSchema = z.object({
 	id: z.string(),
-	sender: z.object({
-		id: z.string(),
-	}),
+	senderId: z.string(),
 	content: z.object({
 		raw: z.string().nullable().optional(),
 	}),

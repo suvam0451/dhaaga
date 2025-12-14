@@ -19,7 +19,6 @@ function RecievedMessageView({ item, avatarUrl }: Props) {
 	return (
 		<View style={styles.root}>
 			<View style={styles.avatarContainer}>
-				{/*@ts-ignore-next-line*/}
 				<Image
 					source={{
 						uri: avatarUrl,
