@@ -7,6 +7,9 @@ import { useAppApiClient } from '#/states/global/hooks';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import Header from '../components/Header';
 import FeatureNotAvailable from '../components/FeatureNotAvailable';
+import { FlashList } from '@shopify/flash-list';
+import ChatRoomListItemView from '#/features/timelines/view/ChatRoomListItemView';
+import { AppDividerSoft } from '#/ui/Divider';
 
 function ChatroomPresenter() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
@@ -30,12 +33,19 @@ function ChatroomPresenter() {
 	}
 
 	return (
-		<AppFlashList.Chatrooms
-			data={data}
+		<FlashList
+			data={data?.data}
+			renderItem={({ item }) => <ChatRoomListItemView room={item} />}
 			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.CHAT} />}
 			refreshControl={
 				<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
 			}
+			contentContainerStyle={{
+				paddingHorizontal: 10,
+			}}
+			ItemSeparatorComponent={() => (
+				<AppDividerSoft style={{ marginVertical: 10 }} />
+			)}
 		/>
 	);
 }

@@ -11,13 +11,6 @@ type UserViewNavbarProps = {
 };
 
 function Navbar_UserDetail({}: UserViewNavbarProps) {
-	const MENU_ITEMS = [
-		{
-			iconId: 'user-guide' as APP_ICON_ENUM,
-			onPress: () => {},
-		},
-	];
-
 	function onPressBack() {
 		if (router.canGoBack()) {
 			router.back();
@@ -43,26 +36,6 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 						size={appDimensions.topNavbar.iconSize}
 					/>
 				</Pressable>
-				<View style={{ marginBottom: 0, flexGrow: 1 }}></View>
-				{MENU_ITEMS.map(({ iconId, onPress }, i) => (
-					<Pressable
-						key={i}
-						style={{
-							padding: appDimensions.topNavbar.padding * 2,
-							marginLeft: appDimensions.topNavbar.marginLeft,
-							backgroundColor: 'rgba(40, 40, 40, 0.64)',
-							borderRadius: '100%',
-						}}
-						onPress={onPress}
-					>
-						<AppIcon
-							id={iconId}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-							onPress={onPress}
-							size={appDimensions.topNavbar.iconSize}
-						/>
-					</Pressable>
-				))}
 			</View>
 		</View>
 	);

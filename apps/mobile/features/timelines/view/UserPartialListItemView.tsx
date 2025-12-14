@@ -1,18 +1,16 @@
 import { StyleSheet, View, Text } from 'react-native';
 import type { UserObjectType } from '@dhaaga/bridge';
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
-import { Image } from 'expo-image';
 import UserRelationPresenter from '#/features/user-profiles/presenters/UserRelationPresenter';
 import { AppDividerSoft } from '#/ui/Divider';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import UserBadge from '#/ui/UserBadge';
 
 type Props = {
 	user: UserObjectType;
 };
 
-const ICON_SIZE = 42;
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin * 0.75;
 
 /**
@@ -33,35 +31,14 @@ function UserPartialListItemView({ user }: Props) {
 					alignItems: 'center',
 				}}
 			>
-				<Image
-					source={{ uri: user.avatarUrl }}
-					style={{
-						width: ICON_SIZE,
-						height: ICON_SIZE,
-						borderRadius: ICON_SIZE / 2,
-					}}
+				<UserBadge
+					avatarUrl={user.avatarUrl}
+					displayName={user.displayName}
+					parsedDisplayName={user.parsedDisplayName}
+					handle={user.handle}
+					style={{ paddingRight: 16 }}
 				/>
-				<View style={styles.usernameArea}>
-					<View style={{ flex: 1 }}>
-						<TextAstRendererView
-							tree={user.parsedDisplayName}
-							variant={'displayName'}
-							mentions={[]}
-							emojiMap={user.calculated.emojis}
-						/>
-						<Text
-							style={{
-								color: theme.secondary.a30,
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-								fontSize: 13,
-							}}
-							numberOfLines={1}
-						>
-							{user.handle}
-						</Text>
-					</View>
-					<UserRelationPresenter userId={user.id} />
-				</View>
+				<UserRelationPresenter userId={user.id} />
 			</View>
 			<AppDividerSoft
 				style={{

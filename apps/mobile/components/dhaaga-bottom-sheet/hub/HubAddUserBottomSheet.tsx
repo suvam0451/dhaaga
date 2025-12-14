@@ -22,13 +22,12 @@ function HubAddUserBottomSheet() {
 	const [SearchQuery, setSearchQuery] = useState(null);
 	const [debouncedQuery, setDebouncedQuery] = useState(null);
 	const { data } = useApiSearchUsers('followings', debouncedQuery, null);
-	const { data: defaultData, error } = useApiGetMyFollowings(null);
+	const { data: defaultData } = useApiGetMyFollowings(null);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 	const { ctx, stateId } = useAppBottomSheet();
 	const [Profile, setProfile] = useState(null);
 	const { db } = useAppDb();
 
-	console.log(defaultData, error);
 	const TextInputRef = useRef<TextInput>(null);
 
 	useEffect(() => {
@@ -102,7 +101,7 @@ function HubAddUserBottomSheet() {
 			/>
 
 			<FlatList
-				data={debouncedQuery ? (data ?? []) : (defaultData?.data ?? [])}
+				data={debouncedQuery ? (data.data ?? []) : (defaultData?.data ?? [])}
 				renderItem={({ item }) => (
 					<UserSearchResultPresenter
 						user={item}

@@ -16,6 +16,7 @@ import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import { NativeTextMedium } from '#/ui/NativeText';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { AppDividerSoft } from '#/ui/Divider';
 
 function Placeholder() {
 	return (
@@ -137,6 +138,7 @@ function UserPeekSheetPresenter() {
 				</View>
 				<UserRelationPresenter userId={data?.id} />
 			</View>
+			<AppDividerSoft style={{ marginVertical: 8, marginHorizontal: 10 }} />
 			<TextAstRendererView
 				tree={data?.parsedDescription}
 				variant={'bodyContent'}
@@ -190,8 +192,7 @@ const styles = StyleSheet.create({
 	sectionB: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginLeft: 8,
-		marginRight: 8,
+		marginHorizontal: 10,
 		marginBottom: MARGIN_BOTTOM,
 	},
 });

@@ -2,7 +2,6 @@ import type {
 	AppBskyNotificationListNotifications,
 	ChatBskyConvoDefs,
 	ChatBskyConvoGetMessages,
-	ChatBskyConvoListConvos,
 	Facet,
 } from '@atproto/api';
 import { NotificationsRoute } from './_interface.js';
@@ -29,15 +28,15 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		};
 	}
 
-	async getChats(): PaginatedPromise<ChatBskyConvoListConvos.OutputSchema> {
+	async getChats(): PaginatedPromise<ChatBskyConvoDefs.ConvoView[]> {
 		const agent = getXrpcAgent(this.dto);
 		const data = await agent.chat.bsky.convo.listConvos(
-			{ limit: 10 },
+			{ limit: 20 },
 			{ headers: { 'Atproto-Proxy': 'did:web:api.bsky.chat#bsky_chat' } },
 		);
 
 		return {
-			data: data.data,
+			data: data.data.convos,
 			maxId: data.data.cursor,
 		};
 	}

@@ -1,14 +1,16 @@
 import {
 	ActivityPubService,
-	ApiTargetInterface,
+	type ApiTargetInterface,
 	KNOWN_SOFTWARE,
 	GroupedNotificationParser,
 	MisskeyApiAdapter,
 	MastoApiAdapter,
 	PleromaApiAdapter,
+	ChatParser,
 } from '@dhaaga/bridge';
 import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
+import type { ChatRoomObjectType } from '@dhaaga/bridge';
 
 const NOTIFICATION_PAGE_SIZE = 20;
 
@@ -73,26 +75,21 @@ function getMentionNotificationsQueryOpts(
 /**
  * Fetches direct message data
  */
-function getChatNotificationsQueryOpts(
-	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
-	server: string,
-	acctIdentifier: string,
-) {
-	async function api(): Promise<any[]> {
-		const result = await client.notifications.getChats(driver);
+function getChatNotificationsQueryOpts(client: ApiTargetInterface) {
+	async function api(): Promise<ResultPage<ChatRoomObjectType[]>> {
+		const result = await client.notifications.getChats(client.driver!);
 
-		// const _data: ChatBskyConvoListConvos.OutputSchema = result.data;
-		// return ChatService.resolveAtProtoChat(db, _data, acct, driver, server);
-
-		throw new Error('not implemented');
+		return {
+			...result,
+			data: ChatParser.parse<unknown[]>(result.data, client),
+		};
 	}
 
 	// Queries
-	return queryOptions<any[]>({
-		queryKey: ['dhaaga/inbox/chat', acctIdentifier],
+	return queryOptions<ResultPage<ChatRoomObjectType[]>>({
+		queryKey: ['dhaaga/inbox/chat', client?.key],
 		queryFn: api,
-		enabled: client !== null,
+		enabled: !!client,
 	});
 }
 

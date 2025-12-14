@@ -85,7 +85,7 @@ function Content() {
 				},
 			});
 		}
-	}, [pinId, pinType, db]);
+	}, [pinId, pinType]);
 
 	useEffect(() => {
 		dispatch({
@@ -110,6 +110,7 @@ function Content() {
 			queryResult={queryResult}
 			navbarType={'unified'}
 			flatListKey={'unified-feed'}
+			skipTimelineInit
 		/>
 	);
 }

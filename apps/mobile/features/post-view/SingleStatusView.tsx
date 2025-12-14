@@ -99,12 +99,7 @@ function SingleStatusView({
 					marginBottom: SECTION_MARGIN_BOTTOM * 0.75,
 				}}
 			>
-				<PostCreatedBy
-					style={{
-						flex: 1,
-					}}
-					post={_target}
-				/>
+				<PostCreatedBy post={_target} />
 				{!isPreview && (
 					<PostMoreOptionsButton
 						postId={_target.id}

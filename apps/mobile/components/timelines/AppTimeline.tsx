@@ -80,6 +80,11 @@ function AppTimeline({
 			) : (
 				<View />
 			)}
+			{navbarType === 'sticky' ? (
+				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+			) : (
+				<View />
+			)}
 			{navbarType === 'inbox' ? <ExploreTabNavBar /> : <View />}
 			<FlashList
 				onLayout={onLayout}

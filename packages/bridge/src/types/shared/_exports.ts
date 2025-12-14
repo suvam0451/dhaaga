@@ -3,7 +3,7 @@
  * the library as pure type definitions
  */
 
-export type { MessageObjectType } from './chat.js';
+export type { MessageObjectType, ChatRoomObjectType } from './chat.js';
 export type { FeedObjectType } from './feed.js';
 export type {
 	NotificationObjectType,
@@ -20,5 +20,6 @@ export type {
 	DhaagaPostThreadInterfaceType,
 } from './post.js';
 export type { CustomEmojiObjectType } from './reactions.js';
+export type { RelationObjectType } from './relationship.js';
 export type { UserObjectType } from './user.js';
 export type { PostLinkAttachmentObjectType } from './link-attachments.js';
