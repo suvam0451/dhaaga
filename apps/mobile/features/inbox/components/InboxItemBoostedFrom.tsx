@@ -3,10 +3,10 @@ import useAppNavigator from '#/states/useAppNavigator';
 import { View } from 'react-native';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { useAppApiClient } from '#/states/global/hooks';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
 import { QuotedPostBorderDecorations } from '#/skins/BorderDecorations';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	post: PostObjectType;
@@ -35,7 +35,7 @@ function InboxItemBoostedFrom({ post }: Props) {
 				server={driver}
 			/>
 			<PressableDisabledOnSwipe onPress={onPress}>
-				<TextContentView
+				<TextAstRendererView
 					tree={post.content.parsed}
 					variant={'bodyContent'}
 					mentions={post.meta.mentions}

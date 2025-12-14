@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
 	button: {
 		borderRadius: appDimensions.buttons.borderRadius,
 		paddingVertical: 8,
-		minWidth: 128,
 	},
 	passiveButtonStyle: {
 		borderColor: 'red',
@@ -383,6 +382,7 @@ export function CurrentRelationView({
 				styles.button,
 				{
 					backgroundColor: bgColor[variant],
+					paddingHorizontal: 16,
 				},
 				style,
 			]}

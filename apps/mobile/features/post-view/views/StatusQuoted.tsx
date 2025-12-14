@@ -2,10 +2,10 @@ import { Pressable, View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
 import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { PostObjectType } from '@dhaaga/bridge';
 import { QuotedPostBorderDecorations } from '#/skins/BorderDecorations';
 import useAppNavigator from '#/states/useAppNavigator';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -40,7 +40,7 @@ function StatusQuoted({ post }: Props) {
 					calculatedHeight={post.calculated.mediaContainerHeight}
 					onPress={onPressMediaItem}
 				/>
-				<TextContentView
+				<TextAstRendererView
 					tree={post.content.parsed}
 					variant={'bodyContent'}
 					mentions={[]}

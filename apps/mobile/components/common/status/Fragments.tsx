@@ -5,8 +5,8 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
-import { TextContentView } from './TextContentView';
 import { useAppTheme } from '#/states/global/hooks';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type PostedByTextOneLineProps = {
 	parsedText: AppParsedTextNodes;
@@ -34,7 +34,7 @@ function PostedByTextOneLine({
 		return (
 			<View style={timelineStyles.oneLineDisplayNameRoot}>
 				{parsedText ? (
-					<TextContentView
+					<TextAstRendererView
 						tree={parsedText}
 						variant={'displayName'}
 						mentions={[]}
@@ -59,7 +59,7 @@ function PostedByTextOneLine({
 		<View style={timelineStyles.oneLineDisplayNameRoot}>
 			<View style={{ flex: 1, flexShrink: 1 }}>
 				{parsedText && parsedText.length > 0 ? (
-					<TextContentView
+					<TextAstRendererView
 						tree={parsedText}
 						variant={'displayName'}
 						mentions={[]}

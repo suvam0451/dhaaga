@@ -5,7 +5,7 @@ import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
 import UserRelationPresenter from '../presenters/UserRelationPresenter';
 import type { UserObjectType } from '@dhaaga/bridge';
-import { TextContentView } from '#/components/common/status/TextContentView';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 function util(o: number): string {
 	const formatter = new Intl.NumberFormat('en-US', {
@@ -49,7 +49,7 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 						}}
 					>
 						<View style={{ flex: 1 }}>
-							<TextContentView
+							<TextAstRendererView
 								oneLine
 								tree={user.parsedDisplayName}
 								variant={'displayName'}
@@ -115,7 +115,7 @@ function UserPeekModalContentView({ toProfile, user }: Props) {
 							width: '100%',
 						}}
 					>
-						<TextContentView
+						<TextAstRendererView
 							tree={user.parsedDescription}
 							variant={'bodyContent'}
 							mentions={[]}

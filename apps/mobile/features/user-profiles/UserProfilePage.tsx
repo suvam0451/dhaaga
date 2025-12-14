@@ -13,7 +13,6 @@ import {
 	useAppManager,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import Navbar_UserDetail from '#/components/shared/topnavbar/Navbar_UserDetail';
 import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +32,7 @@ import UserProfileMiscellaneous from '#/features/user-profiles/UserProfileMiscel
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { DriverService } from '@dhaaga/bridge';
 import UserProfileRepliesView from '#/features/user-profiles/UserProfileRepliesView';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 const TABS = ['gallery', 'pin-octicons', 'gallery', 'gallery'];
@@ -251,7 +251,7 @@ export function UserProfilePage() {
 							marginBottom: MARGIN_BOTTOM,
 						}}
 					>
-						<TextContentView
+						<TextAstRendererView
 							tree={acct.parsedDisplayName}
 							variant={'displayName'}
 							mentions={[]}
@@ -276,7 +276,7 @@ export function UserProfilePage() {
 						</View>
 					</View>
 
-					<TextContentView
+					<TextAstRendererView
 						tree={acct.parsedDescription}
 						variant={'bodyContent'}
 						mentions={[]}

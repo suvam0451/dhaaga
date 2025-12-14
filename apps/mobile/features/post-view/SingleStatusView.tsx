@@ -13,11 +13,11 @@ import PostActionRow from '#/features/post-view/views/PostActionRow';
 import { AppText } from '#/components/lib/Text';
 import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import { PostMoreOptionsButton } from '#/components/common/status/_shared';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { PostInspector } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { PinOrnament } from '#/features/post-view/components/Ornaments';
 import PostLinkAttachments from '#/features/post-item/components/PostLinkAttachments';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -147,7 +147,7 @@ function SingleStatusView({
 						toPost(_target.id);
 					}}
 				>
-					<TextContentView
+					<TextAstRendererView
 						tree={_target.content.parsed}
 						variant={'bodyContent'}
 						mentions={_target.calculated.mentions as any}

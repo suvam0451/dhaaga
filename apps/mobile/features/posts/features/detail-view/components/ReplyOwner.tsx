@@ -4,7 +4,7 @@ import type { PostObjectType } from '@dhaaga/bridge';
 import { appDimensions } from '#/styles/dimensions';
 import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
-import { TextContentView } from '#/components/common/status/TextContentView';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	dto: PostObjectType;
@@ -50,7 +50,7 @@ function ReplyOwner({ dto, style }: Props) {
 				/>
 			</View>
 			<View style={{ marginLeft: 8, flex: 1 }}>
-				<TextContentView
+				<TextAstRendererView
 					tree={dto.postedBy.parsedDisplayName}
 					variant={'displayName'}
 					mentions={[]}

@@ -15,13 +15,13 @@ import {
 } from '#/states/global/hooks';
 import useAppNavigator from '#/states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
-import { TextContentView } from '../TextContentView';
 import type { AppParsedTextNodes, PostObjectType } from '@dhaaga/bridge';
 import { AppText } from '../../../lib/Text';
 import { RandomUtil, ActivityPubService } from '@dhaaga/bridge';
 import { TextNodeParser } from '@dhaaga/bridge';
 import OriginalPosterDecoration from '#/skins/OriginalPosterDecoration';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
@@ -88,7 +88,7 @@ export function OriginalPosterPostedByFragment({
 		>
 			<View>
 				<Pressable onPress={onClick}>
-					<TextContentView
+					<TextAstRendererView
 						tree={
 							displayNameParsed.length === 0
 								? [{ uuid: RandomUtil.nanoId(), type: 'para', nodes: [] }]

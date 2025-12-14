@@ -6,8 +6,8 @@ import { View } from 'react-native';
 import { SavedPostCreatedBy } from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
 import { CollectionDataViewPostEntry } from './reducers/collection-detail.reducer';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { LocalMediaItem } from '#/components/common/media/LocalView';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type SavedPostItemProps = {
 	item: CollectionDataViewPostEntry;
@@ -35,7 +35,7 @@ export function SavedPostItemView({ item }: SavedPostItemProps) {
 				<SavedPostMoreOptionsButton postId={item.item.uuid} />
 			</View>
 			<LocalMediaItem items={item.item.medias} />
-			<TextContentView
+			<TextAstRendererView
 				tree={item.parsedTextContent}
 				variant={'bodyContent'}
 				mentions={[]}

@@ -9,6 +9,7 @@ import { AppTimelineProps } from '#/components/timelines/shared';
 import { JSXElementConstructor, ReactElement } from 'react';
 import { useAppApiClient } from '#/states/global/hooks';
 import { DriverService } from '@dhaaga/bridge';
+import UserPartialListItemView from '#/features/timelines/view/UserPartialListItemView';
 
 function _UserTimelineView(
 	props: AppTimelineProps & {
@@ -63,7 +64,7 @@ function _UserPartialTimelineView(props: AppTimelineProps) {
 	return (
 		<_UserTimelineView
 			{...props}
-			renderItem={({ item }) => <UserListItemDetailedView item={item} />}
+			renderItem={({ item }) => <UserPartialListItemView user={item} />}
 		/>
 	);
 }

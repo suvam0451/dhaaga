@@ -10,11 +10,11 @@ import {
 	ToggleReplyVisibility,
 } from '#/components/common/status/DetailView/_shared';
 import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { usePostThreadState } from '@dhaaga/react';
 import { AppIcon } from '#/components/lib/Icon';
 import { NativeTextNormal } from '#/ui/NativeText';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -66,7 +66,7 @@ function Content({ postId, colors }: PostReplyProps) {
 					{/*<MiniMoreOptionsButton post={dto} />*/}
 				</View>
 
-				<TextContentView
+				<TextAstRendererView
 					tree={dto.content.parsed}
 					variant={'bodyContent'}
 					mentions={dto.calculated.mentions as any}

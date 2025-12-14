@@ -3,8 +3,8 @@ import useAppNavigator from '#/states/useAppNavigator';
 import type { PostObjectType } from '@dhaaga/bridge';
 import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListPresenter';
 import { useAppApiClient } from '#/states/global/hooks';
-import { TextContentView } from '../../../components/common/status/TextContentView';
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	post: PostObjectType;
@@ -33,7 +33,7 @@ export function NotificationPostPeek({ post }: Props) {
 				server={driver}
 			/>
 			<PressableDisabledOnSwipe onPress={onPress}>
-				<TextContentView
+				<TextAstRendererView
 					tree={post.content.parsed}
 					variant={'bodyContent'}
 					mentions={post.meta.mentions}

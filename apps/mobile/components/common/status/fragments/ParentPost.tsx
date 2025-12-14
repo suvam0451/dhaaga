@@ -5,16 +5,12 @@ import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import PostCreatedByIconOnly from './PostCreatedByIconOnly';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppApiClient } from '#/states/global/hooks';
-import {
-	PostedByTextOneLine,
-	ReplyIndicator as ReplyContextLine,
-	timelineStyles,
-} from '../Fragments';
+import { PostedByTextOneLine, timelineStyles } from '../Fragments';
 import { ReplyIndicator } from '../ListView/_shared';
-import { TextContentView } from '../TextContentView';
 import useAppNavigator from '#/states/useAppNavigator';
 import { appDimensions } from '#/styles/dimensions';
 import ReplyIndicatorDecoration from '#/skins/ReplyIndicatorDecoration';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	dto: PostObjectType;
@@ -54,7 +50,7 @@ function ParentPost({ dto, showReplyIndicator }: Props) {
 						onPress={onPressImage}
 					/>
 					<Pressable onPress={onPressBody}>
-						<TextContentView
+						<TextAstRendererView
 							tree={dto.content.parsed}
 							variant={'bodyContent'}
 							mentions={dto.calculated.mentions as any}

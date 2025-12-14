@@ -5,10 +5,10 @@ import { AppThemingUtil } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
 import { ToggleReplyVisibility } from '#/components/common/status/DetailView/_shared';
 import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { usePostThreadState } from '@dhaaga/react';
 import { NativeTextNormal } from '#/ui/NativeText';
 import { AppIcon } from '#/components/lib/Icon';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type PostReplyToReplyProps = {
 	colors: string[];
@@ -72,7 +72,7 @@ function PostReplyToReplyContent({
 					</View>
 				</View>
 				{/* Some magical numbers to get rid of overflow */}
-				<TextContentView
+				<TextAstRendererView
 					tree={dto.content.parsed}
 					variant={'bodyContent'}
 					mentions={dto.calculated.mentions as any}

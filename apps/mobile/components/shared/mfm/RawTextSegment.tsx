@@ -6,15 +6,16 @@ import {
 	AppThemingUtil,
 } from '#/utils/theming.util';
 import { AppText } from '../../lib/Text';
+import { TEXT_PARSING_VARIANT } from '#/types/app.types';
 
 type Props = {
 	value: string;
 	fontFamily: string;
 	emphasis: APP_COLOR_PALETTE_EMPHASIS;
+	variant: TEXT_PARSING_VARIANT;
 };
 
-function RawTextSegment({ value, fontFamily, emphasis }: Props) {
-	// @ts-ignore-next-line
+function RawTextSegment({ value, fontFamily, emphasis, variant }: Props) {
 	const _value = value?.replaceAll(/<br>/g, '\n');
 	const k = RandomUtil.nanoId();
 	const { theme } = useAppTheme();
@@ -30,6 +31,7 @@ function RawTextSegment({ value, fontFamily, emphasis }: Props) {
 				color: color,
 				fontFamily,
 			}}
+			numberOfLines={variant === 'displayName' ? 1 : undefined}
 		>
 			{_value}
 		</AppText.Normal>
