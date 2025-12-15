@@ -25,6 +25,9 @@ export const appDimensions = {
 		borderRadius: 16,
 		clearanceTop: 24,
 	},
+	bottomNav: {
+		secondMenuBarHeight: 52,
+	},
 };
 
 export const appVerticalIndex = {

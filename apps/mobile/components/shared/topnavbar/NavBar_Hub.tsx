@@ -21,6 +21,11 @@ type Props = {
 	acct?: Account;
 };
 
+/**
+ * Component Height = 72
+ * @param acct
+ * @constructor
+ */
 function SocialHubHeader({ acct }: Props) {
 	const [GreetingActive, setGreetingActive] = useState(false);
 	const { pageIndex } = useHub();
@@ -47,13 +52,26 @@ function SocialHubHeader({ acct }: Props) {
 		},
 	];
 
+	function onLayout(event) {
+		const { height } = event.nativeEvent.layout;
+		console.log(height);
+	}
+
+	function onLabelPressed() {
+		setGreetingActive(true);
+		setTimeout(() => {
+			setGreetingActive(false);
+		}, 5000);
+	}
+
 	return (
-		<View style={[styles.container]}>
+		<View onLayout={onLayout} style={[styles.container]}>
 			{/*FIXME: not animating as expected*/}
-			<Animated.View
+			<Pressable
 				style={{
 					flex: 1,
 				}}
+				onPress={onLabelPressed}
 			>
 				{GreetingActive ? (
 					<Animated.View entering={FadeInLeft} exiting={FadeOut}>
@@ -64,7 +82,8 @@ function SocialHubHeader({ acct }: Props) {
 						<NativeTextH1>{t(`hub.navbarLabel`)}</NativeTextH1>
 					</Animated.View>
 				)}
-			</Animated.View>
+			</Pressable>
+
 			<View style={{ flexDirection: 'row' }}>
 				{menuItems.map(({ iconId, onPress }, i) => (
 					<Pressable
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		width: '100%',
-		minHeight: 72,
+		height: 64,
 	},
 	headerText: {
 		fontSize: 28,

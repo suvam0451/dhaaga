@@ -22,6 +22,7 @@ import {
 	NativeTextNormal,
 	NativeTextSemiBold,
 } from '#/ui/NativeText';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -154,7 +155,7 @@ function Page() {
 		show(APP_BOTTOM_SHEET_ENUM.ADD_PROFILE, true);
 	}
 
-	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	return (
 		<>
 			<NavBar_Simple label={'Manage Profiles'} animatedStyle={animatedStyle} />
@@ -167,13 +168,10 @@ function Page() {
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={init} />
 				}
+				contentContainerStyle={{ paddingTop: 32, paddingBottom: 32 }}
 				onScroll={scrollHandler}
 			>
-				<View
-					style={{
-						marginVertical: 20,
-					}}
-				>
+				<View style={{ marginBottom: 24 }}>
 					<NativeTextMedium
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{ fontSize: 16, textAlign: 'center' }}
@@ -184,7 +182,7 @@ function Page() {
 						style={{ textAlign: 'center' }}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 					>
-						Requires an app restart to be reflected in the hub.
+						May need an app restart to show up in the hub interface.
 					</NativeTextNormal>
 				</View>
 

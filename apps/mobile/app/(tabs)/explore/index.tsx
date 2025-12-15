@@ -1,12 +1,6 @@
 import { View } from 'react-native';
 import { Redirect } from 'expo-router';
-import {
-	forwardRef,
-	useEffect,
-	useImperativeHandle,
-	useRef,
-	useState,
-} from 'react';
+import { useEffect } from 'react';
 import {
 	DiscoverCtx,
 	DiscoverStateAction,
@@ -19,33 +13,19 @@ import {
 	useAppApiClient,
 	useAppTheme,
 } from '#/states/global/hooks';
-import SearchWidget from '#/features/explore/components/SearchWidget';
 import { getSearchTabs } from '@dhaaga/db';
 import SearchResultView from '#/features/explore/SearchResultView';
 import ExploreTabNavBar from '#/features/explore/ExploreTabNavBar';
+import ZenExplorationWidget from '#/features/explore/components/ZenExplorationWidget';
 
 /**
  * Renders the results of a
  * search query in the discovery tab
  */
-const Content = forwardRef((props, ref) => {
+function Content() {
 	const { driver } = useAppApiClient();
 	const State = useDiscoverState();
 	const dispatch = useDiscoverDispatch();
-
-	useImperativeHandle(ref, () => ({
-		onSearch(searchTerm: string) {
-			dispatch({
-				type: DiscoverStateAction.SET_SEARCH,
-				payload: {
-					q: searchTerm,
-				},
-			});
-			dispatch({
-				type: DiscoverStateAction.APPLY_SEARCH,
-			});
-		},
-	}));
 
 	useEffect(() => {
 		dispatch({
@@ -74,33 +54,28 @@ const Content = forwardRef((props, ref) => {
 		<>
 			<ExploreTabNavBar />
 			<SearchResultView />
+			<ZenExplorationWidget />
 		</>
 	);
-});
+}
 
 function Page() {
 	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
-	const [SearchTerm, setSearchTerm] = useState(null);
-	const childRef = useRef(null);
-
-	function onSearch() {
-		childRef.current?.onSearch(SearchTerm);
-	}
 
 	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
 
 	return (
-		<View style={{ flex: 1, backgroundColor: theme.palette.bg }}>
+		<View
+			style={{
+				flex: 1,
+				backgroundColor: theme.palette.bg,
+			}}
+		>
 			<DiscoverCtx>
-				<Content ref={childRef} />
+				<Content />
 			</DiscoverCtx>
-			<SearchWidget
-				SearchTerm={SearchTerm}
-				setSearchTerm={setSearchTerm}
-				onSearch={onSearch}
-			/>
 		</View>
 	);
 }

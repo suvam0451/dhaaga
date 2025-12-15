@@ -12,7 +12,7 @@ import {
 	socialHubTabReducerActionType as ACTION,
 	socialHubTabReducerDefault as reducerDefault,
 } from '#/states/interactors/social-hub-tab.reducer';
-import { RefreshControl, ScrollView } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from './views/HubProfileListView';
 import HubPinnedFeedList from './components/HubPinnedFeedList';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
@@ -333,18 +333,17 @@ function HubTab({ profile }: Props) {
 	}
 
 	return (
-		<>
+		<View style={{ backgroundColor: theme.background.a10, height: '100%' }}>
+			<NavBar_Hub acct={parentAcct} />
 			<ScrollView
 				style={{
 					backgroundColor: theme.palette.bg,
-					height: '100%',
 				}}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
+				contentOffset={{ x: 0, y: 72 }}
 			>
-				<NavBar_Hub acct={parentAcct} />
-
 				{/* --- Pinned Timelines --- */}
 				<HubPinnedFeedList
 					account={State.acct}
@@ -368,6 +367,7 @@ function HubTab({ profile }: Props) {
 					onPressAddTag={onPressAddTag}
 					onLongPressTag={onLongPressTag}
 				/>
+				<View style={{ height: 72 }} />
 			</ScrollView>
 
 			<HubProfileListView
@@ -376,7 +376,7 @@ function HubTab({ profile }: Props) {
 				onPressProfile={onPressProfile}
 			/>
 			<ComposeButton />
-		</>
+		</View>
 	);
 }
 

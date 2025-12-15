@@ -4,7 +4,6 @@ import {
 	defaultResultPage,
 	DhaagaJsTimelineQueryOptions,
 	DriverService,
-	KeyExtractorUtil,
 	KNOWN_SOFTWARE,
 	MisskeyApiAdapter,
 	PleromaApiAdapter,
@@ -13,7 +12,6 @@ import {
 import type { PostObjectType, ResultPage } from '@dhaaga/bridge';
 import { TimelineFetchMode } from '@dhaaga/core';
 import { queryOptions } from '@tanstack/react-query';
-import type { AppBskyFeedGetTimeline } from '@atproto/api';
 
 type PostFeedQueryParams = {
 	type: TimelineFetchMode;
@@ -68,58 +66,54 @@ export function unifiedPostFeedQueryOptions(
 	};
 
 	/**
-	 * Generates the cursor based on driver
+	 * Generates the cursor (unless already
+	 * supplied by the client collections)
 	 *
-	 * Only Mastodon and forks are known to embed
-	 * the pagination in headers.
+	 * ^ For Mastodon and forks, which embed
+	 * the pagination in headers, we should
+	 * always use the maxId supplied.
 	 *
-	 * So, either populate maxId in this function
-	 * or use the maxId directly
 	 * @param data
 	 * @param maxId
 	 */
-	function generateMaxId(
-		data: any[],
+	function _parseCursorData(
+		data: ResultPage<any> | any[],
 		maxId?: string | null,
 	): string | null | undefined {
 		if (maxId) return maxId;
-		return data.length > 0 ? data[data.length - 1]?.id : null;
-	}
 
-	function getPageFromResult(result: any) {
-		if (!result) {
-			console.log('[WARN]: this timeline failed to load...');
-			return defaultResultPage;
+		// ResultPage with maxId
+		if (
+			typeof data === 'object' &&
+			!Array.isArray(data) &&
+			Object.hasOwn(data, 'maxId') &&
+			data.maxId != null
+		) {
+			return data.maxId;
 		}
-		return KeyExtractorUtil.getPage<PostObjectType>(result, (o) =>
-			PostParser.parse<unknown[]>(o, driver, server),
-		);
+
+		// Plain array
+		if (Array.isArray(data)) {
+			return data.length > 0 ? (data[data.length - 1].id ?? null) : null;
+		}
+
+		// ResultPage with data array (fallback)
+		if (Array.isArray(data.data)) {
+			return data.data.length > 0
+				? (data.data[data.data.length - 1].id ?? null)
+				: null;
+		}
+
+		throw new Error('unknown cursor format for returned feed');
 	}
 
-	function generateFeedBatch(data: any) {
-		let _feed = [];
-		if (DriverService.supportsAtProto(driver)) {
-			if (Array.isArray(data)) {
-				_feed = data;
-			} else if (data.posts && Array.isArray(data.posts)) {
-				// for hashtags
-				_feed = data.posts;
-			} else if (data.feed && Array.isArray(data.posts)) {
-				// feed generators
-				_feed = data.feed;
-			} else {
-				const _payload = data as unknown as AppBskyFeedGetTimeline.Response;
-				_feed = _payload.data.feed;
-			}
+	function _parseFeedData(data: any) {
+		if (data.data) {
+			return PostParser.parse<unknown[]>(data.data, driver, server);
+		} else if (Array.isArray(data)) {
+			return PostParser.parse<unknown[]>(data, driver, server);
 		} else {
-			_feed = data.posts ? data.posts : data;
-		}
-
-		try {
-			return PostParser.parse<unknown[]>(_feed, driver, server);
-		} catch (e) {
-			console.log('[ERROR]: failed to convert posts', e);
-			return [];
+			throw new Error('unknown data format for returned feed');
 		}
 	}
 
@@ -134,8 +128,8 @@ export function unifiedPostFeedQueryOptions(
 		maxId?: string | null,
 	): PostFeedFetchResultType {
 		return {
-			data: generateFeedBatch(data),
-			maxId: generateMaxId(data, maxId),
+			data: _parseFeedData(data),
+			maxId: _parseCursorData(data, maxId),
 			minId: null,
 		};
 	}
@@ -161,8 +155,8 @@ export function unifiedPostFeedQueryOptions(
 				return createResultBatch(result.data, result.maxId);
 			}
 			case TimelineFetchMode.HASHTAG: {
-				const result = await client.timelines.hashtag(_id!, _query);
-				return createResultBatch(result);
+				const data = await client.timelines.hashtag(_id!, _query);
+				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.LIST: {
 				const result = await client.timelines.list(_id!, _query);
@@ -192,7 +186,7 @@ export function unifiedPostFeedQueryOptions(
 							driver,
 							server,
 						),
-						maxId: generateMaxId(result.data),
+						maxId: _parseCursorData(result.data),
 						minId: null,
 					};
 				} else if (driver === KNOWN_SOFTWARE.SHARKEY) {
@@ -201,7 +195,7 @@ export function unifiedPostFeedQueryOptions(
 					);
 					return {
 						data: PostParser.parse<unknown[]>(result as any[], driver, server),
-						maxId: generateMaxId(result),
+						maxId: _parseCursorData(result),
 						minId: null,
 					};
 				} else {
@@ -209,8 +203,8 @@ export function unifiedPostFeedQueryOptions(
 				}
 			}
 			case TimelineFetchMode.FEDERATED: {
-				const result = await client.timelines.public(_query);
-				return getPageFromResult(result);
+				const data = await client.timelines.public(_query);
+				return createResultBatch(data.data, data.maxId);
 			}
 			case TimelineFetchMode.BOOKMARKS: {
 				const data = await client.users.bookmarks(_query);
@@ -234,11 +228,7 @@ export function unifiedPostFeedQueryOptions(
 							cursor: _query.maxId === null ? undefined : _query.maxId,
 						},
 					);
-					return {
-						data: PostParser.parse<unknown[]>(data.feed, driver, server),
-						maxId: data.cursor === undefined ? null : data.cursor,
-						minId: null,
-					};
+					return createResultBatch(data.data, data.maxId);
 				}
 
 				const data = await client.users.likes(_query);

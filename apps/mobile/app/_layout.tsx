@@ -82,7 +82,7 @@ function App() {
 				style={{
 					flex: 0,
 					backgroundColor: HAS_NO_STICKY_MENU.includes(pathname)
-						? theme.background.a0
+						? theme.background.a10
 						: theme.background.a10,
 				}}
 			/>
@@ -116,7 +116,7 @@ function App() {
 					<AppBottomSheet />
 					<AppDialog />
 				</View>
-				{/*<Animated.View style={fakeView} />*/}
+				<Animated.View style={fakeView} />
 			</SafeAreaView>
 		</Fragment>
 	);

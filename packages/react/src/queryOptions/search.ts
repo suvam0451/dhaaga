@@ -19,28 +19,30 @@ type PostResultPage = ResultPage<PostObjectType[]>;
 type FeedResultPage = ResultPage<FeedObjectType[]>;
 
 export function searchFeedsQueryOpts(
-	client: AtprotoApiAdapter,
-	driver: KNOWN_SOFTWARE,
-	server: string,
+	client: ApiTargetInterface,
 	q: string,
 	maxId?: string,
 ) {
 	async function api(): Promise<FeedResultPage> {
 		const data = await (client as AtprotoApiAdapter).search.findFeeds({
-			limit: 10,
+			limit: 15,
 			query: q,
 			cursor: maxId,
 		});
 		return {
-			data: FeedParser.parse<unknown[]>(data.data, driver, server),
+			data: FeedParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
 			maxId: data.maxId,
 		};
 	}
 
 	return queryOptions<FeedResultPage>({
-		queryKey: ['search/feeds', server, q, maxId],
+		queryKey: ['dhaaga/search/feeds', client?.key, q, maxId],
 		queryFn: api,
-		enabled: !!client && DriverService.supportsAtProto(driver),
+		enabled: !!client && DriverService.supportsAtProto(client?.driver),
 	});
 }
 
@@ -114,7 +116,7 @@ export function searchPostsQueryOpts(
 	}
 
 	return queryOptions<PostResultPage>({
-		queryKey: ['search/posts', server, q, maxId, sort],
+		queryKey: ['dhaaga/search/posts', server, q, maxId, sort],
 		queryFn: api,
 		enabled: client !== null && !!q,
 	});
@@ -122,8 +124,6 @@ export function searchPostsQueryOpts(
 
 export function searchUsersQueryOpts(
 	client: ApiTargetInterface,
-	acctIdentifier: string,
-	defaultTo: 'auto' | 'followings' | 'suggested',
 	q: string,
 	maxId?: string,
 ) {
@@ -157,7 +157,7 @@ export function searchUsersQueryOpts(
 	}
 
 	return queryOptions<ResultPage<UserObjectType[]>>({
-		queryKey: ['dhaaga/search/users', acctIdentifier, q, maxId],
+		queryKey: ['dhaaga/search/users', client?.key, q, maxId],
 		queryFn: api,
 		enabled: !!client,
 	});

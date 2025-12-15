@@ -7,7 +7,7 @@ import { FlatList, Pressable, StyleSheet, TextInput } from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApiSearchUsers } from '#/hooks/api/useApiSearch';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
@@ -16,19 +16,22 @@ import { AppDividerSoft } from '#/ui/Divider';
 import BottomSheetMenu from '../components/BottomSheetMenu';
 import { useApiGetMyFollowings } from '#/hooks/api/useMy';
 import UserSearchResultPresenter from '#/features/hub/presenters/UserSearchResultPresenter';
+import useAutoFocusBottomSheetInput from '#/ui/hooks/useAutoFocusBottomSheetInput';
+import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
+import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 
 function HubAddUserBottomSheet() {
 	const { theme } = useAppTheme();
 	const [SearchQuery, setSearchQuery] = useState(null);
 	const [debouncedQuery, setDebouncedQuery] = useState(null);
-	const { data } = useApiSearchUsers('followings', debouncedQuery, null);
-	const { data: defaultData } = useApiGetMyFollowings(null);
+	const searchResultQuery = useApiSearchUsers(debouncedQuery, null);
+	const defaultResultQuery = useApiGetMyFollowings(null);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 	const { ctx, stateId } = useAppBottomSheet();
 	const [Profile, setProfile] = useState(null);
 	const { db } = useAppDb();
 
-	const TextInputRef = useRef<TextInput>(null);
+	const { ref } = useAutoFocusBottomSheetInput(true);
 
 	useEffect(() => {
 		if (ctx?.$type !== 'profile-id' || !ctx.profileId) return;
@@ -44,7 +47,7 @@ function HubAddUserBottomSheet() {
 	}, [SearchQuery]);
 
 	function onSectionPressed() {
-		TextInputRef.current?.focus();
+		ref.current?.focus();
 	}
 
 	function onChange() {
@@ -55,6 +58,20 @@ function HubAddUserBottomSheet() {
 	function onClearSearch() {
 		setSearchQuery(null);
 		setDebouncedQuery(null);
+	}
+
+	const error = searchResultQuery.error ?? defaultResultQuery.error;
+	const isRefetching =
+		searchResultQuery.isFetching ?? defaultResultQuery.isFetching;
+	const isFetched = searchResultQuery.isFetched && defaultResultQuery.isFetched;
+	const numItems =
+		searchResultQuery.data?.data?.length ??
+		defaultResultQuery.data?.data?.length ??
+		0;
+
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
 	}
 
 	return (
@@ -72,7 +89,7 @@ function HubAddUserBottomSheet() {
 					>
 						<AppIcon id={'search'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A40} />
 						<TextInput
-							ref={TextInputRef}
+							ref={ref}
 							placeholder={t(`hubAddUserSheet.searchPlaceholder`)}
 							placeholderTextColor={theme.secondary.a40}
 							numberOfLines={1}
@@ -101,7 +118,12 @@ function HubAddUserBottomSheet() {
 			/>
 
 			<FlatList
-				data={debouncedQuery ? (data.data ?? []) : (defaultData?.data ?? [])}
+				onLayout={onLayout}
+				data={
+					debouncedQuery
+						? (searchResultQuery.data?.data ?? [])
+						: (defaultResultQuery.data?.data ?? [])
+				}
 				renderItem={({ item }) => (
 					<UserSearchResultPresenter
 						user={item}
@@ -118,6 +140,19 @@ function HubAddUserBottomSheet() {
 				ItemSeparatorComponent={() => (
 					<AppDividerSoft style={{ marginVertical: 8 }} />
 				)}
+				ListEmptyComponent={
+					<TimelineQueryStatusIndicator
+						queryResult={{
+							error,
+							isRefetching,
+							isFetched,
+						}}
+						numItems={numItems}
+						renderSkeleton={() => (
+							<PostSkeleton containerHeight={ContainerHeight} />
+						)}
+					/>
+				}
 			/>
 		</>
 	);

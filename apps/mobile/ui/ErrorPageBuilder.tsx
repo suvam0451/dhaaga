@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import BearError from '#/components/svgs/BearError';
 
 type ErrorPageBuilderProps = {
 	stickerArt?: any;
@@ -32,7 +33,7 @@ function ErrorPageBuilder({
 					marginHorizontal: 'auto',
 				}}
 			>
-				{stickerArt}
+				{stickerArt ? stickerArt : <BearError />}
 			</View>
 			<View style={{ marginTop: 16, marginHorizontal: 32 }}>
 				<AppText.SemiBold

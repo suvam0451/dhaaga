@@ -104,6 +104,7 @@ type APP_ICON_ENUM =
 	| 'phonebook'
 	| 'pin'
 	| 'pin-octicons'
+	| 'planet-outline'
 	| 'quote'
 	| 'retweet'
 	| 'save'
@@ -207,6 +208,7 @@ export function NavbarButtonDefault({ onPress, onLongPress, children }: any) {
 		</Pressable>
 	);
 }
+
 /**
  * A custom navigation button container,
  * which prevents the user from interacting with the
@@ -1026,6 +1028,8 @@ export function AppIcon({
 				return (
 					<Octicons name="pin" size={_size} color={_color} style={iconStyle} />
 				);
+			case 'planet-outline':
+				return <Ionicons name="planet-outline" size={_size} color={_color} />;
 			case 'quote':
 				return (
 					<FontAwesome
