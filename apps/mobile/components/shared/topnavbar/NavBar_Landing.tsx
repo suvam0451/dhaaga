@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_FONTS } from '#/styles/AppFonts';
 import {
 	View,
 	StyleSheet,

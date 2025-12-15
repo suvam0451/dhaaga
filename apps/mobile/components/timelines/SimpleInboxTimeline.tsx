@@ -2,12 +2,14 @@ import { UseQueryResult } from '@tanstack/react-query';
 import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import useNotificationStore from '#/features/inbox/interactors/useNotificationStore';
 import { useEffect, useState } from 'react';
-import Header from '#/features/inbox/components/Header';
-import { StateIndicator } from '#/features/inbox/components/StateIndicator';
+import NavBar_Inbox from '#/components/shared/topnavbar/NavBar_Inbox';
+import { MentionListStateIndicator } from '#/features/inbox/components/MentionListStateIndicator';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { RefreshControl } from 'react-native';
 import { AppDivider } from '#/components/lib/Divider';
 import { FlashList } from '@shopify/flash-list';
+import { appDimensions } from '#/styles/dimensions';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
@@ -42,26 +44,26 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 		});
 	}
 
-	// return <PostTimelineView
-	//
-	// 	navbarType={"custom"} NavBar={() => <Header type={APP_LANDING_PAGE_TYPE.MENTIONS} />}
-	// flatListKey={"inbox/mentions"}
-	// />
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
+
 	return (
 		<>
+			<NavBar_Inbox label={label} type={type} animatedStyle={animatedStyle} />
 			<FlashList
+				onScroll={scrollHandler}
 				onLayout={onLayout}
 				data={state.items}
 				renderItem={({ item }) => <Wrapper item={item} />}
-				ListHeaderComponent={<Header label={label} type={type} />}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
 				}
+				progressViewOffset={appDimensions.topNavbar.hubVariantHeight}
 				contentContainerStyle={{
 					paddingBottom: 32,
+					paddingTop: appDimensions.topNavbar.hubVariantHeight + 12,
 				}}
 				ListEmptyComponent={
-					<StateIndicator
+					<MentionListStateIndicator
 						numItems={state.items.length}
 						containerHeight={ContainerHeight}
 						queryResult={queryResult}
@@ -73,7 +75,6 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 				onEndReached={() => {
 					if (!isPending) loadNext();
 				}}
-				style={{ zIndex: 1 }}
 			/>
 			<TimelineLoadingIndicator
 				numItems={state.items.length}

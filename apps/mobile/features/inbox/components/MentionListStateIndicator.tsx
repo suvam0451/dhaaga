@@ -3,7 +3,7 @@ import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { UseQueryResult } from '@tanstack/react-query';
 import { View } from 'react-native';
 
-export function StateIndicator({
+export function MentionListStateIndicator({
 	containerHeight,
 	queryResult,
 	numItems = 0,
