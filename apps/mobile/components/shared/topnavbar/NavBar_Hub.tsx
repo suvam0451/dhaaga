@@ -16,6 +16,7 @@ import NavBar_Landing from '#/components/shared/topnavbar/NavBar_Landing';
 
 type Props = {
 	acct?: Account;
+	animatedStyle: any;
 };
 
 /**
@@ -23,7 +24,7 @@ type Props = {
  * @param acct
  * @constructor
  */
-function SocialHubHeader({ acct }: Props) {
+function SocialHubHeader({ acct, animatedStyle }: Props) {
 	const [GreetingActive, setGreetingActive] = useState(false);
 	const { pageIndex } = useHub();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -79,6 +80,7 @@ function SocialHubHeader({ acct }: Props) {
 					)}
 				</Pressable>
 			}
+			animatedStyle={animatedStyle}
 		/>
 	);
 }

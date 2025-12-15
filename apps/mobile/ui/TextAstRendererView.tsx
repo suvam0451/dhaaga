@@ -214,7 +214,6 @@ function TextAstRendererView({
 	if (!Array.isArray(tree)) return <View />;
 	return (
 		<View style={style}>
-			{/* --- paragraphs --- */}
 			{tree.map((item, i) => (
 				<ParsedNode
 					key={getMappingKey(item.uuid, i)}

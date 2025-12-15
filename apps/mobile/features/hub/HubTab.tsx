@@ -30,6 +30,8 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import ComposeButton from '#/components/widgets/ComposeButton';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { appDimensions } from '#/styles/dimensions';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type Props = {
 	// account left join guaranteed
@@ -315,17 +317,22 @@ function HubTab({ profile }: Props) {
 		}
 	}
 
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	return (
 		<View style={{ backgroundColor: theme.background.a10, height: '100%' }}>
-			<NavBar_Hub acct={parentAcct} />
+			<NavBar_Hub acct={parentAcct} animatedStyle={animatedStyle} />
 			<ScrollView
+				onScroll={scrollHandler}
 				style={{
 					backgroundColor: theme.palette.bg,
 				}}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
-				contentOffset={{ x: 0, y: 72 }}
+				contentContainerStyle={{
+					paddingTop: appDimensions.topNavbar.hubVariantHeight,
+				}}
+				contentOffset={{ x: 0, y: appDimensions.topNavbar.hubVariantHeight }}
 			>
 				{/* --- Pinned Timelines --- */}
 				<HubPinnedFeedList
