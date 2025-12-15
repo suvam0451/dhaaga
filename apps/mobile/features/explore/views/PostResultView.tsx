@@ -25,12 +25,14 @@ function Generator() {
 	);
 
 	return (
-		<PostTimelineView
-			label={null}
-			queryResult={queryResult}
-			navbarType={'none'}
-			flatListKey={'explore/posts'}
-		/>
+		<>
+			<PostTimelineView
+				label={null}
+				queryResult={queryResult}
+				navbarType={'explore'}
+				flatListKey={'explore/posts'}
+			/>
+		</>
 	);
 }
 

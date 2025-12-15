@@ -6,16 +6,12 @@ import { UserTimelineView } from '#/components/timelines/UserTimelineView';
 function Generator() {
 	const State = useDiscoverState();
 	const state = useUserTimelineState();
-	const queryResult = useApiSearchUsers(
-		'suggested',
-		State.q,
-		state.appliedMaxId,
-	);
+	const queryResult = useApiSearchUsers(State.q, state.appliedMaxId);
 
 	return (
 		<UserTimelineView
 			label={null}
-			navbarType={'none'}
+			navbarType={'explore'}
 			queryResult={queryResult}
 			flatListKey={'explore/users'}
 		/>

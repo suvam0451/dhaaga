@@ -34,7 +34,7 @@ function AppPagerView({
 
 	useEffect(() => {
 		if (!_pagerIndex) return;
-		ref.current.setPage(Number(_pagerIndex));
+		ref.current.setPageWithoutAnimation(Number(_pagerIndex));
 	}, [_requestId]);
 
 	function onPagerViewScroll(e: any) {
@@ -45,7 +45,7 @@ function AppPagerView({
 
 	function onChipSelected(index: number) {
 		if (TabIndex !== index) {
-			ref.current.setPage(index);
+			ref.current.setPageWithoutAnimation(index);
 		}
 	}
 

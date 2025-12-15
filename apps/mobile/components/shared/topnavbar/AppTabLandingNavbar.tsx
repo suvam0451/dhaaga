@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		zIndex: 1,
 		marginBottom: 16,
+		height: appDimensions.topNavbar.hubVariantHeight,
 	},
 	headerText: {
 		fontSize: 28,

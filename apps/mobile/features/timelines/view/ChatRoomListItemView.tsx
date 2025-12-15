@@ -30,6 +30,7 @@ function ChatRoomListItemView({ room }: Props) {
 					alignItems: 'center',
 					flex: 1,
 					maxWidth: '100%',
+					paddingHorizontal: 10,
 				}}
 			>
 				<Image

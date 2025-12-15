@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { Redirect } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import {
 	DiscoverCtx,
 	DiscoverStateAction,
@@ -14,9 +14,11 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { getSearchTabs } from '@dhaaga/db';
-import SearchResultView from '#/features/explore/SearchResultView';
-import ExploreTabNavBar from '#/features/explore/ExploreTabNavBar';
 import ZenExplorationWidget from '#/features/explore/components/ZenExplorationWidget';
+import ZenModeAnimations from '#/features/explore/components/ZenModeAnimations';
+import PostResultView from '#/features/explore/views/PostResultView';
+import UserResultView from '#/features/explore/views/UserResultView';
+import FeedResultView from '#/features/explore/views/FeedResultView';
 
 /**
  * Renders the results of a
@@ -50,10 +52,28 @@ function Content() {
 		});
 	}, [driver]);
 
+	const CurrentResultView = useMemo(() => {
+		if (!State.q) return <ZenModeAnimations />;
+
+		switch (State.category) {
+			case 'posts':
+				return <PostResultView />;
+			case 'users':
+				return <UserResultView />;
+			case 'feeds':
+				return <FeedResultView />;
+			case 'tags':
+				return <View />;
+			case 'links':
+				return <View />;
+			default:
+				return <ZenModeAnimations />;
+		}
+	}, [State.category, State.q]);
+
 	return (
 		<>
-			<ExploreTabNavBar />
-			<SearchResultView />
+			{CurrentResultView}
 			<ZenExplorationWidget />
 		</>
 	);

@@ -11,7 +11,27 @@ import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import { FlashList } from '@shopify/flash-list';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { View } from 'react-native';
-import ExploreTabNavBar from '#/features/explore/ExploreTabNavBar';
+import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
+
+const navbarConfigs: Record<
+	string,
+	{ height: number; topLoaderOffset: number }
+> = {
+	explore: {
+		height: appDimensions.topNavbar.hubVariantHeight,
+		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
+	},
+};
+
+const widgetConfigs: Record<
+	string,
+	{ height: number; bottomLoaderOffset: number }
+> = {
+	explore: {
+		height: 52,
+		bottomLoaderOffset: 52,
+	},
+};
 
 function AppTimeline({
 	items,
@@ -51,8 +71,10 @@ function AppTimeline({
 		fnLoadMore();
 	}
 
-	const { scrollHandler, animatedStyle } =
-		useScrollHandleFlatList(onEndReached);
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList(
+		onEndReached,
+		navbarConfigs[navbarType]?.height ?? 52,
+	);
 
 	const [ContainerHeight, setContainerHeight] = useState(0);
 	function onLayout(event: any) {
@@ -85,14 +107,19 @@ function AppTimeline({
 			) : (
 				<View />
 			)}
-			{navbarType === 'inbox' ? <ExploreTabNavBar /> : <View />}
+			{/*{navbarType === 'inbox' ? <NavBar_Explore /> : <View />}*/}
+			{navbarType === 'explore' ? (
+				<NavBar_Explore animatedStyle={animatedStyle} />
+			) : (
+				<View />
+			)}
 			<FlashList
 				onLayout={onLayout}
 				data={items}
 				renderItem={renderItem}
 				onScroll={scrollHandler}
 				contentContainerStyle={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
+					paddingTop: navbarConfigs[navbarType]?.topLoaderOffset,
 				}}
 				scrollEventThrottle={16}
 				onRefresh={onRefresh}
@@ -119,6 +146,9 @@ function AppTimeline({
 			<TimelineLoadingIndicator
 				numItems={items.length}
 				networkFetchStatus={fetchStatus}
+				style={{
+					marginBottom: widgetConfigs[navbarType]?.bottomLoaderOffset ?? 0,
+				}}
 			/>
 		</>
 	);

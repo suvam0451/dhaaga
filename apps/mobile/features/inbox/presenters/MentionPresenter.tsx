@@ -12,25 +12,6 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 	const { theme } = useAppTheme();
 
 	function renderLeftActions(progress, dragX) {
-		// A shared flag so haptically triggers only once
-		// const triggered = useSharedValue(false);
-
-		// useAnimatedReaction(
-		// 	() => progress.value,
-		// 	(value) => {
-		// 		const threshold = 0.8; // 30% reveal
-		//
-		// 		if (value > threshold && !triggered.value) {
-		// 			triggered.value = true;
-		// 			runOnJS(triggerHaptic)();
-		// 		}
-		//
-		// 		if (value <= threshold && triggered.value) {
-		// 			triggered.value = false; // reset so you can trigger again next swipe
-		// 		}
-		// 	},
-		// );
-
 		return (
 			<View
 				style={{
@@ -71,6 +52,8 @@ function MentionPresenter() {
 		<SimpleInboxTimeline
 			queryResult={queryResult}
 			Wrapper={({ item }) => <Wrapper item={item} />}
+			type={'mentions'}
+			label={'Mentions'}
 		/>
 	);
 }

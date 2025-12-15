@@ -96,23 +96,6 @@ function HubTab({ profile }: Props) {
 			profileId: profile.id,
 			callback: refresh,
 		});
-
-		// if (parentAcct.id !== acct.id) {
-		// show(
-		// 	DialogBuilderService.toSwitchActiveAccount(() => {
-		// 		AccountService.select(db, parentAcct);
-		// 		try {
-		// 			restoreSession().then(() => {
-		// 				hide();
-		// 				setCtx({ profileId: profile.id, onChange: refresh });
-		// 				showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
-		// 			});
-		// 		} catch (e) {
-		// 			hide();
-		// 		}
-		// 	}),
-		// );
-		// }
 	}
 
 	function onPressAddTag() {
