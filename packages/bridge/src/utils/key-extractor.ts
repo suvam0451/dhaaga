@@ -58,6 +58,10 @@ const genericPostListSchema = z.array(
  * Extracts pagination keys and object array.
  *
  * Works for various forms of input
+ *
+ * @deprecated the client api collection
+ * is now expected to return a `ResultPage` object
+ * with `minId` and `maxId` fields included.
  */
 class Util {
 	static getPage<T>(
