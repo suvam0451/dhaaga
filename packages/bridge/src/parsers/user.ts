@@ -4,8 +4,13 @@ import {
 	ActivityPubUserAdapter,
 	UserTargetInterface,
 } from '../implementors/profile/_interface.js';
-import { ActivitypubHelper } from '../index.js';
+import {
+	ActivitypubHelper,
+	DriverService,
+	RelationObjectType,
+} from '../index.js';
 import { UserObjectType, appUserObjectSchema } from '#/types/shared/user.js';
+import BlueskyUserInterface from '#/implementors/profile/bluesky.js';
 
 export const APP_USER_DEFAULT_RELATIONSHIP = {
 	blocking: null,
@@ -58,6 +63,27 @@ class Parser {
 		// prevent infinite recursion
 		if (!input || !input.getId()) return null;
 
+		let relation: RelationObjectType | null = null;
+
+		if (DriverService.supportsAtProto(driver)) {
+			const _input = input as BlueskyUserInterface;
+			relation = {
+				muting: _input.ref.viewer?.muted ?? null,
+				blocking: _input.ref.viewer?.blocking ?? null,
+				blockedBy: _input.ref.viewer?.blockedBy ?? null,
+				following: _input.ref.viewer?.following ?? null,
+				followedBy: _input.ref.viewer?.followedBy ?? null,
+				showingReblogs: null,
+				notifying: null,
+				languages: [],
+				mutingNotifications: null,
+				requested: false,
+				domainBlocking: false,
+				endorsed: false,
+				note: null,
+			};
+		}
+
 		const dto: UserObjectType = {
 			id: input.getId(),
 			displayName: input.getDisplayName() || '',
@@ -98,7 +124,7 @@ class Parser {
 				// 	server,
 				// ),
 			},
-			relationship: APP_USER_DEFAULT_RELATIONSHIP,
+			relationship: relation,
 		};
 
 		const { data, error, success } = appUserObjectSchema.safeParse(dto);

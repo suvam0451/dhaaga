@@ -1,9 +1,9 @@
 import { View } from 'react-native';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { Image, useImage } from 'expo-image';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import type { UserObjectType } from '@dhaaga/bridge';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	user: UserObjectType;
@@ -31,7 +31,7 @@ function UserPinSearchResultView({ user }: Props) {
 					/>
 				</View>
 				<View style={{ marginLeft: 8 }}>
-					<TextContentView
+					<TextAstRendererView
 						tree={user.parsedDisplayName}
 						variant={'displayName'}
 						mentions={[]}

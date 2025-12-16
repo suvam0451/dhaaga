@@ -7,22 +7,24 @@ import {
 } from '@dhaaga/core';
 import { getSearchTabs } from '@dhaaga/db';
 import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
-import { NativeTextH1, NativeTextMedium } from '#/ui/NativeText';
-import { AppIcon } from '#/components/lib/Icon';
+import { NativeTextH1, NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import {
-	TOP_NAVBAR_BOTTOM_PADDING,
-	TOP_NAVBAR_MENU_ICON_SIZE,
-	TOP_NAVBAR_TOP_PADDING,
-} from '#/components/shared/topnavbar/settings';
-import ExploreTabNavBarCollapsedSection from '#/features/explore/components/ExploreTabNavBarCollapsedSection';
-import { Pressable, View, StyleSheet } from 'react-native';
+	Pressable,
+	View,
+	StyleSheet,
+	StyleProp,
+	ViewStyle,
+} from 'react-native';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
-import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import NavBar_Landing from '#/components/shared/topnavbar/NavBar_Landing';
 
-function ExploreTabNavBar() {
+type Props = {
+	animatedStyle?: StyleProp<ViewStyle>;
+};
+
+function NavBar_Explore({ animatedStyle }: Props) {
 	const { theme } = useAppTheme();
 	const { driver } = useAppApiClient();
 	const State = useDiscoverState();
@@ -92,34 +94,22 @@ function ExploreTabNavBar() {
 		},
 	];
 
-	const [DropdownOpen, setDropdownOpen] = useState(false);
-
-	function toggleDropdown() {
-		setDropdownOpen((o) => !o);
-	}
-
-	function closeDropdown() {
-		setDropdownOpen(false);
-	}
-
 	const dropdownItems = explorePageTabs();
 	const NAVBAR_LABEL = dropdownItems.find((i) => i.id === State.tab)?.label;
 
 	return (
-		<View style={[styles.container]}>
-			<View style={{ flexDirection: 'row' }}>
-				<Pressable style={styles.labelArea} onPress={toggleDropdown}>
-					<View style={{ flexDirection: 'row' }}>
-						<NativeTextH1>{NAVBAR_LABEL}</NativeTextH1>
-						<Ionicons
-							name="chevron-down"
-							style={{ marginLeft: 6, paddingTop: 4 }}
-							size={24}
-							color={'white'}
-						/>
-					</View>
+		<NavBar_Landing
+			menuItems={menuItems}
+			LabelComponent={
+				<Pressable style={styles.labelArea}>
 					{State.q ? (
-						<View style={{ marginTop: 4 }}>
+						<View>
+							<NativeTextH6
+								numberOfLines={1}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+							>
+								{NAVBAR_LABEL}
+							</NativeTextH6>
 							<NativeTextMedium>
 								<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
 									Search Term:{' '}
@@ -130,50 +120,23 @@ function ExploreTabNavBar() {
 							</NativeTextMedium>
 						</View>
 					) : (
-						<View />
+						<NativeTextH1>Top Posts</NativeTextH1>
 					)}
 				</Pressable>
-
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'flex-start',
-					}}
-				>
-					{menuItems.map(({ iconId, onPress, hidden }, i) =>
-						hidden ? (
-							<View />
-						) : (
-							<Pressable key={i} style={styles.menuButton} onPress={onPress}>
-								<AppIcon
-									id={iconId as any}
-									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-									onPress={onPress}
-									size={TOP_NAVBAR_MENU_ICON_SIZE}
-								/>
-							</Pressable>
-						),
-					)}
-				</View>
-			</View>
-
-			<ExploreTabNavBarCollapsedSection
-				isOpen={DropdownOpen}
-				close={closeDropdown}
-				items={explorePageTabs() ?? []}
-				selectedItemId={State.tab}
-			/>
-		</View>
+			}
+			animatedStyle={animatedStyle}
+		/>
 	);
 }
 
-export default ExploreTabNavBar;
+export default NavBar_Explore;
 
 const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: 12,
-		width: '100%',
 		zIndex: 1,
+		height: appDimensions.topNavbar.hubVariantHeight,
+		flexDirection: 'row',
 	},
 	headerText: {
 		fontSize: 28,
@@ -182,13 +145,12 @@ const styles = StyleSheet.create({
 	labelArea: {
 		justifyContent: 'center',
 		flexGrow: 1,
-		paddingTop: TOP_NAVBAR_TOP_PADDING,
 		marginBottom: appDimensions.topNavbar.padding,
 	},
 	menuButton: {
 		padding: appDimensions.topNavbar.padding,
+		marginVertical: 'auto',
 		marginLeft: appDimensions.topNavbar.marginLeft,
-		paddingTop: TOP_NAVBAR_TOP_PADDING,
-		paddingBottom: TOP_NAVBAR_BOTTOM_PADDING,
+		paddingVertical: 10,
 	},
 });

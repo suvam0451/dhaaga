@@ -31,12 +31,9 @@ function useApiGetMentionUpdates(maxId?: string | null) {
  * Fetches direct message data
  */
 function useApiGetChatUpdates() {
-	const { driver, client, server } = useAppApiClient();
-	const { acct } = useActiveUserSession();
+	const { client } = useAppApiClient();
 
-	return useQuery(
-		getChatNotificationsQueryOpts(client, driver, server, acct.identifier),
-	);
+	return useQuery(getChatNotificationsQueryOpts(client));
 }
 
 /**

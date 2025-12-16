@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import ProfileAvatar from '#/components/common/user/fragments/ProfileAvatar';
 import UserRelationPresenter from '#/features/user-profiles/presenters/UserRelationPresenter';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { appDimensions } from '#/styles/dimensions';
 import {
 	useAppApiClient,
@@ -16,6 +15,8 @@ import { useQuery } from '@tanstack/react-query';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import { NativeTextMedium } from '#/ui/NativeText';
+import TextAstRendererView from '#/ui/TextAstRendererView';
+import { AppDividerSoft } from '#/ui/Divider';
 
 function Placeholder() {
 	return (
@@ -118,7 +119,7 @@ function UserPeekSheetPresenter() {
 			</View>
 			<View style={styles.sectionB}>
 				<View style={{ flex: 1 }}>
-					<TextContentView
+					<TextAstRendererView
 						tree={data.parsedDisplayName}
 						variant={'displayName'}
 						mentions={[]}
@@ -137,7 +138,8 @@ function UserPeekSheetPresenter() {
 				</View>
 				<UserRelationPresenter userId={data?.id} />
 			</View>
-			<TextContentView
+			<AppDividerSoft style={{ marginVertical: 8, marginHorizontal: 10 }} />
+			<TextAstRendererView
 				tree={data?.parsedDescription}
 				variant={'bodyContent'}
 				mentions={[]}
@@ -190,8 +192,7 @@ const styles = StyleSheet.create({
 	sectionB: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginLeft: 8,
-		marginRight: 8,
+		marginHorizontal: 10,
 		marginBottom: MARGIN_BOTTOM,
 	},
 });

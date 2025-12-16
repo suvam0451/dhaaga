@@ -1,18 +1,19 @@
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
-import RawTextSegment from '../../../shared/mfm/RawTextSegment';
+import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { TEXT_PARSING_VARIANT } from '#/types/app.types';
 import { APP_FONTS } from '#/styles/AppFonts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import HashtagSegment from '../../../shared/mfm/HashtagSegment';
+import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import { appDimensions } from '#/styles/dimensions';
-import MentionSegment from '../../../shared/mfm/MentionSegment';
+import MentionSegment from '../components/shared/mfm/MentionSegment';
 import { TextParser } from '@dhaaga/bridge';
 import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
-import LinkSegment from '../../../shared/mfm/LinkSegment';
-import EmojiCodeSegment from '../../../shared/mfm/EmojiCodeSegment';
+import LinkSegment from '../components/shared/mfm/LinkSegment';
+import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
+import { useMappingHelper } from '@shopify/flash-list';
 
-type TextContentNodeProps = {
+type NodeProps = {
 	node: NodeContent;
 	variant: TEXT_PARSING_VARIANT;
 	mentions: PostMentionObjectType[];
@@ -20,13 +21,7 @@ type TextContentNodeProps = {
 	oneLine?: boolean;
 };
 
-function TextContentNode({
-	node,
-	variant,
-	mentions,
-	emojiMap,
-	oneLine,
-}: TextContentNodeProps) {
+function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 	if (!node) return <View />;
 
 	if (
@@ -39,7 +34,6 @@ function TextContentNode({
 			case 'text': {
 				return (
 					<RawTextSegment
-						key={node.uuid}
 						value={node.text}
 						fontFamily={
 							variant === 'displayName'
@@ -51,6 +45,7 @@ function TextContentNode({
 								? APP_COLOR_PALETTE_EMPHASIS.A0
 								: APP_COLOR_PALETTE_EMPHASIS.A10
 						}
+						variant={variant}
 					/>
 				);
 			}
@@ -58,7 +53,6 @@ function TextContentNode({
 				if (variant === 'displayName') {
 					return (
 						<RawTextSegment
-							key={node.uuid}
 							value={node.text}
 							fontFamily={
 								variant === 'displayName'
@@ -70,12 +64,12 @@ function TextContentNode({
 									? APP_COLOR_PALETTE_EMPHASIS.A0
 									: APP_COLOR_PALETTE_EMPHASIS.A10
 							}
+							variant={variant}
 						/>
 					);
 				}
 				return (
 					<MentionSegment
-						key={node.uuid}
 						value={node.text}
 						link={node.url}
 						mentions={mentions}
@@ -86,7 +80,6 @@ function TextContentNode({
 			case 'customEmoji': {
 				return (
 					<EmojiCodeSegment
-						key={node.uuid}
 						value={node.text}
 						emojiMap={emojiMap}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
@@ -97,7 +90,6 @@ function TextContentNode({
 			case 'tag': {
 				return (
 					<HashtagSegment
-						key={node.uuid}
 						value={node.text}
 						fontFamily={
 							variant === 'displayName'
@@ -130,7 +122,6 @@ function TextContentNode({
 				if (isHashtag) {
 					return (
 						<HashtagSegment
-							key={node.uuid}
 							value={node.text}
 							fontFamily={
 								variant === 'displayName'
@@ -143,7 +134,6 @@ function TextContentNode({
 
 				return (
 					<LinkSegment
-						key={node.uuid}
 						url={node.url}
 						displayName={node.text}
 						fontFamily={
@@ -164,7 +154,6 @@ function TextContentNode({
 		case 'para': {
 			return (
 				<Text
-					key={node.uuid}
 					style={{
 						marginBottom:
 							variant === 'displayName'
@@ -175,9 +164,8 @@ function TextContentNode({
 					}}
 					numberOfLines={oneLine ? 1 : undefined}
 				>
-					{node.nodes.map((_node, i) => (
-						<TextContentNode
-							key={i}
+					{node.nodes.map((_node) => (
+						<ParsedNode
 							mentions={mentions}
 							node={_node}
 							variant={variant}
@@ -191,9 +179,8 @@ function TextContentNode({
 		case 'bold': {
 			return (
 				<Text key={node.uuid}>
-					{node.nodes.map((_node, i) => (
-						<TextContentNode
-							key={i}
+					{node.nodes.map((_node) => (
+						<ParsedNode
 							mentions={mentions}
 							node={_node}
 							variant={variant}
@@ -206,7 +193,7 @@ function TextContentNode({
 	}
 }
 
-type TextContentViewProps = {
+type TextAstRendererViewProps = {
 	tree: AppParsedTextNodes;
 	variant: TEXT_PARSING_VARIANT;
 	mentions: PostMentionObjectType[];
@@ -215,21 +202,21 @@ type TextContentViewProps = {
 	oneLine?: boolean;
 };
 
-export function TextContentView({
+function TextAstRendererView({
 	tree,
 	style,
 	variant,
 	mentions,
 	emojiMap,
 	oneLine,
-}: TextContentViewProps) {
+}: TextAstRendererViewProps) {
+	const { getMappingKey } = useMappingHelper();
 	if (!Array.isArray(tree)) return <View />;
 	return (
 		<View style={style}>
-			{/* --- paragraphs --- */}
 			{tree.map((item, i) => (
-				<TextContentNode
-					key={i}
+				<ParsedNode
+					key={getMappingKey(item.uuid, i)}
 					node={item}
 					variant={variant}
 					mentions={mentions}
@@ -240,3 +227,5 @@ export function TextContentView({
 		</View>
 	);
 }
+
+export default TextAstRendererView;

@@ -4,7 +4,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { userFollowersQueryOpts } from '@dhaaga/react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { UserDetailedTimelineView } from '#/components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/components/timelines/UserTimelineView';
 import { useLocalSearchParams } from 'expo-router';
 
 function Generator() {
@@ -15,9 +15,11 @@ function Generator() {
 	const queryResult = useQuery(userFollowersQueryOpts(client, id, State.maxId));
 
 	return (
-		<UserDetailedTimelineView
+		<UserTimelineView
 			label={t(`noun.follower_other`)}
 			queryResult={queryResult}
+			flatListKey={'followers/list'}
+			navbarType={'sticky'}
 		/>
 	);
 }

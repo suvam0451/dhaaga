@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@dhaaga/bridge": "*",
-    "@dhaaga/orm": "*"
+    "@dhaaga/orm": "*",
+    "zod": "^4.1.13"
   },
   "peerDependencies": {
     "expo-sqlite": ">=16.0.0"

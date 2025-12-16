@@ -16,6 +16,8 @@ function SocialUpdatePresenter() {
 		<SimpleInboxTimeline
 			queryResult={queryResult}
 			Wrapper={({ item }) => <Wrapper item={item} />}
+			type={'social'}
+			label={'Social'}
 		/>
 	);
 }

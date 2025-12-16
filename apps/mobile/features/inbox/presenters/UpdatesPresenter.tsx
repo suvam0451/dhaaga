@@ -16,6 +16,8 @@ function UpdatesPresenter() {
 		<SimpleInboxTimeline
 			queryResult={queryResult}
 			Wrapper={({ item }) => <Wrapper item={item} />}
+			type={'updates'}
+			label={'Updates'}
 		/>
 	);
 }

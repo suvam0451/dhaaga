@@ -129,6 +129,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 		throw new Error('Method not implemented.');
 	}
 
+	// TODO: need to switch to this unified implementation
 	likes(query: GetPostsQueryDTO) {
 		return errorBuilder<any>(ApiErrorCode.FEATURE_UNSUPPORTED) as any;
 	}
@@ -142,10 +143,10 @@ class BlueskyAccountsRouter implements AccountRoute {
 			limit: number;
 			cursor: string | undefined;
 		},
-	): Promise<AppBskyFeedGetActorLikes.OutputSchema> {
+	): PaginatedPromise<AppBskyFeedDefs.FeedViewPost[]> {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.getActorLikes({ actor, cursor, limit });
-		return data.data;
+		return { data: data.data.feed, maxId: data.data.cursor };
 	}
 
 	async getLists(id: string): PaginatedPromise<AppBskyGraphDefs.ListView[]> {

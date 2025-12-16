@@ -1,9 +1,9 @@
 import { AppButtonVariantA, AppButtonVariantDestructive } from '../lib/Buttons';
 import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
-} from '../hooks/tasks/useSyncWithProgress';
+} from '#/features/_archived/bookmark-gallery/components/useSyncWithProgress';
 import { ActivityIndicator, View, Text } from 'react-native';
-import { APP_FONT } from '../../styles/AppTheme';
+import { APP_FONT } from '#/styles/AppTheme';
 
 function BookmarkGalleryAdvanced() {
 	const { Task, IsTaskRunning, Numerator } = useSyncWithProgress(

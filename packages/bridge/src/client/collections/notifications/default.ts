@@ -10,7 +10,7 @@ export class DefaultNotificationsRouter implements NotificationsRoute {
 		throw new Error('method not implemented');
 	}
 
-	async getChat(): Promise<any> {
+	async getChatDetails(): Promise<any> {
 		throw new Error('method not implemented');
 	}
 

@@ -8,7 +8,7 @@ import { FlatList, Pressable, StyleSheet, TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useApiSearchFeeds } from '#/hooks/api/useApiSearch';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProfileService } from '@dhaaga/db';
 import BskyFeedAddListItemView from '#/components/dhaaga-bottom-sheet/hub/components/BskyFeedAddListItemView';
 import { AppIcon } from '#/components/lib/Icon';
@@ -18,6 +18,7 @@ import { AppDividerSoft } from '#/ui/Divider';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 import useApiGetMyFeeds from '#/hooks/api/useFeeds';
 import { DriverService } from '@dhaaga/bridge';
+import useAutoFocusBottomSheetInput from '#/ui/hooks/useAutoFocusBottomSheetInput';
 
 function BskyFeedAddSheetPresenter() {
 	const { theme } = useAppTheme();
@@ -27,21 +28,16 @@ function BskyFeedAddSheetPresenter() {
 	const { data } = useApiSearchFeeds(debouncedQuery, null);
 	const { data: defaultData } = useApiGetMyFeeds();
 	const [Profile, setProfile] = useState(null);
-	const { ctx, stateId, visible } = useAppBottomSheet();
+	const { ctx, stateId } = useAppBottomSheet();
 	const { client } = useAppApiClient();
 	const { db } = useAppDb();
 
-	const TextInputRef = useRef<TextInput>(null);
-
+	const { ref } = useAutoFocusBottomSheetInput(
+		DriverService.supportsAtProto(client?.driver),
+	);
 	useEffect(() => {
 		if (ctx.$type !== 'profile-id' || !ctx.profileId) return;
 		setProfile(ProfileService.getById(db, ctx.profileId));
-		const id = setTimeout(() => {
-			if (visible && DriverService.supportsAtProto(client.driver)) {
-				TextInputRef?.current?.focus();
-			}
-		}, 200);
-		return () => clearTimeout(id);
 	}, [stateId]);
 
 	useEffect(() => {
@@ -63,7 +59,7 @@ function BskyFeedAddSheetPresenter() {
 	}
 
 	function onSectionPressed() {
-		TextInputRef.current?.focus();
+		ref.current?.focus();
 	}
 
 	return (
@@ -81,7 +77,7 @@ function BskyFeedAddSheetPresenter() {
 					>
 						<AppIcon id={'search'} emphasis={APP_COLOR_PALETTE_EMPHASIS.A40} />
 						<TextInput
-							ref={TextInputRef}
+							ref={ref}
 							placeholder={t(`hubAddFeedSheet.searchPlaceholder`)}
 							placeholderTextColor={theme.secondary.a40}
 							numberOfLines={1}

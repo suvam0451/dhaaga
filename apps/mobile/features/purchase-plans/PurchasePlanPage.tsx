@@ -50,7 +50,7 @@ function BetaPageContent() {
 		{
 			type: 'feature',
 			title: 'Free Services',
-			description: 'Everything from all paid tirs',
+			description: 'Everything from all paid tiers',
 			Icon: <FlyingMoney />,
 		},
 	];

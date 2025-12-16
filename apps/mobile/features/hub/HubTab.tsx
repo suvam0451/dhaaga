@@ -12,7 +12,7 @@ import {
 	socialHubTabReducerActionType as ACTION,
 	socialHubTabReducerDefault as reducerDefault,
 } from '#/states/interactors/social-hub-tab.reducer';
-import { RefreshControl, ScrollView } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from './views/HubProfileListView';
 import HubPinnedFeedList from './components/HubPinnedFeedList';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
@@ -30,6 +30,8 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import ComposeButton from '#/components/widgets/ComposeButton';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { appDimensions } from '#/styles/dimensions';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type Props = {
 	// account left join guaranteed
@@ -96,23 +98,6 @@ function HubTab({ profile }: Props) {
 			profileId: profile.id,
 			callback: refresh,
 		});
-
-		// if (parentAcct.id !== acct.id) {
-		// show(
-		// 	DialogBuilderService.toSwitchActiveAccount(() => {
-		// 		AccountService.select(db, parentAcct);
-		// 		try {
-		// 			restoreSession().then(() => {
-		// 				hide();
-		// 				setCtx({ profileId: profile.id, onChange: refresh });
-		// 				showSheet(APP_BOTTOM_SHEET_ENUM.ADD_HUB_USER, true);
-		// 			});
-		// 		} catch (e) {
-		// 			hide();
-		// 		}
-		// 	}),
-		// );
-		// }
 	}
 
 	function onPressAddTag() {
@@ -332,19 +317,24 @@ function HubTab({ profile }: Props) {
 		}
 	}
 
+	// the hub interface is not long enough for smooth animations.
+	// const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
+
 	return (
-		<>
+		<View style={{ backgroundColor: theme.background.a10, height: '100%' }}>
+			<NavBar_Hub acct={parentAcct} />
 			<ScrollView
 				style={{
 					backgroundColor: theme.palette.bg,
-					height: '100%',
 				}}
 				refreshControl={
 					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
 				}
+				contentContainerStyle={{
+					paddingTop: appDimensions.topNavbar.hubVariantHeight,
+				}}
+				contentOffset={{ x: 0, y: appDimensions.topNavbar.hubVariantHeight }}
 			>
-				<NavBar_Hub acct={parentAcct} />
-
 				{/* --- Pinned Timelines --- */}
 				<HubPinnedFeedList
 					account={State.acct}
@@ -368,6 +358,7 @@ function HubTab({ profile }: Props) {
 					onPressAddTag={onPressAddTag}
 					onLongPressTag={onLongPressTag}
 				/>
+				<View style={{ height: 72 }} />
 			</ScrollView>
 
 			<HubProfileListView
@@ -376,7 +367,7 @@ function HubTab({ profile }: Props) {
 				onPressProfile={onPressProfile}
 			/>
 			<ComposeButton />
-		</>
+		</View>
 	);
 }
 

@@ -20,7 +20,7 @@ import polyfills from '#/utils/polyfills';
 
 import '../i18n/_loader';
 import 'fast-text-encoding';
-import { useNativeKeyboardAnimation } from '#/hooks/useNativeKeyboardAnimation'; // needed by atproto
+import { useNativeKeyboardOffset } from '#/ui/hooks/useNativeKeyboardOffset'; // needed by atproto
 import Animated, {
 	configureReanimatedLogger,
 	ReanimatedLogLevel,
@@ -66,7 +66,7 @@ function App() {
 		setIsRendered(true);
 	}
 
-	const { height } = useNativeKeyboardAnimation(20, 20);
+	const { height } = useNativeKeyboardOffset(20, 20);
 	const fakeView = useAnimatedStyle(() => {
 		return {
 			height: height.value,
@@ -82,7 +82,7 @@ function App() {
 				style={{
 					flex: 0,
 					backgroundColor: HAS_NO_STICKY_MENU.includes(pathname)
-						? theme.background.a0
+						? theme.background.a10
 						: theme.background.a10,
 				}}
 			/>

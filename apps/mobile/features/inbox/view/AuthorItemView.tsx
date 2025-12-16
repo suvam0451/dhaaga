@@ -3,12 +3,12 @@ import { Image } from 'expo-image';
 import { ICON_SIZE } from '../components/_common';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import { useAppTheme } from '#/states/global/hooks';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from '#/components/lib/Icon';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	handle: string;
@@ -75,7 +75,7 @@ export function AuthorItemView({
 			</Pressable>
 			<Pressable style={{ marginLeft: 12, flex: 1 }} onPress={onUserPressed}>
 				{parsedDisplayName.length > 0 ? (
-					<TextContentView
+					<TextAstRendererView
 						tree={parsedDisplayName}
 						variant={'displayName'}
 						mentions={[]}

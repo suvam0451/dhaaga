@@ -10,9 +10,10 @@ import CollectionItem from '#/features/collections/components/CollectionItem';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import AssignmentListControlView from '#/features/_shared/views/AssignmentListControlView';
-import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
 import { PostInspector } from '@dhaaga/bridge';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 function BookmarkBottomSheet() {
 	const { theme } = useAppTheme();
@@ -32,17 +33,22 @@ function BookmarkBottomSheet() {
 	const IS_BOOKMARKED = _target.interaction.bookmarked;
 
 	return (
-		// required for touch inputs to work
 		<View style={{ flex: 1 }}>
+			<BottomSheetMenu
+				title={'N/A'}
+				variant={'raised'}
+				CustomHeader={
+					<AssignmentSheetBookmarkView
+						bookmarked={IS_BOOKMARKED}
+						toggleBookmark={toggleBookmark}
+					/>
+				}
+			/>
 			<FlatList
 				data={data}
 				ListHeaderComponent={
 					<>
-						<AssignmentSheetBookmarkView
-							bookmarked={IS_BOOKMARKED}
-							toggleBookmark={toggleBookmark}
-						/>
-						<AppText.Medium
+						<NativeTextMedium
 							style={{
 								color: theme.complementary,
 								textAlign: 'center',
@@ -51,7 +57,7 @@ function BookmarkBottomSheet() {
 							}}
 						>
 							{t(`collections.disclaimer`)}
-						</AppText.Medium>
+						</NativeTextMedium>
 						<AssignmentListControlView
 							onPressAddNew={onRequestAddNewCollection}
 							sectionLabel={t(`collections.collections`)}
@@ -78,6 +84,7 @@ function BookmarkBottomSheet() {
 				contentContainerStyle={{
 					paddingBottom: appDimensions.timelines.sectionBottomMargin * 4,
 				}}
+				ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
 			/>
 		</View>
 	);

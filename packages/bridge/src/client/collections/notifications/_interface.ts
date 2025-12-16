@@ -8,7 +8,6 @@ import type {
 	MastoNotification,
 } from '#/types/mastojs.types.js';
 import type { MegaNotification } from '#/types/megalodon.types.js';
-import type { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { Endpoints } from 'misskey-js';
 import { PaginatedPromise } from '#/types/api-response.js';
 import { NotificationGetQueryDto } from '#/client/typings.js';
@@ -41,7 +40,9 @@ export interface NotificationsRoute {
 		| any
 	>;
 
-	getChats(roomId: string): PaginatedPromise<any>;
+	getChats(
+		roomId: string,
+	): PaginatedPromise<ChatBskyConvoDefs.ConvoView[] | any>;
 
 	getSocialUpdates(
 		query: NotificationGetQueryDto,
@@ -49,7 +50,7 @@ export interface NotificationsRoute {
 		AppBskyNotificationListNotifications.Notification[] | any
 	>;
 
-	getChat(roomId: string): PaginatedPromise<any>;
+	getChatDetails(roomId: string): Promise<ChatBskyConvoDefs.ConvoView | any>;
 
 	/**
 	 * Get chat messages for a conversation

@@ -11,9 +11,11 @@ const ActivityPubReactionStateSchema = z.array(
 		url: z.string().nullable().optional(),
 	}),
 );
+
 type ActivityPubReactionStateType = z.infer<
 	typeof ActivityPubReactionStateSchema
 >;
+
 const ActivityPubBoostedByDto = z.object({
 	id: z.string(),
 	avatarUrl: z.string(),
@@ -22,6 +24,7 @@ const ActivityPubBoostedByDto = z.object({
 	handle: z.string().regex(/^@.*?@?.*?$/),
 	instance: z.string(),
 });
+
 type PostAuthorType = z.infer<typeof ActivityPubBoostedByDto>;
 const AppActivityPubMediaDto = z.object({
 	url: z.string(),
@@ -32,6 +35,7 @@ const AppActivityPubMediaDto = z.object({
 	type: z.string(),
 	blurhash: z.string().nullable(),
 });
+
 type PostMediaAttachmentType = z.infer<typeof AppActivityPubMediaDto>;
 const AppPostStatsDto = z.object({
 	replyCount: z.number().nonnegative(),
@@ -39,6 +43,7 @@ const AppPostStatsDto = z.object({
 	likeCount: z.number().nonnegative(),
 	reactions: ActivityPubReactionStateSchema,
 });
+
 type PostStatsType = z.infer<typeof AppPostStatsDto>;
 /**
  * This payload is used to consume
@@ -135,11 +140,13 @@ export const ActivityPubStatusItemDto = z.object({
 		.nullable()
 		.optional(),
 });
+
 const ActivityPubStatusLevelTwo = ActivityPubStatusItemDto.extend({
 	replyTo: ActivityPubStatusItemDto.nullable().optional(), // Misskey/Firefish natively supports quote boosting
 	boostedFrom: ActivityPubStatusItemDto.nullable().optional(), // Pleroma feature
 	quotedFrom: ActivityPubStatusItemDto.nullable().optional(),
 });
+
 const postObjectSchema = ActivityPubStatusLevelTwo.extend({
 	replyTo: ActivityPubStatusLevelTwo.nullable().optional(), // Misskey/Firefish natively supports quote boosting
 	boostedFrom: ActivityPubStatusLevelTwo.nullable().optional(), // Pleroma feature

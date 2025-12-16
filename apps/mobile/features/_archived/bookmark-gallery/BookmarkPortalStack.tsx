@@ -7,7 +7,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { router } from 'expo-router';
 import useSyncWithProgress, {
 	ACTIVITYPUB_SYNC_TASK,
-} from '#/components/hooks/tasks/useSyncWithProgress';
+} from '#/features/_archived/bookmark-gallery/components/useSyncWithProgress';
 import { APP_FONTS } from '#/styles/AppFonts';
 import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
 

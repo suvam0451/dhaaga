@@ -5,7 +5,6 @@ function AccountsScreen() {
 	const { theme } = useAppTheme();
 	return (
 		<Stack
-			initialRouteName={'index'}
 			screenOptions={{
 				headerShown: false,
 				navigationBarColor: theme.background.a0,

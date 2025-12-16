@@ -20,10 +20,14 @@ export const appDimensions = {
 		marginLeft: 6,
 		height: 52, // 44
 		scrollViewTopPadding: 52,
+		hubVariantHeight: 56,
 	},
 	bottomSheet: {
 		borderRadius: 16,
 		clearanceTop: 24,
+	},
+	bottomNav: {
+		secondMenuBarHeight: 52,
 	},
 };
 

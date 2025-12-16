@@ -48,6 +48,15 @@ class RoutingUtils {
 		});
 	}
 
+	static toChatroom(roomId: string) {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.CHATROOM,
+			params: {
+				roomId: roomId,
+			},
+		});
+	}
+
 	static toHome() {
 		router.navigate({
 			pathname: APP_ROUTING_ENUM.PROFILE_TAB,

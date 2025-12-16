@@ -84,7 +84,9 @@ function AppTabLandingNavbar({
 	return (
 		<View style={[styles.container]}>
 			<View style={{ flexDirection: 'row' }}>
-				<NativeTextH1>{NAVBAR_LABEL}</NativeTextH1>
+				<NativeTextH1 style={{ flex: 1, marginTop: 16 }}>
+					{NAVBAR_LABEL}
+				</NativeTextH1>
 				<View style={{ flexDirection: 'row' }}>
 					{menuItems.map(({ iconId, disabled, onPress }, i) => (
 						<Pressable key={i} style={styles.menuButton} onPress={onPress}>
@@ -113,6 +115,8 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 12,
 		width: '100%',
 		zIndex: 1,
+		marginBottom: 16,
+		height: appDimensions.topNavbar.hubVariantHeight,
 	},
 	headerText: {
 		fontSize: 28,

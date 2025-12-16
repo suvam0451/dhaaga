@@ -41,7 +41,7 @@ function useHideNavUsingFlatList(
 		if (diff > 0) {
 			// swiping up, scrolling down → hide
 			const nextValue = navbarOffset.value - diff / 2;
-			if (nextValue < -height / 2) {
+			if (nextValue < -height / 3) {
 				navbarOffset.value = withTiming(-height, { duration: 180 });
 			} else {
 				navbarOffset.value = clamp(navbarOffset.value - diff / 2, -height, 0);

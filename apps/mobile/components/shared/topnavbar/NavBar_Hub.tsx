@@ -1,9 +1,6 @@
 import { Account } from '@dhaaga/db';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { appDimensions } from '#/styles/dimensions';
-import { AppIcon } from '../../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { Pressable } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useHub } from '#/states/global/hooks';
@@ -12,16 +9,23 @@ import Animated, {
 	FadeInLeft,
 	FlipOutXUp,
 } from 'react-native-reanimated';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { NativeTextH1 } from '#/ui/NativeText';
+import NavBar_Landing from '#/components/shared/topnavbar/NavBar_Landing';
 
 type Props = {
 	acct?: Account;
+	animatedStyle?: any;
 };
 
-function SocialHubHeader({ acct }: Props) {
+/**
+ * Component Height = 72
+ * @param acct
+ * @param animatedStyle
+ * @constructor
+ */
+function SocialHubHeader({ acct, animatedStyle }: Props) {
 	const [GreetingActive, setGreetingActive] = useState(false);
 	const { pageIndex } = useHub();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -47,59 +51,39 @@ function SocialHubHeader({ acct }: Props) {
 		},
 	];
 
+	function onLabelPressed() {
+		setGreetingActive(true);
+		setTimeout(() => {
+			setGreetingActive(false);
+		}, 5000);
+	}
+
 	return (
-		<View style={[styles.container]}>
-			{/*FIXME: not animating as expected*/}
-			<Animated.View
-				style={{
-					flex: 1,
-				}}
-			>
-				{GreetingActive ? (
-					<Animated.View entering={FadeInLeft} exiting={FadeOut}>
-						<TimeOfDayGreeting style={{ paddingHorizontal: 0 }} acct={acct} />
-					</Animated.View>
-				) : (
-					<Animated.View entering={FadeInLeft} exiting={FlipOutXUp}>
-						<NativeTextH1>{t(`hub.navbarLabel`)}</NativeTextH1>
-					</Animated.View>
-				)}
-			</Animated.View>
-			<View style={{ flexDirection: 'row' }}>
-				{menuItems.map(({ iconId, onPress }, i) => (
-					<Pressable
-						key={i}
-						style={{
-							padding: appDimensions.topNavbar.padding,
-							marginLeft: appDimensions.topNavbar.marginLeft,
-						}}
-						onPress={onPress}
-					>
-						<AppIcon
-							id={iconId as any}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-							onPress={onPress}
-							size={appDimensions.topNavbar.iconSize + 6}
-						/>
-					</Pressable>
-				))}
-			</View>
-		</View>
+		<NavBar_Landing
+			menuItems={menuItems}
+			LabelComponent={
+				<Pressable
+					style={{
+						flex: 1,
+						marginVertical: 'auto',
+						alignContent: 'center',
+					}}
+					onPress={onLabelPressed}
+				>
+					{GreetingActive ? (
+						<Animated.View entering={FadeInLeft} exiting={FadeOut}>
+							<TimeOfDayGreeting style={{ paddingHorizontal: 0 }} acct={acct} />
+						</Animated.View>
+					) : (
+						<Animated.View entering={FadeInLeft} exiting={FlipOutXUp}>
+							<NativeTextH1>{t(`hub.navbarLabel`)}</NativeTextH1>
+						</Animated.View>
+					)}
+				</Pressable>
+			}
+			animatedStyle={animatedStyle}
+		/>
 	);
 }
 
 export default SocialHubHeader;
-
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: 12,
-		flexDirection: 'row',
-		alignItems: 'center',
-		width: '100%',
-		minHeight: 72,
-	},
-	headerText: {
-		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
-	},
-});

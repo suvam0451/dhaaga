@@ -14,12 +14,12 @@ import {
 } from '#/states/global/hooks';
 
 import type { UserObjectType } from '@dhaaga/bridge';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { AppAvatar } from '#/components/lib/Avatar';
 import {
 	APP_BOTTOM_SHEET_ACTION_CATEGORY,
 	AppButtonBottomSheetAction,
 } from '#/components/lib/Buttons';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 function ReactingUser({ dto }: { dto: UserObjectType }) {
 	const { theme } = useAppTheme();
@@ -28,7 +28,7 @@ function ReactingUser({ dto }: { dto: UserObjectType }) {
 		<View style={{ flexDirection: 'row', marginVertical: 4 }}>
 			<AppAvatar uri={dto.avatarUrl} />
 			<View style={{ marginLeft: 6, justifyContent: 'center' }}>
-				<TextContentView
+				<TextAstRendererView
 					tree={dto.parsedDisplayName}
 					variant={'displayName'}
 					mentions={[]}

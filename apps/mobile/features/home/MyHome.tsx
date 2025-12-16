@@ -131,7 +131,7 @@ function MyHome() {
 					}}
 				>
 					<NativeTextSpecial
-						style={styles.sectionHeader}
+						style={[styles.sectionHeader, { color: theme.primary }]}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 					>
 						{t(`profile.appFeatures.sectionLabel`)}

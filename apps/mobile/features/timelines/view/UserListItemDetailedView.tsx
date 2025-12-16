@@ -7,11 +7,11 @@ import { appDimensions } from '#/styles/dimensions';
 import { useState } from 'react';
 import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
-import { TextContentView } from '#/components/common/status/TextContentView';
-import { AppDividerHard } from '#/ui/Divider';
+import { AppDividerSoft } from '#/ui/Divider';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 const ICON_SIZE = 42;
-const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
+const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin * 0.75;
 
 type BannerProps = {
 	uri: string;
@@ -62,93 +62,72 @@ function UserListItemDetailedView({ item }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
-		<View
-			style={[
-				styles.userResultContainer,
-				{ backgroundColor: theme.background.a20 },
-			]}
-		>
+		<View style={[styles.root, { backgroundColor: theme.background.a20 }]}>
 			{item.banner && <Banner uri={item.banner} />}
 			{!item.banner && <View style={{ height: 12 }} />}
 			<View
 				style={{
-					paddingHorizontal: 10,
+					flexDirection: 'row',
+					marginBottom: MARGIN_BOTTOM,
+					alignItems: 'center',
 				}}
 			>
-				<View
+				<Image
+					source={{ uri: item.avatarUrl }}
 					style={{
-						flexDirection: 'row',
-						marginBottom: MARGIN_BOTTOM,
-						alignItems: 'center',
+						width: ICON_SIZE,
+						height: ICON_SIZE,
+						borderRadius: ICON_SIZE / 2,
 					}}
-				>
-					<Image
-						source={{ uri: item.avatarUrl }}
+				/>
+				<View style={styles.usernameArea}>
+					<TextAstRendererView
+						tree={item.parsedDisplayName}
+						variant={'displayName'}
+						mentions={[]}
+						emojiMap={item.calculated.emojis}
+					/>
+					<Text
 						style={{
-							width: ICON_SIZE,
-							height: ICON_SIZE,
-							borderRadius: ICON_SIZE / 2,
+							color: theme.secondary.a30,
+							fontFamily: APP_FONTS.INTER_500_MEDIUM,
+							fontSize: 13,
 						}}
-					/>
-					<View style={{ marginLeft: 12, maxWidth: '75%' }}>
-						<TextContentView
-							tree={item.parsedDisplayName}
-							variant={'displayName'}
-							mentions={[]}
-							emojiMap={item.calculated.emojis}
-						/>
-						<Text
-							style={{
-								color: theme.secondary.a30,
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
-								fontSize: 13,
-							}}
-							numberOfLines={1}
-						>
-							{item.handle}
-						</Text>
-					</View>
-					<View style={{ flexGrow: 1 }} />
+						numberOfLines={1}
+					>
+						{item.handle}
+					</Text>
 				</View>
-				<TextContentView
-					tree={item.parsedDescription}
-					variant={'bodyContent'}
-					mentions={[]}
-					emojiMap={item.calculated.emojis}
+			</View>
+			<AppDividerSoft
+				style={{
+					marginVertical: MARGIN_BOTTOM,
+				}}
+			/>
+			<TextAstRendererView
+				tree={item.parsedDescription}
+				variant={'bodyContent'}
+				mentions={[]}
+				emojiMap={item.calculated.emojis}
+			/>
+			<AppDividerSoft
+				style={{
+					marginVertical: MARGIN_BOTTOM,
+				}}
+			/>
+			<View style={styles.statsAndRelationArea}>
+				<ProfileStatView
+					userId={item.id}
+					postCount={item.stats.posts}
+					followingCount={item.stats.following}
+					followerCount={item.stats.followers}
+					style={{ flex: 1, marginLeft: 0 }}
 				/>
-				<AppDividerHard
-					style={{
-						marginVertical: MARGIN_BOTTOM,
-						backgroundColor: theme.background.a50,
-					}}
-				/>
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-					}}
-				>
-					<ProfileStatView
-						userId={item.id}
-						postCount={item.stats.posts}
-						followingCount={item.stats.following}
-						followerCount={item.stats.followers}
-						style={{ flex: 1, marginLeft: 0 }}
-					/>
-					<UserRelationPresenter userId={item.id} />
-				</View>
+				<UserRelationPresenter userId={item.id} />
 			</View>
 		</View>
 	);
 }
-
-/**
- * An alternative layout, since at proto
- * does not offer profile stats
- * @param props
- * @constructor
- */
-function UserListItemViewBsky(props: Props) {}
 
 /**
  * exclude banner and stats
@@ -156,9 +135,11 @@ function UserListItemViewBsky(props: Props) {}
 export default UserListItemDetailedView;
 
 const styles = StyleSheet.create({
-	userResultContainer: {
+	root: {
 		borderRadius: 12,
-		margin: 6,
-		marginBottom: 12,
+		marginHorizontal: 6,
+		paddingHorizontal: 10,
 	},
+	usernameArea: { marginLeft: 12, flex: 1 },
+	statsAndRelationArea: { flexDirection: 'row', alignItems: 'center' },
 });

@@ -1,17 +1,21 @@
-import { Fragment, useState } from 'react';
-import { APP_LANDING_PAGE_TYPE } from '#/components/shared/topnavbar/AppTabLandingNavbar';
+import { useState } from 'react';
 import { useApiGetChatUpdates } from '#/hooks/api/useNotifications';
-import { RefreshControl } from 'react-native';
-import { AppFlashList } from '#/components/lib/AppFlashList';
+import { RefreshControl, View } from 'react-native';
 import { useAppApiClient } from '#/states/global/hooks';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import Header from '../components/Header';
+import NavBar_Inbox from '#/components/shared/topnavbar/NavBar_Inbox';
 import FeatureNotAvailable from '../components/FeatureNotAvailable';
+import { FlashList } from '@shopify/flash-list';
+import ChatRoomListItemView from '#/features/timelines/view/ChatRoomListItemView';
+import { AppDividerSoft } from '#/ui/Divider';
+import { appDimensions } from '#/styles/dimensions';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 function ChatroomPresenter() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { driver } = useAppApiClient();
-	const { refetch, data } = useApiGetChatUpdates();
+	const queryResult = useApiGetChatUpdates();
+	const { refetch, data } = queryResult;
 
 	function refresh() {
 		setIsRefreshing(true);
@@ -20,23 +24,46 @@ function ChatroomPresenter() {
 		});
 	}
 
-	if (driver !== KNOWN_SOFTWARE.BLUESKY) {
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
+
+	if (driver !== KNOWN_SOFTWARE.BLUESKY)
 		return (
-			<Fragment>
-				<Header type={APP_LANDING_PAGE_TYPE.CHAT} />
+			<>
+				<NavBar_Inbox
+					label={'Chat'}
+					type={'chats'}
+					animatedStyle={animatedStyle}
+				/>
 				<FeatureNotAvailable />
-			</Fragment>
+			</>
 		);
-	}
 
 	return (
-		<AppFlashList.Chatrooms
-			data={data}
-			ListHeaderComponent={<Header type={APP_LANDING_PAGE_TYPE.CHAT} />}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
-			}
-		/>
+		<>
+			<NavBar_Inbox
+				label={'Chat'}
+				type={'chats'}
+				animatedStyle={animatedStyle}
+			/>
+			<FlashList
+				onScroll={scrollHandler}
+				data={data?.data ?? []}
+				renderItem={({ item }) => <ChatRoomListItemView room={item} />}
+				contentContainerStyle={{
+					paddingTop: appDimensions.topNavbar.hubVariantHeight + 8,
+				}}
+				progressViewOffset={appDimensions.topNavbar.hubVariantHeight}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
+				}
+				ItemSeparatorComponent={() => (
+					<AppDividerSoft style={{ marginVertical: 10 }} />
+				)}
+				ListEmptyComponent={
+					driver !== KNOWN_SOFTWARE.BLUESKY ? <FeatureNotAvailable /> : <View />
+				}
+			/>
+		</>
 	);
 }
 

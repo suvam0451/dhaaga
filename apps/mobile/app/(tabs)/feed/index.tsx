@@ -85,7 +85,7 @@ function Content() {
 				},
 			});
 		}
-	}, [pinId, pinType, db]);
+	}, [pinId, pinType]);
 
 	useEffect(() => {
 		dispatch({
@@ -108,7 +108,9 @@ function Content() {
 		<PostTimelineView
 			label={null}
 			queryResult={queryResult}
-			feedSwitcherEnabled
+			navbarType={'unified'}
+			flatListKey={'unified-feed'}
+			skipTimelineInit
 		/>
 	);
 }

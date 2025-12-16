@@ -1,4 +1,4 @@
-import { UserDetailedTimelineView } from '../../components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/components/timelines/UserTimelineView';
 import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
 import { useAppApiClient } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -15,9 +15,11 @@ function Generator() {
 	const queryResult = useQuery(userFollowsQueryOpts(client, id, State.maxId));
 
 	return (
-		<UserDetailedTimelineView
+		<UserTimelineView
 			label={t(`noun.follower_other`)}
 			queryResult={queryResult}
+			flatListKey={'followings/list'}
+			navbarType={'sticky'}
 		/>
 	);
 }

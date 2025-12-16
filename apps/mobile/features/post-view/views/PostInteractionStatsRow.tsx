@@ -7,12 +7,12 @@ import {
 } from 'react-native';
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '#/components/lib/Text';
-import { PostObjectType } from '@dhaaga/bridge';
+import { PostInspector, PostObjectType } from '@dhaaga/bridge';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import { PostInspector } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
 
 type StatItemProps = {
 	count: number;
@@ -49,14 +49,17 @@ export function StatItem({
 	return (
 		<Pressable onPress={onPress}>
 			<View style={{ flexDirection: 'row' }}>
-				<AppText.Medium style={[{ color, fontSize: 16 }]}>
+				<NativeTextMedium style={[{ color, fontSize: 16 }]}>
 					{formatted}{' '}
-					<AppText.Medium style={{ color, fontSize: 13 }}>
+					<NativeTextNormal
+						style={{ fontSize: 13 }}
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					>
 						{label}
-					</AppText.Medium>
-				</AppText.Medium>
+					</NativeTextNormal>
+				</NativeTextMedium>
 				{SHOW_TRAILING_BULLET && (
-					<AppText.Medium
+					<NativeTextMedium
 						style={[
 							{
 								color: theme.secondary.a30,
@@ -66,7 +69,7 @@ export function StatItem({
 						]}
 					>
 						&bull;
-					</AppText.Medium>
+					</NativeTextMedium>
 				)}
 			</View>
 		</Pressable>

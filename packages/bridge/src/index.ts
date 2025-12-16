@@ -101,7 +101,6 @@ export { PostInspector, PostResolver } from './parsers/post.js';
 export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
 
 export { AtprotoUtils } from './utils/atproto.js';
-export { KeyExtractorUtil } from './utils/key-extractor.js';
 export type { DriverPostLikeState } from './types/driver.types.js';
 export type { DriverUserFindQueryType } from './types/query.types.js';
 export { defaultResultPage, type ResultPage } from './types/api-response.js';

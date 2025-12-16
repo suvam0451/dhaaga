@@ -9,6 +9,29 @@ import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import { AppDividerSoft } from '#/ui/Divider';
 import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
 import { FlashList } from '@shopify/flash-list';
+import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
+import { View } from 'react-native';
+import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
+
+const navbarConfigs: Record<
+	string,
+	{ height: number; topLoaderOffset: number }
+> = {
+	explore: {
+		height: appDimensions.topNavbar.hubVariantHeight,
+		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
+	},
+};
+
+const widgetConfigs: Record<
+	string,
+	{ height: number; bottomLoaderOffset: number }
+> = {
+	explore: {
+		height: 52,
+		bottomLoaderOffset: 52,
+	},
+};
 
 function AppTimeline({
 	items,
@@ -19,7 +42,9 @@ function AppTimeline({
 	fnLoadMore,
 	fnReset,
 	renderItem,
-	feedSwitcherEnabled,
+	navbarType,
+	NavBar,
+	flatListKey,
 }: AppTimelineRendererProps) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
@@ -46,8 +71,10 @@ function AppTimeline({
 		fnLoadMore();
 	}
 
-	const { scrollHandler, animatedStyle } =
-		useScrollHandleFlatList(onEndReached);
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList(
+		onEndReached,
+		navbarConfigs[navbarType]?.height ?? 52,
+	);
 
 	const [ContainerHeight, setContainerHeight] = useState(0);
 	function onLayout(event: any) {
@@ -63,10 +90,28 @@ function AppTimeline({
 	 */
 	return (
 		<>
-			{feedSwitcherEnabled ? (
+			{navbarType === 'none' ? <View /> : <View />}
+			{navbarType === 'custom' ? NavBar : <View />}
+			{navbarType === 'unified' ? (
 				<NavBar_Feed animatedStyle={animatedStyle} />
 			) : (
+				<View />
+			)}
+			{navbarType === 'simple' ? (
 				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+			) : (
+				<View />
+			)}
+			{navbarType === 'sticky' ? (
+				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
+			) : (
+				<View />
+			)}
+			{/*{navbarType === 'inbox' ? <NavBar_Explore /> : <View />}*/}
+			{navbarType === 'explore' ? (
+				<NavBar_Explore animatedStyle={animatedStyle} />
+			) : (
+				<View />
 			)}
 			<FlashList
 				onLayout={onLayout}
@@ -74,7 +119,7 @@ function AppTimeline({
 				renderItem={renderItem}
 				onScroll={scrollHandler}
 				contentContainerStyle={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
+					paddingTop: navbarConfigs[navbarType]?.topLoaderOffset,
 				}}
 				scrollEventThrottle={16}
 				onRefresh={onRefresh}
@@ -96,6 +141,14 @@ function AppTimeline({
 				removeClippedSubviews={true}
 				keyExtractor={(item) => item.id}
 				onLoad={onListLoad}
+				key={flatListKey}
+			/>
+			<TimelineLoadingIndicator
+				numItems={items.length}
+				networkFetchStatus={fetchStatus}
+				style={{
+					marginBottom: widgetConfigs[navbarType]?.bottomLoaderOffset ?? 0,
+				}}
 			/>
 		</>
 	);

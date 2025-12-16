@@ -31,16 +31,15 @@ export function postThreadInterfaceToObjectChain(
 	itemLookup: Map<string, PostObjectType>;
 	childrenLookup: Map<string, string[]>;
 } {
-	let parents = [];
+	let parents: PostObjectType[] = [];
 	let currentHead = data.ancestors.find((o) => !o.post.isReply());
 
 	while (currentHead && currentHead.id !== anchor.id) {
-		parents.push(
-			PostParser.interfaceToJson(currentHead.post, {
-				driver: client.driver,
-				server: client.server!,
-			}),
-		);
+		const parsedParent = PostParser.interfaceToJson(currentHead.post, {
+			driver: client.driver,
+			server: client.server!,
+		});
+		parents.push(parsedParent!);
 		currentHead = data.ancestors.find(
 			(o) => o.post.getParentStatusId() === currentHead!.post.getId(),
 		);

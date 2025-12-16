@@ -1,8 +1,8 @@
 import type { UserObjectType } from '@dhaaga/bridge';
 import { FlatList, Image, Pressable, View } from 'react-native';
-import { TextContentView } from '#/components/common/status/TextContentView';
 import { AppText } from '#/components/lib/Text';
 import { useAppTheme } from '#/states/global/hooks';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	suggestions: UserObjectType[];
@@ -50,7 +50,7 @@ function SuggestedUserListView({ suggestions, onPick }: Props) {
 						/>
 					</View>
 					<View style={{ justifyContent: 'center', marginLeft: 6 }}>
-						<TextContentView
+						<TextAstRendererView
 							tree={item.parsedDisplayName}
 							variant={'displayName'}
 							mentions={[]}

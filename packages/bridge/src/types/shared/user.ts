@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { appRelationObjectSchema } from '#/types/shared/relationship.js';
 
 const appUserObjectSchema = z.object({
 	id: z.string(),
@@ -14,7 +15,7 @@ const appUserObjectSchema = z.object({
 		isBot: z.boolean(),
 		fields: z.array(
 			z.object({
-				// some label behave like this
+				// some label behaves like this
 				name: z.string().optional(),
 				value: z.string().optional(),
 				verifiedAt: z.string().nullable().optional(),
@@ -43,19 +44,14 @@ const appUserObjectSchema = z.object({
 	 * 	this data block does not need to be cached
 	 * 	also, null means not resolved yet
 	 */
-	relationship: z.object({
-		blocking: z.boolean().nullable(),
-		blockedBy: z.boolean().nullable(),
-		domainBlocking: z.boolean().nullable(),
-		followedBy: z.boolean().nullable(),
-		following: z.boolean().nullable(),
-		muting: z.boolean().nullable(),
-		mutingNotifications: z.boolean().nullable(),
-		note: z.string().nullable(),
-		requested: z.boolean().nullable(),
-		requestedBy: z.boolean().nullable(),
-		showingReblogs: z.boolean().nullable(),
-	}),
+	relationship: appRelationObjectSchema.nullable(),
+	// knownFollowers: z
+	// 	.object({
+	// 		$type: z.literal('app.bsky.actor.defs#knownFollowers').optional(),
+	// 		count: z.number(),
+	// 		followers: z.array(appUserObjectSchema),
+	// 	})
+	// 	.optional(),
 });
 
 /**

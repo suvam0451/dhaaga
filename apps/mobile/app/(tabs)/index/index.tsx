@@ -14,6 +14,7 @@ import SignedOutScreen from '#/features/onboarding/SignedOutScreen';
 import { NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
 import SessionLoadingScreen from '#/features/onboarding/SessionLoadingScreen';
 import HubTab from '#/features/hub/HubTab';
+import useTimeOfDay from '#/ui/hooks/useTimeOfDay';
 
 enum TIME_OF_DAY {
 	UNKNOWN = 'Unknown',
@@ -52,14 +53,12 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 				<NativeTextH6
 					numberOfLines={1}
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					style={[{ maxWidth: '80%' }]}
 				>
 					{greeting}, {acct?.displayName}
 				</NativeTextH6>
 				<NativeTextMedium
 					style={{
 						color: theme.primary,
-						maxWidth: '80%',
 					}}
 					numberOfLines={1}
 				>
@@ -72,19 +71,8 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 
 export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+	const timeOfDay = useTimeOfDay();
 	const Component = useMemo(() => {
-		const currentHours = new Date().getHours();
-		let timeOfDay: TIME_OF_DAY;
-		if (currentHours >= 21 || (currentHours >= 0 && currentHours < 6)) {
-			timeOfDay = TIME_OF_DAY.NIGHT;
-		} else if (currentHours >= 6 && currentHours < 12) {
-			timeOfDay = TIME_OF_DAY.MORNING;
-		} else if (currentHours >= 12 && currentHours < 17) {
-			timeOfDay = TIME_OF_DAY.AFTERNOON;
-		} else {
-			timeOfDay = TIME_OF_DAY.EVENING;
-		}
-
 		switch (timeOfDay) {
 			case TIME_OF_DAY.MORNING:
 				return (
@@ -127,7 +115,7 @@ export function TimeOfDayGreeting({ acct, style }: TimeOfDayGreetingProps) {
 					/>
 				);
 		}
-	}, [acct, t]);
+	}, [acct, t, timeOfDay]);
 
 	return (
 		<View

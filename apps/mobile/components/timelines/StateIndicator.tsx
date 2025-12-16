@@ -29,7 +29,7 @@ export function TimelineQueryStatusIndicator({
 	renderSkeleton,
 	numItems,
 }: {
-	queryResult: UseQueryResult<any, Error>;
+	queryResult: { isRefetching: boolean; error: Error; isFetched: boolean };
 	renderSkeleton: () => React.ReactNode;
 	numItems: number;
 }) {

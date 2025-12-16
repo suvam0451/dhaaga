@@ -4,10 +4,10 @@ import { AppIcon } from '../../../lib/Icon';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
-import { TextContentView } from '../TextContentView';
 import { AppText } from '../../../lib/Text';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import SantaWaveFromSleigh from '#/skins/christmas/decorators/SantaWaveFromSleigh';
+import TextAstRendererView from '#/ui/TextAstRendererView';
 
 type Props = {
 	avatarUrl: string;
@@ -52,7 +52,7 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 					/>
 				</View>
 				<View style={{ marginLeft: 6, flex: 1, flexDirection: 'row' }}>
-					<TextContentView
+					<TextAstRendererView
 						tree={parsedDisplayName}
 						variant={'displayName'}
 						mentions={[]}
