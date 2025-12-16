@@ -46,7 +46,7 @@ function useMiauthLogin(instance: string, signInUrl: string) {
 		// repeated api calls against the same code will fail
 		if (state.url === lastState.current) return;
 
-		const regex = /^https:\/\/suvam\.io\/\?session=([^&]+)/;
+		const regex = /^https:\/\/suvam\.io\/dhaaga\?session=([^&]+)/;
 		const match = state.url.match(regex);
 		if (match) {
 			const session = match[1];

@@ -18,6 +18,10 @@ const navbarConfigs: Record<
 	string,
 	{ height: number; topLoaderOffset: number }
 > = {
+	unified: {
+		height: appDimensions.topNavbar.hubVariantHeight,
+		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
+	},
 	explore: {
 		height: appDimensions.topNavbar.hubVariantHeight,
 		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
