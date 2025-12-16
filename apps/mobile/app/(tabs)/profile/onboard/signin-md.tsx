@@ -44,6 +44,7 @@ function MastodonSignInStack() {
 		if (authResponse === null) return;
 
 		const { userData, accessToken } = authResponse;
+		console.log(userData, accessToken);
 		const upsertResult = AccountDbService.upsertAccountCredentials(
 			db,
 			accessToken,
@@ -59,7 +60,7 @@ function MastodonSignInStack() {
 	}
 
 	return (
-		<>
+		<View style={{ backgroundColor: theme.background.a0, flex: 1 }}>
 			<NavBar_Simple label={`Mastodon Sign-In`} />
 			<AppAuthWebView
 				uri={_signInUrl}
@@ -157,7 +158,7 @@ function MastodonSignInStack() {
 					</View>
 				</View>
 			)}
-		</>
+		</View>
 	);
 }
 

@@ -6,9 +6,8 @@ import { useAssets } from 'expo-asset';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import WelcomeScreenFeatureShowcase from '#/features/onboarding/WelcomeScreenFeatureShowcase';
-import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import { router } from 'expo-router';
 import { LinkingUtils } from '#/utils/linking.utils';
+import RoutingUtils from '#/utils/routing.utils';
 
 function Page() {
 	const [assets, error] = useAssets([require('#/assets/dhaaga/icon.png')]);
@@ -55,7 +54,7 @@ function Page() {
 					label={'Get Started'}
 					loading={false}
 					onClick={() => {
-						router.navigate(APP_ROUTING_ENUM.PROFILE_TAB);
+						RoutingUtils.toAccountManagement();
 					}}
 					textStyle={{ fontSize: 16 }}
 				/>

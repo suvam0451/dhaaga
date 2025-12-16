@@ -163,7 +163,7 @@ class Service {
 
 	static getSelected(db: DataSource): Account | null {
 		const acct = Repo.getFirstSelected(db);
-		if (!acct) throw new Error('No account selected!');
+		if (!acct) return null;
 		Service._postSelect(db, acct);
 		return acct;
 	}
