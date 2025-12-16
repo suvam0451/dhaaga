@@ -164,8 +164,9 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 					}}
 					numberOfLines={oneLine ? 1 : undefined}
 				>
-					{node.nodes.map((_node) => (
+					{node.nodes.map((_node, i) => (
 						<ParsedNode
+							key={i}
 							mentions={mentions}
 							node={_node}
 							variant={variant}
@@ -179,8 +180,9 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 		case 'bold': {
 			return (
 				<Text key={node.uuid}>
-					{node.nodes.map((_node) => (
+					{node.nodes.map((_node, i) => (
 						<ParsedNode
+							key={i}
 							mentions={mentions}
 							node={_node}
 							variant={variant}

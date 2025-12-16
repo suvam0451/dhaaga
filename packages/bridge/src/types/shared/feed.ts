@@ -15,6 +15,11 @@ const feedObjectSchema = z.object({
 		like: z.string().optional(),
 	}),
 	indexedAt: z.date(),
+	/**
+	 * these need to resolve at runtime
+	 */
+	saved: z.boolean().nullable(),
+	pinned: z.boolean().nullable(),
 });
 
 type FeedObjectType = z.infer<typeof feedObjectSchema>;

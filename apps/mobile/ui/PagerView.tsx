@@ -15,6 +15,7 @@ type AppPagerViewProps = {
 	showBottomNav?: boolean;
 	props?: StyleProp<ViewStyle>;
 	scrollEnabled: boolean;
+	RightWidget?: (index: number) => ReactElement;
 };
 
 function AppPagerView({
@@ -23,6 +24,7 @@ function AppPagerView({
 	labels,
 	props,
 	scrollEnabled,
+	RightWidget,
 }: AppPagerViewProps) {
 	const [TabIndex, setTabIndex] = useState(0);
 	const ref = useRef<PagerView>(null);
@@ -71,6 +73,7 @@ function AppPagerView({
 					</View>
 				))}
 			</PagerView>
+			{RightWidget ? RightWidget(TabIndex) : <View />}
 			<AppSegmentedControl items={mappedActions} />
 		</>
 	);

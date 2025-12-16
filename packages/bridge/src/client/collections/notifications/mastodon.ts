@@ -78,11 +78,11 @@ export class MastodonNotificationsRouter implements NotificationsRoute {
 		);
 	}
 
-	async getSubscriptionUpdates(query: NotificationGetQueryDto) {
+	async getSubscriptions(maxId?: string) {
 		let url = '/api/v2/notifications' + '?types[]=status';
 
-		if (query.limit) url += '&limit=' + query.limit;
-		if (query.maxId) url += '&max_id=' + query.maxId;
+		// if (query.limit) url += '&limit=' + query.limit;
+		if (maxId) url += '&max_id=' + maxId;
 
 		return this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(
 			url,

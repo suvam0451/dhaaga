@@ -253,7 +253,7 @@ export function AppAuthenticationPager() {
 	return (
 		<View
 			style={{
-				paddingTop: appDimensions.topNavbar.height + 24,
+				paddingTop: appDimensions.topNavbar.simpleVariantHeight + 24,
 				backgroundColor: theme.background.a0,
 				flex: 1,
 			}}

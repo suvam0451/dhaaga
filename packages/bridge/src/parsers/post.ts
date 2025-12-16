@@ -224,8 +224,8 @@ class Parser {
 		const { data, error, success } = postObjectSchema.safeParse(dto);
 		if (!success) {
 			console.log('[ERROR]: status item dto validation failed', error);
-			console.log('[INFO]: generated object', dto);
-			input.print();
+			// console.log('[INFO]: generated object', dto);
+			// input.print();
 			return null;
 		}
 		return data as PostObjectType;

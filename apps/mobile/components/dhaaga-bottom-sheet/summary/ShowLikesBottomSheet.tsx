@@ -4,7 +4,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { UserTimelineCtx } from '@dhaaga/core';
 import { useState } from 'react';
 import { useApiGetPostLikes } from '#/hooks/api/usePostInteractions';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
 
 function Content() {
 	const { theme } = useAppTheme();

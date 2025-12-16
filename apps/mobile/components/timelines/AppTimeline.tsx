@@ -12,12 +12,21 @@ import { FlashList } from '@shopify/flash-list';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { View } from 'react-native';
 import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
+import NavBar_Inbox from '#/components/shared/topnavbar/NavBar_Inbox';
 
 const navbarConfigs: Record<
 	string,
 	{ height: number; topLoaderOffset: number }
 > = {
 	explore: {
+		height: appDimensions.topNavbar.hubVariantHeight,
+		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
+	},
+	simple: {
+		height: appDimensions.topNavbar.simpleVariantHeight,
+		topLoaderOffset: appDimensions.topNavbar.simpleVariantHeight + 8,
+	},
+	updates: {
 		height: appDimensions.topNavbar.hubVariantHeight,
 		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
 	},
@@ -30,6 +39,10 @@ const widgetConfigs: Record<
 	explore: {
 		height: 52,
 		bottomLoaderOffset: 52,
+	},
+	simple: {
+		height: 0,
+		bottomLoaderOffset: 0,
 	},
 };
 
@@ -107,7 +120,15 @@ function AppTimeline({
 			) : (
 				<View />
 			)}
-			{/*{navbarType === 'inbox' ? <NavBar_Explore /> : <View />}*/}
+			{navbarType === 'updates' ? (
+				<NavBar_Inbox
+					label={label}
+					type={'updates'}
+					animatedStyle={animatedStyle}
+				/>
+			) : (
+				<View />
+			)}
 			{navbarType === 'explore' ? (
 				<NavBar_Explore animatedStyle={animatedStyle} />
 			) : (
@@ -120,6 +141,7 @@ function AppTimeline({
 				onScroll={scrollHandler}
 				contentContainerStyle={{
 					paddingTop: navbarConfigs[navbarType]?.topLoaderOffset,
+					paddingBottom: appDimensions.lists.paddingBottom,
 				}}
 				scrollEventThrottle={16}
 				onRefresh={onRefresh}

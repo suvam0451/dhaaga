@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { PostObjectType } from '@dhaaga/bridge';
-import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBusActions';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 
 type Type = {
 	dto: PostObjectType;

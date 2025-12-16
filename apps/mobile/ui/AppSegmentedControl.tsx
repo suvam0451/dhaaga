@@ -15,7 +15,16 @@ type Props = {
 	}[];
 	ListHeaderComponent?: () => ReactNode;
 	ListFooterComponent?: () => ReactNode;
+	/**
+	 * Applied when there is an absolutely
+	 * positioned widget to the left
+	 */
 	paddingLeft?: number;
+	/**
+	 * Applied when there is an absolutely
+	 * positioned widget to the right
+	 */
+	paddingRight?: number;
 };
 
 function AppSegmentedControl({
@@ -23,6 +32,7 @@ function AppSegmentedControl({
 	ListHeaderComponent,
 	ListFooterComponent,
 	paddingLeft,
+	paddingRight,
 }: Props) {
 	const { theme } = useAppTheme();
 	return (
@@ -32,7 +42,10 @@ function AppSegmentedControl({
 				horizontal={true}
 				showsHorizontalScrollIndicator={false}
 				data={items}
-				contentContainerStyle={{ paddingLeft: paddingLeft ?? 0 }}
+				contentContainerStyle={{
+					paddingLeft: paddingLeft ?? 0,
+					paddingRight: paddingRight ?? 0,
+				}}
 				renderItem={({ item }) => (
 					<Pressable
 						style={{

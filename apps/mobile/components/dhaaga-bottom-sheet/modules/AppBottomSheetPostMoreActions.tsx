@@ -5,7 +5,7 @@ import MorePostActionsPresenter from '#/features/timelines/presenters/MorePostAc
 import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import { useAppApiClient, useAppBottomSheet } from '#/states/global/hooks';
-import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBusActions';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 import { appDimensions } from '#/styles/dimensions';
 
 function AppBottomSheetPostMoreActions() {

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: appDimensions.topNavbar.height,
+		height: appDimensions.topNavbar.simpleVariantHeight,
 	},
 	navbarTitleContainer: {
 		flexDirection: 'row',

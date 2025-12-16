@@ -82,7 +82,7 @@ function AppImageCarousel({ items, timelineCacheId }: AppImageCarouselProps) {
 		items.map((o) => ({
 			url: o.url,
 			width: o.width,
-			height: o.height,
+			simpleVariantHeight: o.height,
 		})),
 	);
 

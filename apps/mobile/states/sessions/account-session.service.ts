@@ -18,10 +18,9 @@ import {
 	KNOWN_SOFTWARE,
 	UserParser,
 } from '@dhaaga/bridge';
-import type { AtpSessionData } from '@atproto/api';
+import type { AppBskyActorGetPreferences, AtpSessionData } from '@atproto/api';
 import type { UserObjectType, CustomEmojiObjectType } from '@dhaaga/bridge';
 import { SearchHistoryItemType } from '#/states/sessions/app-session.service';
-import { BskyPreferences } from '@atproto/api';
 import { AtProtoAuthService } from '@dhaaga/bridge/auth';
 import AccountMetadataDbService from '#/services/db/account-metadata-db.service';
 
@@ -67,7 +66,10 @@ class Storage extends BaseStorageManager {
 		);
 	}
 
-	setAtProtoUserPreferences(acct: Account, value: BskyPreferences) {
+	setAtProtoUserPreferences(
+		acct: Account,
+		value: AppBskyActorGetPreferences.OutputSchema,
+	) {
 		return this.setJson(
 			KEY.ATPROTO_USER_PREFERENCES.toString().replace(
 				':id',
@@ -77,8 +79,10 @@ class Storage extends BaseStorageManager {
 		);
 	}
 
-	getAtProtoUserPreferences(acct: Account): BskyPreferences | null {
-		return this.getJson<BskyPreferences>(
+	getAtProtoUserPreferences(
+		acct: Account,
+	): AppBskyActorGetPreferences.OutputSchema | null {
+		return this.getJson<AppBskyActorGetPreferences.OutputSchema>(
 			KEY.ATPROTO_USER_PREFERENCES.toString().replace(
 				':id',
 				acct.id.toString(),

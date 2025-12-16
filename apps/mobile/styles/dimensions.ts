@@ -18,7 +18,7 @@ export const appDimensions = {
 		iconSize: 26,
 		padding: 6,
 		marginLeft: 6,
-		height: 52, // 44
+		simpleVariantHeight: 52, // 44
 		scrollViewTopPadding: 52,
 		hubVariantHeight: 56,
 	},
@@ -28,6 +28,9 @@ export const appDimensions = {
 	},
 	bottomNav: {
 		secondMenuBarHeight: 52,
+	},
+	lists: {
+		paddingBottom: 64,
 	},
 };
 

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
+import { useAppApiClient } from '#/states/global/hooks';
 import {
 	getChatNotificationsQueryOpts,
 	getMentionNotificationsQueryOpts,
@@ -13,18 +13,8 @@ import {
  * - Grouped for Mastodon
  */
 function useApiGetMentionUpdates(maxId?: string | null) {
-	const { driver, client, server } = useAppApiClient();
-	const { acct } = useActiveUserSession();
-
-	return useQuery(
-		getMentionNotificationsQueryOpts(
-			client,
-			driver,
-			server,
-			acct.identifier,
-			maxId,
-		),
-	);
+	const { client } = useAppApiClient();
+	return useQuery(getMentionNotificationsQueryOpts(client, maxId));
 }
 
 /**
@@ -32,7 +22,6 @@ function useApiGetMentionUpdates(maxId?: string | null) {
  */
 function useApiGetChatUpdates() {
 	const { client } = useAppApiClient();
-
 	return useQuery(getChatNotificationsQueryOpts(client));
 }
 
@@ -43,18 +32,9 @@ function useApiGetChatUpdates() {
  * @param maxId
  */
 function useApiGetSocialUpdates(maxId?: string | null) {
-	const { driver, client, server } = useAppApiClient();
-	const { acct } = useActiveUserSession();
+	const { client } = useAppApiClient();
 
-	return useQuery(
-		getSocialNotificationsQueryOpts(
-			client,
-			driver,
-			server,
-			acct.identifier,
-			maxId,
-		),
-	);
+	return useQuery(getSocialNotificationsQueryOpts(client, maxId));
 }
 
 /**
@@ -63,18 +43,8 @@ function useApiGetSocialUpdates(maxId?: string | null) {
  * @param maxId
  */
 function useApiGetSubscriptionUpdates(maxId?: string | null) {
-	const { acct } = useActiveUserSession();
-	const { driver, client, server } = useAppApiClient();
-
-	return useQuery(
-		getSubscriptionNotificationsQueryOpts(
-			client,
-			driver,
-			server,
-			acct.identifier,
-			maxId,
-		),
-	);
+	const { client } = useAppApiClient();
+	return useQuery(getSubscriptionNotificationsQueryOpts(client, maxId));
 }
 
 export {

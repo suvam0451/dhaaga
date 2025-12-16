@@ -24,8 +24,13 @@ type Props = {
 function NavBar_Simple({ label, animatedStyle }: Props) {
 	const { theme } = useAppTheme();
 
+	function onLayout(event: any) {
+		console.log('height', event.nativeEvent.layout.height);
+	}
+
 	return (
 		<Animated.View
+			onLayout={onLayout}
 			style={[
 				{
 					position: 'absolute',
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		height: appDimensions.topNavbar.height,
+		height: appDimensions.topNavbar.simpleVariantHeight,
 	},
 	navbarTitleContainer: {
 		flexDirection: 'row',

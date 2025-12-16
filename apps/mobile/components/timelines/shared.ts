@@ -1,4 +1,5 @@
 import type {
+	FeedObjectType,
 	PostObjectType,
 	ResultPage,
 	UserObjectType,
@@ -6,7 +7,9 @@ import type {
 import { UseQueryResult } from '@tanstack/react-query';
 import { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
-export type AppTimelineProps<T = PostObjectType | UserObjectType> = {
+export type AppTimelineProps<
+	T = PostObjectType | UserObjectType | FeedObjectType,
+> = {
 	label: string;
 	queryResult: UseQueryResult<ResultPage<T[]>, Error>;
 	/**
@@ -24,7 +27,8 @@ export type AppTimelineProps<T = PostObjectType | UserObjectType> = {
 		| 'custom'
 		| 'unified'
 		| 'inbox'
-		| 'explore';
+		| 'explore'
+		| 'updates';
 	/**
 	 * The typeof header to show.
 	 *

@@ -50,6 +50,12 @@ export interface NotificationsRoute {
 		AppBskyNotificationListNotifications.Notification[] | any
 	>;
 
+	getSubscriptions(
+		maxId?: string,
+	): PaginatedPromise<
+		AppBskyNotificationListNotifications.Notification[] | any
+	>;
+
 	getChatDetails(roomId: string): Promise<ChatBskyConvoDefs.ConvoView | any>;
 
 	/**
