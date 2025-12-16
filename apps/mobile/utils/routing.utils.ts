@@ -77,6 +77,12 @@ class RoutingUtils {
 		});
 	}
 
+	static toOnboarding() {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.PROFILE_ADD_ACCOUNT,
+		});
+	}
+
 	static toAppSettings() {
 		router.navigate({
 			pathname: APP_ROUTING_ENUM.PROFILE_TAB,
