@@ -21,7 +21,11 @@ import { AppIcon } from '#/components/lib/Icon';
 import { Image } from 'expo-image';
 import { NativeTextMedium } from '#/ui/NativeText';
 
-function SubscriptionGalleryWidget() {
+type Props = {
+	pagerIndex: number;
+};
+
+function SubscriptionGalleryWidget({ pagerIndex }: Props) {
 	const [WidgetOpen, setWidgetOpen] = useState(false);
 	const { theme } = useAppTheme();
 
@@ -53,6 +57,7 @@ function SubscriptionGalleryWidget() {
 		setWidgetOpen((o) => !o);
 	}
 
+	if (pagerIndex !== 3) return <View />;
 	return (
 		<>
 			<Animated.View

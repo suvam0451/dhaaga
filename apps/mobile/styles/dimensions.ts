@@ -29,6 +29,9 @@ export const appDimensions = {
 	bottomNav: {
 		secondMenuBarHeight: 52,
 	},
+	lists: {
+		paddingBottom: 64,
+	},
 };
 
 export const appVerticalIndex = {

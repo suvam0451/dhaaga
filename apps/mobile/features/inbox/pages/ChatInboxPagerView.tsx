@@ -11,7 +11,7 @@ import { AppDividerSoft } from '#/ui/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
-function ChatroomPresenter() {
+function ChatInboxPagerView() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { driver } = useAppApiClient();
 	const queryResult = useApiGetChatUpdates();
@@ -67,4 +67,4 @@ function ChatroomPresenter() {
 	);
 }
 
-export default ChatroomPresenter;
+export default ChatInboxPagerView;

@@ -4,7 +4,6 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { useLocalSearchParams } from 'expo-router';
 import AppSegmentedControl from '#/ui/AppSegmentedControl';
-import SubscriptionGalleryWidget from '#/features/inbox/widgets/SubscriptionGalleryWidget';
 
 type AppPagerViewProps = {
 	tabCount: number;
@@ -16,6 +15,7 @@ type AppPagerViewProps = {
 	showBottomNav?: boolean;
 	props?: StyleProp<ViewStyle>;
 	scrollEnabled: boolean;
+	RightWidget?: (index: number) => ReactElement;
 };
 
 function AppPagerView({
@@ -24,6 +24,7 @@ function AppPagerView({
 	labels,
 	props,
 	scrollEnabled,
+	RightWidget,
 }: AppPagerViewProps) {
 	const [TabIndex, setTabIndex] = useState(0);
 	const ref = useRef<PagerView>(null);
@@ -72,7 +73,7 @@ function AppPagerView({
 					</View>
 				))}
 			</PagerView>
-			<SubscriptionGalleryWidget />
+			{RightWidget ? RightWidget(TabIndex) : <View />}
 			<AppSegmentedControl items={mappedActions} />
 		</>
 	);

@@ -1,5 +1,5 @@
 import { useApiGetMentionUpdates } from '#/hooks/api/useNotifications';
-import NotificationItemPresenter from './NotificationItemPresenter';
+import NotificationItemPresenter from '../presenters/NotificationItemPresenter';
 import useNotificationStore from '../interactors/useNotificationStore';
 import { TouchableOpacity, View } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
@@ -44,7 +44,7 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 	);
 }
 
-function MentionPresenter() {
+function MentionInboxPagerView() {
 	const { maxId } = useNotificationStore();
 	const queryResult = useApiGetMentionUpdates(maxId);
 
@@ -58,4 +58,4 @@ function MentionPresenter() {
 	);
 }
 
-export default MentionPresenter;
+export default MentionInboxPagerView;

@@ -27,7 +27,8 @@ export type AppTimelineProps<
 		| 'custom'
 		| 'unified'
 		| 'inbox'
-		| 'explore';
+		| 'explore'
+		| 'updates';
 	/**
 	 * The typeof header to show.
 	 *

@@ -67,16 +67,16 @@ function Generator() {
 				fnLoadNextPage={fnLoadNextPage}
 				fnLoadMore={fnLoadMore}
 				fnReset={fnReset}
-				label={null}
-				navbarType={'inbox'}
+				label={'Updates'}
+				navbarType={'updates'}
 				flatListKey={'inbox/subscriptions'}
 			/>
 		</>
 	);
 }
 
-function UpdatesPresenter() {
+function UpdatesInboxPagerView() {
 	return <Generator />;
 }
 
-export default UpdatesPresenter;
+export default UpdatesInboxPagerView;

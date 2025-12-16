@@ -59,7 +59,7 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 				}
 				progressViewOffset={appDimensions.topNavbar.hubVariantHeight}
 				contentContainerStyle={{
-					paddingBottom: 32,
+					paddingBottom: appDimensions.lists.paddingBottom,
 					paddingTop: appDimensions.topNavbar.hubVariantHeight + 12,
 				}}
 				ListEmptyComponent={
