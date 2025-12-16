@@ -1,12 +1,9 @@
 import {
 	ActivityPubService,
 	type ApiTargetInterface,
-	KNOWN_SOFTWARE,
 	GroupedNotificationParser,
-	MisskeyApiAdapter,
-	MastoApiAdapter,
-	PleromaApiAdapter,
 	ChatParser,
+	DriverService,
 } from '@dhaaga/bridge';
 import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
@@ -23,9 +20,6 @@ type NotificationPage = ResultPage<NotificationObjectType[]>;
  */
 function getMentionNotificationsQueryOpts(
 	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
-	server: string,
-	acctIdentifier: string,
 	maxId?: string,
 ) {
 	async function api(): Promise<NotificationPage> {
@@ -34,31 +28,31 @@ function getMentionNotificationsQueryOpts(
 			maxId,
 		});
 
-		if (ActivityPubService.misskeyLike(driver)) {
+		if (ActivityPubService.misskeyLike(client.driver)) {
 			return GroupedNotificationParser.parseForMisskey(
 				results.data,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 			);
-		} else if (ActivityPubService.supportsV2(driver)) {
+		} else if (ActivityPubService.supportsV2(client.driver)) {
 			return GroupedNotificationParser.parseForMastodonV2(
 				results,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 			);
-		} else if (ActivityPubService.pleromaLike(driver)) {
+		} else if (ActivityPubService.pleromaLike(client.driver)) {
 			return GroupedNotificationParser.parseForMastodonV1(
 				results.data,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 				'mentions',
 			);
-		} else if (ActivityPubService.blueskyLike(driver)) {
+		} else if (ActivityPubService.blueskyLike(client.driver)) {
 			return GroupedNotificationParser.parseForBluesky(
 				results,
 				client,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 			);
 		} else {
 			throw new Error('unsupported driver');
@@ -66,7 +60,7 @@ function getMentionNotificationsQueryOpts(
 	}
 
 	return queryOptions<NotificationPage>({
-		queryKey: ['dhaaga/inbox/mentions', acctIdentifier, maxId],
+		queryKey: ['dhaaga/inbox/mentions', client?.key, maxId],
 		queryFn: api,
 		enabled: client !== null,
 	});
@@ -98,16 +92,10 @@ function getChatNotificationsQueryOpts(client: ApiTargetInterface) {
  * (likes/shares/reactions/follows)
  * for the active account
  * @param client
- * @param driver
- * @param server
- * @param acctIdentifier
  * @param maxId
  */
 function getSocialNotificationsQueryOpts(
 	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
-	server: string,
-	acctIdentifier: string,
 	maxId?: string,
 ) {
 	async function api(): Promise<NotificationPage> {
@@ -116,19 +104,23 @@ function getSocialNotificationsQueryOpts(
 			maxId,
 		});
 
-		if (ActivityPubService.misskeyLike(driver)) {
-			return GroupedNotificationParser.parseForMisskey(result, driver, server);
-		} else if (ActivityPubService.supportsV2(driver)) {
+		if (ActivityPubService.misskeyLike(client.driver)) {
+			return GroupedNotificationParser.parseForMisskey(
+				result,
+				client.driver,
+				client.server!,
+			);
+		} else if (ActivityPubService.supportsV2(client.driver)) {
 			return GroupedNotificationParser.parseForMastodonV2(
 				result,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 			);
-		} else if (ActivityPubService.pleromaLike(driver)) {
+		} else if (ActivityPubService.pleromaLike(client.driver)) {
 			return GroupedNotificationParser.parseForMastodonV1(
 				result,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 				'social',
 			);
 		} else {
@@ -137,7 +129,7 @@ function getSocialNotificationsQueryOpts(
 	}
 
 	return queryOptions<NotificationPage>({
-		queryKey: ['dhaaga/inbox/social', acctIdentifier, maxId],
+		queryKey: ['dhaaga/inbox/social', client?.key, maxId],
 		queryFn: api,
 		enabled: !!client,
 	});
@@ -147,59 +139,47 @@ function getSocialNotificationsQueryOpts(
  * Get all subscriptions for
  * the active account
  * @param client
- * @param driver
- * @param server
- * @param acctIdentifier
  * @param maxId
  */
 function getSubscriptionNotificationsQueryOpts(
 	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
-	server: string,
-	acctIdentifier: string,
 	maxId?: string,
 ) {
 	async function api(): Promise<ResultPage<NotificationObjectType[]>> {
-		if (ActivityPubService.misskeyLike(driver)) {
-			const result = await (
-				client as MisskeyApiAdapter
-			).notifications.getSubscriptions({
-				limit: NOTIFICATION_PAGE_SIZE,
-				maxId,
-			});
+		const result = await client.notifications.getSubscriptions(maxId);
 
-			return GroupedNotificationParser.parseForMisskey(result, driver, server);
-		} else if (ActivityPubService.supportsV2(driver)) {
-			const result = await (
-				client as MastoApiAdapter
-			).notifications.getSubscriptionUpdates({
-				limit: NOTIFICATION_PAGE_SIZE,
-				maxId,
-			});
+		if (DriverService.supportsMisskeyApi(client.driver)) {
+			return GroupedNotificationParser.parseForMisskey(
+				result,
+				client.driver,
+				client.server!,
+			);
+		} else if (DriverService.supportsMastoApiV2(client.driver)) {
 			return GroupedNotificationParser.parseForMastodonV2(
 				result,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 			);
-		} else if (ActivityPubService.pleromaLike(driver)) {
-			const result = await (
-				client as PleromaApiAdapter
-			).notifications.getSubscriptionUpdates({
-				limit: NOTIFICATION_PAGE_SIZE,
-				maxId,
-			});
+		} else if (DriverService.supportsPleromaApi(client.driver)) {
 			return GroupedNotificationParser.parseForMastodonV1(
 				result,
-				driver,
-				server,
+				client.driver,
+				client.server!,
 				'updates',
 			);
+		} else if (DriverService.supportsAtProto(client.driver)) {
+			return GroupedNotificationParser.parseForBluesky(
+				result,
+				client,
+				client.driver,
+				client.server!,
+			);
 		} else {
-			throw new Error('unsupported driver');
+			throw new Error(`unsupported driver ${client.driver}`);
 		}
 	}
 	return queryOptions<NotificationPage>({
-		queryKey: ['dhaaga/inbox/updates', acctIdentifier, maxId],
+		queryKey: ['dhaaga/inbox/updates', client?.key, maxId],
 		queryFn: api,
 		enabled: !!client,
 	});

@@ -90,11 +90,11 @@ export class PleromaNotificationsRouter implements NotificationsRoute {
 		);
 	}
 
-	async getSubscriptionUpdates(query: NotificationGetQueryDto) {
+	async getSubscriptions(maxId?: string) {
 		let url = '/api/v1/notifications' + '?types[]=status';
 
-		if (query.limit) url += '&limit=' + query.limit;
-		if (query.maxId) url += '&max_id=' + query.maxId;
+		// if (query.limit) url += '&limit=' + query.limit;
+		if (maxId) url += '&max_id=' + maxId;
 
 		const result =
 			await this.direct.getCamelCaseWithLinkPagination<MastoGroupedNotificationsResults>(

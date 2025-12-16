@@ -29,4 +29,8 @@ export class DefaultNotificationsRouter implements NotificationsRoute {
 	async getSocialUpdates(query: NotificationGetQueryDto): Promise<any> {
 		throw new Error('method not implemented');
 	}
+
+	async getSubscriptions(): Promise<any> {
+		throw new Error('method not implemented');
+	}
 }

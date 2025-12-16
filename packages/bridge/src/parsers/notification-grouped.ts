@@ -1,4 +1,3 @@
-import { KNOWN_SOFTWARE } from '#/client/utils/driver.js';
 import { PostParser } from '#/parsers/post.js';
 import { UserParser } from '#/parsers/user.js';
 import {
@@ -23,7 +22,7 @@ class Parser {
 	 */
 	static parseForMastodonV1(
 		input: any,
-		driver: KNOWN_SOFTWARE,
+		driver: string,
 		server: string,
 		category: 'mentions' | 'chat' | 'social' | 'updates',
 	): ResultPage<NotificationObjectType[]> {
@@ -54,7 +53,7 @@ class Parser {
 	 */
 	static parseForMastodonV2(
 		input: ResultPage<MastoGroupedNotificationsResults>,
-		driver: KNOWN_SOFTWARE,
+		driver: string,
 		server: string,
 	): ResultPage<NotificationObjectType[]> {
 		const acctList = input.data.accounts;
@@ -213,7 +212,7 @@ class Parser {
 	 */
 	static parseForMisskey(
 		data: any,
-		driver: KNOWN_SOFTWARE,
+		driver: string,
 		server: string,
 	): ResultPage<NotificationObjectType[]> {
 		return {
@@ -277,7 +276,7 @@ class Parser {
 	static async parseForBluesky(
 		data: ResultPage<AppBskyNotificationListNotifications.Notification[]>,
 		client: ApiTargetInterface,
-		driver: KNOWN_SOFTWARE,
+		driver: string,
 		server: string,
 	): Promise<ResultPage<NotificationObjectType[]>> {
 		let results = data.data.map((o) => {

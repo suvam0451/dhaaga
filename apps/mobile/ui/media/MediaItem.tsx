@@ -40,7 +40,7 @@ function TimelineMediaRendered({
 		{
 			url: attachment.previewUrl,
 			width: attachment.width,
-			simpleVariantHeight: attachment.height,
+			height: attachment.height,
 		},
 	]);
 

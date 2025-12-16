@@ -85,6 +85,20 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		};
 	}
 
+	async getSubscriptions(): PaginatedPromise<
+		AppBskyNotificationListNotifications.Notification[]
+	> {
+		const agent = getBskyAgent(this.dto);
+		const response = await agent.listNotifications({
+			reasons: ['subscribed-post'],
+			limit: 40,
+		});
+		return {
+			data: response.data.notifications,
+			maxId: response.data.cursor,
+		};
+	}
+
 	async sendMessage(
 		convoId: string,
 		content: { text: string; facets?: Facet[] },

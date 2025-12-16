@@ -4,6 +4,7 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { useLocalSearchParams } from 'expo-router';
 import AppSegmentedControl from '#/ui/AppSegmentedControl';
+import SubscriptionGalleryWidget from '#/features/inbox/widgets/SubscriptionGalleryWidget';
 
 type AppPagerViewProps = {
 	tabCount: number;
@@ -71,6 +72,7 @@ function AppPagerView({
 					</View>
 				))}
 			</PagerView>
+			<SubscriptionGalleryWidget />
 			<AppSegmentedControl items={mappedActions} />
 		</>
 	);

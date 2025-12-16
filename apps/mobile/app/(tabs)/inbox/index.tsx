@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { InboxCtx } from '@dhaaga/core';
 import { AppPagerView } from '#/ui/PagerView';
+import { SubscriptionGalleryCtx } from '@dhaaga/react';
 
 const renderScene = (index: number) => {
 	switch (index) {
@@ -23,6 +24,12 @@ const renderScene = (index: number) => {
 	}
 };
 
+/**
+ * Wrap by SubscriptionGalleryCtx is intended
+ *
+ * A small price to be able to embed the widget
+ * @constructor
+ */
 function Page() {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
@@ -47,14 +54,16 @@ function Page() {
 	];
 
 	return (
-		<AppPagerView
-			renderScene={(i: number) => <InboxCtx>{renderScene(i)}</InboxCtx>}
-			tabCount={4}
-			labels={tabLabels}
-			showBottomNav
-			props={{ backgroundColor: theme.background.a0 }}
-			scrollEnabled={false}
-		/>
+		<SubscriptionGalleryCtx>
+			<AppPagerView
+				renderScene={(i: number) => <InboxCtx>{renderScene(i)}</InboxCtx>}
+				tabCount={4}
+				labels={tabLabels}
+				showBottomNav
+				props={{ backgroundColor: theme.background.a0 }}
+				scrollEnabled={false}
+			/>
+		</SubscriptionGalleryCtx>
 	);
 }
 
