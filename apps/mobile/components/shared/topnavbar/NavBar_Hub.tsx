@@ -16,12 +16,13 @@ import NavBar_Landing from '#/components/shared/topnavbar/NavBar_Landing';
 
 type Props = {
 	acct?: Account;
-	animatedStyle: any;
+	animatedStyle?: any;
 };
 
 /**
  * Component Height = 72
  * @param acct
+ * @param animatedStyle
  * @constructor
  */
 function SocialHubHeader({ acct, animatedStyle }: Props) {

@@ -1,5 +1,5 @@
 import { Endpoints } from 'misskey-js';
-import type { AppBskyActorDefs, AppBskyFeedSearchPosts } from '@atproto/api';
+import type { AppBskyActorDefs, AppBskyFeedDefs } from '@atproto/api';
 import { MastoAccount, MastoStatus } from '#/types/mastojs.types.js';
 import { MegaAccount, MegaStatus } from '#/types/megalodon.types.js';
 import { PaginatedPromise } from '#/types/api-response.js';
@@ -24,7 +24,7 @@ interface SearchRoute {
 		| MastoStatus[]
 		| Endpoints['notes/search']['res']
 		| MegaStatus[]
-		| AppBskyFeedSearchPosts.Response
+		| AppBskyFeedDefs.PostView[]
 	>;
 }
 

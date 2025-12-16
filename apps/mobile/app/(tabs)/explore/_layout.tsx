@@ -1,12 +1,18 @@
 import { Stack } from 'expo-router/stack';
-import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
+import {
+	useActiveUserSession,
+	useAppActiveSession,
+	useAppTheme,
+} from '#/states/global/hooks';
 import { Redirect } from 'expo-router';
 
 function Layout() {
 	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
+	const { session } = useAppActiveSession();
 
-	if (!acct) return <Redirect href={'/'} />;
+	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
+
 	return (
 		<Stack
 			initialRouteName={'index'}

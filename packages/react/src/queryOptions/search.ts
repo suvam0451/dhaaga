@@ -88,11 +88,11 @@ export function searchPostsQueryOpts(
 			};
 		}
 
-		const _posts = PostParser.parse<unknown[]>(
-			data as unknown as any[],
-			driver,
-			server,
-		);
+		/**
+		 * ActivityPub shenanigans -_-
+		 */
+
+		const _posts = PostParser.parse<unknown[]>(data.data, driver, server);
 
 		let __maxId = null;
 		if (FALLBACK_TO_OFFSET) {
@@ -104,8 +104,7 @@ export function searchPostsQueryOpts(
 				);
 			}
 		} else {
-			// @ts-ignore-next-line
-			__maxId = data[_posts.length - 1].id;
+			__maxId = _posts[_posts.length - 1].id;
 		}
 
 		return {
@@ -137,23 +136,13 @@ export function searchUsersQueryOpts(
 			type: 'accounts',
 			untilId: maxId,
 		});
-		if (DriverService.supportsAtProto(client.driver)) {
-			return {
-				data: UserParser.parse<unknown[]>(
-					data.data,
-					client.driver,
-					client.server!,
-				),
-			};
-		} else {
-			return {
-				data: UserParser.parse<unknown[]>(
-					data.data,
-					client.driver,
-					client.server!,
-				),
-			};
-		}
+		return {
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+		};
 	}
 
 	return queryOptions<ResultPage<UserObjectType[]>>({

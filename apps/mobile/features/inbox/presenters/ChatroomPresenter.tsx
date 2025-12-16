@@ -26,6 +26,18 @@ function ChatroomPresenter() {
 
 	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
+	if (driver !== KNOWN_SOFTWARE.BLUESKY)
+		return (
+			<>
+				<NavBar_Inbox
+					label={'Chat'}
+					type={'chats'}
+					animatedStyle={animatedStyle}
+				/>
+				<FeatureNotAvailable />
+			</>
+		);
+
 	return (
 		<>
 			<NavBar_Inbox

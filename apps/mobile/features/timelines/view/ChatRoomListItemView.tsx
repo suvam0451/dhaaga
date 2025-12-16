@@ -4,7 +4,7 @@ import useApiMe from '#/hooks/useApiMe';
 import { Image } from 'expo-image';
 import { NativeTextNormal, NativeTextSemiBold } from '#/ui/NativeText';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { useAppTheme } from '#/states/global/hooks';
+import { useAppActiveSession, useAppTheme } from '#/states/global/hooks';
 import RoutingUtils from '#/utils/routing.utils';
 
 type Props = {
@@ -14,8 +14,9 @@ type Props = {
 function ChatRoomListItemView({ room }: Props) {
 	const { data } = useApiMe();
 	const { theme } = useAppTheme();
+	const { session } = useAppActiveSession();
 
-	if (!data) return <View />;
+	if (!data || session.state !== 'valid') return <View />;
 	const partner = room.members.find((o) => o.id !== data.id);
 
 	function onPress() {
@@ -74,7 +75,7 @@ function ChatRoomListItemView({ room }: Props) {
 			<View style={{ flexDirection: 'row' }}>
 				<View style={{ width: 54 + 8 }} />
 				{room.lastMessage.reactions.map((o, i) => (
-					<View>
+					<View key={i}>
 						<NativeTextNormal>{o.value}</NativeTextNormal>
 					</View>
 				))}

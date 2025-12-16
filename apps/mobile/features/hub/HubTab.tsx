@@ -317,12 +317,13 @@ function HubTab({ profile }: Props) {
 		}
 	}
 
-	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
+	// the hub interface is not long enough for smooth animations.
+	// const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
+
 	return (
 		<View style={{ backgroundColor: theme.background.a10, height: '100%' }}>
-			<NavBar_Hub acct={parentAcct} animatedStyle={animatedStyle} />
+			<NavBar_Hub acct={parentAcct} />
 			<ScrollView
-				onScroll={scrollHandler}
 				style={{
 					backgroundColor: theme.palette.bg,
 				}}

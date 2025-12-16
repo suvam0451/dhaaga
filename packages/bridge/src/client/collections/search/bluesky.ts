@@ -1,13 +1,9 @@
 import { SearchRoute } from './_interface.js';
-import { Endpoints } from 'misskey-js';
 import {
 	AppBskyActorDefs,
 	AppBskyFeedDefs,
-	AppBskyFeedSearchPosts,
 	AppBskyUnspeccedGetPopularFeedGenerators,
 } from '@atproto/api';
-import { MastoStatus } from '#/types/mastojs.types.js';
-import { MegaStatus } from '#/types/megalodon.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { errorBuilder } from '#/types/index.js';
@@ -26,12 +22,7 @@ class BlueskySearchRouter implements SearchRoute {
 
 	async findPosts(
 		q: DhaagaJsPostSearchDTO,
-	): PaginatedPromise<
-		| MastoStatus[]
-		| Endpoints['notes/search']['res']
-		| MegaStatus[]
-		| AppBskyFeedSearchPosts.Response
-	> {
+	): PaginatedPromise<AppBskyFeedDefs.PostView[]> {
 		const agent = getBskyAgent(this.dto);
 		const data = await agent.app.bsky.feed.searchPosts({
 			q: q.q,
