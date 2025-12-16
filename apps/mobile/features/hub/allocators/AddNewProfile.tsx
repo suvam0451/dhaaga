@@ -1,8 +1,8 @@
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '#/components/lib/Text';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { APP_FONTS } from '#/styles/AppFonts';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 type Props = {
 	onPressAddNew: () => void;
@@ -21,7 +21,7 @@ type Props = {
  * @param actionButtonLabel
  * @constructor
  */
-function AssignmentListControlView({
+function AddNewProfile({
 	onPressAddNew,
 	sectionLabel,
 	actionButtonLabel,
@@ -30,26 +30,26 @@ function AssignmentListControlView({
 
 	return (
 		<View style={styles.root}>
-			<AppText.Medium
+			<NativeTextMedium
 				style={[styles.sectionLabel, { color: theme.secondary.a10 }]}
 			>
 				{sectionLabel}
-			</AppText.Medium>
+			</NativeTextMedium>
 			<Pressable onPress={onPressAddNew}>
-				<AppText.Medium
+				<NativeTextMedium
 					style={{
 						color: theme.primary,
 						fontSize: 16,
 					}}
 				>
 					{actionButtonLabel}
-				</AppText.Medium>
+				</NativeTextMedium>
 			</Pressable>
 		</View>
 	);
 }
 
-export default AssignmentListControlView;
+export default AddNewProfile;
 
 const styles = StyleSheet.create({
 	root: {

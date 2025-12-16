@@ -2,7 +2,7 @@ import EmojiPickerBottomSheet from './emoji-picker/EmojiPickerBottomSheet';
 import { Emoji } from './emoji-picker/emojiPickerReducer';
 import { useAppBottomSheet } from '#/states/global/hooks';
 import { useState } from 'react';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
 
 function ABS_Add_Reaction() {
 	const { ctx, hide } = useAppBottomSheet();

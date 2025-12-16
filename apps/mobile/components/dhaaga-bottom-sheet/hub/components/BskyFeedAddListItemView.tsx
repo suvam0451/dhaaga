@@ -1,5 +1,5 @@
 import { Profile } from '@dhaaga/db';
-import { useProfileMutation } from '#/features/app-profiles/api/useProfileMutation';
+import { useProfileMutation } from '#/features/hub/api/useProfileMutation';
 import { Pressable, View, StyleSheet } from 'react-native';
 import type { FeedObjectType } from '@dhaaga/bridge';
 import { AppIcon } from '#/components/lib/Icon';

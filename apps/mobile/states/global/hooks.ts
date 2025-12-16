@@ -133,6 +133,7 @@ export function useAppPublishers() {
 		useShallow((o) => ({
 			postEventBus: o.userSession.postEventBus,
 			userEventBus: o.userSession.userEventBug,
+			feedEventBus: o.userSession.feedEventBus,
 			appEventBus: o.appSession.appEventBus,
 		})),
 	);

@@ -16,8 +16,8 @@ import {
 } from '@dhaaga/bridge';
 import { LinkingUtils } from '#/utils/linking.utils';
 import SyncStatusPresenter from '#/features/feeds/presenters/SyncStatusPresenter';
-import ProfileFeedAssignInteractor from '#/features/app-profiles/interactors/ProfileFeedAssignInteractor';
 import { AppDividerHard } from '#/ui/Divider';
+import HubToFeedAllocatorView from '#/features/hub/allocators/HubToFeedAllocatorView';
 
 function FeedOptionsBottomSheet() {
 	const { ctx } = useAppBottomSheet();
@@ -47,7 +47,7 @@ function FeedOptionsBottomSheet() {
 	switch (ctx.feedType) {
 		case TimelineFetchMode.FEED:
 			return (
-				<ProfileFeedAssignInteractor
+				<HubToFeedAllocatorView
 					uri={query.id}
 					Header={
 						<View>

@@ -21,6 +21,10 @@ const navbarConfigs: Record<
 		height: appDimensions.topNavbar.hubVariantHeight,
 		topLoaderOffset: appDimensions.topNavbar.hubVariantHeight + 8,
 	},
+	simple: {
+		height: appDimensions.topNavbar.simpleVariantHeight,
+		topLoaderOffset: appDimensions.topNavbar.simpleVariantHeight + 8,
+	},
 };
 
 const widgetConfigs: Record<
@@ -30,6 +34,10 @@ const widgetConfigs: Record<
 	explore: {
 		height: 52,
 		bottomLoaderOffset: 52,
+	},
+	simple: {
+		height: 0,
+		bottomLoaderOffset: 0,
 	},
 };
 

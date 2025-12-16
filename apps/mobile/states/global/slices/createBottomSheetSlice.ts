@@ -68,7 +68,7 @@ type AppStateBottomSheetContextType =
 	  }
 	| {
 			$type: 'atproto-feed-options';
-			feed: FeedObjectType;
+			feedUri: string;
 	  };
 
 export type AppStateBottomSheetState = {

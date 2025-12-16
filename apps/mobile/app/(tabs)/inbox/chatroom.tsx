@@ -25,17 +25,8 @@ import {
 } from '@dhaaga/react';
 import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
-import { useNativeKeyboardOffset } from '#/ui/hooks/useNativeKeyboardOffset';
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming,
-} from 'react-native-reanimated';
-import {
-	KeyboardAwareScrollView,
-	useKeyboardHandler,
-	useKeyboardState,
-} from 'react-native-keyboard-controller';
+import Animated from 'react-native-reanimated';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 type ParticipantsProps = {
 	accounts: UserObjectType[];
@@ -72,34 +63,6 @@ function Message({ message }: MessageProps) {
 }
 
 function Generator() {
-	const keyboardHeight = useSharedValue(0);
-
-	useKeyboardHandler({
-		onMove: (e) => {
-			'worklet';
-			keyboardHeight.value = e.height;
-		},
-		onEnd: (e) => {
-			'worklet';
-			keyboardHeight.value = e.height;
-		},
-	});
-
-	const { height: keyboardHeightB } = useKeyboardState();
-	console.log(keyboardHeightB);
-
-	const animatedStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: withTiming(-keyboardHeight.value, {
-						duration: 250,
-					}),
-				},
-			],
-		};
-	});
-
 	const { theme } = useAppTheme();
 	const [MessageText, setMessageText] = useState(null);
 
@@ -121,8 +84,6 @@ function Generator() {
 			type: ChatroomStateAction.RESET,
 		});
 	}, []);
-
-	const { hiddenViewStyle } = useNativeKeyboardOffset(20, 20);
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching' || !!error) return;
@@ -195,7 +156,6 @@ function Generator() {
 					style={[
 						styles.sendInterface,
 						{
-							// position: 'absolute',
 							bottom: 0,
 							backgroundColor: theme.background.a0,
 						},
@@ -220,17 +180,12 @@ function Generator() {
 						isSending={IsMessageLoading}
 					/>
 				</View>
-				{/*<Animated.View*/}
-				{/*	style={[{ backgroundColor: theme.background.a0 }, hiddenViewStyle]}*/}
-				{/*/>*/}
 			</Animated.View>
 		</View>
 	);
 }
 
 function Page() {
-	const { hiddenViewStyle } = useNativeKeyboardOffset(20, 20);
-	const { theme } = useAppTheme();
 	return (
 		<View style={{ flex: 1 }}>
 			<ChatroomCtx>

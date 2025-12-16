@@ -1,3 +1,0 @@
-type Props = {
-	onPressAddNew: () => void;
-};

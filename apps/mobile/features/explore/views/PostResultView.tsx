@@ -4,24 +4,16 @@ import {
 	useDiscoverState,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import { searchPostsQueryOpts } from '@dhaaga/react';
-import { useQuery } from '@tanstack/react-query';
-import { useAppApiClient } from '#/states/global/hooks';
 import PostTimelineView from '#/components/timelines/PostTimelineView';
+import { useApiSearchPosts } from '#/hooks/api/useApiSearch';
 
 function Generator() {
-	const { client, driver, server } = useAppApiClient();
 	const State = useDiscoverState();
 	const TimelineState = usePostTimelineState();
-	const queryResult = useQuery(
-		searchPostsQueryOpts(
-			client,
-			driver,
-			server,
-			State.q,
-			TimelineState.appliedMaxId,
-			State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
-		),
+	const queryResult = useApiSearchPosts(
+		State.q,
+		TimelineState.appliedMaxId,
+		State.tab === SEARCH_RESULT_TAB.LATEST ? 'latest' : 'top',
 	);
 
 	return (

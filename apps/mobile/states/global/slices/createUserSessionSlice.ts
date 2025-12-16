@@ -11,6 +11,7 @@ import {
 	AppStateImmerSetObject,
 } from '#/states/global/typings';
 import { PostPublisherService } from '#/states/event-bus/post.publisher';
+import { FeedPublisherService } from '#/states/event-bus/feed.publisher';
 
 export type AppStateUserSessionState = {
 	state: 'idle' | 'loading' | 'valid' | 'invalid' | 'no-account';
@@ -29,6 +30,7 @@ export type AppStateUserSessionState = {
 	postEventBus: PostPublisherService;
 	userEventBug: PostPublisherService;
 	tagEventBus: PostPublisherService;
+	feedEventBus: FeedPublisherService;
 };
 
 const DEFAULT_STATE: AppStateUserSessionState = {
@@ -47,6 +49,7 @@ const DEFAULT_STATE: AppStateUserSessionState = {
 	postEventBus: null,
 	userEventBug: null,
 	tagEventBus: null,
+	feedEventBus: null,
 };
 
 export type AppStateUserSessionActions = {
@@ -162,6 +165,7 @@ function createUserSessionSlice(
 						postEventBus: new PostPublisherService(client),
 						userEventBug: new PostPublisherService(client),
 						tagEventBus: new PostPublisherService(client),
+						feedEventBus: new FeedPublisherService(client),
 					};
 				});
 			} catch (e) {

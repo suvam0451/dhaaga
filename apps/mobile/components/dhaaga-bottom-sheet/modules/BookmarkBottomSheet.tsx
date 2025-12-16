@@ -2,14 +2,14 @@ import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import {
 	usePostEventBusActions,
 	usePostEventBusStore,
-} from '#/hooks/pubsub/usePostEventBusActions';
+} from '#/hooks/pubsub/usePostEventBus';
 import { FlatList, View } from 'react-native';
 import AssignmentSheetBookmarkView from '#/features/collections/views/AssignmentSheetBookmarkView';
 import useDbAddPostToCollection from '#/states/db/useDbAddPostToCollection';
 import CollectionItem from '#/features/collections/components/CollectionItem';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import AssignmentListControlView from '#/features/_shared/views/AssignmentListControlView';
+import AddNewProfile from '#/features/hub/allocators/AddNewProfile';
 import { appDimensions } from '#/styles/dimensions';
 import { PostInspector } from '@dhaaga/bridge';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
@@ -58,7 +58,7 @@ function BookmarkBottomSheet() {
 						>
 							{t(`collections.disclaimer`)}
 						</NativeTextMedium>
-						<AssignmentListControlView
+						<AddNewProfile
 							onPressAddNew={onRequestAddNewCollection}
 							sectionLabel={t(`collections.collections`)}
 							actionButtonLabel={t(`collections.newCollection`)}

@@ -23,7 +23,7 @@ import { appDimensions, appVerticalIndex } from '#/styles/dimensions';
 import BookmarkBottomSheet from '#/components/dhaaga-bottom-sheet/modules/BookmarkBottomSheet';
 import FeedOptionsBottomSheet from '#/components/dhaaga-bottom-sheet/modules/FeedOptionsBottomSheet';
 import HubFeedAddBottomSheet from '#/components/dhaaga-bottom-sheet/hub/HubFeedAddBottomSheet';
-import MoreActionsSheetPresenter from '#/features/feeds/presenters/MoreActionsSheetPresenter';
+import AtProtoFeedMoreOptions from '#/components/dhaaga-bottom-sheet/AtProtoFeedMoreOptions';
 import { Fragment } from 'react';
 import ShowReactionDetailsBottomSheet from '#/components/dhaaga-bottom-sheet/summary/ShowReactionDetailsBottomSheet';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
@@ -85,7 +85,7 @@ function Factory() {
 		case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
 			return <AppBottomSheetPostMoreActions />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_FEED_ACTIONS:
-			return <MoreActionsSheetPresenter />;
+			return <AtProtoFeedMoreOptions />;
 		case APP_BOTTOM_SHEET_ENUM.REACTION_DETAILS:
 			return <ShowReactionDetailsBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:

@@ -12,7 +12,7 @@ import { Fragment } from 'react';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import { AppText } from '../../lib/Text';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBusActions';
+import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
 
 type PostMoreOptionsButtonProps = {
 	postId: string;

@@ -20,6 +20,7 @@ type StatItemProps = {
 	nextCounts: number[];
 	onPress: () => void;
 	me?: boolean;
+	style?: StyleProp<ViewStyle>;
 };
 
 function util(o: number): string {
@@ -39,15 +40,16 @@ export function StatItem({
 	nextCounts,
 	onPress,
 	me,
+	style,
 }: StatItemProps) {
 	const { theme } = useAppTheme();
 	const formatted = util(count);
 	const color = me ? theme.primary : theme.complementary;
 
 	const SHOW_TRAILING_BULLET = !nextCounts.every((o) => o === 0);
-	if (count === 0) return <View />;
+	if (count === 0) return <View style={style} />;
 	return (
-		<Pressable onPress={onPress}>
+		<Pressable onPress={onPress} style={style}>
 			<View style={{ flexDirection: 'row' }}>
 				<NativeTextMedium style={[{ color, fontSize: 16 }]}>
 					{formatted}{' '}

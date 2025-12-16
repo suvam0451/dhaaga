@@ -26,6 +26,8 @@ class Parser {
 				like: _input.viewer?.like,
 			},
 			indexedAt: new Date(_input.indexedAt),
+			saved: null,
+			pinned: null,
 		};
 
 		const { data, error, success } = feedObjectSchema.safeParse(dto);

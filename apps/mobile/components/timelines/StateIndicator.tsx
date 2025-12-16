@@ -1,4 +1,3 @@
-import { UseQueryResult } from '@tanstack/react-query';
 import TimelineErrorView from '#/features/timelines/view/TimelineErrorView';
 import { View } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
@@ -18,7 +17,7 @@ function TimelineEmptyView() {
 			<ErrorPageBuilder
 				stickerArt={<BearError />}
 				errorMessage={'Timeline Empty'}
-				errorDescription={'No posts found. Or, something went wrong.'}
+				errorDescription={'No results were found.\nOr, something went wrong.'}
 			/>
 		</View>
 	);
