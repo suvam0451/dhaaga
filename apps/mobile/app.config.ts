@@ -116,14 +116,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		'expo-video',
 		'expo-router',
 		[
-			'expo-splash-screen',
-			{
-				backgroundColor: '#e6cf8b',
-				icon: './assets/dhaaga/icon.png',
-				imageWidth: 256,
-			},
-		],
-		[
 			'expo-build-properties',
 			{
 				android: {
