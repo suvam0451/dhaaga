@@ -12,7 +12,7 @@ const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 					'expo-notifications',
 					{
 						icon: './assets/dhaaga/icon.png',
-						color: '#ffffff',
+						color: '#e6cf8b',
 						defaultChannel: 'default',
 						sounds: [],
 						enableBackgroundRemoteNotifications: false,
@@ -69,17 +69,22 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'android.permission.BADGE_WRITE',
 			'com.sec.android.provider.badge.READ',
 			'com.sec.android.provider.badge.WRITE',
+			'com.sec.android.provider.badge.permission.READ',
+			'com.sec.android.provider.badge.permission.READ',
+			'com.majeur.launcher.permission.UPDATE_BADGE',
 			'com.sonyericsson.home.permission.BROADCAST_BADGE',
 			'com.sonymobile.home.permission.PROVIDER_INSERT_BADGE',
 			'me.everything.badger.permission.BADGE_COUNT_READ',
 			'me.everything.badger.permission.BADGE_COUNT_WRITE',
+			'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE',
+			'android.permission.FOREGROUND_SERVICE',
 		],
 		// softwareKeyboardLayoutMode: 'pan',
 		icon: './assets/dhaaga/icon.png',
 		adaptiveIcon: {
-			foregroundImage: './assets/dhaaga/adaptive_foreground.png',
-			backgroundImage: './assets/dhaaga/adaptive_background.png',
-			monochromeImage: './assets/dhaaga/adaptive_foreground.png',
+			foregroundImage: './assets/dhaaga/adaptive_fg.png',
+			backgroundImage: './assets/dhaaga/adaptive_bg.png',
+			monochromeImage: './assets/dhaaga/adaptive_mc.png',
 			backgroundColor: '#e6cf8b',
 		},
 		softwareKeyboardLayoutMode: 'pan',
@@ -113,6 +118,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		'expo-localization',
 		'expo-video',
 		'expo-router',
+		[
+			'expo-splash-screen',
+			{
+				backgroundColor: '#e6cf8b',
+			},
+		],
 		[
 			'expo-build-properties',
 			{

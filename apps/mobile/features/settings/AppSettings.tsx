@@ -11,7 +11,8 @@ import { useAppTheme } from '#/states/global/hooks';
 import { CoffeeIconOnly } from './components/Coffee';
 import { LinkingUtils } from '#/utils/linking.utils';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import { AppText } from '#/components/lib/Text';
+import { APP_VERSION } from '#/utils/default-settings';
+import { NativeTextNormal, NativeTextSemiBold } from '#/ui/NativeText';
 
 function Header() {
 	return (
@@ -80,24 +81,24 @@ export function Footer({ hideVersion }: { hideVersion?: boolean }) {
 					}}
 				/>
 			</View>
-			<AppText.SemiBold
+			<NativeTextSemiBold
 				style={[
 					styles.metadataText,
 					{ color: theme.secondary.a40, fontSize: 15 },
 				]}
 			>
 				{t(`setting.footer`)}
-			</AppText.SemiBold>
+			</NativeTextSemiBold>
 			{!hideVersion && (
-				<AppText.SemiBold
+				<NativeTextSemiBold
 					style={{
 						color: theme.primary,
 						textAlign: 'center',
 						fontSize: 16,
 					}}
 				>
-					v0.17.2
-				</AppText.SemiBold>
+					{APP_VERSION}
+				</NativeTextSemiBold>
 			)}
 		</View>
 	);
@@ -130,23 +131,23 @@ function SettingCategoryListItem({
 		>
 			<View style={{ width: 24, height: 24, marginRight: 6 }}>{Icon}</View>
 			<View style={styles.settingCategoryItemTextarea}>
-				<AppText.SemiBold
+				<NativeTextSemiBold
 					style={[
 						styles.collapsibleSettingsLabel,
 						{ color: theme.secondary.a0 },
 					]}
 				>
 					{label}
-				</AppText.SemiBold>
+				</NativeTextSemiBold>
 				{desc && (
-					<AppText.Normal
+					<NativeTextNormal
 						style={{
 							color: theme.secondary.a20,
 							fontSize: 14,
 						}}
 					>
 						{desc}
-					</AppText.Normal>
+					</NativeTextNormal>
 				)}
 			</View>
 
