@@ -100,9 +100,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		backgroundColor: '#e6cf8b',
 	},
 	assetBundlePatterns: ['**/*'],
-	web: {
-		favicon: './assets/dhaaga/favicon.png',
-	},
 	extra: {
 		eas: {
 			projectId: '6a318c01-ca78-440f-840f-64c54ddc94fe',
@@ -122,6 +119,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-splash-screen',
 			{
 				backgroundColor: '#e6cf8b',
+				icon: './assets/dhaaga/icon.png',
+				imageWidth: 256,
 			},
 		],
 		[
