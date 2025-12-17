@@ -4,6 +4,8 @@ const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
 const APP_SCHEME = process.env.APP_SCHEME ?? 'dhaaga-lite';
 
+const IS_LITE = BUNDLE_ID === 'io.suvam.dhaaga.lite';
+
 const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
 		? []
@@ -124,14 +126,9 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					buildToolsVersion: '36.1.0',
 					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: true,
-					blockedPermissions: [
-						'android.permission.SYSTEM_ALERT_WINDOW',
-						'android.permission.READ_EXTERNAL_STORAGE',
-						'android.permission.WRITE_EXTERNAL_STORAGE',
-						'android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK',
-					],
 					buildArchs: ['arm64-v8a'],
-					enableBundleCompression: true,
+					enableBundleCompression: IS_LITE,
+					useLegacyPackaging: IS_LITE,
 				},
 			},
 		],
@@ -139,29 +136,22 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'expo-image-picker',
 			{
 				photosPermission:
-					'Dhaaga needs gallery access to support media attachments.',
+					'Dhaaga needs gallery access to support attaching media to your post.',
 			},
 		],
 		[
 			'expo-font',
 			{
 				fonts: [
-					// Applicable for flat node_modules (yarn, pnpm with node-linker=hoisted etc.)
-					'../../node_modules/@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf',
-					'../../node_modules/@expo-google-fonts/inter/500Medium/Inter_500Medium.ttf',
-					'../../node_modules/@expo-google-fonts/inter/600SemiBold/Inter_600SemiBold.ttf',
-					'../../node_modules/@expo-google-fonts/inter/700Bold/Inter_700Bold.ttf', // Montserrat
 					'../../node_modules/@expo-google-fonts/bebas-neue/400Regular/BebasNeue_400Regular.ttf', // BebasNeue
-					'../../node_modules/@expo-google-fonts/roboto/400Regular/Roboto_400Regular.ttf', // Roboto
-					'../../node_modules/@expo-google-fonts/roboto/500Medium/Roboto_500Medium.ttf',
-					'../../node_modules/@expo-google-fonts/roboto/700Bold/Roboto_700Bold.ttf',
 				],
 			},
 		],
 		[
 			'expo-audio',
 			{
-				microphonePermission: 'Allow Dhaaga to access your microphone.',
+				microphonePermission:
+					'Allow Dhaaga access to your microphone to be able to create audio posts.',
 			},
 		],
 		[

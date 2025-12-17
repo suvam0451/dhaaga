@@ -213,9 +213,8 @@ export function NativeTextSpecial({
 				_baseStyling,
 				{
 					color: _color,
-					fontFamily: FONT_INCOMPATIBLE
-						? APP_FONTS.ROBOTO_500
-						: APP_FONTS.BEBAS_NEUE_400,
+					fontFamily: FONT_INCOMPATIBLE ? undefined : APP_FONTS.BEBAS_NEUE_400,
+					fontWeight: FONT_INCOMPATIBLE ? 'bold' : undefined,
 					fontSize: FONT_INCOMPATIBLE ? 18 : 22,
 				},
 				style,

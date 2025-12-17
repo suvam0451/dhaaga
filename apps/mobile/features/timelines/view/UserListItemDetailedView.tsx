@@ -1,14 +1,14 @@
 import type { UserObjectType } from '@dhaaga/bridge';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { Image, useImage } from 'expo-image';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
 import { useState } from 'react';
 import ProfileStatView from '../../user-profiles/view/ProfileStatView';
 import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPresenter';
 import { AppDividerSoft } from '#/ui/Divider';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { NativeTextNormal } from '#/ui/NativeText';
 
 const ICON_SIZE = 42;
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin * 0.75;
@@ -87,16 +87,15 @@ function UserListItemDetailedView({ item }: Props) {
 						mentions={[]}
 						emojiMap={item.calculated.emojis}
 					/>
-					<Text
+					<NativeTextNormal
 						style={{
 							color: theme.secondary.a30,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							fontSize: 13,
 						}}
 						numberOfLines={1}
 					>
 						{item.handle}
-					</Text>
+					</NativeTextNormal>
 				</View>
 			</View>
 			<AppDividerSoft

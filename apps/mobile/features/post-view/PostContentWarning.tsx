@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Pressable, StyleSheet, View, Text } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
-import { AppIcon } from '../../components/lib/Icon';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { AppIcon } from '#/components/lib/Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type WithCwTextProps = {
 	cw?: string;
@@ -52,15 +52,14 @@ function PostContentWarning({ show, setShow, cw }: WithCwTextProps) {
 				) : (
 					<AppIcon id="eye-off-filled" size={24} color={theme.secondary.a40} />
 				)}
-				<Text
+				<NativeTextBold
 					style={{
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						color: theme.secondary.a20,
 						marginLeft: 8,
 					}}
 				>
 					{cw}
-				</Text>
+				</NativeTextBold>
 			</View>
 
 			<View

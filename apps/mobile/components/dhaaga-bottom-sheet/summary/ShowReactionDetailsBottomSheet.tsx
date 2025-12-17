@@ -3,7 +3,6 @@ import { FlatList, Text, View } from 'react-native';
 import useGetReactionDetails from '#/hooks/api/useGetReactionDetails';
 import { Image } from 'expo-image';
 import { APP_FONT } from '#/styles/AppTheme';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { FontAwesome } from '@expo/vector-icons';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import {
@@ -20,6 +19,7 @@ import {
 	AppButtonBottomSheetAction,
 } from '#/components/lib/Buttons';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 
 function ReactingUser({ dto }: { dto: UserObjectType }) {
 	const { theme } = useAppTheme();
@@ -34,15 +34,14 @@ function ReactingUser({ dto }: { dto: UserObjectType }) {
 					mentions={[]}
 					emojiMap={dto.calculated.emojis}
 				/>
-				<Text
+				<NativeTextNormal
 					style={{
 						color: theme.textColor.medium,
-						fontFamily: APP_FONTS.INTER_400_REGULAR,
 						fontSize: 13,
 					}}
 				>
 					{dto.handle}
-				</Text>
+				</NativeTextNormal>
 			</View>
 		</View>
 	);
@@ -114,7 +113,6 @@ function ShowReactionDetailsBottomSheet() {
 	return (
 		<View style={{ padding: 8, paddingTop: 16, flex: 1 }}>
 			<View style={{ flexDirection: 'row' }}>
-				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri: Data.url }} style={{ width: 32, height: 32 }} />
 				<View
 					style={{
@@ -124,17 +122,15 @@ function ShowReactionDetailsBottomSheet() {
 						flex: 1,
 					}}
 				>
-					<Text
+					<NativeTextBold
 						style={{
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							color: APP_FONT.MONTSERRAT_BODY,
-
 							flexShrink: 1,
 						}}
 						numberOfLines={1}
 					>
 						{Data.id}
-					</Text>
+					</NativeTextBold>
 				</View>
 
 				<AppButtonBottomSheetAction
@@ -170,29 +166,27 @@ function ShowReactionDetailsBottomSheet() {
 						<Fragment>
 							{IS_REMOTE && (
 								<View>
-									<Text
+									<NativeTextBold
 										style={{
 											color: theme.textColor.medium,
-											fontFamily: APP_FONTS.INTER_500_MEDIUM,
 											marginTop: 8,
 										}}
 									>
 										You cannot add this reaction,{'\n'}since it is not from your
 										instance.
-									</Text>
+									</NativeTextBold>
 								</View>
 							)}
 
-							<Text
+							<NativeTextBold
 								style={{
 									fontSize: 16,
-									fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 									color: theme.textColor.medium,
 									marginVertical: 16,
 								}}
 							>
 								Reacted By {Data.count} users:
-							</Text>
+							</NativeTextBold>
 						</Fragment>
 					}
 				/>

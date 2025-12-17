@@ -5,23 +5,22 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { PostResolver, TextParser } from '@dhaaga/bridge';
-import { AppText } from '../../lib/Text';
 import { Text } from 'react-native';
 import { ActivityPubService } from '@dhaaga/bridge';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type Props = {
 	value: string;
 	link: string;
-	fontFamily: string;
 	mentions: PostMentionObjectType[];
 };
 
-function MentionSegment({ value, link, fontFamily, mentions }: Props) {
+function MentionSegment({ value, mentions }: Props) {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
-	const { show, setCtx } = useAppBottomSheet();
+	const { show } = useAppBottomSheet();
 	const { acct } = useActiveUserSession();
 
 	const parsed = TextParser.mentionTextToHandle(
@@ -51,15 +50,14 @@ function MentionSegment({ value, link, fontFamily, mentions }: Props) {
 
 	return (
 		<Text onPress={onPress}>
-			<AppText.Normal
+			<NativeTextBold
 				style={{
-					fontFamily,
 					color: parsed.me ? theme.primary : theme.complementary,
 				}}
 				onPress={onPress}
 			>
 				{parsed.text}
-			</AppText.Normal>
+			</NativeTextBold>
 		</Text>
 	);
 }

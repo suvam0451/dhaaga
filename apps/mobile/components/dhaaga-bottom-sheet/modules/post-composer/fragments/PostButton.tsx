@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import { APP_POST_VISIBILITY } from '#/hooks/app/useVisibility';
@@ -19,6 +18,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { PostParser } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { NativeTextBold } from '#/ui/NativeText';
 
 /**
  * Click to Post!
@@ -147,14 +147,13 @@ function PostButton() {
 			}}
 			onPress={onClick}
 		>
-			<Text
+			<NativeTextBold
 				style={{
 					color: 'black',
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 				}}
 			>
 				{t(`composer.quickPostSubmit`)}
-			</Text>
+			</NativeTextBold>
 			<FontAwesome
 				name="send"
 				size={20}

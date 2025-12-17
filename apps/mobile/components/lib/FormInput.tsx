@@ -37,7 +37,6 @@ export function AppFormTextInput({
 					fontSize: 16,
 					color: theme.secondary.a10,
 					textDecorationLine: 'none',
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					flex: 1,
 				}}
 				autoCapitalize={'none'}

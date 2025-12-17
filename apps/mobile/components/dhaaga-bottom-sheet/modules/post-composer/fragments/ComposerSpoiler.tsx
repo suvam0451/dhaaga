@@ -6,7 +6,6 @@ import {
 	TextInputChangeEventData,
 	View,
 } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
 import { useAppTheme } from '#/states/global/hooks';
@@ -57,7 +56,6 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'none',
 		textDecorationStyle: undefined,
 		paddingVertical: 8,
-		fontFamily: APP_FONTS.ROBOTO_400,
 		fontSize: 16,
 	},
 });

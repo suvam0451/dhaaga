@@ -6,13 +6,12 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import APP_ICON_ENUM, { AppIcon } from './Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import { Loader } from './Loader';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from './Text';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type AppMenuOptionType = {
 	appIconId: any;
@@ -68,16 +67,15 @@ export function AppMenuItem({
 					paddingRight: 4,
 				}}
 			>
-				<Text
+				<NativeTextBold
 					style={{
 						color: theme.secondary.a10,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						fontSize: 18,
 						marginBottom: 2,
 					}}
 				>
 					{_label}
-				</Text>
+				</NativeTextBold>
 				{desc && (
 					<Text
 						style={{
@@ -163,15 +161,6 @@ type AppBottomSheetMenuWithBackNavigationProps = {
 	nextLoading?: boolean;
 };
 
-type AppBottomSheetMenuHeaderProps = {
-	title: string;
-	desc?: string;
-	menuItems: {
-		iconId: string;
-		onPress: () => void;
-	}[];
-};
-
 /**
  *
  * @constructor
@@ -206,15 +195,14 @@ export class AppBottomSheetMenu {
 					}}
 				>
 					<AppIcon id={'chevron-left'} color={theme.complementary} />
-					<Text
+					<NativeTextBold
 						style={{
 							color: theme.complementary,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							fontSize: 16,
 						}}
 					>
 						{backLabel || 'Back'}
-					</Text>
+					</NativeTextBold>
 				</Pressable>
 				<View
 					style={{

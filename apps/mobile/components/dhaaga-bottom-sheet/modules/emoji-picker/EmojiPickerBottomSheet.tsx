@@ -1,6 +1,5 @@
-import { memo, useEffect, useReducer, useRef, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { useEffect, useReducer, useRef, useState } from 'react';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import emojiPickerReducer, {
 	defaultValue,
 	Emoji,
@@ -17,6 +16,7 @@ import { appDimensions } from '#/styles/dimensions';
 import SelectedEmojiPreview from './fragments/SelectedEmojiPreview';
 import { AppBottomSheetMenu } from '../../../lib/Menu';
 import { AppTextInput } from '../../../lib/TextInput';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type EmojiPickerBottomSheetProps = {
 	onAccept: (o: Emoji) => void;
@@ -33,7 +33,7 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 	return (
 		<View>
 			<View style={{ alignItems: 'center' }}>
-				<Text
+				<NativeTextBold
 					style={[
 						styles.noReactionAvailableSectionA,
 						{
@@ -42,7 +42,7 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 					]}
 				>
 					Could not load custom emojis for your server.
-				</Text>
+				</NativeTextBold>
 			</View>
 			<Pressable
 				style={[
@@ -53,7 +53,9 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 				]}
 				onPress={onBack}
 			>
-				<Text style={styles.noReactionAvailableButton}>Back</Text>
+				<NativeTextBold style={styles.noReactionAvailableButton}>
+					Back
+				</NativeTextBold>
 			</Pressable>
 		</View>
 	);
@@ -62,129 +64,130 @@ function NoReactionsAvailable({ onBack }: NoReactionsAvailableProps) {
 /**
  * @composerState the parent composer state,
  */
-const EmojiPickerBottomSheet = memo(
-	({ onAccept, onCancel, isProcessing }: EmojiPickerBottomSheetProps) => {
-		const { driver } = useAppApiClient();
-		const { acct } = useActiveUserSession();
-		const { acctManager } = useAccountManager();
-		const { theme } = useAppTheme();
-		const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
+function EmojiPickerBottomSheet({
+	onAccept,
+	onCancel,
+	isProcessing,
+}: EmojiPickerBottomSheetProps) {
+	const { driver } = useAppApiClient();
+	const { acct } = useActiveUserSession();
+	const { acctManager } = useAccountManager();
+	const { theme } = useAppTheme();
+	const [State, dispatch] = useReducer(emojiPickerReducer, defaultValue);
 
-		const [SearchText, setSearchText] = useState('');
+	const [SearchText, setSearchText] = useState('');
 
-		const lastSubdomain = useRef(null);
-		useEffect(() => {
-			if (lastSubdomain.current === acct?.server) return;
-			dispatch({
-				type: EMOJI_PICKER_REDUCER_ACTION.INIT,
-				payload: {
-					subdomain: acct?.server,
-					acctManager: acctManager,
-					domain: driver,
-				},
-			});
-			lastSubdomain.current = acct?.server;
-		}, [acct?.server]);
+	const lastSubdomain = useRef(null);
+	useEffect(() => {
+		if (lastSubdomain.current === acct?.server) return;
+		dispatch({
+			type: EMOJI_PICKER_REDUCER_ACTION.INIT,
+			payload: {
+				subdomain: acct?.server,
+				acctManager: acctManager,
+				domain: driver,
+			},
+		});
+		lastSubdomain.current = acct?.server;
+	}, [acct?.server]);
 
-		function _onAccept() {
-			if (!State.selectedReaction) return;
-			onAccept(State.selectedReaction);
-		}
+	function _onAccept() {
+		if (!State.selectedReaction) return;
+		onAccept(State.selectedReaction);
+	}
 
-		if (!State.tagEmojiMap) return <NoReactionsAvailable onBack={onCancel} />;
+	if (!State.tagEmojiMap) return <NoReactionsAvailable onBack={onCancel} />;
 
-		function onEmojiSelected(o: any) {
-			dispatch({
-				type: EMOJI_PICKER_REDUCER_ACTION.SELECT,
-				payload: {
-					shortCode: o.shortCode,
-				},
-			});
-		}
+	function onEmojiSelected(o: any) {
+		dispatch({
+			type: EMOJI_PICKER_REDUCER_ACTION.SELECT,
+			payload: {
+				shortCode: o.shortCode,
+			},
+		});
+	}
 
-		function onSearchTermChanged(o: any) {
-			setSearchText(o);
-			dispatch({
-				type: EMOJI_PICKER_REDUCER_ACTION.APPLY_SEARCH,
-				payload: {
-					searchTerm: o,
-				},
-			});
-		}
+	function onSearchTermChanged(o: any) {
+		setSearchText(o);
+		dispatch({
+			type: EMOJI_PICKER_REDUCER_ACTION.APPLY_SEARCH,
+			payload: {
+				searchTerm: o,
+			},
+		});
+	}
 
-		function onTagSelectionChanged(o: any) {
-			dispatch({
-				type: EMOJI_PICKER_REDUCER_ACTION.APPLY_TAG,
-				payload: {
-					tag: o,
-				},
-			});
-		}
+	function onTagSelectionChanged(o: any) {
+		dispatch({
+			type: EMOJI_PICKER_REDUCER_ACTION.APPLY_TAG,
+			payload: {
+				tag: o,
+			},
+		});
+	}
 
-		return (
-			<View
+	return (
+		<View
+			style={{
+				flex: 1,
+				marginBottom: 12,
+			}}
+		>
+			<AppBottomSheetMenu.WithBackNavigation
+				nextLabel={'Select'}
+				backLabel={'Back'}
+				onBack={onCancel}
+				onNext={_onAccept}
+				nextEnabled={!!State.selectedReaction}
+				MiddleComponent={
+					<AppTextInput.SingleLine
+						placeholder={'Search'}
+						onChangeText={onSearchTermChanged}
+						style={styles.textInput}
+						value={SearchText}
+					/>
+				}
 				style={{
-					flex: 1,
-					marginBottom: 12,
+					paddingHorizontal: 6,
 				}}
-			>
-				<AppBottomSheetMenu.WithBackNavigation
-					nextLabel={'Select'}
-					backLabel={'Back'}
-					onBack={onCancel}
-					onNext={_onAccept}
-					nextEnabled={!!State.selectedReaction}
-					MiddleComponent={
-						<AppTextInput.SingleLine
-							placeholder={'Search'}
-							onChangeText={onSearchTermChanged}
-							style={styles.textInput}
-							value={SearchText}
-						/>
-					}
-					style={{
-						paddingHorizontal: 6,
-					}}
-					nextLoading={isProcessing}
-				/>
-				<SelectedEmojiPreview selection={State.selectedReaction} />
-				<EmojiPickerSearchResults State={State} onSelect={onEmojiSelected} />
-				<View style={{ paddingTop: 6 }}>
-					<FlatList
-						horizontal={true}
-						data={State.allTags}
-						renderItem={({ item }) => (
-							<Pressable
+				nextLoading={isProcessing}
+			/>
+			<SelectedEmojiPreview selection={State.selectedReaction} />
+			<EmojiPickerSearchResults State={State} onSelect={onEmojiSelected} />
+			<View style={{ paddingTop: 6 }}>
+				<FlatList
+					horizontal={true}
+					data={State.allTags}
+					renderItem={({ item }) => (
+						<Pressable
+							style={{
+								backgroundColor: '#363636',
+								paddingHorizontal: 10,
+								paddingVertical: 8,
+								marginHorizontal: 4,
+								borderRadius: appDimensions.buttons.borderRadius,
+								maxHeight: 38,
+							}}
+							onPress={() => {
+								onTagSelectionChanged(item);
+							}}
+						>
+							<NativeTextBold
 								style={{
-									backgroundColor: '#363636',
-									paddingHorizontal: 10,
-									paddingVertical: 8,
-									marginHorizontal: 4,
-									borderRadius: appDimensions.buttons.borderRadius,
-									maxHeight: 38,
-								}}
-								onPress={() => {
-									onTagSelectionChanged(item);
+									color: theme.complementary,
+									fontSize: 16,
 								}}
 							>
-								<Text
-									style={{
-										color: theme.complementary,
-										fontSize: 16,
-										fontFamily: APP_FONTS.INTER_500_MEDIUM,
-									}}
-								>
-									{item ? item : 'DEFAULT'}
-								</Text>
-							</Pressable>
-						)}
-						style={{ flexGrow: 1, maxHeight: 48 }}
-					/>
-				</View>
+								{item ? item : 'DEFAULT'}
+							</NativeTextBold>
+						</Pressable>
+					)}
+					style={{ flexGrow: 1, maxHeight: 48 }}
+				/>
 			</View>
-		);
-	},
-);
+		</View>
+	);
+}
 
 const styles = StyleSheet.create({
 	cancelButtonContainer: {
@@ -200,7 +203,6 @@ const styles = StyleSheet.create({
 		minWidth: 128,
 	}, // no reaction available prompt
 	noReactionAvailableSectionA: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 16,
 		textAlign: 'center',
 		paddingVertical: 32,
@@ -216,7 +218,6 @@ const styles = StyleSheet.create({
 	},
 	noReactionAvailableButton: {
 		color: 'black',
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		fontSize: 16,
 		textAlign: 'center',
 	},

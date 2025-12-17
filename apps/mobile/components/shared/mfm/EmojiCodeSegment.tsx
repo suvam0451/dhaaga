@@ -12,12 +12,11 @@ type Props = {
 	value: string;
 	emojiMap: Map<string, string>;
 	emphasis: APP_COLOR_PALETTE_EMPHASIS;
-	fontFamily: string;
 };
 
 const EMOJI_HEIGHT = 20;
 
-function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
+function EmojiCodeSegment({ emojiMap, value, emphasis }: Props) {
 	const [ReactionData, setReactionData] = useState<CustomEmojiObjectType>(null);
 	const [EmojiWidth, setEmojiWidth] = useState(EMOJI_HEIGHT);
 	const { theme } = useAppTheme();

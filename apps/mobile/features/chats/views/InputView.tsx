@@ -1,10 +1,7 @@
 import { TextInput, View } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-
-const MAX_HEIGHT = 160;
 
 type Props = {
 	// dynamic height based on text content
@@ -33,16 +30,12 @@ function InputView({ setHeight, text, setText }: Props) {
 				style={{
 					textDecorationLine: 'none',
 					flex: 1,
-					// flexGrow: 1,
 					borderRadius: 12,
 					backgroundColor: '#242424',
 					paddingVertical: 8,
 					paddingLeft: 12,
 					marginLeft: 6,
 					color: theme.secondary.a20,
-					fontFamily: APP_FONTS.ROBOTO_400,
-					// height: 'auto',
-					// maxHeight: 192,
 				}}
 			/>
 		</View>

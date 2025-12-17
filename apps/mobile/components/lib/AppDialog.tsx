@@ -2,19 +2,17 @@ import {
 	Pressable,
 	StyleProp,
 	StyleSheet,
-	Text,
 	View,
 	ViewStyle,
 } from 'react-native';
 import { useAppDialog, useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { Fragment, useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { AppTextInput } from './TextInput';
 import { appDimensions, appVerticalIndex } from '#/styles/dimensions';
-import { AppText } from './Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 
 type DialogOptionsProps = {
 	label: string;
@@ -54,16 +52,15 @@ function DialogOption({ label, onPress, variant, style }: DialogOptionsProps) {
 				</View>
 			) : (
 				<Pressable style={{ paddingVertical: 10 }} onPress={_onPress}>
-					<Text
+					<NativeTextBold
 						style={{
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							color: color,
 							fontSize: 18,
 							textAlign: 'center',
 						}}
 					>
 						{label}
-					</Text>
+					</NativeTextBold>
 				</Pressable>
 			)}
 		</View>
@@ -116,15 +113,13 @@ export function AppDialog() {
 				<View
 					style={{ paddingHorizontal: 24, marginBottom: MARGIN_BOTTOM * 2 }}
 				>
-					<AppText.SemiBold
-						style={[styles.modalTitle, { color: theme.primary }]}
-					>
+					<NativeTextBold style={[styles.modalTitle, { color: theme.primary }]}>
 						{title}
-					</AppText.SemiBold>
+					</NativeTextBold>
 
 					{description.map((text, i) => (
-						<AppText.Medium
-							forwardedKey={i}
+						<NativeTextNormal
+							key={i}
 							style={[
 								styles.modalDescription,
 								{
@@ -134,7 +129,7 @@ export function AppDialog() {
 							]}
 						>
 							{text}
-						</AppText.Medium>
+						</NativeTextNormal>
 					))}
 					{IS_TXT_MODE && (
 						<AppTextInput.SingleLine
@@ -144,7 +139,6 @@ export function AppDialog() {
 							style={{
 								fontSize: 16,
 								textAlign: 'center',
-								fontFamily: APP_FONTS.ROBOTO_500,
 								color: theme.primary,
 								textDecorationLine: 'none',
 								paddingVertical: 20,
@@ -210,20 +204,8 @@ const styles = StyleSheet.create({
 		paddingTop: 32,
 	},
 	modalDescription: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		textAlign: 'center',
 		fontSize: 16,
-	},
-	actionButtonContainer: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginVertical: 16,
-	},
-	animDotContainer: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 	backdrop: {
 		position: 'absolute',

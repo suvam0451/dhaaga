@@ -8,7 +8,6 @@ import emojiPickerReducer, {
 	EMOJI_PICKER_REDUCER_ACTION,
 } from './emoji-picker/emojiPickerReducer';
 import { APP_FONT } from '#/styles/AppTheme';
-import { APP_FONTS } from '#/styles/AppFonts';
 import EmojiPickerSearchResults from './emoji-picker/fragments/EmojiPickerSearchResults';
 import EmojiPickerCategoryList from './emoji-picker/fragments/EmojiPickerCategoryList';
 import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
@@ -74,18 +73,7 @@ function BottomSheetAddReaction() {
 	);
 }
 
-const EMOJI_SIZE = 38;
 const styles = StyleSheet.create({
-	categoryLabel: {
-		color: APP_FONT.MONTSERRAT_BODY,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	},
-	emojiContainer: {
-		width: EMOJI_SIZE,
-		height: EMOJI_SIZE,
-		borderRadius: 8,
-		margin: 4,
-	},
 	textInput: {
 		textDecorationLine: 'none',
 		paddingVertical: 16,

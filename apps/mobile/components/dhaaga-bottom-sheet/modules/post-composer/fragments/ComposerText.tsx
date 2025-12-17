@@ -1,13 +1,12 @@
 import { ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
-import { memo, useRef } from 'react';
+import { useRef } from 'react';
 import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
-const ComposerTextInput = memo(function Foo() {
+function ComposerTextInput() {
 	const { theme } = useAppTheme();
 	const { state } = useComposerCtx();
 
@@ -43,7 +42,7 @@ const ComposerTextInput = memo(function Foo() {
 			</ScrollView>
 		</Pressable>
 	);
-});
+}
 
 export default ComposerTextInput;
 
@@ -57,7 +56,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		marginHorizontal: 10,
 		textAlignVertical: 'top',
-		fontFamily: APP_FONTS.ROBOTO_400,
 		flexGrow: 1,
 		height: '100%',
 	},

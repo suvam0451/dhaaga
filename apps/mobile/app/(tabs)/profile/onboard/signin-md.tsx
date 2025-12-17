@@ -8,7 +8,6 @@ import {
 	useAppTheme,
 	useHub,
 } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useActivityPubAuth } from '@dhaaga/react';
 import AccountDbService from '#/services/db/account-db.service';
 import appStyling from '#/styles/AppStyles';
@@ -17,6 +16,7 @@ import RoutingUtils from '#/utils/routing.utils';
 import { HideWhileKeyboardActive } from '#/ui/Containers';
 import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
+import { NativeTextBold } from '#/ui/NativeText';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
@@ -73,30 +73,28 @@ function MastodonSignInStack() {
 				>
 					{code && (
 						<View style={{ height: 240 }}>
-							<Text
+							<NativeTextBold
 								style={{
 									marginVertical: 20,
 									color: theme.secondary.a10,
-									fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 									textAlign: 'center',
 									fontSize: 16,
 								}}
 							>
 								Login and Confirm your account
-							</Text>
+							</NativeTextBold>
 							{code && (
 								<View>
-									<Text
+									<NativeTextBold
 										style={{
 											marginBottom: 12,
 											color: theme.secondary.a30,
-											fontFamily: APP_FONTS.INTER_500_MEDIUM,
 											textAlign: 'center',
 										}}
 									>
 										A valid token was detected. Proceed with adding the account
 										shown above?
-									</Text>
+									</NativeTextBold>
 								</View>
 							)}
 
@@ -110,15 +108,14 @@ function MastodonSignInStack() {
 								]}
 								onPress={onPressConfirm}
 							>
-								<Text
+								<NativeTextBold
 									style={{
 										color: 'black',
-										fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 										fontSize: 16,
 									}}
 								>
 									Proceed
-								</Text>
+								</NativeTextBold>
 							</TouchableOpacity>
 						</View>
 					)}

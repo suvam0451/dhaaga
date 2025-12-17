@@ -1,10 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { EmojiDto } from './_shared.types';
 import EmojiReaction from './EmojiReaction';
 import { APP_FONT } from '#/styles/AppTheme';
-import { APP_FONTS } from '#/styles/AppFonts';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { appDimensions } from '#/styles/dimensions';
 import type { PostObjectType } from '@dhaaga/bridge';
 import {
@@ -13,6 +11,7 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { DriverService } from '@dhaaga/bridge';
+import { NativeTextBold } from '#/ui/NativeText';
 
 const EMOJI_COLLAPSED_COUNT_LIMIT = 10;
 
@@ -42,7 +41,7 @@ function EmojiReactions({ dto }: EmojiReactionsProps) {
 
 	// mastodon does not support emojis
 	if (
-		driver === KNOWN_SOFTWARE.MASTODON ||
+		DriverService.supportsMastoApiV2(driver) ||
 		DriverService.supportsAtProto(driver)
 	)
 		return <Fragment />;
@@ -69,18 +68,16 @@ function EmojiReactions({ dto }: EmojiReactionsProps) {
 							},
 						]}
 					>
-						<View>
-							<Text
-								style={[
-									styles.showAllEmojiButtonText,
-									{ color: theme.textColor.medium },
-								]}
-							>
-								{AllEmojisExpanded
-									? 'Less'
-									: `More (${Emojis.length - ShownEmojis.length})`}
-							</Text>
-						</View>
+						<NativeTextBold
+							style={[
+								styles.showAllEmojiButtonText,
+								{ color: theme.textColor.medium },
+							]}
+						>
+							{AllEmojisExpanded
+								? 'Less'
+								: `More (${Emojis.length - ShownEmojis.length})`}
+						</NativeTextBold>
 					</View>
 				</TouchableOpacity>
 			)}
@@ -99,7 +96,6 @@ const styles = StyleSheet.create({
 	},
 	showAllEmojiButtonText: {
 		color: APP_FONT.MONTSERRAT_BODY,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 	emojiSectionContainer: {
 		flexDirection: 'row',

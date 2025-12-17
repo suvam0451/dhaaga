@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
@@ -52,9 +51,5 @@ const styles = StyleSheet.create({
 		width: '100%',
 		position: 'absolute',
 		zIndex: 10,
-	},
-	headerText: {
-		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
 	},
 });

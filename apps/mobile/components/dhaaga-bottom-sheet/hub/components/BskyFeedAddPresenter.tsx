@@ -13,7 +13,6 @@ import { ProfileService } from '@dhaaga/db';
 import BskyFeedAddListItemView from '#/components/dhaaga-bottom-sheet/hub/components/BskyFeedAddListItemView';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { AppDividerSoft } from '#/ui/Divider';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 import useApiGetMyFeeds from '#/hooks/api/useFeeds';
@@ -88,7 +87,7 @@ function BskyFeedAddSheetPresenter() {
 							style={[
 								styles.textInput,
 								{
-									fontFamily: APP_FONTS.ROBOTO_500,
+									fontWeight: 'bold',
 									color: theme.secondary.a20,
 									marginLeft: 12,
 									flex: 1,

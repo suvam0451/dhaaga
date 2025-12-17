@@ -13,7 +13,6 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { Image } from 'expo-image';
 import { NativeTextBold, NativeTextH6 } from '#/ui/NativeText';
 
@@ -124,10 +123,6 @@ const styles = StyleSheet.create({
 	root: {
 		marginTop: 16,
 		marginHorizontal: 8,
-	},
-	text: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		fontSize: 18,
 	},
 	buttonContainer: {
 		maxWidth: '50%',

@@ -1,6 +1,5 @@
 import { StyleProp, TextInput, TextStyle, StyleSheet } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 
 type AppTextInput_SingleLineProps = {
 	value: string;
@@ -27,7 +26,7 @@ export class AppTextInput {
 				placeholderTextColor={theme.secondary.a40}
 				style={[
 					styles.singleLine,
-					{ color: theme.secondary.a20, fontFamily: APP_FONTS.ROBOTO_500 },
+					{ color: theme.secondary.a20, fontWeight: 'bold' },
 					style,
 				]}
 				onChangeText={onChangeText}

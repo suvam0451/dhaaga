@@ -1,6 +1,5 @@
 import { useAppTheme } from '#/states/global/hooks';
 import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { TouchableOpacity, View } from 'react-native';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
@@ -62,7 +61,6 @@ function BottomSheetActionItem({
 						style={{
 							color: theme.secondary.a20,
 							flexWrap: 'wrap',
-							fontFamily: APP_FONTS.ROBOTO_400,
 						}}
 					>
 						{desc}

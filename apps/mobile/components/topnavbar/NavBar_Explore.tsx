@@ -16,7 +16,6 @@ import {
 	StyleProp,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { appDimensions } from '#/styles/dimensions';
 import NavBarFactory from '#/components/topnavbar/components/NavBarFactory';
 
@@ -132,25 +131,9 @@ function NavBar_Explore({ animatedStyle }: Props) {
 export default NavBar_Explore;
 
 const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: 12,
-		zIndex: 1,
-		height: appDimensions.topNavbar.hubVariantHeight,
-		flexDirection: 'row',
-	},
-	headerText: {
-		fontSize: 28,
-		fontFamily: APP_FONTS.INTER_700_BOLD, // fontWeight: '600',
-	},
 	labelArea: {
 		justifyContent: 'center',
 		flexGrow: 1,
 		marginBottom: appDimensions.topNavbar.padding,
-	},
-	menuButton: {
-		padding: appDimensions.topNavbar.padding,
-		marginVertical: 'auto',
-		marginLeft: appDimensions.topNavbar.marginLeft,
-		paddingVertical: 10,
 	},
 });

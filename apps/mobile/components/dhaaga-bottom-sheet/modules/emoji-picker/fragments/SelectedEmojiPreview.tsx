@@ -4,6 +4,7 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { Image } from 'expo-image';
 import { useAppTheme } from '#/states/global/hooks';
 import { CustomEmojiObjectType } from '@dhaaga/bridge';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 
 type SelectedEmojiPreviewProps = {
 	selection: CustomEmojiObjectType | null;
@@ -14,16 +15,15 @@ const SelectedEmojiPreview = memo(
 		const { theme } = useAppTheme();
 		if (!selection) {
 			return (
-				<Text
+				<NativeTextNormal
 					style={{
 						flexGrow: 1,
-						fontFamily: APP_FONTS.INTER_400_REGULAR,
 						color: theme.secondary.a40,
 						textAlign: 'center',
 					}}
 				>
 					No reaction Selected
-				</Text>
+				</NativeTextNormal>
 			);
 		}
 
@@ -36,14 +36,13 @@ const SelectedEmojiPreview = memo(
 					justifyContent: 'center',
 				}}
 			>
-				{/*@ts-ignore-next-line*/}
 				<Image source={{ uri: selection.url }} style={styles.emojiContainer} />
-				<Text
+				<NativeTextBold
 					style={[styles.emojiDesc, { color: theme.complementary }]}
 					numberOfLines={1}
 				>
 					{selection.shortCode}
-				</Text>
+				</NativeTextBold>
 			</View>
 		);
 	},
@@ -51,26 +50,16 @@ const SelectedEmojiPreview = memo(
 
 const EMOJI_SIZE = 32;
 const styles = StyleSheet.create({
-	categoryLabel: {
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
-	},
 	emojiContainer: {
 		width: EMOJI_SIZE,
 		height: EMOJI_SIZE,
 		borderRadius: 8,
 		margin: 4,
 	},
-	textInput: {
-		textDecorationLine: 'none',
-		paddingVertical: 16,
-		fontSize: 16,
-		borderRadius: 8,
-	},
 	emojiDesc: {
 		marginLeft: 4,
 		flexShrink: 1,
 		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 });
 

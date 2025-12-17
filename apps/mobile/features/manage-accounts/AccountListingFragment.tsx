@@ -1,12 +1,5 @@
-import {
-	View,
-	StyleSheet,
-	TouchableOpacity,
-	Text,
-	Pressable,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '#/styles/AppFonts';
 import Feather from '@expo/vector-icons/Feather';
 import {
 	Account,
@@ -25,6 +18,7 @@ import { DialogFactory } from '#/utils/dialog-factory';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type Props = {
 	acct: Account;
@@ -90,35 +84,32 @@ export function AccountDetails({
 
 	return (
 		<Pressable style={{ marginLeft: 8, flexGrow: 1 }} onPress={onClicked}>
-			<Text
+			<NativeTextBold
 				style={{
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					color: theme.secondary.a10,
 				}}
 				numberOfLines={1}
 			>
 				{displayName ? displayName : ' '}
-			</Text>
-			<Text
+			</NativeTextBold>
+			<NativeTextBold
 				style={{
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					color: theme.secondary.a30,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
 			>
 				@{username}
-			</Text>
-			<Text
+			</NativeTextBold>
+			<NativeTextBold
 				style={{
-					fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					color: selected ? theme.primary : theme.complementary,
 					fontSize: 12,
 				}}
 				numberOfLines={1}
 			>
 				{subdomain}
-			</Text>
+			</NativeTextBold>
 		</Pressable>
 	);
 }
@@ -207,16 +198,15 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 						subdomain={acct.server}
 					/>
 					{acct.selected && (
-						<Text
+						<NativeTextBold
 							style={{
-								fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 								color: theme.primary,
 								fontSize: 16,
 								paddingRight: 8,
 							}}
 						>
 							Active
-						</Text>
+						</NativeTextBold>
 					)}
 				</TouchableOpacity>
 

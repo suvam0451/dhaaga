@@ -12,11 +12,11 @@ import {
 } from 'react-native';
 import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import * as Haptics from 'expo-haptics';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from './Text';
 import { appDimensions } from '#/styles/dimensions';
 import appStyles from '#/styles/AppStyles';
+import { NativeTextBold } from '#/ui/NativeText';
 
 const BUTTON_KINDS = [
 	'primary',
@@ -90,13 +90,12 @@ export function AppButtonVariantA({
 			disabled={disabled}
 		>
 			{loading && <ActivityIndicator size="small" color={'black'} />}
-			<Text
+			<NativeTextBold
 				style={[
 					{
 						color: variant === 'secondary' ? theme.secondary.a10 : 'black',
 						// opacity: 1,
 						fontSize: 16,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						textAlign: 'center',
 						marginLeft: loading ? 8 : 0,
 					},
@@ -104,7 +103,7 @@ export function AppButtonVariantA({
 				]}
 			>
 				{label}
-			</Text>
+			</NativeTextBold>
 		</TouchableOpacity>
 	);
 }
@@ -198,14 +197,13 @@ export function AppButtonBottomSheetAction({
 			onPress={onPress}
 		>
 			{label && (
-				<Text
+				<NativeTextBold
 					style={{
 						color: disabled ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
 					{label}
-				</Text>
+				</NativeTextBold>
 			)}
 			{loading ? (
 				<ActivityIndicator

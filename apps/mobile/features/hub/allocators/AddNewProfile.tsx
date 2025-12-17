@@ -66,11 +66,4 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		marginBottom: 16,
 	},
-	tipText: {
-		textAlign: 'center',
-		marginBottom: 8,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
-		maxWidth: 396,
-		alignSelf: 'center',
-	},
 });

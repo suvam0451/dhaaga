@@ -7,7 +7,6 @@ import {
 import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useRef, useState } from 'react';
 import {
 	Dimensions,
@@ -138,7 +137,6 @@ function ZenExplorationWidget() {
 					onSubmitEditing={onSearch}
 					style={{
 						flex: 1,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						color: 'black',
 					}}
 				/>

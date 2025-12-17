@@ -2,11 +2,9 @@ import {
 	Pressable,
 	StyleProp,
 	StyleSheet,
-	Text,
 	View,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { router } from 'expo-router';
 import { AppIcon } from '../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
@@ -26,6 +24,7 @@ import { appDimensions } from '#/styles/dimensions';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import Animated from 'react-native-reanimated';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type Props = {
 	animatedStyle?: StyleProp<ViewStyle>;
@@ -87,12 +86,12 @@ function NavBar_Feed({ animatedStyle }: Props) {
 						maxWidth: '40%',
 					}}
 				>
-					<Text
+					<NativeTextBold
 						style={[styles.label, { color: theme.primary, fontSize: 24 }]}
 						numberOfLines={1}
 					>
 						{_label || 'Unknown'}
-					</Text>
+					</NativeTextBold>
 					<View
 						style={{
 							marginLeft: 4,
@@ -176,7 +175,6 @@ const styles = StyleSheet.create({
 		height: appDimensions.topNavbar.simpleVariantHeight,
 	},
 	label: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
 		fontSize: 16,
 	},
 });

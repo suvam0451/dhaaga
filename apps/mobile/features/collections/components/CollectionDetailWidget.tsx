@@ -1,12 +1,12 @@
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';
 import { useAppTheme } from '#/states/global/hooks';
 import { useCollectionDetailState } from '../contexts/CollectionDetailCtx';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type ControlHeadersProps = {
 	allSelected: boolean;
@@ -113,17 +113,16 @@ function CollectionDetailWidget() {
 							marginTop: 4,
 						}}
 					>
-						<AppText.SemiBold
+						<NativeTextBold
 							style={{
 								color: theme.primary,
 								marginBottom: appDimensions.timelines.sectionBottomMargin,
-								fontFamily: APP_FONTS.INTER_500_MEDIUM,
 								fontSize: 16,
 								marginLeft: 6,
 							}}
 						>
 							{state.results.length} posts from {state.users.length} users
-						</AppText.SemiBold>
+						</NativeTextBold>
 					</View>
 					<View
 						style={{

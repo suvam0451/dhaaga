@@ -1,7 +1,6 @@
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import RawTextSegment from '../components/shared/mfm/RawTextSegment';
 import { TEXT_PARSING_VARIANT } from '#/types/app.types';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import HashtagSegment from '../components/shared/mfm/HashtagSegment';
 import { appDimensions } from '#/styles/dimensions';
@@ -42,7 +41,6 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 						value={node.text}
 						link={node.url}
 						mentions={mentions}
-						fontFamily={APP_FONTS.ROBOTO_500}
 					/>
 				);
 			}
@@ -52,7 +50,6 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 						value={node.text}
 						emojiMap={emojiMap}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						fontFamily={APP_FONTS.INTER_500_MEDIUM}
 					/>
 				);
 			}
