@@ -13,7 +13,7 @@ import {
 	useAppManager,
 	useAppTheme,
 } from '#/states/global/hooks';
-import Navbar_UserDetail from '#/components/shared/topnavbar/Navbar_UserDetail';
+import Navbar_UserDetail from '#/components/topnavbar/Navbar_UserDetail';
 import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';

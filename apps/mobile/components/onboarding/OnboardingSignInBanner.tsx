@@ -2,7 +2,6 @@ import { View, StyleSheet } from 'react-native';
 import { Asset, useAssets } from 'expo-asset';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAppTheme } from '#/states/global/hooks';
-import { AppText } from '../lib/Text';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import Animated, {
@@ -13,6 +12,8 @@ import Animated, {
 import { useEffect } from 'react';
 import { AppButtonVariantA } from '../lib/Buttons';
 import { HideWhileKeyboardActive } from '#/ui/Containers';
+import { Image } from 'expo-image';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type OnboardingCtaBannerProps = {
 	titleText: string;
@@ -25,6 +26,7 @@ type OnboardingCtaBannerProps = {
 
 const ANIM_DISTANCE = 72;
 const ANIM_FINAL_SIZE = 0.95;
+
 function OnboardingSignInBanner({
 	titleText,
 	descText,
@@ -87,39 +89,35 @@ function OnboardingSignInBanner({
 						style={[{ position: 'absolute' }, shiftRight]}
 						onTouchStart={onPlatformReset}
 					>
-						<Animated.Image
+						<Image
 							source={{ uri: softwareLogoAsset.localUri! }}
-							style={[
-								{
-									width: TARGET_LOGO_WIDTH,
-									height: ALL_LOGO_HEIGHT,
-									marginHorizontal: 'auto',
-									borderRadius: 16,
-									zIndex: 2,
-								},
-							]}
+							style={{
+								width: TARGET_LOGO_WIDTH,
+								height: ALL_LOGO_HEIGHT,
+								marginHorizontal: 'auto',
+								borderRadius: 16,
+								zIndex: 2,
+							}}
 						/>
 					</Animated.View>
-					<Animated.Image
-						source={{ uri: assets[0].localUri! }}
-						style={[
-							{
+					<Animated.View style={shiftLeft}>
+						<Image
+							source={{ uri: assets[0].localUri! }}
+							style={{
 								width: HOST_LOGO_WIDTH,
 								height: ALL_LOGO_HEIGHT,
 								marginHorizontal: 'auto',
 								borderRadius: 16,
 								backgroundColor: '#1f2836',
 								zIndex: 2,
-							},
-							shiftLeft,
-						]}
-						// contentFit={'cover'}
-					/>
+							}}
+						/>
+					</Animated.View>
 				</View>
 			</HideWhileKeyboardActive>
 			{platformSelected && (
 				<View>
-					<AppText.Medium
+					<NativeTextBold
 						style={{
 							textAlign: 'center',
 							paddingTop: 16,
@@ -128,8 +126,8 @@ function OnboardingSignInBanner({
 						}}
 					>
 						{titleText}
-					</AppText.Medium>
-					<AppText.Medium
+					</NativeTextBold>
+					<NativeTextBold
 						style={{
 							color: theme.complementary,
 							fontSize: 18,
@@ -138,7 +136,7 @@ function OnboardingSignInBanner({
 						onPress={descExternalOnPress}
 					>
 						{descText}
-					</AppText.Medium>
+					</NativeTextBold>
 				</View>
 			)}
 		</View>

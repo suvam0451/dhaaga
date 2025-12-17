@@ -3,8 +3,7 @@ import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { AppText } from '#/components/lib/Text';
-import { NativeTextH6 } from '#/ui/NativeText';
+import { NativeTextBold, NativeTextH6 } from '#/ui/NativeText';
 
 type Props = {
 	label: string;
@@ -17,7 +16,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 	const { theme } = useAppTheme();
 
 	return (
-		<View style={styles.appModuleContainer}>
+		<View style={styles.root}>
 			<Pressable
 				style={[
 					styles.appModuleContent,
@@ -41,7 +40,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 				>
 					{label}
 				</NativeTextH6>
-				<AppText.Medium
+				<NativeTextBold
 					style={{
 						width: 96,
 						color: theme.secondary.a40,
@@ -49,7 +48,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 					numberOfLines={1}
 				>
 					{desc}
-				</AppText.Medium>
+				</NativeTextBold>
 			</Pressable>
 		</View>
 	);
@@ -58,14 +57,14 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 export default AccountHomeModuleItem;
 
 const styles = StyleSheet.create({
-	appModuleContainer: {
+	root: {
 		maxWidth: '50%',
 		flex: 1,
 		paddingHorizontal: 6,
 	},
 	appModuleContent: {
-		paddingVertical: 10,
-		paddingHorizontal: 12, // marginHorizontal: 8,
+		paddingVertical: 8,
+		paddingHorizontal: 12,
 		borderRadius: 8,
 		marginBottom: 12,
 		overflow: 'hidden',

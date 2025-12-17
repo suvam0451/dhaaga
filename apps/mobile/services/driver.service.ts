@@ -131,12 +131,12 @@ class DriverService {
 					iconId: 'bookmark',
 					to: APP_ROUTING_ENUM.MY_BOOKMARKS,
 				},
-				{
-					label: t(`profile.appFeatures.lists.label`),
-					desc: t(`profile.appFeatures.lists.desc`),
-					iconId: 'list',
-					to: APP_ROUTING_ENUM.MY_LISTS,
-				},
+				// {
+				// 	label: t(`profile.appFeatures.lists.label`),
+				// 	desc: t(`profile.appFeatures.lists.desc`),
+				// 	iconId: 'list',
+				// 	to: APP_ROUTING_ENUM.MY_LISTS,
+				// },
 			];
 		} else {
 			return [];

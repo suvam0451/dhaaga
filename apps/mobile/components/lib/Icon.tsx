@@ -25,8 +25,9 @@ import {
 	useActiveUserSession,
 	useAppBottomSheet,
 	useAppTheme,
-} from '../../states/global/hooks';
+} from '#/states/global/hooks';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import RoutingUtils from '#/utils/routing.utils';
 
 type APP_ICON_ENUM =
 	| 'add'
@@ -98,6 +99,7 @@ type APP_ICON_ENUM =
 	| 'notifications-outline'
 	| 'no-account'
 	| 'palette'
+	| 'person'
 	| 'person-add'
 	| 'person-outline'
 	| 'people'
@@ -255,13 +257,8 @@ export function NavbarButtonDisabledOnSignOut({
 	);
 }
 
-export function ProfileTabNavbarIconButton({
-	onPress,
-	onLongPress,
-	children,
-}: any) {
+export function ProfileTabNavbarIconButton({ children }: any) {
 	const { show } = useAppBottomSheet();
-	const { acct } = useActiveUserSession();
 
 	function onLongPressAction(e: any) {
 		e.preventDefault();
@@ -270,9 +267,7 @@ export function ProfileTabNavbarIconButton({
 	}
 
 	function onPressAction(e: any) {
-		// router.navigate('/profile');
-		// router.dismiss(2);
-		onPress();
+		RoutingUtils.toHome();
 	}
 	return (
 		<Pressable onPress={onPressAction} onLongPress={onLongPressAction}>
@@ -983,6 +978,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="person-add"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'person':
+				return (
+					<Ionicons
+						name={'person'}
 						size={_size}
 						color={_color}
 						style={iconStyle}

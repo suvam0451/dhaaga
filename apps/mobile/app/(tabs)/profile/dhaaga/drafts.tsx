@@ -1,5 +1,5 @@
 import { AppText } from '#/components/lib/Text';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { FlatList, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';

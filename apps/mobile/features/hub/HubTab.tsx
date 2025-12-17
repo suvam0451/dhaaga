@@ -16,7 +16,7 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from './views/HubProfileListView';
 import HubPinnedFeedList from './components/HubPinnedFeedList';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
-import NavBar_Hub from '#/components/shared/topnavbar/NavBar_Hub';
+import NavBar_Hub from '#/components/topnavbar/NavBar_Hub';
 import {
 	ProfileService,
 	ProfilePinnedUserService,
@@ -28,10 +28,9 @@ import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import ComposeButton from '#/components/widgets/ComposeButton';
+import ComposeButton from '#/features/hub/components/ComposeButton';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { appDimensions } from '#/styles/dimensions';
-import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type Props = {
 	// account left join guaranteed

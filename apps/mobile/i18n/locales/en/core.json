@@ -17,7 +17,7 @@
 	},
 	"onboarding": {
 		"addAccountButton": "Add Account",
-		"accountCreationNotSupported": "You must bring your own account.\nBluesky support is experimental.",
+		"accountCreationNotSupported": "Account creation is not supported.",
 		"needBlueskyAccount": "You need a Bluesky account",
 		"createOneHere": "Create one here",
 		"loginButton": "Sign In",
@@ -77,7 +77,7 @@
 	},
 	"profile": {
 		"appFeatures": {
-			"sectionLabel": "Dhaaga Features",
+			"sectionLabel": "App Features",
 			"likes": {
 				"label": "Likes",
 				"desc": "Posts I've Liked"

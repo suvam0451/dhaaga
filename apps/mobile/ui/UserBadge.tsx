@@ -57,6 +57,7 @@ function UserBadge({
 			<TouchableOpacity
 				onPress={onDisplayNamePressed}
 				style={styles.displayNameArea}
+				delayPressIn={200}
 			>
 				{USE_DISPLAY_NAME ? (
 					<NativeTextMedium numberOfLines={1}>{displayName}</NativeTextMedium>

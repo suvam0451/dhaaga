@@ -1,6 +1,5 @@
-import useAppNavigator from '../../../states/useAppNavigator';
+import useAppNavigator from '#/states/useAppNavigator';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { APP_FONTS } from '../../../styles/AppFonts';
 import ProfileStatItemView from '../view/ProfileStatItemView';
 
 type Props = {
@@ -47,7 +46,7 @@ function ProfileStatPresenter({
 	];
 
 	return (
-		<View style={[{ flexDirection: 'row' }, styles.container, style]}>
+		<View style={[styles.root, style]}>
 			{data.map((o, i) => (
 				<ProfileStatItemView
 					key={i}
@@ -63,19 +62,9 @@ function ProfileStatPresenter({
 export default ProfileStatPresenter;
 
 const styles = StyleSheet.create({
-	container: {
+	root: {
 		flexGrow: 1,
 		marginHorizontal: 10,
-	},
-	primaryText: {
-		fontSize: 18,
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-	},
-	secondaryText: { fontSize: 13, fontFamily: APP_FONTS.INTER_400_REGULAR },
-	touchContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingVertical: 8,
+		flexDirection: 'row',
 	},
 });

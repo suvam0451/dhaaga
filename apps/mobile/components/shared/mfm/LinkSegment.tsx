@@ -1,19 +1,16 @@
 import { StyleSheet } from 'react-native';
 import useLongLinkTextCollapse from '#/states/useLongLinkTextCollapse';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import TextUtils from '#/utils/text.utils';
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
-import { NativeTextMedium } from '#/ui/NativeText';
+import { NativeTextBold } from '#/ui/NativeText';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type LinkProcessorProps = {
 	url: string;
 	displayName: string;
-	fontFamily: string;
-	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 };
 
-function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
+function LinkSegment({ url, displayName }: LinkProcessorProps) {
 	const { theme } = useAppTheme();
 	const { show, setCtx } = useAppBottomSheet();
 
@@ -44,12 +41,11 @@ function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 	}
 
 	return (
-		<NativeTextMedium
+		<NativeTextBold
 			style={[
 				styles.text,
 				{
-					color: theme.complementaryA.a0,
-					fontFamily,
+					color: theme.complementary,
 				},
 			]}
 			onPress={onTextPress}
@@ -57,7 +53,7 @@ function LinkSegment({ url, displayName, fontFamily }: LinkProcessorProps) {
 			numberOfLines={1}
 		>
 			{displayName ? linkDisplayName : Result}
-		</NativeTextMedium>
+		</NativeTextBold>
 	);
 }
 

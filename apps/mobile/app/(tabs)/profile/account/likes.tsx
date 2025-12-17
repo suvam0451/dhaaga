@@ -22,7 +22,14 @@ function ContentView() {
 		}),
 	);
 
-	return <PostTimelineView label={'My Likes'} queryResult={queryResult} />;
+	return (
+		<PostTimelineView
+			navbarType={'simple'}
+			label={'My Likes'}
+			queryResult={queryResult}
+			flatListKey={'account/likes'}
+		/>
+	);
 }
 
 function Page() {

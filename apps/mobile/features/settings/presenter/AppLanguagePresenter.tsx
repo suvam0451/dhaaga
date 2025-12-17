@@ -1,6 +1,6 @@
 import { LocaleOptions } from '#/i18n/data';
 import { FlatList, Pressable, View } from 'react-native';
-import useAppSettings from '../interactors/useAppSettings';
+import useAppSettings from '#/hooks/app/useAppSettings';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useAppTheme } from '#/states/global/hooks';
@@ -11,13 +11,13 @@ import { useTranslation } from 'react-i18next';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
 
 function AppLanguagePresenter() {
-	const { getValue, setValue, setAppLangauge } = useAppSettings();
+	const { getValue, setAppLanguage } = useAppSettings();
 	const { theme } = useAppTheme();
-	const { i18n, t } = useTranslation();
+	const { i18n } = useTranslation();
 
 	function onChangeLanguage(languageCode: string) {
 		i18n.changeLanguage(languageCode);
-		setAppLangauge(languageCode);
+		setAppLanguage(languageCode);
 	}
 
 	const lang = getValue(APP_SETTING_KEY.APP_LANGUAGE);

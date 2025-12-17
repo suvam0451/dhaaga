@@ -177,50 +177,6 @@ type AppBottomSheetMenuHeaderProps = {
  * @constructor
  */
 export class AppBottomSheetMenu {
-	static Header({ title, menuItems }: AppBottomSheetMenuHeaderProps) {
-		const { theme } = useAppTheme();
-		return (
-			<View
-				style={{
-					marginVertical: 16,
-					justifyContent: 'space-between',
-					flexDirection: 'row',
-					marginHorizontal: 16,
-					alignItems: 'center',
-					marginTop: 32,
-				}}
-			>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_700_BOLD,
-						color: theme.textColor.high,
-						fontSize: 20,
-						flex: 1,
-					}}
-				>
-					{title}
-				</Text>
-				<View>
-					{menuItems.map((o, i) => (
-						<Pressable
-							key={i}
-							style={{
-								paddingHorizontal: 8,
-							}}
-							onPress={o.onPress}
-						>
-							<AppIcon
-								id={o.iconId as APP_ICON_ENUM}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-								onPress={o.onPress}
-							/>
-						</Pressable>
-					))}
-				</View>
-			</View>
-		);
-	}
-
 	static WithBackNavigation({
 		onBack,
 		onNext,

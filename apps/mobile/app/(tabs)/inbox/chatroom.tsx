@@ -11,7 +11,7 @@ import InputView from '#/features/chats/views/InputView';
 import { appDimensions } from '#/styles/dimensions';
 import RecievedMessageView from '#/features/chats/views/RecievedMessageView';
 import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import {
 	useApiGetChatMessages,
 	useApiGetChatroom,

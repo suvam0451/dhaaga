@@ -4,18 +4,18 @@ import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import AppSettingBooleanToggle from '#/components/screens/settings/fragments/AppSettingBooleanToggle';
 import { useState } from 'react';
 import { AppDivider } from '#/components/lib/Divider';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
 import { APP_SETTING_KEY } from '#/services/settings.service';
-import useAppSettings from '#/features/settings/interactors/useAppSettings';
+import useAppSettings from '#/hooks/app/useAppSettings';
 import { LocaleOptions } from '#/i18n/data';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
 import { NativeTextMedium } from '#/ui/NativeText';
+import AppSettingBooleanToggle from '#/components/screens/settings/fragments/AppSettingBooleanToggle';
 
 function Divider() {
 	const { theme } = useAppTheme();

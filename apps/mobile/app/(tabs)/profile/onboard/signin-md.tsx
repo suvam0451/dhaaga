@@ -12,10 +12,10 @@ import { APP_FONTS } from '#/styles/AppFonts';
 import { useActivityPubAuth } from '@dhaaga/react';
 import AccountDbService from '#/services/db/account-db.service';
 import appStyling from '#/styles/AppStyles';
-import { AppAuthWebView } from '#/components/lib/WebView';
+import { AppAuthWebView } from '#/ui/WebView';
 import RoutingUtils from '#/utils/routing.utils';
 import { HideWhileKeyboardActive } from '#/ui/Containers';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 
 function MastodonSignInStack() {

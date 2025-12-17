@@ -1,5 +1,5 @@
 import { AppText } from '#/components/lib/Text';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { View } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 

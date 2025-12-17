@@ -1,9 +1,9 @@
 import type { PostLinkAttachmentObjectType } from '@dhaaga/bridge';
-import { Dimensions, Pressable, View } from 'react-native';
+import { BaseUrlNormalizationService } from '@dhaaga/bridge';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Image } from 'expo-image';
-import { NativeTextMedium } from '#/ui/NativeText';
-import { BaseUrlNormalizationService } from '@dhaaga/bridge';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 import { AppDividerSoft } from '#/ui/Divider';
 import { AttachedLinkBorderDecorations } from '#/skins/BorderDecorations';
 import { useAppBottomSheet } from '#/states/global/hooks';
@@ -36,7 +36,8 @@ function PostLinkAttachments({ items }: Props) {
 	return (
 		<View>
 			{items.map((item: PostLinkAttachmentObjectType, i) => (
-				<Pressable
+				<TouchableOpacity
+					delayPressIn={200}
 					key={i}
 					onPress={() => {
 						onPress(item);
@@ -58,23 +59,27 @@ function PostLinkAttachments({ items }: Props) {
 						) : (
 							<View />
 						)}
-						<View style={{ padding: 6, paddingVertical: 12 }}>
-							<NativeTextMedium numberOfLines={3} style={{ marginBottom: 4 }}>
+						<View style={{ padding: 6, paddingTop: 12 }}>
+							<NativeTextBold
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								numberOfLines={3}
+								style={{ marginBottom: 4 }}
+							>
 								{item.title}
-							</NativeTextMedium>
-							<NativeTextMedium
+							</NativeTextBold>
+							<NativeTextNormal
 								numberOfLines={5}
 								emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 							>
 								{item.description}
-							</NativeTextMedium>
+							</NativeTextNormal>
 							<AppDividerSoft style={{ marginVertical: 6 }} />
-							<NativeTextMedium>
+							<NativeTextBold emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
 								{BaseUrlNormalizationService.stripHttps(item.url)}
-							</NativeTextMedium>
+							</NativeTextBold>
 						</View>
 					</AttachedLinkBorderDecorations>
-				</Pressable>
+				</TouchableOpacity>
 			))}
 		</View>
 	);

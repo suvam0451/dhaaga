@@ -23,12 +23,12 @@ export type AppTimelineProps<
 	navbarType:
 		| 'none'
 		| 'simple'
-		| 'sticky'
 		| 'custom'
 		| 'unified'
 		| 'inbox'
 		| 'explore'
 		| 'updates';
+
 	/**
 	 * The typeof header to show.
 	 *

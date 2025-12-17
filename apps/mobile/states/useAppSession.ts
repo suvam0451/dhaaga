@@ -7,7 +7,7 @@ import {
 	useSessionManagement,
 } from './global/hooks';
 import SettingsService, { APP_SETTING_KEY } from '../services/settings.service';
-import useAppSettings from '../features/settings/interactors/useAppSettings';
+import useAppSettings from '../hooks/app/useAppSettings';
 import { useTranslation } from 'react-i18next';
 
 /**

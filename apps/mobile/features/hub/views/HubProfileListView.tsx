@@ -4,7 +4,7 @@ import { FlatList, Pressable, View } from 'react-native';
 import { AppDividerSoft } from '#/ui/Divider';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { NativeTextMedium } from '#/ui/NativeText';
+import { NativeTextBold } from '#/ui/NativeText';
 import { appDimensions } from '#/styles/dimensions';
 
 type Props = {
@@ -49,7 +49,6 @@ function HubProfileListView({
 				renderItem={({ item, index }) => (
 					<Pressable
 						style={{
-							paddingVertical: 16,
 							paddingHorizontal: 10,
 						}}
 						onPress={() => {
@@ -59,16 +58,17 @@ function HubProfileListView({
 							onLongPressProfile(item.id);
 						}}
 					>
-						<NativeTextMedium
+						<NativeTextBold
 							style={{
 								textAlign: 'center',
 								fontSize: 18,
+								marginVertical: 'auto',
 								color:
 									pageIndex === index ? theme.primary : theme.secondary.a20,
 							}}
 						>
 							{item.label}
-						</NativeTextMedium>
+						</NativeTextBold>
 					</Pressable>
 				)}
 				ListFooterComponent={

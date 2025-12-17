@@ -7,7 +7,7 @@ import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import WelcomeScreenFeatureShowcase from '#/features/onboarding/WelcomeScreenFeatureShowcase';
 import { LinkingUtils } from '#/utils/linking.utils';
 import RoutingUtils from '#/utils/routing.utils';
-import { NativeTextMedium, NativeTextSemiBold } from '#/ui/NativeText';
+import { NativeTextMedium, NativeTextBold } from '#/ui/NativeText';
 import { APP_VERSION } from '#/utils/default-settings';
 
 function Page() {
@@ -22,8 +22,14 @@ function Page() {
 
 	return (
 		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
-			<NativeTextSemiBold style={styles.appLabel}>Dhaaga</NativeTextSemiBold>
+			<NativeTextBold style={styles.appLabel}>Dhaaga</NativeTextBold>
 			<Image source={{ uri: assets[0].localUri! }} style={styles.appLogo} />
+			<NativeTextMedium
+				style={styles.versionText}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
+			>
+				{APP_VERSION}
+			</NativeTextMedium>
 			<View style={styles.showcaseArea}>
 				<WelcomeScreenFeatureShowcase />
 			</View>
@@ -31,7 +37,7 @@ function Page() {
 				<AppButtonVariantA
 					label={'Get Started'}
 					loading={false}
-					onClick={RoutingUtils.toOnboarding}
+					onClick={RoutingUtils.toFirstTimeOnboarding}
 					textStyle={{ fontSize: 16 }}
 				/>
 				<AppButtonVariantA
@@ -41,12 +47,6 @@ function Page() {
 					onClick={LinkingUtils.openProjectWebsite}
 					textStyle={{ fontSize: 16 }}
 				/>
-				<NativeTextMedium
-					style={styles.versionText}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
-				>
-					{APP_VERSION}
-				</NativeTextMedium>
 			</View>
 		</View>
 	);

@@ -2,14 +2,13 @@ import {
 	View,
 	ActivityIndicator,
 	StyleSheet,
-	Text,
 	StyleProp,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/states/global/hooks';
 import useLoadingMoreIndicatorState from '../states/useLoadingMoreIndicatorState';
 import { FetchStatus } from '@tanstack/react-query';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type LoadingMoreProps = {
 	numItems: number;
@@ -50,7 +49,7 @@ function TimelineLoadingIndicator({
 					]}
 				>
 					<ActivityIndicator size="small" color="#ffffff87" />
-					<Text
+					<NativeTextBold
 						style={[
 							styles.text,
 							{
@@ -59,7 +58,7 @@ function TimelineLoadingIndicator({
 						]}
 					>
 						{'Loading More...'}
-					</Text>
+					</NativeTextBold>
 				</View>
 			</View>
 		);
@@ -87,7 +86,6 @@ const styles = StyleSheet.create({
 	text: {
 		textAlign: 'center',
 		marginLeft: 6,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 	},
 });
 

@@ -1,6 +1,5 @@
 import { Text, StyleSheet } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
@@ -32,7 +31,6 @@ export default Page;
 
 const styles = StyleSheet.create({
 	text: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginTop: '50%',
 		fontSize: 18,
 		textAlign: 'center',

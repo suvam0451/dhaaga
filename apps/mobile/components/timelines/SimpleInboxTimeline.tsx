@@ -2,12 +2,11 @@ import { UseQueryResult } from '@tanstack/react-query';
 import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import useNotificationStore from '#/features/inbox/interactors/useNotificationStore';
 import { useEffect, useState } from 'react';
-import NavBar_Inbox from '#/components/shared/topnavbar/NavBar_Inbox';
+import NavBar_Inbox from '#/components/topnavbar/NavBar_Inbox';
 import { MentionListStateIndicator } from '#/features/inbox/components/MentionListStateIndicator';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import { RefreshControl } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { AppDivider } from '#/components/lib/Divider';
-import { FlashList } from '@shopify/flash-list';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
@@ -49,7 +48,7 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 	return (
 		<>
 			<NavBar_Inbox label={label} type={type} animatedStyle={animatedStyle} />
-			<FlashList
+			<FlatList
 				onScroll={scrollHandler}
 				onLayout={onLayout}
 				data={state.items}

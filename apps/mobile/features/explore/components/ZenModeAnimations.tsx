@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { NativeTextMedium, NativeTextSemiBold } from '#/ui/NativeText';
+import { NativeTextMedium, NativeTextBold } from '#/ui/NativeText';
 import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
 import StarField from '#/skins/default/night/ManyStars';
 import ShootingStar from '#/skins/default/ShottingStar';
@@ -8,7 +8,7 @@ import SunBored from '#/skins/default/day/SunBored';
 import DayCloud from '#/skins/default/day/DayCloud';
 import useTimeOfDay from '#/ui/hooks/useTimeOfDay';
 import MoonSleepingFilled from '#/skins/default/night/MoonSleepingFilled';
-import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
+import NavBar_Explore from '#/components/topnavbar/NavBar_Explore';
 
 function DayMode() {
 	const { acct } = useActiveUserSession();
@@ -42,7 +42,7 @@ function DayMode() {
 				>
 					Have a lovely night,
 				</NativeTextMedium>
-				<NativeTextSemiBold
+				<NativeTextBold
 					style={{
 						color: theme.primary,
 						fontSize: 20,
@@ -51,7 +51,7 @@ function DayMode() {
 					}}
 				>
 					{acct.displayName ?? acct.username}
-				</NativeTextSemiBold>
+				</NativeTextBold>
 			</View>
 		</View>
 	);
@@ -85,7 +85,7 @@ function NightMode() {
 				>
 					Have a lovely night,
 				</NativeTextMedium>
-				<NativeTextSemiBold
+				<NativeTextBold
 					style={{
 						color: theme.primary,
 						fontSize: 20,
@@ -94,7 +94,7 @@ function NightMode() {
 					}}
 				>
 					{acct.displayName ?? acct.username}
-				</NativeTextSemiBold>
+				</NativeTextBold>
 			</View>
 		</View>
 	);

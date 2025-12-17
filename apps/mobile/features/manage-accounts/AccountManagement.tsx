@@ -10,9 +10,8 @@ import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
-import AppTabLandingNavbar, {
-	APP_LANDING_PAGE_TYPE,
-} from '#/components/shared/topnavbar/AppTabLandingNavbar';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import { appDimensions } from '#/styles/dimensions';
 
 function SelectAccountStack() {
 	const { theme } = useAppTheme();
@@ -63,44 +62,36 @@ function SelectAccountStack() {
 	}
 
 	return (
-		<FlatList
-			data={SOFTWARE_ARRAY}
-			renderItem={({ item }) => (
-				<AccountManagementListItem
-					data={Data}
-					software={item}
-					onListChange={refresh}
-				/>
-			)}
-			contentContainerStyle={{
-				paddingHorizontal: 4,
-				backgroundColor: theme.palette.bg,
-			}}
-			ListHeaderComponent={
-				<AppTabLandingNavbar
-					type={APP_LANDING_PAGE_TYPE.ALL_ACCOUNTS}
-					menuItems={[
-						{
-							iconId: 'user-guide',
-							onPress: () => {
-								router.navigate(APP_ROUTING_ENUM.PROFILE_GUIDE_ACCOUNTS);
-							},
-						},
-					]}
-				/>
-			}
-			ListFooterComponent={
-				<AppButtonVariantA
-					label={t(`onboarding.addAccountButton`)}
-					loading={false}
-					onClick={onPressAddAccount}
-					style={{ width: 196, marginTop: 32 }}
-				/>
-			}
-			refreshControl={
-				<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
-			}
-		/>
+		<>
+			<NavBar_Simple label={'Manage Accounts'} />
+			<FlatList
+				data={SOFTWARE_ARRAY}
+				renderItem={({ item }) => (
+					<AccountManagementListItem
+						data={Data}
+						software={item}
+						onListChange={refresh}
+					/>
+				)}
+				contentContainerStyle={{
+					paddingHorizontal: 4,
+					backgroundColor: theme.palette.bg,
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
+				}}
+				ListFooterComponent={
+					<AppButtonVariantA
+						label={t(`onboarding.addAccountButton`)}
+						loading={false}
+						onClick={onPressAddAccount}
+						style={{ width: 196, marginTop: 32 }}
+					/>
+				}
+				refreshControl={
+					<RefreshControl refreshing={Refreshing} onRefresh={onRefresh} />
+				}
+				style={{ backgroundColor: theme.background.a0 }}
+			/>
+		</>
 	);
 }
 

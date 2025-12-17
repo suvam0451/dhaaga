@@ -76,7 +76,7 @@ export function NativeTextMedium({
 	);
 }
 
-export function NativeTextSemiBold({
+export function NativeTextBold({
 	style,
 	color,
 	children,

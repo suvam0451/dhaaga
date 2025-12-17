@@ -1,30 +1,12 @@
-import {
-	RefreshControl,
-	ScrollView,
-	StyleProp,
-	StyleSheet,
-	View,
-	ViewStyle,
-} from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { AppIcon } from '#/components/lib/Icon';
-import { router } from 'expo-router';
-import AppTabLandingNavbar, {
-	APP_LANDING_PAGE_TYPE,
-} from '#/components/shared/topnavbar/AppTabLandingNavbar';
-import { useState } from 'react';
-import { AccountService } from '@dhaaga/db';
+import React from 'react';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import {
-	useActiveUserSession,
-	useAppDb,
-	useAppGlobalStateActions,
-	useAppTheme,
-} from '#/states/global/hooks';
-import { AppText } from '#/components/lib/Text';
+import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import ProtocolCards from '../components/ProtocolCards';
+import { NativeTextBold, NativeTextMedium } from '#/ui/NativeText';
 
 type AddAccountLandingFragmentProps = {
 	containerStyle?: StyleProp<ViewStyle>;
@@ -45,29 +27,29 @@ export function AddAccountLandingFragment({
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	return (
 		<View style={containerStyle}>
-			<AppText.SemiBold
+			<NativeTextBold
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				style={[styles.noAccountText]}
 			>
 				Select Platform
-			</AppText.SemiBold>
+			</NativeTextBold>
 			<ProtocolCards onSelectSetPagerId={onSelectSetPagerId} />
 			<View style={styles.tipContainer}>
 				<AppIcon
 					id={'info'}
 					size={24}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
 				/>
-				<AppText.Medium
+				<NativeTextMedium
 					style={[
 						styles.tipText,
 						{
-							color: theme.secondary.a50,
+							color: theme.secondary.a40,
 						},
 					]}
 				>
 					{t(`onboarding.accountCreationNotSupported`)}
-				</AppText.Medium>
+				</NativeTextMedium>
 			</View>
 		</View>
 	);
@@ -78,63 +60,10 @@ export function AddAccountLandingFragment({
  * @constructor
  */
 
-type AppNoAccountProps = {
-	tab: APP_LANDING_PAGE_TYPE;
-};
-
-function AddAccountPresenter({ tab }: AppNoAccountProps) {
-	const [IsRefreshing, setIsRefreshing] = useState(false);
-	const { theme } = useAppTheme();
-	const { acct } = useActiveUserSession();
-	const { db } = useAppDb();
-	const { restoreSession } = useAppGlobalStateActions();
-
-	function onRefresh() {
-		setIsRefreshing(true);
-		try {
-			// possibly locked because of the added/deleted account
-			if (!acct) {
-				AccountService.ensureAccountSelection(db);
-				restoreSession();
-				setIsRefreshing(false);
-			}
-		} catch (e) {
-			setIsRefreshing(false);
-		} finally {
-			setIsRefreshing(false);
-		}
-	}
-
-	return (
-		<ScrollView
-			style={{ height: '100%', backgroundColor: theme.palette.bg }}
-			refreshControl={
-				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
-			}
-		>
-			<AppTabLandingNavbar
-				type={tab}
-				menuItems={[
-					{
-						iconId: 'user-guide',
-						onPress: () => {
-							router.navigate('/user-guide');
-						},
-					},
-				]}
-			/>
-			<AddAccountLandingFragment onSelectSetPagerId={() => {}} />
-		</ScrollView>
-	);
-}
-
-export default AddAccountPresenter;
-
 const styles = StyleSheet.create({
 	noAccountText: {
-		fontSize: 24,
+		fontSize: 28,
 		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_700_BOLD,
 		marginBottom: 24,
 	},
 	selectSnsBox: {

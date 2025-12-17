@@ -9,7 +9,7 @@ import type { FeedObjectType } from '@dhaaga/bridge';
 import {
 	NativeTextMedium,
 	NativeTextNormal,
-	NativeTextSemiBold,
+	NativeTextBold,
 } from '#/ui/NativeText';
 import { AppDividerSoft } from '#/ui/Divider';
 import useAppNavigator from '#/states/useAppNavigator';
@@ -63,9 +63,9 @@ export function FeedListItemView({ item }: SearchResultFeedItemProps) {
 			>
 				<Image source={img} style={styles.avatar} />
 				<View style={styles.labelArea}>
-					<NativeTextSemiBold style={{ fontSize: 16 }}>
+					<NativeTextBold style={{ fontSize: 16 }}>
 						{item.displayName}
-					</NativeTextSemiBold>
+					</NativeTextBold>
 
 					<NativeTextMedium
 						style={{ fontSize: 14 }}

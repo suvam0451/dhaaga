@@ -11,7 +11,6 @@ import type { NodeContent, AppParsedTextNodes } from '@dhaaga/bridge';
 import LinkSegment from '../components/shared/mfm/LinkSegment';
 import EmojiCodeSegment from '../components/shared/mfm/EmojiCodeSegment';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
-import { useMappingHelper } from '@shopify/flash-list';
 
 type NodeProps = {
 	node: NodeContent;
@@ -32,41 +31,11 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 	) {
 		switch (node.type) {
 			case 'text': {
-				return (
-					<RawTextSegment
-						value={node.text}
-						fontFamily={
-							variant === 'displayName'
-								? APP_FONTS.INTER_600_SEMIBOLD
-								: APP_FONTS.ROBOTO_400
-						}
-						emphasis={
-							variant === 'displayName'
-								? APP_COLOR_PALETTE_EMPHASIS.A0
-								: APP_COLOR_PALETTE_EMPHASIS.A10
-						}
-						variant={variant}
-					/>
-				);
+				return <RawTextSegment value={node.text} variant={variant} />;
 			}
 			case 'mention': {
 				if (variant === 'displayName') {
-					return (
-						<RawTextSegment
-							value={node.text}
-							fontFamily={
-								variant === 'displayName'
-									? APP_FONTS.INTER_600_SEMIBOLD
-									: APP_FONTS.ROBOTO_400
-							}
-							emphasis={
-								variant === 'displayName'
-									? APP_COLOR_PALETTE_EMPHASIS.A0
-									: APP_COLOR_PALETTE_EMPHASIS.A10
-							}
-							variant={variant}
-						/>
-					);
+					return <RawTextSegment value={node.text} variant={variant} />;
 				}
 				return (
 					<MentionSegment
@@ -88,16 +57,7 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 				);
 			}
 			case 'tag': {
-				return (
-					<HashtagSegment
-						value={node.text}
-						fontFamily={
-							variant === 'displayName'
-								? APP_FONTS.INTER_600_SEMIBOLD
-								: APP_FONTS.ROBOTO_400
-						}
-					/>
-				);
+				return <HashtagSegment value={node.text} />;
 			}
 			case 'link': {
 				// const mention = mentions.find((o) => o.url === node.url);
@@ -120,30 +80,10 @@ function ParsedNode({ node, variant, mentions, emojiMap, oneLine }: NodeProps) {
 
 				const isHashtag = TextParser.isHashtag(node.url);
 				if (isHashtag) {
-					return (
-						<HashtagSegment
-							value={node.text}
-							fontFamily={
-								variant === 'displayName'
-									? APP_FONTS.INTER_600_SEMIBOLD
-									: APP_FONTS.ROBOTO_500
-							}
-						/>
-					);
+					return <HashtagSegment value={node.text} />;
 				}
 
-				return (
-					<LinkSegment
-						url={node.url}
-						displayName={node.text}
-						fontFamily={
-							variant === 'displayName'
-								? APP_FONTS.INTER_600_SEMIBOLD
-								: APP_FONTS.ROBOTO_400
-						}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				);
+				return <LinkSegment url={node.url} displayName={node.text} />;
 			}
 			default:
 				return <View />;
@@ -212,13 +152,12 @@ function TextAstRendererView({
 	emojiMap,
 	oneLine,
 }: TextAstRendererViewProps) {
-	const { getMappingKey } = useMappingHelper();
 	if (!Array.isArray(tree)) return <View />;
 	return (
 		<View style={style}>
 			{tree.map((item, i) => (
 				<ParsedNode
-					key={getMappingKey(item.uuid, i)}
+					key={i}
 					node={item}
 					variant={variant}
 					mentions={mentions}

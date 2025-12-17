@@ -1,5 +1,4 @@
 export enum APP_FONTS {
-	MONTSERRAT_500_MEDIUM = 'Inter_500Medium',
 	MONTSERRAT_600_SEMIBOLD = 'Inter_600SemiBold',
 	MONTSERRAT_700_BOLD = 'Inter_700Bold',
 	MONTSERRAT_800_EXTRABOLD = 'Inter_800ExtraBold',

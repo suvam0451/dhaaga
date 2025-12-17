@@ -109,87 +109,10 @@ export function AppButtonVariantA({
 	);
 }
 
-export function AppButtonVariantDestructive({
-	label,
-	loading,
-	onClick,
-	onLongClick,
-	opts,
-	customLoadingState,
-}: AppButtonVariantAProps) {
-	function onPress() {
-		if (onClick) {
-			if (opts?.useHaptics) {
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-			}
-			onClick();
-		}
-	}
-
-	function onLongPress() {
-		if (onLongClick && !loading) {
-			onLongClick();
-		}
-	}
-
-	return (
-		<TouchableOpacity
-			style={[
-				appStyles.button,
-				{
-					backgroundColor: 'red',
-					borderRadius: 8,
-				},
-			]}
-			onPress={onPress}
-			onLongPress={onLongPress}
-		>
-			{loading ? (
-				customLoadingState ? (
-					customLoadingState
-				) : (
-					<ActivityIndicator size={20} color={'rgba(255, 255, 255, 0.6)'} />
-				)
-			) : (
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						opacity: 1,
-						fontFamily: 'Inter-Bold',
-					}}
-				>
-					{label}
-				</Text>
-			)}
-		</TouchableOpacity>
-	);
-}
-
 const styles = StyleSheet.create({
 	button: {
 		borderRadius: appDimensions.buttons.borderRadius,
 		paddingVertical: 8,
-	},
-	passiveButtonStyle: {
-		borderColor: 'red',
-		backgroundColor: '#2e6945', // '#cb6483',
-		paddingVertical: 8,
-		paddingHorizontal: 12,
-	},
-	passiveTextStyle: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
-	},
-	activeButtonStyle: {
-		borderColor: '#cb6483',
-		backgroundColor: '#363636',
-		borderRadius: 4,
-		paddingVertical: 8,
-		paddingHorizontal: 12,
-	},
-	activeTextStyle: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });
 

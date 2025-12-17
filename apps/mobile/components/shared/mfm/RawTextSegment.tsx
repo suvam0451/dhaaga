@@ -1,40 +1,41 @@
 import { Text } from 'react-native';
-import { RandomUtil } from '@dhaaga/bridge';
 import { useAppTheme } from '#/states/global/hooks';
-import {
-	APP_COLOR_PALETTE_EMPHASIS,
-	AppThemingUtil,
-} from '#/utils/theming.util';
-import { AppText } from '../../lib/Text';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { TEXT_PARSING_VARIANT } from '#/types/app.types';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 
 type Props = {
 	value: string;
-	fontFamily: string;
-	emphasis: APP_COLOR_PALETTE_EMPHASIS;
 	variant: TEXT_PARSING_VARIANT;
 };
 
-function RawTextSegment({ value, fontFamily, emphasis, variant }: Props) {
+function RawTextSegment({ value, variant }: Props) {
 	const _value = value?.replaceAll(/<br>/g, '\n');
-	const k = RandomUtil.nanoId();
 	const { theme } = useAppTheme();
 
-	let color = AppThemingUtil.getColorForEmphasis(theme.secondary, emphasis);
+	if (!_value) return <Text></Text>;
 
-	if (!_value) return <Text key={k}></Text>;
-
+	if (variant === 'displayName')
+		return (
+			<NativeTextBold
+				style={{
+					color: theme.secondary.a0,
+					fontSize: 16,
+				}}
+				numberOfLines={variant === 'displayName' ? 1 : undefined}
+			>
+				{_value}
+			</NativeTextBold>
+		);
 	return (
-		<AppText.Normal
-			forwardedKey={k}
+		<NativeTextNormal
 			style={{
-				color: color,
-				fontFamily,
+				color: theme.secondary.a0,
 			}}
-			numberOfLines={variant === 'displayName' ? 1 : undefined}
+			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 		>
 			{_value}
-		</AppText.Normal>
+		</NativeTextNormal>
 	);
 }
 

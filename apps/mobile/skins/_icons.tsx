@@ -215,7 +215,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 						</View>
 					);
 				default:
-					return <Ionicons name="home" size={size} color={color} />;
+					return <Ionicons name="map" size={size} color={color} />;
 			}
 		}
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_INACTIVE: {
@@ -232,7 +232,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 						</View>
 					);
 				default:
-					return <Ionicons name="home-outline" size={size} color={color} />;
+					return <Ionicons name="map-outline" size={size} color={color} />;
 			}
 		}
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE: {

@@ -1,29 +1,18 @@
 import {
 	Dimensions,
-	Pressable,
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import {
-	NativeTextMedium,
-	NativeTextNormal,
-	NativeTextSemiBold,
-	NativeTextSpecial,
-} from '#/ui/NativeText';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import { NativeTextBold } from '#/ui/NativeText';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { useAppTheme } from '#/states/global/hooks';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import FreePlanLabel from '#/components/svgs/plans/FreePlanLabel';
 import SupporterPlanLabel from '#/components/svgs/plans/SupporterPlanLabel';
-import BetaPlanLabel from '#/components/svgs/plans/BetaPlanLabel';
-import FlyingMoney from '#/components/svgs/plans/FlyingMoney';
 import FreePlanOverview from '#/features/purchase-plans/components/FreePlanOverview';
-import PagerView from 'react-native-pager-view';
-import BetaPlanOverview from '#/features/purchase-plans/components/BetaPlanOverview';
 import Animated, {
-	clamp,
 	useAnimatedScrollHandler,
 	useAnimatedStyle,
 	useSharedValue,
@@ -32,45 +21,19 @@ import Animated, {
 	runOnJS,
 } from 'react-native-reanimated';
 import ProCrown from '#/components/svgs/plans/free/ProCrown';
-import { useRef } from 'react';
-
-const AnimatedText = Animated.createAnimatedComponent(NativeTextMedium);
-const AnimatedNativeTextSemiBold =
-	Animated.createAnimatedComponent(NativeTextSemiBold);
-type HighlightItem =
-	| { type: 'feature'; title: string; description: string; Icon: any }
-	| {
-			type: 'divider';
-	  };
-
-function BetaPageContent() {
-	const { theme } = useAppTheme();
-
-	const featureList: HighlightItem[] = [
-		{
-			type: 'feature',
-			title: 'Free Services',
-			description: 'Everything from all paid tiers',
-			Icon: <FlyingMoney />,
-		},
-	];
-	return (
-		<>
-			<NativeTextSpecial
-				style={{ fontSize: 32, marginTop: 32, color: theme.primary }}
-			>
-				INCLUDES
-			</NativeTextSpecial>
-		</>
-	);
-}
-
-function SupporterPageContent() {}
-
-function ProPageContent() {}
+import { ReactNode, useRef } from 'react';
 
 const FIXED_CARD_MAX_HEIGHT = 192;
 const COLLAPSED_CARD_HEIGHT = 88;
+
+type PlanCarProps = {
+	label: string;
+	Icon: ReactNode;
+	desc: string;
+	animatedStyle: any;
+};
+
+function PlanCard() {}
 
 function Page() {
 	const { theme } = useAppTheme();
@@ -182,123 +145,91 @@ function Page() {
 							]}
 							onPress={onCardPress}
 						>
-							<AnimatedNativeTextSemiBold
-								style={[
-									{ fontSize: 20, marginBottom: 8, textAlign: 'center' },
-									viewStyle,
-								]}
-							>
-								Free
-							</AnimatedNativeTextSemiBold>
-							<FreePlanLabel size={48} />
-							<AnimatedText
-								style={[{ textAlign: 'center', marginTop: 12 }, viewStyle]}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-							>
-								Free Forever. No take backsies.
-							</AnimatedText>
+							<Animated.View style={viewStyle}>
+								<NativeTextBold
+									style={[
+										{ fontSize: 20, marginBottom: 8, textAlign: 'center' },
+									]}
+								>
+									Free
+								</NativeTextBold>
+								<FreePlanLabel size={48} />
+								<NativeTextBold
+									style={[{ textAlign: 'center', marginTop: 12 }]}
+									emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+								>
+									Free Forever. No take backsies.
+								</NativeTextBold>
+							</Animated.View>
 						</TouchableOpacity>
 					</Animated.View>
+					<Animated.View style={[cardStyle]}>
+						<TouchableOpacity
+							style={[
+								styles.card,
+								{
+									alignItems: 'center',
+									borderColor: theme.primary,
+									backgroundColor: theme.background.a40,
+									marginRight: 12,
+								},
+							]}
+							onPress={onCardPress}
+						>
+							<Animated.View style={viewStyle}>
+								<NativeTextBold
+									style={[
+										{ fontSize: 20, marginBottom: 10, textAlign: 'center' },
+										viewStyle,
+									]}
+								>
+									Supporter
+								</NativeTextBold>
+								<View style={{ width: 48, height: 48 }}>
+									<SupporterPlanLabel />
+								</View>
+								<NativeTextBold
+									style={{ marginTop: 10, textAlign: 'center' }}
+									emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+								>
+									If you like the app, consider buying it!
+								</NativeTextBold>
+							</Animated.View>
+						</TouchableOpacity>
+					</Animated.View>
+					<Animated.View style={[cardStyle]}>
+						<TouchableOpacity
+							style={[
+								styles.card,
+								{
+									alignItems: 'center',
+									borderColor: theme.primary,
+									backgroundColor: theme.background.a40,
+									marginRight: 12,
+								},
+							]}
+							onPress={onCardPress}
+						>
+							<Animated.View style={viewStyle}>
+								<NativeTextBold
+									style={[
+										{ fontSize: 20, marginBottom: 10, textAlign: 'center' },
+										viewStyle,
+									]}
+								>
+									Plus/Pro
+								</NativeTextBold>
+								<View style={{ width: 48, height: 48 }}>
+									<ProCrown />
+								</View>
 
-					<Animated.View style={[cardStyle]}>
-						<TouchableOpacity
-							style={[
-								styles.card,
-								{
-									alignItems: 'center',
-									borderColor: theme.primary,
-									backgroundColor: theme.background.a40,
-									marginRight: 12,
-								},
-							]}
-							onPress={onCardPress}
-						>
-							<AnimatedNativeTextSemiBold
-								style={[
-									{
-										fontSize: 20,
-										marginBottom: 10,
-										textAlign: 'center',
-									},
-									viewStyle,
-								]}
-							>
-								Beta
-							</AnimatedNativeTextSemiBold>
-							<View style={{ width: 48, height: 48 }}>
-								<BetaPlanLabel size={48} />
-							</View>
-							<AnimatedText
-								style={[{ marginTop: 12, textAlign: 'center' }, viewStyle]}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-							>
-								Everything is free while my wallet lasts, xD
-							</AnimatedText>
-						</TouchableOpacity>
-					</Animated.View>
-					<Animated.View style={[cardStyle]}>
-						<TouchableOpacity
-							style={[
-								styles.card,
-								{
-									alignItems: 'center',
-									borderColor: theme.primary,
-									backgroundColor: theme.background.a40,
-									marginRight: 12,
-								},
-							]}
-							onPress={onCardPress}
-						>
-							<AnimatedNativeTextSemiBold
-								style={[
-									{ fontSize: 20, marginBottom: 10, textAlign: 'center' },
-									viewStyle,
-								]}
-							>
-								Supporter
-							</AnimatedNativeTextSemiBold>
-							<View style={{ width: 48, height: 48 }}>
-								<SupporterPlanLabel />
-							</View>
-							<AnimatedText
-								style={[{ marginTop: 10, textAlign: 'center' }, viewStyle]}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-							>
-								If you like the app, consider buying it!
-							</AnimatedText>
-						</TouchableOpacity>
-					</Animated.View>
-					<Animated.View style={[cardStyle]}>
-						<TouchableOpacity
-							style={[
-								styles.card,
-								{
-									alignItems: 'center',
-									borderColor: theme.primary,
-									backgroundColor: theme.background.a40,
-									marginRight: 12,
-								},
-							]}
-							onPress={onCardPress}
-						>
-							<AnimatedNativeTextSemiBold
-								style={[
-									{ fontSize: 20, marginBottom: 10, textAlign: 'center' },
-									viewStyle,
-								]}
-							>
-								Plus/Pro
-							</AnimatedNativeTextSemiBold>
-							<View style={{ width: 48, height: 48 }}>
-								<ProCrown />
-							</View>
-
-							<AnimatedText
-								style={[{ marginTop: 10, textAlign: 'center' }, viewStyle]}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-							>
-								Extra tools for power users.
-							</AnimatedText>
+								<NativeTextBold
+									style={{ marginTop: 10, textAlign: 'center' }}
+									emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+								>
+									Extra tools for power users.
+								</NativeTextBold>
+							</Animated.View>
 						</TouchableOpacity>
 					</Animated.View>
 				</ScrollView>
@@ -308,13 +239,6 @@ function Page() {
 				key={0}
 				animatedHeaderStyle={animatedPagerViewStyle}
 			/>
-			{/*<Animated.View style={[animatedPagerViewStyle]} />*/}
-			{/*<PagerView style={{ flex: 1 }} initialPage={TabIndex}>*/}
-
-			{/*	/!*<View key={1} style={{ flex: 1 }}>*!/*/}
-			{/*	/!*	<BetaPlanOverview key={1} />*!/*/}
-			{/*	/!*</View>*!/*/}
-			{/*</PagerView>*/}
 		</View>
 	);
 }

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useApiGetChatUpdates } from '#/hooks/api/useNotifications';
-import { RefreshControl, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { useAppApiClient } from '#/states/global/hooks';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import NavBar_Inbox from '#/components/shared/topnavbar/NavBar_Inbox';
+import NavBar_Inbox from '#/components/topnavbar/NavBar_Inbox';
 import FeatureNotAvailable from '../components/FeatureNotAvailable';
-import { FlashList } from '@shopify/flash-list';
 import ChatRoomListItemView from '#/features/timelines/view/ChatRoomListItemView';
 import { AppDividerSoft } from '#/ui/Divider';
 import { appDimensions } from '#/styles/dimensions';
@@ -45,7 +44,7 @@ function ChatInboxPagerView() {
 				type={'chats'}
 				animatedStyle={animatedStyle}
 			/>
-			<FlashList
+			<FlatList
 				onScroll={scrollHandler}
 				data={data?.data ?? []}
 				renderItem={({ item }) => <ChatRoomListItemView room={item} />}

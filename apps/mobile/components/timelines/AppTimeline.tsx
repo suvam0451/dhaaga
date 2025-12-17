@@ -2,17 +2,20 @@ import { AppTimelineRendererProps } from '#/components/timelines/shared';
 import { useAppTheme } from '#/states/global/hooks';
 import { useEffect, useState } from 'react';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import { AppDividerSoft } from '#/ui/Divider';
-import NavBar_Feed from '#/components/shared/topnavbar/NavBar_Feed';
-import { FlashList } from '@shopify/flash-list';
+import NavBar_Feed from '#/components/topnavbar/NavBar_Feed';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import { View } from 'react-native';
-import NavBar_Explore from '#/components/shared/topnavbar/NavBar_Explore';
-import NavBar_Inbox from '#/components/shared/topnavbar/NavBar_Inbox';
+import { FlatList, View } from 'react-native';
+import NavBar_Explore from '#/components/topnavbar/NavBar_Explore';
+import NavBar_Inbox from '#/components/topnavbar/NavBar_Inbox';
+import {
+	POST_FEED_INITIAL_NUM_TO_RENDER,
+	POST_FEED_WINDOW_SIZE,
+} from '#/utils/constans';
 
 const navbarConfigs: Record<
 	string,
@@ -119,11 +122,6 @@ function AppTimeline({
 			) : (
 				<View />
 			)}
-			{navbarType === 'sticky' ? (
-				<NavBar_Simple label={label} animatedStyle={animatedStyle} />
-			) : (
-				<View />
-			)}
 			{navbarType === 'updates' ? (
 				<NavBar_Inbox
 					label={label}
@@ -138,7 +136,7 @@ function AppTimeline({
 			) : (
 				<View />
 			)}
-			<FlashList
+			<FlatList
 				onLayout={onLayout}
 				data={items}
 				renderItem={renderItem}
@@ -166,8 +164,11 @@ function AppTimeline({
 				)}
 				removeClippedSubviews={true}
 				keyExtractor={(item) => item.id}
-				onLoad={onListLoad}
+				// onLoad={onListLoad}
 				key={flatListKey}
+				initialNumToRender={POST_FEED_INITIAL_NUM_TO_RENDER}
+				windowSize={POST_FEED_WINDOW_SIZE}
+				maxToRenderPerBatch={POST_FEED_WINDOW_SIZE}
 			/>
 			<TimelineLoadingIndicator
 				numItems={items.length}

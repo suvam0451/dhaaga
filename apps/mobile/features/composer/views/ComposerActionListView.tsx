@@ -2,8 +2,7 @@ import { useAppTheme } from '#/states/global/hooks';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { AppIcon } from '#/components/lib/Icon';
 import { Ionicons } from '@expo/vector-icons';
-import { AppText } from '#/components/lib/Text';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { NativeTextBold } from '#/ui/NativeText';
 
 const ICON_SIZE = 26;
 
@@ -41,20 +40,9 @@ function ComposerActionListView({
 	canUseVideo,
 	canUseGif,
 	canUseCustomEmoji,
-
-	isMediaDisabled,
-	isVideoDisabled,
-	isGifDisabled,
-
 	isCwUsed,
-	mediaCount,
-	isVideoUsed,
-	isGifUsed,
-
 	onCwPressed,
 	onMediaPressed,
-	onVideoPressed,
-	onGifPressed,
 	onCustomEmojiPressed,
 }: Props) {
 	const { theme } = useAppTheme();
@@ -104,27 +92,25 @@ function ComposerActionListView({
 			)}
 			{canUseGif && (
 				<Pressable style={styles.pressableContainer}>
-					<AppText.Medium
+					<NativeTextBold
 						style={{
 							fontSize: 18,
 							color: DEFAULT_COLOR,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						}}
 					>
 						GIF
-					</AppText.Medium>
+					</NativeTextBold>
 				</Pressable>
 			)}
 			<Pressable style={styles.pressableContainer}>
-				<AppText.Medium
+				<NativeTextBold
 					style={{
 						fontSize: 18,
 						color: DEFAULT_COLOR,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 					}}
 				>
 					EN
-				</AppText.Medium>
+				</NativeTextBold>
 			</Pressable>
 		</View>
 	);
