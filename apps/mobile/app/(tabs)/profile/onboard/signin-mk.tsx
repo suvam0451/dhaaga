@@ -1,13 +1,18 @@
-import { Alert } from 'react-native';
+import { View } from 'react-native';
 import { useMiauthLogin } from '@dhaaga/react';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import AccountConfirmationPopup from '#/features/onboarding/AccountConfirmationPopup';
 import AccountDbService from '#/services/db/account-db.service';
-import { useAppDb, useAppPublishers, useHub } from '#/states/global/hooks';
+import {
+	useAppDb,
+	useAppPublishers,
+	useAppTheme,
+	useHub,
+} from '#/states/global/hooks';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
-import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import { AppAuthWebView } from '#/components/lib/WebView';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import { AppAuthWebView } from '#/ui/WebView';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import RoutingUtils from '#/utils/routing.utils';
 
 function MisskeySignInStack() {
 	const params = useLocalSearchParams();
@@ -15,6 +20,7 @@ function MisskeySignInStack() {
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
 
+	const { theme } = useAppTheme();
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
 	const { appEventBus } = useAppPublishers();
@@ -38,16 +44,14 @@ function MisskeySignInStack() {
 			userData,
 		);
 		if (upsertResult) {
-			Alert.alert('Account Added. Refresh if any screen feels outdated.');
 			appEventBus.publish(APP_EVENT_ENUM.ACCOUNT_LIST_CHANGED);
 			loadAccounts();
-			router.replace(APP_ROUTING_ENUM.PROFILE_TAB);
-		} else {
+			RoutingUtils.toAccountManagement();
 		}
 	}
 
 	return (
-		<>
+		<View style={{ backgroundColor: theme.background.a0, flex: 1 }}>
 			<NavBar_Simple label={'Misskey Sign-In'} />
 			<AppAuthWebView
 				uri={_signInUrl}
@@ -64,7 +68,7 @@ function MisskeySignInStack() {
 					}
 				/>
 			)}
-		</>
+		</View>
 	);
 }
 

@@ -69,21 +69,25 @@ class RoutingUtils {
 
 	static toAccountManagement() {
 		router.navigate({
+			pathname: APP_ROUTING_ENUM.MISC_MANAGE_ACCOUNTS,
+		});
+	}
+
+	static toOnboarding() {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.PROFILE_ADD_ACCOUNT,
+		});
+	}
+
+	static toFirstTimeOnboarding() {
+		router.navigate({
 			pathname: APP_ROUTING_ENUM.PROFILE_TAB,
-			params: {
-				requestId: RandomUtil.nanoId(),
-				pagerIndex: 1,
-			},
 		});
 	}
 
 	static toAppSettings() {
 		router.navigate({
-			pathname: APP_ROUTING_ENUM.PROFILE_TAB,
-			params: {
-				requestId: RandomUtil.nanoId(),
-				pagerIndex: 2,
-			},
+			pathname: APP_ROUTING_ENUM.SETTINGS_PAGE,
 		});
 	}
 }

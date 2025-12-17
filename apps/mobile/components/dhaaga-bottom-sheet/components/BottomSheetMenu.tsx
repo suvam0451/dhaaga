@@ -1,16 +1,15 @@
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import {
 	View,
-	Text,
 	Pressable,
 	StyleSheet,
 	StyleProp,
 	ViewStyle,
 } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type Props = {
 	title: string;
@@ -45,16 +44,15 @@ function BottomSheetMenu({
 			{CustomHeader ? (
 				CustomHeader
 			) : (
-				<Text
+				<NativeTextBold
 					style={{
-						fontFamily: APP_FONTS.INTER_700_BOLD,
 						color: theme.textColor.high,
 						fontSize: 20,
 						flex: 1,
 					}}
 				>
 					{title}
-				</Text>
+				</NativeTextBold>
 			)}
 			<View style={{ flexDirection: 'row' }}>
 				{menuItems.map((o, i) => (

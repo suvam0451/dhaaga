@@ -1,8 +1,4 @@
 import { Image } from 'expo-image';
-import { StyleProp, Text, View, ViewStyle } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
-import { Account } from '@dhaaga/db';
-import { useAppTheme } from '#/states/global/hooks';
 
 type AppAvatarProps = {
 	uri: string;

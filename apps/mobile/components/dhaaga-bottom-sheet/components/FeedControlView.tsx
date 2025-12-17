@@ -9,7 +9,7 @@ import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomS
 import {
 	NativeTextMedium,
 	NativeTextNormal,
-	NativeTextSemiBold,
+	NativeTextBold,
 } from '#/ui/NativeText';
 import FeedControlSelections from '#/components/dhaaga-bottom-sheet/components/FeedControlSelections';
 
@@ -56,7 +56,7 @@ function FeedControlView({
 				variant={'raised'}
 				CustomHeader={
 					<View>
-						<NativeTextSemiBold
+						<NativeTextBold
 							style={[
 								styles.title,
 								{
@@ -65,7 +65,7 @@ function FeedControlView({
 							]}
 						>
 							{title}
-						</NativeTextSemiBold>
+						</NativeTextBold>
 						{subtitle && (
 							<NativeTextMedium
 								style={[

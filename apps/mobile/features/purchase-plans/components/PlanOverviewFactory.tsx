@@ -1,8 +1,9 @@
-import { FlatList, View } from 'react-native';
-import { NativeTextMedium } from '#/ui/NativeText';
+import { View } from 'react-native';
+import { NativeTextMedium, NativeTextBold } from '#/ui/NativeText';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppDividerSoft } from '#/ui/Divider';
 import Animated from 'react-native-reanimated';
+import { useAppTheme } from '#/states/global/hooks';
 
 export type PlanOverviewFactoryData =
 	| { type: 'feature'; title: string; description: string; Icon: any }
@@ -18,6 +19,7 @@ type Props = {
 };
 
 function PlanOverviewFactory({ items, Header, Footer, scrollHandler }: Props) {
+	const { theme } = useAppTheme();
 	return (
 		<Animated.FlatList
 			data={items}
@@ -31,16 +33,13 @@ function PlanOverviewFactory({ items, Header, Footer, scrollHandler }: Props) {
 							>
 								{item.Icon}
 								<View style={{ marginLeft: 8 }}>
-									<NativeTextMedium
-										style={{ fontSize: 20 }}
+									<NativeTextBold
+										style={{ fontSize: 20, color: theme.primary }}
 										emphasis={APP_COLOR_PALETTE_EMPHASIS.A0}
 									>
 										{item.title}
-									</NativeTextMedium>
-									<NativeTextMedium
-										style={{ marginTop: 4 }}
-										emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-									>
+									</NativeTextBold>
+									<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}>
 										{item.description}
 									</NativeTextMedium>
 								</View>

@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import {
+	FlatList,
 	Pressable,
 	RefreshControl,
 	ScrollView,
@@ -19,7 +21,7 @@ import DriverService, { AppModulesProps } from '#/services/driver.service';
 import useApiMe from '#/hooks/useApiMe';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
-import MyProfileNavbar from '#/components/shared/topnavbar/MyProfileNavbar';
+import NavBar_Home from '#/components/topnavbar/NavBar_Home';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import AccountHomeModuleItem from './components/AccountHomeModuleItem';
 import { useTranslation } from 'react-i18next';
@@ -27,16 +29,21 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import AccountLoadError from '#/features/home/views/AccountLoadError';
 import AccountMissingError from '#/features/home/views/AccountMissingError';
 import MyAccountOverview from '#/features/home/components/MyAccountOverview';
-import { NativeTextSemiBold, NativeTextSpecial } from '#/ui/NativeText';
+import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
+import RoutingUtils from '#/utils/routing.utils';
 
-function MyHome() {
+function Home() {
 	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { driver } = useAppApiClient();
 	const { refetch, data } = useApiMe();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-	const { session } = useAppActiveSession();
+
+	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
+		t,
+		driver,
+	);
 
 	function _refresh() {
 		setIsRefreshing(true);
@@ -44,14 +51,6 @@ function MyHome() {
 			setIsRefreshing(false);
 		});
 	}
-
-	if (!session?.target) return <AccountMissingError />;
-	if (session.target && session.state !== 'valid') return <AccountLoadError />;
-
-	const serverModules: AppModulesProps[] = DriverService.getAccountModules(
-		t,
-		driver,
-	);
 
 	const appModules: AppModulesProps[] = [
 		{
@@ -80,7 +79,103 @@ function MyHome() {
 		},
 	];
 
+	function navigateTo(to: string) {
+		router.navigate(to);
+	}
+
+	return (
+		<ScrollView
+			refreshControl={
+				<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
+			}
+			style={{
+				backgroundColor: theme.palette.bg,
+			}}
+		>
+			<MyAccountOverview user={data} />
+			<View style={{ marginVertical: 4 }} />
+			<TimeOfDayGreeting acct={acct} />
+			<View style={{ marginVertical: 12 }} />
+			<FlatList
+				data={serverModules}
+				numColumns={2}
+				renderItem={({ item }) => (
+					<AccountHomeModuleItem
+						desc={item.desc}
+						label={item.label}
+						iconId={item.iconId}
+						onPress={() => {
+							navigateTo(item.to);
+						}}
+					/>
+				)}
+				style={{
+					marginHorizontal: 8,
+				}}
+			/>
+			<View style={{ marginVertical: 8 }} />
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginRight: 16,
+				}}
+			>
+				<NativeTextSpecial
+					style={[styles.sectionHeader, { color: theme.primary }]}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+				>
+					{t(`profile.appFeatures.sectionLabel`)}
+				</NativeTextSpecial>
+				<Pressable
+					style={{
+						borderWidth: 1.5,
+						borderRadius: 8,
+						backgroundColor: theme.background.a50,
+						paddingVertical: 6,
+						paddingHorizontal: 16,
+					}}
+					onPress={() => {
+						router.navigate(APP_ROUTING_ENUM.SETTINGS_PLANS);
+					}}
+				>
+					<NativeTextBold style={{}}>FREE</NativeTextBold>
+				</Pressable>
+			</View>
+			<Animated.FlatList
+				data={appModules}
+				numColumns={2}
+				renderItem={({ item }) => (
+					<AccountHomeModuleItem
+						desc={item.desc}
+						label={item.label}
+						iconId={item.iconId}
+						onPress={() => {
+							navigateTo(item.to);
+						}}
+					/>
+				)}
+				style={{
+					marginHorizontal: 8,
+				}}
+			/>
+		</ScrollView>
+	);
+}
+
+function MyHome() {
+	const { theme } = useAppTheme();
+	const { session } = useAppActiveSession();
+
 	const MENU_ITEMS = [
+		{
+			iconId: 'person' as APP_ICON_ENUM,
+			onPress: RoutingUtils.toAccountManagement,
+		},
+		{
+			iconId: 'cog' as APP_ICON_ENUM,
+			onPress: RoutingUtils.toAppSettings,
+		},
 		{
 			iconId: 'user-guide' as APP_ICON_ENUM,
 			onPress: () => {
@@ -89,86 +184,22 @@ function MyHome() {
 		},
 	];
 
-	function navigateTo(to: string) {
-		router.navigate(to);
-	}
+	const Component = useMemo(() => {
+		if (!session?.target) return <AccountMissingError />;
+		if (session.target && session.state !== 'valid')
+			return <AccountLoadError />;
+		return <Home />;
+	}, [session]);
 
 	return (
-		<View style={{ backgroundColor: theme.palette.bg, height: '100%' }}>
-			<ScrollView
-				refreshControl={
-					<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
-				}
-			>
-				<MyProfileNavbar menuItems={MENU_ITEMS} />
-				<MyAccountOverview user={data} />
-				<View style={{ marginVertical: 4 }} />
-				<TimeOfDayGreeting acct={acct} />
-				<View style={{ marginVertical: 12 }} />
-				<Animated.FlatList
-					data={serverModules}
-					numColumns={2}
-					renderItem={({ item }) => (
-						<AccountHomeModuleItem
-							desc={item.desc}
-							label={item.label}
-							iconId={item.iconId}
-							onPress={() => {
-								navigateTo(item.to);
-							}}
-						/>
-					)}
-					style={{
-						marginHorizontal: 8,
-					}}
-				/>
-				<View style={{ marginVertical: 8 }} />
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						marginRight: 16,
-					}}
-				>
-					<NativeTextSpecial
-						style={[styles.sectionHeader, { color: theme.primary }]}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					>
-						{t(`profile.appFeatures.sectionLabel`)}
-					</NativeTextSpecial>
-					<Pressable
-						style={{
-							borderWidth: 1.5,
-							borderRadius: 8,
-							backgroundColor: theme.background.a50,
-							paddingVertical: 6,
-							paddingHorizontal: 16,
-						}}
-						onPress={() => {
-							router.navigate(APP_ROUTING_ENUM.SETTINGS_PLANS);
-						}}
-					>
-						<NativeTextSemiBold style={{}}>FREE</NativeTextSemiBold>
-					</Pressable>
-				</View>
-				<Animated.FlatList
-					data={appModules}
-					numColumns={2}
-					renderItem={({ item }) => (
-						<AccountHomeModuleItem
-							desc={item.desc}
-							label={item.label}
-							iconId={item.iconId}
-							onPress={() => {
-								navigateTo(item.to);
-							}}
-						/>
-					)}
-					style={{
-						marginHorizontal: 8,
-					}}
-				/>
-			</ScrollView>
+		<View
+			style={{
+				flex: 1,
+				backgroundColor: theme.background.a0,
+			}}
+		>
+			<NavBar_Home menuItems={MENU_ITEMS} />
+			{Component}
 		</View>
 	);
 }

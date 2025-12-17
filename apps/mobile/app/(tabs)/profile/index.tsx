@@ -1,48 +1,12 @@
-import { AppPagerView } from '#/ui/PagerView';
-import { useAppTheme } from '#/states/global/hooks';
 import MyHome from '#/features/home/MyHome';
-import AccountManagement from '#/features/manage-accounts/AccountManagement';
-import AppSettings from '#/features/settings/AppSettings';
+import { useAppActiveSession } from '#/states/global/hooks';
+import { AppAuthenticationPager } from '#/app/(tabs)/profile/onboard/add-account';
 
-const renderScene = (index: number) => {
-	switch (index) {
-		case 0:
-			return <MyHome />;
-		case 1:
-			return <AccountManagement />;
-		case 2:
-			return <AppSettings />;
-	}
-};
+function FifthTab() {
+	const { session } = useAppActiveSession();
 
-function Page() {
-	const { theme } = useAppTheme();
-
-	const labels = [
-		{
-			label: 'Home',
-			id: 'home',
-		},
-		{
-			label: 'Accounts',
-			id: 'accounts',
-		},
-		{
-			label: 'Settings',
-			id: 'settings',
-		},
-	];
-
-	return (
-		<AppPagerView
-			renderScene={renderScene}
-			tabCount={3}
-			labels={labels}
-			showBottomNav
-			props={{ backgroundColor: theme.background.a0 }}
-			scrollEnabled={false}
-		/>
-	);
+	if (session.state === 'no-account') return <AppAuthenticationPager />;
+	return <MyHome />;
 }
 
-export default Page;
+export default FifthTab;

@@ -3,7 +3,6 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { Pressable, StyleSheet, FlatList } from 'react-native';
 import { AppText } from '#/components/lib/Text';
-import { APP_FONTS } from '#/styles/AppFonts';
 import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
 
 type ProtocolCardsProps = {
@@ -94,16 +93,8 @@ function ProtocolCards({ onSelectSetPagerId }: ProtocolCardsProps) {
 export default ProtocolCards;
 
 const styles = StyleSheet.create({
-	noAccountText: {
-		// fontSize: 22,
-		textAlign: 'center',
-		marginTop: 48,
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		marginBottom: 32,
-	},
 	selectSnsBox: {
 		paddingVertical: 20,
-		// paddingBottom: 16,
 		alignItems: 'center',
 		margin: 10,
 		borderRadius: 16,

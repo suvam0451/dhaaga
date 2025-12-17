@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
-import { APP_FONTS } from '#/styles/AppFonts';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -68,10 +67,6 @@ function ComposerAutoCompletion() {
 }
 
 const styles = StyleSheet.create({
-	emojiText: {
-		marginLeft: 4,
-		fontFamily: APP_FONTS.ROBOTO_500,
-	},
 	autoCompletionResultAnimatedContainer: {
 		borderRadius: 8,
 		paddingHorizontal: 4,

@@ -15,10 +15,8 @@ import { useAppTheme } from '#/states/global/hooks';
 import { useEffect, useRef, useState } from 'react';
 import {
 	Directions,
-	FlingGestureHandlerEventPayload,
 	Gesture,
 	GestureDetector,
-	GestureStateChangeEvent,
 } from 'react-native-gesture-handler';
 
 const AUTOPLAY_INTERVAL = 10000;
@@ -74,13 +72,11 @@ function WelcomeScreenFeatureShowcase() {
 		animatedIndex.value = withTiming(Index, { duration: 250 });
 	}, [Index]);
 
-	const start =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
-	const end =
-		useRef<GestureStateChangeEvent<FlingGestureHandlerEventPayload>>(null);
+	let startX = 0;
+	let finalX = 0;
 
 	function ranOnJs() {
-		if (start.current.absoluteX > end.current.absoluteX) {
+		if (startX < finalX) {
 			setIndex((prev) => (prev + 1) % DISPLAY_ITEMS.length);
 		} else {
 			setIndex(
@@ -93,10 +89,10 @@ function WelcomeScreenFeatureShowcase() {
 	const fling = Gesture.Fling()
 		.direction(Directions.LEFT | Directions.RIGHT)
 		.onBegin((event) => {
-			start.current = event;
+			startX = event.absoluteX;
 		})
 		.onEnd((event) => {
-			end.current = event;
+			finalX = event.absoluteX;
 			scheduleOnRN(ranOnJs);
 		});
 

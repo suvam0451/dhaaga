@@ -1,8 +1,7 @@
 import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
-import { AppText } from '#/components/lib/Text';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/states/global/hooks';
 import { CustomEmojiObjectType } from '@dhaaga/bridge';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type Props = {
 	suggestions: CustomEmojiObjectType[];
@@ -41,11 +40,11 @@ function SuggestedEmojiListView({ suggestions, onPick }: Props) {
 							borderRadius: 4,
 						}}
 					/>
-					<AppText.Medium
+					<NativeTextBold
 						style={[styles.emojiText, { color: theme.complementary }]}
 					>
 						{item.shortCode}
-					</AppText.Medium>
+					</NativeTextBold>
 				</Pressable>
 			)}
 		/>
@@ -57,7 +56,6 @@ export default SuggestedEmojiListView;
 const styles = StyleSheet.create({
 	emojiText: {
 		marginLeft: 4,
-		fontFamily: APP_FONTS.ROBOTO_500,
 	},
 	autoCompletionResultAnimatedContainer: {
 		borderRadius: 8,

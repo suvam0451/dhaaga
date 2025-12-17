@@ -100,7 +100,7 @@ function HubAddUserBottomSheet() {
 							style={[
 								styles.textInput,
 								{
-									fontFamily: APP_FONTS.ROBOTO_500,
+									fontWeight: 'bold',
 									color: theme.secondary.a20,
 									marginLeft: 12,
 									flex: 1,

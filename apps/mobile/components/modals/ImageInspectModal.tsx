@@ -14,11 +14,10 @@ import { AppIcon } from '../lib/Icon';
 import { useImageAutoHeight } from '#/hooks/app/useImageDims';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useAppTheme } from '#/states/global/hooks';
-import { AppText } from '../lib/Text';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { LinkingUtils } from '#/utils/linking.utils';
 import { AppDownloadService } from '#/services/app.service';
 import { RandomUtil } from '@dhaaga/bridge';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type StatSectionProps = {
 	icon: any;
@@ -41,12 +40,12 @@ function StatSection({ icon, count, last, label, onPress }: StatSectionProps) {
 			style={{ paddingHorizontal: 4, flexDirection: 'row' }}
 			onPress={onPress}
 		>
-			<AppText.Medium
-				style={{ fontFamily: APP_FONTS.INTER_500_MEDIUM, marginRight: 6 }}
+			<NativeTextBold
+				style={{ marginRight: 6 }}
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 			>
 				{label}
-			</AppText.Medium>
+			</NativeTextBold>
 			{icon}
 		</Pressable>
 	);
@@ -57,10 +56,7 @@ type ImageInspectPostMetricsProps = {
 	imageUrl: string;
 };
 
-function ImageInspectPostMetrics({
-	post,
-	imageUrl,
-}: ImageInspectPostMetricsProps) {
+function ImageInspectPostMetrics({ imageUrl }: ImageInspectPostMetricsProps) {
 	const { theme } = useAppTheme();
 	const { hide } = useGlobalState(
 		useShallow((o) => ({
@@ -273,7 +269,6 @@ function ImageInspectModal() {
 			<View style={styles.backdrop} />
 			<ImageInspectPostMetrics post={PostData} imageUrl={imgUrl} />
 			<GestureDetector gesture={composed}>
-				{/*@ts-ignore-next-line*/}
 				<Animated.View
 					style={[
 						styles.box,
@@ -281,12 +276,10 @@ function ImageInspectModal() {
 							height: Dimensions.get('window').height - 108,
 							borderRadius: 8,
 						},
-						// @ts-ignore-next-line
 						animatedStyle,
 					]}
 				>
 					{Data.length > 0 && (
-						// @ts-ignore-next-line
 						<Image
 							source={{
 								uri: Data[0].url,
@@ -312,10 +305,6 @@ const styles = StyleSheet.create({
 		height: '100%',
 		width: '100%',
 		position: 'absolute',
-		// alignItems: 'center',
-		// opacity: 0.8,
-		// justifyContent: 'flex-start',
-		// flex: 1,
 	},
 	imageInspectorPostMetricsContainer: {
 		position: 'absolute',

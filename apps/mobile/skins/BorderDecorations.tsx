@@ -4,7 +4,7 @@ import { useAppTheme } from '#/states/global/hooks';
 import ChristmasMistleToe from '#/skins/christmas/ChristmasMistleToe';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';
-import { NativeTextSemiBold } from '#/ui/NativeText';
+import { NativeTextBold } from '#/ui/NativeText';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -15,14 +15,14 @@ export function QuotedPostBorderDecorations({ children }: { children: any }) {
 			<View>
 				<View style={styles.container}>
 					<AppIcon id={'quote'} size={14} color={theme.complementary} />
-					<NativeTextSemiBold
+					<NativeTextBold
 						style={{
 							color: theme.complementary,
 							marginLeft: 4,
 						}}
 					>
 						Quoted this Post
-					</NativeTextSemiBold>
+					</NativeTextBold>
 				</View>
 				<View style={styles.inner}>
 					<View>
@@ -43,14 +43,14 @@ export function QuotedPostBorderDecorations({ children }: { children: any }) {
 		<View>
 			<View style={styles.container}>
 				<AppIcon id={'quote'} size={14} color={theme.complementary} />
-				<NativeTextSemiBold
+				<NativeTextBold
 					style={{
 						color: theme.complementary,
 						marginLeft: 4,
 					}}
 				>
 					Quoted this Post
-				</NativeTextSemiBold>
+				</NativeTextBold>
 			</View>
 			<View
 				style={[
@@ -74,14 +74,14 @@ export function AttachedLinkBorderDecorations({ children }: { children: any }) {
 			<View>
 				<View style={styles.container}>
 					<AppIcon id={'quote'} size={14} color={theme.complementary} />
-					<NativeTextSemiBold
+					<NativeTextBold
 						style={{
-							color: theme.complementary,
+							color: theme.secondary.a20,
 							marginLeft: 4,
 						}}
 					>
 						Shared this Link
-					</NativeTextSemiBold>
+					</NativeTextBold>
 				</View>
 				<View style={styles.inner}>
 					<ChristmasMistleToe
@@ -100,22 +100,22 @@ export function AttachedLinkBorderDecorations({ children }: { children: any }) {
 
 	return (
 		<View>
-			<View style={styles.container}>
-				<AppIcon id={'quote'} size={14} color={theme.complementary} />
-				<NativeTextSemiBold
-					style={{
-						color: theme.complementary,
-						marginLeft: 4,
-					}}
-				>
-					Shared this Link
-				</NativeTextSemiBold>
-			</View>
+			{/*<View style={styles.container}>*/}
+			{/*	<AppIcon id={'quote'} size={14} color={theme.complementary} />*/}
+			{/*	<NativeTextBold*/}
+			{/*		style={{*/}
+			{/*			color: theme.complementary,*/}
+			{/*			marginLeft: 4,*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		Shared this Link*/}
+			{/*	</NativeTextBold>*/}
+			{/*</View>*/}
 			<View
 				style={[
 					styles.inner,
 					{
-						borderColor: theme.complementary,
+						borderColor: theme.secondary.a50,
 						borderWidth: 2.5,
 					},
 				]}
@@ -133,13 +133,12 @@ const styles = StyleSheet.create({
 		marginBottom: SECTION_MARGIN_BOTTOM,
 	},
 	inner: {
-		paddingHorizontal: 10,
+		paddingHorizontal: 4,
 		paddingVertical: 4,
 		borderWidth: 3,
 		borderRadius: 6,
 		borderColor: '#0d7a00',
 		borderStyle: 'dashed',
-		marginBottom: SECTION_MARGIN_BOTTOM,
 		position: 'relative',
 	},
 });

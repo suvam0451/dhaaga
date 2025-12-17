@@ -14,13 +14,12 @@ import { AppIcon } from '#/components/lib/Icon';
 import { AppAccountSelectionItem } from '#/components/common/app/Account';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { DialogFactory } from '#/utils/dialog-factory';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
-import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import {
 	NativeTextMedium,
 	NativeTextNormal,
-	NativeTextSemiBold,
+	NativeTextBold,
 } from '#/ui/NativeText';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
@@ -206,11 +205,11 @@ function Page() {
 							alignSelf: 'center',
 						}}
 					>
-						<NativeTextSemiBold
+						<NativeTextBold
 							style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
 						>
 							Add Profile
-						</NativeTextSemiBold>
+						</NativeTextBold>
 					</View>
 				</Pressable>
 			</ScrollView>

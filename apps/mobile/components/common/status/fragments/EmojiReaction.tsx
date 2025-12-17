@@ -1,19 +1,13 @@
 import { EmojiDto, styles } from './_shared.types';
 import { useMemo, useState } from 'react';
-import {
-	TouchableOpacity,
-	View,
-	Text,
-	StyleSheet,
-	Pressable,
-} from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Pressable } from 'react-native';
 import EmojiReactionImage from './EmojiReactionImage';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { ActivityPubReactionsService } from '@dhaaga/bridge';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { useAppPublishers, useAppTheme } from '#/states/global/hooks';
 import { Loader } from '#/components/lib/Loader';
 import { withPostItemContext } from '#/components/containers/WithPostItemContext';
+import { NativeTextBold } from '#/ui/NativeText';
 
 function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	const { dto: postItem } = withPostItemContext();
@@ -66,26 +60,23 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 	if (dto.type === 'text') {
 		return (
 			<TouchableOpacity style={CONTAINER_STYLE} onPress={onReactionPress}>
-				<Text
+				<NativeTextBold
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-						// unicode emojis detected
 						color:
 							dto.name.length < 3 ? theme.secondary.a10 : theme.secondary.a30,
 						fontSize: 14,
 					}}
 				>
 					{dto.name}
-				</Text>
-				<Text
+				</NativeTextBold>
+				<NativeTextBold
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 						color: theme.secondary.a10,
 						marginLeft: 8,
 					}}
 				>
 					{dto.count}
-				</Text>
+				</NativeTextBold>
 			</TouchableOpacity>
 		);
 	}
@@ -102,15 +93,14 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 					height={dto.height}
 					width={dto.width}
 				/>
-				<Text
+				<NativeTextBold
 					style={{
-						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 						color: theme.secondary.a10,
 						marginLeft: 8,
 					}}
 				>
 					{dto.count}
-				</Text>
+				</NativeTextBold>
 			</Pressable>
 		);
 	}

@@ -15,13 +15,13 @@ import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { AccountCollection } from '@dhaaga/db';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppCtaButton } from '#/components/lib/Buttons';
 import { appDimensions } from '#/styles/dimensions';
-import { NativeTextNormal, NativeTextSemiBold } from '#/ui/NativeText';
+import { NativeTextNormal, NativeTextBold } from '#/ui/NativeText';
 
 type ListItemViewProps = {
 	item: AccountCollection;
@@ -46,14 +46,14 @@ function ListItemView({ onPress, onLongPress, item }: ListItemViewProps) {
 				<AppIcon id={'albums-outline'} size={24} color={theme.secondary.a20} />
 			</View>
 			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
-				<NativeTextSemiBold
+				<NativeTextBold
 					style={{
 						fontSize: 18,
 						color: theme.primary,
 					}}
 				>
 					{item.alias}
-				</NativeTextSemiBold>
+				</NativeTextBold>
 				<NativeTextNormal
 					style={{
 						color: theme.secondary.a20,

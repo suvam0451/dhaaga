@@ -23,7 +23,6 @@
  * Grab the opposite end of the color wheel and
  * shift the hue by +/- 30 to get this palette
  */
-import { APP_FONTS } from '../styles/AppFonts';
 import { StyleProp, TextStyle } from 'react-native';
 import { commentThreadPalette } from '../styles/comment-threads';
 
@@ -126,23 +125,6 @@ export class AppThemingUtil {
 		return '#' + ('000000' + randomColor).slice(-6);
 	}
 
-	static getFontFamilyForVariant(variant: AppTextVariant) {
-		switch (variant) {
-			case AppTextVariant.BODY_NORMAL:
-			case AppTextVariant.BODY_MEDIUM:
-			case AppTextVariant.BODY_SEMIBOLD:
-			case AppTextVariant.BODY_BOLD:
-				return undefined;
-			case AppTextVariant.H6:
-			case AppTextVariant.H5:
-			case AppTextVariant.H4:
-			case AppTextVariant.H3:
-			case AppTextVariant.H2:
-			case AppTextVariant.H1:
-				return APP_FONTS.INTER_600_SEMIBOLD;
-		}
-	}
-
 	/**
 	 * Use this for testing/applying typography
 	 * @param variant
@@ -154,62 +136,52 @@ export class AppThemingUtil {
 			case AppTextVariant.BODY_NORMAL:
 				return {
 					fontSize: 15,
-					fontFamily: APP_FONTS.ROBOTO_400,
-					lineHeight: 19,
+					fontWeight: 'normal',
 				};
 			case AppTextVariant.BODY_MEDIUM:
 				return {
 					fontSize: 15,
-					fontFamily: APP_FONTS.ROBOTO_500,
-					lineHeight: 19,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.BODY_SEMIBOLD:
 				return {
 					fontSize: 14,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					// lineHeight: 18,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.BODY_BOLD:
 				return {
-					fontSize: 14,
-					fontFamily: APP_FONTS.INTER_700_BOLD,
-					lineHeight: 18,
+					fontSize: 15,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.H6:
 				return {
-					fontSize: 18,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 22,
+					fontSize: 20,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.H5:
 				return {
-					fontSize: 20,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 24,
+					fontSize: 22,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.H4:
 				return {
-					fontSize: 22,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 26,
+					fontSize: 24,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.H3:
 				return {
-					fontSize: 24,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 28,
+					fontSize: 26,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.H2:
 				return {
-					fontSize: 26,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 30,
+					fontSize: 28,
+					fontWeight: 'bold',
 				};
 			case AppTextVariant.H1:
 				return {
-					fontSize: 28,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
-					lineHeight: 32,
+					fontSize: 30,
+					fontWeight: 'bold',
 				};
 		}
 	}

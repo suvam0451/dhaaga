@@ -15,7 +15,7 @@ import { generateFacets } from '#/utils/atproto-facets.utils';
 function useChatroom() {
 	const { db } = useAppDb();
 	const { acct } = useActiveUserSession();
-	const { driver, client, server } = useAppApiClient();
+	const { client } = useAppApiClient();
 
 	const [State, dispatch] = useReducer(chatroomReducer, chatroomReducerDefault);
 

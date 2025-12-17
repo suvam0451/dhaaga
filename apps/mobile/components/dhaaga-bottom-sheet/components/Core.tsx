@@ -6,10 +6,8 @@ import ComposerPresenter from '#/features/composer/presenters/ComposerPresenter'
 import UserPeekSheetPresenter from '#/components/dhaaga-bottom-sheet/preview/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from '../modules/AppBottomSheetPostMoreActions';
 import ABS_Select_Account from '../modules/ABS_Select_Account';
-import ThemeSelectBottomSheet from '../modules/ThemeSelectBottomSheet';
 import ABS_Link_Preview from '../modules/ABS_Link_Preview';
 import ABS_TagDetails from '../modules/ABS_TagDetails';
-import { APP_FONTS } from '#/styles/AppFonts';
 import AppBottomSheetUserMoreActions from '../modules/AppBottomSheetUserMoreActions';
 import HubAddTagBottomSheet from '#/components/dhaaga-bottom-sheet/hub/HubAddTagBottomSheet';
 import HubAddUserBottomSheet from '#/components/dhaaga-bottom-sheet/hub/HubAddUserBottomSheet';
@@ -90,8 +88,6 @@ function Factory() {
 			return <ShowReactionDetailsBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.SELECT_ACCOUNT:
 			return <ABS_Select_Account />;
-		case APP_BOTTOM_SHEET_ENUM.SWITCH_THEME_PACK:
-			return <ThemeSelectBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.FEED_SETTINGS:
 			return <FeedOptionsBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.LINK:
@@ -187,10 +183,6 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
 		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
 		zIndex: appVerticalIndex.sheetContent,
-	},
-	text: {
-		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD, // 400 previously
 	},
 });
 

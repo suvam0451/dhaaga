@@ -8,6 +8,7 @@ import { ScrollView, View, Text } from 'react-native';
 import WithAppStatusItemContext from '../../containers/WithPostItemContext';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { APP_FONTS } from '#/styles/AppFonts';
+import { NativeTextBold } from '#/ui/NativeText';
 
 function AuthoredPostPreviewBottomSheet() {
 	const { ctx, stateId } = useAppBottomSheet();
@@ -41,17 +42,16 @@ function AuthoredPostPreviewBottomSheet() {
 					marginBottom: 32,
 				}}
 			>
-				<Text
+				<NativeTextBold
 					style={{
 						color: theme.secondary.a10,
 						fontSize: 20,
-						fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
 						marginLeft: 4,
 						flex: 1,
 					}}
 				>
 					Published 🎉
-				</Text>
+				</NativeTextBold>
 				{/*<TouchableOpacity*/}
 				{/*	style={[*/}
 				{/*		styles.buttonContainer,*/}

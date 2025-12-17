@@ -114,6 +114,7 @@ function createUserSessionSlice(
 					state.userSession = {
 						...state.userSession,
 						...DEFAULT_STATE,
+						state: totalAccounts === 0 ? 'no-account' : 'invalid',
 						error:
 							totalAccounts === 0
 								? 'No accounts found. Please add an account to continue.'

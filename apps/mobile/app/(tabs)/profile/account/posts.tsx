@@ -46,6 +46,8 @@ function Content() {
 		<PostTimelineView
 			label={'My Posts'}
 			queryResult={queryResult}
+			navbarType={'simple'}
+			flatListKey={'account/posts'}
 			skipTimelineInit
 		/>
 	);

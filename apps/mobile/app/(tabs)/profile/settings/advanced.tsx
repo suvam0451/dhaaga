@@ -1,9 +1,9 @@
-import { Text, StyleSheet } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { StyleSheet } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
+import { NativeTextBold } from '#/ui/NativeText';
 
 function Page() {
 	const { theme } = useAppTheme();
@@ -14,16 +14,16 @@ function Page() {
 
 	return (
 		<SettingPageBuilder label={t(`advanced.navbar_Label`)}>
-			<Text style={[styles.text, { color: theme.secondary.a20 }]}>
+			<NativeTextBold style={[styles.text, { color: theme.secondary.a20 }]}>
 				{t(`discover.moreSoon.firstHalf`, {
 					ns: LOCALIZATION_NAMESPACE.CORE,
 				})}
-				<Text style={{ color: theme.complementary }}>
+				<NativeTextBold style={{ color: theme.complementary }}>
 					{t(`discover.moreSoon.secondHalf`, {
 						ns: LOCALIZATION_NAMESPACE.CORE,
 					})}
-				</Text>
-			</Text>
+				</NativeTextBold>
+			</NativeTextBold>
 		</SettingPageBuilder>
 	);
 }
@@ -32,7 +32,6 @@ export default Page;
 
 const styles = StyleSheet.create({
 	text: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginTop: '50%',
 		fontSize: 18,
 		textAlign: 'center',

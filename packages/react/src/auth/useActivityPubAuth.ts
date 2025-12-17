@@ -75,7 +75,7 @@ function useActivityPubAuth(
 				_clientSecret,
 			);
 
-			const { data: verified, error } = await verifyCredentialsActivitypub(
+			const data = await verifyCredentialsActivitypub(
 				instance /**
 				 * Pleroma/Akkoma give
 				 * us another token, while one
@@ -87,13 +87,8 @@ function useActivityPubAuth(
 				token || Code!, // fucking yolo it, xDD
 			);
 
-			if (error) {
-				setError(error.code);
-				return null;
-			} else {
-				setUserData(verified);
-				return { userData: verified, accessToken: token ?? Code };
-			}
+			setUserData(data);
+			return { userData: data, accessToken: token ?? Code };
 		} catch (e) {
 			return null;
 		} finally {

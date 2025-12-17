@@ -4,7 +4,7 @@ import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import useApiBuildPostThread from '#/hooks/api/useApiBuildPostThread';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import StatusItem from '#/features/post-item/PostTimelineEntryView';
 import PostCommentThreadControls from '#/features/posts/features/detail-view/presenters/PostCommentThreadControls';

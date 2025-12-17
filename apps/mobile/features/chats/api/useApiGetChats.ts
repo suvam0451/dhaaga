@@ -22,7 +22,6 @@ function useApiGetChatroom(roomId: string) {
 		const result = await client.notifications.getChatDetails(roomId);
 		switch (driver) {
 			case KNOWN_SOFTWARE.BLUESKY: {
-				console.log(result);
 				return ChatParser.parse<unknown>(result, client);
 				// const myDid = AccountMetadataService.getAccountDid(db, acct);
 				// const _data: ChatBskyConvoGetConvo.OutputSchema = result.data;

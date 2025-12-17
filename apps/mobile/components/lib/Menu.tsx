@@ -6,13 +6,12 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import APP_ICON_ENUM, { AppIcon } from './Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import { Loader } from './Loader';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
 import { AppText } from './Text';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type AppMenuOptionType = {
 	appIconId: any;
@@ -68,16 +67,15 @@ export function AppMenuItem({
 					paddingRight: 4,
 				}}
 			>
-				<Text
+				<NativeTextBold
 					style={{
 						color: theme.secondary.a10,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						fontSize: 18,
 						marginBottom: 2,
 					}}
 				>
 					{_label}
-				</Text>
+				</NativeTextBold>
 				{desc && (
 					<Text
 						style={{
@@ -163,64 +161,11 @@ type AppBottomSheetMenuWithBackNavigationProps = {
 	nextLoading?: boolean;
 };
 
-type AppBottomSheetMenuHeaderProps = {
-	title: string;
-	desc?: string;
-	menuItems: {
-		iconId: string;
-		onPress: () => void;
-	}[];
-};
-
 /**
  *
  * @constructor
  */
 export class AppBottomSheetMenu {
-	static Header({ title, menuItems }: AppBottomSheetMenuHeaderProps) {
-		const { theme } = useAppTheme();
-		return (
-			<View
-				style={{
-					marginVertical: 16,
-					justifyContent: 'space-between',
-					flexDirection: 'row',
-					marginHorizontal: 16,
-					alignItems: 'center',
-					marginTop: 32,
-				}}
-			>
-				<Text
-					style={{
-						fontFamily: APP_FONTS.INTER_700_BOLD,
-						color: theme.textColor.high,
-						fontSize: 20,
-						flex: 1,
-					}}
-				>
-					{title}
-				</Text>
-				<View>
-					{menuItems.map((o, i) => (
-						<Pressable
-							key={i}
-							style={{
-								paddingHorizontal: 8,
-							}}
-							onPress={o.onPress}
-						>
-							<AppIcon
-								id={o.iconId as APP_ICON_ENUM}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-								onPress={o.onPress}
-							/>
-						</Pressable>
-					))}
-				</View>
-			</View>
-		);
-	}
-
 	static WithBackNavigation({
 		onBack,
 		onNext,
@@ -250,15 +195,14 @@ export class AppBottomSheetMenu {
 					}}
 				>
 					<AppIcon id={'chevron-left'} color={theme.complementary} />
-					<Text
+					<NativeTextBold
 						style={{
 							color: theme.complementary,
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							fontSize: 16,
 						}}
 					>
 						{backLabel || 'Back'}
-					</Text>
+					</NativeTextBold>
 				</Pressable>
 				<View
 					style={{

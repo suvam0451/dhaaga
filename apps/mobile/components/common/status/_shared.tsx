@@ -103,7 +103,7 @@ export function SavedPostMoreOptionsButton({
 /**
  * For replies
  *
- * Slightly less padding that the above variant
+ * Slightly less padding than the above variant
  * @param post
  * @constructor
  */

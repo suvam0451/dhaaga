@@ -32,11 +32,6 @@ export const APP_THEME = {
 	CHAT_BUBBLE_CLIENT_SIDE: 'rgba(10,46,52,0.87)',
 };
 
-export const APP_THIRD_PARTY_BRANDING = {
-	MASTODON_DARK_BG: '#410044',
-	MISSKEY_DARK_BG: '#326624',
-};
-
 export const APP_FONT = {
 	// Base on text emphasis, no transparency
 	HIGH_EMPHASIS: '#f5f5f5',

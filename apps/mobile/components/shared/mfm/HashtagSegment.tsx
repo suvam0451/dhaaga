@@ -1,12 +1,11 @@
 import { Text } from 'react-native';
-import { RandomUtil } from '@dhaaga/bridge';
-import { AppText } from '../../lib/Text';
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { NativeTextNormal } from '#/ui/NativeText';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 
 type Props = {
 	value: string;
-	fontFamily: string;
 };
 
 function HashtagSegment({ value }: Props) {
@@ -22,26 +21,22 @@ function HashtagSegment({ value }: Props) {
 		});
 	}
 
-	const k = RandomUtil.nanoId();
-
 	return (
-		<Text key={k} onPress={onPress}>
-			<AppText.Normal
+		<Text onPress={onPress}>
+			<NativeTextNormal
 				style={{
-					color: theme.secondary.a40,
+					color: theme.secondary.a50,
 					fontSize: 12,
 				}}
 			>
 				#
-			</AppText.Normal>
-			<AppText.Normal
+			</NativeTextNormal>
+			<NativeTextNormal
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 				onPress={onPress}
-				style={{
-					color: theme.complementary,
-				}}
 			>
 				{_value}
-			</AppText.Normal>
+			</NativeTextNormal>
 		</Text>
 	);
 }

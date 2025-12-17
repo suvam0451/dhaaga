@@ -1,15 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '#/styles/AppFonts';
 import PostButton from './PostButton';
 import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '../../../../lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import useComposer from '#/states/app/useComposer';
 import { PostInspector } from '@dhaaga/bridge';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 
 /**
  * Indicates in which context this reply is being composed
@@ -24,7 +23,7 @@ function ReplyIndicator() {
 	const _target = PostInspector.getContentTarget(state.parent);
 	return (
 		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-			<AppText.Medium
+			<NativeTextNormal
 				style={[
 					{
 						flexShrink: 1,
@@ -33,7 +32,7 @@ function ReplyIndicator() {
 				]}
 			>
 				{t(`quickPost.replyingTo`)}
-			</AppText.Medium>
+			</NativeTextNormal>
 			<View
 				style={{
 					flexDirection: 'row',
@@ -45,7 +44,7 @@ function ReplyIndicator() {
 					source={{ uri: _target.postedBy.avatarUrl }}
 					style={{ width: 24, height: 24, borderRadius: 8 }}
 				/>
-				<AppText.Medium
+				<NativeTextNormal
 					style={[
 						{
 							maxWidth: 208,
@@ -56,7 +55,7 @@ function ReplyIndicator() {
 					numberOfLines={1}
 				>
 					{_target.postedBy.handle}
-				</AppText.Medium>
+				</NativeTextNormal>
 			</View>
 		</View>
 	);
@@ -91,13 +90,13 @@ function ComposerTopMenu() {
 					<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
 				</View>
 				<View style={{ flexGrow: 1, marginLeft: 6 }}>
-					<AppText.SemiBold
+					<NativeTextBold
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={[styles.displayName]}
 					>
 						{acct?.displayName}
-					</AppText.SemiBold>
-					<Text
+					</NativeTextBold>
+					<NativeTextBold
 						style={[
 							styles.username,
 							{
@@ -106,7 +105,7 @@ function ComposerTopMenu() {
 						]}
 					>
 						@{acct?.username}
-					</Text>
+					</NativeTextBold>
 				</View>
 				<PostButton />
 			</View>
@@ -139,7 +138,6 @@ const styles = StyleSheet.create({
 	},
 	username: {
 		fontSize: 13,
-		fontFamily: APP_FONTS.INTER_500_MEDIUM,
 		marginLeft: 4,
 	},
 });

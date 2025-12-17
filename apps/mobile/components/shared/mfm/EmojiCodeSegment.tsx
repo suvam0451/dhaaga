@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Text } from 'react-native';
 import { Image, ImageErrorEventData, ImageLoadEventData } from 'expo-image';
 import { type CustomEmojiObjectType, RandomUtil } from '@dhaaga/bridge';
 import {
@@ -7,17 +6,17 @@ import {
 	AppThemingUtil,
 } from '#/utils/theming.util';
 import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
+import { NativeTextMedium } from '#/ui/NativeText';
 
 type Props = {
 	value: string;
 	emojiMap: Map<string, string>;
 	emphasis: APP_COLOR_PALETTE_EMPHASIS;
-	fontFamily: string;
 };
 
 const EMOJI_HEIGHT = 20;
 
-function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
+function EmojiCodeSegment({ emojiMap, value, emphasis }: Props) {
 	const [ReactionData, setReactionData] = useState<CustomEmojiObjectType>(null);
 	const [EmojiWidth, setEmojiWidth] = useState(EMOJI_HEIGHT);
 	const { theme } = useAppTheme();
@@ -45,9 +44,9 @@ function EmojiCodeSegment({ emojiMap, value, emphasis, fontFamily }: Props) {
 
 	if (!ReactionData)
 		return (
-			<Text key={k} style={{ color, fontFamily }}>
-				{`:${value}:`}
-			</Text>
+			<NativeTextMedium
+				color={theme.secondary.a50}
+			>{`:${value}:`}</NativeTextMedium>
 		);
 
 	return (

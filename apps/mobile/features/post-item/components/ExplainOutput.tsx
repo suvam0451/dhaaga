@@ -1,7 +1,7 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
+import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	fromLang: string;
@@ -19,6 +19,7 @@ type Props = {
  * @constructor
  */
 function ExplainOutput({ text, fromLang, toLang, additionalInfo }: Props) {
+	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{
@@ -52,37 +53,34 @@ function ExplainOutput({ text, fromLang, toLang, additionalInfo }: Props) {
 						<Ionicons color={'#bb86fc'} name={'language-outline'} size={15} />
 					</View>
 					<View>
-						<Text
+						<NativeTextBold
 							style={{
 								color: 'rgba(187,134,252,0.87)',
-								fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 							}}
 						>
 							{` ${fromLang} -> ${toLang}`}
-						</Text>
+						</NativeTextBold>
 					</View>
 				</View>
 				<View>
-					<Text
+					<NativeTextBold
 						style={{
-							color: APP_FONT.DISABLED,
+							color: theme.secondary.a20,
 							textAlign: 'right',
-							fontFamily: APP_FONTS.INTER_500_MEDIUM,
 							fontSize: 13,
 						}}
 					>
 						{additionalInfo}
-					</Text>
+					</NativeTextBold>
 				</View>
 			</View>
-			<Text
+			<NativeTextNormal
 				style={{
-					color: APP_FONT.MONTSERRAT_BODY,
-					fontFamily: APP_FONTS.INTER_400_REGULAR,
+					color: theme.secondary.a20,
 				}}
 			>
 				{text}
-			</Text>
+			</NativeTextNormal>
 		</View>
 	);
 }

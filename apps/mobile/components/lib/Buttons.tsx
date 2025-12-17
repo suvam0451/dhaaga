@@ -12,11 +12,11 @@ import {
 } from 'react-native';
 import { APP_FONT, APP_THEME } from '#/styles/AppTheme';
 import * as Haptics from 'expo-haptics';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from './Text';
 import { appDimensions } from '#/styles/dimensions';
 import appStyles from '#/styles/AppStyles';
+import { NativeTextBold } from '#/ui/NativeText';
 
 const BUTTON_KINDS = [
 	'primary',
@@ -90,13 +90,12 @@ export function AppButtonVariantA({
 			disabled={disabled}
 		>
 			{loading && <ActivityIndicator size="small" color={'black'} />}
-			<Text
+			<NativeTextBold
 				style={[
 					{
 						color: variant === 'secondary' ? theme.secondary.a10 : 'black',
 						// opacity: 1,
 						fontSize: 16,
-						fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 						textAlign: 'center',
 						marginLeft: loading ? 8 : 0,
 					},
@@ -104,63 +103,7 @@ export function AppButtonVariantA({
 				]}
 			>
 				{label}
-			</Text>
-		</TouchableOpacity>
-	);
-}
-
-export function AppButtonVariantDestructive({
-	label,
-	loading,
-	onClick,
-	onLongClick,
-	opts,
-	customLoadingState,
-}: AppButtonVariantAProps) {
-	function onPress() {
-		if (onClick) {
-			if (opts?.useHaptics) {
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-			}
-			onClick();
-		}
-	}
-
-	function onLongPress() {
-		if (onLongClick && !loading) {
-			onLongClick();
-		}
-	}
-
-	return (
-		<TouchableOpacity
-			style={[
-				appStyles.button,
-				{
-					backgroundColor: 'red',
-					borderRadius: 8,
-				},
-			]}
-			onPress={onPress}
-			onLongPress={onLongPress}
-		>
-			{loading ? (
-				customLoadingState ? (
-					customLoadingState
-				) : (
-					<ActivityIndicator size={20} color={'rgba(255, 255, 255, 0.6)'} />
-				)
-			) : (
-				<Text
-					style={{
-						color: APP_FONT.MONTSERRAT_BODY,
-						opacity: 1,
-						fontFamily: 'Inter-Bold',
-					}}
-				>
-					{label}
-				</Text>
-			)}
+			</NativeTextBold>
 		</TouchableOpacity>
 	);
 }
@@ -169,27 +112,6 @@ const styles = StyleSheet.create({
 	button: {
 		borderRadius: appDimensions.buttons.borderRadius,
 		paddingVertical: 8,
-	},
-	passiveButtonStyle: {
-		borderColor: 'red',
-		backgroundColor: '#2e6945', // '#cb6483',
-		paddingVertical: 8,
-		paddingHorizontal: 12,
-	},
-	passiveTextStyle: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
-	},
-	activeButtonStyle: {
-		borderColor: '#cb6483',
-		backgroundColor: '#363636',
-		borderRadius: 4,
-		paddingVertical: 8,
-		paddingHorizontal: 12,
-	},
-	activeTextStyle: {
-		fontFamily: APP_FONTS.INTER_700_BOLD,
-		color: APP_FONT.MONTSERRAT_BODY,
 	},
 });
 
@@ -275,14 +197,13 @@ export function AppButtonBottomSheetAction({
 			onPress={onPress}
 		>
 			{label && (
-				<Text
+				<NativeTextBold
 					style={{
 						color: disabled ? APP_FONT.DISABLED : APP_FONT.MONTSERRAT_BODY,
-						fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
 					}}
 				>
 					{label}
-				</Text>
+				</NativeTextBold>
 			)}
 			{loading ? (
 				<ActivityIndicator

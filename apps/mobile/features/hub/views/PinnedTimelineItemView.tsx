@@ -13,10 +13,8 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { AppText } from '#/components/lib/Text';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { Image } from 'expo-image';
-import { NativeTextH6 } from '#/ui/NativeText';
+import { NativeTextBold, NativeTextH6 } from '#/ui/NativeText';
 
 type Props = {
 	pinId: number;
@@ -97,7 +95,6 @@ function PinnedTimelineItemView({
 						)}
 					</View>
 					<NativeTextH6
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{
 							color: theme.complementary,
 						}}
@@ -105,7 +102,7 @@ function PinnedTimelineItemView({
 					>
 						{label}
 					</NativeTextH6>
-					<AppText.Medium
+					<NativeTextBold
 						style={{
 							width: 96,
 							color: theme.secondary.a40,
@@ -113,7 +110,7 @@ function PinnedTimelineItemView({
 						numberOfLines={1}
 					>
 						{server}
-					</AppText.Medium>
+					</NativeTextBold>
 				</TouchableOpacity>
 			</Animated.View>
 		</View>
@@ -126,10 +123,6 @@ const styles = StyleSheet.create({
 	root: {
 		marginTop: 16,
 		marginHorizontal: 8,
-	},
-	text: {
-		fontFamily: APP_FONTS.MONTSERRAT_600_SEMIBOLD,
-		fontSize: 18,
 	},
 	buttonContainer: {
 		maxWidth: '50%',

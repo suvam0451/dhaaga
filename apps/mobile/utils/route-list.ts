@@ -29,6 +29,7 @@ export enum APP_ROUTING_ENUM {
 
 	// 5 Profile
 	PROFILE_TAB = '/profile',
+	MISC_MANAGE_ACCOUNTS = '/profile/manage-accounts',
 	// 5.1 -- Account Integrations
 	PROFILE_GUIDE_ACCOUNTS = '/profile/user-guide-accounts',
 	PROFILE_ADD_ACCOUNT = '/profile/onboard/add-account',

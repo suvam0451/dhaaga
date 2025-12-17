@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { APP_FONT } from '../../../styles/AppTheme';
-import { APP_FONTS } from '../../../styles/AppFonts';
+import { APP_FONT } from '#/styles/AppTheme';
 
 type PleromaPasteTokenProps = {
 	domain: string;
@@ -39,7 +38,6 @@ const styles = StyleSheet.create({
 		textDecorationStyle: undefined,
 		color: APP_FONT.MONTSERRAT_HEADER,
 		fontSize: 16,
-		fontFamily: APP_FONTS.INTER_400_REGULAR,
 	},
 });
 

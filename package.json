@@ -1,8 +1,8 @@
 {
 	"name": "dhaaga",
-	"version": "0.17.2",
+	"version": "0.18.0",
 	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
-	"author": "Debashish Patra <mailto:hi@suvam.io>",
+	"author": "Debashish Patra <mailto:suvam0451@icloud.com>",
 	"homepage": "https://suvam.io/dhaaga",
 	"license": "AGPL-3.0-or-later",
 	"private": true,
@@ -16,7 +16,7 @@
 		"build:react": "npm run build --workspace=@dhaaga/react",
 		"build:web": "npm run build --workspace apps/web",
 		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
-		"link-assets:mobile": "cp -r ./apps/_shared/assets/* ./apps/mobile/assets",
+		"link-assets:mobile": "mkdir -p ./apps/mobile/assets && cp -r ./apps/_shared/assets/* ./apps/mobile/assets",
 		"link-assets:web": "cp -r ./apps/_shared/assets ./apps/web/public",
 		"link:all": "npm run link-assets:mobile && npm run link-assets:web",
 		"build-deps": "npm run build:all && npm run link:all"
@@ -39,7 +39,7 @@
 		"react-dom": "19.1.0"
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20251216.1",
+		"@typescript/native-preview": "^7.0.0-dev.20251217.1",
 		"prettier": "^3.7.4"
 	},
 	"type": "module"

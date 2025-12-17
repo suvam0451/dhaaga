@@ -1,10 +1,10 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
 import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
+import { NativeTextBold } from '#/ui/NativeText';
 
 export type AccountCreationPreviewProps = {
 	avatar: string;
@@ -87,39 +87,37 @@ function AccountConfirmationPopup({
 	return (
 		<View
 			style={[
-				styles.sheetRoot,
+				styles.root,
 				{
 					backgroundColor: theme.background.a20,
 				},
 			]}
 		>
-			<Text
+			<NativeTextBold
 				style={{
 					marginVertical: 20,
 					color: theme.secondary.a10,
-					fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 					textAlign: 'center',
 					fontSize: 20,
 				}}
 			>
 				Confirm your account
-			</Text>
+			</NativeTextBold>
 			<View
 				style={{
 					marginBottom: 16,
 				}}
 			>
-				<Text
+				<NativeTextBold
 					style={{
 						marginBottom: 12,
 						color: theme.secondary.a30,
-						fontFamily: APP_FONTS.INTER_500_MEDIUM,
 						textAlign: 'center',
 					}}
 				>
 					A valid token was detected. Proceed with adding the account shown
 					below ?
-				</Text>
+				</NativeTextBold>
 			</View>
 			{userData && <UserDataPreview {...userData} />}
 			<AppButtonVariantA
@@ -139,7 +137,7 @@ function AccountConfirmationPopup({
 }
 
 const styles = StyleSheet.create({
-	sheetRoot: {
+	root: {
 		paddingHorizontal: 12,
 		paddingBottom: 54 + 32,
 		borderTopLeftRadius: 32,

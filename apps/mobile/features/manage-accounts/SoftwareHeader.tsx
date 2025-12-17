@@ -1,19 +1,15 @@
-import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleProp, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { APP_FONTS } from '#/styles/AppFonts';
 import useKnownSoftware from '#/hooks/app/useKnownSoftware';
-import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
 	software: string;
 	iconSizeMultiplier?: number;
-	addText?: boolean;
 	height?: number;
 	style?: StyleProp<ViewStyle>;
 };
 
-function SoftwareHeader({ software, addText, height = 64, style }: Props) {
-	const { theme } = useAppTheme();
+function SoftwareHeader({ software, height = 64, style }: Props) {
 	const Theming = useKnownSoftware(software);
 
 	const logo = Theming.logo;
@@ -29,28 +25,8 @@ function SoftwareHeader({ software, addText, height = 64, style }: Props) {
 					height: height,
 				}}
 			/>
-			{addText ? (
-				<Text
-					style={[
-						styles.accountCategoryText,
-						{ color: theme.textColor.medium },
-					]}
-				>
-					{Theming?.label}
-				</Text>
-			) : (
-				<View />
-			)}
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	accountCategoryText: {
-		fontSize: 16,
-		marginLeft: 10,
-		fontFamily: APP_FONTS.MONTSERRAT_700_BOLD,
-	},
-});
 
 export default SoftwareHeader;

@@ -1,6 +1,6 @@
 import { useAppTheme } from '#/states/global/hooks';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 
 function HubAddTagBottomSheet() {
 	const { theme } = useAppTheme();
@@ -14,16 +14,18 @@ function HubAddTagBottomSheet() {
 
 	return (
 		<ScrollView>
-			<Text style={[styles.sheetTitle, { color: theme.secondary.a10 }]}>
+			<NativeTextBold
+				style={[styles.sheetTitle, { color: theme.secondary.a10 }]}
+			>
 				{title}
-			</Text>
+			</NativeTextBold>
 			{desc.map((o, i) => (
-				<Text
+				<NativeTextNormal
 					key={i}
 					style={[styles.sheetDesc, { color: theme.secondary.a30 }]}
 				>
 					{o}
-				</Text>
+				</NativeTextNormal>
 			))}
 		</ScrollView>
 	);
@@ -35,7 +37,6 @@ const styles = StyleSheet.create({
 	sheetTitle: {
 		fontSize: 28,
 		textAlign: 'center',
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginTop: 48,
 		marginBottom: 24,
 	},

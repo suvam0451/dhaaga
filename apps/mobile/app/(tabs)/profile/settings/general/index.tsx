@@ -1,21 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import AppSettingBooleanToggle from '#/components/screens/settings/fragments/AppSettingBooleanToggle';
 import { useState } from 'react';
 import { AppDivider } from '#/components/lib/Divider';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
 import { APP_SETTING_KEY } from '#/services/settings.service';
-import useAppSettings from '#/features/settings/interactors/useAppSettings';
+import useAppSettings from '#/hooks/app/useAppSettings';
 import { LocaleOptions } from '#/i18n/data';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
-import { NativeTextMedium } from '#/ui/NativeText';
+import { NativeTextBold, NativeTextMedium } from '#/ui/NativeText';
+import AppSettingBooleanToggle from '#/components/screens/settings/fragments/AppSettingBooleanToggle';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -141,7 +140,7 @@ function Page() {
 				<AppIcon id={'chevron-right'} size={28} />
 			</View>
 
-			<Text style={[styles.text, { color: theme.secondary.a20 }]}>
+			<NativeTextBold style={[styles.text, { color: theme.secondary.a20 }]}>
 				{t(`discover.moreSoon.firstHalf`, {
 					ns: LOCALIZATION_NAMESPACE.CORE,
 				})}
@@ -150,7 +149,7 @@ function Page() {
 						ns: LOCALIZATION_NAMESPACE.CORE,
 					})}
 				</Text>
-			</Text>
+			</NativeTextBold>
 		</SettingPageBuilder>
 	);
 }
@@ -159,7 +158,6 @@ export default Page;
 
 const styles = StyleSheet.create({
 	text: {
-		fontFamily: APP_FONTS.INTER_600_SEMIBOLD,
 		marginTop: '50%',
 		fontSize: 18,
 		textAlign: 'center',

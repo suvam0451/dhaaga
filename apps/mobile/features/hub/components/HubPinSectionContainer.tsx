@@ -1,8 +1,7 @@
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '#/components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { NativeTextSpecial } from '#/ui/NativeText';
 
 type Props = {
 	label: string;
@@ -23,25 +22,23 @@ function HubPinSectionContainer({ style, children, label, onPressAdd }: Props) {
 					marginBottom: 8,
 				}}
 			>
-				<Text
+				<NativeTextSpecial
 					style={[
 						styles.sectionLabel,
 						{
-							color: theme.secondary.a10,
-							fontFamily: APP_FONTS.BEBAS_NEUE_400,
+							color: theme.secondary.a0,
 							fontSize: 32,
 						},
 					]}
 				>
 					{label}
-				</Text>
+				</NativeTextSpecial>
 
 				<AppIcon
 					id={'add'}
 					containerStyle={{ padding: 6 }}
 					onPress={onPressAdd}
 					size={28}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
 				/>
 			</View>
 			{children}

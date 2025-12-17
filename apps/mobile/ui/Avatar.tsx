@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
@@ -15,6 +15,7 @@ function Avatar({ uri, onPressed, onLongPressed }: Props) {
 			onPress={onPressed}
 			onLongPress={onLongPressed}
 			style={styles.avatar}
+			delayPressIn={200}
 		>
 			<Image
 				style={{

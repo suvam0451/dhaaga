@@ -1,107 +1,22 @@
-import { ScrollView, StyleSheet, View, Pressable } from 'react-native';
+import {
+	ScrollView,
+	StyleSheet,
+	View,
+	TouchableOpacity,
+	FlatList,
+} from 'react-native';
 import { router } from 'expo-router';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import AppTabLandingNavbar, {
-	APP_LANDING_PAGE_TYPE,
-} from '#/components/shared/topnavbar/AppTabLandingNavbar';
 import { useAppTheme } from '#/states/global/hooks';
-import { CoffeeIconOnly } from './components/Coffee';
-import { LinkingUtils } from '#/utils/linking.utils';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import { AppText } from '#/components/lib/Text';
-
-function Header() {
-	return (
-		<View
-			style={{
-				marginTop: 20,
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'flex-start',
-				paddingHorizontal: 10,
-			}}
-		/>
-	);
-}
-
-export function Footer({ hideVersion }: { hideVersion?: boolean }) {
-	const { theme } = useAppTheme();
-	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-	const ICON_COLOR = theme.complementary;
-	const ICON_SIZE = 32;
-
-	return (
-		<View style={{ marginTop: 32 }}>
-			<View style={styles.iconRowContainer}>
-				<Ionicons
-					name={'share-social'}
-					size={ICON_SIZE}
-					color={ICON_COLOR}
-					style={{ padding: 10 }}
-					onPress={LinkingUtils.shareAppLinkWithFriends}
-				/>
-				<Ionicons
-					name="logo-discord"
-					size={ICON_SIZE}
-					color={ICON_COLOR}
-					style={{ padding: 10 }}
-					onPress={LinkingUtils.openDiscordLink}
-				/>
-				<Ionicons
-					name="logo-github"
-					size={ICON_SIZE}
-					color={ICON_COLOR}
-					style={{ padding: 10 }}
-					onPress={LinkingUtils.openGithubLink}
-				/>
-				<Ionicons
-					name="globe-outline"
-					size={ICON_SIZE}
-					color={ICON_COLOR}
-					style={{ padding: 10 }}
-					onPress={LinkingUtils.openProjectWebsite}
-				/>
-				<View
-					style={{
-						width: 1,
-						height: '100%',
-						backgroundColor: theme.secondary.a50,
-						marginHorizontal: 6,
-						borderRadius: 12,
-					}}
-				/>
-				<CoffeeIconOnly
-					containerStyle={{
-						alignSelf: 'center',
-						marginLeft: 8,
-					}}
-				/>
-			</View>
-			<AppText.SemiBold
-				style={[
-					styles.metadataText,
-					{ color: theme.secondary.a40, fontSize: 15 },
-				]}
-			>
-				{t(`setting.footer`)}
-			</AppText.SemiBold>
-			{!hideVersion && (
-				<AppText.SemiBold
-					style={{
-						color: theme.primary,
-						textAlign: 'center',
-						fontSize: 16,
-					}}
-				>
-					v0.17.2
-				</AppText.SemiBold>
-			)}
-		</View>
-	);
-}
+import { NativeTextBold } from '#/ui/NativeText';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import { appDimensions } from '#/styles/dimensions';
+import { AppDividerSoft } from '#/ui/Divider';
+import SettingsFooter from '#/features/settings/components/SettingsFooter';
 
 type SettingCategoryListItemProps = {
 	label: string;
@@ -120,33 +35,35 @@ function SettingCategoryListItem({
 	const ARROW_COLOR = theme.secondary.a30;
 
 	return (
-		<Pressable
+		<TouchableOpacity
 			style={[styles.collapsibleSettingsSection]}
 			onPress={() => {
 				if (to) {
 					router.navigate(to);
 				}
 			}}
+			delayPressIn={200}
 		>
 			<View style={{ width: 24, height: 24, marginRight: 6 }}>{Icon}</View>
 			<View style={styles.settingCategoryItemTextarea}>
-				<AppText.SemiBold
+				<NativeTextBold
 					style={[
 						styles.collapsibleSettingsLabel,
 						{ color: theme.secondary.a0 },
 					]}
 				>
 					{label}
-				</AppText.SemiBold>
+				</NativeTextBold>
 				{desc && (
-					<AppText.Normal
+					<NativeTextBold
 						style={{
-							color: theme.secondary.a20,
+							color: theme.secondary.a30,
 							fontSize: 14,
+							marginTop: 2,
 						}}
 					>
 						{desc}
-					</AppText.Normal>
+					</NativeTextBold>
 				)}
 			</View>
 
@@ -155,7 +72,7 @@ function SettingCategoryListItem({
 					<Ionicons name="chevron-forward" size={24} color={ARROW_COLOR} />
 				</View>
 			)}
-		</Pressable>
+		</TouchableOpacity>
 	);
 }
 
@@ -224,66 +141,49 @@ function SettingCategoryList() {
 	];
 
 	return (
-		<View style={{ width: '100%', flexGrow: 1, paddingHorizontal: 8 }}>
-			{items.map((o, i) => (
+		<FlatList
+			data={items}
+			renderItem={({ item }) => (
 				<SettingCategoryListItem
-					key={i}
-					label={o.label}
-					to={o.to}
-					Icon={o.Icon}
-					desc={o.desc}
+					label={item.label}
+					to={item.to}
+					Icon={item.Icon}
+					desc={item.desc}
 				/>
-			))}
-		</View>
+			)}
+			contentContainerStyle={{ paddingHorizontal: 10 }}
+			ItemSeparatorComponent={() => (
+				<AppDividerSoft style={{ marginVertical: 10 }} />
+			)}
+		/>
 	);
 }
 
 function AppSettings() {
 	const { theme } = useAppTheme();
 	return (
-		<ScrollView
-			style={{
-				paddingBottom: 16,
-				backgroundColor: theme.palette.bg,
-			}}
-		>
-			<AppTabLandingNavbar
-				type={APP_LANDING_PAGE_TYPE.APP_SETTINGS}
-				menuItems={[
-					{
-						iconId: 'user-guide',
-						onPress: () => {
-							router.navigate(APP_ROUTING_ENUM.PROFILE_SETTINGS_GUIDE);
-						},
-					},
-				]}
-			/>
-			<Header />
-			<SettingCategoryList />
-			<View style={{ marginTop: 64 }}>
-				<Footer />
-			</View>
-		</ScrollView>
+		<>
+			<NavBar_Simple label={'App Settings'} />
+			<ScrollView
+				style={{
+					paddingBottom: 16,
+					backgroundColor: theme.palette.bg,
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,
+				}}
+			>
+				<SettingCategoryList />
+				<SettingsFooter />
+			</ScrollView>
+		</>
 	);
 }
 
 const styles = StyleSheet.create({
-	settingSectionWithIcon: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginVertical: 4,
-		marginHorizontal: 8,
-		paddingVertical: 4,
-		justifyContent: 'center',
-	},
 	collapsibleSettingsSection: {
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginVertical: 4,
-		marginHorizontal: 8,
-		paddingVertical: 10,
 	},
 	collapsibleSettingsLabel: {
 		fontSize: 18,

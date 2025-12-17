@@ -21,7 +21,14 @@ function Generator() {
 		}),
 	);
 
-	return <PostTimelineView label={'My Bookmarks'} queryResult={queryResult} />;
+	return (
+		<PostTimelineView
+			navbarType={'simple'}
+			label={'My Bookmarks'}
+			queryResult={queryResult}
+			flatListKey={'account/bookmarks'}
+		/>
+	);
 }
 
 function Page() {

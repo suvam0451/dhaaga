@@ -2,7 +2,7 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { AppDividerSoft } from '#/ui/Divider';
 import { ReactNode } from 'react';
-import { NativeTextMedium } from '#/ui/NativeText';
+import { NativeTextBold } from '#/ui/NativeText';
 import { useAppTheme } from '#/states/global/hooks';
 
 type Props = {
@@ -49,21 +49,21 @@ function AppSegmentedControl({
 				renderItem={({ item }) => (
 					<Pressable
 						style={{
-							paddingVertical: 16,
 							paddingHorizontal: 10,
 						}}
 						onPress={item.onPress}
 						onLongPress={item.onLongPress}
 					>
-						<NativeTextMedium
+						<NativeTextBold
 							style={{
 								textAlign: 'center',
 								fontSize: 18,
+								marginVertical: 'auto',
 								color: item.active ? theme.primary : theme.secondary.a20,
 							}}
 						>
 							{item.label}
-						</NativeTextMedium>
+						</NativeTextBold>
 					</Pressable>
 				)}
 				style={{ flex: 1, width: '100%' }}

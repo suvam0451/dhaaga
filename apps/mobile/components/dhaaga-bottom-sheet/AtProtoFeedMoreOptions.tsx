@@ -20,7 +20,7 @@ import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomS
 import {
 	NativeTextMedium,
 	NativeTextNormal,
-	NativeTextSemiBold,
+	NativeTextBold,
 } from '#/ui/NativeText';
 import HubToFeedAllocatorView from '#/features/hub/allocators/HubToFeedAllocatorView';
 
@@ -59,9 +59,9 @@ function AtProtoFeedMoreOptions() {
 							}}
 						/>
 						<View style={{ flexGrow: 1, marginLeft: 8 }}>
-							<NativeTextSemiBold style={{ fontSize: 16 }}>
+							<NativeTextBold style={{ fontSize: 16 }}>
 								{feed.displayName}
-							</NativeTextSemiBold>
+							</NativeTextBold>
 
 							<NativeTextMedium
 								style={{ fontSize: 14 }}

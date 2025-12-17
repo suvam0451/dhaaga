@@ -1,4 +1,4 @@
-import NavBar_Simple from '#/components/shared/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { useAppTheme } from '#/states/global/hooks';
 import BrowsingHistoryEmpty from '#/components/svgs/BrowsingHistoryEmpty';

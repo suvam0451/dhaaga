@@ -2,7 +2,7 @@ import type { ChatRoomObjectType } from '@dhaaga/bridge';
 import { Pressable, View } from 'react-native';
 import useApiMe from '#/hooks/useApiMe';
 import { Image } from 'expo-image';
-import { NativeTextNormal, NativeTextSemiBold } from '#/ui/NativeText';
+import { NativeTextNormal, NativeTextBold } from '#/ui/NativeText';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useAppActiveSession, useAppTheme } from '#/states/global/hooks';
 import RoutingUtils from '#/utils/routing.utils';
@@ -39,9 +39,9 @@ function ChatRoomListItemView({ room }: Props) {
 					style={{ width: 54, height: 54, borderRadius: 27, marginRight: 8 }}
 				/>
 				<View style={{ flex: 1 }}>
-					<NativeTextSemiBold style={{ fontSize: 16 }}>
+					<NativeTextBold style={{ fontSize: 16 }}>
 						{partner.displayName ?? partner.handle}
-					</NativeTextSemiBold>
+					</NativeTextBold>
 					<NativeTextNormal
 						style={{ fontSize: 13 }}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
@@ -54,11 +54,9 @@ function ChatRoomListItemView({ room }: Props) {
 								style={{ marginTop: 6, flex: 1 }}
 								numberOfLines={1}
 							>
-								<NativeTextSemiBold
-									style={{ marginTop: 6, color: theme.primary }}
-								>
+								<NativeTextBold style={{ marginTop: 6, color: theme.primary }}>
 									You:
-								</NativeTextSemiBold>{' '}
+								</NativeTextBold>{' '}
 								{room.lastMessage.content.raw}
 							</NativeTextNormal>
 						</View>

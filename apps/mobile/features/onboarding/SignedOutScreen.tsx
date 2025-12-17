@@ -1,14 +1,14 @@
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
-import { AppText } from '#/components/lib/Text';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { useAssets } from 'expo-asset';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import WelcomeScreenFeatureShowcase from '#/features/onboarding/WelcomeScreenFeatureShowcase';
-import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import { router } from 'expo-router';
 import { LinkingUtils } from '#/utils/linking.utils';
+import RoutingUtils from '#/utils/routing.utils';
+import { NativeTextMedium, NativeTextBold } from '#/ui/NativeText';
+import { APP_VERSION } from '#/utils/default-settings';
 
 function Page() {
 	const [assets, error] = useAssets([require('#/assets/dhaaga/icon.png')]);
@@ -22,41 +22,22 @@ function Page() {
 
 	return (
 		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
-			<AppText.SemiBold
-				style={{ textAlign: 'center', marginTop: 24, fontSize: 32 }}
+			<NativeTextBold style={styles.appLabel}>Dhaaga</NativeTextBold>
+			<Image source={{ uri: assets[0].localUri! }} style={styles.appLogo} />
+			<NativeTextMedium
+				style={styles.versionText}
+				emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
 			>
-				Dhaaga
-			</AppText.SemiBold>
-			<Image
-				source={{ uri: assets[0].localUri! }}
-				style={[
-					{
-						width: 84,
-						height: 84,
-						marginHorizontal: 'auto',
-						borderRadius: 16,
-						zIndex: 2,
-						marginTop: 24,
-					},
-				]}
-			/>
-			<View
-				style={{
-					marginHorizontal: 28,
-					flex: 1,
-					marginVertical: 'auto',
-					justifyContent: 'center',
-				}}
-			>
+				{APP_VERSION}
+			</NativeTextMedium>
+			<View style={styles.showcaseArea}>
 				<WelcomeScreenFeatureShowcase />
 			</View>
 			<View style={{ marginBottom: 32 }}>
 				<AppButtonVariantA
 					label={'Get Started'}
 					loading={false}
-					onClick={() => {
-						router.navigate(APP_ROUTING_ENUM.PROFILE_TAB);
-					}}
+					onClick={RoutingUtils.toFirstTimeOnboarding}
 					textStyle={{ fontSize: 16 }}
 				/>
 				<AppButtonVariantA
@@ -66,15 +47,35 @@ function Page() {
 					onClick={LinkingUtils.openProjectWebsite}
 					textStyle={{ fontSize: 16 }}
 				/>
-				<AppText.Medium
-					style={{ textAlign: 'center', marginTop: 8 }}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A50}
-				>
-					v0.17.2
-				</AppText.Medium>
 			</View>
 		</View>
 	);
 }
 
 export default Page;
+
+const styles = StyleSheet.create({
+	appLabel: {
+		textAlign: 'center',
+		marginTop: 24,
+		fontSize: 32,
+	},
+	appLogo: {
+		width: 84,
+		height: 84,
+		marginHorizontal: 'auto',
+		borderRadius: 16,
+		zIndex: 2,
+		marginTop: 24,
+	},
+	showcaseArea: {
+		marginHorizontal: 28,
+		flex: 1,
+		marginVertical: 'auto',
+		justifyContent: 'center',
+	},
+	versionText: {
+		textAlign: 'center',
+		marginTop: 8,
+	},
+});
