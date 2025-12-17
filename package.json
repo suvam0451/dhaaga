@@ -16,7 +16,7 @@
 		"build:react": "npm run build --workspace=@dhaaga/react",
 		"build:web": "npm run build --workspace apps/web",
 		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
-		"link-assets:mobile": "cp -r ./apps/_shared/assets/* ./apps/mobile/assets",
+		"link-assets:mobile": "mkdir -p ./apps/mobile/assets && cp -r ./apps/_shared/assets/* ./apps/mobile/assets",
 		"link-assets:web": "cp -r ./apps/_shared/assets ./apps/web/public",
 		"link:all": "npm run link-assets:mobile && npm run link-assets:web",
 		"build-deps": "npm run build:all && npm run link:all"
