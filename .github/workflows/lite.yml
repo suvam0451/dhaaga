@@ -18,7 +18,7 @@ jobs:
       - run: npm run build-deps
       - run: npm install @react-native-community/cli
         working-directory: ./apps/mobile
-      - run: npm uninstall expo-dev-client expo-notifications react-native-purchases expo-device
+      - run: npm uninstall expo-dev-client expo-notifications expo-iap expo-device
         working-directory: ./apps/mobile
       - run: node lite.js # pre-requisites scripts
         working-directory: ./apps/mobile
