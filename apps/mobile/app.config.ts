@@ -4,8 +4,6 @@ const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
 const APP_SCHEME = process.env.APP_SCHEME ?? 'dhaaga-lite';
 
-const IS_LITE = BUNDLE_ID === 'io.suvam.dhaaga.lite';
-
 const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
 		? []
@@ -26,7 +24,7 @@ const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 const NONFREE_PERMS_WHITELIST =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
 		? []
-		: ['android.permission.POST_NOTIFICATIONS'];
+		: ['android.permission.POST_NOTIFICATIONS', 'com.android.vending.BILLING'];
 
 const NONFREE_PERMS_BLACKLIST =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite' ? ['android.permission.BILLING'] : [];
@@ -56,10 +54,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		edgeToEdgeEnabled: true,
 		predictiveBackGestureEnabled: true,
 		permissions: [
-			'android.permission.ACCESS_NETWORK_STATE',
 			'android.permission.INTERNET',
 			'android.permission.VIBRATE',
-			'com.android.vending.BILLING',
 			...NONFREE_PERMS_WHITELIST,
 		],
 		blockedPermissions: [
@@ -96,6 +92,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'me.everything.badger.permission.BADGE_COUNT_WRITE',
 			'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE',
 			'android.permission.FOREGROUND_SERVICE',
+			'android.permission.ACCESS_NETWORK_STATE',
 			...NONFREE_PERMS_BLACKLIST,
 		],
 		// softwareKeyboardLayoutMode: 'pan',
@@ -145,8 +142,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: true,
 					buildArchs: ['arm64-v8a'],
-					enableBundleCompression: IS_LITE,
-					useLegacyPackaging: IS_LITE,
+					enableBundleCompression: true,
+					useLegacyPackaging: false,
 				},
 			},
 		],
