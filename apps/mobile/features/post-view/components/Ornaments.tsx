@@ -1,11 +1,8 @@
 import { useAppTheme } from '#/states/global/hooks';
 import { AppIcon } from '#/components/lib/Icon';
 import { AppText } from '#/components/lib/Text';
-import { View, StyleSheet } from 'react-native';
-import { appDimensions } from '#/styles/dimensions';
+import { View } from 'react-native';
 import { AttachedLinkBorderDecorations } from '#/skins/BorderDecorations';
-
-const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 type PinOrnamentProps = {
 	isPinned: boolean;
@@ -35,13 +32,4 @@ export function LinkAttachmentOrnament({ children }: any) {
 	);
 }
 
-const styles = StyleSheet.create({
-	quoteOrnamentRoot: {
-		paddingHorizontal: 10,
-		paddingVertical: 4,
-		marginTop: 8,
-		borderRadius: 6,
-		borderStyle: 'dashed',
-		borderWidth: 1,
-	},
-});
+export function ShareIndicatorOrnament({ children }: any) {}

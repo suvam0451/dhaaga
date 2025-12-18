@@ -10,11 +10,8 @@ import {
 	useAppApiClient,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { RefreshControl, StyleProp, ViewStyle } from 'react-native';
-import Animated, {
-	ScrollHandlerProcessed,
-	SharedValue,
-} from 'react-native-reanimated';
+import { RefreshControl, View } from 'react-native';
+import Animated, { ScrollHandlerProcessed } from 'react-native-reanimated';
 import { useEffect, useState } from 'react';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
@@ -23,13 +20,13 @@ import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { useQuery } from '@tanstack/react-query';
 
 type Props = {
+	forwardedRef: any;
 	userId: string;
 	onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
-	animatedStyle: StyleProp<ViewStyle>;
-	headerHeight: SharedValue<number>;
+	headerHeight: number;
 };
 
-function ContentView({ userId, onScroll, headerHeight }: Props) {
+function ContentView({ forwardedRef, userId, onScroll, headerHeight }: Props) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useActiveUserSession();
@@ -70,6 +67,7 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 
 	return (
 		<Animated.FlatList
+			ref={forwardedRef}
 			data={State.items}
 			onScroll={onScroll}
 			renderItem={({ item }) => (
@@ -82,9 +80,7 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 			refreshControl={
 				<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
 			}
-			ListHeaderComponent={
-				<Animated.View style={{ height: headerHeight.value }} />
-			}
+			ListHeaderComponent={<View style={{ height: headerHeight }} />}
 			contentContainerStyle={{ paddingTop: 16 }}
 			style={[{ backgroundColor: theme.background.a0 }]}
 		/>
@@ -92,17 +88,17 @@ function ContentView({ userId, onScroll, headerHeight }: Props) {
 }
 
 function UserProfileRepliesView({
+	forwardedRef,
 	userId,
 	onScroll,
 	headerHeight,
-	animatedStyle,
 }: Props) {
 	return (
 		<PostTimelineCtx>
 			<ContentView
+				forwardedRef={forwardedRef}
 				userId={userId}
 				onScroll={onScroll}
-				animatedStyle={animatedStyle}
 				headerHeight={headerHeight}
 			/>
 		</PostTimelineCtx>

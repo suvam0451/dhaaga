@@ -1,17 +1,23 @@
 import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+	StyleProp,
+	TouchableOpacity,
+	View,
+	ViewStyle,
+	StyleSheet,
+} from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useAppTheme } from '#/states/global/hooks';
 
 const TAB_BAR_HEIGHT = 56;
 const ICON_SIZE = 32;
-// images-outline
+
 const TABS = [
 	'megaphone-outline',
 	'chatbubbles-outline',
 	'gallery',
 	'grid-outline',
-]; // grid-outline, apps-outline
+];
 
 type Props = {
 	changeTabIndex: (index: number) => void;
@@ -19,7 +25,7 @@ type Props = {
 	animatedStyle: StyleProp<ViewStyle>;
 };
 
-function UserProfileStickyHeader({
+function UserProfilePagerWidget({
 	TabIndex,
 	changeTabIndex,
 	animatedStyle,
@@ -31,15 +37,9 @@ function UserProfileStickyHeader({
 	return (
 		<Animated.View
 			style={[
+				styles.root,
 				{
-					// position: 'absolute',
-					height: TAB_BAR_HEIGHT,
-					width: '100%',
 					backgroundColor: '#181818',
-					flexDirection: 'row',
-					borderBottomWidth: 1,
-					borderColor: '#333',
-					zIndex: 20,
 				},
 				animatedStyle,
 			]}
@@ -47,13 +47,7 @@ function UserProfileStickyHeader({
 			{TABS.map((tab, index) => (
 				<TouchableOpacity
 					key={index}
-					style={{
-						flex: 1,
-						justifyContent: 'center',
-						alignItems: 'center',
-						paddingTop: 16,
-						zIndex: 200,
-					}}
+					style={styles.buttonContainer}
 					onPress={() => changeTabIndex(index)}
 				>
 					<AppIcon
@@ -63,13 +57,13 @@ function UserProfileStickyHeader({
 						onPress={() => changeTabIndex(index)}
 					/>
 					<View
-						style={{
-							backgroundColor: TabIndex === index ? ACTIVE_TINT : 'transparent',
-							width: 64,
-							height: 3,
-							marginTop: 8,
-							borderRadius: 16,
-						}}
+						style={[
+							styles.activeIndicator,
+							{
+								backgroundColor:
+									TabIndex === index ? ACTIVE_TINT : 'transparent',
+							},
+						]}
 					/>
 				</TouchableOpacity>
 			))}
@@ -77,4 +71,29 @@ function UserProfileStickyHeader({
 	);
 }
 
-export default UserProfileStickyHeader;
+export default UserProfilePagerWidget;
+
+const styles = StyleSheet.create({
+	root: {
+		height: TAB_BAR_HEIGHT,
+		width: '100%',
+		backgroundColor: '#181818',
+		flexDirection: 'row',
+		borderBottomWidth: 1,
+		borderColor: '#333',
+		zIndex: 20,
+	},
+	buttonContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingTop: 16,
+		zIndex: 200,
+	},
+	activeIndicator: {
+		width: 64,
+		height: 3,
+		marginTop: 8,
+		borderRadius: 16,
+	},
+});

@@ -2,12 +2,9 @@ import { DefinedUseQueryResult } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { AppDividerSoft } from '#/ui/Divider';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import Animated, {
-	ScrollHandlerProcessed,
-	SharedValue,
-} from 'react-native-reanimated';
+import Animated, { ScrollHandlerProcessed } from 'react-native-reanimated';
 import { useAppTheme } from '#/states/global/hooks';
-import { RefreshControl, StyleProp, ViewStyle } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 
 type Props<T, U> = {
 	queryResult: DefinedUseQueryResult<T, Error>;
@@ -15,11 +12,11 @@ type Props<T, U> = {
 	onDataLoaded: (data: T) => void;
 	onModuleReset: () => void;
 	onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
-	animatedStyle: StyleProp<ViewStyle>;
-	headerHeight: SharedValue<number>;
+	headerHeight: number;
 	items: U[];
 	renderItem: ({ item }: { item: U }) => any;
 	paddingTop: number;
+	forwardedRef: any;
 };
 
 /**
@@ -33,6 +30,7 @@ type Props<T, U> = {
  * @param renderItem
  * @param onScroll
  * @param paddingTop
+ * @param forwardedRef
  * @constructor
  */
 function UserProfileModuleBuilder<T, U>({
@@ -40,11 +38,13 @@ function UserProfileModuleBuilder<T, U>({
 	onListEndReached,
 	onDataLoaded,
 	onModuleReset,
-	headerHeight,
+	// headerHeight,
 	items,
 	renderItem,
 	onScroll,
 	paddingTop,
+	headerHeight,
+	forwardedRef,
 }: Props<T, U>) {
 	const { theme } = useAppTheme();
 	const [IsRefreshing, setIsRefreshing] = useState(false);
@@ -69,15 +69,14 @@ function UserProfileModuleBuilder<T, U>({
 	return (
 		<>
 			<Animated.FlatList
+				ref={forwardedRef}
 				data={items}
 				onScroll={onScroll}
 				renderItem={renderItem}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
 				}
-				ListHeaderComponent={
-					<Animated.View style={{ height: headerHeight.value }} />
-				}
+				ListHeaderComponent={<View style={{ height: headerHeight }} />}
 				contentContainerStyle={{ paddingTop }}
 				style={[{ backgroundColor: theme.background.a0 }]}
 				ItemSeparatorComponent={() => (

@@ -8,22 +8,21 @@ import {
 	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import { ScrollHandlerProcessed, SharedValue } from 'react-native-reanimated';
+import { ScrollHandlerProcessed } from 'react-native-reanimated';
 import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
 import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
-import { StyleProp, ViewStyle } from 'react-native';
 import UserProfileModuleBuilder from '#/features/user-profiles/components/UserProfileModuleBuilder';
 import { useEffect } from 'react';
 
 type Props = {
+	forwardedRef: any;
 	userId: string;
 	onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
-	animatedStyle: StyleProp<ViewStyle>;
-	headerHeight: SharedValue<number>;
+	headerHeight: number;
 };
 
-function ContentView({ userId, onScroll, animatedStyle, headerHeight }: Props) {
+function ContentView({ forwardedRef, userId, onScroll, headerHeight }: Props) {
 	const { client, driver, server } = useAppApiClient();
 	const { acct } = useActiveUserSession();
 
@@ -73,6 +72,7 @@ function ContentView({ userId, onScroll, animatedStyle, headerHeight }: Props) {
 
 	return (
 		<UserProfileModuleBuilder
+			forwardedRef={forwardedRef}
 			queryResult={queryResult}
 			onListEndReached={onEndReachedDispatch}
 			onDataLoaded={onDataLoadedDispatch}
@@ -88,23 +88,22 @@ function ContentView({ userId, onScroll, animatedStyle, headerHeight }: Props) {
 			onScroll={onScroll}
 			paddingTop={32}
 			headerHeight={headerHeight}
-			animatedStyle={animatedStyle}
 		/>
 	);
 }
 
 function UserProfilePostsView({
+	forwardedRef,
 	userId,
 	onScroll,
-	animatedStyle,
 	headerHeight,
 }: Props) {
 	return (
 		<PostTimelineCtx>
 			<ContentView
+				forwardedRef={forwardedRef}
 				userId={userId}
 				onScroll={onScroll}
-				animatedStyle={animatedStyle}
 				headerHeight={headerHeight}
 			/>
 		</PostTimelineCtx>

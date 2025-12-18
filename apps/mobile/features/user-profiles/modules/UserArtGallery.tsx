@@ -1,11 +1,4 @@
-import {
-	View,
-	Dimensions,
-	FlatList,
-	RefreshControl,
-	StyleProp,
-	ViewStyle,
-} from 'react-native';
+import { View, Dimensions, FlatList, RefreshControl } from 'react-native';
 import {
 	userGalleryQueryOpts,
 	UserMasonryGalleryCtx,
@@ -17,19 +10,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppApiClient } from '#/states/global/hooks';
 import { useEffect, useState } from 'react';
 import { Image } from 'expo-image';
-import Animated, {
-	ScrollHandlerProcessed,
-	SharedValue,
-} from 'react-native-reanimated';
+import Animated, { ScrollHandlerProcessed } from 'react-native-reanimated';
 
 type Props = {
+	forwardedRef: any;
 	userId: string;
 	onScroll: ScrollHandlerProcessed<Record<string, unknown>>;
-	animatedStyle: StyleProp<ViewStyle>;
-	headerHeight: SharedValue<number>;
+	headerHeight: number;
 };
 
-function Content({ userId, onScroll, headerHeight }: Props) {
+function Content({ forwardedRef, userId, onScroll, headerHeight }: Props) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { client } = useAppApiClient();
 	const { data, fetchStatus, error, refetch } = useQuery(
@@ -65,6 +55,7 @@ function Content({ userId, onScroll, headerHeight }: Props) {
 	// console.log(Object.keys(data.data));
 	return (
 		<Animated.FlatList
+			ref={forwardedRef}
 			data={State.items}
 			onScroll={onScroll}
 			renderItem={({ item }) => (
@@ -107,9 +98,7 @@ function Content({ userId, onScroll, headerHeight }: Props) {
 					</View>
 				</View>
 			)}
-			ListHeaderComponent={
-				<Animated.View style={{ height: headerHeight.value }} />
-			}
+			ListHeaderComponent={<View style={{ height: headerHeight }} />}
 			ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
 			contentContainerStyle={{ paddingTop: 16 }}
 			style={[{ flex: 1 }]}
@@ -121,17 +110,17 @@ function Content({ userId, onScroll, headerHeight }: Props) {
 }
 
 function UserArtGallery({
+	forwardedRef,
 	userId,
 	onScroll,
-	animatedStyle,
 	headerHeight,
 }: Props) {
 	return (
 		<UserMasonryGalleryCtx>
 			<Content
+				forwardedRef={forwardedRef}
 				userId={userId}
 				onScroll={onScroll}
-				animatedStyle={animatedStyle}
 				headerHeight={headerHeight}
 			/>
 		</UserMasonryGalleryCtx>

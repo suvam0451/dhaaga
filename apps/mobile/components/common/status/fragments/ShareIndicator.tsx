@@ -58,9 +58,9 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 						mentions={[]}
 						emojiMap={new Map()}
 					/>
-					<View style={{ marginLeft: 6 }}>
-						<SantaWaveFromSleigh size={20} />
-					</View>
+					{/*<View style={{ marginLeft: 6 }}>*/}
+					{/*	<SantaWaveFromSleigh size={20} />*/}
+					{/*</View>*/}
 				</View>
 				<AppText.Normal
 					style={{

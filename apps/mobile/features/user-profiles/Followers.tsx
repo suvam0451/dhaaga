@@ -19,7 +19,7 @@ function Generator() {
 			label={t(`noun.follower_other`)}
 			queryResult={queryResult}
 			flatListKey={'followers/list'}
-			navbarType={'sticky'}
+			navbarType={'simple'}
 		/>
 	);
 }
