@@ -8,6 +8,12 @@ import { router } from 'expo-router';
  * are concerned) easier
  */
 class RoutingUtils {
+	static toTimelineUserGuide() {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.FEED_GUIDE,
+		});
+	}
+
 	static toMentionInbox() {
 		router.navigate({
 			pathname: APP_ROUTING_ENUM.INBOX,

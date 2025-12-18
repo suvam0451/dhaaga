@@ -17,17 +17,9 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 	}
 
 	return (
-		<View style={[styles.container]}>
+		<View style={[styles.root]}>
 			<View style={{ flexDirection: 'row' }}>
-				<Pressable
-					style={{
-						padding: appDimensions.topNavbar.padding * 2,
-						marginLeft: appDimensions.topNavbar.marginLeft,
-						backgroundColor: 'rgba(40, 40, 40, 0.64)',
-						borderRadius: '100%',
-					}}
-					onPress={onPressBack}
-				>
+				<Pressable style={styles.backButtonContainer} onPress={onPressBack}>
 					<AppIcon
 						id={'chevron-left'}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
@@ -43,7 +35,7 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 export default Navbar_UserDetail;
 
 const styles = StyleSheet.create({
-	container: {
+	root: {
 		paddingHorizontal: 12,
 		paddingVertical: 16,
 		flexDirection: 'row',
@@ -51,5 +43,11 @@ const styles = StyleSheet.create({
 		width: '100%',
 		position: 'absolute',
 		zIndex: 10,
+	},
+	backButtonContainer: {
+		padding: appDimensions.topNavbar.padding,
+		marginLeft: appDimensions.topNavbar.marginLeft,
+		backgroundColor: 'rgba(40, 40, 40, 0.64)',
+		borderRadius: '100%',
 	},
 });

@@ -7,7 +7,6 @@ import {
 import { Redirect } from 'expo-router';
 
 function Layout() {
-	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
@@ -18,7 +17,6 @@ function Layout() {
 			initialRouteName={'index'}
 			screenOptions={{
 				headerShown: false,
-				navigationBarColor: theme.background.a0,
 			}}
 		/>
 	);

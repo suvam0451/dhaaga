@@ -101,7 +101,6 @@ function App() {
 						initialRouteName={'(tabs)'}
 						screenOptions={{
 							headerShown: false,
-							navigationBarColor: theme.background.a0,
 						}}
 					>
 						<Stack.Screen

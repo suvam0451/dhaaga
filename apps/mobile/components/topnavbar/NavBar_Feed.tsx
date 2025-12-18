@@ -1,13 +1,4 @@
-import {
-	Pressable,
-	StyleProp,
-	StyleSheet,
-	View,
-	ViewStyle,
-} from 'react-native';
-import { router } from 'expo-router';
-import { AppIcon } from '../lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import { LocalizationService } from '#/services/localization.service';
 import {
 	usePostTimelineState,
@@ -20,11 +11,10 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { appDimensions } from '#/styles/dimensions';
-import { APP_ROUTING_ENUM } from '#/utils/route-list';
-import Animated from 'react-native-reanimated';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { NativeTextBold } from '#/ui/NativeText';
+import NavBarFactory from '#/components/topnavbar/components/NavBarFactory';
+import RoutingUtils from '#/utils/routing.utils';
 
 type Props = {
 	animatedStyle?: StyleProp<ViewStyle>;
@@ -63,117 +53,41 @@ function NavBar_Feed({ animatedStyle }: Props) {
 		);
 	}
 
-	function onUserGuidePress() {
-		router.push(APP_ROUTING_ENUM.FEED_GUIDE);
-	}
-
 	const _label = LocalizationService.timelineLabelText(
 		State.feedType,
 		State.query,
 		driver,
 	);
 
-	return (
-		<Animated.View style={[styles.container, animatedStyle]}>
-			<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						height: '100%',
-						flex: 1,
-						marginLeft: 16,
-						maxWidth: '40%',
-					}}
-				>
-					<NativeTextBold
-						style={[styles.label, { color: theme.primary, fontSize: 24 }]}
-						numberOfLines={1}
-					>
-						{_label || 'Unknown'}
-					</NativeTextBold>
-					<View
-						style={{
-							marginLeft: 4,
-							marginTop: 2,
-						}}
-					>
-						<AppIcon id={'chevron-down'} color={theme.primary} size={20} />
-					</View>
-				</View>
+	const MENU_ITEMS = [
+		{
+			iconId: 'filter-outline',
+			onPress: onViewTimelineController,
+			hidden: State.feedType === TimelineFetchMode.IDLE,
+		},
+		{
+			iconId: 'user-guide',
+			onPress: RoutingUtils.toTimelineUserGuide,
+		},
+	];
 
-				<View
-					style={[
-						styles.menuSection,
-						{ justifyContent: 'flex-end', paddingRight: 8 },
-					]}
+	return (
+		<NavBarFactory
+			menuItems={MENU_ITEMS}
+			LabelComponent={
+				<NativeTextBold
+					style={[styles.label, { color: theme.primary, fontSize: 24 }]}
+					numberOfLines={1}
 				>
-					{State.feedType === TimelineFetchMode.IDLE ? (
-						<View />
-					) : (
-						<Pressable
-							style={{
-								padding: appDimensions.topNavbar.padding,
-								marginLeft: appDimensions.topNavbar.marginLeft,
-							}}
-							onPress={onViewTimelineController}
-						>
-							<AppIcon
-								id={'filter-outline'}
-								size={appDimensions.topNavbar.iconSize + 6}
-								emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-								onPress={onViewTimelineController}
-							/>
-						</Pressable>
-					)}
-					<Pressable
-						style={{
-							padding: appDimensions.topNavbar.padding,
-							marginLeft: appDimensions.topNavbar.marginLeft,
-						}}
-						onPress={onUserGuidePress}
-					>
-						<AppIcon
-							id={'user-guide'}
-							size={appDimensions.topNavbar.iconSize + 6}
-							color={theme.secondary.a20}
-							onPress={onUserGuidePress}
-						/>
-					</Pressable>
-				</View>
-			</View>
-		</Animated.View>
+					{_label || 'Unknown'}
+				</NativeTextBold>
+			}
+			animatedStyle={animatedStyle}
+		/>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		position: 'absolute',
-		backgroundColor: '#1c1c1c',
-		left: 0,
-		right: 0,
-		width: '100%',
-		zIndex: 1,
-	},
-	menuSection: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		width: 84,
-		height: '100%',
-	},
-	menuActionButtonContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		height: '100%',
-		paddingHorizontal: 8,
-	},
-	root: {
-		width: '100%',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		height: appDimensions.topNavbar.simpleVariantHeight,
-	},
 	label: {
 		fontSize: 16,
 	},

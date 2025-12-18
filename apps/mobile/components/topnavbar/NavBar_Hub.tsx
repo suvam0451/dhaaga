@@ -1,6 +1,6 @@
 import { Account } from '@dhaaga/db';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
-import { Pressable } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useHub } from '#/states/global/hooks';
@@ -62,14 +62,7 @@ function SocialHubHeader({ acct, animatedStyle }: Props) {
 		<NavBarFactory
 			menuItems={menuItems}
 			LabelComponent={
-				<Pressable
-					style={{
-						flex: 1,
-						marginVertical: 'auto',
-						alignContent: 'center',
-					}}
-					onPress={onLabelPressed}
-				>
+				<TouchableOpacity style={styles.label} onPress={onLabelPressed}>
 					{GreetingActive ? (
 						<Animated.View entering={FadeInLeft} exiting={FadeOut}>
 							<TimeOfDayGreeting style={{ paddingHorizontal: 0 }} acct={acct} />
@@ -79,7 +72,7 @@ function SocialHubHeader({ acct, animatedStyle }: Props) {
 							<NativeTextH1>{t(`hub.navbarLabel`)}</NativeTextH1>
 						</Animated.View>
 					)}
-				</Pressable>
+				</TouchableOpacity>
 			}
 			animatedStyle={animatedStyle}
 		/>
@@ -87,3 +80,11 @@ function SocialHubHeader({ acct, animatedStyle }: Props) {
 }
 
 export default SocialHubHeader;
+
+const styles = StyleSheet.create({
+	label: {
+		flex: 1,
+		marginVertical: 'auto',
+		alignContent: 'center',
+	},
+});

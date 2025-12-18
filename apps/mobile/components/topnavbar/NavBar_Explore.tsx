@@ -7,7 +7,7 @@ import {
 } from '@dhaaga/core';
 import { getSearchTabs } from '@dhaaga/db';
 import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
-import { NativeTextH1, NativeTextH6, NativeTextMedium } from '#/ui/NativeText';
+import { NativeTextBold, NativeTextH1, NativeTextH6 } from '#/ui/NativeText';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import {
 	Pressable,
@@ -109,14 +109,14 @@ function NavBar_Explore({ animatedStyle }: Props) {
 							>
 								{NAVBAR_LABEL}
 							</NativeTextH6>
-							<NativeTextMedium>
-								<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
-									Search Term:{' '}
-								</NativeTextMedium>
-								<NativeTextMedium style={{ color: theme.primary }}>
+							<NativeTextBold>
+								<NativeTextBold emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}>
+									Results For:{' '}
+								</NativeTextBold>
+								<NativeTextBold style={{ color: theme.primary }}>
 									{State.q}
-								</NativeTextMedium>
-							</NativeTextMedium>
+								</NativeTextBold>
+							</NativeTextBold>
 						</View>
 					) : (
 						<NativeTextH1>Top Posts</NativeTextH1>
