@@ -23,6 +23,11 @@ const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 				['expo-iap'],
 			];
 
+const NONFREE_PERMS =
+	BUNDLE_ID === 'io.suvam.dhaaga.lite'
+		? []
+		: ['android.permission.POST_NOTIFICATIONS'];
+
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
@@ -50,9 +55,9 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		permissions: [
 			'android.permission.ACCESS_NETWORK_STATE',
 			'android.permission.INTERNET',
-			'android.permission.POST_NOTIFICATIONS',
 			'android.permission.VIBRATE',
 			'com.android.vending.BILLING',
+			...NONFREE_PERMS,
 		],
 		blockedPermissions: [
 			'android.permission.SYSTEM_ALERT_WINDOW',
