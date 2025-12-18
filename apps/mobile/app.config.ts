@@ -23,10 +23,13 @@ const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 				['expo-iap'],
 			];
 
-const NONFREE_PERMS =
+const NONFREE_PERMS_WHITELIST =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
 		? []
 		: ['android.permission.POST_NOTIFICATIONS'];
+
+const NONFREE_PERMS_BLACKLIST =
+	BUNDLE_ID === 'io.suvam.dhaaga.lite' ? ['android.permission.BILLING'] : [];
 
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
@@ -57,7 +60,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'android.permission.INTERNET',
 			'android.permission.VIBRATE',
 			'com.android.vending.BILLING',
-			...NONFREE_PERMS,
+			...NONFREE_PERMS_WHITELIST,
 		],
 		blockedPermissions: [
 			'android.permission.SYSTEM_ALERT_WINDOW',
@@ -93,6 +96,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'me.everything.badger.permission.BADGE_COUNT_WRITE',
 			'com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE',
 			'android.permission.FOREGROUND_SERVICE',
+			...NONFREE_PERMS_BLACKLIST,
 		],
 		// softwareKeyboardLayoutMode: 'pan',
 		icon: './assets/dhaaga/icon.png',
