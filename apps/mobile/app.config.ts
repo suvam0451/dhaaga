@@ -20,6 +20,7 @@ const NONFREE_DEPS: ([] | [string] | [string, any])[] =
 						enableBackgroundRemoteNotifications: false,
 					},
 				],
+				['expo-iap'],
 			];
 
 const expo = ({ config }: ConfigContext): ExpoConfig => ({
@@ -46,6 +47,13 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		versionCode: 36,
 		edgeToEdgeEnabled: true,
 		predictiveBackGestureEnabled: true,
+		permissions: [
+			'android.permission.ACCESS_NETWORK_STATE',
+			'android.permission.INTERNET',
+			'android.permission.POST_NOTIFICATIONS',
+			'android.permission.VIBRATE',
+			'com.android.vending.BILLING',
+		],
 		blockedPermissions: [
 			'android.permission.SYSTEM_ALERT_WINDOW',
 			'android.permission.READ_EXTERNAL_STORAGE',
@@ -72,7 +80,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 			'com.sec.android.provider.badge.READ',
 			'com.sec.android.provider.badge.WRITE',
 			'com.sec.android.provider.badge.permission.READ',
-			'com.sec.android.provider.badge.permission.READ',
+			'com.sec.android.provider.badge.permission.WRITE',
 			'com.majeur.launcher.permission.UPDATE_BADGE',
 			'com.sonyericsson.home.permission.BROADCAST_BADGE',
 			'com.sonymobile.home.permission.PROVIDER_INSERT_BADGE',
@@ -123,6 +131,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				android: {
 					compileSdkVersion: 36,
 					targetSdkVersion: 36,
+					kotlinVersion: '2.2.0',
 					buildToolsVersion: '36.1.0',
 					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: true,

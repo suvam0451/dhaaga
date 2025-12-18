@@ -24,6 +24,7 @@
 		"react-icons": "^5.5.0",
 		"react-router-dom": "^7.10.1",
 		"tailwind-merge": "^3.4.0",
+		"vitest": "^4.0.16",
 		"zustand": "^5.0.9"
 	},
 	"devDependencies": {

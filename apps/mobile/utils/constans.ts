@@ -5,3 +5,7 @@ export const POST_FEED_WINDOW_SIZE = 7;
 export const USER_FEED_INITIAL_NUM_TO_RENDER = 15;
 export const USER_FEED_MAX_TO_RENDER_PER_BATCH = 10;
 export const USER_FEED_WINDOW_SIZE = 7;
+
+const PLAY_STORE_SUBSCRIPTION_IDS = [
+	'suvam.io.subscription.jqf8', // sub
+];
