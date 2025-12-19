@@ -28,7 +28,6 @@ import * as Haptics from 'expo-haptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
-import ComposeButton from '#/features/hub/components/ComposeButton';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { appDimensions } from '#/styles/dimensions';
 
@@ -365,7 +364,6 @@ function HubTab({ profile }: Props) {
 				onPressAddProfile={onPressAddProfile}
 				onPressProfile={onPressProfile}
 			/>
-			<ComposeButton />
 		</View>
 	);
 }
