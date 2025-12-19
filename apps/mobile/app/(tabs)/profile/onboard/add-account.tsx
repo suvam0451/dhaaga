@@ -29,6 +29,7 @@ import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import RoutingUtils from '#/utils/routing.utils';
+import { RandomUtil } from '@dhaaga/bridge';
 
 function AtProto() {
 	const {
@@ -124,6 +125,7 @@ function ActivityPub() {
 					domain: software,
 					clientId,
 					clientSecret,
+					requestId: RandomUtil.nanoId(),
 				},
 			});
 		});

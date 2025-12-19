@@ -17,6 +17,7 @@ import { HideWhileKeyboardActive } from '#/ui/Containers';
 import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { NativeTextBold } from '#/ui/NativeText';
+import { useEffect } from 'react';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
@@ -30,9 +31,14 @@ function MastodonSignInStack() {
 	const _domain: string = params['domain'] as string;
 	const _clientId: string = params['clientId'] as string;
 	const _clientSecret: string = params['clientSecret'] as string;
+	const _requestId: string = params['requestId'] as string;
 
-	const { RNWebviewStateChangeCallback, code, setCode, authenticate } =
+	const { RNWebviewStateChangeCallback, code, setCode, authenticate, reset } =
 		useActivityPubAuth(_subdomain, _clientId, _clientSecret);
+
+	useEffect(() => {
+		reset();
+	}, [_requestId]);
 
 	async function onPressConfirm() {
 		if (!db || !code) return;
@@ -57,6 +63,10 @@ function MastodonSignInStack() {
 			loadAccounts();
 			RoutingUtils.toAccountManagement();
 		}
+	}
+
+	async function onPressReset() {
+		reset();
 	}
 
 	return (
@@ -98,25 +108,46 @@ function MastodonSignInStack() {
 								</View>
 							)}
 
-							<TouchableOpacity
-								disabled={!code}
-								style={[
-									appStyling.button,
-									{
-										backgroundColor: theme.primary,
-									},
-								]}
-								onPress={onPressConfirm}
-							>
-								<NativeTextBold
-									style={{
-										color: 'black',
-										fontSize: 16,
-									}}
+							<View style={{ flexDirection: 'row' }}>
+								<TouchableOpacity
+									disabled={!code}
+									style={[
+										appStyling.button,
+										{
+											backgroundColor: theme.primary,
+										},
+									]}
+									onPress={onPressConfirm}
 								>
-									Proceed
-								</NativeTextBold>
-							</TouchableOpacity>
+									<NativeTextBold
+										style={{
+											color: 'black',
+											fontSize: 16,
+										}}
+									>
+										Proceed
+									</NativeTextBold>
+								</TouchableOpacity>
+								<TouchableOpacity
+									disabled={!code}
+									style={[
+										appStyling.button,
+										{
+											backgroundColor: theme.background.a40,
+										},
+									]}
+									onPress={onPressReset}
+								>
+									<NativeTextBold
+										style={{
+											color: theme.secondary.a20,
+											fontSize: 16,
+										}}
+									>
+										Reset
+									</NativeTextBold>
+								</TouchableOpacity>
+							</View>
 						</View>
 					)}
 				</HideWhileKeyboardActive>

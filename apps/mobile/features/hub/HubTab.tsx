@@ -331,6 +331,9 @@ function HubTab({ profile }: Props) {
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.hubVariantHeight,
 				}}
+				scrollIndicatorInsets={{
+					top: appDimensions.topNavbar.hubVariantHeight,
+				}}
 				contentOffset={{ x: 0, y: appDimensions.topNavbar.hubVariantHeight }}
 			>
 				{/* --- Pinned Timelines --- */}
