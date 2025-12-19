@@ -1,19 +1,17 @@
 import { useAppTheme } from '#/states/global/hooks';
 import { ReactNode, useState } from 'react';
-import {
-	Animated,
-	Dimensions,
-	Pressable,
-	View,
-	StyleSheet,
-} from 'react-native';
-import { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { Dimensions, Pressable, View, StyleSheet } from 'react-native';
+import Animated, {
+	useAnimatedStyle,
+	withTiming,
+} from 'react-native-reanimated';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';
 
 const WIDGET_MIN_WIDTH = 52;
 
 type Props = {
+	isOpen: boolean;
 	/**
 	 * Draws on top when the
 	 * widget is expanded
@@ -27,15 +25,18 @@ type Props = {
 
 	inactiveIcon: string;
 	activeIcon: string;
+
+	onWidgetPress: () => void;
 };
 
 function AppWidget({
+	isOpen,
 	BackgroundSlot,
 	ForegroundSlot,
 	inactiveIcon,
 	activeIcon,
+	onWidgetPress,
 }: Props) {
-	const [WidgetOpen, setWidgetOpen] = useState(false);
 	const { theme } = useAppTheme();
 
 	// Alignment
@@ -43,14 +44,10 @@ function AppWidget({
 	// Dimensions
 	const MAX_WIDTH = Dimensions.get('window').width;
 	// Derived Styles
-	const BORDER_TOP_START_RADIUS_CLOSED = Alignment === 'left' ? 8 : 16;
-	const BORDER_TOP_END_RADIUS_CLOSED = Alignment === 'left' ? 16 : 8;
-	const BORDER_BOTTOM_START_RADIUS_CLOSED = Alignment === 'left' ? 8 : 16;
-	const BORDER_BOTTOM_END_RADIUS_CLOSED = Alignment === 'left' ? 16 : 8;
-
-	function onPress() {
-		setWidgetOpen((o) => !o);
-	}
+	const BORDER_TOP_START_RADIUS_CLOSED = Alignment === 'left' ? 6 : 16;
+	const BORDER_TOP_END_RADIUS_CLOSED = Alignment === 'left' ? 16 : 6;
+	const BORDER_BOTTOM_START_RADIUS_CLOSED = Alignment === 'left' ? 6 : 16;
+	const BORDER_BOTTOM_END_RADIUS_CLOSED = Alignment === 'left' ? 16 : 6;
 
 	/**
 	 * Animations
@@ -58,55 +55,53 @@ function AppWidget({
 
 	const widgetStyle = useAnimatedStyle(() => {
 		return {
-			width: withTiming(WidgetOpen ? MAX_WIDTH : WIDGET_MIN_WIDTH, {
+			width: withTiming(isOpen ? MAX_WIDTH : WIDGET_MIN_WIDTH, {
 				duration: 200,
 			}),
-			borderTopStartRadius: WidgetOpen ? 8 : BORDER_TOP_START_RADIUS_CLOSED,
-			borderTopEndRadius: WidgetOpen ? 8 : BORDER_TOP_END_RADIUS_CLOSED,
-			borderBottomStartRadius: WidgetOpen
-				? 8
-				: BORDER_BOTTOM_START_RADIUS_CLOSED,
-			borderBottomEndRadius: WidgetOpen ? 8 : BORDER_BOTTOM_END_RADIUS_CLOSED,
+			borderTopStartRadius: isOpen ? 6 : BORDER_TOP_START_RADIUS_CLOSED,
+			borderTopEndRadius: isOpen ? 6 : BORDER_TOP_END_RADIUS_CLOSED,
+			borderBottomStartRadius: isOpen ? 6 : BORDER_BOTTOM_START_RADIUS_CLOSED,
+			borderBottomEndRadius: isOpen ? 6 : BORDER_BOTTOM_END_RADIUS_CLOSED,
 		};
 	});
 
 	return (
-		<View>
-			{BackgroundSlot}
+		<>
+			<View style={{ display: isOpen ? 'none' : 'flex' }}>
+				{BackgroundSlot}
+			</View>
 			<Animated.View
 				style={[
 					{
-						width: 72,
 						position: 'absolute',
-						zIndex: 1000000000,
+						zIndex: 10,
 						bottom: 0,
 						right: 0,
 						height: appDimensions.bottomNav.secondMenuBarHeight,
-						backgroundColor: theme.background.a10,
+						backgroundColor: theme.primary,
 						flexDirection: 'row',
 					},
 					widgetStyle,
 				]}
 			>
-				<View style={{ flex: 1, alignItems: 'center' }}>
-					{WidgetOpen ? ForegroundSlot : <View />}
-				</View>
-				<Pressable
-					onPress={onPress}
-					style={[
-						styles.triggerIcon,
-						{
-							backgroundColor: theme.primary,
-						},
-					]}
+				<View
+					style={{
+						flex: 1,
+						alignItems: 'center',
+						display: isOpen ? 'flex' : 'none',
+						marginRight: 72,
+					}}
 				>
+					{ForegroundSlot}
+				</View>
+				<Pressable onPress={onWidgetPress} style={[styles.triggerIcon]}>
 					<AppIcon
-						id={WidgetOpen ? activeIcon : (inactiveIcon as any)}
+						id={isOpen ? activeIcon : (inactiveIcon as any)}
 						color={'black'}
 					/>
 				</Pressable>
 			</Animated.View>
-		</View>
+		</>
 	);
 }
 
@@ -115,6 +110,15 @@ export default AppWidget;
 const styles = StyleSheet.create({
 	triggerIcon: {
 		paddingVertical: 12,
-		paddingHorizontal: 12,
+		alignItems: 'center',
+		marginVertical: 'auto',
+		height: appDimensions.bottomNav.secondMenuBarHeight,
+		width: WIDGET_MIN_WIDTH,
+		maxWidth: WIDGET_MIN_WIDTH,
+		flexShrink: 1,
+		position: 'absolute',
+		right: 0,
+		bottom: 0,
+		zIndex: 20,
 	},
 });

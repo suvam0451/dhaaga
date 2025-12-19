@@ -25,9 +25,6 @@ type Props = {
 	 * positioned widget to the right
 	 */
 	paddingRight?: number;
-
-	RightWidget: ReactNode;
-	LeftWidget: ReactNode;
 };
 
 function AppSegmentedControl({
@@ -36,9 +33,6 @@ function AppSegmentedControl({
 	ListFooterComponent,
 	paddingLeft,
 	paddingRight,
-
-	RightWidget,
-	LeftWidget,
 }: Props) {
 	const { theme } = useAppTheme();
 	return (
