@@ -15,7 +15,7 @@ function Generator() {
 	const { client } = useAppApiClient();
 	const State = useSubscriptionGalleryState();
 	const dispatch = useSubscriptionGalleryDispatch();
-	const queryResult = useApiGetSubscriptionUpdates(State.maxId);
+	const queryResult = useApiGetSubscriptionUpdates(State.appliedMaxId);
 
 	useEffect(() => {
 		dispatch({

@@ -101,10 +101,6 @@ function AppTimeline({
 		setContainerHeight(event.nativeEvent.layout.height);
 	}
 
-	function onListLoad(info: { elapsedTimeInMs: number }) {
-		console.log('[INFO]: loaded items in', info.elapsedTimeInMs, 'ms');
-	}
-
 	/**
 	 * NOTE: AT proto does not return a detailed view
 	 */

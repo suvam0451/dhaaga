@@ -120,7 +120,14 @@ function reducer(state: State, action: Actions): State {
 				}
 				if (nextLeftPage.length > 0)
 					nextSplits.push({ left: nextLeftPage, right: nextRightPage });
+				draft.posts = copy;
+				draft.bundles = bundleCopy;
 				draft.items = nextSplits;
+				draft.maxId = action.payload.maxId
+					? action.payload.maxId
+					: action.payload.data.length > 0
+						? action.payload.data[0].id
+						: null;
 			});
 		}
 		case ACTION.REQUEST_LOAD_MORE: {

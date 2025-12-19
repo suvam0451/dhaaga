@@ -41,11 +41,11 @@ function TimelineLoadingIndicator({
 	if (!visible || numItems === 0) return <View />;
 	if (visible && loading)
 		return (
-			<View style={[styles.widgetRootContainer, style]}>
+			<View style={[styles.root, style]}>
 				<View
 					style={[
 						styles.widgetContainer,
-						{ backgroundColor: theme.palette.menubar },
+						{ backgroundColor: theme.background.a30 },
 					]}
 				>
 					<ActivityIndicator size="small" color="#ffffff87" />
@@ -66,7 +66,7 @@ function TimelineLoadingIndicator({
 }
 
 const styles = StyleSheet.create({
-	widgetRootContainer: {
+	root: {
 		position: 'absolute',
 		height: 64,
 		width: '100%',

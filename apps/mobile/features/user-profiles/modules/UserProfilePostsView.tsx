@@ -1,19 +1,7 @@
-import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
-import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import { useQuery } from '@tanstack/react-query';
-import {
-	PostTimelineCtx,
-	PostTimelineStateAction,
-	TimelineFetchMode,
-	usePostTimelineDispatch,
-	usePostTimelineState,
-} from '@dhaaga/core';
+import { PostTimelineCtx, usePostTimelineState } from '@dhaaga/core';
 import { ScrollHandlerProcessed } from 'react-native-reanimated';
-import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
-import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
-import UserProfileModuleBuilder from '#/features/user-profiles/components/UserProfileModuleBuilder';
-import { useEffect } from 'react';
+import ProfileModulePostListRenderer from '#/features/user-profiles/components/ProfileModulePostListRenderer';
+import { useApiGetOriginalPostsFromAuthor } from '#/features/user-profiles/api';
 
 type Props = {
 	forwardedRef: any;
@@ -23,71 +11,19 @@ type Props = {
 };
 
 function ContentView({ forwardedRef, userId, onScroll, headerHeight }: Props) {
-	const { client, driver, server } = useAppApiClient();
-	const { acct } = useActiveUserSession();
-
 	const State = usePostTimelineState()!;
-	const dispatch = usePostTimelineDispatch()!;
 
-	const queryResult = useQuery(
-		unifiedPostFeedQueryOptions(client, driver, server, acct?.identifier, {
-			type: TimelineFetchMode.USER,
-			maxId: State.appliedMaxId,
-			sessionId: State.sessionId,
-			limit: 10,
-			query: {
-				id: userId,
-				label: 'N/A',
-			},
-			opts: {
-				bskyFilter: 'posts_no_replies',
-			},
-		}),
+	const queryResult = useApiGetOriginalPostsFromAuthor(
+		userId,
+		State.appliedMaxId,
 	);
 
-	useEffect(() => {
-		dispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-	}, []);
-
-	function onEndReachedDispatch() {
-		dispatch({
-			type: PostTimelineStateAction.REQUEST_LOAD_MORE,
-		});
-	}
-
-	function onModuleResetDispatch() {
-		dispatch({
-			type: PostTimelineStateAction.RESET,
-		});
-	}
-
-	function onDataLoadedDispatch(data: any) {
-		dispatch({
-			type: PostTimelineStateAction.APPEND_RESULTS,
-			payload: data,
-		});
-	}
-
 	return (
-		<UserProfileModuleBuilder
+		<ProfileModulePostListRenderer
 			forwardedRef={forwardedRef}
-			queryResult={queryResult}
-			onListEndReached={onEndReachedDispatch}
-			onDataLoaded={onDataLoadedDispatch}
-			onModuleReset={onModuleResetDispatch}
-			items={State.items}
-			renderItem={({ item }) => (
-				<WithAppStatusItemContext dto={item}>
-					<TimelineFilter_EmojiCrash>
-						<PostTimelineEntryView />
-					</TimelineFilter_EmojiCrash>
-				</WithAppStatusItemContext>
-			)}
 			onScroll={onScroll}
-			paddingTop={32}
 			headerHeight={headerHeight}
+			queryResult={queryResult}
 		/>
 	);
 }

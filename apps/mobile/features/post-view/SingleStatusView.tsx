@@ -10,7 +10,6 @@ import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
 import { useAppTheme, useImageInspect } from '#/states/global/hooks';
 import PostActionRow from '#/features/post-view/views/PostActionRow';
-import { AppText } from '#/components/lib/Text';
 import StatusQuoted from '#/features/post-view/views/StatusQuoted';
 import { PostMoreOptionsButton } from '#/components/common/status/_shared';
 import { PostInspector } from '@dhaaga/bridge';
@@ -18,6 +17,7 @@ import type { PostObjectType } from '@dhaaga/bridge';
 import { PinOrnament } from '#/features/post-view/components/Ornaments';
 import PostLinkAttachments from '#/features/post-item/components/PostLinkAttachments';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { NativeTextBold } from '#/ui/NativeText';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
@@ -48,9 +48,9 @@ function PostFullDetails({ dto }: PostFullDetailsProps) {
 				marginHorizontal: 6,
 			}}
 		>
-			<AppText.Medium style={{ color: theme.complementary }}>
+			<NativeTextBold style={{ color: theme.complementary }}>
 				{new Date(POST.createdAt).toLocaleString()}
-			</AppText.Medium>
+			</NativeTextBold>
 		</View>
 	);
 }

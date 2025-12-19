@@ -25,6 +25,9 @@ type Props = {
 	 * positioned widget to the right
 	 */
 	paddingRight?: number;
+
+	RightWidget: ReactNode;
+	LeftWidget: ReactNode;
 };
 
 function AppSegmentedControl({
@@ -33,11 +36,14 @@ function AppSegmentedControl({
 	ListFooterComponent,
 	paddingLeft,
 	paddingRight,
+
+	RightWidget,
+	LeftWidget,
 }: Props) {
 	const { theme } = useAppTheme();
 	return (
 		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
-			<AppDividerSoft />
+			{/*<AppDividerSoft />*/}
 			<FlatList
 				horizontal={true}
 				showsHorizontalScrollIndicator={false}

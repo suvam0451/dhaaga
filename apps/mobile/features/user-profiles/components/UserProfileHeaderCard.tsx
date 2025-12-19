@@ -6,7 +6,7 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import Animated from 'react-native-reanimated';
-import Navbar_UserDetail from '#/components/topnavbar/Navbar_UserDetail';
+import Navbar from '#/features/user-profiles/components/Navbar';
 import { Dimensions, View, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { appDimensions } from '#/styles/dimensions';
@@ -48,17 +48,14 @@ function UserProfileHeaderCard({ animatedStyle, onLayout, acct }: Props) {
 		<Animated.View
 			onLayout={onLayout}
 			style={[
+				styles.root,
 				{
-					position: 'absolute',
-					width: '100%',
-					backgroundColor: theme.background.a30,
-					zIndex: 50,
-					paddingBottom: 24,
+					backgroundColor: theme.background.a10,
 				},
 				animatedStyle,
 			]}
 		>
-			<Navbar_UserDetail acct={acct} />
+			<Navbar acct={acct} />
 			{bannerUrl ? (
 				<Image
 					source={{ uri: bannerUrl }}
@@ -130,7 +127,7 @@ function UserProfileHeaderCard({ animatedStyle, onLayout, acct }: Props) {
 					</View>
 					<View
 						style={{
-							backgroundColor: theme.background.a20,
+							backgroundColor: theme.background.a40,
 							borderRadius: appDimensions.buttons.borderRadius,
 							marginHorizontal: 12,
 							paddingVertical: 8,
@@ -148,12 +145,12 @@ function UserProfileHeaderCard({ animatedStyle, onLayout, acct }: Props) {
 						</NativeTextBold>
 					</View>
 					<Pressable
-						style={{ paddingHorizontal: 12 }}
+						style={{ paddingHorizontal: 12, paddingLeft: 0 }}
 						onPress={onMoreOptionsPressed}
 					>
 						<AppIcon
 							id={'ellipsis-v'}
-							size={24}
+							size={20}
 							color={theme.secondary.a20}
 							onPress={onMoreOptionsPressed}
 						/>
@@ -167,6 +164,13 @@ function UserProfileHeaderCard({ animatedStyle, onLayout, acct }: Props) {
 export default UserProfileHeaderCard;
 
 const styles = StyleSheet.create({
+	root: {
+		position: 'absolute',
+		width: '100%',
+		zIndex: 50,
+		paddingBottom: 24,
+	},
+
 	avatarImageContainer: {
 		flex: 1,
 		width: '100%',

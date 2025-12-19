@@ -13,6 +13,12 @@ export type TimelineReducerBaseState<T> = {
 
 	// track cursors
 	minId?: string | null;
+
+	/**
+	 * Do not use this for querying data.
+	 *
+	 * Use appliedMaxId, instead
+	 */
 	maxId?: string | null;
 
 	opts: { limit: number; q?: string };

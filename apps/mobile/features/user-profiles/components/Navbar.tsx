@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
-import { AppIcon } from '../lib/Icon';
+import { AppIcon } from '../../../components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import type { UserObjectType } from '@dhaaga/bridge';
 import { router } from 'expo-router';
@@ -9,7 +9,7 @@ type UserViewNavbarProps = {
 	acct: UserObjectType;
 };
 
-function Navbar_UserDetail({}: UserViewNavbarProps) {
+function Navbar({}: UserViewNavbarProps) {
 	function onPressBack() {
 		if (router.canGoBack()) {
 			router.back();
@@ -18,21 +18,22 @@ function Navbar_UserDetail({}: UserViewNavbarProps) {
 
 	return (
 		<View style={[styles.root]}>
-			<View style={{ flexDirection: 'row' }}>
-				<Pressable style={styles.backButtonContainer} onPress={onPressBack}>
-					<AppIcon
-						id={'chevron-left'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						onPress={onPressBack}
-						size={appDimensions.topNavbar.iconSize}
-					/>
-				</Pressable>
-			</View>
+			<TouchableOpacity
+				style={styles.backButtonContainer}
+				onPress={onPressBack}
+			>
+				<AppIcon
+					id={'chevron-left'}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					onPress={onPressBack}
+					size={appDimensions.topNavbar.iconSize}
+				/>
+			</TouchableOpacity>
 		</View>
 	);
 }
 
-export default Navbar_UserDetail;
+export default Navbar;
 
 const styles = StyleSheet.create({
 	root: {

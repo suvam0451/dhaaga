@@ -12,7 +12,9 @@ function Generator() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.GLOSSARY]);
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const State = useUserTimelineState();
-	const queryResult = useQuery(userFollowersQueryOpts(client, id, State.maxId));
+	const queryResult = useQuery(
+		userFollowersQueryOpts(client, id, State.appliedMaxId),
+	);
 
 	return (
 		<UserTimelineView

@@ -1,5 +1,4 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useRef } from 'react';
 import { useAppApiClient, useAppBottomSheet } from '#/states/global/hooks';
 import useAppNavigator from '#/states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
@@ -74,8 +73,6 @@ function PostCreatedBy({ style, post }: OriginalPosterProps) {
 	const { show } = useAppBottomSheet();
 	const { toProfile } = useAppNavigator();
 	const { driver } = useAppApiClient();
-
-	const UserDivRef = useRef(null);
 
 	function onAvatarClicked() {
 		let ctx = null;

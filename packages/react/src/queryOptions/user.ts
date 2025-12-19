@@ -106,15 +106,14 @@ export function userFollowersQueryOpts(
 export function userGalleryQueryOpts(
 	client: ApiTargetInterface,
 	userId: string,
+	maxId: string | null,
 ) {
-	async function api(
-		client: ApiTargetInterface,
-		userId: string,
-	): Promise<ResultPage<PostObjectType[]>> {
+	async function api(): Promise<ResultPage<PostObjectType[]>> {
 		const result = await client.users.getPosts(userId, {
-			limit: 10,
+			limit: 40,
 			userId,
 			onlyMedia: true,
+			excludeReplies: true,
 			excludeReblogs: true,
 			// misskey
 			allowPartial: true,
@@ -125,6 +124,8 @@ export function userGalleryQueryOpts(
 			bskyFilter: DriverService.supportsAtProto(client.driver)
 				? 'posts_with_media'
 				: undefined,
+			maxId,
+			untilId: maxId === null ? undefined : maxId,
 		});
 
 		const data = DriverService.supportsAtProto(client.driver)
@@ -145,8 +146,8 @@ export function userGalleryQueryOpts(
 	}
 
 	return queryOptions<ResultPage<PostObjectType[]>>({
-		queryKey: [`dhaaga/profile/gallery`, userId],
-		queryFn: () => api(client, userId),
+		queryKey: [`dhaaga/profile/gallery`, userId, maxId],
+		queryFn: api,
 		enabled: !!client && !!userId,
 	});
 }
