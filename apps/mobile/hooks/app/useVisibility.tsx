@@ -8,19 +8,21 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 export enum APP_POST_VISIBILITY {
-	PUBLIC = 'Public', // same in misskey
-	UNLISTED = 'Home', // Home/Unlisted
-	DIRECT = 'Direct', // same as "specified" in misskey
-	PRIVATE = 'Followers', // Private/Followers
+	PUBLIC = 'public', // same in misskey
+	UNLISTED = 'home', // Home/Unlisted
+	DIRECT = 'direct', // same as "specified" in misskey
+	PRIVATE = 'followers', // Private/Followers
 }
 
-function useAppVisibility(visibility: APP_POST_VISIBILITY) {
+function useAppVisibility(
+	visibility: 'public' | 'home' | 'direct' | 'followers',
+) {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return useMemo(() => {
 		switch (visibility) {
-			case APP_POST_VISIBILITY.PUBLIC: {
+			case 'public': {
 				return {
 					text: t(`quickPost.visibility.public`),
 					icon: (
@@ -29,7 +31,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 				};
 			}
 
-			case APP_POST_VISIBILITY.UNLISTED: {
+			case 'home': {
 				return {
 					text: t(`quickPost.visibility.unlisted`),
 					icon: (
@@ -37,7 +39,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 					),
 				};
 			}
-			case APP_POST_VISIBILITY.PRIVATE: {
+			case 'direct': {
 				return {
 					text: t(`quickPost.visibility.private`),
 					icon: (
@@ -45,7 +47,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 					),
 				};
 			}
-			case APP_POST_VISIBILITY.DIRECT: {
+			case 'followers': {
 				return {
 					text: t(`quickPost.visibility.direct`),
 					icon: (
@@ -59,7 +61,7 @@ function useAppVisibility(visibility: APP_POST_VISIBILITY) {
 						<Ionicons
 							name="earth-outline"
 							size={16}
-							color={theme.textColor.medium}
+							color={theme.secondary.a30}
 						/>
 					),
 				};

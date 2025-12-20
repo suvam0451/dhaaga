@@ -67,6 +67,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{ height: ACTION_BUTTON_SIZE, width: ACTION_BUTTON_SIZE }}
@@ -87,6 +88,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{ height: ACTION_BUTTON_SIZE, width: ACTION_BUTTON_SIZE }}
@@ -107,8 +109,11 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
-						<View>
+						<View
+							style={{ width: ACTION_BUTTON_SIZE, height: ACTION_BUTTON_SIZE }}
+						>
 							<ChristmasGiftBoxFilledOutline size={size} color={ACTIVE_TINT} />
 						</View>
 					);
@@ -125,6 +130,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{ width: ACTION_BUTTON_SIZE, height: ACTION_BUTTON_SIZE }}
@@ -145,6 +151,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.POST_REPLY_BUTTON: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{
@@ -169,6 +176,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<ChristmasReindeerFilledOutline size={ACTION_BUTTON_SIZE + 2} />
 					);
@@ -185,6 +193,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<ChristmasReindeerOutline
 							size={ACTION_BUTTON_SIZE + 2}
@@ -204,6 +213,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{
@@ -221,6 +231,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{
@@ -238,6 +249,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{
@@ -255,6 +267,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{
@@ -274,6 +287,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return <ChristmasScarfFilledOutline size={size} color={color} />;
 				default:
 					return <Ionicons name="compass" size={size} color={color} />;
@@ -282,6 +296,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return <ChristmasScarfOutline size={size} color={color} />;
 				default:
 					return <Ionicons name="compass-outline" size={size} color={color} />;
@@ -290,6 +305,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_ACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{
@@ -307,6 +323,7 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 		case DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_INACTIVE: {
 			switch (skin) {
 				case 'winter':
+				case 'christmas':
 					return (
 						<View
 							style={{

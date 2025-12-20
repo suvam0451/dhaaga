@@ -3,15 +3,19 @@ import { StyleProp, View, ViewStyle } from 'react-native';
 
 type Props = {
 	style?: StyleProp<ViewStyle>;
+	themed?: boolean;
 };
 
-export function AppDividerSoft({ style }: Props) {
+export function AppDividerSoft({ style, themed }: Props) {
 	const { theme } = useAppTheme();
 	return (
 		<View
 			style={[
 				{
-					backgroundColor: theme.background.a50,
+					backgroundColor:
+						themed && theme.id !== 'default'
+							? 'transparent'
+							: theme.background.a50,
 					height: 1,
 				},
 				style,

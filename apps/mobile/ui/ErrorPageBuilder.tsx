@@ -1,7 +1,8 @@
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import BearError from '#/components/svgs/BearError';
+import { useAppTheme } from '#/states/global/hooks';
 
 type ErrorPageBuilderProps = {
 	stickerArt?: any;
@@ -24,8 +25,17 @@ function ErrorPageBuilder({
 	errorDescription,
 	children,
 }: ErrorPageBuilderProps) {
+	const { theme } = useAppTheme();
 	return (
-		<>
+		<View
+			style={{
+				backgroundColor: theme.background.a0,
+				margin: 'auto',
+				paddingVertical: 10,
+				borderRadius: 12,
+				maxWidth: Dimensions.get('window').width * (4 / 5),
+			}}
+		>
 			<View
 				style={{
 					width: 128,
@@ -51,7 +61,7 @@ function ErrorPageBuilder({
 				</AppText.Normal>
 				{children}
 			</View>
-		</>
+		</View>
 	);
 }
 

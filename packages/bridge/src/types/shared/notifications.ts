@@ -16,7 +16,7 @@ const appNotificationObjectSchema = z.object({
 	id: z.string(),
 	type: z.string(),
 	createdAt: z.coerce.date(),
-	user: appUserObjectSchema.nullable(),
+	// user: appUserObjectSchema.nullable(),
 	post: postObjectSchema.nullable(),
 	extraData: z.any(),
 	read: z.boolean(),

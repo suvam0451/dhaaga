@@ -48,7 +48,7 @@ function TimelineLoadingIndicator({
 						{ backgroundColor: theme.background.a30 },
 					]}
 				>
-					<ActivityIndicator size="small" color="#ffffff87" />
+					<ActivityIndicator size="small" color={theme.secondary.a20} />
 					<NativeTextBold
 						style={[
 							styles.text,
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		height: 64,
 		width: '100%',
+		// margin: 'auto',
 		bottom: 0,
 		display: 'flex',
 		alignItems: 'center',

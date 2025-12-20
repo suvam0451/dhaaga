@@ -22,20 +22,3 @@ const ComposerCtx = createContext<Type>(defaultValue);
 export function useComposerCtx() {
 	return useContext(ComposerCtx);
 }
-
-function WithComposerContext({ children }) {
-	const [state, dispatch] = useReducer(reducer, reducerDefault);
-
-	return (
-		<ComposerCtx.Provider
-			value={{
-				state,
-				dispatch,
-			}}
-		>
-			{children}
-		</ComposerCtx.Provider>
-	);
-}
-
-export default WithComposerContext;

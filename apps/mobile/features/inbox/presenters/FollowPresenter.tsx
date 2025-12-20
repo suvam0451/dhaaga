@@ -1,17 +1,21 @@
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { View } from 'react-native';
-import { Props, styles } from '../components/_common';
-import { AppDivider } from '../../../components/lib/Divider';
+import {
+	UngroupedNotificationWithPostProps,
+	styles,
+} from '../components/_common';
 import AuthorItemPresenter from './AuthorItemPresenter';
 
-function FollowPresenter({ item }: Props) {
-	const user = item.user;
+function FollowPresenter({
+	user,
+	createdAt,
+}: UngroupedNotificationWithPostProps) {
 	return (
 		<View style={styles.container}>
 			<AuthorItemPresenter
 				user={user}
 				notificationType={DriverNotificationType.FOLLOW}
-				createdAt={item.createdAt}
+				createdAt={createdAt}
 			/>
 		</View>
 	);

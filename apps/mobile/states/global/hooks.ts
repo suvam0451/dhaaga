@@ -94,6 +94,7 @@ export function useAppTheme() {
 			setTheme: o.appTheme.setAppColorScheme,
 			skin: o.appTheme.skin,
 			setSkin: o.appTheme.setAppSkin,
+			loadSkinFromMemory: o.appTheme.loadSkinFromMemory,
 		})),
 	);
 }

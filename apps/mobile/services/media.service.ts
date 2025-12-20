@@ -77,20 +77,6 @@ class MediaService {
 				let seedWidth = item.getWidth();
 				let seedHeight = item.getHeight();
 
-				// console.log('[INFO]: image dims', seedHeight, seedHeight);
-				// if (!seedWidth || !seedHeight) {
-				// 	await RNImage.getSize(item.getUrl(), (width, height) => {
-				// 		console.log(item.getUrl(), width, height);
-				// 		seedWidth = width;
-				// 		seedHeight = height;
-				// 	});
-				// 	console.log(
-				// 		'[INFO]: manually resolved image dims',
-				// 		seedHeight,
-				// 		seedHeight,
-				// 	);
-				// }
-
 				const { height } = this.calculateDimensions({
 					maxW: maxWidth,
 					maxH: maxHeight,

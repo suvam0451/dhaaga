@@ -29,7 +29,7 @@ function StateIndicator({ error, isFetching }: StateIndicatorProps) {
 			<View
 				style={{
 					flex: 1,
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 					paddingTop: 52,
 				}}
 			>

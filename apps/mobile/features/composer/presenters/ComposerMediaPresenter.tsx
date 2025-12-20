@@ -1,5 +1,4 @@
 import { View, StyleSheet } from 'react-native';
-import { useComposerCtx } from '../contexts/useComposerCtx';
 import ComposeMediaTargets from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/MediaTargets';
 import {
 	useActiveUserSession,
@@ -8,24 +7,30 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { AppBottomSheetMenu } from '#/components/lib/Menu';
-import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import { AppIcon } from '#/components/lib/Icon';
 import MediaUtils from '#/utils/media.utils';
 import { ACCOUNT_METADATA_KEY, AccountMetadataService } from '@dhaaga/db';
 import ActivityPubProviderService from '#/services/activitypub-provider.service';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import useComposer from '../../../states/app/useComposer';
+import useComposer from '#/states/app/useComposer';
 import { AppText } from '#/components/lib/Text';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
+import { usePostComposerInputMode } from '#/features/composer/hooks';
 
 function ComposerMediaPresenter() {
 	const { driver } = useAppApiClient();
 	const { acct } = useActiveUserSession();
 	const { db } = useAppDb();
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 	const { theme } = useAppTheme();
-	const { toHome } = useComposer();
+	const { toTextMode } = usePostComposerInputMode();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	/**
@@ -44,19 +49,19 @@ function ComposerMediaPresenter() {
 		);
 
 		dispatch({
-			type: PostComposerReducerActionType.ADD_MEDIA,
+			type: PostComposerAction.ADD_MEDIA,
 			payload: {
 				item: _asset,
 			},
 		});
 
-		// media attachments are uploaded during post creation
+		// media attachments are uploaded during post-creation
 		if (driver === KNOWN_SOFTWARE.BLUESKY) return;
 
 		// try upload
 		try {
 			dispatch({
-				type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+				type: PostComposerAction.SET_UPLOAD_STATUS,
 				payload: {
 					status: 'uploading',
 					localUri: _asset.uri,
@@ -73,14 +78,14 @@ function ComposerMediaPresenter() {
 			);
 			if (uploadResult.id && uploadResult.previewUrl) {
 				dispatch({
-					type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+					type: PostComposerAction.SET_UPLOAD_STATUS,
 					payload: {
 						status: 'uploaded',
 						localUri: _asset.uri,
 					},
 				});
 				dispatch({
-					type: PostComposerReducerActionType.SET_REMOTE_CONTENT,
+					type: PostComposerAction.SET_REMOTE_CONTENT,
 					payload: {
 						localUri: _asset.uri,
 						remoteId: uploadResult.id,
@@ -89,7 +94,7 @@ function ComposerMediaPresenter() {
 				});
 			} else {
 				dispatch({
-					type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+					type: PostComposerAction.SET_UPLOAD_STATUS,
 					payload: {
 						status: 'failed',
 						localUri: _asset.uri,
@@ -98,7 +103,7 @@ function ComposerMediaPresenter() {
 			}
 		} catch (E) {
 			dispatch({
-				type: PostComposerReducerActionType.SET_UPLOAD_STATUS,
+				type: PostComposerAction.SET_UPLOAD_STATUS,
 				payload: {
 					status: 'failed',
 					localUri: _asset.uri,
@@ -112,7 +117,7 @@ function ComposerMediaPresenter() {
 			<AppBottomSheetMenu.WithBackNavigation
 				backLabel={t(`sheets.backOption`)}
 				nextLabel={''}
-				onBack={toHome}
+				onBack={toTextMode}
 				onNext={() => {}}
 				nextEnabled={false}
 				MiddleComponent={

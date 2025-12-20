@@ -172,7 +172,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		[
 			'expo-asset',
 			{
-				assets: ['./assets/dhaaga', './assets/branding', './assets/badges'],
+				assets: [
+					'./assets/backdrops',
+					'./assets/badges',
+					'./assets/branding',
+					'./assets/dhaaga',
+				],
 			},
 		],
 		...NONFREE_DEPS,

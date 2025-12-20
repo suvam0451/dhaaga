@@ -8,6 +8,22 @@ import { router } from 'expo-router';
  * are concerned) easier
  */
 class RoutingUtils {
+	/**
+	 * Hub
+	 */
+
+	static toHubUserGuide() {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.HUB_GUIDE,
+		});
+	}
+
+	static toHubSkinSelection() {
+		router.navigate({
+			pathname: APP_ROUTING_ENUM.HUB_SKINS,
+		});
+	}
+
 	static toTimelineUserGuide() {
 		router.navigate({
 			pathname: APP_ROUTING_ENUM.FEED_GUIDE,

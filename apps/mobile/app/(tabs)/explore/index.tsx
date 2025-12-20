@@ -11,7 +11,6 @@ import {
 	useActiveUserSession,
 	useAppActiveSession,
 	useAppApiClient,
-	useAppTheme,
 } from '#/states/global/hooks';
 import { getSearchTabs } from '@dhaaga/db';
 import ZenExplorationWidget from '#/features/explore/components/ZenExplorationWidget';
@@ -19,6 +18,7 @@ import ZenModeAnimations from '#/features/explore/components/ZenModeAnimations';
 import PostResultView from '#/features/explore/views/PostResultView';
 import UserResultView from '#/features/explore/views/UserResultView';
 import FeedResultView from '#/features/explore/views/FeedResultView';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 /**
  * Renders the results of a
@@ -80,23 +80,17 @@ function Content() {
 }
 
 function Page() {
-	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
 	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
 
 	return (
-		<View
-			style={{
-				flex: 1,
-				backgroundColor: theme.palette.bg,
-			}}
-		>
+		<WithBackgroundSkin>
 			<DiscoverCtx>
 				<Content />
 			</DiscoverCtx>
-		</View>
+		</WithBackgroundSkin>
 	);
 }
 

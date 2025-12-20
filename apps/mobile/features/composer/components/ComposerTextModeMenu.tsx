@@ -1,20 +1,20 @@
 import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import PostButton from './PostButton';
+import PostButton from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/PostButton';
 import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
-import { appDimensions } from '#/styles/dimensions';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import useComposer from '#/states/app/useComposer';
 import { PostInspector } from '@dhaaga/bridge';
 import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
+import { usePostComposerState } from '@dhaaga/react';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 
 /**
  * Indicates in which context this reply is being composed
  */
 function ReplyIndicator() {
-	const { state } = useComposer();
+	const state = usePostComposerState();
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
@@ -22,7 +22,7 @@ function ReplyIndicator() {
 
 	const _target = PostInspector.getContentTarget(state.parent);
 	return (
-		<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+		<View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 4 }}>
 			<NativeTextNormal
 				style={[
 					{
@@ -66,60 +66,65 @@ function ReplyIndicator() {
  *
  * For emoji selections, this section is hidden
  */
-function ComposerTopMenu() {
+function ComposerTextModeMenu() {
 	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 
 	return (
-		<View
-			style={[
-				styles.root,
-				{
-					backgroundColor: theme.background.a30,
-				},
-			]}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					marginBottom: appDimensions.timelines.sectionBottomMargin * 0.5,
-				}}
-			>
-				<View style={styles.avatarBorderBox}>
-					<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
-				</View>
-				<View style={{ flexGrow: 1, marginLeft: 6 }}>
-					<NativeTextBold
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						style={[styles.displayName]}
+		<BottomSheetMenu
+			title={null}
+			variant={'raised'}
+			CustomHeader={
+				<View
+					style={[
+						styles.root,
+						{
+							backgroundColor: theme.background.a30,
+						},
+					]}
+				>
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							// marginBottom: appDimensions.timelines.sectionBottomMargin * 0.5,
+						}}
 					>
-						{acct?.displayName}
-					</NativeTextBold>
-					<NativeTextBold
-						style={[
-							styles.username,
-							{
-								color: theme.secondary.a40,
-							},
-						]}
-					>
-						@{acct?.username}
-					</NativeTextBold>
+						<View style={styles.avatarBorderBox}>
+							<Image source={acct?.avatarUrl} style={styles.avatarContainer} />
+						</View>
+						<View style={{ flexGrow: 1, marginLeft: 6 }}>
+							<NativeTextBold
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								style={[styles.displayName]}
+							>
+								{acct?.displayName}
+							</NativeTextBold>
+							<NativeTextBold
+								style={[
+									styles.username,
+									{
+										color: theme.secondary.a40,
+									},
+								]}
+							>
+								@{acct?.username}
+							</NativeTextBold>
+						</View>
+						<PostButton />
+					</View>
+					<ReplyIndicator />
 				</View>
-				<PostButton />
-			</View>
-			<ReplyIndicator />
-		</View>
+			}
+		/>
 	);
 }
 
+export default ComposerTextModeMenu;
+
 const styles = StyleSheet.create({
 	root: {
-		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
-		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
-		padding: 10,
-		paddingTop: appDimensions.bottomSheet.clearanceTop,
+		flex: 1,
 	},
 	avatarBorderBox: {
 		borderWidth: 0.75,
@@ -141,5 +146,3 @@ const styles = StyleSheet.create({
 		marginLeft: 4,
 	},
 });
-
-export default ComposerTopMenu;

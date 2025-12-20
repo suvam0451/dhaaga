@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { appDimensions } from '#/styles/dimensions';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 type Props = {
 	// account left join guaranteed
@@ -43,7 +44,6 @@ type Props = {
 function HubTab({ profile }: Props) {
 	const { db } = useAppDb();
 	const [State, dispatch] = useReducer(reducer, reducerDefault);
-	const { theme } = useAppTheme();
 	const [Refreshing, setRefreshing] = useState(false);
 	const { show, hide } = useAppDialog();
 	const { loadAccounts } = useHub();
@@ -319,55 +319,54 @@ function HubTab({ profile }: Props) {
 	// const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
 	return (
-		<View style={{ backgroundColor: theme.background.a10, height: '100%' }}>
-			<NavBar_Hub acct={parentAcct} />
-			<ScrollView
-				style={{
-					backgroundColor: theme.palette.bg,
-				}}
-				refreshControl={
-					<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
-				}
-				contentContainerStyle={{
-					paddingTop: appDimensions.topNavbar.hubVariantHeight,
-				}}
-				scrollIndicatorInsets={{
-					top: appDimensions.topNavbar.hubVariantHeight,
-				}}
-				contentOffset={{ x: 0, y: appDimensions.topNavbar.hubVariantHeight }}
-			>
-				{/* --- Pinned Timelines --- */}
-				<HubPinnedFeedList
-					account={State.acct}
-					items={State.pins.timelines}
-					onPressAddFeed={onPressAddFeed}
-				/>
+		<WithBackgroundSkin>
+			<View style={{ height: '100%' }}>
+				<NavBar_Hub acct={parentAcct} />
+				<ScrollView
+					refreshControl={
+						<RefreshControl refreshing={Refreshing} onRefresh={refresh} />
+					}
+					contentContainerStyle={{
+						paddingTop: appDimensions.topNavbar.hubVariantHeight,
+					}}
+					scrollIndicatorInsets={{
+						top: appDimensions.topNavbar.hubVariantHeight,
+					}}
+					contentOffset={{ x: 0, y: appDimensions.topNavbar.hubVariantHeight }}
+				>
+					{/* --- Pinned Timelines --- */}
+					<HubPinnedFeedList
+						account={State.acct}
+						items={State.pins.timelines}
+						onPressAddFeed={onPressAddFeed}
+					/>
 
-				{/* --- Pinned Users --- */}
-				<HubPinnedUserList
-					parentAcct={State.acct}
-					items={State.pins.users}
-					profile={profile}
-					onPressAddUser={onPressAddUser}
-					onLongPressUser={onLongPressUser}
-				/>
+					{/* --- Pinned Users --- */}
+					<HubPinnedUserList
+						parentAcct={State.acct}
+						items={State.pins.users}
+						profile={profile}
+						onPressAddUser={onPressAddUser}
+						onLongPressUser={onLongPressUser}
+					/>
 
-				{/* --- Pinned Tags --- */}
-				<HubPinnedTagList
-					items={State.pins.tags}
-					parentAcct={State.acct}
-					onPressAddTag={onPressAddTag}
-					onLongPressTag={onLongPressTag}
-				/>
-				<View style={{ height: 72 }} />
-			</ScrollView>
+					{/* --- Pinned Tags --- */}
+					<HubPinnedTagList
+						items={State.pins.tags}
+						parentAcct={State.acct}
+						onPressAddTag={onPressAddTag}
+						onLongPressTag={onLongPressTag}
+					/>
+					<View style={{ height: 72 }} />
+				</ScrollView>
 
-			<HubProfileListView
-				onLongPressProfile={onLongPressProfile}
-				onPressAddProfile={onPressAddProfile}
-				onPressProfile={onPressProfile}
-			/>
-		</View>
+				<HubProfileListView
+					onLongPressProfile={onLongPressProfile}
+					onPressAddProfile={onPressAddProfile}
+					onPressProfile={onPressProfile}
+				/>
+			</View>
+		</WithBackgroundSkin>
 	);
 }
 

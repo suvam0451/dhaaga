@@ -1,6 +1,3 @@
-import { ChatBskyConvoDefs, ChatBskyConvoListConvos } from '@atproto/api';
-import { Account, AccountMetadataService, DataSource } from '@dhaaga/db';
-import { UserParser, ChatParser, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import type { MessageObjectType, UserObjectType } from '@dhaaga/bridge';
 
 /**
@@ -15,7 +12,3 @@ export type AppChatRoom = {
 	lastMessage: MessageObjectType;
 	myId: string;
 };
-
-class ChatService {}
-
-export default ChatService;

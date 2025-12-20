@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 import ShareIndicator from '#/components/common/status/fragments/ShareIndicator';
 import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import SingleStatusView from '../post-view/SingleStatusView';
@@ -42,41 +42,18 @@ type StatusItemProps = {
  * Renders a status/note
  * @constructor
  */
-function PostTimelineEntryView({
-	isPreview,
-	isPin,
-	showFullDetails,
-}: StatusItemProps) {
-	const { dto } = withPostItemContext();
-	if (!dto) return <View />;
+const PostTimelineEntryView = memo(
+	({ isPreview, isPin, showFullDetails }: StatusItemProps) => {
+		const { dto } = withPostItemContext();
+		if (!dto) return <View />;
 
-	if (dto.meta.isBoost) {
-		// Quote Boost
-		if (!!dto.content.raw || dto.content.media.length > 0) {
-			return (
-				<PostContainer>
-					<SingleStatusView
-						hasBoost={true}
-						isPreview={isPreview}
-						isPin={isPin}
-						showFullDetails={showFullDetails}
-					/>
-				</PostContainer>
-			);
-		} else {
-			// Normal Boost + Has Reply
-			if (dto.meta.isReply) {
+		if (dto.meta.isBoost) {
+			// Quote Boost
+			if (!!dto.content.raw || dto.content.media.length > 0) {
 				return (
 					<PostContainer>
-						<ShareIndicator
-							avatarUrl={dto.postedBy?.avatarUrl}
-							parsedDisplayName={dto.postedBy?.parsedDisplayName}
-							createdAt={dto.createdAt}
-						/>
-						<AncestorFragment />
 						<SingleStatusView
 							hasBoost={true}
-							hasParent={true}
 							isPreview={isPreview}
 							isPin={isPin}
 							showFullDetails={showFullDetails}
@@ -84,46 +61,67 @@ function PostTimelineEntryView({
 					</PostContainer>
 				);
 			} else {
-				return (
-					<PostContainer>
-						<ShareIndicator
-							avatarUrl={dto.postedBy?.avatarUrl}
-							parsedDisplayName={dto.postedBy?.parsedDisplayName}
-							createdAt={dto.createdAt}
-						/>
-						<SingleStatusView
-							hasBoost={true}
-							isPreview={isPreview}
-							isPin={isPin}
-							showFullDetails={showFullDetails}
-						/>
-					</PostContainer>
-				);
+				// Normal Boost + Has Reply
+				if (dto.meta.isReply) {
+					return (
+						<PostContainer>
+							<ShareIndicator
+								avatarUrl={dto.postedBy?.avatarUrl}
+								parsedDisplayName={dto.postedBy?.parsedDisplayName}
+								createdAt={dto.createdAt}
+							/>
+							<AncestorFragment />
+							<SingleStatusView
+								hasBoost={true}
+								hasParent={true}
+								isPreview={isPreview}
+								isPin={isPin}
+								showFullDetails={showFullDetails}
+							/>
+						</PostContainer>
+					);
+				} else {
+					return (
+						<PostContainer>
+							<ShareIndicator
+								avatarUrl={dto.postedBy?.avatarUrl}
+								parsedDisplayName={dto.postedBy?.parsedDisplayName}
+								createdAt={dto.createdAt}
+							/>
+							<SingleStatusView
+								hasBoost={true}
+								isPreview={isPreview}
+								isPin={isPin}
+								showFullDetails={showFullDetails}
+							/>
+						</PostContainer>
+					);
+				}
 			}
+		} else if (dto.meta.isReply) {
+			return (
+				<PostContainer>
+					<AncestorFragment />
+					<SingleStatusView
+						hasParent={true}
+						isPreview={isPreview}
+						isPin={isPin}
+						showFullDetails={showFullDetails}
+					/>
+				</PostContainer>
+			);
+		} else {
+			return (
+				<PostContainer>
+					<SingleStatusView
+						isPreview={isPreview}
+						isPin={isPin}
+						showFullDetails={showFullDetails}
+					/>
+				</PostContainer>
+			);
 		}
-	} else if (dto.meta.isReply) {
-		return (
-			<PostContainer>
-				<AncestorFragment />
-				<SingleStatusView
-					hasParent={true}
-					isPreview={isPreview}
-					isPin={isPin}
-					showFullDetails={showFullDetails}
-				/>
-			</PostContainer>
-		);
-	} else {
-		return (
-			<PostContainer>
-				<SingleStatusView
-					isPreview={isPreview}
-					isPin={isPin}
-					showFullDetails={showFullDetails}
-				/>
-			</PostContainer>
-		);
-	}
-}
+	},
+);
 
 export default PostTimelineEntryView;

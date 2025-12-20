@@ -47,32 +47,17 @@ export type ColorRangeType = {
 export type AppColorSchemeType = {
 	id: string;
 	name: string;
-	palette: {
-		bg: string;
-		menubar: string;
-		buttonUnstyled: string;
-		hashtagLow: string;
-		hashtagHigh: string;
-		link: string;
-	};
-	textColor: {
-		high: string; // 96%
-		medium: string; // 74%
-		emphasisC: string; // 48%
-		low: string; // 36%
-		misc: string; // 12%
-	};
+	barStyle: 'light-content' | 'dark-content';
 	reactions: {
 		active: string;
 		inactive: string;
 		highlight: string;
 	};
 	primary: string; // hue - 30
+	primaryText: string;
 	harmonyL?: ColorRangeType; // hue + 30
 	harmonyR?: ColorRangeType; // hue + 180 (Complementary, Required)
 	complementary: string; // hue - 150 (Split Complementary)
-	complementaryA: ColorRangeType | null; // hue + 150 (Split Complementary)
-	complementaryB?: ColorRangeType;
 
 	surface?: ColorRangeType;
 	secondary: ColorRangeType;
@@ -97,6 +82,15 @@ export enum AppTextVariant {
 }
 
 export class AppThemingUtil {
+	static applyOpacity(colorHex: string, opacity: number) {
+		const cleaned = colorHex.replace('#', '');
+
+		const r = parseInt(cleaned.substring(0, 2), 16);
+		const g = parseInt(cleaned.substring(2, 4), 16);
+		const b = parseInt(cleaned.substring(4, 6), 16);
+
+		return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+	}
 	static getThreadColorForDepth(depth: number): string {
 		const n = commentThreadPalette.length; // Get the length of the array
 

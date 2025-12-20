@@ -26,6 +26,7 @@ import Animated, {
 	ReanimatedLogLevel,
 	useAnimatedStyle,
 } from 'react-native-reanimated';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 enableMapSet();
 polyfills();
@@ -66,7 +67,7 @@ function App() {
 		setIsRendered(true);
 	}
 
-	const { height } = useNativeKeyboardOffset(20, 20);
+	const { height } = useNativeKeyboardOffset(0, 0);
 	const fakeView = useAnimatedStyle(() => {
 		return {
 			height: height.value,
@@ -92,30 +93,32 @@ function App() {
 				onLayout={onLayout}
 			>
 				<StatusBar
-					barStyle="light-content"
+					barStyle={theme.barStyle}
 					backgroundColor={theme.background.a0}
 					translucent={true}
 				/>
-				<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
-					<Stack
-						initialRouteName={'(tabs)'}
-						screenOptions={{
-							headerShown: false,
-						}}
-					>
-						<Stack.Screen
-							name="(tabs)"
-							options={{
-								presentation: 'modal',
+				<WithBackgroundSkin>
+					<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
+						<Stack
+							initialRouteName={'(tabs)'}
+							screenOptions={{
+								headerShown: false,
 							}}
-						/>
-					</Stack>
-					{/* Globally shared components */}
-					<ImageInspectModal />
-					<AppBottomSheet />
-					<AppDialog />
-				</View>
-				<Animated.View style={fakeView} />
+						>
+							<Stack.Screen
+								name="(tabs)"
+								options={{
+									presentation: 'modal',
+								}}
+							/>
+						</Stack>
+						{/* Globally shared components */}
+						<ImageInspectModal />
+						<AppBottomSheet />
+						<AppDialog />
+					</View>
+					<Animated.View style={fakeView} />
+				</WithBackgroundSkin>
 			</SafeAreaView>
 		</Fragment>
 	);

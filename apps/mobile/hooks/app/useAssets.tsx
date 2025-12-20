@@ -74,92 +74,92 @@ function WithAppAssetsContext({ children }: Props) {
 		height: number;
 	} {
 		if (!IsAssetsLoaded || !assets)
-			return { imgUrl: null, width: 0, simpleVariantHeight: 0 };
+			return { imgUrl: null, width: 0, height: 0 };
 		switch (input.toLowerCase() as KNOWN_SOFTWARE) {
 			case KNOWN_SOFTWARE.AKKOMA:
 				return {
 					imgUrl: assets[0].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.FIREFISH:
 				return {
 					imgUrl: assets[1].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.HOMETOWN:
 			case KNOWN_SOFTWARE.MASTODON:
 				return {
 					imgUrl: assets[2].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.MEISSKEY:
 			case KNOWN_SOFTWARE.MISSKEY:
 				return {
 					imgUrl: assets[3].localUri,
 					width: 32,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.PLEROMA:
 				return {
 					imgUrl: assets[4].localUri,
 					width: 14,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.ICESHRIMP:
 				return {
 					imgUrl: assets[5].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.GOTOSOCIAL:
 				return {
 					imgUrl: assets[6].localUri,
 					width: 28,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			case KNOWN_SOFTWARE.SHARKEY: {
 				return {
 					imgUrl: assets[7].localUri,
 					width: 28,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 			case KNOWN_SOFTWARE.PEERTUBE: {
 				return {
 					imgUrl: assets[8].localUri,
 					width: 20,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 			case KNOWN_SOFTWARE.PIXELFED: {
 				return {
 					imgUrl: assets[9].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 			case KNOWN_SOFTWARE.CHERRYPICK: {
 				return {
 					imgUrl: assets[10].localUri,
 					width: 148,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 			case KNOWN_SOFTWARE.FRIENDICA: {
 				return {
 					imgUrl: assets[11].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 			case KNOWN_SOFTWARE.LEMMY: {
 				return {
 					imgUrl: assets[12].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 			// hometown is clubbed with mastodon
@@ -168,7 +168,7 @@ function WithAppAssetsContext({ children }: Props) {
 				return {
 					imgUrl: assets[13].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 			}
 
@@ -177,7 +177,7 @@ function WithAppAssetsContext({ children }: Props) {
 				return {
 					imgUrl: assets[14].localUri,
 					width: 24,
-					simpleVariantHeight: 24,
+					height: 24,
 				};
 		}
 	}

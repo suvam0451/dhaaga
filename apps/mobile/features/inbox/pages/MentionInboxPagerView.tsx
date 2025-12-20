@@ -10,13 +10,15 @@ import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
 
 function Wrapper({ item }: { item: NotificationObjectType }) {
 	const { theme } = useAppTheme();
-
 	function renderLeftActions(progress, dragX) {
 		return (
 			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
+					backgroundColor: theme.background.a20,
+					borderRadius: 8,
+					marginLeft: 4,
 				}}
 			>
 				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
@@ -37,7 +39,6 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 			renderLeftActions={renderLeftActions}
 			overshootRight={false}
 			overshootFriction={8}
-			childrenContainerStyle={{ backgroundColor: theme.background.a0 }}
 		>
 			<NotificationItemPresenter item={item} />
 		</Swipeable>

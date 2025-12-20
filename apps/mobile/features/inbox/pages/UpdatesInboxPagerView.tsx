@@ -70,6 +70,7 @@ function Generator() {
 				label={'Updates'}
 				navbarType={'updates'}
 				flatListKey={'inbox/subscriptions'}
+				skipTimelineInit={true}
 			/>
 		</>
 	);

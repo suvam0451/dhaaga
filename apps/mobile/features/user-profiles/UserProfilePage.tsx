@@ -101,7 +101,7 @@ export function UserProfilePage() {
 	return (
 		<View
 			style={{
-				backgroundColor: theme.palette.bg,
+				backgroundColor: theme.background.a0,
 				flex: 1,
 			}}
 		>

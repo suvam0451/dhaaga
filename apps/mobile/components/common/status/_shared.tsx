@@ -176,8 +176,11 @@ export function PostContainer({ children }: any) {
 		<Fragment>
 			<View
 				style={{
-					paddingHorizontal: 10,
-					backgroundColor: theme.palette.bg,
+					paddingHorizontal: 6,
+					marginHorizontal: 6,
+					backgroundColor: theme.background.a0,
+					borderRadius: 10,
+					paddingVertical: 6,
 				}}
 			>
 				{children}

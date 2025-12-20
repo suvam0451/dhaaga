@@ -1,7 +1,6 @@
 import { Account } from '@dhaaga/db';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useHub } from '#/states/global/hooks';
 import Animated, {
@@ -13,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { NativeTextH1 } from '#/ui/NativeText';
 import NavBarFactory from '#/components/topnavbar/components/NavBarFactory';
+import RoutingUtils from '#/utils/routing.utils';
 
 type Props = {
 	acct?: Account;
@@ -44,10 +44,12 @@ function SocialHubHeader({ acct, animatedStyle }: Props) {
 
 	const menuItems = [
 		{
+			iconId: 'color-palette-outline',
+			onPress: RoutingUtils.toHubSkinSelection,
+		},
+		{
 			iconId: 'user-guide',
-			onPress: () => {
-				router.push('/user-guide');
-			},
+			onPress: RoutingUtils.toHubUserGuide,
 		},
 	];
 

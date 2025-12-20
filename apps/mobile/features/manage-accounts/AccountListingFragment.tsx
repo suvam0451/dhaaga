@@ -35,13 +35,12 @@ export function AccountPfp({ url, selected, onClicked }: AccountPfpProps) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
-			style={{
-				height: 48,
-				width: 48,
-				borderRadius: 8,
-				borderWidth: 1.5,
-				borderColor: selected ? theme.primary : 'gray',
-			}}
+			style={[
+				styles.avatar,
+				{
+					borderColor: selected ? theme.primary : 'gray',
+				},
+			]}
 			onPress={onClicked}
 		>
 			<Image
@@ -156,7 +155,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 	return (
 		<View
 			style={{
-				backgroundColor: theme.palette.menubar,
+				backgroundColor: theme.background.a30,
 				padding: 8,
 				paddingVertical: 6,
 				marginBottom: 8,
@@ -212,12 +211,7 @@ function AccountListingFragment({ acct, onListChange }: Props) {
 
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<TouchableOpacity
-						style={{
-							paddingHorizontal: 12,
-							paddingVertical: 12,
-							flexDirection: 'row',
-							alignItems: 'center',
-						}}
+						style={styles.moreActionsButtonContainer}
 						onPress={onMoreActions}
 					>
 						<Feather
@@ -238,6 +232,12 @@ const styles = StyleSheet.create({
 		width: '100%',
 		borderRadius: 6,
 	},
+	avatar: {
+		height: 48,
+		width: 48,
+		borderRadius: 8,
+		borderWidth: 1.5,
+	},
 	selectedIndicator: {
 		position: 'absolute',
 		height: 16,
@@ -248,6 +248,12 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		borderTopLeftRadius: 8,
 		borderBottomEndRadius: 4,
+	},
+	moreActionsButtonContainer: {
+		paddingHorizontal: 12,
+		paddingVertical: 12,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 });
 

@@ -1,99 +1,123 @@
 import {
+	useAppApiClient,
 	useAppBottomSheet,
-	useAppPublishers,
+	useAppDialog,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { useEffect, useState } from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { useState } from 'react';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import WithAppStatusItemContext from '../../containers/WithPostItemContext';
 import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { NativeTextBold } from '#/ui/NativeText';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
+import { PostMutator } from '@dhaaga/bridge';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 
 function AuthoredPostPreviewBottomSheet() {
-	const { ctx, stateId } = useAppBottomSheet();
-	const { postEventBus } = useAppPublishers();
-	const [Post, setPost] = useState(null);
+	const { client } = useAppApiClient();
+	const { ctx } = useAppBottomSheet();
 	const { theme } = useAppTheme();
+	const [IsDeleted, setIsDeleted] = useState(false);
+	const { show, hide } = useAppDialog();
 
-	function onUpdate({ uuid }: { uuid: string }) {
-		setPost(postEventBus.read(uuid));
+	const { post } = usePostEventBusStore(
+		ctx.$type === 'post-preview' ? ctx.postId : null,
+	);
+
+	async function onDeleteConfirm() {
+		try {
+			const result = await PostMutator.delete(client, post);
+			setIsDeleted(result);
+		} finally {
+			hide();
+		}
 	}
 
-	useEffect(() => {
-		if (ctx.$type !== 'post-preview') return;
-		const postId = ctx.postId;
-		onUpdate({ uuid: postId });
-		postEventBus.subscribe(postId, onUpdate);
-		return () => {
-			postEventBus.unsubscribe(postId, onUpdate);
-		};
-	}, [stateId]);
+	function onDelete() {
+		show({
+			title: 'Confirm Deletion',
+			description: ['Are you sure you want to delete this post?'],
+			actions: [
+				{
+					label: 'Confirm & Delete',
+					onPress: onDeleteConfirm,
+				},
+			],
+		});
+	}
 
 	return (
-		<ScrollView
-			contentContainerStyle={{ paddingHorizontal: 10, marginVertical: 32 }}
-		>
-			<View
-				style={{
-					flexDirection: 'row',
-					flex: 1,
-					alignItems: 'center',
-					marginBottom: 32,
-				}}
-			>
-				<NativeTextBold
-					style={{
-						color: theme.secondary.a10,
-						fontSize: 20,
-						marginLeft: 4,
-						flex: 1,
-					}}
-				>
-					Published 🎉
-				</NativeTextBold>
-				{/*<TouchableOpacity*/}
-				{/*	style={[*/}
-				{/*		styles.buttonContainer,*/}
-				{/*		{*/}
-				{/*			backgroundColor: theme.complementary,*/}
-				{/*		},*/}
-				{/*	]}*/}
-				{/*	onPress={onBrowsePress}*/}
-				{/*>*/}
-				{/*	<Text*/}
-				{/*		style={{*/}
-				{/*			color: 'black',*/}
-				{/*			fontFamily: APP_FONTS.INTER_600_SEMIBOLD,*/}
-				{/*		}}*/}
-				{/*	>*/}
-				{/*		Browse*/}
-				{/*	</Text>*/}
-				{/*	<FontAwesome*/}
-				{/*		name="send"*/}
-				{/*		size={20}*/}
-				{/*		style={{ marginLeft: 8 }}*/}
-				{/*		color={'black'}*/}
-				{/*	/>*/}
-				{/*</TouchableOpacity>*/}
-			</View>
-			<WithAppStatusItemContext dto={Post}>
-				<PostTimelineEntryView isPreview />
-			</WithAppStatusItemContext>
-
-			<View style={{ marginTop: 36 }}>
-				<Text
-					style={{
-						color: theme.secondary.a30,
-						fontSize: 14,
-						textAlign: 'center',
-					}}
-				>
-					More options (Deletion, Re-draft etc.) will be implemented later.
-				</Text>
-			</View>
-		</ScrollView>
+		<>
+			<BottomSheetMenu
+				title={'Published'}
+				variant={'raised'}
+				menuItems={[
+					{
+						iconId: 'trash',
+						onPress: onDelete,
+						hidden: IsDeleted,
+					},
+					{
+						iconId: 'eye-outline',
+						onPress: () => {},
+						hidden: IsDeleted,
+					},
+				]}
+				CustomHeader={
+					<View
+						style={{
+							flexDirection: 'row',
+							flex: 1,
+							alignItems: 'center',
+						}}
+					>
+						<NativeTextBold
+							style={{
+								color: theme.secondary.a10,
+								fontSize: 20,
+								marginLeft: 4,
+								flex: 1,
+							}}
+						>
+							Post Published
+						</NativeTextBold>
+					</View>
+				}
+			/>
+			<ScrollView contentContainerStyle={styles.scrollView}>
+				{IsDeleted ? (
+					<View
+						style={[
+							styles.deletionIndicator,
+							{
+								backgroundColor: theme.complementary,
+							},
+						]}
+					>
+						<NativeTextBold style={{ color: theme.primaryText }}>
+							This post is now deleted.
+						</NativeTextBold>
+					</View>
+				) : (
+					<View />
+				)}
+				<WithAppStatusItemContext dto={post}>
+					<PostTimelineEntryView isPreview />
+				</WithAppStatusItemContext>
+			</ScrollView>
+		</>
 	);
 }
 
 export default AuthoredPostPreviewBottomSheet;
+
+const styles = StyleSheet.create({
+	scrollView: { paddingHorizontal: 10, marginVertical: 32, paddingBottom: 52 },
+	deletionIndicator: {
+		padding: 12,
+		borderRadius: 12,
+		alignItems: 'center',
+		paddingVertical: 16,
+		marginBottom: 24,
+	},
+});

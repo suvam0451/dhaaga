@@ -19,6 +19,10 @@ function DayMode() {
 			<View
 				style={{
 					alignItems: 'center',
+					backgroundColor: theme.background.a0,
+					margin: 'auto',
+					padding: 36,
+					borderRadius: 12,
 				}}
 			>
 				<View>
@@ -40,7 +44,7 @@ function DayMode() {
 				<NativeTextMedium
 					style={{ fontSize: 20, marginTop: 20, lineHeight: 24 }}
 				>
-					Have a lovely night,
+					Have a nice day,
 				</NativeTextMedium>
 				<NativeTextBold
 					style={{

@@ -23,7 +23,13 @@ class Parser {
 						? DriverNotificationType.CHAT
 						: DriverNotificationType.MENTION,
 				createdAt: input.createdAt,
-				user: UserParser.parse<unknown>(input.account, driver, server),
+				users: [
+					{
+						item: UserParser.parse<unknown>(input.account, driver, server),
+						types: [DriverNotificationType.CHAT],
+						extraData: {},
+					},
+				],
 				post: PostParser.parse<unknown>(input, driver, server) || null,
 				extraData: {},
 				read: false,

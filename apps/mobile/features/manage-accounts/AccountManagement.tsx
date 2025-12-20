@@ -75,7 +75,7 @@ function SelectAccountStack() {
 				)}
 				contentContainerStyle={{
 					paddingHorizontal: 4,
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 4,
 				}}
 				ListFooterComponent={

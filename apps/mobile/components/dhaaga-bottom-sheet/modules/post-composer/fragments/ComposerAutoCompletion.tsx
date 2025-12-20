@@ -1,19 +1,23 @@
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
 } from 'react-native-reanimated';
 import TextEditorService from '#/services/text-editor.service';
-import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
 import { useAppTheme } from '#/states/global/hooks';
 import type { CustomEmojiObjectType } from '@dhaaga/bridge';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
 
 function ComposerAutoCompletion() {
 	const { theme } = useAppTheme();
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 
 	const available = useSharedValue(0);
 
@@ -38,7 +42,7 @@ function ComposerAutoCompletion() {
 
 	function onEmojiAccepted(item: CustomEmojiObjectType) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_TEXT,
+			type: PostComposerAction.SET_TEXT,
 			payload: {
 				content: TextEditorService.autoCompleteReaction(
 					state.text,
@@ -48,7 +52,7 @@ function ComposerAutoCompletion() {
 			},
 		});
 		dispatch({
-			type: PostComposerReducerActionType.CLEAR_SEARCH_PROMPT,
+			type: PostComposerAction.CLEAR_SEARCH_PROMPT,
 		});
 	}
 

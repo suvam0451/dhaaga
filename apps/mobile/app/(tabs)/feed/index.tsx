@@ -23,33 +23,39 @@ import BearError from '#/components/svgs/BearError';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { View } from 'react-native';
 import { router } from 'expo-router';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 function TimelineIdle() {
-	const { theme } = useAppTheme();
 	const { animatedStyle } = useScrollHandleAnimatedList();
 
 	return (
-		<View
-			style={{ flex: 1, backgroundColor: theme.background.a0, paddingTop: 52 }}
-		>
-			<NavBar_Feed animatedStyle={animatedStyle} />
-			<ErrorPageBuilder
-				stickerArt={<BearError />}
-				errorMessage={'No Timeline Selected'}
-				errorDescription={
-					'You can pin and access various types of timelines from your personalised hub.'
-				}
-			/>
-			<View style={{ marginTop: 32 }}>
-				<AppButtonVariantA
-					label={'Go There'}
-					loading={false}
-					onClick={() => {
-						router.navigate('/');
-					}}
-				/>
+		<WithBackgroundSkin>
+			<View
+				style={{
+					paddingTop: 52,
+					flex: 1,
+				}}
+			>
+				<NavBar_Feed animatedStyle={animatedStyle} />
+				<ErrorPageBuilder
+					stickerArt={<BearError />}
+					errorMessage={'No Timeline Selected'}
+					errorDescription={
+						'You can pin and access various types of timelines from your personalised hub.'
+					}
+				>
+					<View style={{ marginTop: 32 }}>
+						<AppButtonVariantA
+							label={'Go There'}
+							loading={false}
+							onClick={() => {
+								router.navigate('/');
+							}}
+						/>
+					</View>
+				</ErrorPageBuilder>
 			</View>
-		</View>
+		</WithBackgroundSkin>
 	);
 }
 
@@ -117,9 +123,11 @@ function Content() {
 
 function Page() {
 	return (
-		<PostTimelineCtx>
-			<Content />
-		</PostTimelineCtx>
+		<WithBackgroundSkin>
+			<PostTimelineCtx>
+				<Content />
+			</PostTimelineCtx>
+		</WithBackgroundSkin>
 	);
 }
 

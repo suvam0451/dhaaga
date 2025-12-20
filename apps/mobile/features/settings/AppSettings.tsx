@@ -167,7 +167,7 @@ function AppSettings() {
 			<ScrollView
 				style={{
 					paddingBottom: 16,
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,
 				}}
 			>

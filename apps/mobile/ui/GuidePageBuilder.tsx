@@ -24,7 +24,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 			<NavBar_Simple label={label} animatedStyle={animatedStyle} />
 			<FlatList
 				style={{
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 				}}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,

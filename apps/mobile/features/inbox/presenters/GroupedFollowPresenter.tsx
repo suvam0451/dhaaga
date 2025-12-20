@@ -1,13 +1,16 @@
 import { View } from 'react-native';
-import { Props } from '../components/_common';
-import { AppText } from '../../../components/lib/Text';
+import { GroupedNotificationWithUserProps } from '../components/_common';
+import { AppText } from '#/components/lib/Text';
 import GroupedUsersItemView from '../view/GroupedUsersItemView';
-import { AppDivider } from '../../../components/lib/Divider';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
+import { AppDivider } from '#/components/lib/Divider';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { MoreOptionsButtonSectionView } from '../components/MoreOptionsButtonSectionView';
 
-function GroupedFollowPresenter({ item }: Props) {
+function GroupedFollowPresenter({
+	users,
+	createdAt,
+}: GroupedNotificationWithUserProps) {
 	return (
 		<View>
 			<View style={{ paddingHorizontal: 10 }}>
@@ -20,12 +23,12 @@ function GroupedFollowPresenter({ item }: Props) {
 				>
 					<View style={{ flex: 1 }}>
 						<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
-							{item.users.length} users followed you
+							{users.length} users followed you
 						</AppText.Medium>
 					</View>
-					<MoreOptionsButtonSectionView createdAt={item.createdAt} />
+					<MoreOptionsButtonSectionView createdAt={createdAt} />
 				</View>
-				<GroupedUsersItemView items={item.users} />
+				<GroupedUsersItemView items={users} />
 			</View>
 			<AppDivider.Soft style={{ marginVertical: 12 }} />
 		</View>

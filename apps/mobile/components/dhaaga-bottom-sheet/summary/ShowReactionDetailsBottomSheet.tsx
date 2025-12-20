@@ -36,7 +36,7 @@ function ReactingUser({ dto }: { dto: UserObjectType }) {
 				/>
 				<NativeTextNormal
 					style={{
-						color: theme.textColor.medium,
+						color: theme.secondary.a30,
 						fontSize: 13,
 					}}
 				>
@@ -168,7 +168,7 @@ function ShowReactionDetailsBottomSheet() {
 								<View>
 									<NativeTextBold
 										style={{
-											color: theme.textColor.medium,
+											color: theme.secondary.a30,
 											marginTop: 8,
 										}}
 									>
@@ -181,7 +181,7 @@ function ShowReactionDetailsBottomSheet() {
 							<NativeTextBold
 								style={{
 									fontSize: 16,
-									color: theme.textColor.medium,
+									color: theme.secondary.a30,
 									marginVertical: 16,
 								}}
 							>

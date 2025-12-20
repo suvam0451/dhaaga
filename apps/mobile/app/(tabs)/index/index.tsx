@@ -48,7 +48,6 @@ function HubGreetingFragment({ greeting, acct }: HubGreetingFragmentProps) {
 				position: 'relative',
 			}}
 		>
-			<StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 			<View style={{ flexGrow: 1 }}>
 				<NativeTextH6
 					numberOfLines={1}

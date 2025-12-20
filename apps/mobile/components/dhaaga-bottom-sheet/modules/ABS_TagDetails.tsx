@@ -19,12 +19,11 @@ function ABS_TagDetails() {
 
 	const ValueRef = useRef<string>(null);
 	useEffect(() => {
-		const _target = ctx?.tag;
-
-		if (ValueRef.current === _target) return;
-		setTagName(_target);
-		ValueRef.current = _target;
-	}, [stateId, ctx]);
+		if (ctx.$type !== 'tag-preview') return setTagName(null);
+		if (ValueRef.current === ctx.tagId) return;
+		setTagName(ctx.tagId);
+		ValueRef.current = ctx.tagId;
+	}, [stateId]);
 
 	const FOLLOW_POSSIBLE = ActivityPubService.mastodonLike(driver);
 

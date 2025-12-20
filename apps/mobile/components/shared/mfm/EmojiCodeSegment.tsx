@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Image, ImageErrorEventData, ImageLoadEventData } from 'expo-image';
 import { type CustomEmojiObjectType, RandomUtil } from '@dhaaga/bridge';
-import {
-	APP_COLOR_PALETTE_EMPHASIS,
-	AppThemingUtil,
-} from '#/utils/theming.util';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useActiveUserSession, useAppTheme } from '#/states/global/hooks';
 import { NativeTextMedium } from '#/ui/NativeText';
 
@@ -21,11 +18,6 @@ function EmojiCodeSegment({ emojiMap, value, emphasis }: Props) {
 	const [EmojiWidth, setEmojiWidth] = useState(EMOJI_HEIGHT);
 	const { theme } = useAppTheme();
 	const { acctManager } = useActiveUserSession();
-
-	let color = AppThemingUtil.getColorForEmphasis(
-		theme.complementaryB,
-		emphasis,
-	);
 
 	const k = RandomUtil.nanoId();
 

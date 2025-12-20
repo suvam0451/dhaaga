@@ -1,14 +1,18 @@
-import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import type { CustomEmojiObjectType, UserObjectType } from '@dhaaga/bridge';
-import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
 import TextEditorService from '#/services/text-editor.service';
 import { useAppBottomSheet, useAppPublishers } from '#/states/global/hooks';
 import { useEffect } from 'react';
 import useAutoSuggestion from '#/features/composer/interactors/useAutoSuggestion';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
 
 function useComposer() {
 	const { ctx, stateId } = useAppBottomSheet();
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 	const { postEventBus } = useAppPublishers();
 	useAutoSuggestion(state, dispatch);
 
@@ -17,7 +21,7 @@ function useComposer() {
 		const postId = ctx?.$type === 'compose-reply' ? ctx.parentPostId : null;
 
 		dispatch({
-			type: PostComposerReducerActionType.SET_PARENT,
+			type: PostComposerAction.SET_PARENT,
 			payload: {
 				item: postId ? postEventBus.read(postId) : null,
 			},
@@ -26,7 +30,7 @@ function useComposer() {
 
 	function onAcctAutofill(item: UserObjectType) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_TEXT,
+			type: PostComposerAction.SET_TEXT,
 			payload: {
 				content: TextEditorService.autoCompleteHandler(
 					state.text,
@@ -36,13 +40,13 @@ function useComposer() {
 			},
 		});
 		dispatch({
-			type: PostComposerReducerActionType.CLEAR_SEARCH_PROMPT,
+			type: PostComposerAction.CLEAR_SEARCH_PROMPT,
 		});
 	}
 
 	function onEmojiAutofill(item: CustomEmojiObjectType) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_TEXT,
+			type: PostComposerAction.SET_TEXT,
 			payload: {
 				content: TextEditorService.autoCompleteReaction(
 					state.text,
@@ -52,13 +56,13 @@ function useComposer() {
 			},
 		});
 		dispatch({
-			type: PostComposerReducerActionType.CLEAR_SEARCH_PROMPT,
+			type: PostComposerAction.CLEAR_SEARCH_PROMPT,
 		});
 	}
 
 	function toHome() {
 		dispatch({
-			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+			type: PostComposerAction.SWITCH_TO_TEXT_TAB,
 		});
 	}
 

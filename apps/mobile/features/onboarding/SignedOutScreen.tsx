@@ -17,11 +17,11 @@ function Page() {
 
 	if (error || !assets || assets.length < 1)
 		return (
-			<View style={{ height: '100%', backgroundColor: theme.palette.bg }} />
+			<View style={{ height: '100%', backgroundColor: theme.background.a0 }} />
 		);
 
 	return (
-		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
+		<View style={{ height: '100%', backgroundColor: theme.background.a0 }}>
 			<NativeTextBold style={styles.appLabel}>Dhaaga</NativeTextBold>
 			<Image source={{ uri: assets[0].localUri! }} style={styles.appLogo} />
 			<NativeTextMedium

@@ -6,9 +6,9 @@ import NavBar_Inbox from '#/components/topnavbar/NavBar_Inbox';
 import { MentionListStateIndicator } from '#/features/inbox/components/MentionListStateIndicator';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { FlatList, RefreshControl } from 'react-native';
-import { AppDivider } from '#/components/lib/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { AppDividerSoft } from '#/ui/Divider';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
@@ -48,6 +48,7 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 	return (
 		<>
 			<NavBar_Inbox label={label} type={type} animatedStyle={animatedStyle} />
+
 			<FlatList
 				onScroll={scrollHandler}
 				onLayout={onLayout}
@@ -69,7 +70,7 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 					/>
 				}
 				ItemSeparatorComponent={() => (
-					<AppDivider.Soft style={{ marginVertical: 12 }} />
+					<AppDividerSoft style={{ marginVertical: 12 }} />
 				)}
 				onEndReached={() => {
 					if (!isPending) loadNext();

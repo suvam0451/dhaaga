@@ -250,6 +250,18 @@ class Mutator {
 			return input;
 		}
 	}
+
+	static async delete(
+		client: ApiTargetInterface,
+		input: PostObjectType,
+	): Promise<boolean> {
+		try {
+			const { success, deleted } = await client.posts.delete(input.id);
+			return success && deleted;
+		} catch (e) {
+			return false;
+		}
+	}
 }
 
 export { Mutator as PostMutator };

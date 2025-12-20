@@ -1,9 +1,8 @@
-import { Props, styles } from './_common';
+import { UngroupedNotificationWithPostProps, styles } from './_common';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '#/features/inbox/components/NotificationPostPeek';
 import { View } from 'react-native';
-import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
 import InboxItemBoostedFrom from '#/features/inbox/components/InboxItemBoostedFrom';
 
 /**
@@ -13,16 +12,17 @@ import InboxItemBoostedFrom from '#/features/inbox/components/InboxItemBoostedFr
  * @param item
  * @constructor
  */
-function QuotePostNotification({ item }: Props) {
-	const user: UserObjectType = item.user;
-	const post: PostObjectType = item.post;
-
+function QuotePostNotification({
+	user,
+	post,
+	createdAt,
+}: UngroupedNotificationWithPostProps) {
 	return (
 		<View style={[styles.container]}>
 			<AuthorItemPresenter
 				user={user}
 				notificationType={DriverNotificationType.REPLY}
-				createdAt={item.createdAt}
+				createdAt={createdAt}
 			/>
 			<NotificationPostPeek post={post} />
 			{post.meta.isBoost ? (

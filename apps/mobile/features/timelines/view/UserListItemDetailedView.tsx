@@ -68,7 +68,7 @@ function UserListItemDetailedView({ item }: Props) {
 	}
 
 	return (
-		<View style={[styles.root, { backgroundColor: theme.background.a20 }]}>
+		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
 			<TouchableOpacity delayPressIn={200} onPress={onPress}>
 				{item.banner && <Banner uri={item.banner} />}
 				{!item.banner && <View style={{ height: 12 }} />}
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		marginHorizontal: 6,
 		paddingHorizontal: 10,
+		paddingVertical: 10,
 	},
 	usernameArea: { marginLeft: 12, flex: 1 },
 	statsAndRelationArea: { flexDirection: 'row', alignItems: 'center' },

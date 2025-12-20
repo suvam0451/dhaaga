@@ -62,7 +62,7 @@ function AppPagerView({
 			<PagerView
 				ref={ref}
 				scrollEnabled={scrollEnabled}
-				style={[{ flex: 1, backgroundColor: theme.background.a10 }, props]}
+				style={[{ flex: 1 }, props]}
 				initialPage={TabIndex}
 				onPageScroll={onPagerViewScroll}
 				collapsable={false}

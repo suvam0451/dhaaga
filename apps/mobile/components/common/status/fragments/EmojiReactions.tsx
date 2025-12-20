@@ -64,14 +64,14 @@ function EmojiReactions({ dto }: EmojiReactionsProps) {
 						style={[
 							styles.showAllEmojiButtonContainer,
 							{
-								backgroundColor: theme.reactions.active,
+								backgroundColor: theme.complementary,
 							},
 						]}
 					>
 						<NativeTextBold
 							style={[
 								styles.showAllEmojiButtonText,
-								{ color: theme.textColor.medium },
+								{ color: theme.primaryText },
 							]}
 						>
 							{AllEmojisExpanded
@@ -89,13 +89,13 @@ const styles = StyleSheet.create({
 	showAllEmojiButtonContainer: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#303030',
+		// backgroundColor: '#303030',
 		padding: 8,
 		paddingVertical: 6,
 		borderRadius: 8,
 	},
 	showAllEmojiButtonText: {
-		color: APP_FONT.MONTSERRAT_BODY,
+		// color: APP_FONT.MONTSERRAT_BODY,
 	},
 	emojiSectionContainer: {
 		flexDirection: 'row',

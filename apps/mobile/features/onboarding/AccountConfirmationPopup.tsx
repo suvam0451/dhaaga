@@ -129,7 +129,7 @@ function AccountConfirmationPopup({
 					marginTop: 32,
 				}}
 				textStyle={{
-					color: theme.textColor.high,
+					color: theme.secondary.a10,
 				}}
 			/>
 		</View>

@@ -4,7 +4,7 @@ import {
 	AppStateImmerSetObject,
 } from '#/states/global/typings';
 
-export type DHAAGA_SKIN_TYPE = 'winter' | null;
+export type DHAAGA_SKIN_TYPE = string;
 
 export type AppStateAppThemingState = {
 	skin: DHAAGA_SKIN_TYPE;
@@ -14,6 +14,7 @@ export type AppStateAppThemingState = {
 export type AppStateAppThemingActions = {
 	setAppColorScheme: (key: string) => void;
 	setAppSkin: (key: DHAAGA_SKIN_TYPE) => void;
+	loadSkinFromMemory: () => void;
 };
 
 function createAppThemingSlice(
@@ -42,9 +43,58 @@ function createAppThemingSlice(
 			}
 		},
 		setAppSkin: (key) => {
-			set((state) => {
-				state.appTheme.skin = key;
-			});
+			const match = APP_BUILT_IN_THEMES.find((o) => o.id === key);
+
+			if (match) {
+				get().appSession.appManager.storage.setAppSkin({
+					id: key,
+					useWallpaper: true,
+					useIconPack: true,
+					useTransparency: true,
+				});
+				set((state) => {
+					state.appTheme.skin = key;
+					state.appTheme.colorScheme = match;
+				});
+			} else {
+				const defaultColorScheme = APP_BUILT_IN_THEMES.find(
+					(o) => o.id === 'default',
+				);
+
+				set((state) => {
+					state.appTheme.skin = 'default';
+					state.appTheme.colorScheme = defaultColorScheme;
+				});
+			}
+		},
+		loadSkinFromMemory: () => {
+			const skin = get().appSession.appManager.storage.getAppSkin();
+			const match = APP_BUILT_IN_THEMES.find(
+				(o) => o.id === (skin.id ?? 'default'),
+			);
+
+			if (!match) {
+				get().appSession.appManager.storage.setAppSkin({
+					id: 'default',
+					useWallpaper: true,
+					useIconPack: true,
+					useTransparency: true,
+				});
+
+				const defaultColorScheme = APP_BUILT_IN_THEMES.find(
+					(o) => o.id === 'default',
+				);
+
+				set((state) => {
+					state.appTheme.skin = 'default';
+					state.appTheme.colorScheme = defaultColorScheme;
+				});
+			} else {
+				set((state) => {
+					state.appTheme.skin = skin.id;
+					state.appTheme.colorScheme = match;
+				});
+			}
 		},
 	};
 }

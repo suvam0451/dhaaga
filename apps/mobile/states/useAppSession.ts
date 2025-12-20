@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
 	useAccountManager,
 	useAppDb,
+	useAppTheme,
 	useHub,
 	useSessionManagement,
 } from './global/hooks';
@@ -33,6 +34,7 @@ function useAppSession() {
 	const { appInit, restoreSession } = useSessionManagement();
 	const { acctManager } = useAccountManager();
 	const { loadAccounts } = useHub();
+	const { loadSkinFromMemory } = useAppTheme();
 
 	// load essential app data
 	useEffect(() => {
@@ -41,6 +43,7 @@ function useAppSession() {
 		appInit(db);
 		restoreSession();
 		loadAccounts();
+		loadSkinFromMemory();
 		setAppReady(true);
 	}, [db]);
 

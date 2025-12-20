@@ -1,6 +1,5 @@
 import {
 	DriverUserFindQueryType,
-	FeedObjectType,
 	type PostLinkAttachmentObjectType,
 	RandomUtil,
 } from '@dhaaga/bridge';

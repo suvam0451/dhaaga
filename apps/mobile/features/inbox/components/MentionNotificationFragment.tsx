@@ -1,21 +1,24 @@
 import { View } from 'react-native';
 import { DriverNotificationType } from '@dhaaga/bridge';
-import { Props, styles } from './_common';
+import { UngroupedNotificationWithPostProps, styles } from './_common';
 import { NotificationPostPeek } from './NotificationPostPeek';
-import { AppDivider } from '../../../components/lib/Divider';
 import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
+import { useAppTheme } from '#/states/global/hooks';
 
-function MentionNotificationFragment({ item }: Props) {
-	const user = item.user;
-	const post = item.post;
-
+function MentionNotificationFragment({
+	user,
+	post,
+	createdAt,
+	extraData,
+}: UngroupedNotificationWithPostProps) {
+	const { theme } = useAppTheme();
 	return (
-		<View style={[styles.container]}>
+		<View style={[styles.container, { backgroundColor: theme.background.a0 }]}>
 			<AuthorItemPresenter
 				user={user}
 				notificationType={DriverNotificationType.MENTION}
-				createdAt={item.createdAt}
-				extraData={item.extraData}
+				createdAt={createdAt}
+				extraData={extraData}
 				noIcon
 			/>
 			<NotificationPostPeek post={post} />

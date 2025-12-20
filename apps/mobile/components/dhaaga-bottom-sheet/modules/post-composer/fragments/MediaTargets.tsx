@@ -1,16 +1,15 @@
-import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import {
-	useAppApiClient,
-	useAppDialog,
-	useAppTheme,
-} from '#/states/global/hooks';
+import { useAppTheme } from '#/states/global/hooks';
 import { Image } from 'expo-image';
-import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
 import { AppIcon } from '../../../../lib/Icon';
-import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import { AppText } from '../../../../lib/Text';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
+import { useAltText } from '#/features/composer/hooks';
+import { NativeTextBold } from '#/ui/NativeText';
 
 /**
  * Shows a list of uploaded
@@ -18,97 +17,14 @@ import { AppText } from '../../../../lib/Text';
  * select/remove
  */
 function ComposeMediaTargets() {
-	const { client, driver } = useAppApiClient();
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 	const { theme } = useAppTheme();
-	const { show } = useAppDialog();
-
-	async function altInputCallback(idx: number, input: string) {
-		dispatch({
-			type: PostComposerReducerActionType.SET_ALT_TEXT,
-			payload: {
-				index: idx,
-				text: input,
-			},
-		});
-
-		// for bluesky, media assets are not preloaded
-		if (driver === KNOWN_SOFTWARE.BLUESKY) return;
-
-		dispatch({
-			type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
-			payload: {
-				index: idx,
-				status: 'uploading',
-			},
-		});
-		await onSaveAltText(idx, input);
-	}
-
-	function onAltPress(idx: number) {
-		show(
-			{
-				title: 'Alt Text',
-				actions: [],
-				description: [
-					'See alt text for this image.',
-					'Submit empty string to remove.',
-				],
-			},
-			{
-				$type: 'text-prompt',
-				placeholder: state.medias[idx].remoteAlt || 'Enter new alt text',
-			},
-			(ctx) => {
-				if (ctx.$type !== 'text-prompt') return;
-				if (!ctx.userInput) return;
-				altInputCallback(idx, ctx.userInput.trim());
-			},
-		);
-	}
-
-	async function onSaveAltText(idx: number, text: string) {
-		if (text == '') return;
-		if (state.medias.length <= idx) {
-			return;
-		}
-		const _media = state.medias[idx];
-		try {
-			const { error } = await client.media.updateDescription(
-				_media.remoteId,
-				text,
-			);
-			if (error) {
-				dispatch({
-					type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
-					payload: {
-						index: idx,
-						status: 'failed',
-					},
-				});
-			} else {
-				dispatch({
-					type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
-					payload: {
-						index: idx,
-						status: 'uploaded',
-					},
-				});
-			}
-		} catch (e) {
-			dispatch({
-				type: PostComposerReducerActionType.SET_ALT_TEXT_SYNC_STATUS,
-				payload: {
-					index: idx,
-					status: 'failed',
-				},
-			});
-		}
-	}
+	const { showDialog } = useAltText();
 
 	function onRemovePress(idx: number) {
 		dispatch({
-			type: PostComposerReducerActionType.REMOVE_MEDIA,
+			type: PostComposerAction.REMOVE_MEDIA,
 			payload: {
 				index: idx,
 			},
@@ -179,11 +95,11 @@ function ComposeMediaTargets() {
 								<View style={styles.button}>{indicatorIcon}</View>
 								<Pressable
 									onPress={() => {
-										onAltPress(index);
+										showDialog(index);
 									}}
 									style={styles.buttonMid}
 								>
-									<AppText.Medium
+									<NativeTextBold
 										style={{
 											color:
 												state.medias[index].remoteAlt ===
@@ -193,8 +109,8 @@ function ComposeMediaTargets() {
 													: theme.complementary,
 										}}
 									>
-										ALT
-									</AppText.Medium>
+										{state.medias[index].localAlt ? `ALT` : `NO ALT`}
+									</NativeTextBold>
 								</Pressable>
 								<Pressable
 									onPress={() => {

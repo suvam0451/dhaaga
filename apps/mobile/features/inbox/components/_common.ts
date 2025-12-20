@@ -1,16 +1,42 @@
 import { StyleSheet } from 'react-native';
-import type { NotificationObjectType } from '@dhaaga/bridge';
+import {
+	NotificationUserGroupType,
+	PostObjectType,
+	UserObjectType,
+} from '@dhaaga/bridge';
 
 export const ICON_SIZE = 36;
 
-export type Props = {
-	item: NotificationObjectType;
+export type GroupedNotificationWithPostProps = {
+	users: NotificationUserGroupType[];
+	post: PostObjectType;
+	createdAt: Date;
+};
+
+export type GroupedNotificationWithUserProps = {
+	users: NotificationUserGroupType[];
+	createdAt: Date;
+};
+
+export type UngroupedNotificationWithPostProps = {
+	user: UserObjectType;
+	post: PostObjectType;
+	createdAt: Date;
+	extraData?: any;
+};
+
+export type UngroupedNotificationWithUserProps = {
+	user: UserObjectType;
+	createdAt: Date;
+	extraData?: any;
 };
 
 export const styles = StyleSheet.create({
 	container: {
-		paddingHorizontal: 10,
-		width: '100%',
+		marginHorizontal: 6,
+		paddingHorizontal: 6,
+		borderRadius: 8,
+		paddingVertical: 8,
 	},
 	groupIndicatorIcon: {
 		padding: 4,

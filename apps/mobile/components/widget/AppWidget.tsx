@@ -97,7 +97,7 @@ function AppWidget({
 				<Pressable onPress={onWidgetPress} style={[styles.triggerIcon]}>
 					<AppIcon
 						id={isOpen ? activeIcon : (inactiveIcon as any)}
-						color={'black'}
+						color={theme.primaryText}
 					/>
 				</Pressable>
 			</Animated.View>

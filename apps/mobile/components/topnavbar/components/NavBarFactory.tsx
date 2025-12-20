@@ -62,7 +62,9 @@ function NavBarFactory({
 		<Animated.View
 			style={[
 				styles.root,
-				{ backgroundColor: theme.background.a10 },
+				{
+					backgroundColor: theme.background.a10,
+				},
 				animatedStyle,
 			]}
 		>

@@ -69,7 +69,6 @@ class Parser {
 				results.push({
 					id: group.groupKey,
 					type: group.type,
-					user: null,
 					post: null,
 					users: (group.sampleAccountIds as unknown as string[]).map(
 						(o: string) => ({
@@ -89,7 +88,7 @@ class Parser {
 					extraData: {},
 				});
 				counter++;
-			} else if (!seenPost.has(group.statusId)) {
+			} else if (!seenPost.has(_group.statusId)) {
 				const post = PostParser.parse<unknown>(
 					postList.find((x: any) => x.id === group.statusId),
 					driver,
@@ -104,7 +103,6 @@ class Parser {
 					 * instead
 					 */
 					type: group.type,
-					user: null,
 					post,
 					users: (group.sampleAccountIds as unknown as string[]).map(
 						(o: string) => ({
@@ -183,7 +181,6 @@ class Parser {
 		// 			id: o.groupKey,
 		// 			type: o.type,
 		// 			post: _post,
-		// 			user: _acct,
 		// 			read: false,
 		// 			createdAt: new Date(o.latestPageNotificationAt),
 		// 			extraData: {},
@@ -246,8 +243,14 @@ class Parser {
 								o.type ||
 								(_post.visibility === 'specified' ? 'chat' : _post.visibility),
 							post: _post,
-							user: _acct,
 							read: false,
+							users: [
+								{
+									item: _acct!,
+									types: [o.type],
+									extraData: {},
+								},
+							],
 							createdAt: new Date(o.createdAt || _post.createdAt),
 							extraData: {},
 						};
@@ -290,12 +293,17 @@ class Parser {
 				uri: o.uri,
 				cid: o.cid,
 				type: o.reason,
-				user: _user,
 				post: _post,
 				createdAt: new Date(o.indexedAt),
 				read: o.isRead,
 				extraData: {},
-				users: [],
+				users: [
+					{
+						item: _user!,
+						types: [o.reason],
+						extraData: {},
+					},
+				],
 			};
 		});
 

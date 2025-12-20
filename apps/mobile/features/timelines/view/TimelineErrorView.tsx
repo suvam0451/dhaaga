@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import { useAppTheme } from '#/states/global/hooks';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 
@@ -8,13 +7,13 @@ type Props = {
 };
 
 function TimelineErrorView({ error }: Props) {
-	const { theme } = useAppTheme();
 	return (
 		<View
 			style={{
-				flex: 1,
-				backgroundColor: theme.palette.bg,
 				paddingTop: 52,
+				margin: 'auto',
+				borderRadius: 12,
+				alignItems: 'center',
 			}}
 		>
 			<ErrorPageBuilder

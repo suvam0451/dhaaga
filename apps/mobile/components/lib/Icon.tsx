@@ -61,6 +61,7 @@ type APP_ICON_ENUM =
 	| 'cloud-upload-outline'
 	| 'close'
 	| 'close-outline'
+	| 'color-palette-outline'
 	| 'settings'
 	| 'settings-outline'
 	| 'copy'
@@ -73,6 +74,7 @@ type APP_ICON_ENUM =
 	| 'eye'
 	| 'eye-filled'
 	| 'eye-off-filled'
+	| 'eye-outline'
 	| 'filter-outline'
 	| 'flash'
 	| 'funnel-outline'
@@ -638,6 +640,15 @@ export function AppIcon({
 						style={iconStyle}
 					/>
 				);
+			case 'color-palette-outline':
+				return (
+					<Ionicons
+						name={'color-palette-outline'}
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
 			case 'checkmark-done-outline':
 				return (
 					<Ionicons
@@ -741,6 +752,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="eye-off"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'eye-outline':
+				return (
+					<Ionicons
+						name="eye-outline"
 						size={_size}
 						color={_color}
 						style={iconStyle}

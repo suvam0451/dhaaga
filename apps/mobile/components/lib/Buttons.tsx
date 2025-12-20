@@ -93,7 +93,8 @@ export function AppButtonVariantA({
 			<NativeTextBold
 				style={[
 					{
-						color: variant === 'secondary' ? theme.secondary.a10 : 'black',
+						color:
+							variant === 'secondary' ? theme.secondary.a10 : theme.primaryText,
 						// opacity: 1,
 						fontSize: 16,
 						textAlign: 'center',
@@ -288,7 +289,7 @@ export function CurrentRelationView({
 	const fgColor: Record<ButtonVariant, string> = {
 		blank: 'transparent',
 		error: 'red',
-		cta: 'black',
+		cta: theme.primaryText,
 		info: theme.complementary,
 		warn: 'orange',
 		warm: theme.primary,

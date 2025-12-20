@@ -3,14 +3,11 @@ import {
 	useAppDialog,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { useComposerCtx } from '../contexts/useComposerCtx';
-import { PostComposerReducerActionType } from '../reducers/composer.reducer';
 import { Fragment } from 'react';
 import AutoFillPresenter from './AutoFillPresenter';
 import { View } from 'react-native';
 import ComposerActionListView from '../views/ComposerActionListView';
 import { ActivityPubService } from '@dhaaga/bridge';
-import { AppService } from '#/services/app.service';
 import PostVisibilityView from '../views/PostVisibilityView';
 import useAppVisibility, {
 	APP_POST_VISIBILITY,
@@ -19,10 +16,17 @@ import { DialogFactory } from '#/utils/dialog-factory';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
+import { useThreadGate } from '#/features/composer/hooks';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
 
 function BottomMenuPresenter() {
 	const { theme } = useAppTheme();
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 	const { driver } = useAppApiClient();
 	const { show, hide } = useAppDialog();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.DIALOGS]);
@@ -32,7 +36,7 @@ function BottomMenuPresenter() {
 	 */
 	async function setVisibility(visibility: APP_POST_VISIBILITY) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_VISIBILITY,
+			type: PostComposerAction.SET_VISIBILITY,
 			payload: {
 				visibility,
 			},
@@ -40,50 +44,7 @@ function BottomMenuPresenter() {
 		hide();
 	}
 
-	function handleThreadGate() {
-		show({
-			title: 'Set Interaction',
-			description: ['Set who can interact with this post.'],
-			actions: [
-				{
-					label: 'Allow Quotes',
-					variant: 'switch',
-					onPress: async () => {},
-					selected: false,
-				},
-				{
-					label: 'Anyone',
-					variant: 'switch',
-					onPress: async () => {},
-					selected: true,
-				},
-				{
-					label: 'Your Followers',
-					variant: 'switch',
-					onPress: async () => {},
-					selected: false,
-				},
-				{
-					label: 'Nobody',
-					variant: 'switch',
-					onPress: async () => {},
-					selected: false,
-				},
-				{
-					label: 'People you Mention',
-					variant: 'switch',
-					onPress: async () => {},
-					selected: false,
-				},
-				{
-					label: 'People you Follow',
-					variant: 'switch',
-					onPress: async () => {},
-					selected: false,
-				},
-			],
-		});
-	}
+	const { onPress: handleThreadGate } = useThreadGate();
 
 	function handleVisibilityUpdate() {
 		show(DialogFactory.changePostVisibility_ActivityPub(t, setVisibility));
@@ -101,19 +62,19 @@ function BottomMenuPresenter() {
 
 	function toggleCwShown() {
 		dispatch({
-			type: PostComposerReducerActionType.TOGGLE_CW_SECTION_SHOWN,
+			type: PostComposerAction.TOGGLE_CW_SECTION_SHOWN,
 		});
 	}
 
 	function onCustomEmojiClicked() {
 		dispatch({
-			type: PostComposerReducerActionType.SWITCH_TO_EMOJI_TAB,
+			type: PostComposerAction.SWITCH_TO_EMOJI_TAB,
 		});
 	}
 
 	function onToggleMediaButton() {
 		dispatch({
-			type: PostComposerReducerActionType.SWITCH_TO_MEDIA_TAB,
+			type: PostComposerAction.SWITCH_TO_MEDIA_TAB,
 		});
 	}
 
@@ -128,7 +89,7 @@ function BottomMenuPresenter() {
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					backgroundColor: theme.background.a30,
+					backgroundColor: theme.background.a10,
 					// paddingVertical: 6, // 6 more comes from first button
 					paddingLeft: 4,
 					paddingRight: 10,

@@ -13,6 +13,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import AppSegmentedControl from '#/ui/AppSegmentedControl';
 import AppWidget from '#/components/widget/AppWidget';
+import { AppThemingUtil } from '#/utils/theming.util';
 
 function ZenExplorationWidget() {
 	const { driver } = useAppApiClient();
@@ -98,7 +99,7 @@ function ZenExplorationWidget() {
 							}}
 							onPress={onClearSearch}
 						>
-							<AppIcon id={'clear'} color={'black'} />
+							<AppIcon id={'clear'} color={theme.primaryText} />
 						</Pressable>
 						<TextInput
 							ref={TextRef}
@@ -107,11 +108,14 @@ function ZenExplorationWidget() {
 							value={SearchTerm}
 							onChangeText={setSearchTerm}
 							numberOfLines={1}
-							placeholderTextColor={'rgba(0, 0, 0, 0.84)'}
+							placeholderTextColor={AppThemingUtil.applyOpacity(
+								theme.primaryText,
+								0.5,
+							)}
 							onSubmitEditing={onSubmit}
 							style={{
 								flex: 1,
-								color: 'black',
+								color: theme.primaryText,
 							}}
 						/>
 					</Animated.View>

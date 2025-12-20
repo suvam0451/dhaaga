@@ -31,3 +31,6 @@ apps/web/public/assets/**
 packages/**/dist/**
 packages/**/tsconfig.tsbuildinfo
 apps/web/public/docs/**
+apps/_shared/assets/licensed
+apps//
+!apps/_shared/assets/licensed/README.md

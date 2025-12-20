@@ -1,32 +1,37 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
-import ComposerTextInput from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerText';
 import ComposerSpoiler from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerSpoiler';
-import { useComposerCtx } from '../contexts/useComposerCtx';
-import ComposerMediaPresenter from './ComposerMediaPresenter';
+import ComposerMediaPresenter from './presenters/ComposerMediaPresenter';
 import EmojiPickerBottomSheet from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/EmojiPickerBottomSheet';
-import ComposerTopMenu from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerTopMenu';
+import ComposerTextModeMenu from '#/features/composer/components/ComposerTextModeMenu';
 import TextEditorService from '#/services/text-editor.service';
 import { useAppBottomSheet } from '#/states/global/hooks';
 import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
-import { PostComposerReducerActionType } from '../reducers/composer.reducer';
-import BottomMenuPresenter from './BottomMenuPresenter';
-import useComposer from '#/states/app/useComposer';
+import BottomMenuPresenter from './presenters/BottomMenuPresenter';
+import {
+	PostComposerCtx,
+	usePostComposerDispatch,
+	PostComposerAction,
+	usePostComposerState,
+} from '@dhaaga/react';
+import ComposerTextInput from './components/ComposerTextInput';
+import { usePostComposerInputMode } from '#/features/composer/hooks';
 
-function ComposerPresenter() {
+function Generator() {
 	const { visible } = useAppBottomSheet();
-	const { dispatch } = useComposerCtx();
-	const { state, toHome } = useComposer();
+	const dispatch = usePostComposerDispatch();
+	const { toTextMode } = usePostComposerInputMode();
+	const state = usePostComposerState();
 
 	function onEmojiApplied(o: Emoji) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_TEXT,
+			type: PostComposerAction.SET_TEXT,
 			payload: {
 				content: TextEditorService.addReactionText(state.text, o.shortCode),
 			},
 		});
 		dispatch({
-			type: PostComposerReducerActionType.SWITCH_TO_TEXT_TAB,
+			type: PostComposerAction.SWITCH_TO_TEXT_TAB,
 		});
 	}
 
@@ -35,7 +40,7 @@ function ComposerPresenter() {
 			case 'txt': {
 				return (
 					<View style={{ height: '100%' }}>
-						<ComposerTopMenu />
+						<ComposerTextModeMenu />
 						<ComposerSpoiler />
 						<ComposerTextInput />
 						<BottomMenuPresenter />
@@ -44,7 +49,10 @@ function ComposerPresenter() {
 			}
 			case 'emoji':
 				return (
-					<EmojiPickerBottomSheet onAccept={onEmojiApplied} onCancel={toHome} />
+					<EmojiPickerBottomSheet
+						onAccept={onEmojiApplied}
+						onCancel={toTextMode}
+					/>
 				);
 			case 'media': {
 				return <ComposerMediaPresenter />;
@@ -65,4 +73,12 @@ function ComposerPresenter() {
 	);
 }
 
-export default ComposerPresenter;
+function PostComposerSheet() {
+	return (
+		<PostComposerCtx>
+			<Generator />
+		</PostComposerCtx>
+	);
+}
+
+export default PostComposerSheet;

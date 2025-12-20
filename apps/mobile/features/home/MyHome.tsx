@@ -75,7 +75,7 @@ function Home() {
 			label: 'Skins',
 			desc: 'Fun stuff',
 			iconId: 'layers-outline',
-			to: APP_ROUTING_ENUM.MY_DRAFTS,
+			to: APP_ROUTING_ENUM.APP_SKINS,
 		},
 	];
 
@@ -89,7 +89,7 @@ function Home() {
 				<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
 			}
 			style={{
-				backgroundColor: theme.palette.bg,
+				backgroundColor: theme.background.a0,
 			}}
 		>
 			<MyAccountOverview user={data} />

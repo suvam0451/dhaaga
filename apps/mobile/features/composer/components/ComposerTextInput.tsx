@@ -1,14 +1,14 @@
 import { ScrollView, StyleSheet, TextInput, Pressable } from 'react-native';
 import { useRef } from 'react';
-import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
-import useInputGeneratePrompt from '../api/useInputGeneratePrompt';
+import useInputGeneratePrompt from '#/components/dhaaga-bottom-sheet/modules/post-composer/api/useInputGeneratePrompt';
 import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { usePostComposerState } from '@dhaaga/react';
 
 function ComposerTextInput() {
 	const { theme } = useAppTheme();
-	const { state } = useComposerCtx();
+	const state = usePostComposerState();
 
 	const { onSelectionChange, onChange } = useInputGeneratePrompt();
 	const ref = useRef<TextInput>(null);
@@ -26,11 +26,11 @@ function ComposerTextInput() {
 					autoCapitalize={'none'}
 					multiline={true}
 					placeholder={t(`composer.quickPostCta`)}
-					placeholderTextColor={'rgba(255, 255, 255, 0.33)'}
+					placeholderTextColor={theme.secondary.a20}
 					style={[
 						styles.textInput,
 						{
-							color: theme.secondary.a10,
+							color: theme.secondary.a0,
 						},
 					]}
 					onChange={onChange}

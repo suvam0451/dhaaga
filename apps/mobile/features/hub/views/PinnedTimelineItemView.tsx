@@ -64,7 +64,7 @@ function PinnedTimelineItemView({
 					style={[
 						styles.button,
 						{
-							backgroundColor: theme.background.a30, // '#282828',
+							backgroundColor: theme.background.a20, // '#282828',
 						},
 					]}
 					onPress={onPress}

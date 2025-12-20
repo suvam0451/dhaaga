@@ -93,14 +93,10 @@ function Ctx({ children }: { children: ReactNode }) {
 	);
 }
 
-export {
-	Ctx as PostThreadCtx,
-	usePostThreadState,
-	usePostThreadDispatch,
-	ACTION as PostThreadAction,
-};
+export { Ctx as PostThreadCtx, usePostThreadState, usePostThreadDispatch };
 
 export type {
 	State as PostThreadStateType,
 	DispatchType as PostThreadDispatchType,
+	ACTION as PostThreadAction,
 };
