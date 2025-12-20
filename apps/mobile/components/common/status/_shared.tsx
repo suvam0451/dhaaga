@@ -175,13 +175,12 @@ export function PostContainer({ children }: any) {
 	return (
 		<Fragment>
 			<View
-				style={{
-					paddingHorizontal: 6,
-					marginHorizontal: 6,
-					backgroundColor: theme.background.a0,
-					borderRadius: 10,
-					paddingVertical: 6,
-				}}
+				style={[
+					styles.postRoot,
+					{
+						backgroundColor: theme.background.a0,
+					},
+				]}
 			>
 				{children}
 			</View>
@@ -190,6 +189,12 @@ export function PostContainer({ children }: any) {
 }
 
 const styles = StyleSheet.create({
+	postRoot: {
+		paddingHorizontal: 8,
+		marginHorizontal: 4,
+		borderRadius: 10,
+		paddingVertical: 10,
+	},
 	statusMoreOptionsContainer: {
 		justifyContent: 'flex-start',
 		flexDirection: 'row',

@@ -1,44 +1,29 @@
-import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
-import { ScrollView, StyleSheet } from 'react-native';
-import { UserTimelineCtx } from '@dhaaga/core';
-import { useState } from 'react';
-import { useApiGetPostLikes } from '#/hooks/api/usePostInteractions';
-import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
-import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
+import { useAppBottomSheet } from '#/states/global/hooks';
+import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
+import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import { useApiGetPostLikedBy } from '#/components/api';
 
 function Content() {
-	const { theme } = useAppTheme();
 	const { ctx } = useAppBottomSheet();
-	const postId = ctx && ctx.$type === 'post-id' ? ctx.postId : null;
+	const { post } = usePostEventBusStore(
+		ctx.$type === 'post-id' ? ctx.postId : null,
+	);
 
-	const [MaxId, setMaxId] = useState(null);
-
-	const { data, error, isFetching } = useApiGetPostLikes(postId, MaxId);
-	const { toggleLike } = usePostEventBusActions(postId);
-
-	const title = 'Sorry 😔';
-	const desc = [
-		'This feature is not implemented yet!',
-		'Unfortunately, there is no other way to view likes :(',
-		'Good software takes time to build. Soon™',
-	];
+	const State = useUserTimelineState();
+	const queryResult = useApiGetPostLikedBy(post.id, State.appliedMaxId);
 
 	return (
-		<ScrollView contentContainerStyle={{ padding: 10 }}>
-			<NativeTextBold
-				style={[styles.sheetTitle, { color: theme.secondary.a10 }]}
-			>
-				{title}
-			</NativeTextBold>
-			{desc.map((o, i) => (
-				<NativeTextNormal
-					key={i}
-					style={[styles.sheetDesc, { color: theme.secondary.a30 }]}
-				>
-					{o}
-				</NativeTextNormal>
-			))}
-		</ScrollView>
+		<>
+			<BottomSheetMenu title={'Liked By'} variant={'clear'} />
+			<UserTimelineView
+				label={null}
+				queryResult={queryResult}
+				navbarType={'none'}
+				flatListKey={'post/likes'}
+			/>
+		</>
 	);
 }
 
@@ -51,19 +36,3 @@ function ShowLikesBottomSheet() {
 }
 
 export default ShowLikesBottomSheet;
-
-const styles = StyleSheet.create({
-	sheetTitle: {
-		fontSize: 28,
-		textAlign: 'center',
-		marginTop: 48,
-		marginBottom: 24,
-	},
-	sheetDesc: {
-		fontSize: 16,
-		textAlign: 'center',
-		marginBottom: 8,
-		maxWidth: 256,
-		alignSelf: 'center',
-	},
-});

@@ -6,9 +6,16 @@ import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomS
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import { NativeTextMedium } from '#/ui/NativeText';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
+import { PostTimelineCtx, usePostTimelineState } from '@dhaaga/core';
 
-function ShowCommentsBottomSheet() {
+function Generator() {
 	const { ctx } = useAppBottomSheet();
+	const { post } = usePostEventBusStore(
+		ctx.$type === 'post-id' ? ctx.postId : null,
+	);
+
+	const State = usePostTimelineState();
 
 	const [MaxId, setMaxId] = useState(null);
 
@@ -36,6 +43,14 @@ function ShowCommentsBottomSheet() {
 				/>
 			}
 		/>
+	);
+}
+
+function ShowCommentsBottomSheet() {
+	return (
+		<PostTimelineCtx>
+			<Generator />
+		</PostTimelineCtx>
 	);
 }
 

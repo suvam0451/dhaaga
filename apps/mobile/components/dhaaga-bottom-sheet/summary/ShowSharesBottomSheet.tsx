@@ -1,49 +1,38 @@
-import { useAppTheme } from '#/states/global/hooks';
-import { ScrollView, StyleSheet } from 'react-native';
-import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
+import { useAppBottomSheet } from '#/states/global/hooks';
+import { useApiGetPostSharedBy } from '#/components/api';
+import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
+import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
+import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 
-function ShowSharesBottomSheet() {
-	const { theme } = useAppTheme();
-	const title = 'Sorry 😔';
-	const desc = [
-		'This feature is not implemented yet!',
-		'Unfortunately, there is no other way to view who else has shared this post :(',
-		'Good software takes time to build. Soon™',
-	];
+function Generator() {
+	const { ctx } = useAppBottomSheet();
+	const { post } = usePostEventBusStore(
+		ctx.$type === 'post-id' ? ctx.postId : null,
+	);
+
+	const State = useUserTimelineState();
+	const queryResult = useApiGetPostSharedBy(post.id, State.appliedMaxId);
 
 	return (
-		<ScrollView contentContainerStyle={{ padding: 10 }}>
-			<NativeTextBold
-				style={[styles.sheetTitle, { color: theme.secondary.a10 }]}
-			>
-				{title}
-			</NativeTextBold>
-			{desc.map((o, i) => (
-				<NativeTextNormal
-					key={i}
-					style={[styles.sheetDesc, { color: theme.secondary.a30 }]}
-				>
-					{o}
-				</NativeTextNormal>
-			))}
-		</ScrollView>
+		<>
+			<BottomSheetMenu title={'Shared By'} variant={'clear'} />
+			<UserTimelineView
+				label={null}
+				queryResult={queryResult}
+				navbarType={'none'}
+				flatListKey={'post/shares'}
+			/>
+		</>
+	);
+}
+
+function ShowSharesBottomSheet() {
+	return (
+		<UserTimelineCtx>
+			<Generator />
+		</UserTimelineCtx>
 	);
 }
 
 export default ShowSharesBottomSheet;
-
-const styles = StyleSheet.create({
-	sheetTitle: {
-		fontSize: 28,
-		textAlign: 'center',
-		marginTop: 48,
-		marginBottom: 24,
-	},
-	sheetDesc: {
-		fontSize: 16,
-		textAlign: 'center',
-		marginBottom: 8,
-		maxWidth: 256,
-		alignSelf: 'center',
-	},
-});

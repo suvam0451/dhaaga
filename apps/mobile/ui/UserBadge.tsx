@@ -51,6 +51,7 @@ function UserBadge({
 	const USE_DISPLAY_NAME =
 		!parsedDisplayName || DriverService.supportsAtProto(driver);
 
+	const handleFallback = displayName === '' ? handle : displayName;
 	return (
 		<View style={[styles.root, style]}>
 			<Avatar uri={avatarUrl} onPressed={onAvatarPressed} />
@@ -60,7 +61,9 @@ function UserBadge({
 				delayPressIn={200}
 			>
 				{USE_DISPLAY_NAME ? (
-					<NativeTextMedium numberOfLines={1}>{displayName}</NativeTextMedium>
+					<NativeTextMedium numberOfLines={1}>
+						{handleFallback}
+					</NativeTextMedium>
 				) : (
 					<TextAstRendererView
 						tree={

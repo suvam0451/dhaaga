@@ -17,6 +17,7 @@ import { ActivityPubService, PostInspector } from '@dhaaga/bridge';
 import PostInteractionStatsRow from '#/features/post-view/views/PostInteractionStatsRow';
 import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import { AppDividerSoft } from '#/ui/Divider';
 
 /**
  * Press this to toggle sharing status
@@ -203,6 +204,7 @@ function PostActionRow() {
 	return (
 		<View style={{ marginTop: 8 }}>
 			<PostInteractionStatsRow dto={_dto} />
+			<AppDividerSoft style={{ marginVertical: 2 }} />
 			<StatusInteractionButtons />
 		</View>
 	);

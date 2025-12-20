@@ -30,6 +30,82 @@ export function postGetQueryOpts(client: ApiTargetInterface, postId: string) {
 	});
 }
 
+export function postGetLikedByQueryOpts(
+	client: ApiTargetInterface,
+	postId: string,
+	maxId?: string,
+) {
+	async function api() {
+		const data = await client.posts.getLikedBy(postId, 20, maxId);
+		return {
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+			maxId: data.maxId,
+			minId: data.minId,
+		};
+	}
+
+	return queryOptions<ResultPage<UserObjectType[]>>({
+		queryKey: ['dhaaga/post/likedBy', postId, maxId],
+		queryFn: api,
+		enabled: client && postId !== undefined,
+	});
+}
+
+export function postGetSharedByQueryOpts(
+	client: ApiTargetInterface,
+	postId: string,
+	maxId?: string,
+) {
+	async function api() {
+		const data = await client.posts.getSharedBy(postId, 20, maxId);
+		return {
+			data: UserParser.parse<unknown[]>(
+				data.data,
+				client.driver,
+				client.server!,
+			),
+			maxId: data.maxId,
+			minId: data.minId,
+		};
+	}
+
+	return queryOptions<ResultPage<UserObjectType[]>>({
+		queryKey: ['dhaaga/post/sharedBy', postId, maxId],
+		queryFn: api,
+		enabled: client && postId !== undefined,
+	});
+}
+
+export function postGetCommentsQueryOpts(
+	client: ApiTargetInterface,
+	postId: string,
+	maxId?: string,
+) {
+	async function api() {
+		// const data = await client.posts.rep(postId, 20, maxId);
+		// return {
+		// 	data: UserParser.parse<unknown[]>(
+		// 		data.data,
+		// 		client.driver,
+		// 		client.server!,
+		// 	),
+		// 	maxId: data.maxId,
+		// 	minId: data.minId,
+		// };
+		return null as any;
+	}
+
+	return queryOptions<ResultPage<UserObjectType[]>>({
+		queryKey: ['dhaaga/post/comments', postId, maxId],
+		queryFn: api,
+		enabled: client && postId !== undefined,
+	});
+}
+
 export function postHierarchyQueryOpts(
 	client: ApiTargetInterface,
 	postId: string,
