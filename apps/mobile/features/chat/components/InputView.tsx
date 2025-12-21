@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
 type Props = {
+	ref: React.RefObject<TextInput>;
 	// dynamic height based on text content
 	height: number;
 	setHeight: (height: number) => void;
@@ -11,13 +12,14 @@ type Props = {
 	setText: (text: string) => void;
 };
 
-function InputView({ setHeight, text, setText }: Props) {
+function InputView({ setHeight, text, setText, ref }: Props) {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
 		<View style={{ flexGrow: 1 }}>
 			<TextInput
+				ref={ref}
 				placeholder={t(`chatroom.sendInterfacePlaceholder`)}
 				multiline={true}
 				placeholderTextColor={theme.secondary.a30}

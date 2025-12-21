@@ -1,23 +1,25 @@
-import { StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, TextInput, View } from 'react-native';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import InputView from '#/features/chat/components/InputView';
 import SendButtonView from '#/features/chat/components/SendButtonView';
-import { useState } from 'react';
+import { RefObject, useRef, useState } from 'react';
 import { useAppTheme } from '#/states/global/hooks';
 import useSendMessage from '#/features/chat/hooks/useSendMessage';
 import { AppDividerSoft } from '#/ui/Divider';
 
 type Props = {
 	roomId: string;
+	listRef: RefObject<FlatList<any>>;
 };
 
-function ReplyComposerView({ roomId }: Props) {
+function ReplyComposerView({ roomId, listRef }: Props) {
 	const { theme } = useAppTheme();
 	const [height, setHeight] = useState(40); // Initial height
 	const [Input, setInput] = useState(null);
-	const { send, isLoading } = useSendMessage(roomId);
 
+	const inputRef = useRef<TextInput>(null);
+	const { send, isLoading } = useSendMessage(roomId, listRef, inputRef);
 	async function onSend() {
 		if (!Input) return;
 		send(Input);
@@ -41,6 +43,7 @@ function ReplyComposerView({ roomId }: Props) {
 				/>
 			</View>
 			<InputView
+				ref={inputRef}
 				height={height}
 				setHeight={setHeight}
 				text={Input}
@@ -59,7 +62,7 @@ export default ReplyComposerView;
 
 const styles = StyleSheet.create({
 	sendInterface: {
-		position: 'absolute',
+		// position: 'absolute',
 		paddingVertical: 8,
 		paddingHorizontal: 10,
 		flexDirection: 'row',

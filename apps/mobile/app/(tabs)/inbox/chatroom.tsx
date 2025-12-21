@@ -1,5 +1,5 @@
 import { FlatList, View } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
 import ChatRoomMessageItemView from '#/features/chat/views/ChatRoomMessageItemView';
@@ -75,17 +75,20 @@ function Generator() {
 
 	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
+	const listRef = useRef<FlatList>(null);
+
 	return (
 		<View style={{ flex: 1 }}>
 			<NavBar_Simple label={'Chat'} animatedStyle={animatedStyle} />
 			<FlatList
+				ref={listRef}
 				onScroll={scrollHandler}
 				onLayout={onLayout}
 				data={State.items}
 				renderItem={({ item }) => <Message message={item} />}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
-					paddingBottom: appDimensions.bottomNav.secondMenuBarHeight + 4,
+					// paddingBottom: appDimensions.bottomNav.secondMenuBarHeight + 4,
 				}}
 				style={{ flex: 1, backgroundColor: theme.background.a0 }}
 				ListEmptyComponent={
@@ -97,7 +100,7 @@ function Generator() {
 					/>
 				}
 			/>
-			<ReplyComposerView roomId={roomId} />
+			<ReplyComposerView roomId={roomId} listRef={listRef} />
 		</View>
 	);
 }
