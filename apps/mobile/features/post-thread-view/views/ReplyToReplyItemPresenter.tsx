@@ -56,7 +56,6 @@ function PostReplyToReplyContent({
 					}}
 				>
 					<ReplyOwner dto={dto} style={{ flex: 1 }} />
-					{/*<MiniMoreOptionsButton post={dto} />*/}
 					<View
 						style={{
 							flexDirection: 'row',

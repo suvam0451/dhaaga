@@ -4,16 +4,15 @@ import useApiBuildPostThread from '#/hooks/api/useApiBuildPostThread';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import PostCommentThreadControls from '#/features/post-thread-view/views/PostCommentThreadControls';
-import PostReplyItem from '#/features/post-thread-view/views/ReplyItemPresenter';
 import { appDimensions } from '#/styles/dimensions';
 import { AppDividerSoft } from '#/ui/Divider';
 import NoMoreReplies from '#/features/post-thread-view/components/NoMoreReplies';
-import { RefreshControl, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
-import { FlashList } from '@shopify/flash-list';
+import ThreadRootReplyView from '#/features/post-thread-view/views/ThreadRootReplyView';
 
 function ContentView() {
 	const { theme } = useAppTheme();
@@ -40,7 +39,7 @@ function ContentView() {
 	return (
 		<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
 			<NavBar_Simple label={'Post Details'} animatedStyle={animatedStyle} />
-			<FlashList
+			<FlatList
 				onLayout={onLayout}
 				data={items}
 				renderItem={({ item }) => {
@@ -55,7 +54,7 @@ function ContentView() {
 								</>
 							);
 						case 'reply':
-							return <PostReplyItem colors={[]} postId={item.post.id} />;
+							return <ThreadRootReplyView postId={item.post.id} />;
 					}
 					return <View />;
 				}}

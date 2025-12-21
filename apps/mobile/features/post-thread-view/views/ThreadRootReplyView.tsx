@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
-import ReplyOwner from '../components/ReplyOwner';
 import ReplyToReplyItemPresenter from './ReplyToReplyItemPresenter';
 import { AppThemingUtil } from '#/utils/theming.util';
 import { appDimensions } from '#/styles/dimensions';
@@ -15,15 +14,17 @@ import { AppIcon } from '#/components/lib/Icon';
 import { NativeTextNormal } from '#/ui/NativeText';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import UserBadge from '#/ui/UserBadge';
+import useSheetNavigation from '#/states/navigation/useSheetNavigation';
+import useAppNavigator from '#/states/useAppNavigator';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 type PostReplyProps = {
 	postId: string;
-	colors: string[];
 };
 
-function Content({ postId, colors }: PostReplyProps) {
+function Content({ postId }: PostReplyProps) {
 	const data = usePostThreadState();
 	const [IsMediaShown, setIsMediaShown] = useState(false);
 	const [IsThreadShown, setIsThreadShown] = useState(false);
@@ -46,11 +47,31 @@ function Content({ postId, colors }: PostReplyProps) {
 
 	const DEPTH_COLOR = AppThemingUtil.getThreadColorForDepth(0);
 
+	const authorId = dto?.postedBy?.id;
+
+	const { toProfile } = useAppNavigator();
+	const { openUserProfileSheet } = useSheetNavigation();
+
+	function onAvatarClicked() {
+		openUserProfileSheet(authorId);
+	}
+
+	function onProfileClicked() {
+		toProfile(authorId);
+	}
+
 	return (
 		<View style={{ paddingHorizontal: 10 }}>
 			<WithAppStatusItemContext dto={dto}>
 				<View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-					<ReplyOwner dto={dto} style={{ flex: 1 }} />
+					<UserBadge
+						avatarUrl={dto.postedBy.avatarUrl}
+						displayName={dto.postedBy.displayName}
+						handle={dto.postedBy.handle}
+						style={{ marginBottom: 6 }}
+						onAvatarPressed={onAvatarClicked}
+						onDisplayNamePressed={onProfileClicked}
+					/>
 					<View
 						style={{
 							flexDirection: 'row',
@@ -63,7 +84,6 @@ function Content({ postId, colors }: PostReplyProps) {
 						</NativeTextNormal>
 						<AppIcon id={'heart'} size={16} />
 					</View>
-					{/*<MiniMoreOptionsButton post={dto} />*/}
 				</View>
 
 				<TextAstRendererView
@@ -110,7 +130,7 @@ function Content({ postId, colors }: PostReplyProps) {
 					{children.map((o, i) => (
 						<ReplyToReplyItemPresenter
 							key={i}
-							colors={[...colors, DEPTH_COLOR]}
+							colors={[DEPTH_COLOR]}
 							postId={o.id}
 							depth={1}
 						/>
@@ -121,7 +141,7 @@ function Content({ postId, colors }: PostReplyProps) {
 	);
 }
 
-function ReplyItem({ postId, colors }: PostReplyProps) {
+function ReplyItem({ postId }: PostReplyProps) {
 	function renderRightActions(progress, dragX) {
 		return (
 			<View
@@ -148,7 +168,7 @@ function ReplyItem({ postId, colors }: PostReplyProps) {
 			overshootLeft={false}
 			overshootFriction={8}
 		>
-			<Content postId={postId} colors={colors} />
+			<Content postId={postId} />
 		</Swipeable>
 	);
 }

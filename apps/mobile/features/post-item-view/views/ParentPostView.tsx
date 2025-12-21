@@ -30,8 +30,6 @@ function Generator({ showReplyIndicator }: Props) {
 	const { driver } = useAppApiClient();
 	const { toPost } = useAppNavigator();
 
-	const IS_QUOTE_BOOST = post.meta.isBoost && post.content.raw;
-
 	function onPressBody() {
 		toPost(post.id);
 	}
@@ -39,6 +37,9 @@ function Generator({ showReplyIndicator }: Props) {
 	function onPressImage() {}
 
 	if (!post) return <View />;
+
+	const IS_QUOTE_BOOST = post.meta.isBoost && post.content.raw;
+
 	return (
 		<View>
 			{showReplyIndicator ? <ReplyIndicatorOrnament /> : <View />}

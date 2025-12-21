@@ -108,10 +108,9 @@ function ZenExplorationWidget() {
 							value={SearchTerm}
 							onChangeText={setSearchTerm}
 							numberOfLines={1}
-							placeholderTextColor={AppThemingUtil.applyOpacity(
-								theme.primaryText,
-								0.5,
-							)}
+							autoCorrect={false}
+							autoCapitalize={'none'}
+							placeholderTextColor={theme.primaryText}
 							onSubmitEditing={onSubmit}
 							style={{
 								flex: 1,
