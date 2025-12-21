@@ -15,7 +15,7 @@ import type { MessageObjectType } from '@dhaaga/bridge';
  * @param roomId
  */
 function useApiGetChatroom(roomId: string) {
-	const { driver, client, server } = useAppApiClient();
+	const { driver, client } = useAppApiClient();
 	const { acct } = useActiveUserSession();
 
 	async function api(): Promise<ChatRoomObjectType> {

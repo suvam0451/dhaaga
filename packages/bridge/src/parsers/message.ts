@@ -44,7 +44,24 @@ class Parser {
 					})) ?? [],
 			};
 		} else {
-			return null;
+			// successful message objects
+			return {
+				id: input.id,
+				deleted: false,
+				senderId: input.sender.did,
+				content: {
+					raw: (input as any).text,
+				},
+				embed: (input as any).embed, // not tested
+				createdAt: new Date(input.sentAt),
+				facets: (input as any).facets ?? [],
+				reactions:
+					(input as any).reactions?.map((o: any) => ({
+						value: o.value,
+						senderId: o.sender?.did,
+						createdAt: new Date(o.createdAt),
+					})) ?? [], // not tested
+			};
 		}
 	}
 

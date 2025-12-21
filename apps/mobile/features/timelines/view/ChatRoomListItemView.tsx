@@ -1,5 +1,5 @@
 import type { ChatRoomObjectType } from '@dhaaga/bridge';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import useApiMe from '#/hooks/useApiMe';
 import { Image } from 'expo-image';
 import { NativeTextNormal, NativeTextBold } from '#/ui/NativeText';
@@ -24,14 +24,19 @@ function ChatRoomListItemView({ room }: Props) {
 	}
 
 	return (
-		<Pressable onPress={onPress}>
+		<Pressable
+			style={[
+				styles.root,
+				{
+					backgroundColor: theme.background.a30,
+				},
+			]}
+			onPress={onPress}
+		>
 			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					flex: 1,
-					maxWidth: '100%',
-					paddingHorizontal: 10,
 				}}
 			>
 				<Image
@@ -82,3 +87,13 @@ function ChatRoomListItemView({ room }: Props) {
 	);
 }
 export default ChatRoomListItemView;
+
+const styles = StyleSheet.create({
+	root: {
+		marginHorizontal: 6,
+		paddingHorizontal: 6,
+		flex: 1,
+		borderRadius: 12,
+		paddingVertical: 6,
+	},
+});
