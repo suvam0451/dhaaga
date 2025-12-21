@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Account, AccountService, ProfileService } from '@dhaaga/db';
 import { Animated, Pressable, View } from 'react-native';
-import { AppAccountSelectionItem } from '../../common/app/Account';
 import {
 	useAppBottomSheet,
 	useAppDb,
@@ -12,6 +11,7 @@ import { AppText } from '../../lib/Text';
 import { AppTextInput } from '../../lib/TextInput';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
+import { AppAccountSelectionItem } from '#/features/accounts/views/AccountView';
 
 type AS_Add_Profile_Select_AccountProps = {
 	accts: Account[];

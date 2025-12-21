@@ -1,7 +1,7 @@
 import { useApiGetSocialUpdates } from '#/hooks/api/useNotifications';
 import useNotificationStore from '../interactors/useNotificationStore';
 import NotificationItemPresenter from '../presenters/NotificationItemPresenter';
-import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
+import SimpleInboxTimeline from '#/features/timelines/view/SimpleInboxTimeline';
 import type { NotificationObjectType } from '@dhaaga/bridge';
 
 function Wrapper({ item }: { item: NotificationObjectType }) {

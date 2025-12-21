@@ -20,8 +20,8 @@ import RoutingUtils from '#/utils/routing.utils';
 import {
 	AccountDetails,
 	AccountPfp,
-} from '#/features/manage-accounts/AccountListingFragment';
-import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
+} from '#/features/accounts/views/AccountListItemView';
+import SoftwareHeader from '#/features/accounts/components/SoftwareHeader';
 
 type ListItemProps = {
 	acct: Account;

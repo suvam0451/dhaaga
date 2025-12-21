@@ -1,12 +1,10 @@
-import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
-import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { AppDividerSoft } from '#/ui/Divider';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { RefreshControl, View } from 'react-native';
 import { useState } from 'react';
 import Animated, { ScrollHandlerProcessed } from 'react-native-reanimated';
 import { FetchStatus } from '@tanstack/react-query';
+import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 
 type Props = {
 	forwardedRef: any;
@@ -46,13 +44,7 @@ function ProfileModuleListRenderer({
 				ref={forwardedRef}
 				data={data}
 				onScroll={onScroll}
-				renderItem={({ item }) => (
-					<WithAppStatusItemContext dto={item}>
-						<TimelineFilter_EmojiCrash>
-							<PostTimelineEntryView />
-						</TimelineFilter_EmojiCrash>
-					</WithAppStatusItemContext>
-				)}
+				renderItem={({ item }) => <TimelinePostItemView post={item} />}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
 				}

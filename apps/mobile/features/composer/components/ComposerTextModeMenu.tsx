@@ -62,7 +62,7 @@ function ReplyIndicator() {
 }
 
 /**
- * The top section of the post composer.
+ * The top section of the post-composer.
  *
  * For emoji selections, this section is hidden
  */
@@ -87,7 +87,6 @@ function ComposerTextModeMenu() {
 						style={{
 							flexDirection: 'row',
 							alignItems: 'center',
-							// marginBottom: appDimensions.timelines.sectionBottomMargin * 0.5,
 						}}
 					>
 						<View style={styles.avatarBorderBox}>

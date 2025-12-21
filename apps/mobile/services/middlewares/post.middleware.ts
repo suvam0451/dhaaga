@@ -71,6 +71,7 @@ class PostMiddleware {
 				replyCount: -1,
 				boostCount: -1,
 				likeCount: -1,
+				quoteCount: -1,
 				reactions: [],
 			},
 			interaction: {

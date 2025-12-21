@@ -6,7 +6,7 @@ import {
 	View,
 } from 'react-native';
 import { NativeTextBold } from '#/ui/NativeText';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { useAppTheme } from '#/states/global/hooks';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import FreePlanLabel from '#/components/svgs/plans/FreePlanLabel';

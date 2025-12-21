@@ -4,7 +4,7 @@ import { useAppTheme } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import { NativeTextBold } from '#/ui/NativeText';
-import { usePostExecutor } from '#/features/composer/hooks';
+import useComposerCreateAction from '#/features/composer/hooks/useComposerCreateAction';
 
 /**
  * Click to Post!
@@ -12,7 +12,7 @@ import { usePostExecutor } from '#/features/composer/hooks';
 function PostButton() {
 	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
-	const { create, isLoading } = usePostExecutor();
+	const { create, isLoading } = useComposerCreateAction();
 
 	return (
 		<TouchableOpacity

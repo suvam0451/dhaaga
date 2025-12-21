@@ -6,7 +6,7 @@ import {
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { useQuery } from '@tanstack/react-query';
-import PostTimelineView from '#/components/timelines/PostTimelineView';
+import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 
 function Generator() {
 	const { client, driver, server } = useAppApiClient();
@@ -27,6 +27,7 @@ function Generator() {
 			label={'My Bookmarks'}
 			queryResult={queryResult}
 			flatListKey={'account/bookmarks'}
+			itemType={'post'}
 		/>
 	);
 }

@@ -18,7 +18,7 @@ import { APP_PINNED_OBJECT_TYPE } from '#/services/driver.service';
 import HubPinSectionContainer from './HubPinSectionContainer';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
-import { HapticUtils } from '#/utils/haptics';
+import { HapticsUtils } from '#/utils/haptics';
 
 type Props = {
 	profile: Profile;
@@ -81,7 +81,7 @@ function HubPinnedUserList({
 	}
 
 	function onLongPress(item: ProfilePinnedUser) {
-		HapticUtils.medium();
+		HapticsUtils.medium();
 		onLongPressUser(item);
 	}
 

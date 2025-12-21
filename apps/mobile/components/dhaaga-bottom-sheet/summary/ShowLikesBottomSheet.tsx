@@ -2,7 +2,7 @@ import { useAppBottomSheet } from '#/states/global/hooks';
 import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
-import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/features/timelines/view/UserTimelineView';
 import { useApiGetPostLikedBy } from '#/components/api';
 
 function Content() {
@@ -22,6 +22,7 @@ function Content() {
 				queryResult={queryResult}
 				navbarType={'none'}
 				flatListKey={'post/likes'}
+				itemType={'user-any'}
 			/>
 		</>
 	);

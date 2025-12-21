@@ -8,7 +8,7 @@ import SunBored from '#/skins/default/day/SunBored';
 import DayCloud from '#/skins/default/day/DayCloud';
 import useTimeOfDay from '#/ui/hooks/useTimeOfDay';
 import MoonSleepingFilled from '#/skins/default/night/MoonSleepingFilled';
-import NavBar_Explore from '#/components/topnavbar/NavBar_Explore';
+import NavBar_Explore from '#/features/navbar/views/NavBar_Explore';
 
 function DayMode() {
 	const { acct } = useActiveUserSession();

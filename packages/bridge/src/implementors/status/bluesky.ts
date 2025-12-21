@@ -317,6 +317,7 @@ class AtprotoPostAdapter implements PostTargetInterface {
 	getRepostsCount = () => this.post?.repostCount || 0;
 	getRepliesCount = () => this.post?.replyCount || 0;
 	getFavouritesCount = () => this.post?.likeCount || 0;
+	getQuotesCount = () => this.post?.quoteCount || 0;
 	// TODO: not implemented by interface
 	getQuoteCount = () => this.post?.quoteCount || 0;
 

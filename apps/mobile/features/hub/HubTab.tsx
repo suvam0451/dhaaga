@@ -16,7 +16,7 @@ import { RefreshControl, ScrollView, View } from 'react-native';
 import HubProfileListView from './views/HubProfileListView';
 import HubPinnedFeedList from './components/HubPinnedFeedList';
 import { Profile, ProfilePinnedTag, ProfilePinnedUser } from '@dhaaga/db';
-import NavBar_Hub from '#/components/topnavbar/NavBar_Hub';
+import NavBar_Hub from '#/features/navbar/views/NavBar_Hub';
 import {
 	ProfileService,
 	ProfilePinnedUserService,

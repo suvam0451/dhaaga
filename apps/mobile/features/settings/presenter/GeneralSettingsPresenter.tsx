@@ -1,5 +1,5 @@
 import SectionHeader from '../components/SectionHeader';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 
 function GeneralSettingsPresenter() {
 	return (

@@ -6,12 +6,11 @@ import {
 } from '#/states/global/hooks';
 import { useState } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import WithAppStatusItemContext from '../../containers/WithPostItemContext';
-import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
 import { NativeTextBold } from '#/ui/NativeText';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 import { PostMutator } from '@dhaaga/bridge';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
+import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 
 function AuthoredPostPreviewBottomSheet() {
 	const { client } = useAppApiClient();
@@ -101,9 +100,7 @@ function AuthoredPostPreviewBottomSheet() {
 				) : (
 					<View />
 				)}
-				<WithAppStatusItemContext dto={post}>
-					<PostTimelineEntryView isPreview />
-				</WithAppStatusItemContext>
+				<TimelinePostItemView post={post} isPreview />
 			</ScrollView>
 		</>
 	);

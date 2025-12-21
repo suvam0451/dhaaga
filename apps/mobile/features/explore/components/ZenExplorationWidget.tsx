@@ -12,7 +12,7 @@ import Animated from 'react-native-reanimated';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import AppSegmentedControl from '#/ui/AppSegmentedControl';
-import AppWidget from '#/components/widget/AppWidget';
+import AppWidget from '#/features/widgets/AppWidget';
 import { AppThemingUtil } from '#/utils/theming.util';
 
 function ZenExplorationWidget() {

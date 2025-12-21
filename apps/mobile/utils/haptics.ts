@@ -17,4 +17,4 @@ class Utils {
 	}
 }
 
-export { Utils as HapticUtils };
+export { Utils as HapticsUtils };

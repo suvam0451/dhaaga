@@ -11,10 +11,9 @@ import { Account, Profile, ProfileService, AccountService } from '@dhaaga/db';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from '#/components/lib/Icon';
-import { AppAccountSelectionItem } from '#/components/common/app/Account';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { DialogFactory } from '#/utils/dialog-factory';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import {
 	NativeTextMedium,
@@ -22,6 +21,7 @@ import {
 	NativeTextBold,
 } from '#/ui/NativeText';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { AppAccountSelectionItem } from '#/features/accounts/views/AccountView';
 
 type ProfileFragmentProps = {
 	acct: Account;

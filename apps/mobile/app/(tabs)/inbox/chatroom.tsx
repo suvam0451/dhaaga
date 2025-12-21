@@ -11,7 +11,7 @@ import InputView from '#/features/chats/views/InputView';
 import { appDimensions } from '#/styles/dimensions';
 import RecievedMessageView from '#/features/chats/views/RecievedMessageView';
 import type { UserObjectType, MessageObjectType } from '@dhaaga/bridge';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import {
 	useApiGetChatMessages,
 	useApiGetChatroom,
@@ -23,10 +23,9 @@ import {
 	useChatroomDispatch,
 	useChatroomState,
 } from '@dhaaga/react';
-import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
-import PostSkeleton from '#/ui/skeletons/PostSkeleton';
 import Animated from 'react-native-reanimated';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 
 type ParticipantsProps = {
 	accounts: UserObjectType[];
@@ -137,12 +136,11 @@ function Generator() {
 						></View>
 					}
 					ListEmptyComponent={
-						<TimelineQueryStatusIndicator
+						<TimelineStateIndicator
 							queryResult={queryResult}
 							numItems={State.items.length}
-							renderSkeleton={() => (
-								<PostSkeleton containerHeight={ContainerHeight} />
-							)}
+							itemType={'message'}
+							containerHeight={ContainerHeight}
 						/>
 					}
 					renderScrollComponent={(props) => (
@@ -156,7 +154,6 @@ function Generator() {
 					style={[
 						styles.sendInterface,
 						{
-							bottom: 0,
 							backgroundColor: theme.background.a0,
 						},
 					]}
@@ -203,5 +200,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		flexDirection: 'row',
 		alignItems: 'center',
+		bottom: 0,
 	},
 });

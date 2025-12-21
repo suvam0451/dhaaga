@@ -1,4 +1,4 @@
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
@@ -8,11 +8,32 @@ import { AppDividerSoft } from '#/ui/Divider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '#/states/global/hooks';
 
+type SkinPreviewObjectType = {
+	id: string;
+	name: string;
+	statusBar: 'light-content' | 'dark-content';
+	bg: string;
+	bgFinal: string;
+	primary: string;
+	complementary: string;
+	text0: string; // #91954a, 56563c
+	text10: string;
+	text20: string;
+	text30: string;
+	text40: string;
+	text50: string;
+	isDarkMode: boolean;
+	hasCustomSkin: boolean;
+	hasTransparency: boolean;
+	hasWallpaper: boolean;
+	hasIconPack: boolean;
+};
+
 function SkinSelectionPage() {
 	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
 	const { setSkin } = useAppTheme();
 
-	const items = [
+	const items: SkinPreviewObjectType[] = [
 		{
 			id: 'default',
 			name: 'Default',
@@ -28,9 +49,10 @@ function SkinSelectionPage() {
 			text40: '#808080',
 			text50: '#656565',
 			isDarkMode: true,
-			hasCustomTheme: false,
+			hasCustomSkin: false,
 			hasTransparency: false,
 			hasIconPack: false,
+			hasWallpaper: false,
 		},
 		{
 			id: 'christmas',
@@ -47,16 +69,15 @@ function SkinSelectionPage() {
 			text40: '#464b32',
 			text50: '#305633',
 			isDarkMode: false,
-			hasSkin: true,
-			hasCustomTheme: true,
+			hasCustomSkin: true,
 			hasTransparency: false,
 			hasIconPack: true,
+			hasWallpaper: true,
 		},
 		{
 			id: 'white_album',
 			name: 'White Album',
 			statusBar: 'light-content',
-			description: 'An ode to the love',
 			bg: '#fffdf8', // #eec665, #eaeada
 			bgFinal: '#73acbf',
 			primary: '#f9ba4f',
@@ -68,15 +89,15 @@ function SkinSelectionPage() {
 			text40: '#1B5774',
 			text50: '#1B5D79',
 			isDarkMode: false,
-			hasCustomTheme: false,
+			hasCustomSkin: false,
 			hasTransparency: false,
 			hasIconPack: false,
+			hasWallpaper: false,
 		},
 		{
 			id: 'white_album_2',
 			name: 'White Album 2',
 			statusBar: 'light-content',
-			description: 'An ode to the love',
 			bg: '#fffdf8', // fffdf8
 			bgFinal: '#9EC5D1', // 73acbf
 			primary: '#48599D', // 814B0E, e8922e
@@ -88,15 +109,15 @@ function SkinSelectionPage() {
 			text40: '#15487F', // 1B5774
 			text50: '#134358', // 1B5D79
 			isDarkMode: false,
-			hasSkin: true,
+			hasCustomSkin: false,
 			hasTransparency: true,
 			hasIconPack: false,
+			hasWallpaper: true,
 		},
 		{
 			id: 'kataware_doki',
 			name: 'Kataware Doki',
 			statusBar: 'dark-content',
-			description: 'A warm, golden glow',
 			bg: '#4f0b3f',
 			bgFinal: '#853963',
 			primary: '#fcaf88',
@@ -108,14 +129,15 @@ function SkinSelectionPage() {
 			text40: '#b881a1',
 			text50: '#9d7290',
 			isDarkMode: true,
-			hasCustomTheme: true,
+			hasCustomSkin: true,
 			hasTransparency: false,
 			hasIconPack: false,
+			hasWallpaper: true,
 		},
 		{
 			id: 'sunset',
 			name: 'Sunset',
-			description: 'A warm, golden glow',
+			statusBar: 'light-content',
 			bg: '#fcfb9b',
 			bgFinal: '#eec665',
 			primary: '#32455b',
@@ -126,10 +148,41 @@ function SkinSelectionPage() {
 			text30: '#44472F',
 			text40: '#3E4230',
 			text50: '#2f2e27',
-			isDarkMode: false,
-			hasCustomTheme: false,
+			isDarkMode: true,
+			hasCustomSkin: false,
 			hasTransparency: false,
 			hasIconPack: false,
+			hasWallpaper: true,
+		},
+		// {
+		// 	id: 'orange_castle',
+		// 	name: 'Sky Castle',
+		// 	bg: '#fee8b7',
+		// 	bgFinal: '#ffc667',
+		// 	primary: '#d90469',
+		// 	complementary: '#462519',
+		// 	text0: '#5A2501',
+		// 	text50: '#743E2A',
+		// },
+		{
+			id: 'beast_within',
+			name: 'Beast Within',
+			statusBar: 'light-content',
+			bg: '#121212',
+			bgFinal: '#182629',
+			primary: '#fef5ad',
+			complementary: '#a67666',
+			text0: '#c0dbc3',
+			text10: '#b2d0b6',
+			text20: '#a3c4a7',
+			text30: '#94b898',
+			text40: '#88ad8a',
+			text50: '#7ca176',
+			isDarkMode: true,
+			hasCustomSkin: true,
+			hasTransparency: false,
+			hasIconPack: true,
+			hasWallpaper: true,
 		},
 	];
 
@@ -225,7 +278,7 @@ function SkinSelectionPage() {
 								</View>
 							</View>
 							<View style={{ flexDirection: 'row' }}>
-								{item.hasSkin ? (
+								{item.hasWallpaper ? (
 									<NativeTextBold style={{ color: item.text20 }}>
 										Wallpaper
 									</NativeTextBold>

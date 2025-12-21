@@ -120,4 +120,33 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			highlight: '#f8d3e4',
 		},
 	},
+	{
+		id: 'beast_within',
+		name: 'Beast Within',
+		barStyle: 'light-content',
+		primary: '#fef5ad',
+		primaryText: 'black',
+		complementary: '#a67666',
+		background: {
+			a0: '#121212',
+			a10: '#141718',
+			a20: '#151c1e',
+			a30: '#162124',
+			a40: '#172329',
+			a50: '#182629',
+		},
+		secondary: {
+			a0: '#c0dbc3',
+			a10: '#b2d0b6',
+			a20: '#a3c4a7',
+			a30: '#94b898',
+			a40: '#88ad8a',
+			a50: '#7ca176',
+		},
+		reactions: {
+			active: '#492916',
+			inactive: '#301515',
+			highlight: '#f8d3e4',
+		},
+	},
 ];

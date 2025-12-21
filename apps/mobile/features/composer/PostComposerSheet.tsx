@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import ComposerSpoiler from '#/components/dhaaga-bottom-sheet/modules/post-composer/fragments/ComposerSpoiler';
-import ComposerMediaPresenter from './presenters/ComposerMediaPresenter';
+import ComposerMediaModeView from './views/ComposerMediaModeView';
 import EmojiPickerBottomSheet from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/EmojiPickerBottomSheet';
 import ComposerTextModeMenu from '#/features/composer/components/ComposerTextModeMenu';
 import TextEditorService from '#/services/text-editor.service';
 import { useAppBottomSheet } from '#/states/global/hooks';
 import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
-import BottomMenuPresenter from './presenters/BottomMenuPresenter';
+import BottomMenuView from './views/BottomMenuView';
 import {
 	PostComposerCtx,
 	usePostComposerDispatch,
@@ -15,12 +15,12 @@ import {
 	usePostComposerState,
 } from '@dhaaga/react';
 import ComposerTextInput from './components/ComposerTextInput';
-import { usePostComposerInputMode } from '#/features/composer/hooks';
+import useComposerInputMode from '#/features/composer/hooks/useComposerInputMode';
 
 function Generator() {
 	const { visible } = useAppBottomSheet();
 	const dispatch = usePostComposerDispatch();
-	const { toTextMode } = usePostComposerInputMode();
+	const { toTextMode } = useComposerInputMode();
 	const state = usePostComposerState();
 
 	function onEmojiApplied(o: Emoji) {
@@ -43,7 +43,7 @@ function Generator() {
 						<ComposerTextModeMenu />
 						<ComposerSpoiler />
 						<ComposerTextInput />
-						<BottomMenuPresenter />
+						<BottomMenuView />
 					</View>
 				);
 			}
@@ -55,7 +55,7 @@ function Generator() {
 					/>
 				);
 			case 'media': {
-				return <ComposerMediaPresenter />;
+				return <ComposerMediaModeView />;
 			}
 		}
 	}, [state.mode]);

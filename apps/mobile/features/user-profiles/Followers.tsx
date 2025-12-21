@@ -4,7 +4,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { userFollowersQueryOpts } from '@dhaaga/react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/features/timelines/view/UserTimelineView';
 import { useLocalSearchParams } from 'expo-router';
 
 function Generator() {
@@ -22,6 +22,7 @@ function Generator() {
 			queryResult={queryResult}
 			flatListKey={'followers/list'}
 			navbarType={'simple'}
+			itemType={'user-any'}
 		/>
 	);
 }

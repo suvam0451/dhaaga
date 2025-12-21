@@ -1,4 +1,4 @@
-import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/features/timelines/view/UserTimelineView';
 import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
 import { useAppApiClient } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -22,6 +22,7 @@ function Generator() {
 			queryResult={queryResult}
 			flatListKey={'followings/list'}
 			navbarType={'simple'}
+			itemType={'user-any'}
 		/>
 	);
 }

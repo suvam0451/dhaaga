@@ -7,7 +7,7 @@ import { useAssets } from 'expo-asset';
 import {
 	OnboardingSignInBanner,
 	OnboardingSignInButton,
-} from '#/components/onboarding/OnboardingSignInBanner';
+} from '#/features/onboarding/components/OnboardingSignInBanner';
 import { LinkingUtils } from '#/utils/linking.utils';
 import { useAtProtoAuth, useDhaagaAuthFormControl } from '@dhaaga/react';
 import { AppFormTextInput } from '#/components/lib/FormInput';
@@ -25,7 +25,7 @@ import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { AccountService } from '@dhaaga/db';
 import AccountDbService from '#/services/db/account-db.service';
 import { BackHandler } from 'react-native';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import RoutingUtils from '#/utils/routing.utils';

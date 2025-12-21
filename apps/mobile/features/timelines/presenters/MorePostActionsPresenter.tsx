@@ -5,7 +5,7 @@ import { DriverService, PostInspector } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
 import { AppDividerSoft } from '#/ui/Divider';
-import { HapticUtils } from '#/utils/haptics';
+import { HapticsUtils } from '#/utils/haptics';
 import BottomSheetActionItem from '#/ui/BottomSheetActionItem';
 
 function MorePostActionsPresenter({
@@ -54,7 +54,7 @@ function MorePostActionsPresenter({
 					active={IS_BOOKMARKED}
 					desc={'Save this post for later'}
 					onPress={() => {
-						toggleBookmark(HapticUtils.medium);
+						toggleBookmark(HapticsUtils.medium);
 					}}
 				/>
 			)}
@@ -65,7 +65,7 @@ function MorePostActionsPresenter({
 					label={IS_LIKED ? 'Remove Like' : 'Add Like'}
 					desc={'Your likes are visible to everyone'}
 					onPress={() => {
-						toggleLike(HapticUtils.medium);
+						toggleLike(HapticsUtils.medium);
 					}}
 				/>
 			)}

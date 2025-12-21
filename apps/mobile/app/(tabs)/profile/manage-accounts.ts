@@ -1,3 +1,3 @@
-import AccountManagement from '#/features/manage-accounts/AccountManagement';
+import Page from '#/features/accounts/ManageAccountsPage';
 
-export default AccountManagement;
+export default Page;

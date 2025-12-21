@@ -58,31 +58,34 @@ export function usePostEventBusStore(input: string | PostObjectType) {
 export function usePostEventBusActions(input: string) {
 	const { postEventBus } = useAppPublishers();
 
-	function toggleBookmark(loader?: (flag: boolean) => void) {
-		postEventBus.toggleBookmark(input, loader);
+	async function toggleBookmark(loader?: (flag: boolean) => void) {
+		await postEventBus.toggleBookmark(input, loader);
 	}
 
-	function toggleLike(loader?: (flag: boolean) => void) {
-		postEventBus.toggleLike(input, loader);
+	async function toggleLike(loader?: (flag: boolean) => void) {
+		await postEventBus.toggleLike(input, loader);
 	}
 
-	function loadBookmarkState(loader?: (flag: boolean) => void) {
-		postEventBus.loadBookmarkState(input, loader);
+	async function loadBookmarkState(loader?: (flag: boolean) => void) {
+		await postEventBus.loadBookmarkState(input, loader);
 	}
 
-	function toggleShare(loader?: (flag: boolean) => void) {
-		postEventBus.toggleShare(input, loader);
+	async function toggleShare(loader?: (flag: boolean) => void) {
+		await postEventBus.toggleShare(input, loader);
 	}
 
-	function addReaction(reaction: Emoji, loader?: (flag: boolean) => void) {
-		postEventBus.addReaction(input, reaction, loader);
+	async function addReaction(
+		reaction: Emoji,
+		loader?: (flag: boolean) => void,
+	) {
+		await postEventBus.addReaction(input, reaction, loader);
 	}
 
-	function toggleReaction(
+	async function toggleReaction(
 		reaction: EmojiDto,
 		loader?: (flag: boolean) => void,
 	) {
-		postEventBus.toggleReaction(input, reaction, loader);
+		await postEventBus.toggleReaction(input, reaction, loader);
 	}
 
 	return {

@@ -6,7 +6,7 @@ import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { AppIcon } from '#/components/lib/Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import type { NotificationObjectType } from '@dhaaga/bridge';
-import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
+import SimpleInboxTimeline from '#/features/timelines/view/SimpleInboxTimeline';
 
 function Wrapper({ item }: { item: NotificationObjectType }) {
 	const { theme } = useAppTheme();

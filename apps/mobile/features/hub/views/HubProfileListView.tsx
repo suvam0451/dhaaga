@@ -6,7 +6,7 @@ import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { NativeTextBold } from '#/ui/NativeText';
 import { appDimensions } from '#/styles/dimensions';
-import AppWidget from '#/components/widget/AppWidget';
+import AppWidget from '#/features/widgets/AppWidget';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {

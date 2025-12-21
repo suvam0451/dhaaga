@@ -196,6 +196,10 @@ class MisskeyApiPostAdapter implements PostTargetInterface {
 		return 0;
 	}
 
+	getQuotesCount(): number {
+		return 0;
+	}
+
 	getIsBookmarked(): boolean | null | undefined {
 		return undefined;
 	}

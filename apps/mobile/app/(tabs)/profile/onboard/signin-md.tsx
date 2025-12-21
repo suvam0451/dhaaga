@@ -14,7 +14,7 @@ import appStyling from '#/styles/AppStyles';
 import { AppAuthWebView } from '#/ui/WebView';
 import RoutingUtils from '#/utils/routing.utils';
 import { HideWhileKeyboardActive } from '#/ui/Containers';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { NativeTextBold } from '#/ui/NativeText';
 import { useEffect } from 'react';

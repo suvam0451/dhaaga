@@ -3,7 +3,7 @@ import { useApiGetChatUpdates } from '#/hooks/api/useNotifications';
 import { FlatList, RefreshControl, View } from 'react-native';
 import { useAppApiClient } from '#/states/global/hooks';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
-import NavBar_Inbox from '#/components/topnavbar/NavBar_Inbox';
+import NavBar_Inbox from '#/features/navbar/views/NavBar_Inbox';
 import FeatureNotAvailable from '../components/FeatureNotAvailable';
 import ChatRoomListItemView from '#/features/timelines/view/ChatRoomListItemView';
 import { AppDividerSoft } from '#/ui/Divider';

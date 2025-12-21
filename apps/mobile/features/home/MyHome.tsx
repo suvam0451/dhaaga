@@ -21,7 +21,7 @@ import DriverService, { AppModulesProps } from '#/services/driver.service';
 import useApiMe from '#/hooks/useApiMe';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
-import NavBar_Home from '#/components/topnavbar/NavBar_Home';
+import NavBar_Home from '#/features/navbar/views/NavBar_Home';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import AccountHomeModuleItem from './components/AccountHomeModuleItem';
 import { useTranslation } from 'react-i18next';

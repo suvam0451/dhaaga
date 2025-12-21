@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
 import { NativeTextBold, NativeTextMedium } from '#/ui/NativeText';
-import AppSettingBooleanToggle from '#/components/screens/settings/fragments/AppSettingBooleanToggle';
+import AppSettingBooleanToggle from '#/features/settings/components/AppSettingBooleanToggle';
 
 function Divider() {
 	const { theme } = useAppTheme();

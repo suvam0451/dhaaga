@@ -5,7 +5,7 @@ import {
 } from '@dhaaga/core';
 import { useActiveUserSession, useAppApiClient } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import PostTimelineView from '#/components/timelines/PostTimelineView';
+import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 import { useQuery } from '@tanstack/react-query';
 
 function ContentView() {
@@ -28,6 +28,7 @@ function ContentView() {
 			label={'My Likes'}
 			queryResult={queryResult}
 			flatListKey={'account/likes'}
+			itemType={'post'}
 		/>
 	);
 }

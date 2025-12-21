@@ -4,7 +4,7 @@ import {
 	AutoFillResultsType,
 } from '../types/composer.types';
 import { useQuery } from '@tanstack/react-query';
-import { DriverService, UserParser } from '@dhaaga/bridge';
+import { AtprotoApiAdapter, DriverService, UserParser } from '@dhaaga/bridge';
 
 const DEFAULT: AutoFillResultsType = {
 	accounts: [],
@@ -16,57 +16,47 @@ function useSuggestionsApi(prompt: AutoFillPromptType) {
 	const { client, driver, server } = useAppApiClient();
 	const { acctManager } = useAccountManager();
 
+	async function api() {
+		switch (prompt.type) {
+			case 'acct': {
+				const data = DriverService.supportsAtProto(driver)
+					? await (client as AtprotoApiAdapter).search.findUsersTypeAhead({
+							q: prompt.q,
+							query: prompt.q,
+							limit: 5,
+							type: 'accounts',
+						})
+					: await client.search.findUsers({
+							q: prompt.q,
+							query: prompt.q,
+							limit: 5,
+							type: 'accounts',
+						});
+
+				return {
+					...DEFAULT,
+					accounts: UserParser.parse<unknown[]>(data.data, driver, server),
+				};
+			}
+			case 'emoji': {
+				acctManager.loadReactions();
+				const cache = acctManager.serverReactionCache;
+				const matches = cache.filter((o) => o.shortCode.includes(prompt.q));
+				return {
+					...DEFAULT,
+					emojis: matches.slice(0, 5),
+				};
+			}
+			default: {
+				throw new Error('E_Invalid_Prompt');
+			}
+		}
+	}
+
 	return useQuery<AutoFillResultsType>({
 		queryKey: ['composer/suggestions', prompt],
-		queryFn: async () => {
-			if (prompt.q === '') throw new Error('E_Empty_Prompt');
-
-			switch (prompt.type) {
-				case 'acct': {
-					const { data, error } = await client.search.findUsers({
-						q: prompt.q,
-						query: prompt.q,
-						limit: 5,
-						type: 'accounts',
-					});
-					if (error) throw new Error(error.message);
-
-					// Custom Logic
-					if (DriverService.supportsAtProto(driver)) {
-						return {
-							...DEFAULT,
-							accounts: UserParser.parse<unknown[]>(
-								(data as any).data.actors as any[],
-								driver,
-								server,
-							),
-						};
-					}
-
-					return {
-						...DEFAULT,
-						accounts: UserParser.parse<unknown[]>(
-							data as any[],
-							driver,
-							server,
-						),
-					};
-				}
-				case 'emoji': {
-					acctManager.loadReactions();
-					const cache = acctManager.serverReactionCache;
-					const matches = cache.filter((o) => o.shortCode.includes(prompt.q));
-					return {
-						...DEFAULT,
-						emojis: matches.slice(0, 5),
-					};
-				}
-				default: {
-					throw new Error('E_Invalid_Prompt');
-				}
-			}
-		},
-		enabled: !!client && prompt.type !== 'none',
+		queryFn: api,
+		enabled: !!client && prompt.type !== 'none' && !!prompt.q,
 		initialData: DEFAULT,
 	});
 }

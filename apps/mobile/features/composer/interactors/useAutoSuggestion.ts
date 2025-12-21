@@ -16,14 +16,12 @@ function useAutoSuggestion(
 	state: PostComposerStateType,
 	dispatch: PostComposerDispatchType,
 ) {
-	const { status, data, error, fetchStatus } = useSuggestionsApi(state.prompt);
+	const { status, data, fetchStatus } = useSuggestionsApi(state.prompt);
 
 	useEffect(() => {
 		if (fetchStatus === 'fetching') return;
-		if (status !== 'success') {
-			dispatch({ type: PostComposerAction.CLEAR_SUGGESTION });
-			return;
-		}
+		if (status !== 'success')
+			return dispatch({ type: PostComposerAction.CLEAR_SUGGESTION });
 		dispatch({
 			type: PostComposerAction.SET_SUGGESTION,
 			payload: data,

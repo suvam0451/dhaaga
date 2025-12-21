@@ -1,6 +1,6 @@
 import { useAppTheme } from '#/states/global/hooks';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { ScrollView } from 'react-native';
 

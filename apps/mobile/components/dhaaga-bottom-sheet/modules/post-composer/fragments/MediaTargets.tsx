@@ -8,8 +8,8 @@ import {
 	usePostComposerState,
 	PostComposerAction,
 } from '@dhaaga/react';
-import { useAltText } from '#/features/composer/hooks';
 import { NativeTextBold } from '#/ui/NativeText';
+import useAltText from '#/features/composer/hooks/useAltText';
 
 /**
  * Shows a list of uploaded

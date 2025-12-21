@@ -112,6 +112,7 @@ class Parser {
 				replyCount: input.getRepliesCount(),
 				boostCount: input.getRepostsCount(),
 				likeCount: input.getFavouritesCount(),
+				quoteCount: input.getQuotesCount(),
 				reactions: input.getReactions(input.getMyReaction() || ''),
 			},
 			interaction: {

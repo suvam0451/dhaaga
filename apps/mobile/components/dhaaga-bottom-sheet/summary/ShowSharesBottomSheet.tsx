@@ -2,7 +2,7 @@ import { useAppBottomSheet } from '#/states/global/hooks';
 import { useApiGetPostSharedBy } from '#/components/api';
 import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
-import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/features/timelines/view/UserTimelineView';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
 
 function Generator() {
@@ -22,6 +22,7 @@ function Generator() {
 				queryResult={queryResult}
 				navbarType={'none'}
 				flatListKey={'post/shares'}
+				itemType={'user-any'}
 			/>
 		</>
 	);

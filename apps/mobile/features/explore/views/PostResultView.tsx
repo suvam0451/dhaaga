@@ -4,7 +4,7 @@ import {
 	useDiscoverState,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import PostTimelineView from '#/components/timelines/PostTimelineView';
+import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 import { useApiSearchPosts } from '#/hooks/api/useApiSearch';
 
 function Generator() {
@@ -23,6 +23,7 @@ function Generator() {
 				queryResult={queryResult}
 				navbarType={'explore'}
 				flatListKey={'explore/posts'}
+				itemType={'post'}
 			/>
 		</>
 	);

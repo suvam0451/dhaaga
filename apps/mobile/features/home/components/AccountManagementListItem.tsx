@@ -2,8 +2,8 @@ import { Fragment } from 'react';
 import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import { Account } from '@dhaaga/db';
-import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
-import AccountListingFragment from '#/features/manage-accounts/AccountListingFragment';
+import AccountListItemView from '#/features/accounts/views/AccountListItemView';
+import SoftwareHeader from '#/features/accounts/components/SoftwareHeader';
 
 type AccountListForSoftwareProps = {
 	data: Account[];
@@ -32,11 +32,7 @@ function AccountManagementListItem({
 						style={{ marginVertical: 10, marginBottom: 6, marginLeft: 4 }}
 					/>
 					{filteredForSoftware.map((o, i) => (
-						<AccountListingFragment
-							key={i}
-							acct={o}
-							onListChange={onListChange}
-						/>
+						<AccountListItemView key={i} acct={o} onListChange={onListChange} />
 					))}
 				</Fragment>
 			)}

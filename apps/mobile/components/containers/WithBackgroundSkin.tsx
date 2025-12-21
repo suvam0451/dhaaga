@@ -8,17 +8,25 @@ function WithBackgroundSkin({ children }: any) {
 	const [assets, error] = useAssets([
 		require('#/assets/backdrops/christmas.jpeg'),
 		require('#/assets/backdrops/white_album.jpg'),
+		require('#/assets/backdrops/beast_within.jpg'),
 	]);
+
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
 
 	const uri = useMemo(() => {
 		if (!LOADED) return null;
+
+		// lite edition
+		if (assets.length === 0) return null;
+
 		switch (theme.id) {
 			case 'christmas':
 				return assets[0].localUri;
 			case 'white_album':
 			case 'white_album_2':
 				return assets[1].localUri;
+			case 'beast_within':
+				return assets[2].localUri;
 			case 'default':
 				return null;
 			default:
@@ -30,7 +38,7 @@ function WithBackgroundSkin({ children }: any) {
 
 	if (uri) {
 		return (
-			<ImageBackground source={{ uri }} style={{ flex: 1 }}>
+			<ImageBackground source={{ uri }} style={{ flex: 1, height: '100%' }}>
 				{children}
 			</ImageBackground>
 		);

@@ -3,7 +3,7 @@ import { KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { Pressable, StyleSheet, FlatList } from 'react-native';
 import { AppText } from '#/components/lib/Text';
-import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
+import SoftwareHeader from '#/features/accounts/components/SoftwareHeader';
 
 type ProtocolCardsProps = {
 	onSelectSetPagerId: (id: number) => void;
