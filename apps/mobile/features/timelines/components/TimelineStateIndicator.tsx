@@ -26,7 +26,7 @@ function TimelineEmptyView() {
 			<ErrorPageBuilder
 				stickerArt={<BearError />}
 				errorMessage={'Timeline Empty'}
-				errorDescription={'No results were found.\nOr, something went wrong.'}
+				errorDescription={'No results were found.'}
 			/>
 		</View>
 	);

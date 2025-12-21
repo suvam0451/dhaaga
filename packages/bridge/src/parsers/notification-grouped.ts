@@ -308,7 +308,10 @@ class Parser {
 		});
 
 		const uris = results.map((o) => o.uri);
-		const posts = await (client as AtprotoApiAdapter).posts.getPosts(uris);
+		const posts =
+			uris.length > 0
+				? await (client as AtprotoApiAdapter).posts.getPosts(uris)
+				: [];
 		const parsed = PostParser.parse<unknown[]>(posts, driver, server);
 
 		results = results.map((o) => ({

@@ -1,4 +1,3 @@
-import { useAppTheme } from '#/states/global/hooks';
 import MentionInboxPagerView from '#/features/inbox/pages/MentionInboxPagerView';
 import ChatInboxPagerView from '#/features/inbox/pages/ChatInboxPagerView';
 import SocialInboxPagerView from '#/features/inbox/pages/SocialInboxPagerView';
