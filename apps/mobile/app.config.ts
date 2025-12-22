@@ -38,7 +38,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	icon: './assets/dhaaga/icon.png',
 	userInterfaceStyle: 'dark',
 	scheme: APP_SCHEME,
-	jsEngine: 'hermes',
 	platforms: ['android'],
 	developmentClient: {
 		silentLaunch: true,

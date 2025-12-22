@@ -60,88 +60,88 @@
   },
   "composer": {
     "setAltText": {
-      "title": "Alternatieve Tekst",
+      "title": "Alternativtext",
       "description": [
-        "Bekijk de alternatieve tekst voor deze afbeelding.",
-        "Stuur een lege string in om te verwijderen."
+        "Siehe den Alternativtext für dieses Bild.",
+        "Senden Sie eine leere Zeichenkette, um zu entfernen."
       ],
-      "placeholder": "Voer nieuwe alternatieve tekst in"
+      "placeholder": "Geben Sie neuen Alternativtext ein"
     },
     "setVisibility": {
-      "title": "Stel zichtbaarheid in",
+      "title": "Sichtbarkeit einstellen",
       "description": [
-        "Je \"Niet openbaar\" berichten zijn verborgen voor feeds en zoekopdrachten.",
-        "Je \"Direct\" berichten zijn niet versleuteld."
+        "Ihre \"Nicht gelisteten\" Beiträge sind in Feeds und Suchen verborgen.",
+        "Ihre \"Direkten\" Nachrichten sind nicht verschlüsselt."
       ],
-      "publicLabel": "Openbaar",
-      "unlistedLabel": "Niet openbaar",
-      "followersOnlyLabel": "Alleen volgers",
-      "directLabel": "Direct"
+      "publicLabel": "Öffentlich",
+      "unlistedLabel": "Nicht gelistet",
+      "followersOnlyLabel": "Nur Follower",
+      "directLabel": "Direkt"
     }
   },
   "hub": {
     "profileAdd": {
-      "title": "Voeg Profiel Toe",
+      "title": "Profil hinzufügen",
       "description": [
-        "Profielen helpen je om je pins en hub lay-out te organiseren op basis van interesse."
+        "Profile helfen Ihnen, Ihre Pins und Hub-Layouts nach Interessen zu organisieren."
       ],
-      "placeholder": "Geef je profiel een naam",
-      "successToast": "Profiel succesvol toegevoegd!"
+      "placeholder": "Benennen Sie Ihr Profil",
+      "successToast": "Profil erfolgreich hinzugefügt!"
     },
     "profileDelete": {
-      "title": "Bevestig Verwijdering",
+      "title": "Löschung bestätigen",
       "description": [
-        "Weet je zeker dat je dit profiel wilt verwijderen?",
-        "Alle pins en opgeslagen lay-outs gaan verloren."
+        "Sind Sie sicher, dass Sie dieses Profil löschen möchten?",
+        "Alle Pins und gespeicherten Layouts gehen verloren."
       ],
-      "deleteConfirmOption": "Bevestigen en Verwijderen"
+      "deleteConfirmOption": "Bestätigen und Löschen"
     },
     "profileEdit": {
-      "title": "Profiel Bewerken",
+      "title": "Profil bearbeiten",
       "description": [
-        "Je kunt dit profiel hernoemen of verwijderen."
+        "Sie können dieses Profil umbenennen oder löschen."
       ],
       "descriptionAlt": [
-        "Je kunt alleen een standaard profiel hernoemen."
+        "Sie können nur ein Standardprofil umbenennen."
       ],
-      "renameOption": "Hernoemen",
-      "deleteOption": "Verwijderen"
+      "renameOption": "Umbenennen",
+      "deleteOption": "Löschen"
     },
     "profileRename": {
-      "title": "Profiel Hernoemen",
+      "title": "Profil umbenennen",
       "description": [
-        "Geef dit profiel een nieuwe naam."
+        "Geben Sie diesem Profil einen neuen Namen."
       ],
-      "placeholder": "Geef je profiel een naam"
+      "placeholder": "Benennen Sie Ihr Profil"
     },
     "tagAdd": {
-      "title": "Voeg Hashtag Toe",
+      "title": "Hashtag hinzufügen",
       "description": [
-        "Tags kunnen ook worden toegevoegd tijdens het bladeren door tijdlijnen (door op de tag te drukken)."
+        "Tags können auch beim Durchsuchen von Zeitleisten hinzugefügt werden (durch Drücken des Tags)."
       ],
-      "placeholder": "Naam van de tag",
-      "successToast": "Tag succesvol toegevoegd!"
+      "placeholder": "Name des Tags",
+      "successToast": "Tag erfolgreich hinzugefügt!"
     },
     "tagRemove": {
     },
     "tagEdit": {
-      "title": "Bewerk Vastgezette Tag",
+      "title": "Angehefteten Tag bearbeiten",
       "description": [
-        "Je kunt deze vastgezette tag hernoemen of verwijderen."
+        "Sie können diesen angehefteten Tag umbenennen oder löschen."
       ]
     },
     "tagRename": {
-      "title": "Hernoem Vastgezette Tag",
+      "title": "Angehefteten Tag umbenennen",
       "description": [
-        "Verander welke hashtag deze pin je naartoe brengt."
+        "Ändern Sie, zu welchem Hashtag dieser Pin führt."
       ],
-      "placeholder": "Werk je tag hier bij"
+      "placeholder": "Aktualisieren Sie Ihren Tag hier"
     },
     "userEdit": {
-      "title": "Bewerk Vastgezette Gebruiker",
+      "title": "Angehefteten Benutzer bearbeiten",
       "description": [
-        "Je kunt deze pin verwijderen.",
-        "Het herordenen wordt ondersteund in een toekomstige update."
+        "Sie können diesen Pin entfernen.",
+        "Das Neuordnen wird in einem zukünftigen Update unterstützt."
       ]
     }
   },

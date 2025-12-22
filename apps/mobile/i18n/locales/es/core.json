@@ -1,0 +1,224 @@
+{
+	"feed": {
+		"subscribeOption": "Subscribe",
+		"unsubscribeOption": "Unsubscribe",
+		"pinOption": "Pin",
+		"unpinOption": "Unpin"
+	},
+	"features": {
+		"notAvailable": {
+			"title": "Not Available",
+			"desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
+		}
+	},
+	"errors": {
+		"errorLabel": "Error",
+		"timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
+	},
+	"onboarding": {
+		"addAccountButton": "Add Account",
+		"accountCreationNotSupported": "Account creation is not supported.",
+		"needBlueskyAccount": "You need a Bluesky account",
+		"createOneHere": "Create one here",
+		"loginButton": "Sign In",
+		"appPassword": "App Password",
+		"enterYourServer": "Enter your server address",
+		"serverUrl": "Enter your instance url",
+		"popularMastodon": "Popular Mastodon Servers",
+		"popularPleroma": "Popular Pleroma Servers",
+		"popularAkkoma": "Popular Akkoma Servers"
+	},
+	"topNav": {
+		"primary": {
+			"hub": "Centro Social",
+			"discover": "Descubrir",
+			"compose": "Redactar",
+			"account": "Mi Cuenta",
+			"setting": "Ajustes",
+			"inbox": "Bandeja de entrada",
+			"mentions": "Menciones",
+			"chat": "Chat",
+			"social": "Social",
+			"updates": "Actualizaciones"
+		},
+		"secondary": {
+			"addProfile": "Añadir perfil",
+			"myLikes": "Mis Me gusta",
+			"myBookmarks": "Mis Marcadores",
+			"myAccount": "Mi Cuenta",
+			"myProfile": "Mi Perfil",
+			"appSettings": "Ajustes",
+			"manageAccounts": "Gestionar cuentas",
+			"blueskySignIn": "Iniciar sesión en Bluesky",
+			"selectServer": "Seleccionar servidor",
+			"mastodonSignIn": "Iniciar sesión en Mastodon",
+			"misskeySignIn": "Iniciar sesión en Misskey",
+			"pickPlatform": "Elegir plataforma"
+		}
+	},
+	"dialogs": {
+		"renameOption": "Rename",
+		"deleteOption": "Delete",
+		"dismissOption": "Dismiss",
+		"saveOption": "Save"
+	},
+	"discover": {
+		"moreSoon": {
+			"firstHalf": "More stuff coming",
+			"secondHalf": "soon™"
+		},
+		"instructions": [
+			"1) Open \uD83D\uDD0D to enter search term",
+			"2) Submit (↵) to search",
+			"3) Open \uD83D\uDD0D to change search term",
+			"4) Use (✖\uFE0F) to come back here"
+		],
+		"welcome": "Let's explore something new today!"
+	},
+	"profile": {
+		"appFeatures": {
+			"sectionLabel": "App Features",
+			"likes": {
+				"label": "Likes",
+				"desc": "Posts I've Liked"
+			},
+			"bookmarks": {
+				"label": "Bookmarks",
+				"desc": "My Bookmarks"
+			},
+			"feeds": {
+				"label": "Feeds",
+				"desc": "Subscribed Feeds"
+			},
+			"lists": {
+				"label": "Lists",
+				"desc": "My Lists"
+			},
+			"socialHub": {
+				"label": "Social Hub",
+				"desc": "Manage profiles"
+			},
+			"collections": {
+				"label": "Collections",
+				"desc": "Bookmark++"
+			},
+			"drafts": {
+				"label": "Drafts",
+				"desc": "Lost letters"
+			}
+		}
+	},
+	"sheets": {
+		"backOption": "Back"
+	},
+	"hub": {
+		"feeds": {
+			"global": "Global",
+			"local": "Local",
+			"social": "Social",
+			"home": "Home",
+			"bubble": "Bubble"
+		},
+		"greetings": {
+			"goodMorning": "Good Morning",
+			"goodAfternoon": "Good Afternoon",
+			"goodEvening": "Good Evening",
+			"goodNight": "Good Night"
+		},
+		"navbarLabel": "Dhaaga Hub",
+		"section": {
+			"feeds": "Feeds",
+			"users": "Users",
+			"tags": "Tags",
+			"timelines": "Timelines"
+		}
+	},
+	"inbox": {
+		"name": "Inbox",
+		"nav": {
+			"mentions": "Mentions",
+			"chat": "Chat",
+			"social": "Social",
+			"updates": "Updates"
+		},
+		"summary": {
+			"liked": "Liked your post",
+			"followRequestAccepted": "Accepted your follow request",
+			"followed": "Followed You",
+			"shared": "Shared your post",
+			"reacted": "Reacted to your post",
+			"posted": "Posted",
+			"replied": "Replied to you",
+			"mentioned": "Mentioned you"
+		}
+	},
+	"collections": {
+		"name": "Collections",
+		"addButton": "Add Collection",
+		"fallbackDesc": "No Description Provided",
+		"emptyTitle": "Collection Empty",
+		"emptyDesc": "This collection has no saved posts"
+	},
+	"composer": {
+		"pageTitle": "Compose",
+		"quickPost": "Quick Post",
+		"quickPostCta": "What's on your mind?",
+		"quickPostSubmit": "Post",
+		"noAttachments": "No attachments added",
+		"landing": {
+			"tComposeFull": "Create a Post",
+			"dComposeFull": ["Longer Posts", "More Options"],
+			"tComposePoll": "Create a Poll",
+			"dComposePoll": ["<Not Implemented>"],
+			"tViewScheduled": "View Published Posts",
+			"dViewScheduled": ["<Not Implemented>"],
+			"tViewDrafts": "View Drafts",
+			"dViewDrafts": ["<Not Implemented>"]
+		}
+	},
+	"quickPost": {
+		"name": "Quick Post",
+		"spoilerPlaceholder": "Spoiler / Content Warning",
+		"ctaPlaceholder": "What's on your mind?",
+		"postButton": "Post",
+		"replyingTo": "Replying to: ",
+		"quoting": "Quoting: ",
+		"visibility": {
+			"public": "Public",
+			"unlisted": "Home",
+			"direct": "Direct",
+			"private": "Followers"
+		},
+		"interactivity": {
+			"everybody": "Everyone",
+			"nobody": "Only Me",
+			"Limited": "Limited"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "Your Message"
+	},
+	"setting": {
+		"accountModule": {
+			"title": "Accounts",
+			"desc": "Add and Manage Accounts"
+		},
+		"generalModule": {
+			"title": "General",
+			"desc": "Most usual boring settings are here"
+		},
+		"appFeaturesModule": {
+			"title": "Goodie Hut",
+			"desc": "Tweak unique features of Dhaaga"
+		},
+		"digitalWellbeingModule": {
+			"title": "Digital Wellbeing",
+			"desc": "Disconnect to reconnect with yourself"
+		},
+		"advancedModule": {
+			"title": "Advanced",
+			"desc": "'For power users"
+		},
+		"footer": "Built with \uD83D\uDC9B by Debashish Patra"
+	}
+}

@@ -37,6 +37,20 @@ import plGlossary from './locales/pl/glossary.json';
 import plGuides from './locales/pl/guides.json';
 import plSettings from './locales/pl/settings.json';
 import plSheets from './locales/pl/sheets.json';
+// fr
+import frCore from './locales/fr/core.json';
+import frDialogs from './locales/fr/dialogs.json';
+import frGlossary from './locales/fr/glossary.json';
+import frGuides from './locales/fr/guides.json';
+import frSettings from './locales/fr/settings.json';
+import frSheets from './locales/fr/sheets.json';
+// es
+import esCore from './locales/es/core.json';
+import esDialogs from './locales/es/dialogs.json';
+import esGlossary from './locales/es/glossary.json';
+import esGuides from './locales/es/guides.json';
+import esSettings from './locales/es/settings.json';
+import esSheets from './locales/es/sheets.json';
 
 const resources = {
 	en: {
@@ -78,6 +92,22 @@ const resources = {
 		guides: plGuides,
 		sheets: plSheets,
 		settings: plSettings,
+	},
+	fr: {
+		core: frCore,
+		dialogs: frDialogs,
+		glossary: frGlossary,
+		guides: frGuides,
+		sheets: frSheets,
+		settings: frSettings,
+	},
+	es: {
+		core: esCore,
+		dialogs: esDialogs,
+		glossary: esGlossary,
+		guides: esGuides,
+		sheets: esSheets,
+		settings: esSettings,
 	},
 };
 
