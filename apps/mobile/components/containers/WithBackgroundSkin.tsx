@@ -5,14 +5,12 @@ import { useMemo } from 'react';
 import { Asset } from 'expo-asset';
 
 let LICENSED_RESOURCES = [];
-if (!['skinned', 'dev'].includes(process.env.APP_VARIANT)) {
-	LICENSED_RESOURCES = [
-		Asset.fromModule(require('#/assets/licensed/backdrops/christmas.jpeg')),
-		Asset.fromModule(require('#/assets/licensed/backdrops/white_album.jpg')),
-		Asset.fromModule(require('#/assets/licensed/backdrops/beast_within.jpg')),
-		Asset.fromModule(require('#/assets/licensed/backdrops/kataware_doki.jpg')),
-	];
-}
+LICENSED_RESOURCES = [
+	Asset.fromModule(require('#/assets/licensed/backdrops/christmas.jpeg')),
+	Asset.fromModule(require('#/assets/licensed/backdrops/white_album.jpg')),
+	Asset.fromModule(require('#/assets/licensed/backdrops/beast_within.jpg')),
+	Asset.fromModule(require('#/assets/licensed/backdrops/kataware_doki.jpg')),
+];
 
 function WithBackgroundSkin({ children }: any) {
 	const { theme } = useAppTheme();
