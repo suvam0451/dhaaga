@@ -1,51 +1,18 @@
 import { PostThreadCtx } from '@dhaaga/react';
 import { useAppTheme } from '#/states/global/hooks';
-import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
-import BearError from '#/components/svgs/BearError';
 import useApiBuildPostThread from '#/hooks/api/useApiBuildPostThread';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
-import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import StatusItem from '#/features/post-item/PostTimelineEntryView';
-import PostCommentThreadControls from '#/features/posts/features/detail-view/presenters/PostCommentThreadControls';
-import PostReplyItem from '#/features/posts/features/detail-view/presenters/ReplyItemPresenter';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
+import PostCommentThreadControls from '#/features/post-thread-view/views/PostCommentThreadControls';
 import { appDimensions } from '#/styles/dimensions';
 import { AppDividerSoft } from '#/ui/Divider';
-import NoMoreReplies from '#/features/posts/features/detail-view/components/NoMoreReplies';
-import { RefreshControl, View } from 'react-native';
+import NoMoreReplies from '#/features/post-thread-view/components/NoMoreReplies';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import Animated from 'react-native-reanimated';
-
-type StateIndicatorProps = {
-	error?: Error;
-	isFetching?: boolean;
-};
-
-function StateIndicator({ error, isFetching }: StateIndicatorProps) {
-	const { theme } = useAppTheme();
-	if (error) {
-		return (
-			<View
-				style={{
-					flex: 1,
-					backgroundColor: theme.palette.bg,
-					paddingTop: 52,
-				}}
-			>
-				<ErrorPageBuilder
-					stickerArt={<BearError />}
-					errorMessage={'Failed to load thread'}
-					errorDescription={error?.toString()}
-				/>
-			</View>
-		);
-	} else if (isFetching) {
-		return <View />;
-	} else {
-		return <View />;
-	}
-}
+import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
+import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
+import ThreadRootReplyView from '#/features/post-thread-view/views/ThreadRootReplyView';
 
 function ContentView() {
 	const { theme } = useAppTheme();
@@ -64,10 +31,16 @@ function ContentView() {
 		});
 	}
 
+	const [ContainerHeight, setContainerHeight] = useState(0);
+	function onLayout(event: any) {
+		setContainerHeight(event.nativeEvent.layout.height);
+	}
+
 	return (
 		<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
 			<NavBar_Simple label={'Post Details'} animatedStyle={animatedStyle} />
-			<Animated.FlatList
+			<FlatList
+				onLayout={onLayout}
 				data={items}
 				renderItem={({ item }) => {
 					switch (item.type) {
@@ -76,14 +49,12 @@ function ContentView() {
 						case 'anchor':
 							return (
 								<>
-									<WithAppStatusItemContext dto={item.post}>
-										<StatusItem showFullDetails />
-									</WithAppStatusItemContext>
+									<TimelinePostItemView post={item.post} showFullDetails />
 									<PostCommentThreadControls count={0} />
 								</>
 							);
 						case 'reply':
-							return <PostReplyItem colors={[]} postId={item.post.id} />;
+							return <ThreadRootReplyView postId={item.post.id} />;
 					}
 					return <View />;
 				}}
@@ -95,15 +66,21 @@ function ContentView() {
 				}}
 				onScroll={scrollHandler}
 				ListEmptyComponent={
-					<StateIndicator error={error} isFetching={isFetching} />
+					<TimelineStateIndicator
+						queryResult={{
+							error,
+							isFetched: !isFetching,
+							isRefetching: isFetching,
+						}}
+						containerHeight={ContainerHeight}
+						itemType={'post-thread'}
+						numItems={items.length}
+					/>
 				}
 				ItemSeparatorComponent={() => (
 					<AppDividerSoft style={{ marginVertical: 8 }} />
 				)}
 				ListFooterComponent={items.length > 0 ? <NoMoreReplies /> : <View />}
-				maxToRenderPerBatch={10}
-				initialNumToRender={16}
-				windowSize={7}
 			/>
 		</View>
 	);

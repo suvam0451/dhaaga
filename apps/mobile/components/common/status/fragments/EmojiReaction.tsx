@@ -23,22 +23,17 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 				return [
 					styles.emojiContainer,
 					{
-						backgroundColor: theme.reactions.active,
-						borderWidth: 2,
-						borderColor: theme.primary,
+						backgroundColor: theme.primary,
 					},
 				];
 			} else {
 				return [
 					styles.emojiContainer,
-					{ backgroundColor: theme.reactions.active },
+					{ backgroundColor: theme.background.a30 },
 				];
 			}
 		}
-		return [
-			styles.emojiContainer,
-			{ backgroundColor: theme.reactions.inactive },
-		];
+		return [styles.emojiContainer, { backgroundColor: theme.background.a10 }];
 	}, [dto.interactable, dto.me, theme]);
 
 	async function onReactionPress() {
@@ -71,7 +66,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 				</NativeTextBold>
 				<NativeTextBold
 					style={{
-						color: theme.secondary.a10,
+						color: dto.me ? theme.primaryText : theme.secondary.a10,
 						marginLeft: 8,
 					}}
 				>
@@ -95,7 +90,7 @@ function EmojiReaction({ dto }: { dto: EmojiDto; postDto: PostObjectType }) {
 				/>
 				<NativeTextBold
 					style={{
-						color: theme.secondary.a10,
+						color: dto.me ? theme.primaryText : theme.secondary.a10,
 						marginLeft: 8,
 					}}
 				>

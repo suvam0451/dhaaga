@@ -13,7 +13,7 @@ import {
 } from '@dhaaga/core';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
 import { useQuery } from '@tanstack/react-query';
-import PostTimelineView from '#/components/timelines/PostTimelineView';
+import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 
 function DataView() {
 	const { db } = useAppDb();
@@ -62,6 +62,7 @@ function DataView() {
 			skipTimelineInit
 			navbarType={'simple'}
 			flatListKey={`feed-preview-${State?.query?.id}`}
+			itemType={'post'}
 		/>
 	);
 }

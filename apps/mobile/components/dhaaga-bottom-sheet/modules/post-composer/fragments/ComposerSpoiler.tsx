@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import {
 	NativeSyntheticEvent,
 	StyleSheet,
@@ -6,20 +5,24 @@ import {
 	TextInputChangeEventData,
 	View,
 } from 'react-native';
-import { useComposerCtx } from '#/features/composer/contexts/useComposerCtx';
-import { PostComposerReducerActionType } from '#/features/composer/reducers/composer.reducer';
 import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
 
-const ComposerSpoiler = memo(() => {
+function ComposerSpoiler() {
 	const { theme } = useAppTheme();
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function onChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_CW,
+			type: PostComposerAction.SET_CW,
 			payload: {
 				content: e.nativeEvent.text,
 			},
@@ -49,7 +52,9 @@ const ComposerSpoiler = memo(() => {
 			/>
 		</View>
 	);
-});
+}
+
+export default ComposerSpoiler;
 
 const styles = StyleSheet.create({
 	textInput: {
@@ -59,5 +64,3 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 });
-
-export default ComposerSpoiler;

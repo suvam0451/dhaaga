@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, memo, useContext } from 'react';
 import type { PostObjectType } from '@dhaaga/bridge';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 
@@ -34,7 +34,7 @@ type Props = {
  * @param dto
  * @constructor
  */
-function WithAppStatusItemContext({ children, dto }: Props) {
+const WithAppStatusItemContext = memo(({ children, dto }: Props) => {
 	const { post } = usePostEventBusStore(dto);
 
 	return (
@@ -46,6 +46,6 @@ function WithAppStatusItemContext({ children, dto }: Props) {
 			{children}
 		</AppStatusItemContext.Provider>
 	);
-}
+});
 
 export default WithAppStatusItemContext;

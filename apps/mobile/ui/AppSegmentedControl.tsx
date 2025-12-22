@@ -37,7 +37,7 @@ function AppSegmentedControl({
 	const { theme } = useAppTheme();
 	return (
 		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
-			<AppDividerSoft />
+			{/*<AppDividerSoft />*/}
 			<FlatList
 				horizontal={true}
 				showsHorizontalScrollIndicator={false}

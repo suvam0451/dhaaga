@@ -12,9 +12,9 @@ export function Loader() {
 	const { theme } = useAppTheme();
 	const opacity = useRef(new Animated.Value(0)).current;
 	const colors = [
-		theme.complementaryA.a0,
 		theme.complementary,
-		theme.complementaryB.a0,
+		theme.complementary,
+		theme.complementary,
 	];
 
 	function wave(idx: number, reverseY: boolean) {

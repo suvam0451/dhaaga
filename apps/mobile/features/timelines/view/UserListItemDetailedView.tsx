@@ -1,5 +1,5 @@
 import type { UserObjectType } from '@dhaaga/bridge';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { Image, useImage } from 'expo-image';
 import { appDimensions } from '#/styles/dimensions';
@@ -9,6 +9,7 @@ import UserRelationPresenter from '../../user-profiles/presenters/UserRelationPr
 import { AppDividerSoft } from '#/ui/Divider';
 import TextAstRendererView from '#/ui/TextAstRendererView';
 import { NativeTextNormal } from '#/ui/NativeText';
+import useAppNavigator from '#/states/useAppNavigator';
 
 const ICON_SIZE = 42;
 const MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin * 0.75;
@@ -60,60 +61,67 @@ type Props = {
 
 function UserListItemDetailedView({ item }: Props) {
 	const { theme } = useAppTheme();
+	const { toProfile } = useAppNavigator();
+
+	function onPress() {
+		toProfile(item.id);
+	}
 
 	return (
-		<View style={[styles.root, { backgroundColor: theme.background.a20 }]}>
-			{item.banner && <Banner uri={item.banner} />}
-			{!item.banner && <View style={{ height: 12 }} />}
-			<View
-				style={{
-					flexDirection: 'row',
-					marginBottom: MARGIN_BOTTOM,
-					alignItems: 'center',
-				}}
-			>
-				<Image
-					source={{ uri: item.avatarUrl }}
+		<View style={[styles.root, { backgroundColor: theme.background.a10 }]}>
+			<TouchableOpacity delayPressIn={200} onPress={onPress}>
+				{item.banner && <Banner uri={item.banner} />}
+				{!item.banner && <View style={{ height: 12 }} />}
+				<View
 					style={{
-						width: ICON_SIZE,
-						height: ICON_SIZE,
-						borderRadius: ICON_SIZE / 2,
+						flexDirection: 'row',
+						marginBottom: MARGIN_BOTTOM,
+						alignItems: 'center',
+					}}
+				>
+					<Image
+						source={{ uri: item.avatarUrl }}
+						style={{
+							width: ICON_SIZE,
+							height: ICON_SIZE,
+							borderRadius: ICON_SIZE / 2,
+						}}
+					/>
+					<View style={styles.usernameArea}>
+						<TextAstRendererView
+							tree={item.parsedDisplayName}
+							variant={'displayName'}
+							mentions={[]}
+							emojiMap={item.calculated.emojis}
+						/>
+						<NativeTextNormal
+							style={{
+								color: theme.secondary.a30,
+								fontSize: 13,
+							}}
+							numberOfLines={1}
+						>
+							{item.handle}
+						</NativeTextNormal>
+					</View>
+				</View>
+				<AppDividerSoft
+					style={{
+						marginVertical: MARGIN_BOTTOM,
 					}}
 				/>
-				<View style={styles.usernameArea}>
-					<TextAstRendererView
-						tree={item.parsedDisplayName}
-						variant={'displayName'}
-						mentions={[]}
-						emojiMap={item.calculated.emojis}
-					/>
-					<NativeTextNormal
-						style={{
-							color: theme.secondary.a30,
-							fontSize: 13,
-						}}
-						numberOfLines={1}
-					>
-						{item.handle}
-					</NativeTextNormal>
-				</View>
-			</View>
-			<AppDividerSoft
-				style={{
-					marginVertical: MARGIN_BOTTOM,
-				}}
-			/>
-			<TextAstRendererView
-				tree={item.parsedDescription}
-				variant={'bodyContent'}
-				mentions={[]}
-				emojiMap={item.calculated.emojis}
-			/>
-			<AppDividerSoft
-				style={{
-					marginVertical: MARGIN_BOTTOM,
-				}}
-			/>
+				<TextAstRendererView
+					tree={item.parsedDescription}
+					variant={'bodyContent'}
+					mentions={[]}
+					emojiMap={item.calculated.emojis}
+				/>
+				<AppDividerSoft
+					style={{
+						marginVertical: MARGIN_BOTTOM,
+					}}
+				/>
+			</TouchableOpacity>
 			<View style={styles.statsAndRelationArea}>
 				<ProfileStatView
 					userId={item.id}
@@ -138,6 +146,7 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		marginHorizontal: 6,
 		paddingHorizontal: 10,
+		paddingVertical: 10,
 	},
 	usernameArea: { marginLeft: 12, flex: 1 },
 	statsAndRelationArea: { flexDirection: 'row', alignItems: 'center' },

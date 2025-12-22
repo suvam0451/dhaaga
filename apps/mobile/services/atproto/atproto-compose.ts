@@ -8,10 +8,10 @@ import {
 	Agent,
 	AppBskyFeedDefs,
 } from '@atproto/api';
-import { PostComposerReducerStateType } from '#/features/composer/reducers/composer.reducer';
 import MediaUtils from '#/utils/media.utils';
 import { AppBskyFeedPost } from '@atproto/api/src/client';
 import { PostInspector } from '@dhaaga/bridge';
+import { PostComposerStateType } from '@dhaaga/react';
 
 type AtProtoPostRecordType = Partial<AppBskyFeedPost.Record> &
 	Omit<AppBskyFeedPost.Record, 'createdAt'>;
@@ -84,7 +84,7 @@ class AtprotoComposerService {
 	 */
 	static async postUsingReducerState(
 		client: AtprotoApiAdapter,
-		state: PostComposerReducerStateType,
+		state: PostComposerStateType,
 	): Promise<AppBskyFeedDefs.PostView> {
 		const agent = client.getAgent();
 
@@ -165,21 +165,24 @@ class AtprotoComposerService {
 		 * Thanks Graysky again!
 		 */
 		if (state.threadGates.length > 0) {
-			const _none = state.threadGates.find((v) => v.type === 'nobody');
+			const _none = state.threadGates.includes('nobody');
 			if (_none) return await this.getPost(client, result.uri);
 			const allow = [];
 
 			for (const rule of state.threadGates) {
-				if (rule.type === 'mentioned') {
+				if (rule === 'mentioned') {
 					allow.push({ $type: 'app.bsky.feed.threadgate#mentionRule' });
-				} else if (rule.type === 'following') {
+				} else if (rule === 'following') {
 					allow.push({ $type: 'app.bsky.feed.threadgate#followingRule' });
-				} else if (rule.type === 'list') {
-					allow.push({
-						$type: 'app.bsky.feed.threadgate#listRule',
-						list: rule.list,
-					});
 				}
+
+				// --- NOT SUPPORTED ---
+				// else if (rule === 'list') {
+				// 	allow.push({
+				// 		$type: 'app.bsky.feed.threadgate#listRule',
+				// 		list: rule.list,
+				// 	});
+				// }
 			}
 
 			await agent.app.bsky.feed.threadgate.create(

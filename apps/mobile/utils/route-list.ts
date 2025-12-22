@@ -8,6 +8,7 @@ export enum APP_ROUTING_ENUM {
 	// 1. Hub
 	HUB_ROOT = '/',
 	HUB_GUIDE = '/user-guide',
+	HUB_SKINS = '/skins',
 
 	// 2. Feed
 	FEED_ROOT = '/feed',
@@ -59,5 +60,6 @@ export enum APP_ROUTING_ENUM {
 	MY_LISTS = '/profile/account/lists',
 	MY_FEEDS = '/profile/account/feeds',
 	MY_DRAFTS = '/profile/account/drafts',
+	APP_SKINS = '/profile/dhaaga/skins',
 	MY_POSTS = '/profile/account/posts',
 }

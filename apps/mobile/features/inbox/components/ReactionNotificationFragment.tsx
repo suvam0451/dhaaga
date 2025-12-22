@@ -1,20 +1,22 @@
-import { Props, styles } from './_common';
+import { UngroupedNotificationWithPostProps, styles } from './_common';
 import { View } from 'react-native';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from './NotificationPostPeek';
 import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
 
-function ReactionNotificationFragment({ item }: Props) {
-	const user = item.user;
-	const post = item.post;
-
+function ReactionNotificationFragment({
+	user,
+	post,
+	createdAt,
+	extraData,
+}: UngroupedNotificationWithPostProps) {
 	return (
 		<View style={styles.container}>
 			<AuthorItemPresenter
 				user={user}
 				notificationType={DriverNotificationType.REACTION}
-				extraData={item?.extraData}
-				createdAt={item.createdAt}
+				extraData={extraData}
+				createdAt={createdAt}
 			/>
 			<NotificationPostPeek post={post} />
 		</View>

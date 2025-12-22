@@ -80,6 +80,8 @@ type Props = {
 };
 
 function BottomSheetActionMenuBuilder({ items }: Props) {
+	// if (!items) return <View />;
+
 	return (
 		<View style={{ marginTop: 8, paddingHorizontal: 10 }}>
 			{items.map((item, i) => (

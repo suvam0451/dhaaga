@@ -1,8 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import useBottomSheetHeight from '#/hooks/anim/useBottomSheetHeight';
-import WithComposerContext from '#/features/composer/contexts/useComposerCtx';
-import ComposerPresenter from '#/features/composer/presenters/ComposerPresenter';
+import PostComposerSheet from '#/features/composer/PostComposerSheet';
 import UserPeekSheetPresenter from '#/components/dhaaga-bottom-sheet/preview/UserPeekSheetPresenter';
 import AppBottomSheetPostMoreActions from '../modules/AppBottomSheetPostMoreActions';
 import ABS_Select_Account from '../modules/ABS_Select_Account';
@@ -73,11 +72,7 @@ function Factory() {
 		 * Uncategorized
 		 */
 		case APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER:
-			return (
-				<WithComposerContext>
-					<ComposerPresenter />
-				</WithComposerContext>
-			);
+			return <PostComposerSheet />;
 		case APP_BOTTOM_SHEET_ENUM.USER_PREVIEW:
 			return <UserPeekSheetPresenter />;
 		case APP_BOTTOM_SHEET_ENUM.MORE_POST_ACTIONS:
@@ -108,13 +103,8 @@ function Factory() {
 			return <AuthoredPostPreviewBottomSheet />;
 		case APP_BOTTOM_SHEET_ENUM.ADD_REACTION:
 			return <ABS_Add_Reaction />;
-
 		default: {
-			return (
-				<WithComposerContext>
-					<ComposerPresenter />
-				</WithComposerContext>
-			);
+			return <View />;
 		}
 	}
 }
@@ -132,7 +122,7 @@ function AppBottomSheet() {
 					position: 'absolute',
 					height: visible ? '100%' : 'auto',
 					width: '100%',
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 					zIndex: appVerticalIndex.sheetBackdrop,
 					opacity: 0.42,
 				}}

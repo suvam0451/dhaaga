@@ -91,7 +91,7 @@ export function AppDialog() {
 
 	useEffect(() => {
 		if (!state) return;
-		if (state.$type === 'text-prompt') setUserInput('');
+		if (state.$type === 'text-prompt') setUserInput(state.userInput ?? '');
 	}, [stateId]);
 
 	if (!visible) return <View />;

@@ -33,7 +33,7 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 		setCurrentIndex(0);
 	}, [userId]);
 
-	const { data } = useQuery(userGalleryQueryOpts(client, userId));
+	const { data } = useQuery(userGalleryQueryOpts(client, userId, null));
 
 	useEffect(() => {
 		if (!data) return;

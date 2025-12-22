@@ -5,23 +5,15 @@ import {
 	useDiscoverState,
 } from '@dhaaga/core';
 import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
-import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';
 import { useRef, useState } from 'react';
-import {
-	Dimensions,
-	Pressable,
-	TextInput,
-	View,
-	StyleSheet,
-} from 'react-native';
-import Animated, {
-	useAnimatedStyle,
-	withTiming,
-} from 'react-native-reanimated';
+import { Pressable, TextInput, View, StyleSheet } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import AppSegmentedControl from '#/ui/AppSegmentedControl';
+import AppWidget from '#/features/widgets/AppWidget';
+import { AppThemingUtil } from '#/utils/theming.util';
 
 function ZenExplorationWidget() {
 	const { driver } = useAppApiClient();
@@ -48,30 +40,15 @@ function ZenExplorationWidget() {
 	const TextRef = useRef<TextInput>(null);
 	const [WidgetOpen, setWidgetOpen] = useState(false);
 	const [SearchTerm, setSearchTerm] = useState(null);
-	const MIN_WIDTH = 52;
-	const MAX_WIDTH = Dimensions.get('window').width;
-
-	/**
-	 * Animations
-	 */
-
-	const textInputAreaStyle = useAnimatedStyle(() => {
-		return {
-			width: withTiming(WidgetOpen ? MAX_WIDTH : MIN_WIDTH, { duration: 200 }),
-			borderTopEndRadius: WidgetOpen ? 8 : 16,
-			borderBottomEndRadius: WidgetOpen ? 8 : 16,
-		};
-	});
 
 	/**
 	 * Functions
 	 */
 
-	function onSearchOpen() {
-		const wasOpen = WidgetOpen;
+	function onWidgetOpen() {
+		const WAS_OPEN = WidgetOpen;
 		setWidgetOpen((o) => !o);
-
-		if (!wasOpen) {
+		if (!WAS_OPEN) {
 			setTimeout(() => TextRef.current?.focus(), 200);
 		} else {
 			setTimeout(() => TextRef.current?.blur(), 200);
@@ -82,7 +59,7 @@ function ZenExplorationWidget() {
 		setSearchTerm(null);
 	}
 
-	function onSearch() {
+	function onSubmit() {
 		setWidgetOpen(false);
 		dispatch({
 			type: DiscoverStateAction.SET_SEARCH,
@@ -97,73 +74,65 @@ function ZenExplorationWidget() {
 
 	return (
 		<>
-			<Animated.View
-				style={[
-					{
-						marginVertical: 'auto',
-						alignItems: 'center',
-						borderRightWidth: 2,
-						borderColor: theme.background.a50,
-						backgroundColor: theme.primary,
-						borderTopStartRadius: 4,
-						borderBottomStartRadius: 4,
-						marginRight: 6,
-						flexDirection: 'row',
-						zIndex: 100,
-						height: appDimensions.bottomNav.secondMenuBarHeight,
-					},
-					textInputAreaStyle,
-				]}
-			>
-				<Pressable
-					style={{
-						paddingVertical: 12,
-						paddingHorizontal: 12,
-						paddingRight: WidgetOpen ? 6 : 12,
-						marginRight: WidgetOpen ? 0 : 6,
-					}}
-					onPress={onSearchOpen}
-				>
-					<AppIcon id={'search'} size={24} color={'black'} />
-				</Pressable>
-				<TextInput
-					ref={TextRef}
-					multiline={false}
-					placeholder={t(`discover.welcome`)}
-					value={SearchTerm}
-					onChangeText={setSearchTerm}
-					numberOfLines={1}
-					placeholderTextColor={'rgba(0, 0, 0, 0.84)'}
-					onSubmitEditing={onSearch}
-					style={{
-						flex: 1,
-						color: 'black',
-					}}
-				/>
-				<Pressable
-					style={{
-						paddingVertical: 12,
-						paddingHorizontal: 12,
-						paddingRight: WidgetOpen ? 6 : 12,
-						marginRight: WidgetOpen ? 0 : 6,
-						display: WidgetOpen ? 'flex' : 'none',
-					}}
-					onPress={onClearSearch}
-				>
-					<AppIcon id={'clear'} color={'black'} />
-				</Pressable>
-			</Animated.View>
-			<AppSegmentedControl
-				items={navItems}
-				ListFooterComponent={() => (
-					<View style={{ backgroundColor: theme.primary, flex: 1 }}></View>
-				)}
-				ListHeaderComponent={() => (
-					<View style={styles.exploreMenuItem}>
-						<AppIcon id={'planet-outline'} />
-					</View>
-				)}
-				paddingLeft={64}
+			<AppWidget
+				isOpen={WidgetOpen}
+				activeIcon={'search'}
+				inactiveIcon={'search'}
+				onWidgetPress={onWidgetOpen}
+				ForegroundSlot={
+					<Animated.View
+						style={[
+							{
+								marginVertical: 'auto',
+								alignItems: 'center',
+								flexDirection: 'row',
+								zIndex: 100,
+							},
+						]}
+					>
+						<Pressable
+							style={{
+								paddingVertical: 12,
+								paddingHorizontal: 12,
+								paddingRight: 6,
+								marginRight: 6,
+							}}
+							onPress={onClearSearch}
+						>
+							<AppIcon id={'clear'} color={theme.primaryText} />
+						</Pressable>
+						<TextInput
+							ref={TextRef}
+							multiline={false}
+							placeholder={t(`discover.welcome`)}
+							value={SearchTerm}
+							onChangeText={setSearchTerm}
+							numberOfLines={1}
+							autoCorrect={false}
+							autoCapitalize={'none'}
+							placeholderTextColor={theme.primaryText}
+							onSubmitEditing={onSubmit}
+							style={{
+								flex: 1,
+								color: theme.primaryText,
+							}}
+						/>
+					</Animated.View>
+				}
+				BackgroundSlot={
+					<AppSegmentedControl
+						items={navItems}
+						ListFooterComponent={() => (
+							<View style={{ backgroundColor: theme.primary, flex: 1 }}></View>
+						)}
+						ListHeaderComponent={() => (
+							<View style={styles.exploreMenuItem}>
+								<AppIcon id={'planet-outline'} />
+							</View>
+						)}
+						paddingLeft={16}
+					/>
+				}
 			/>
 		</>
 	);

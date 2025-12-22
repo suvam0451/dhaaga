@@ -172,7 +172,7 @@ export function AltTextOverlay({ altText }: AltTextDialogProps) {
 						position: 'absolute',
 						top: -36,
 						left: 6,
-						backgroundColor: theme.palette.bg,
+						backgroundColor: theme.background.a0,
 						padding: 6,
 						borderRadius: 8,
 						opacity: 0.75,
@@ -202,7 +202,7 @@ export function CarousalIndicatorOverlay({
 				style={[
 					styles.carousalIndexContent,
 					{
-						backgroundColor: theme.palette.bg,
+						backgroundColor: theme.background.a0,
 					},
 				]}
 			>

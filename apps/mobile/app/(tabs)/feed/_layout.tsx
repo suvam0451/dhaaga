@@ -7,7 +7,6 @@ import {
 import { Redirect } from 'expo-router';
 
 function DiscoverScreen() {
-	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
@@ -17,7 +16,6 @@ function DiscoverScreen() {
 			initialRouteName={'index'}
 			screenOptions={{
 				headerShown: false,
-				navigationBarColor: theme.background.a0,
 			}}
 		/>
 	);

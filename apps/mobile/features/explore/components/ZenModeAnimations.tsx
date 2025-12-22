@@ -8,7 +8,7 @@ import SunBored from '#/skins/default/day/SunBored';
 import DayCloud from '#/skins/default/day/DayCloud';
 import useTimeOfDay from '#/ui/hooks/useTimeOfDay';
 import MoonSleepingFilled from '#/skins/default/night/MoonSleepingFilled';
-import NavBar_Explore from '#/components/topnavbar/NavBar_Explore';
+import NavBar_Explore from '#/features/navbar/views/NavBar_Explore';
 
 function DayMode() {
 	const { acct } = useActiveUserSession();
@@ -19,6 +19,10 @@ function DayMode() {
 			<View
 				style={{
 					alignItems: 'center',
+					backgroundColor: theme.background.a0,
+					margin: 'auto',
+					padding: 36,
+					borderRadius: 12,
 				}}
 			>
 				<View>
@@ -40,7 +44,7 @@ function DayMode() {
 				<NativeTextMedium
 					style={{ fontSize: 20, marginTop: 20, lineHeight: 24 }}
 				>
-					Have a lovely night,
+					Have a nice day,
 				</NativeTextMedium>
 				<NativeTextBold
 					style={{

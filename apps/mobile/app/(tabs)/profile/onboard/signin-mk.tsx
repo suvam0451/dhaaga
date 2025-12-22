@@ -11,7 +11,7 @@ import {
 } from '#/states/global/hooks';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { AppAuthWebView } from '#/ui/WebView';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import RoutingUtils from '#/utils/routing.utils';
 
 function MisskeySignInStack() {

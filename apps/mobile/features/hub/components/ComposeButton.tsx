@@ -3,6 +3,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
+/**
+ * @deprecated may get re-introduced later
+ * @constructor
+ */
 function ComposeButton() {
 	const { theme } = useAppTheme();
 	const { show } = useAppBottomSheet();

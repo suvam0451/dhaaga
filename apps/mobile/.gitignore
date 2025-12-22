@@ -4,3 +4,5 @@ android/**
 ios/**
 .expo/**
 .expo/
+assets
+features/skins/svgs

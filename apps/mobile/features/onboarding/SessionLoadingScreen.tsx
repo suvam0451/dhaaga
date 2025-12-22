@@ -12,11 +12,11 @@ function SessionLoadingScreen() {
 
 	if (error || !assets || assets.length < 1)
 		return (
-			<View style={{ height: '100%', backgroundColor: theme.palette.bg }} />
+			<View style={{ height: '100%', backgroundColor: theme.background.a0 }} />
 		);
 
 	return (
-		<View style={{ height: '100%', backgroundColor: theme.palette.bg }}>
+		<View style={{ height: '100%', backgroundColor: theme.background.a0 }}>
 			<AppText.SemiBold
 				style={{ textAlign: 'center', marginTop: 24, fontSize: 32 }}
 			>

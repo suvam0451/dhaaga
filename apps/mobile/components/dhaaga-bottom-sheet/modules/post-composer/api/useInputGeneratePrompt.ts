@@ -1,17 +1,21 @@
 import { useCallback } from 'react';
-import { useComposerCtx } from '../../../../../features/composer/contexts/useComposerCtx';
 import { NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
-import { PostComposerReducerActionType } from '../../../../../features/composer/reducers/composer.reducer';
+import {
+	usePostComposerDispatch,
+	usePostComposerState,
+	PostComposerAction,
+} from '@dhaaga/react';
 
 const EMOJI_REGEX = /:[a-zA-Z_@]+?$/;
 const ACCT_REGEX = /(@[a-zA-Z_0-9.]+(@[a-zA-Z_0-9.]*)?)$/;
 
 function useInputGeneratePrompt() {
-	const { state, dispatch } = useComposerCtx();
+	const state = usePostComposerState();
+	const dispatch = usePostComposerDispatch();
 
 	function onSelectionChange(e: any) {
 		dispatch({
-			type: PostComposerReducerActionType.SET_KEYBOARD_SELECTION,
+			type: PostComposerAction.SET_KEYBOARD_SELECTION,
 			payload: e.nativeEvent.selection,
 		});
 	}
@@ -27,7 +31,7 @@ function useInputGeneratePrompt() {
 			const _target = e.nativeEvent.text;
 
 			dispatch({
-				type: PostComposerReducerActionType.SET_TEXT,
+				type: PostComposerAction.SET_TEXT,
 				payload: {
 					content: _target,
 				},
@@ -35,7 +39,7 @@ function useInputGeneratePrompt() {
 
 			if (e.nativeEvent.text === '') {
 				dispatch({
-					type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+					type: PostComposerAction.SET_SEARCH_PROMPT,
 					payload: {
 						type: 'none',
 						q: '',
@@ -46,7 +50,7 @@ function useInputGeneratePrompt() {
 				// console.log(_regexTarget, 'matches acct regex');
 				const res = ACCT_REGEX.exec(_regexTarget);
 				dispatch({
-					type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+					type: PostComposerAction.SET_SEARCH_PROMPT,
 					payload: {
 						type: 'acct',
 						q: res[0].slice(1, res[0].length),
@@ -56,7 +60,7 @@ function useInputGeneratePrompt() {
 				console.log(_regexTarget, 'matches emoji regex');
 				const res = EMOJI_REGEX.exec(_regexTarget);
 				dispatch({
-					type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+					type: PostComposerAction.SET_SEARCH_PROMPT,
 					payload: {
 						type: 'emoji',
 						q: res[0].slice(1, res[0].length - 1),
@@ -64,7 +68,7 @@ function useInputGeneratePrompt() {
 				});
 			} else {
 				dispatch({
-					type: PostComposerReducerActionType.SET_SEARCH_PROMPT,
+					type: PostComposerAction.SET_SEARCH_PROMPT,
 					payload: {
 						type: 'none',
 						q: '',

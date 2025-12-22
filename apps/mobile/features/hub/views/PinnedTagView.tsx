@@ -13,7 +13,7 @@ function PinnedTagView({ item, onPress, onLongPress }: Props) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
-			style={[styles.tagContainer, { backgroundColor: theme.palette.menubar }]}
+			style={[styles.tagContainer, { backgroundColor: theme.background.a30 }]}
 			onPress={() => {
 				onPress(item);
 			}}

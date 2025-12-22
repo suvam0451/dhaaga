@@ -13,7 +13,7 @@ import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { useAppTheme } from '#/states/global/hooks';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { NativeTextBold } from '#/ui/NativeText';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { AppDividerSoft } from '#/ui/Divider';
 import SettingsFooter from '#/features/settings/components/SettingsFooter';
@@ -167,7 +167,7 @@ function AppSettings() {
 			<ScrollView
 				style={{
 					paddingBottom: 16,
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,
 				}}
 			>

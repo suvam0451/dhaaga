@@ -41,14 +41,14 @@ function TimelineLoadingIndicator({
 	if (!visible || numItems === 0) return <View />;
 	if (visible && loading)
 		return (
-			<View style={[styles.widgetRootContainer, style]}>
+			<View style={[styles.root, style]}>
 				<View
 					style={[
 						styles.widgetContainer,
-						{ backgroundColor: theme.palette.menubar },
+						{ backgroundColor: theme.background.a30 },
 					]}
 				>
-					<ActivityIndicator size="small" color="#ffffff87" />
+					<ActivityIndicator size="small" color={theme.secondary.a20} />
 					<NativeTextBold
 						style={[
 							styles.text,
@@ -66,10 +66,11 @@ function TimelineLoadingIndicator({
 }
 
 const styles = StyleSheet.create({
-	widgetRootContainer: {
+	root: {
 		position: 'absolute',
 		height: 64,
 		width: '100%',
+		// margin: 'auto',
 		bottom: 0,
 		display: 'flex',
 		alignItems: 'center',

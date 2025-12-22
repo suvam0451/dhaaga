@@ -1,4 +1,8 @@
-import { MessageObjectType, ResultPage, UserObjectType } from '@dhaaga/bridge';
+import {
+	ChatRoomObjectType,
+	MessageObjectType,
+	ResultPage,
+} from '@dhaaga/bridge';
 import { produce } from 'immer';
 import {
 	createContext,
@@ -10,7 +14,7 @@ import {
 
 type State = {
 	items: MessageObjectType[];
-	participants: UserObjectType[];
+	roomData: ChatRoomObjectType | null;
 
 	// track cursors
 	minId?: string | null;
@@ -22,31 +26,36 @@ type State = {
 
 const DEFAULT: State = {
 	items: [],
-	participants: [],
+	roomData: null,
 	seen: new Set(),
 };
 
 enum ACTION {
 	RESET = 'init',
-	SET_PARTICIPANTS = 'setParticipants',
+	SET_ROOM_DATA = 'setRoomData',
 	/**
 	 * Will perform eh reconciliation of the message
 	 * list, appending the new messages to the end of the list
 	 */
 	APPEND_PAGE = 'append_PAGE',
+	APPEND_MESSAGE = 'append_MESSAGE',
 }
 
 type Actions =
 	| { type: ACTION.RESET }
 	| {
-			type: ACTION.SET_PARTICIPANTS;
+			type: ACTION.SET_ROOM_DATA;
 			payload: {
-				participants: UserObjectType[];
+				roomData: ChatRoomObjectType;
 			};
 	  }
 	| {
 			type: ACTION.APPEND_PAGE;
 			payload: ResultPage<MessageObjectType[]>;
+	  }
+	| {
+			type: ACTION.APPEND_MESSAGE;
+			payload: MessageObjectType;
 	  };
 
 function reducer(state: State, action: Actions): State {
@@ -54,10 +63,10 @@ function reducer(state: State, action: Actions): State {
 		case ACTION.RESET: {
 			return DEFAULT;
 		}
-		case ACTION.SET_PARTICIPANTS: {
+		case ACTION.SET_ROOM_DATA: {
 			return {
 				...state,
-				participants: action.payload.participants,
+				roomData: action.payload.roomData,
 				seen: new Set(),
 			};
 		}
@@ -71,9 +80,25 @@ function reducer(state: State, action: Actions): State {
 					draft.seen.add(item.id);
 				}
 
-				draft.items = copy;
+				draft.items = copy.sort(
+					(a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+				);
 				draft.minId = action.payload.minId; // TODO: not merged in order
 				draft.maxId = action.payload.maxId; // TODO: not merged in order
+			});
+		}
+		case ACTION.APPEND_MESSAGE: {
+			const copy = Array.from(state.items);
+
+			return produce(state, (draft) => {
+				copy.push(action.payload);
+				draft.seen.add(action.payload.id);
+
+				draft.items = copy.sort(
+					(a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+				);
+				draft.minId = draft.minId;
+				draft.maxId = action.payload.id;
 			});
 		}
 		default:

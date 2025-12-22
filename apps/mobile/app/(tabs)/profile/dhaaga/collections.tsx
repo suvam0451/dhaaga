@@ -15,7 +15,7 @@ import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { AccountCollection } from '@dhaaga/db';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';

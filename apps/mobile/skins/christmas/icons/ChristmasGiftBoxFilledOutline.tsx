@@ -2,8 +2,6 @@
 import * as React from 'react';
 import Svg, { Path, G } from 'react-native-svg';
 function SvgComponent(props) {
-	const size = props.size ?? 512;
-	const scale = size / 512;
 	return (
 		<Svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -14,7 +12,7 @@ function SvgComponent(props) {
 			viewBox="0 0 512 512"
 			{...props}
 		>
-			<G scale={scale}>
+			<G>
 				<Path
 					d="M269.549 114.328 214.822 36.39c-15.532-22.12-49.186-19.131-60.577 5.381l-40.133 86.364 155.437-13.807z"
 					style={{

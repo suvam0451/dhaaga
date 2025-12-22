@@ -33,7 +33,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',
-	version: '0.18.0',
+	version: '0.19.0',
 	orientation: 'portrait',
 	icon: './assets/dhaaga/icon.png',
 	userInterfaceStyle: 'dark',
@@ -49,9 +49,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: BUNDLE_ID,
-		version: 'v0.18.0',
-		versionCode: 36,
-		edgeToEdgeEnabled: true,
+		version: 'v0.19.0',
+		versionCode: 37,
 		predictiveBackGestureEnabled: true,
 		permissions: [
 			'android.permission.INTERNET',
@@ -115,16 +114,11 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		resizeMode: 'contain',
 		backgroundColor: '#e6cf8b',
 	},
-	assetBundlePatterns: ['**/*'],
 	extra: {
 		eas: {
 			projectId: '6a318c01-ca78-440f-840f-64c54ddc94fe',
 		},
 	},
-	experiments: {
-		reactCanary: true,
-	},
-	newArchEnabled: true,
 	plugins: [
 		'expo-sqlite',
 		'expo-web-browser',
@@ -137,8 +131,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				android: {
 					compileSdkVersion: 36,
 					targetSdkVersion: 36,
-					kotlinVersion: '2.2.0',
-					buildToolsVersion: '36.1.0',
+					// kotlinVersion: '2.2.0', // pinning causes build errors
+					buildToolsVersion: '36.1.0 ',
 					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: true,
 					buildArchs: ['arm64-v8a'],
@@ -172,7 +166,12 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		[
 			'expo-asset',
 			{
-				assets: ['./assets/dhaaga', './assets/branding', './assets/badges'],
+				assets: [
+					'./assets/licensed',
+					'./assets/badges',
+					'./assets/branding',
+					'./assets/dhaaga',
+				],
 			},
 		],
 		...NONFREE_DEPS,

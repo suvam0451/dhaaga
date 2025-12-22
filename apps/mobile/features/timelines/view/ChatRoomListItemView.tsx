@@ -1,5 +1,5 @@
 import type { ChatRoomObjectType } from '@dhaaga/bridge';
-import { Pressable, View } from 'react-native';
+import { Pressable, View, StyleSheet } from 'react-native';
 import useApiMe from '#/hooks/useApiMe';
 import { Image } from 'expo-image';
 import { NativeTextNormal, NativeTextBold } from '#/ui/NativeText';
@@ -24,20 +24,22 @@ function ChatRoomListItemView({ room }: Props) {
 	}
 
 	return (
-		<Pressable onPress={onPress}>
+		<Pressable
+			style={[
+				styles.root,
+				{
+					backgroundColor: theme.background.a10,
+				},
+			]}
+			onPress={onPress}
+		>
 			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
-					flex: 1,
-					maxWidth: '100%',
-					paddingHorizontal: 10,
 				}}
 			>
-				<Image
-					source={{ uri: partner.avatar }}
-					style={{ width: 54, height: 54, borderRadius: 27, marginRight: 8 }}
-				/>
+				<Image source={{ uri: partner.avatar }} style={styles.avatar} />
 				<View style={{ flex: 1 }}>
 					<NativeTextBold style={{ fontSize: 16 }}>
 						{partner.displayName ?? partner.handle}
@@ -51,7 +53,7 @@ function ChatRoomListItemView({ room }: Props) {
 					{room.lastMessage.senderId === data.id ? (
 						<View>
 							<NativeTextNormal
-								style={{ marginTop: 6, flex: 1 }}
+								style={styles.lastMessageText}
 								numberOfLines={1}
 							>
 								<NativeTextBold style={{ marginTop: 6, color: theme.primary }}>
@@ -61,10 +63,7 @@ function ChatRoomListItemView({ room }: Props) {
 							</NativeTextNormal>
 						</View>
 					) : (
-						<NativeTextNormal
-							style={{ marginTop: 6, flex: 1 }}
-							numberOfLines={1}
-						>
+						<NativeTextNormal style={styles.lastMessageText} numberOfLines={1}>
 							{room.lastMessage.content.raw}
 						</NativeTextNormal>
 					)}
@@ -82,3 +81,23 @@ function ChatRoomListItemView({ room }: Props) {
 	);
 }
 export default ChatRoomListItemView;
+
+const styles = StyleSheet.create({
+	root: {
+		marginHorizontal: 6,
+		paddingHorizontal: 6,
+		flex: 1,
+		borderRadius: 12,
+		paddingVertical: 6,
+	},
+	avatar: {
+		width: 54,
+		height: 54,
+		borderRadius: 27,
+		marginRight: 8,
+	},
+	lastMessageText: {
+		marginTop: 4,
+		flex: 1,
+	},
+});

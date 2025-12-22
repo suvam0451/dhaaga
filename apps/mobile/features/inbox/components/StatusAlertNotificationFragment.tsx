@@ -1,18 +1,18 @@
-import { Props, styles } from './_common';
+import { UngroupedNotificationWithPostProps, styles } from './_common';
 import { View } from 'react-native';
 import { DriverNotificationType, PostInspector } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '#/features/inbox/components/NotificationPostPeek';
 import AuthorItemPresenter from '../presenters/AuthorItemPresenter';
 import ShareIndicator from '#/components/common/status/fragments/ShareIndicator';
 
-function StatusAlertNotificationFragment({ item }: Props) {
-	const post = item.post;
-
+function StatusAlertNotificationFragment({
+	user,
+	post,
+	createdAt,
+	extraData,
+}: UngroupedNotificationWithPostProps) {
 	const IS_BOOST = post.meta.isBoost;
-
 	const target = PostInspector.getContentTarget(post);
-
-	const user = target.postedBy;
 
 	return (
 		<View style={styles.container}>
@@ -26,8 +26,8 @@ function StatusAlertNotificationFragment({ item }: Props) {
 			<AuthorItemPresenter
 				user={user}
 				notificationType={DriverNotificationType.STATUS}
-				extraData={item?.extraData}
-				createdAt={item.createdAt}
+				extraData={extraData}
+				createdAt={createdAt}
 				noIcon
 			/>
 			<NotificationPostPeek post={target} />

@@ -9,47 +9,52 @@ import {
 	useActiveUserSession,
 	useAppApiClient,
 	useAppDb,
-	useAppTheme,
 } from '#/states/global/hooks';
 import { unifiedPostFeedQueryOptions } from '@dhaaga/react';
-import PostTimelineView from '#/components/timelines/PostTimelineView';
+import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
-import NavBar_Feed from '#/components/topnavbar/NavBar_Feed';
+import NavBar_Feed from '#/features/navbar/views/NavBar_Feed';
 import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { View } from 'react-native';
 import { router } from 'expo-router';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 function TimelineIdle() {
-	const { theme } = useAppTheme();
 	const { animatedStyle } = useScrollHandleAnimatedList();
 
 	return (
-		<View
-			style={{ flex: 1, backgroundColor: theme.background.a0, paddingTop: 52 }}
-		>
-			<NavBar_Feed animatedStyle={animatedStyle} />
-			<ErrorPageBuilder
-				stickerArt={<BearError />}
-				errorMessage={'No Timeline Selected'}
-				errorDescription={
-					'You can pin and access various types of timelines from your personalised hub.'
-				}
-			/>
-			<View style={{ marginTop: 32 }}>
-				<AppButtonVariantA
-					label={'Go There'}
-					loading={false}
-					onClick={() => {
-						router.navigate('/');
-					}}
-				/>
+		<WithBackgroundSkin>
+			<View
+				style={{
+					paddingTop: 52,
+					flex: 1,
+				}}
+			>
+				<NavBar_Feed animatedStyle={animatedStyle} />
+				<ErrorPageBuilder
+					stickerArt={<BearError />}
+					errorMessage={'No Timeline Selected'}
+					errorDescription={
+						'You can pin and access various types of timelines from your personalised hub.'
+					}
+				>
+					<View style={{ marginTop: 32 }}>
+						<AppButtonVariantA
+							label={'Go There'}
+							loading={false}
+							onClick={() => {
+								router.navigate('/');
+							}}
+						/>
+					</View>
+				</ErrorPageBuilder>
 			</View>
-		</View>
+		</WithBackgroundSkin>
 	);
 }
 
@@ -111,15 +116,18 @@ function Content() {
 			navbarType={'unified'}
 			flatListKey={'unified-feed'}
 			skipTimelineInit
+			itemType={'post'}
 		/>
 	);
 }
 
 function Page() {
 	return (
-		<PostTimelineCtx>
-			<Content />
-		</PostTimelineCtx>
+		<WithBackgroundSkin>
+			<PostTimelineCtx>
+				<Content />
+			</PostTimelineCtx>
+		</WithBackgroundSkin>
 	);
 }
 

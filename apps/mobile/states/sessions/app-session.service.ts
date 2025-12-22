@@ -1,8 +1,8 @@
-import { BaseStorageManager } from './_shared';
 import { z } from 'zod';
-import { DataSource } from '@dhaaga/db';
 import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
-import { ViewMeasurement } from '../../utils/viewport.utils';
+import { DataSource } from '@dhaaga/db';
+import { BaseStorageManager } from './_shared';
+import { ViewMeasurement } from '#/utils/viewport.utils';
 
 enum APP_CACHE_KEY {
 	// bottom sheets
@@ -15,6 +15,7 @@ enum APP_CACHE_KEY {
 	MEDIA_INSPECT_POST_TARGET = 'app/_cache/modal_mediaInspectPostObject',
 	USER_COMPONENT_PEEK_TARGET = 'app/_cache/modal_userComponentPeekObject',
 	BOTTOM_SHEET_MORE_ACTION_POST_TARGET = 'app/_cache/bottomSheet_moreActions_postObject',
+	APP_SKIN_TARGET = 'app/_cache/appSkin',
 }
 
 /**
@@ -41,6 +42,13 @@ const userPeekModalDataSchema = z.object({
 });
 
 export type UserPeekModalDataType = z.infer<typeof userPeekModalDataSchema>;
+
+type AppSkinObjectType = {
+	id: string;
+	useWallpaper: boolean;
+	useIconPack: boolean;
+	useTransparency: boolean;
+};
 
 /**
  * ---- Storage Interfaces ----
@@ -130,6 +138,25 @@ class Storage extends BaseStorageManager {
 			userId,
 			measurement,
 		});
+	}
+
+	/**
+	 * App Skin
+	 */
+
+	getAppSkin(): AppSkinObjectType {
+		return (
+			this.getJson<AppSkinObjectType>(APP_CACHE_KEY.APP_SKIN_TARGET) ?? {
+				id: 'default',
+				useWallpaper: false,
+				useIconPack: false,
+				useTransparency: false,
+			}
+		);
+	}
+
+	setAppSkin(item: AppSkinObjectType) {
+		return this.setJson(APP_CACHE_KEY.APP_SKIN_TARGET, item);
 	}
 }
 

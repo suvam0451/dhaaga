@@ -1,33 +1,48 @@
 import { View } from 'react-native';
-import { Props } from '../components/_common';
-import { AppText } from '../../../components/lib/Text';
+import {
+	GroupedNotificationWithUserProps,
+	styles,
+} from '../components/_common';
 import GroupedUsersItemView from '../view/GroupedUsersItemView';
-import { AppDivider } from '../../../components/lib/Divider';
-import { appDimensions } from '../../../styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '../../../utils/theming.util';
-import { MoreOptionsButtonSectionView } from '../components/MoreOptionsButtonSectionView';
+import { appDimensions } from '#/styles/dimensions';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { useAppTheme } from '#/states/global/hooks';
+import { NativeTextNormal } from '#/ui/NativeText';
+import { AppIcon } from '#/components/lib/Icon';
+import { DatetimeUtil } from '#/utils/datetime.utils';
 
-function GroupedFollowPresenter({ item }: Props) {
+function GroupedFollowPresenter({
+	users,
+	createdAt,
+}: GroupedNotificationWithUserProps) {
+	const { theme } = useAppTheme();
 	return (
-		<View>
-			<View style={{ paddingHorizontal: 10 }}>
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'center',
-						marginBottom: appDimensions.timelines.sectionBottomMargin * 1.25,
-					}}
-				>
-					<View style={{ flex: 1 }}>
-						<AppText.Medium emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
-							{item.users.length} users followed you
-						</AppText.Medium>
-					</View>
-					<MoreOptionsButtonSectionView createdAt={item.createdAt} />
+		<View style={[styles.container, { backgroundColor: theme.background.a0 }]}>
+			<View
+				style={{
+					flexDirection: 'row',
+					alignItems: 'center',
+					marginBottom: appDimensions.timelines.sectionBottomMargin * 1.25,
+				}}
+			>
+				<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+					<AppIcon id="add" size={18} color={theme.complementary} />
+					<NativeTextNormal emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}>
+						{users.length} users followed you
+					</NativeTextNormal>
 				</View>
-				<GroupedUsersItemView items={item.users} />
+				<NativeTextNormal
+					style={[
+						styles.timeAgo,
+						{
+							color: theme.secondary.a40,
+						},
+					]}
+				>
+					{DatetimeUtil.timeAgo(createdAt)}
+				</NativeTextNormal>
 			</View>
-			<AppDivider.Soft style={{ marginVertical: 12 }} />
+			<GroupedUsersItemView items={users} />
 		</View>
 	);
 }

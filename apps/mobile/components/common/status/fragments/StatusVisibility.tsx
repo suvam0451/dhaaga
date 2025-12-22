@@ -17,7 +17,7 @@ function StatusVisibility({ size, visibility }: StatusVisibilityProps) {
 				<Ionicons
 					name="earth-outline"
 					size={size || 16}
-					color={theme.textColor.low}
+					color={theme.secondary.a30}
 				/>
 			);
 		case 'specified':
@@ -26,7 +26,7 @@ function StatusVisibility({ size, visibility }: StatusVisibilityProps) {
 				<Ionicons
 					name={'lock-closed-outline'}
 					size={size || 16}
-					color={theme.textColor.low}
+					color={theme.secondary.a30}
 				/>
 			);
 		case 'unlisted':
@@ -34,7 +34,7 @@ function StatusVisibility({ size, visibility }: StatusVisibilityProps) {
 				<Ionicons
 					name={'lock-open-outline'}
 					size={size || 16}
-					color={theme.textColor.low}
+					color={theme.secondary.a30}
 				/>
 			);
 		default:
@@ -42,7 +42,7 @@ function StatusVisibility({ size, visibility }: StatusVisibilityProps) {
 				<Ionicons
 					name="earth-outline"
 					size={size || 16}
-					color={theme.textColor.low}
+					color={theme.secondary.a30}
 				/>
 			);
 	}

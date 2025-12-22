@@ -3,7 +3,7 @@ import { Image, useImage } from 'expo-image';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { StatItem } from '#/features/post-view/views/PostInteractionStatsRow';
+import { StatItem } from '#/features/post-item-view/views/PostInteractionStatsRow';
 import TimelineIndicatorPresenter from '../../feeds/presenters/TimelineIndicatorPresenter';
 import type { FeedObjectType } from '@dhaaga/bridge';
 import {

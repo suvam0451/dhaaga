@@ -4,7 +4,7 @@ import {
 	useDiscoverState,
 } from '@dhaaga/core';
 import { useApiSearchFeeds } from '#/hooks/api/useApiSearch';
-import FeedTimelineView from '#/components/timelines/FeedTimelineView';
+import FeedTimelineView from '#/features/timelines/view/FeedTimelineView';
 
 function Generator() {
 	const State = useDiscoverState();
@@ -17,6 +17,7 @@ function Generator() {
 			queryResult={queryResult}
 			navbarType={'explore'}
 			flatListKey={'explore/feeds'}
+			itemType={'feed'}
 		/>
 	);
 }

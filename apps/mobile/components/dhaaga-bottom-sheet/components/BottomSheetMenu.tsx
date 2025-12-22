@@ -16,6 +16,7 @@ type Props = {
 	menuItems?: {
 		iconId: string;
 		onPress: () => void;
+		hidden?: boolean;
 	}[];
 	variant: 'raised' | 'clear';
 	CustomHeader?: any;
@@ -46,7 +47,7 @@ function BottomSheetMenu({
 			) : (
 				<NativeTextBold
 					style={{
-						color: theme.textColor.high,
+						color: theme.secondary.a10,
 						fontSize: 20,
 						flex: 1,
 					}}
@@ -55,21 +56,25 @@ function BottomSheetMenu({
 				</NativeTextBold>
 			)}
 			<View style={{ flexDirection: 'row' }}>
-				{menuItems.map((o, i) => (
-					<Pressable
-						key={i}
-						style={{
-							paddingHorizontal: 8,
-						}}
-						onPress={o.onPress}
-					>
-						<AppIcon
-							id={o.iconId as APP_ICON_ENUM}
-							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+				{menuItems.map((o, i) =>
+					o.hidden ? (
+						<View />
+					) : (
+						<Pressable
+							key={i}
+							style={{
+								paddingHorizontal: 8,
+							}}
 							onPress={o.onPress}
-						/>
-					</Pressable>
-				))}
+						>
+							<AppIcon
+								id={o.iconId as APP_ICON_ENUM}
+								emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+								onPress={o.onPress}
+							/>
+						</Pressable>
+					),
+				)}
 			</View>
 		</View>
 	);

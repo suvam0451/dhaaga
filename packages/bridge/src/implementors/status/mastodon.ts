@@ -96,6 +96,8 @@ class MastoApiPostAdapter implements PostTargetInterface {
 
 	getFavouritesCount = (): number => this.ref.favouritesCount;
 
+	getQuotesCount = (): number => this.ref.quotesCount;
+
 	getUsername = () => this.ref.account.username || '';
 
 	getDisplayName = () => this.ref.account.displayName || '';

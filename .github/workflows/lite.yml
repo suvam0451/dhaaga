@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v5 # Checkout
         with:
           lfs: true
+          fetch-depth: 0
       - uses: actions/setup-node@v5 # Install Node.js
         with:
           node-version: latest
@@ -20,7 +21,7 @@ jobs:
         working-directory: ./apps/mobile
       - run: npm uninstall expo-dev-client expo-notifications expo-iap expo-device
         working-directory: ./apps/mobile
-      - run: node lite.js # pre-requisites scripts
+      - run: node scripts/lite.js # pre-requisites scripts
         working-directory: ./apps/mobile
         env:
           LITE_EDITION_SIGNING_KEY: ${{ secrets.LITE_EDITION_SIGNING_KEY }}

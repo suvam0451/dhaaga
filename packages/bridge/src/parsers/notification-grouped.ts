@@ -69,7 +69,6 @@ class Parser {
 				results.push({
 					id: group.groupKey,
 					type: group.type,
-					user: null,
 					post: null,
 					users: (group.sampleAccountIds as unknown as string[]).map(
 						(o: string) => ({
@@ -89,7 +88,7 @@ class Parser {
 					extraData: {},
 				});
 				counter++;
-			} else if (!seenPost.has(group.statusId)) {
+			} else if (!seenPost.has(_group.statusId)) {
 				const post = PostParser.parse<unknown>(
 					postList.find((x: any) => x.id === group.statusId),
 					driver,
@@ -104,7 +103,6 @@ class Parser {
 					 * instead
 					 */
 					type: group.type,
-					user: null,
 					post,
 					users: (group.sampleAccountIds as unknown as string[]).map(
 						(o: string) => ({
@@ -183,7 +181,6 @@ class Parser {
 		// 			id: o.groupKey,
 		// 			type: o.type,
 		// 			post: _post,
-		// 			user: _acct,
 		// 			read: false,
 		// 			createdAt: new Date(o.latestPageNotificationAt),
 		// 			extraData: {},
@@ -246,8 +243,14 @@ class Parser {
 								o.type ||
 								(_post.visibility === 'specified' ? 'chat' : _post.visibility),
 							post: _post,
-							user: _acct,
 							read: false,
+							users: [
+								{
+									item: _acct!,
+									types: [o.type],
+									extraData: {},
+								},
+							],
 							createdAt: new Date(o.createdAt || _post.createdAt),
 							extraData: {},
 						};
@@ -279,28 +282,101 @@ class Parser {
 		driver: string,
 		server: string,
 	): Promise<ResultPage<NotificationObjectType[]>> {
-		let results = data.data.map((o) => {
-			const _user = UserParser.parse<unknown>(o.author, driver, server);
-			const _post =
-				o.record && o.record.$type === 'app.bsky.feed.post'
-					? PostParser.parse<unknown>(o, driver, server)
-					: null;
-			return {
-				id: o.uri,
-				uri: o.uri,
-				cid: o.cid,
-				type: o.reason,
-				user: _user,
-				post: _post,
-				createdAt: new Date(o.indexedAt),
-				read: o.isRead,
-				extraData: {},
-				users: [],
-			};
-		});
+		let results: NotificationObjectType[] = [];
 
-		const uris = results.map((o) => o.uri);
-		const posts = await (client as AtprotoApiAdapter).posts.getPosts(uris);
+		for (const item of data.data) {
+			const _user = UserParser.parse<unknown>(item.author, driver, server);
+			const _post =
+				item.record && item.record.$type === 'app.bsky.feed.post'
+					? PostParser.parse<unknown>(item, driver, server)
+					: null;
+
+			if (
+				results.length > 0 &&
+				results[results.length - 1].type === item.reason
+			) {
+				switch (item.reason) {
+					case 'follow': {
+						results[results.length - 1] = {
+							...results[results.length - 1],
+							users: [
+								// @ts-ignore-next-line
+								...results[results.length - 1].users,
+								{
+									item: _user!,
+									types: [item.reason],
+									extraData: {
+										followedAt: item.indexedAt,
+									},
+								},
+							],
+						};
+						continue;
+					}
+					case 'like': {
+						const matchedId = results.findIndex(
+							(o) => o.uri === (item as any).record.subject.uri,
+						);
+						if (matchedId !== -1) {
+							results[matchedId] = {
+								...results[matchedId],
+								users: [
+									// @ts-ignore-next-line
+									...results[matchedId].users,
+									{
+										item: _user!,
+										types: [item.reason],
+										extraData: {
+											interactedAt: item.indexedAt,
+										},
+									},
+								],
+							};
+							continue;
+						}
+						break;
+					}
+					default: {
+					}
+				}
+			}
+
+			if (item.reason === 'like') {
+				console.log('like object', item.record);
+			}
+
+			results.push({
+				id: ['like', 'repost'].includes(item.reason)
+					? (item as any).record.subject.uri
+					: item.uri,
+				uri: ['like', 'repost'].includes(item.reason)
+					? (item as any).record.subject.uri
+					: item.uri,
+				cid: ['like', 'repost'].includes(item.reason)
+					? (item as any).record.subject.cid
+					: item.cid,
+				type: item.reason,
+				post: _post,
+				createdAt: new Date(item.indexedAt),
+				read: item.isRead,
+				extraData: {
+					followedAt: item.reason === 'follow' ? item.indexedAt : undefined,
+				},
+				users: [
+					{
+						item: _user!,
+						types: [item.reason],
+						extraData: {},
+					},
+				],
+			});
+		}
+
+		const uris = results.map((o) => o.uri).filter(Boolean);
+		const posts =
+			uris.length > 0
+				? await (client as AtprotoApiAdapter).posts.getPosts(uris as any)
+				: [];
 		const parsed = PostParser.parse<unknown[]>(posts, driver, server);
 
 		results = results.map((o) => ({

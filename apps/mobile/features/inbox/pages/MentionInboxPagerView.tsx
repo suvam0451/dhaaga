@@ -6,17 +6,19 @@ import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { AppIcon } from '#/components/lib/Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import type { NotificationObjectType } from '@dhaaga/bridge';
-import SimpleInboxTimeline from '#/components/timelines/SimpleInboxTimeline';
+import SimpleInboxTimeline from '#/features/timelines/view/SimpleInboxTimeline';
 
 function Wrapper({ item }: { item: NotificationObjectType }) {
 	const { theme } = useAppTheme();
-
 	function renderLeftActions(progress, dragX) {
 		return (
 			<View
 				style={{
 					flexDirection: 'row',
 					alignItems: 'center',
+					backgroundColor: theme.background.a20,
+					borderRadius: 8,
+					marginLeft: 4,
 				}}
 			>
 				<TouchableOpacity style={{ paddingHorizontal: 16 }}>
@@ -37,7 +39,6 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 			renderLeftActions={renderLeftActions}
 			overshootRight={false}
 			overshootFriction={8}
-			childrenContainerStyle={{ backgroundColor: theme.background.a0 }}
 		>
 			<NotificationItemPresenter item={item} />
 		</Swipeable>
@@ -45,7 +46,7 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 }
 
 function MentionInboxPagerView() {
-	const { maxId } = useNotificationStore();
+	const { maxId } = useNotificationStore(10);
 	const queryResult = useApiGetMentionUpdates(maxId);
 
 	return (

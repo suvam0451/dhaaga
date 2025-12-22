@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { Image } from 'expo-image';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { StatItem } from '#/features/post-view/views/PostInteractionStatsRow';
+import { StatItem } from '#/features/post-item-view/views/PostInteractionStatsRow';
 import FeedControlSheetActions from '#/components/dhaaga-bottom-sheet/components/FeedControlSheetActions';
 import { AppDividerSoft } from '#/ui/Divider';
 import { LinkingUtils } from '#/utils/linking.utils';

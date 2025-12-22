@@ -5,8 +5,8 @@ import MediaThumbListPresenter from '#/features/inbox/presenters/MediaThumbListP
 import { PressableDisabledOnSwipe } from '#/ui/Touchable';
 import { useAppApiClient } from '#/states/global/hooks';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
-import { QuotedPostBorderDecorations } from '#/skins/BorderDecorations';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { QuotedPostOrnament } from '#/features/post-item-view/components/Ornaments';
 
 type Props = {
 	post: PostObjectType;
@@ -23,7 +23,7 @@ function InboxItemBoostedFrom({ post }: Props) {
 	}
 
 	return (
-		<QuotedPostBorderDecorations>
+		<QuotedPostOrnament>
 			<AuthorItemPresenter
 				user={post.postedBy}
 				notificationType={DriverNotificationType.REPLY}
@@ -42,7 +42,7 @@ function InboxItemBoostedFrom({ post }: Props) {
 					emojiMap={post.calculated.emojis}
 				/>
 			</PressableDisabledOnSwipe>
-		</QuotedPostBorderDecorations>
+		</QuotedPostOrnament>
 	);
 }
 

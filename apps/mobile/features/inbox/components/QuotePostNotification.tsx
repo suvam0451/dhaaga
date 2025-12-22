@@ -1,10 +1,10 @@
-import { Props, styles } from './_common';
+import { UngroupedNotificationWithPostProps, styles } from './_common';
 import AuthorItemPresenter from '#/features/inbox/presenters/AuthorItemPresenter';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { NotificationPostPeek } from '#/features/inbox/components/NotificationPostPeek';
 import { View } from 'react-native';
-import type { PostObjectType, UserObjectType } from '@dhaaga/bridge';
 import InboxItemBoostedFrom from '#/features/inbox/components/InboxItemBoostedFrom';
+import { useAppTheme } from '#/states/global/hooks';
 
 /**
  * If a mention is also a quote, we don't have to worry
@@ -13,16 +13,18 @@ import InboxItemBoostedFrom from '#/features/inbox/components/InboxItemBoostedFr
  * @param item
  * @constructor
  */
-function QuotePostNotification({ item }: Props) {
-	const user: UserObjectType = item.user;
-	const post: PostObjectType = item.post;
-
+function QuotePostNotification({
+	user,
+	post,
+	createdAt,
+}: UngroupedNotificationWithPostProps) {
+	const { theme } = useAppTheme();
 	return (
-		<View style={[styles.container]}>
+		<View style={[styles.container, { backgroundColor: theme.background.a0 }]}>
 			<AuthorItemPresenter
 				user={user}
-				notificationType={DriverNotificationType.REPLY}
-				createdAt={item.createdAt}
+				notificationType={DriverNotificationType.QUOTE}
+				createdAt={createdAt}
 			/>
 			<NotificationPostPeek post={post} />
 			{post.meta.isBoost ? (

@@ -1,7 +1,7 @@
 import { useDiscoverState, UserTimelineCtx } from '@dhaaga/core';
 import { useApiSearchUsers } from '#/hooks/api/useApiSearch';
 import { useUserTimelineState } from '@dhaaga/core';
-import { UserTimelineView } from '#/components/timelines/UserTimelineView';
+import { UserTimelineView } from '#/features/timelines/view/UserTimelineView';
 
 function Generator() {
 	const State = useDiscoverState();
@@ -14,6 +14,7 @@ function Generator() {
 			navbarType={'explore'}
 			queryResult={queryResult}
 			flatListKey={'explore/users'}
+			itemType={'user-any'}
 		/>
 	);
 }

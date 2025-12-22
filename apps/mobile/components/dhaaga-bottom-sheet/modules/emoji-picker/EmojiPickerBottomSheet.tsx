@@ -161,7 +161,7 @@ function EmojiPickerBottomSheet({
 					renderItem={({ item }) => (
 						<Pressable
 							style={{
-								backgroundColor: '#363636',
+								backgroundColor: theme.background.a30,
 								paddingHorizontal: 10,
 								paddingVertical: 8,
 								marginHorizontal: 4,
@@ -190,12 +190,6 @@ function EmojiPickerBottomSheet({
 }
 
 const styles = StyleSheet.create({
-	cancelButtonContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		maxWidth: '100%',
-		marginBottom: 8,
-	},
 	textInput: {
 		paddingVertical: 8,
 		fontSize: 16,

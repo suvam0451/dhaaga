@@ -1,7 +1,7 @@
 import { StyleProp, View, ViewStyle, FlatList } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { NativeTextNormal, NativeTextSpecial } from '#/ui/NativeText';
@@ -24,7 +24,7 @@ function GuidePageBuilder({ questionnaire, label }: UserGuideContainerProps) {
 			<NavBar_Simple label={label} animatedStyle={animatedStyle} />
 			<FlatList
 				style={{
-					backgroundColor: theme.palette.bg,
+					backgroundColor: theme.background.a0,
 				}}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 8,

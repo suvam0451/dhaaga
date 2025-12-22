@@ -20,7 +20,10 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		query: NotificationGetQueryDto,
 	): PaginatedPromise<AppBskyNotificationListNotifications.Notification[]> {
 		const agent = getXrpcAgent(this.dto);
-		const response = await agent.listNotifications({ limit: query.limit });
+		const response = await agent.listNotifications({
+			limit: 25,
+			cursor: query.maxId ? query.maxId : undefined,
+		});
 		return {
 			data: response.data.notifications,
 			maxId: response.data.cursor,
@@ -71,13 +74,14 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		};
 	}
 
-	async getMentions(): PaginatedPromise<
-		AppBskyNotificationListNotifications.Notification[]
-	> {
+	async getMentions(
+		query: NotificationGetQueryDto,
+	): PaginatedPromise<AppBskyNotificationListNotifications.Notification[]> {
 		const agent = getBskyAgent(this.dto);
 		const response = await agent.listNotifications({
 			reasons: ['mention', 'reply', 'quote'],
-			limit: 30,
+			limit: 25,
+			cursor: query.maxId ? query.maxId : undefined,
 		});
 		return {
 			data: response.data.notifications,
@@ -85,13 +89,17 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		};
 	}
 
-	async getSubscriptions(): PaginatedPromise<
-		AppBskyNotificationListNotifications.Notification[]
-	> {
+	async getSubscriptions(
+		maxId?: string,
+	): PaginatedPromise<AppBskyNotificationListNotifications.Notification[]> {
 		const agent = getBskyAgent(this.dto);
 		const response = await agent.listNotifications({
 			reasons: ['subscribed-post'],
-			limit: 40,
+			/**
+			 * uris must not have more than 25 elements
+			 */
+			limit: 25,
+			cursor: maxId ? maxId : undefined,
 		});
 		return {
 			data: response.data.notifications,
@@ -125,6 +133,8 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 
 		const resp = await agent.listNotifications({
 			reasons: ['like', 'follow', 'repost'],
+			limit: 25,
+			cursor: query.maxId ? query.maxId : undefined,
 		});
 		return {
 			data: resp.data.notifications,

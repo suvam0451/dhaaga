@@ -3,10 +3,12 @@ import {
 	useAppBottomSheet,
 	useAppPublishers,
 } from '#/states/global/hooks';
-import { withPostItemContext } from '../../../../containers/WithPostItemContext';
+import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import { ActivityPubService } from '@dhaaga/bridge';
 import { Pressable } from 'react-native';
-import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
+import DhaagaSkinnedIcon, {
+	APP_ICON_IDENTIFIER,
+} from '#/features/skins/components/ThemedAppIcons';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 /**
@@ -41,9 +43,9 @@ function PostActionButtonToggleBookmark() {
 			onPress={_toggleBookmark}
 		>
 			{FLAG ? (
-				<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_ACTIVE} />
+				<DhaagaSkinnedIcon id={APP_ICON_IDENTIFIER.BOOKMARK_MENU_ACTIVE} />
 			) : (
-				<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.BOOKMARK_MENU_INACTIVE} />
+				<DhaagaSkinnedIcon id={APP_ICON_IDENTIFIER.BOOKMARK_MENU_INACTIVE} />
 			)}
 		</Pressable>
 	);

@@ -1,4 +1,3 @@
-import { useAppTheme } from '#/states/global/hooks';
 import MentionInboxPagerView from '#/features/inbox/pages/MentionInboxPagerView';
 import ChatInboxPagerView from '#/features/inbox/pages/ChatInboxPagerView';
 import SocialInboxPagerView from '#/features/inbox/pages/SocialInboxPagerView';
@@ -9,6 +8,7 @@ import { InboxCtx } from '@dhaaga/core';
 import { AppPagerView } from '#/ui/PagerView';
 import { SubscriptionGalleryCtx } from '@dhaaga/react';
 import SubscriptionGalleryWidget from '#/features/inbox/widgets/SubscriptionGalleryWidget';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 const renderScene = (index: number) => {
 	switch (index) {
@@ -32,7 +32,6 @@ const renderScene = (index: number) => {
  * @constructor
  */
 function Page() {
-	const { theme } = useAppTheme();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	const tabLabels = [
@@ -56,17 +55,18 @@ function Page() {
 
 	return (
 		<SubscriptionGalleryCtx>
-			<AppPagerView
-				renderScene={(i: number) => <InboxCtx>{renderScene(i)}</InboxCtx>}
-				tabCount={4}
-				labels={tabLabels}
-				showBottomNav
-				props={{ backgroundColor: theme.background.a0 }}
-				scrollEnabled={false}
-				RightWidget={(index) => (
-					<SubscriptionGalleryWidget pagerIndex={index} />
-				)}
-			/>
+			<WithBackgroundSkin>
+				<AppPagerView
+					renderScene={(i: number) => <InboxCtx>{renderScene(i)}</InboxCtx>}
+					tabCount={4}
+					labels={tabLabels}
+					showBottomNav
+					scrollEnabled={false}
+					RightWidget={(index) => (
+						<SubscriptionGalleryWidget pagerIndex={index} />
+					)}
+				/>
+			</WithBackgroundSkin>
 		</SubscriptionGalleryCtx>
 	);
 }

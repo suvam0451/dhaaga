@@ -3,90 +3,74 @@ import { Pressable, View, StyleSheet } from 'react-native';
 import { AppIcon } from '#/components/lib/Icon';
 import { Ionicons } from '@expo/vector-icons';
 import { NativeTextBold } from '#/ui/NativeText';
+import {
+	useComposerFeatureCompatibility,
+	useComposerModes,
+} from '#/features/composer/hooks/useComposerFeatureCompatibility';
+import { usePostComposerState } from '@dhaaga/react';
 
 const ICON_SIZE = 26;
-
-type Props = {
-	canUseCw: boolean;
-	canUseMedia: boolean;
-	canUseVideo: boolean;
-	canUseGif: boolean;
-	canUseCustomEmoji: boolean;
-
-	isMediaDisabled: boolean;
-	isVideoDisabled: boolean;
-	isGifDisabled: boolean;
-
-	isCwUsed: boolean;
-	mediaCount: number | null;
-	isVideoUsed: boolean;
-	isGifUsed: boolean;
-
-	onCwPressed: () => void;
-	onMediaPressed: () => void;
-	onVideoPressed: () => void;
-	onGifPressed: () => void;
-	onCustomEmojiPressed: () => void;
-};
 
 /**
  * Options to add extra stuff to a post
  *
  * - TXT mode: cw,
  */
-function ComposerActionListView({
-	canUseCw,
-	canUseMedia,
-	canUseVideo,
-	canUseGif,
-	canUseCustomEmoji,
-	isCwUsed,
-	onCwPressed,
-	onMediaPressed,
-	onCustomEmojiPressed,
-}: Props) {
+function ComposerActionListView() {
 	const { theme } = useAppTheme();
-
+	const {
+		canAttachMedia,
+		canAttachVideo,
+		supportsContentWarning,
+		supportsCustomEmojis,
+		canUseGif,
+	} = useComposerFeatureCompatibility();
+	const State = usePostComposerState();
+	const { onPressMediaTab, onPressEmojiTab, onPressContentWarningButton } =
+		useComposerModes();
 	const DEFAULT_COLOR = theme.complementary;
 	const ACTIVE_COLOR = theme.primary;
 
+	const isCwUsed = !!State.cw;
+
 	return (
 		<View style={styles.root}>
-			{canUseMedia && (
-				<Pressable style={styles.pressableContainer} onPress={onMediaPressed}>
-					<AppIcon
-						id={'images'}
-						size={ICON_SIZE}
-						color={DEFAULT_COLOR}
-						onPress={onMediaPressed}
-					/>
+			{canAttachMedia ? (
+				<Pressable style={styles.pressableContainer} onPress={onPressMediaTab}>
+					<AppIcon id={'images'} size={ICON_SIZE} color={DEFAULT_COLOR} />
 				</Pressable>
+			) : (
+				<View />
 			)}
-			{canUseVideo && (
+			{canAttachVideo ? (
 				<Pressable style={styles.pressableContainer}>
 					<Ionicons name="videocam" size={ICON_SIZE} color={DEFAULT_COLOR} />
 				</Pressable>
+			) : (
+				<View />
 			)}
-			{canUseCw && (
-				<Pressable style={styles.pressableContainer} onPress={onCwPressed}>
+			{supportsContentWarning ? (
+				<Pressable
+					style={styles.pressableContainer}
+					onPress={onPressContentWarningButton}
+				>
 					<Ionicons
 						name="warning"
 						size={ICON_SIZE}
 						color={isCwUsed ? ACTIVE_COLOR : DEFAULT_COLOR}
-						onPress={onCwPressed}
+						onPress={onPressContentWarningButton}
 					/>
 				</Pressable>
+			) : (
+				<View />
 			)}
-			{canUseCustomEmoji && (
-				<Pressable
-					style={styles.pressableContainer}
-					onPress={onCustomEmojiPressed}
-				>
+			{supportsCustomEmojis && (
+				<Pressable style={styles.pressableContainer} onPress={onPressEmojiTab}>
 					<Ionicons
 						name={'happy'}
 						size={ICON_SIZE}
 						color={DEFAULT_COLOR}
-						onPress={onCustomEmojiPressed}
+						onPress={onPressEmojiTab}
 					/>
 				</Pressable>
 			)}

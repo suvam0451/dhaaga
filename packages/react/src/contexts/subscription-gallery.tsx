@@ -77,11 +77,17 @@ function reducer(state: State, action: Actions) {
 
 			return produce(state, (draft) => {
 				for (const item of action.payload.data) {
-					if (!item.user) continue;
-					if (!draft.userSet.has(item.user.id)) {
-						draft.userSet.add(item.user.id);
-						draft.userSelection.add(item.user.id);
-						usersCopy.push(item.user);
+					/**
+					 * Bluesky emits a user object, Mastodon emits
+					 * users object. This needs to be unified
+					 */
+					if (item.users?.length === 0) continue;
+					const _author = item.users![0]?.item;
+
+					if (!draft.userSet.has(_author.id)) {
+						draft.userSet.add(_author.id);
+						draft.userSelection.add(_author.id);
+						usersCopy.push(_author);
 					}
 
 					if (draft.seen.has(item.id)) continue;
@@ -93,9 +99,10 @@ function reducer(state: State, action: Actions) {
 
 				draft.data = dataCopy;
 				draft.users = usersCopy;
+
 				// apply filter
 				draft.items = dataCopy.filter((o) =>
-					draft.userSelection.has(o.user?.id ?? 'N/A'),
+					draft.userSelection.has(o.users![0]?.item?.id ?? 'N/A'),
 				);
 			});
 		}

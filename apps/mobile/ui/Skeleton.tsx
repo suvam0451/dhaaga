@@ -87,7 +87,7 @@ const Skeleton = ({ height, width, style }: Props) => {
 	// }, [direction]);
 
 	const coordinates = useMemo(() => {
-		//toggle between different direction of movement
+		//toggle between a different direction of movement
 		if (direction === ANIMATION_DIRECTION.leftToRight) {
 			return {
 				start: { x: 0, y: 0 },

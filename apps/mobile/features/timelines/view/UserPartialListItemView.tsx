@@ -27,7 +27,6 @@ function UserPartialListItemView({ user }: Props) {
 			<View
 				style={{
 					flexDirection: 'row',
-					marginBottom: MARGIN_BOTTOM,
 					alignItems: 'center',
 				}}
 			>
@@ -40,17 +39,23 @@ function UserPartialListItemView({ user }: Props) {
 				/>
 				<UserRelationPresenter userId={user.id} />
 			</View>
-			<AppDividerSoft
-				style={{
-					marginVertical: MARGIN_BOTTOM,
-				}}
-			/>
-			<TextAstRendererView
-				tree={user.parsedDescription}
-				variant={'bodyContent'}
-				mentions={[]}
-				emojiMap={user.calculated.emojis}
-			/>
+			{user.description ? (
+				<View style={{ marginTop: MARGIN_BOTTOM }}>
+					<AppDividerSoft
+						style={{
+							marginVertical: MARGIN_BOTTOM,
+						}}
+					/>
+					<TextAstRendererView
+						tree={user.parsedDescription}
+						variant={'bodyContent'}
+						mentions={[]}
+						emojiMap={user.calculated.emojis}
+					/>
+				</View>
+			) : (
+				<View />
+			)}
 		</View>
 	);
 }

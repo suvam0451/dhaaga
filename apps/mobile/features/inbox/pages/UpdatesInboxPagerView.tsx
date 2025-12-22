@@ -1,21 +1,20 @@
 import { useApiGetSubscriptionUpdates } from '#/hooks/api/useNotifications';
 import { useEffect } from 'react';
 import {
+	SubscriptionGalleryCtx,
 	SubscriptionGalleryStateAction,
 	useSubscriptionGalleryDispatch,
 	useSubscriptionGalleryState,
 } from '@dhaaga/react';
 import { useAppApiClient } from '#/states/global/hooks';
-import AppTimeline from '#/components/timelines/AppTimeline';
-import WithAppStatusItemContext from '#/components/containers/WithPostItemContext';
-import { TimelineFilter_EmojiCrash } from '#/components/common/status/TimelineFilter_EmojiCrash';
-import PostTimelineEntryView from '#/features/post-item/PostTimelineEntryView';
+import AppTimeline from '#/features/timelines/components/AppTimeline';
+import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 
 function Generator() {
 	const { client } = useAppApiClient();
 	const State = useSubscriptionGalleryState();
 	const dispatch = useSubscriptionGalleryDispatch();
-	const queryResult = useApiGetSubscriptionUpdates(State.maxId);
+	const queryResult = useApiGetSubscriptionUpdates(State.appliedMaxId);
 
 	useEffect(() => {
 		dispatch({
@@ -53,30 +52,28 @@ function Generator() {
 	}
 
 	return (
-		<>
-			<AppTimeline
-				queryResult={queryResult}
-				items={State.items.map((o) => o.post)}
-				renderItem={({ item }) => (
-					<WithAppStatusItemContext dto={item}>
-						<TimelineFilter_EmojiCrash>
-							<PostTimelineEntryView />
-						</TimelineFilter_EmojiCrash>
-					</WithAppStatusItemContext>
-				)}
-				fnLoadNextPage={fnLoadNextPage}
-				fnLoadMore={fnLoadMore}
-				fnReset={fnReset}
-				label={'Updates'}
-				navbarType={'updates'}
-				flatListKey={'inbox/subscriptions'}
-			/>
-		</>
+		<AppTimeline
+			queryResult={queryResult}
+			items={State.items.map((o) => o.post)}
+			renderItem={({ item }) => <TimelinePostItemView post={item} />}
+			fnLoadNextPage={fnLoadNextPage}
+			fnLoadMore={fnLoadMore}
+			fnReset={fnReset}
+			label={'Updates'}
+			navbarType={'updates'}
+			flatListKey={'inbox/subscriptions'}
+			skipTimelineInit={true}
+			itemType={'social-update'}
+		/>
 	);
 }
 
 function UpdatesInboxPagerView() {
-	return <Generator />;
+	return (
+		<SubscriptionGalleryCtx>
+			<Generator />
+		</SubscriptionGalleryCtx>
+	);
 }
 
 export default UpdatesInboxPagerView;

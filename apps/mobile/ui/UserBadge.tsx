@@ -5,7 +5,6 @@ import {
 	StyleProp,
 	ViewStyle,
 } from 'react-native';
-import Avatar from '#/ui/Avatar';
 import TextAstRendererView from '#/ui/TextAstRendererView';
 import {
 	type AppParsedTextNodes,
@@ -14,6 +13,7 @@ import {
 } from '@dhaaga/bridge';
 import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
+import ThemedMainAuthor from '#/features/skins/components/ThemedMainAuthor';
 
 type Props = {
 	avatarUrl: string;
@@ -51,16 +51,19 @@ function UserBadge({
 	const USE_DISPLAY_NAME =
 		!parsedDisplayName || DriverService.supportsAtProto(driver);
 
+	const handleFallback = displayName === '' ? handle : displayName;
 	return (
 		<View style={[styles.root, style]}>
-			<Avatar uri={avatarUrl} onPressed={onAvatarPressed} />
+			<ThemedMainAuthor uri={avatarUrl} onPress={onAvatarPressed} />
 			<TouchableOpacity
 				onPress={onDisplayNamePressed}
 				style={styles.displayNameArea}
 				delayPressIn={200}
 			>
 				{USE_DISPLAY_NAME ? (
-					<NativeTextMedium numberOfLines={1}>{displayName}</NativeTextMedium>
+					<NativeTextMedium numberOfLines={1}>
+						{handleFallback}
+					</NativeTextMedium>
 				) : (
 					<TextAstRendererView
 						tree={

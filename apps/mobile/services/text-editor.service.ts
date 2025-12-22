@@ -5,7 +5,7 @@ type KeyboardSelection = { start: number; end: number };
 
 class TextEditorService {
 	/**
-	 * auto-completes reaction shortCode in text editor
+	 * auto-completes reaction shortCode in the text editor
 	 * @param draft
 	 * @param shortCode
 	 * @param selection
@@ -17,7 +17,6 @@ class TextEditorService {
 	): string {
 		if (!EMOJI_REGEX.test(draft)) return draft;
 		const match = EMOJI_REGEX.exec(draft);
-		// @ts-ignore-next-line
 		return draft.replaceAll(match[0], `:${shortCode}: `);
 	}
 
@@ -51,21 +50,12 @@ class TextEditorService {
 	}
 
 	/**
-	 * Just add some text to the text field
+	 * Add some text to the text field
 	 * @param draft
 	 * @param shortCode
 	 */
 	static addReactionText(draft: string, shortCode: string): string {
 		return (draft || '') + `:${shortCode}:` + ' ';
-	}
-
-	/**
-	 * Just add some text to the text field
-	 * @param draft
-	 * @param text
-	 */
-	static addText(draft: string, text: string): string {
-		return (draft || '') + text + ' ';
 	}
 }
 

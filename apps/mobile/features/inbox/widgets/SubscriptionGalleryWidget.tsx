@@ -13,10 +13,7 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { AppDividerSoft } from '#/ui/Divider';
-import {
-	useSubscriptionGalleryDispatch,
-	useSubscriptionGalleryState,
-} from '@dhaaga/react';
+import { useSubscriptionGalleryState } from '@dhaaga/react';
 import { AppIcon } from '#/components/lib/Icon';
 import { Image } from 'expo-image';
 import { NativeTextMedium } from '#/ui/NativeText';
@@ -30,7 +27,6 @@ function SubscriptionGalleryWidget({ pagerIndex }: Props) {
 	const { theme } = useAppTheme();
 
 	const State = useSubscriptionGalleryState();
-	const dispatch = useSubscriptionGalleryDispatch();
 
 	const MIN_WIDTH = 52;
 	const MAX_WIDTH = Dimensions.get('window').width;

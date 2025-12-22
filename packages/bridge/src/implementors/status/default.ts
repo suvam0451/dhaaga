@@ -132,6 +132,10 @@ class PostAdapterBase implements PostTargetInterface {
 		return 0;
 	}
 
+	getQuotesCount(): number {
+		return 0;
+	}
+
 	getUsername() {
 		return '';
 	}

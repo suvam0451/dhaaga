@@ -21,7 +21,7 @@ import DriverService, { AppModulesProps } from '#/services/driver.service';
 import useApiMe from '#/hooks/useApiMe';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
-import NavBar_Home from '#/components/topnavbar/NavBar_Home';
+import NavBar_Home from '#/features/navbar/views/NavBar_Home';
 import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import AccountHomeModuleItem from './components/AccountHomeModuleItem';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +31,7 @@ import AccountMissingError from '#/features/home/views/AccountMissingError';
 import MyAccountOverview from '#/features/home/components/MyAccountOverview';
 import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
 import RoutingUtils from '#/utils/routing.utils';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 function Home() {
 	const { theme } = useAppTheme();
@@ -75,7 +76,7 @@ function Home() {
 			label: 'Skins',
 			desc: 'Fun stuff',
 			iconId: 'layers-outline',
-			to: APP_ROUTING_ENUM.MY_DRAFTS,
+			to: APP_ROUTING_ENUM.APP_SKINS,
 		},
 	];
 
@@ -89,7 +90,7 @@ function Home() {
 				<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
 			}
 			style={{
-				backgroundColor: theme.palette.bg,
+				backgroundColor: theme.background.a0,
 			}}
 		>
 			<MyAccountOverview user={data} />
@@ -192,15 +193,17 @@ function MyHome() {
 	}, [session]);
 
 	return (
-		<View
-			style={{
-				flex: 1,
-				backgroundColor: theme.background.a0,
-			}}
-		>
-			<NavBar_Home menuItems={MENU_ITEMS} />
-			{Component}
-		</View>
+		<WithBackgroundSkin>
+			<View
+				style={{
+					flex: 1,
+					// backgroundColor: theme.background.a0,
+				}}
+			>
+				<NavBar_Home menuItems={MENU_ITEMS} />
+				{Component}
+			</View>
+		</WithBackgroundSkin>
 	);
 }
 

@@ -18,7 +18,7 @@ const EmojiReactionImage = memo(function Foo({
 }) {
 	const Dims = useReactionDimension({
 		url,
-		simpleVariantHeight: height,
+		height,
 		width,
 	});
 

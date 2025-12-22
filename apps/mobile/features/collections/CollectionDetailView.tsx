@@ -5,7 +5,7 @@ import CollectionDetailWidget from '#/features/collections/components/Collection
 import { appDimensions } from '#/styles/dimensions';
 import { SavedPostItemView } from '#/features/collections/SavedPostItemView';
 import { Animated, RefreshControl } from 'react-native';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 
 function Content() {

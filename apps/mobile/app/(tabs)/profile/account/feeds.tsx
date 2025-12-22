@@ -8,7 +8,7 @@ import { AppDivider } from '#/components/lib/Divider';
 import { Image } from 'expo-image';
 import { useAppTheme } from '#/states/global/hooks';
 import { router } from 'expo-router';
-import NavBar_Simple from '#/components/topnavbar/NavBar_Simple';
+import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import Animated from 'react-native-reanimated';
 import { useState } from 'react';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';

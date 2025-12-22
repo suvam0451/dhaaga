@@ -109,6 +109,8 @@ interface PostTargetInterface {
 
 	getFavouritesCount(): number;
 
+	getQuotesCount(): number;
+
 	getAccountId_Poster(): string;
 
 	getMyReaction(): string | null | undefined;

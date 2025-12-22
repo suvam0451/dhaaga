@@ -41,6 +41,7 @@ const AppPostStatsDto = z.object({
 	replyCount: z.number().nonnegative(),
 	boostCount: z.number().nonnegative(),
 	likeCount: z.number().nonnegative(),
+	quoteCount: z.number().nonnegative(),
 	reactions: ActivityPubReactionStateSchema,
 });
 

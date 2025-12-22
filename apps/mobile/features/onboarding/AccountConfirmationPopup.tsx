@@ -3,8 +3,8 @@ import { useAppTheme } from '#/states/global/hooks';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
-import SoftwareHeader from '#/features/manage-accounts/SoftwareHeader';
 import { NativeTextBold } from '#/ui/NativeText';
+import SoftwareHeader from '#/features/accounts/components/SoftwareHeader';
 
 export type AccountCreationPreviewProps = {
 	avatar: string;
@@ -129,7 +129,7 @@ function AccountConfirmationPopup({
 					marginTop: 32,
 				}}
 				textStyle={{
-					color: theme.textColor.high,
+					color: theme.secondary.a10,
 				}}
 			/>
 		</View>

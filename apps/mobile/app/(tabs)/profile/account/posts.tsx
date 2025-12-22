@@ -4,7 +4,7 @@ import {
 	usePostTimelineDispatch,
 	usePostTimelineState,
 } from '@dhaaga/core';
-import PostTimelineView from '#/components/timelines/PostTimelineView';
+import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 import useTimelineQueryReactNative from '#/hooks/useTimelineQueryReactNative';
 import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import { useEffect } from 'react';
@@ -49,6 +49,7 @@ function Content() {
 			navbarType={'simple'}
 			flatListKey={'account/posts'}
 			skipTimelineInit
+			itemType={'post'}
 		/>
 	);
 }

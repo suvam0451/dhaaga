@@ -91,13 +91,13 @@ function MenuPresenter({ post }: Props) {
 			/>
 			<View style={styles.rightSection}>
 				<View style={styles.buttonOnly}>
-					<AppIcon id={'share'} size={24} color={theme.textColor.medium} />
+					<AppIcon id={'share'} size={24} color={theme.secondary.a30} />
 				</View>
 				<View style={styles.buttonOnly}>
 					<Ionicons
 						name={'cloud-download-outline'}
 						size={24}
-						color={theme.textColor.medium}
+						color={theme.secondary.a30}
 						style={{ width: 24 }}
 					/>
 				</View>

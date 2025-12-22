@@ -4,7 +4,6 @@ import {
 	useAppTheme,
 } from '#/states/global/hooks';
 import { FlatList, Pressable, StyleSheet, TextInput } from 'react-native';
-import { APP_FONTS } from '#/styles/AppFonts';
 import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useEffect, useState } from 'react';
@@ -17,8 +16,7 @@ import BottomSheetMenu from '../components/BottomSheetMenu';
 import { useApiGetMyFollowings } from '#/hooks/api/useMy';
 import UserSearchResultPresenter from '#/features/hub/presenters/UserSearchResultPresenter';
 import useAutoFocusBottomSheetInput from '#/ui/hooks/useAutoFocusBottomSheetInput';
-import { TimelineQueryStatusIndicator } from '#/components/timelines/StateIndicator';
-import PostSkeleton from '#/ui/skeletons/PostSkeleton';
+import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 
 function HubAddUserBottomSheet() {
 	const { theme } = useAppTheme();
@@ -100,10 +98,7 @@ function HubAddUserBottomSheet() {
 							style={[
 								styles.textInput,
 								{
-									fontWeight: 'bold',
 									color: theme.secondary.a20,
-									marginLeft: 12,
-									flex: 1,
 								},
 							]}
 						/>
@@ -141,16 +136,15 @@ function HubAddUserBottomSheet() {
 					<AppDividerSoft style={{ marginVertical: 8 }} />
 				)}
 				ListEmptyComponent={
-					<TimelineQueryStatusIndicator
+					<TimelineStateIndicator
 						queryResult={{
 							error,
 							isRefetching,
 							isFetched,
 						}}
 						numItems={numItems}
-						renderSkeleton={() => (
-							<PostSkeleton containerHeight={ContainerHeight} />
-						)}
+						itemType={'user-partial'}
+						containerHeight={ContainerHeight}
 					/>
 				}
 			/>
@@ -178,5 +172,8 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'none',
 		fontSize: 16,
 		borderRadius: 8,
+		fontWeight: 'bold',
+		marginLeft: 12,
+		flex: 1,
 	},
 });
