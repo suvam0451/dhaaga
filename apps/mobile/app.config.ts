@@ -115,7 +115,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		resizeMode: 'contain',
 		backgroundColor: '#e6cf8b',
 	},
-	assetBundlePatterns: ['**/*'],
 	extra: {
 		eas: {
 			projectId: '6a318c01-ca78-440f-840f-64c54ddc94fe',
@@ -137,8 +136,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				android: {
 					compileSdkVersion: 36,
 					targetSdkVersion: 36,
-					kotlinVersion: '2.2.0',
-					buildToolsVersion: '36.1.0',
+					// kotlinVersion: '2.2.0', // pinning causes build errors
+					buildToolsVersion: '36.1.0 ',
 					enableMinifyInReleaseBuilds: true,
 					enableShrinkResourcesInReleaseBuilds: true,
 					buildArchs: ['arm64-v8a'],
