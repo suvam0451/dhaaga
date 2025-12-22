@@ -91,7 +91,9 @@ class BlueskyNotificationsRouter implements NotificationsRoute {
 		const agent = getBskyAgent(this.dto);
 		const response = await agent.listNotifications({
 			reasons: ['subscribed-post'],
-			limit: 40,
+			/**
+			 * uris must not have more than 25 elements
+			 */ limit: 25,
 		});
 		return {
 			data: response.data.notifications,

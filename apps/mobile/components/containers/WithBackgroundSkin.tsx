@@ -2,14 +2,15 @@ import { useAssets } from 'expo-asset';
 import { View, ImageBackground } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { useMemo } from 'react';
+import { Asset } from 'expo-asset';
 
 let LICENSED_RESOURCES = [];
-if (process.env.APP_VARIANT === 'skinned') {
+if (!['skinned', 'dev'].includes(process.env.APP_VARIANT)) {
 	LICENSED_RESOURCES = [
-		require('#/assets/backdrops/christmas.jpeg'),
-		require('#/assets/backdrops/white_album.jpg'),
-		require('#/assets/backdrops/beast_within.jpg'),
-		require('#/assets/backdrops/kataware_doki.jpg'),
+		Asset.fromModule(require('#/assets/backdrops/christmas.jpeg')),
+		Asset.fromModule(require('#/assets/backdrops/white_album.jpg')),
+		Asset.fromModule(require('#/assets/backdrops/beast_within.jpg')),
+		Asset.fromModule(require('#/assets/backdrops/kataware_doki.jpg')),
 	];
 }
 

@@ -4,11 +4,11 @@ import useNotificationStore from '#/features/inbox/interactors/useNotificationSt
 import { useEffect, useState } from 'react';
 import NavBar_Inbox from '#/features/navbar/views/NavBar_Inbox';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
-import { FlatList, RefreshControl } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { AppDividerSoft } from '#/ui/Divider';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
+import { FlashList } from '@shopify/flash-list';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
@@ -48,15 +48,13 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 	return (
 		<>
 			<NavBar_Inbox label={label} type={type} animatedStyle={animatedStyle} />
-
-			<FlatList
+			<FlashList
 				onScroll={scrollHandler}
 				onLayout={onLayout}
 				data={state.items}
 				renderItem={({ item }) => <Wrapper item={item} />}
-				refreshControl={
-					<RefreshControl refreshing={IsRefreshing} onRefresh={_onRefresh} />
-				}
+				onRefresh={_onRefresh}
+				refreshing={IsRefreshing}
 				progressViewOffset={appDimensions.topNavbar.hubVariantHeight}
 				contentContainerStyle={{
 					paddingBottom: appDimensions.lists.paddingBottom,
