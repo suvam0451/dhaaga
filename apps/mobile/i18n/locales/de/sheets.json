@@ -14,16 +14,16 @@
     "disclaimer": "⚠️ Sammlungen werden lokal auf diesem Gerät gespeichert ⚠️"
   },
   "hubAddFeedSheet": {
-    "title": "Sorry \uD83D\uDE14",
+    "title": "Entschuldigung \uD83D\uDE14",
     "desc": [
-      "Deze functie wordt in de toekomst uitgebreid!",
-      "Een standaard set bestemmingen is voor je ingesteld.",
-      "Bluesky-gebruikers kunnen hun feeds nu bekijken vanaf hun profiel (5e tabblad)."
+      "Diese Funktion wird in Zukunft erweitert!",
+      "Ein Standardsatz von Zielen wurde für Sie vorbelegt.",
+      "Bluesky-Benutzer können ihre Feeds vorerst über ihr Profil (5. Registerkarte) aufrufen."
     ],
     "searchPlaceholder": "Suche nach Feeds zum Anheften"
   },
   "hubAddUserSheet": {
-    "searchPlaceholder": "Zoek naar gebruikers om vast te pinnen"
+    "searchPlaceholder": "Suche nach Benutzern zum Anheften"
   },
   "linkPreview": {
     "failedStateLabel": "Fehler beim Parsen dieser URL",
