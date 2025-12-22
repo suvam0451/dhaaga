@@ -1,6 +1,7 @@
 import fs, { rmSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import stripLicensedAssetUse from './strip-licensed-asset-use.js';
+import linkAssets from '#/scripts/link-assets.js';
 
 // ----------------------
 function switchToLiteEdition() {
@@ -168,6 +169,7 @@ function addSigningKey() {
 
 addSigningKey();
 
+linkAssets();
 stripLicensedAssetUse();
 
 console.log('ALL DONE!');
