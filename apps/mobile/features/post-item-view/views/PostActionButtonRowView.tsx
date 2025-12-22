@@ -15,7 +15,9 @@ import { AppToggleIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
 import { ActivityPubService, PostInspector } from '@dhaaga/bridge';
 import PostInteractionStatsRow from '#/features/post-item-view/views/PostInteractionStatsRow';
-import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
+import DhaagaSkinnedIcon, {
+	APP_ICON_IDENTIFIER,
+} from '#/features/skins/components/ThemedAppIcons';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { AppDividerSoft } from '#/ui/Divider';
 import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
@@ -52,12 +54,10 @@ function ShareButton() {
 			{IsLoading ? (
 				<ActivityIndicator color={theme.primary} />
 			) : FLAG ? (
-				<DhaagaSkinnedIcon
-					id={DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_ACTIVE}
-				/>
+				<DhaagaSkinnedIcon id={APP_ICON_IDENTIFIER.POST_SHARE_BUTTON_ACTIVE} />
 			) : (
 				<DhaagaSkinnedIcon
-					id={DHAAGA_SKINNED_ICON_ID.POST_SHARE_BUTTON_INACTIVE}
+					id={APP_ICON_IDENTIFIER.POST_SHARE_BUTTON_INACTIVE}
 				/>
 			)}
 		</Pressable>
@@ -93,11 +93,9 @@ function LikeButton() {
 			{IsLoading ? (
 				<ActivityIndicator color={theme.primary} />
 			) : FLAG ? (
-				<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_ACTIVE} />
+				<DhaagaSkinnedIcon id={APP_ICON_IDENTIFIER.LIKE_INDICATOR_ACTIVE} />
 			) : (
-				<DhaagaSkinnedIcon
-					id={DHAAGA_SKINNED_ICON_ID.LIKE_INDICATOR_INACTIVE}
-				/>
+				<DhaagaSkinnedIcon id={APP_ICON_IDENTIFIER.LIKE_INDICATOR_INACTIVE} />
 			)}
 		</Pressable>
 	);
@@ -119,7 +117,7 @@ function CommentButton() {
 
 	return (
 		<Pressable style={styles.actionButton} onPress={onPress}>
-			<DhaagaSkinnedIcon id={DHAAGA_SKINNED_ICON_ID.POST_REPLY_BUTTON} />
+			<DhaagaSkinnedIcon id={APP_ICON_IDENTIFIER.POST_REPLY_BUTTON} />
 		</Pressable>
 	);
 }

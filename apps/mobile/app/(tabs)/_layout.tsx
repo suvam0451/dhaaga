@@ -10,7 +10,9 @@ import {
 	useAppActiveSession,
 	useAppTheme,
 } from '#/states/global/hooks';
-import DhaagaSkinnedIcon, { DHAAGA_SKINNED_ICON_ID } from '#/skins/_icons';
+import DhaagaSkinnedIcon, {
+	APP_ICON_IDENTIFIER,
+} from '#/features/skins/components/ThemedAppIcons';
 
 const BOTTOM_NAVBAR_HEIGHT = 50; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
@@ -55,13 +57,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ focused, color, size }) =>
 						focused ? (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_ACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_HUB_ACTIVE}
 								size={size + ICON_A_SIZE_OFFSET}
 								color={color}
 							/>
 						) : (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_HUB_INACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_HUB_INACTIVE}
 								size={size + ICON_A_SIZE_OFFSET}
 								color={color}
 							/>
@@ -75,13 +77,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ color, size, focused }) =>
 						focused ? (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_ACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_FEED_ACTIVE}
 								size={size + ICON_B_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
 						) : (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_FEED_INACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_FEED_INACTIVE}
 								size={size + ICON_B_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
@@ -95,13 +97,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ color, size, focused }) =>
 						focused ? (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_ACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_EXPLORE_ACTIVE}
 								size={size + ICON_C_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
 						) : (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_EXPLORE_INACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_EXPLORE_INACTIVE}
 								size={size + ICON_C_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
@@ -116,13 +118,13 @@ export default function TabLayout() {
 					tabBarIcon: ({ color, size, focused }) =>
 						focused ? (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_ACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_INBOX_ACTIVE}
 								size={size + ICON_D_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
 						) : (
 							<DhaagaSkinnedIcon
-								id={DHAAGA_SKINNED_ICON_ID.BOTTOM_NAVBAR_INBOX_INACTIVE}
+								id={APP_ICON_IDENTIFIER.BOTTOM_NAVBAR_INBOX_INACTIVE}
 								size={size + ICON_D_SIZE_OFFSET}
 								color={!acct ? theme.background.a50 : color}
 							/>
