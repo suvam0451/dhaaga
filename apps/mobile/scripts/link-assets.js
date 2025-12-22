@@ -14,6 +14,25 @@ function copyDir(src, dest) {
 	fs.cpSync(src, dest, { recursive: true });
 }
 
+function emptyDir(dir) {
+	if (fs.existsSync(dir)) {
+		// remove all contents inside
+		const files = fs.readdirSync(dir);
+		for (const file of files) {
+			const filePath = path.join(dir, file);
+			const stat = fs.statSync(filePath);
+
+			if (stat.isDirectory()) {
+				fs.rmSync(filePath, { recursive: true, force: true });
+			} else {
+				fs.unlinkSync(filePath);
+			}
+		}
+	} else {
+		fs.mkdirSync(dir, { recursive: true });
+	}
+}
+
 function linkAssets() {
 	// root path
 	const root = path.resolve(__dirname, '../../..');
@@ -27,13 +46,7 @@ function linkAssets() {
 	 */
 	if (!['publish', 'dev'].includes(process.env.APP_VARIANT)) {
 		const licensedFolder = path.join(mobileDst, 'licensed');
-
-		if (fs.existsSync(licensedFolder)) {
-			fs.rmSync(licensedFolder, { recursive: true, force: true });
-			console.log(`Removed ${licensedFolder} ✅`);
-		} else {
-			console.log(`No licensed folder to remove at ${licensedFolder}`);
-		}
+		emptyDir(licensedFolder);
 	}
 
 	ensureDir(mobileDst);
