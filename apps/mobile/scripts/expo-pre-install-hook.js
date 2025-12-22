@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import stripLicensedAssets from '#/scripts/strip-licensed-assets.js';
+import stripLicensedAssets from './strip-licensed-assets.js';
 
 function run(cmd) {
 	execSync(cmd, { stdio: 'inherit' });
