@@ -30,10 +30,22 @@
 				"APP_NAME": "Dhaaga"
 			}
 		},
-		"publish": {
+		"publish-apk": {
 			"extends": "_shared",
 			"android": {
 				"buildType": "apk"
+			},
+			"env": {
+				"APP_VARIANT": "publish",
+				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
+				"APP_SCHEME": "dhaaga",
+				"APP_NAME": "Dhaaga"
+			}
+		},
+		"publish-aab": {
+			"extends": "_shared",
+			"android": {
+				"buildType": "app-bundle"
 			},
 			"env": {
 				"APP_VARIANT": "publish",

@@ -62,8 +62,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "expo start --dev-client",
-		"apk": "eas build -p android --profile apk",
-		"aab": "eas build -p android --profile aab",
+		"apk": "eas build -p android --profile publish-apk",
+		"aab": "eas build -p android --profile publish-aab",
 		"dev-client:android": "eas build -p android --profile dev",
 		"dev-client:ios": "eas build -p ios --profile dev",
 		"lite:manual": "react-native build-android --mode=release && cd android && ./gradlew assembleRelease",

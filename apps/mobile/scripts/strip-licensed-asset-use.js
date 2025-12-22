@@ -13,7 +13,7 @@ const dir = __dirname;
  * metro bundler does not throw an error
  */
 function stripLicensedAssetUse() {
-	if (!['skinned', 'dev'].includes(process.env.APP_VARIANT))
+	if (!['publish-apk', 'publish-aab'].includes(process.env.APP_VARIANT))
 		fs.renameSync(
 			path.join(dir, '../components/containers/WithBackgroundSkin.tsx'),
 			path.join(dir, '../components/containers/archived.bak'),

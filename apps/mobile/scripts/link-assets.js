@@ -44,7 +44,7 @@ function linkAssets() {
 	/**
 	 * Remove the licensed assets
 	 */
-	if (!['publish', 'dev'].includes(process.env.APP_VARIANT)) {
+	if (!['publish-apk', 'publish-aab'].includes(process.env.APP_VARIANT)) {
 		const licensedFolder = path.join(mobileDst, 'licensed');
 		emptyDir(licensedFolder);
 	}
