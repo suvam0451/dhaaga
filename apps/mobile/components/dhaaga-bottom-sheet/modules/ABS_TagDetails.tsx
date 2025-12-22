@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useApiGetTagInterface } from '#/hooks/api/useTags';
 import { ActivityPubService } from '@dhaaga/bridge';
@@ -29,8 +29,32 @@ function ABS_TagDetails() {
 
 	const { data } = useApiGetTagInterface(TagName);
 
+	const BASE_ACTIONS = [
+		{
+			appIconId: 'eye',
+			label: 'Browse Timeline',
+			onPress: () => {},
+			description: 'Browse posts using this tag',
+		},
+		{
+			appIconId: 'pin',
+			label: 'Pin to Social Hub',
+			onPress: () => {},
+			description: 'Pin this tag to your Hub profile',
+		},
+	];
+
+	if (FOLLOW_POSSIBLE) {
+		BASE_ACTIONS.unshift({
+			appIconId: 'eye',
+			label: 'Follow Tag',
+			description: 'follow this tag',
+			onPress: () => {},
+		});
+	}
+
 	return (
-		<ScrollView>
+		<>
 			<BottomSheetMenu
 				title={'N/A'}
 				variant={'raised'}
@@ -58,30 +82,8 @@ function ABS_TagDetails() {
 					</View>
 				}
 			/>
-			<BottomSheetActionMenuBuilder
-				items={[
-					FOLLOW_POSSIBLE
-						? {
-								appIconId: 'eye',
-								label: 'Follow Tag',
-								onPress: () => {},
-							}
-						: null,
-					{
-						appIconId: 'eye',
-						label: 'Browse Timeline',
-						onPress: () => {},
-						description: 'Browse posts using this tag',
-					},
-					{
-						appIconId: 'pin',
-						label: 'Pin to Social Hub',
-						onPress: () => {},
-						description: 'Pin this tag to your Hub profile',
-					},
-				]}
-			/>
-		</ScrollView>
+			<BottomSheetActionMenuBuilder items={BASE_ACTIONS} />
+		</>
 	);
 }
 
