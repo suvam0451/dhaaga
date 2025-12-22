@@ -30,6 +30,18 @@
 				"APP_NAME": "Dhaaga"
 			}
 		},
+		"skinned": {
+			"extends": "_shared",
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"APP_VARIANT": "skinned",
+				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
+				"APP_SCHEME": "dhaaga",
+				"APP_NAME": "Dhaaga"
+			}
+		},
 		"dev": {
 			"extends": "_shared",
 			"developmentClient": true,

@@ -3,21 +3,26 @@ import { View, ImageBackground } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { useMemo } from 'react';
 
-function WithBackgroundSkin({ children }: any) {
-	const { theme } = useAppTheme();
-	const [assets, error] = useAssets([
+let LICENSED_RESOURCES = [];
+if (process.env.APP_VARIANT === 'skinned') {
+	LICENSED_RESOURCES = [
 		require('#/assets/backdrops/christmas.jpeg'),
 		require('#/assets/backdrops/white_album.jpg'),
 		require('#/assets/backdrops/beast_within.jpg'),
 		require('#/assets/backdrops/kataware_doki.jpg'),
-	]);
+	];
+}
+
+function WithBackgroundSkin({ children }: any) {
+	const { theme } = useAppTheme();
+	const [assets, error] = useAssets(LICENSED_RESOURCES);
 
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
 
 	const uri = useMemo(() => {
 		if (!LOADED) return null;
 
-		// lite edition
+		// lite edition or ci
 		if (assets.length === 0) return null;
 
 		switch (theme.id) {
