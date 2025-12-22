@@ -46,10 +46,10 @@ function DhaagaSkinnedIcon({ id, size, color }: DhaagaSkinnedIconProps) {
 	const ACTIVE_TINT = theme.primary;
 	const INACTIVE_TINT = theme.secondary.a40;
 	switch (id) {
-		case APP_ICON_IDENTIFIER.BOOKMARK_MENU_ACTIVE:
 		case APP_ICON_IDENTIFIER.LIKE_INDICATOR_ACTIVE:
+		case APP_ICON_IDENTIFIER.BOOKMARK_MENU_ACTIVE:
 		case APP_ICON_IDENTIFIER.POST_SHARE_BUTTON_ACTIVE: {
-			return LicensedSvgMapper[id].call({
+			return LicensedSvgMapper[id]({
 				size: ACTION_BUTTON_SIZE,
 				color: ACTIVE_TINT,
 				skinId: theme.id,
