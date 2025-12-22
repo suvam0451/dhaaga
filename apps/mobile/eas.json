@@ -4,7 +4,8 @@
 	},
 	"build": {
 		"_shared": {
-			"node": "25.2.1"
+			"node": "25.2.1",
+			"hooks": { "pre-install": "node scripts/preinstall.js" }
 		},
 		"aab": {
 			"extends": "_shared",
