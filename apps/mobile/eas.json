@@ -4,8 +4,7 @@
 	},
 	"build": {
 		"_shared": {
-			"node": "25.2.1",
-			"hooks": { "pre-install": "node scripts/preinstall.js" }
+			"node": "25.2.1"
 		},
 		"aab": {
 			"extends": "_shared",
@@ -31,13 +30,13 @@
 				"APP_NAME": "Dhaaga"
 			}
 		},
-		"skinned": {
+		"publish": {
 			"extends": "_shared",
 			"android": {
 				"buildType": "apk"
 			},
 			"env": {
-				"APP_VARIANT": "skinned",
+				"APP_VARIANT": "publish",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
 				"APP_SCHEME": "dhaaga",
 				"APP_NAME": "Dhaaga"

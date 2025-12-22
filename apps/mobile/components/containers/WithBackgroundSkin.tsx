@@ -7,10 +7,10 @@ import { Asset } from 'expo-asset';
 let LICENSED_RESOURCES = [];
 if (!['skinned', 'dev'].includes(process.env.APP_VARIANT)) {
 	LICENSED_RESOURCES = [
-		Asset.fromModule(require('#/assets/backdrops/christmas.jpeg')),
-		Asset.fromModule(require('#/assets/backdrops/white_album.jpg')),
-		Asset.fromModule(require('#/assets/backdrops/beast_within.jpg')),
-		Asset.fromModule(require('#/assets/backdrops/kataware_doki.jpg')),
+		Asset.fromModule(require('#/assets/licensed/backdrops/christmas.jpeg')),
+		Asset.fromModule(require('#/assets/licensed/backdrops/white_album.jpg')),
+		Asset.fromModule(require('#/assets/licensed/backdrops/beast_within.jpg')),
+		Asset.fromModule(require('#/assets/licensed/backdrops/kataware_doki.jpg')),
 	];
 }
 

@@ -71,7 +71,7 @@
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"tl:sync": "node ../_shared/translations/sync.js",
-		"eas-build-pre-install": "cd ../.. && npm run link:all",
+		"eas-build-pre-install": "node scripts/expo-build-pre-install.js",
 		"eas-build-post-install": "cd ../.. && npm run build-deps"
 	},
 	"type": "module",

@@ -12,7 +12,7 @@ const dir = __dirname;
  * used in the play store version so that
  * metro bundler does not throw an error
  */
-function stripLicensedAssets() {
+function stripLicensedAssetUse() {
 	if (!['skinned', 'dev'].includes(process.env.APP_VARIANT))
 		fs.renameSync(
 			path.join(dir, '../components/containers/WithBackgroundSkin.tsx'),
@@ -25,4 +25,4 @@ function stripLicensedAssets() {
 	);
 }
 
-export default stripLicensedAssets;
+export default stripLicensedAssetUse;
