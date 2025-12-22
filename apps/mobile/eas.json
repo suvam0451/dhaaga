@@ -36,7 +36,7 @@
 				"buildType": "apk"
 			},
 			"env": {
-				"APP_VARIANT": "publish",
+				"APP_VARIANT": "publish-apk",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
 				"APP_SCHEME": "dhaaga",
 				"APP_NAME": "Dhaaga"
@@ -48,7 +48,7 @@
 				"buildType": "app-bundle"
 			},
 			"env": {
-				"APP_VARIANT": "publish",
+				"APP_VARIANT": "publish-aab",
 				"BUNDLE_IDENTIFIER": "io.suvam.dhaaga",
 				"APP_SCHEME": "dhaaga",
 				"APP_NAME": "Dhaaga"
