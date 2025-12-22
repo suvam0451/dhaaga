@@ -178,7 +178,7 @@ export function PostContainer({ children }: any) {
 				style={[
 					styles.postRoot,
 					{
-						// backgroundColor: theme.background.a0,
+						backgroundColor: theme.background.a0,
 					},
 				]}
 			>

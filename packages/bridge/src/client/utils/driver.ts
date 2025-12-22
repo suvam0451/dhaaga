@@ -123,6 +123,10 @@ enum DriverNotificationType {
 	RENOTE_GROUPED = 'renote:grouped',
 	POLL_VOTE = 'pollVote',
 	GROUP_INVITED = 'groupInvited',
+
+	// at proto
+	LIKE = 'like',
+	REPOST = 'repost',
 }
 
 export { data, KNOWN_SOFTWARE, DriverNotificationType };

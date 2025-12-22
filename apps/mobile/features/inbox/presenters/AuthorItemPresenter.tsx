@@ -48,9 +48,9 @@ function AuthorItemPresenter({
 			case DriverNotificationType.FAVOURITE: {
 				return (
 					<AppIcon
-						id="heart"
+						id="heart-outline"
 						size={NOTIFICATION_TYPE_ICON_SIZE}
-						color={theme.primaryText}
+						color={theme.complementary}
 					/>
 				);
 			}
@@ -59,7 +59,7 @@ function AuthorItemPresenter({
 				return (
 					<AppIcon
 						id={'sync-outline'}
-						color={theme.primaryText}
+						color={theme.complementary}
 						size={NOTIFICATION_TYPE_ICON_SIZE}
 					/>
 				);
@@ -69,7 +69,7 @@ function AuthorItemPresenter({
 					<AppIcon
 						id="add"
 						size={NOTIFICATION_TYPE_ICON_SIZE}
-						color={theme.primaryText}
+						color={theme.complementary}
 					/>
 				);
 			}
@@ -78,7 +78,7 @@ function AuthorItemPresenter({
 					<AppIcon
 						id="checkmark"
 						size={NOTIFICATION_TYPE_ICON_SIZE}
-						color={theme.primaryText}
+						color={theme.complementary}
 					/>
 				);
 			}

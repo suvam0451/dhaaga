@@ -12,18 +12,24 @@ type State = {
 	seen: Set<string>;
 	items: NotificationObjectType[];
 	listEmpty: boolean;
+	maxId: string | null;
+	appliedMaxId: string | null;
+	endOfList: boolean;
 };
 
 const DEFAULT: State = {
 	seen: new Set(),
 	items: [],
 	listEmpty: false,
+	maxId: null,
+	appliedMaxId: null,
+	endOfList: false,
 };
 
 enum ACTION {
 	APPEND,
-	REPLACE,
 	RESET,
+	LOAD_NEXT_PAGE,
 }
 
 type Actions =
@@ -32,21 +38,16 @@ type Actions =
 			payload: { page: ResultPage<NotificationObjectType[]> };
 	  }
 	| {
-			type: ACTION.REPLACE;
-			payload: { page: ResultPage<NotificationObjectType[]> };
+			type: ACTION.RESET;
 	  }
 	| {
-			type: ACTION.RESET;
+			type: ACTION.LOAD_NEXT_PAGE;
 	  };
 
 function reducer(state: State, action: Actions): State {
 	switch (action.type) {
 		case ACTION.RESET: {
-			return produce(state, (draft) => {
-				draft.seen = new Set();
-				draft.items = [];
-				draft.listEmpty = false;
-			});
+			return DEFAULT;
 		}
 		case ACTION.APPEND: {
 			return produce(state, (draft) => {
@@ -58,17 +59,24 @@ function reducer(state: State, action: Actions): State {
 					draft.seen.add(item.id);
 					draft.items.push(item);
 				}
+
+				draft.maxId =
+					action.payload.page.maxId ??
+					(action.payload.page.data.length > 0
+						? action.payload.page.data[action.payload.page.data.length - 1]!.id
+						: null);
+				// console.log(
+				// 	'inbox stats',
+				// 	draft.items.length,
+				// 	draft.maxId,
+				// 	draft.appliedMaxId,
+				// );
+				draft.endOfList = !draft.maxId;
 			});
 		}
-		case ACTION.REPLACE: {
+		case ACTION.LOAD_NEXT_PAGE: {
 			return produce(state, (draft) => {
-				draft.seen = new Set();
-				draft.items = [];
-				for (const item of action.payload.page.data) {
-					if (draft.seen.has(item.id)) continue;
-					draft.seen.add(item.id);
-					draft.items.push(item);
-				}
+				draft.appliedMaxId = state.maxId;
 			});
 		}
 	}

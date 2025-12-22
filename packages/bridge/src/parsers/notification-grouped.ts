@@ -282,35 +282,100 @@ class Parser {
 		driver: string,
 		server: string,
 	): Promise<ResultPage<NotificationObjectType[]>> {
-		let results = data.data.map((o) => {
-			const _user = UserParser.parse<unknown>(o.author, driver, server);
+		let results: NotificationObjectType[] = [];
+
+		for (const item of data.data) {
+			const _user = UserParser.parse<unknown>(item.author, driver, server);
 			const _post =
-				o.record && o.record.$type === 'app.bsky.feed.post'
-					? PostParser.parse<unknown>(o, driver, server)
+				item.record && item.record.$type === 'app.bsky.feed.post'
+					? PostParser.parse<unknown>(item, driver, server)
 					: null;
-			return {
-				id: o.uri,
-				uri: o.uri,
-				cid: o.cid,
-				type: o.reason,
+
+			if (
+				results.length > 0 &&
+				results[results.length - 1].type === item.reason
+			) {
+				switch (item.reason) {
+					case 'follow': {
+						results[results.length - 1] = {
+							...results[results.length - 1],
+							users: [
+								// @ts-ignore-next-line
+								...results[results.length - 1].users,
+								{
+									item: _user!,
+									types: [item.reason],
+									extraData: {
+										followedAt: item.indexedAt,
+									},
+								},
+							],
+						};
+						continue;
+					}
+					case 'like': {
+						const matchedId = results.findIndex(
+							(o) => o.uri === (item as any).record.subject.uri,
+						);
+						if (matchedId !== -1) {
+							results[matchedId] = {
+								...results[matchedId],
+								users: [
+									// @ts-ignore-next-line
+									...results[matchedId].users,
+									{
+										item: _user!,
+										types: [item.reason],
+										extraData: {
+											interactedAt: item.indexedAt,
+										},
+									},
+								],
+							};
+							continue;
+						}
+						break;
+					}
+					default: {
+					}
+				}
+			}
+
+			if (item.reason === 'like') {
+				console.log('like object', item.record);
+			}
+
+			results.push({
+				id: ['like', 'repost'].includes(item.reason)
+					? (item as any).record.subject.uri
+					: item.uri,
+				uri: ['like', 'repost'].includes(item.reason)
+					? (item as any).record.subject.uri
+					: item.uri,
+				cid: ['like', 'repost'].includes(item.reason)
+					? (item as any).record.subject.cid
+					: item.cid,
+				type: item.reason,
 				post: _post,
-				createdAt: new Date(o.indexedAt),
-				read: o.isRead,
-				extraData: {},
+				createdAt: new Date(item.indexedAt),
+				read: item.isRead,
+				extraData: {
+					followedAt: item.reason === 'follow' ? item.indexedAt : undefined,
+				},
 				users: [
 					{
 						item: _user!,
-						types: [o.reason],
+						types: [item.reason],
 						extraData: {},
 					},
 				],
-			};
-		});
+			});
+		}
 
-		const uris = results.map((o) => o.uri);
+		const uris = results.map((o) => o.uri).filter(Boolean);
 		const posts =
 			uris.length > 0
-				? await (client as AtprotoApiAdapter).posts.getPosts(uris)
+				? await (client as AtprotoApiAdapter).posts.getPosts(uris as any)
 				: [];
 		const parsed = PostParser.parse<unknown[]>(posts, driver, server);
 

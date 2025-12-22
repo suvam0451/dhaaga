@@ -41,9 +41,11 @@ export function NotificationItemPresenter({ item }: Props) {
 			case DriverNotificationType.REBLOG:
 			case DriverNotificationType.RENOTE:
 			case DriverNotificationType.FAVOURITE:
+			case DriverNotificationType.LIKE:
 				return <GroupedPostInteractionPresenter {..._object} />;
-			default:
+			default: {
 				return <GroupedFollowPresenter {..._object} />;
+			}
 		}
 	}
 
@@ -66,6 +68,7 @@ export function NotificationItemPresenter({ item }: Props) {
 		case DriverNotificationType.PUBLIC:
 			return <MentionNotificationFragment {...object} />;
 		case DriverNotificationType.FAVOURITE:
+		case DriverNotificationType.LIKE:
 			return <FavouriteNotificationFragment {...object} />;
 		case DriverNotificationType.FOLLOW:
 			return <FollowPresenter {...object} />;
@@ -74,6 +77,7 @@ export function NotificationItemPresenter({ item }: Props) {
 			return <StatusAlertNotificationFragment {...object} />;
 		case DriverNotificationType.REBLOG:
 		case DriverNotificationType.RENOTE:
+		case DriverNotificationType.REPOST:
 			return <BoostNotificationFragment {...object} />;
 		case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED:
 			return <FollowReqAcceptNotificationFragment {...object} />;

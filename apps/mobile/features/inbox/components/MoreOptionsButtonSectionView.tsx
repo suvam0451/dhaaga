@@ -30,12 +30,6 @@ function MoreOptionsButtonSectionView({ createdAt, onPress }: Props) {
 			>
 				{DatetimeUtil.timeAgo(createdAt)}
 			</AppText.Normal>
-			<AppIcon
-				id={'ellipsis-v'}
-				color={theme.secondary.a40}
-				size={20}
-				iconStyle={{ paddingRight: 6 }}
-			/>
 		</Pressable>
 	);
 }

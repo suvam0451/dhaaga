@@ -123,6 +123,13 @@ function getSocialNotificationsQueryOpts(
 				client.server!,
 				'social',
 			);
+		} else if (DriverService.supportsAtProto(client.driver)) {
+			return GroupedNotificationParser.parseForBluesky(
+				result,
+				client,
+				client.driver,
+				client.server!,
+			);
 		} else {
 			throw new Error('unsupported driver');
 		}

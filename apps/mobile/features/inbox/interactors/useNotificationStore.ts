@@ -1,4 +1,3 @@
-import useAppPaginator from '#/hooks/app/useAppPaginator';
 import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
 import {
 	InboxStateAction,
@@ -12,8 +11,7 @@ import { useEffect } from 'react';
  * Help manage notifications for
  * an inbox category
  */
-function useNotificationStore() {
-	const { lastId, loadNext, MaxId, reset: resetPaginator } = useAppPaginator();
+function useNotificationStore(minResultsToShow: number = 25) {
 	const state = useInboxState();
 	const dispatch = useInboxDispatch();
 	const { acct } = useActiveUserSession();
@@ -30,21 +28,35 @@ function useNotificationStore() {
 				page,
 			},
 		});
-		lastId.current = page.maxId;
 	}
+
+	useEffect(() => {
+		if (state.items.length < minResultsToShow && !state.endOfList) {
+			dispatch({
+				type: InboxStateAction.LOAD_NEXT_PAGE,
+			});
+		}
+	}, [state.maxId]);
 
 	function reset() {
 		dispatch({
 			type: InboxStateAction.RESET,
 		});
-		resetPaginator();
+	}
+
+	function loadNext() {
+		if (!state.endOfList) {
+			dispatch({
+				type: InboxStateAction.LOAD_NEXT_PAGE,
+			});
+		}
 	}
 
 	return {
 		state,
 		append: appendNotifications,
 		loadNext,
-		maxId: MaxId,
+		maxId: state.appliedMaxId,
 		reset,
 	};
 }

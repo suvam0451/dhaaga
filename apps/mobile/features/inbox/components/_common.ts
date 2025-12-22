@@ -54,21 +54,18 @@ export const styles = StyleSheet.create({
 		borderColor: 'black',
 		borderWidth: 3,
 	},
-	senderAvatarContainer: {
-		width: ICON_SIZE + 2,
-		height: ICON_SIZE + 2,
-		position: 'relative',
-		borderWidth: 1,
-		borderColor: 'grey',
-		borderRadius: ICON_SIZE / 2,
-	} /**
+	/**
 	 * Shows createdAt and ellipsis icon
-	 */,
+	 */
 	moreOptionsButtonContainer: {
 		paddingHorizontal: 4,
 		paddingLeft: 16,
 		flexDirection: 'row',
 		height: '100%',
 		alignItems: 'center',
+	},
+	timeAgo: {
+		fontSize: 13,
+		marginBottom: 'auto',
 	},
 });

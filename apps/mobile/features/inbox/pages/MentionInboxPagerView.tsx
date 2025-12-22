@@ -46,7 +46,7 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 }
 
 function MentionInboxPagerView() {
-	const { maxId } = useNotificationStore();
+	const { maxId } = useNotificationStore(10);
 	const queryResult = useApiGetMentionUpdates(maxId);
 
 	return (
