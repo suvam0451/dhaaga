@@ -15,13 +15,13 @@ const dir = __dirname;
 function stripLicensedAssets() {
 	if (!['skinned', 'dev'].includes(process.env.APP_VARIANT))
 		fs.renameSync(
-			path.join(dir, 'WithBackgroundSkin.tsx'),
-			path.join(dir, 'archived.bak'),
+			path.join(dir, '../components/containers/WithBackgroundSkin.tsx'),
+			path.join(dir, '../components/containers/archived.bak'),
 		);
 
 	fs.renameSync(
-		path.join(dir, 'WithBackgroundSkin.lite.tsx'),
-		path.join(dir, 'WithBackgroundSkin.tsx'),
+		path.join(dir, '../components/containers/WithBackgroundSkin.lite.tsx'),
+		path.join(dir, '../components/containers/WithBackgroundSkin.tsx'),
 	);
 }
 
