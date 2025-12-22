@@ -85,6 +85,9 @@ export class LocalizationService {
 			case DriverNotificationType.MENTION: {
 				return t(`inbox.summary.mentioned`);
 			}
+			case DriverNotificationType.QUOTE: {
+				return 'Quoted Your Post';
+			}
 		}
 	}
 }

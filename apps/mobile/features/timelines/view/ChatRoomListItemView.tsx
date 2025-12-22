@@ -28,7 +28,7 @@ function ChatRoomListItemView({ room }: Props) {
 			style={[
 				styles.root,
 				{
-					backgroundColor: theme.background.a30,
+					backgroundColor: theme.background.a10,
 				},
 			]}
 			onPress={onPress}
@@ -39,10 +39,7 @@ function ChatRoomListItemView({ room }: Props) {
 					alignItems: 'center',
 				}}
 			>
-				<Image
-					source={{ uri: partner.avatar }}
-					style={{ width: 54, height: 54, borderRadius: 27, marginRight: 8 }}
-				/>
+				<Image source={{ uri: partner.avatar }} style={styles.avatar} />
 				<View style={{ flex: 1 }}>
 					<NativeTextBold style={{ fontSize: 16 }}>
 						{partner.displayName ?? partner.handle}
@@ -56,7 +53,7 @@ function ChatRoomListItemView({ room }: Props) {
 					{room.lastMessage.senderId === data.id ? (
 						<View>
 							<NativeTextNormal
-								style={{ marginTop: 6, flex: 1 }}
+								style={styles.lastMessageText}
 								numberOfLines={1}
 							>
 								<NativeTextBold style={{ marginTop: 6, color: theme.primary }}>
@@ -66,10 +63,7 @@ function ChatRoomListItemView({ room }: Props) {
 							</NativeTextNormal>
 						</View>
 					) : (
-						<NativeTextNormal
-							style={{ marginTop: 6, flex: 1 }}
-							numberOfLines={1}
-						>
+						<NativeTextNormal style={styles.lastMessageText} numberOfLines={1}>
 							{room.lastMessage.content.raw}
 						</NativeTextNormal>
 					)}
@@ -95,5 +89,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		borderRadius: 12,
 		paddingVertical: 6,
+	},
+	avatar: {
+		width: 54,
+		height: 54,
+		borderRadius: 27,
+		marginRight: 8,
+	},
+	lastMessageText: {
+		marginTop: 4,
+		flex: 1,
 	},
 });

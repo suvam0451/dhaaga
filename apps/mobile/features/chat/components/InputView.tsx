@@ -1,4 +1,4 @@
-import { TextInput, View } from 'react-native';
+import { TextInput, View, StyleSheet } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -22,26 +22,34 @@ function InputView({ setHeight, text, setText, ref }: Props) {
 				ref={ref}
 				placeholder={t(`chatroom.sendInterfacePlaceholder`)}
 				multiline={true}
-				placeholderTextColor={theme.secondary.a30}
+				placeholderTextColor={theme.primaryText}
 				onContentSizeChange={(e) => {
 					// const _height = e.nativeEvent.contentSize.height;
 					// setHeight(Math.min(MAX_HEIGHT, _height)); // Update height based on content
 				}}
 				onChangeText={setText}
 				value={text}
-				style={{
-					textDecorationLine: 'none',
-					flex: 1,
-					borderRadius: 12,
-					backgroundColor: '#242424',
-					paddingVertical: 8,
-					paddingLeft: 12,
-					marginLeft: 6,
-					color: theme.secondary.a20,
-				}}
+				style={[
+					styles.root,
+					{
+						backgroundColor: theme.primary,
+						color: theme.primaryText,
+					},
+				]}
 			/>
 		</View>
 	);
 }
 
 export default InputView;
+
+const styles = StyleSheet.create({
+	root: {
+		textDecorationLine: 'none',
+		flex: 1,
+		borderRadius: 12,
+		paddingVertical: 8,
+		paddingLeft: 12,
+		marginLeft: 6,
+	},
+});

@@ -19,7 +19,6 @@ function MentionNotificationFragment({
 				notificationType={DriverNotificationType.MENTION}
 				createdAt={createdAt}
 				extraData={extraData}
-				noIcon
 			/>
 			<NotificationPostPeek post={post} />
 		</View>

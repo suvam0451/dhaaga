@@ -30,18 +30,18 @@ function ReplyComposerView({ roomId, listRef }: Props) {
 			style={[
 				styles.sendInterface,
 				{
-					backgroundColor: theme.background.a0,
+					backgroundColor: theme.background.a10,
 				},
 			]}
 		>
 			<AppDividerSoft style={{ height: 0.5 }} />
-			<View style={{ height: 'auto' }}>
-				<AppIcon
-					id={'chevron-right'}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-					size={28}
-				/>
-			</View>
+			{/*<View style={{ height: 'auto' }}>*/}
+			{/*	<AppIcon*/}
+			{/*		id={'chevron-right'}*/}
+			{/*		emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}*/}
+			{/*		size={28}*/}
+			{/*	/>*/}
+			{/*</View>*/}
 			<InputView
 				ref={inputRef}
 				height={height}
@@ -62,7 +62,7 @@ export default ReplyComposerView;
 
 const styles = StyleSheet.create({
 	sendInterface: {
-		// position: 'absolute',
+		position: 'absolute', // required for auto-resize
 		paddingVertical: 8,
 		paddingHorizontal: 10,
 		flexDirection: 'row',

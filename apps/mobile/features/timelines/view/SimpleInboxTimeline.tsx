@@ -71,7 +71,7 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 					/>
 				)}
 				ItemSeparatorComponent={() => (
-					<AppDividerSoft style={{ marginVertical: 12 }} />
+					<AppDividerSoft themed style={{ marginVertical: 4 }} />
 				)}
 				onEndReached={() => {
 					if (!isPending) loadNext();

@@ -9,6 +9,7 @@ function WithBackgroundSkin({ children }: any) {
 		require('#/assets/backdrops/christmas.jpeg'),
 		require('#/assets/backdrops/white_album.jpg'),
 		require('#/assets/backdrops/beast_within.jpg'),
+		require('#/assets/backdrops/kataware_doki.jpg'),
 	]);
 
 	const LOADED = !error && assets?.every((o) => o?.downloaded);
@@ -27,6 +28,8 @@ function WithBackgroundSkin({ children }: any) {
 				return assets[1].localUri;
 			case 'beast_within':
 				return assets[2].localUri;
+			case 'kataware_doki':
+				return assets[3].localUri;
 			case 'default':
 				return null;
 			default:

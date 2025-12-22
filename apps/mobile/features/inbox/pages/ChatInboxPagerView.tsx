@@ -56,7 +56,7 @@ function ChatInboxPagerView() {
 					<RefreshControl refreshing={IsRefreshing} onRefresh={refresh} />
 				}
 				ItemSeparatorComponent={() => (
-					<AppDividerSoft style={{ marginVertical: 10 }} />
+					<AppDividerSoft themed style={{ marginVertical: 8 }} />
 				)}
 				ListEmptyComponent={
 					driver !== KNOWN_SOFTWARE.BLUESKY ? <FeatureNotAvailable /> : <View />

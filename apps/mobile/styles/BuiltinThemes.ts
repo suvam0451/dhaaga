@@ -149,4 +149,33 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			highlight: '#f8d3e4',
 		},
 	},
+	{
+		id: 'kataware_doki',
+		name: 'Kataware Doki',
+		barStyle: 'light-content',
+		primary: '#fcaf88',
+		primaryText: '#000000',
+		complementary: '#90CEEE',
+		background: {
+			a0: '#4f0b3f',
+			a10: '#5c1648',
+			a20: '#692254',
+			a30: '#762e5f',
+			a40: '#823a69',
+			a50: '#853963',
+		},
+		secondary: {
+			a0: '#fef1b7',
+			a10: '#f9deb2',
+			a20: '#efc7b1',
+			a30: '#d9a4b2',
+			a40: '#b881a1',
+			a50: '#9d7290',
+		},
+		reactions: {
+			active: '#492916',
+			inactive: '#301515',
+			highlight: '#f8d3e4',
+		},
+	},
 ];

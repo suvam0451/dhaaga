@@ -7,6 +7,7 @@ import { NativeTextBold } from '#/ui/NativeText';
 import { AppDividerSoft } from '#/ui/Divider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '#/states/global/hooks';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type SkinPreviewObjectType = {
 	id: string;
@@ -30,7 +31,7 @@ type SkinPreviewObjectType = {
 };
 
 function SkinSelectionPage() {
-	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	const { setSkin } = useAppTheme();
 
 	const items: SkinPreviewObjectType[] = [
@@ -74,26 +75,26 @@ function SkinSelectionPage() {
 			hasIconPack: true,
 			hasWallpaper: true,
 		},
-		{
-			id: 'white_album',
-			name: 'White Album',
-			statusBar: 'light-content',
-			bg: '#fffdf8', // #eec665, #eaeada
-			bgFinal: '#73acbf',
-			primary: '#f9ba4f',
-			complementary: '#9f4c5d',
-			text0: '#134358', // #91954a, 56563c
-			text10: '#15487F',
-			text20: '#174D66',
-			text30: '#19526D',
-			text40: '#1B5774',
-			text50: '#1B5D79',
-			isDarkMode: false,
-			hasCustomSkin: false,
-			hasTransparency: false,
-			hasIconPack: false,
-			hasWallpaper: false,
-		},
+		// {
+		// 	id: 'white_album',
+		// 	name: 'White Album',
+		// 	statusBar: 'light-content',
+		// 	bg: '#fffdf8', // #eec665, #eaeada
+		// 	bgFinal: '#73acbf',
+		// 	primary: '#f9ba4f',
+		// 	complementary: '#9f4c5d',
+		// 	text0: '#134358', // #91954a, 56563c
+		// 	text10: '#15487F',
+		// 	text20: '#174D66',
+		// 	text30: '#19526D',
+		// 	text40: '#1B5774',
+		// 	text50: '#1B5D79',
+		// 	isDarkMode: false,
+		// 	hasCustomSkin: false,
+		// 	hasTransparency: false,
+		// 	hasIconPack: false,
+		// 	hasWallpaper: false,
+		// },
 		{
 			id: 'white_album_2',
 			name: 'White Album 2',
@@ -136,7 +137,7 @@ function SkinSelectionPage() {
 		},
 		{
 			id: 'sunset',
-			name: 'Sunset',
+			name: 'Empire of Sun',
 			statusBar: 'light-content',
 			bg: '#fcfb9b',
 			bgFinal: '#eec665',
@@ -166,7 +167,7 @@ function SkinSelectionPage() {
 		// },
 		{
 			id: 'beast_within',
-			name: 'Beast Within',
+			name: 'Moon Covenant',
 			statusBar: 'light-content',
 			bg: '#121212',
 			bgFinal: '#182629',
@@ -192,7 +193,7 @@ function SkinSelectionPage() {
 
 	return (
 		<WithBackgroundSkin>
-			<NavBar_Simple label={'Skins'} animatedStyle={animatedStyle} />
+			<NavBar_Simple label={'App Skins'} animatedStyle={animatedStyle} />
 			<FlatList
 				data={items}
 				renderItem={({ item }) => (

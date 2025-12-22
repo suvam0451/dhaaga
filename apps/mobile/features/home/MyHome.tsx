@@ -31,6 +31,7 @@ import AccountMissingError from '#/features/home/views/AccountMissingError';
 import MyAccountOverview from '#/features/home/components/MyAccountOverview';
 import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
 import RoutingUtils from '#/utils/routing.utils';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 function Home() {
 	const { theme } = useAppTheme();
@@ -192,15 +193,17 @@ function MyHome() {
 	}, [session]);
 
 	return (
-		<View
-			style={{
-				flex: 1,
-				backgroundColor: theme.background.a0,
-			}}
-		>
-			<NavBar_Home menuItems={MENU_ITEMS} />
-			{Component}
-		</View>
+		<WithBackgroundSkin>
+			<View
+				style={{
+					flex: 1,
+					// backgroundColor: theme.background.a0,
+				}}
+			>
+				<NavBar_Home menuItems={MENU_ITEMS} />
+				{Component}
+			</View>
+		</WithBackgroundSkin>
 	);
 }
 

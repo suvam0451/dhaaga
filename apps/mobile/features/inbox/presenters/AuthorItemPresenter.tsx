@@ -3,6 +3,7 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '#/states/global/hooks';
+import type { PostAuthorType, UserObjectType } from '@dhaaga/bridge';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { useMemo } from 'react';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
@@ -15,7 +16,6 @@ import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '#/services/localization.service';
 import { AppIcon } from '#/components/lib/Icon';
 import useAppNavigator from '#/states/useAppNavigator';
-import type { UserObjectType, PostAuthorType } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 
 type Props = {
@@ -43,115 +43,91 @@ function AuthorItemPresenter({
 
 	const desc = LocalizationService.notificationLabel(t, notificationType);
 
-	const { Icon, bg } = useMemo(() => {
+	const Icon = useMemo(() => {
 		switch (notificationType) {
 			case DriverNotificationType.FAVOURITE: {
-				return {
-					Icon: (
-						<AppIcon
-							id="heart"
-							size={NOTIFICATION_TYPE_ICON_SIZE}
-							color="#ed4999"
-						/>
-					),
-					bg: '#1f1f1f',
-				};
+				return (
+					<AppIcon
+						id="heart"
+						size={NOTIFICATION_TYPE_ICON_SIZE}
+						color={theme.primaryText}
+					/>
+				);
 			}
 			case DriverNotificationType.REBLOG:
 			case DriverNotificationType.RENOTE: {
-				return {
-					Icon: (
-						<AppIcon
-							id={'sync-outline'}
-							color={'white'}
-							size={NOTIFICATION_TYPE_ICON_SIZE}
-						/>
-					),
-					bg: '#34d299',
-				};
+				return (
+					<AppIcon
+						id={'sync-outline'}
+						color={theme.primaryText}
+						size={NOTIFICATION_TYPE_ICON_SIZE}
+					/>
+				);
 			}
 			case DriverNotificationType.FOLLOW: {
-				return {
-					Icon: (
-						<AppIcon
-							id="add"
-							size={NOTIFICATION_TYPE_ICON_SIZE}
-							color="white"
-						/>
-					),
-					bg: '#34aed2',
-				};
+				return (
+					<AppIcon
+						id="add"
+						size={NOTIFICATION_TYPE_ICON_SIZE}
+						color={theme.primaryText}
+					/>
+				);
 			}
 			case DriverNotificationType.FOLLOW_REQUEST_ACCEPTED: {
-				return {
-					Icon: (
-						<AppIcon
-							id="checkmark"
-							size={NOTIFICATION_TYPE_ICON_SIZE}
-							color="white"
-						/>
-					),
-					bg: '#34aed2',
-				};
+				return (
+					<AppIcon
+						id="checkmark"
+						size={NOTIFICATION_TYPE_ICON_SIZE}
+						color={theme.primaryText}
+					/>
+				);
 			}
 			case DriverNotificationType.REACTION: {
 				const emoji = acctManager.resolveEmoji(extraData, new Map());
 
 				if (!emoji) {
-					return {
-						Icon: (
-							<FontAwesome6
-								name="question-circle"
-								size={16}
-								color={theme.secondary.a40}
-							/>
-						),
-						bg: '#242424',
-					};
-					// console.log('[WARN]: failed to resolve emoji', extraData);
-					// data = extraData;
+					return (
+						<FontAwesome6
+							name="question-circle"
+							size={16}
+							color={theme.secondary.a40}
+						/>
+					);
 				}
 
 				if (extraData?.length < 5) {
-					return {
-						Icon: <Text>{extraData}</Text>,
-						bg: '#242424',
-					};
+					return <Text>{extraData}</Text>;
 				} else {
-					return {
-						Icon: (
-							<Image
-								source={{ uri: emoji.url }}
-								style={{ height: 18, width: 18 }}
-							/>
-						),
-						bg: '#242424',
-					};
+					return (
+						<Image
+							source={{ uri: emoji.url }}
+							style={{ height: 18, width: 18 }}
+						/>
+					);
 				}
 			}
 			case DriverNotificationType.REPLY:
+				return (
+					<AppIcon
+						id={'arrow-redo-outline'}
+						size={16}
+						color={theme.complementary}
+					/>
+				);
 			case DriverNotificationType.MENTION: {
-				return {
-					Icon: (
-						<Octicons name="mention" size={16} color={theme.secondary.a20} />
-					),
-					bg: 'purple',
-				};
+				return (
+					<Octicons name="mention" size={16} color={theme.complementary} />
+				);
 			}
 			case DriverNotificationType.STATUS: {
-				return {
-					Icon: (
-						<FontAwesome6 name="rss" size={16} color={theme.secondary.a20} />
-					),
-					bg: 'purple',
-				};
+				return (
+					<FontAwesome6 name="rss" size={16} color={theme.secondary.a20} />
+				);
 			}
-			default: {
-				return {
-					Icon: <Octicons name="mention" size={24} color="black" />,
-					bg: '#1f1f1f',
-				};
-			}
+			case DriverNotificationType.QUOTE:
+				return <AppIcon id={'quote'} size={16} color={theme.complementary} />;
+			default:
+				return <Octicons name="mention" size={24} color="black" />;
 		}
 	}, [notificationType, extraData, acctManager]);
 
@@ -178,7 +154,6 @@ function AuthorItemPresenter({
 			extraData={extraData}
 			createdAt={createdAt}
 			Icon={noIcon ? null : Icon}
-			bg={bg}
 			desc={desc}
 			onAvatarPressed={onAvatarPressed}
 			onUserPressed={onUserPressed}

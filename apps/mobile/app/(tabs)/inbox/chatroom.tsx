@@ -88,7 +88,7 @@ function Generator() {
 				renderItem={({ item }) => <Message message={item} />}
 				contentContainerStyle={{
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
-					// paddingBottom: appDimensions.bottomNav.secondMenuBarHeight + 4,
+					paddingBottom: appDimensions.bottomNav.secondMenuBarHeight + 4,
 				}}
 				style={{ flex: 1, backgroundColor: theme.background.a0 }}
 				ListEmptyComponent={

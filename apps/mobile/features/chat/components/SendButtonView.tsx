@@ -23,7 +23,12 @@ function SendButtonView({ isSending, onSend, isEnabled }: Props) {
 			{isSending ? (
 				<ActivityIndicator color={theme.primaryText} />
 			) : (
-				<FontAwesome name="send" size={20} color={'black'} onPress={onSend} />
+				<FontAwesome
+					name="send"
+					size={20}
+					color={theme.primaryText}
+					onPress={onSend}
+				/>
 			)}
 		</Pressable>
 	);

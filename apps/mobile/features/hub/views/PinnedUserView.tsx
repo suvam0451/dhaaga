@@ -15,13 +15,7 @@ function PinnedUserView({ item, onPress, onLongPress }: Props) {
 	const { theme } = useAppTheme();
 	return (
 		<Pressable
-			style={{
-				flex: 1,
-				marginBottom: 8,
-				maxWidth: '25%',
-				width: 72,
-				height: 72,
-			}}
+			style={styles.root}
 			onPress={() => {
 				onPress(item);
 			}}
@@ -30,59 +24,57 @@ function PinnedUserView({ item, onPress, onLongPress }: Props) {
 			}}
 		>
 			<MaskedView
-				maskElement={
-					<View
-						pointerEvents="none"
-						style={[
-							{
-								borderWidth: 1.75,
-								borderRadius: '100%',
-								height: 72,
-								width: 72,
-								margin: 'auto',
-							},
-						]}
-					/>
-				}
+				maskElement={<View pointerEvents="none" style={styles.maskedArea} />}
 				style={[StyleSheet.absoluteFill]}
 			>
 				<LinearGradient
-					colors={['red', 'orange']}
+					colors={[theme.complementary, theme.primary]}
 					pointerEvents="none"
-					style={{ height: 92, width: 92 }}
+					style={styles.gradientArea}
 				/>
 			</MaskedView>
-			<View
-				style={{
-					width: 62,
-					height: 62,
-					margin: 'auto', // alignSelf: 'center',
-					justifyContent: 'center',
-				}}
-			>
-				<View
-					style={{
-						borderRadius: '100%',
-						overflow: 'hidden',
-						borderColor: theme.complementary,
-						opacity: 0.78,
+			<View style={styles.avatarArea}>
+				<Image
+					source={{
+						uri: item.avatarUrl,
 					}}
-				>
-					{/*@ts-ignore-next-line*/}
-					<Image
-						source={{
-							uri: item.avatarUrl,
-						}}
-						style={{
-							borderRadius: 62 / 2,
-							width: 62,
-							height: 62,
-						}}
-					/>
-				</View>
+					style={styles.image}
+				/>
 			</View>
 		</Pressable>
 	);
 }
 
 export default PinnedUserView;
+
+const styles = StyleSheet.create({
+	root: {
+		flex: 1,
+		marginBottom: 8,
+		maxWidth: '25%',
+		width: 72,
+		height: 72,
+	},
+	maskedArea: {
+		borderWidth: 1.75,
+		borderRadius: '100%',
+		height: 72,
+		width: 72,
+		margin: 'auto',
+	},
+	gradientArea: {
+		height: 92,
+		width: 92,
+	},
+	avatarArea: {
+		width: 62,
+		height: 62,
+		margin: 'auto',
+		justifyContent: 'center',
+	},
+	image: {
+		borderRadius: 62 / 2,
+		width: 62,
+		height: 62,
+	},
+});

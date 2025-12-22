@@ -13,7 +13,8 @@ function ThemedReplyContextLine() {
 	switch (theme.id) {
 		case 'christmas':
 		case 'winter':
-		case 'white-album':
+		case 'white_album':
+		case 'white_album_2':
 			return (
 				<View style={styles.root}>
 					<View onLayout={onLayout} style={styles.christmasCane}>

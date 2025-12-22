@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { StatusBar, StyleProp, View, ViewStyle } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { Account } from '@dhaaga/db';
 import {
 	useActiveUserSession,

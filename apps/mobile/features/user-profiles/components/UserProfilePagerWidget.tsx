@@ -39,7 +39,7 @@ function UserProfilePagerWidget({
 			style={[
 				styles.root,
 				{
-					backgroundColor: '#181818',
+					backgroundColor: theme.background.a20,
 				},
 				animatedStyle,
 			]}
@@ -77,10 +77,8 @@ const styles = StyleSheet.create({
 	root: {
 		height: TAB_BAR_HEIGHT,
 		width: '100%',
-		backgroundColor: '#181818',
 		flexDirection: 'row',
 		borderBottomWidth: 1,
-		borderColor: '#333',
 		zIndex: 20,
 	},
 	buttonContainer: {

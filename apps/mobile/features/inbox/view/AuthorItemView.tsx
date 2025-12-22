@@ -1,14 +1,12 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Image } from 'expo-image';
-import { ICON_SIZE } from '../components/_common';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import { useAppTheme } from '#/states/global/hooks';
-import { AppText } from '#/components/lib/Text';
 import { appDimensions } from '#/styles/dimensions';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { AppIcon } from '#/components/lib/Icon';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
+import Avatar from '#/ui/Avatar';
 
 type Props = {
 	handle: string;
@@ -17,7 +15,6 @@ type Props = {
 	extraData?: any;
 	createdAt: Date | string;
 	Icon: any;
-	bg: string;
 	emojiMap: Map<string, string>;
 	desc: string;
 	onAvatarPressed: () => void;
@@ -33,7 +30,6 @@ export function AuthorItemView({
 	avatarUrl,
 	createdAt,
 	Icon,
-	bg,
 	emojiMap,
 	desc,
 	onAvatarPressed,
@@ -45,35 +41,9 @@ export function AuthorItemView({
 	const { theme } = useAppTheme();
 
 	return (
-		<View
-			style={{
-				flexDirection: 'row',
-				flex: 1,
-				alignItems: 'center',
-				marginBottom: appDimensions.timelines.sectionBottomMargin,
-			}}
-		>
-			<Pressable style={styles.senderAvatarContainer} onPress={onAvatarPressed}>
-				<Image
-					source={{
-						uri: avatarUrl,
-					}}
-					style={{
-						width: ICON_SIZE,
-						height: ICON_SIZE,
-						borderRadius: ICON_SIZE / 2,
-					}}
-				/>
-				<View
-					style={[
-						styles.notificationCategoryIconContainer,
-						{ backgroundColor: bg || '#1f1f1f' },
-					]}
-				>
-					{Icon}
-				</View>
-			</Pressable>
-			<Pressable style={{ marginLeft: 12, flex: 1 }} onPress={onUserPressed}>
+		<View style={styles.root}>
+			<Avatar uri={avatarUrl} onPressed={onAvatarPressed} />
+			<Pressable style={{ marginLeft: 8, flex: 1 }} onPress={onUserPressed}>
 				{parsedDisplayName.length > 0 ? (
 					<TextAstRendererView
 						tree={parsedDisplayName}
@@ -81,41 +51,32 @@ export function AuthorItemView({
 						mentions={[]}
 						emojiMap={emojiMap}
 						oneLine
-						style={{
-							marginRight: 16,
-							marginBottom: appDimensions.timelines.sectionBottomMargin * 0.25,
-						}}
 					/>
 				) : (
-					<AppText.SemiBold>{handle}</AppText.SemiBold>
+					<NativeTextBold>{handle}</NativeTextBold>
 				)}
-				<AppText.Normal
-					style={{ fontSize: 13.5 }}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-				>
-					{desc}
-				</AppText.Normal>
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<View style={[styles.notificationCategoryIconContainer, {}]}>
+						{Icon}
+					</View>
+					<NativeTextNormal
+						style={{ fontSize: 13.5, color: theme.secondary.a40 }}
+					>
+						{desc}
+					</NativeTextNormal>
+				</View>
 			</Pressable>
-			<Pressable
-				style={{
-					height: '100%',
-					paddingTop: 4,
-					paddingHorizontal: 4,
-					paddingLeft: 16,
-					flexDirection: 'row',
-					alignItems: 'center',
-				}}
-				onPress={onMoreOptionsPressed}
-			>
-				<AppText.Normal
-					style={{
-						color: theme.secondary.a40,
-						marginRight: 8,
-						fontSize: 13,
-					}}
+			<Pressable style={styles.timeAgoContainer} onPress={onMoreOptionsPressed}>
+				<NativeTextNormal
+					style={[
+						styles.timeAgo,
+						{
+							color: theme.secondary.a40,
+						},
+					]}
 				>
 					{DatetimeUtil.timeAgo(createdAt)}
-				</AppText.Normal>
+				</NativeTextNormal>
 				{extraData?.interaction?.liked ? (
 					<AppIcon id={'heart'} size={28} color={theme.primary} />
 				) : (
@@ -127,22 +88,25 @@ export function AuthorItemView({
 }
 
 const styles = StyleSheet.create({
-	senderAvatarContainer: {
-		width: ICON_SIZE + 2,
-		height: ICON_SIZE + 2,
-		position: 'relative',
-		borderWidth: 1,
-		borderColor: 'grey',
-		borderRadius: ICON_SIZE / 2,
+	root: {
+		flexDirection: 'row',
+		flex: 1,
+		alignItems: 'center',
+		marginBottom: appDimensions.timelines.sectionBottomMargin,
 	},
 	notificationCategoryIconContainer: {
-		position: 'absolute',
-		zIndex: 99,
-		bottom: -9,
-		right: -9,
-		padding: 0.5,
-		borderRadius: 32,
-		borderColor: 'black',
-		borderWidth: 3,
+		marginRight: 4,
+	},
+	timeAgoContainer: {
+		height: '100%',
+		paddingTop: 4,
+		paddingHorizontal: 4,
+		paddingLeft: 16,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	timeAgo: {
+		fontSize: 13,
+		marginBottom: 'auto',
 	},
 });
