@@ -26,8 +26,6 @@ const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
  * radius and zero in marginTop
  */
 type StatusCoreProps = {
-	hasParent?: boolean;
-	hasBoost?: boolean;
 	isPreview?: boolean;
 	isPin?: boolean;
 	showFullDetails?: boolean;
@@ -100,7 +98,7 @@ function RootStatusView({
 	}
 
 	return (
-		<Fragment>
+		<>
 			<PinOrnament isPinned={isPin} />
 			<View
 				style={{
@@ -178,7 +176,7 @@ function RootStatusView({
 			{isPreview ? <View /> : <EmojiReactions dto={_target} />}
 			{isPreview ? <View /> : <PostActionButtonRowView />}
 			{showFullDetails ? <PostFullDetails dto={dto} /> : <View />}
-		</Fragment>
+		</>
 	);
 }
 

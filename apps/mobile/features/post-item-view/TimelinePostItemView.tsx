@@ -28,10 +28,18 @@ function AncestorFragment() {
 	 * the parent post may be a reply itself
 	 * */
 	const IS_PARENT_ALSO_ROOT = dto.rootPost?.id === dto.replyTo?.id;
+
+	const HAS_GRANDPARENT = dto.rootPost && !IS_PARENT_ALSO_ROOT;
+	// if (HAS_GRANDPARENT) {
+	// 	console.log('root post', dto.rootPost);
+	// }
+
 	return (
 		<Fragment>
-			{dto.rootPost && !IS_PARENT_ALSO_ROOT && (
+			{HAS_GRANDPARENT ? (
 				<ParentPostView post={dto.rootPost} showReplyIndicator={false} />
+			) : (
+				<View />
 			)}
 			<ParentPostView post={dto.replyTo} showReplyIndicator={!dto.rootPost} />
 		</Fragment>
@@ -63,7 +71,6 @@ const Generator = memo(
 				if (!!_post.content.raw || _post.content.media.length > 0) {
 					return (
 						<RootStatusView
-							hasBoost={true}
 							isPreview={isPreview}
 							isPin={isPin}
 							showFullDetails={showFullDetails}
@@ -81,8 +88,6 @@ const Generator = memo(
 								/>
 								<AncestorFragment />
 								<RootStatusView
-									hasBoost={true}
-									hasParent={true}
 									isPreview={isPreview}
 									isPin={isPin}
 									showFullDetails={showFullDetails}
@@ -98,7 +103,6 @@ const Generator = memo(
 									createdAt={_post.createdAt}
 								/>
 								<RootStatusView
-									hasBoost={true}
 									isPreview={isPreview}
 									isPin={isPin}
 									showFullDetails={showFullDetails}
@@ -112,7 +116,6 @@ const Generator = memo(
 					<>
 						<AncestorFragment />
 						<RootStatusView
-							hasParent={true}
 							isPreview={isPreview}
 							isPin={isPin}
 							showFullDetails={showFullDetails}
@@ -120,7 +123,6 @@ const Generator = memo(
 					</>
 				);
 			} else {
-				console.log('[WARN]: could not resolve layout for the _post entry');
 				return (
 					<RootStatusView
 						isPreview={isPreview}

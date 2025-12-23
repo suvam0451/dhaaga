@@ -31,6 +31,7 @@ function UserPartialListItemView({ user }: Props) {
 				}}
 			>
 				<UserBadge
+					userId={user.id}
 					avatarUrl={user.avatarUrl}
 					displayName={user.displayName}
 					parsedDisplayName={user.parsedDisplayName}

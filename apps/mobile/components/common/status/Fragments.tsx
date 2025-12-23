@@ -7,8 +7,10 @@ import { DatetimeUtil } from '#/utils/datetime.utils';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { useAppTheme } from '#/states/global/hooks';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { PostMoreOptionsButton } from '#/components/common/status/_shared';
 
-type PostedByTextOneLineProps = {
+type Props = {
+	postId: string;
 	parsedText: AppParsedTextNodes;
 	altText: string;
 	driver: KNOWN_SOFTWARE;
@@ -25,33 +27,28 @@ type PostedByTextOneLineProps = {
  * @constructor
  */
 function PostedByTextOneLine({
+	postId,
 	parsedText,
 	driver,
 	createdAt,
 	altText,
-}: PostedByTextOneLineProps) {
+}: Props) {
 	if (driver === KNOWN_SOFTWARE.BLUESKY)
 		return (
 			<View style={timelineStyles.oneLineDisplayNameRoot}>
-				{parsedText ? (
-					<TextAstRendererView
-						tree={parsedText}
-						variant={'displayName'}
-						mentions={[]}
-						emojiMap={new Map()}
-					/>
-				) : (
-					<AppText.Medium>{altText}</AppText.Medium>
-				)}
-				<AppText.Normal
-					style={{
-						fontSize: 13,
-					}}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
-				>
-					{' • '}
-					{DatetimeUtil.timeAgo(createdAt)}
-				</AppText.Normal>
+				<View style={{ flex: 1 }}>
+					{parsedText ? (
+						<TextAstRendererView
+							tree={parsedText}
+							variant={'displayName'}
+							mentions={[]}
+							emojiMap={new Map()}
+						/>
+					) : (
+						<AppText.Medium>{altText}</AppText.Medium>
+					)}
+				</View>
+				<PostMoreOptionsButton postId={postId} createdAt={createdAt} />
 			</View>
 		);
 

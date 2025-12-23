@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
-import SeeMore from '../components/SeeMore';
 import ThumbnailView from '../views/ThumbnailView';
 import { userGalleryQueryOpts } from '@dhaaga/react';
 import type { PostMediaAttachmentType, PostObjectType } from '@dhaaga/bridge';
@@ -138,7 +137,6 @@ function ProfileGalleryModePresenter({ userId }: Props) {
 				<FlatList
 					ref={ListRef}
 					contentContainerStyle={{ paddingBottom: 8, height: 84 }}
-					ListFooterComponent={<SeeMore />}
 					horizontal={true}
 					data={MediaItems}
 					renderItem={({ item, index }) => (

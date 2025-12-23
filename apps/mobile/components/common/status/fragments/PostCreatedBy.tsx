@@ -1,11 +1,8 @@
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { useAppApiClient, useAppBottomSheet } from '#/states/global/hooks';
-import useAppNavigator from '#/states/useAppNavigator';
 import { AccountSavedUser } from '@dhaaga/db';
 import type { PostObjectType } from '@dhaaga/bridge';
-import { ActivityPubService } from '@dhaaga/bridge';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import UserBadge from '#/ui/UserBadge';
+import useSheetNavigation from '#/states/navigation/useSheetNavigation';
 
 type SavedPostCreatedByProps = {
 	user: AccountSavedUser;
@@ -29,9 +26,6 @@ export function SavedPostCreatedBy({
 	// resolve to handle and show modal
 	function onAvatarPressed() {}
 
-	// redirect to profile
-	function onProfilePressed() {}
-
 	if (!user) return <View />;
 
 	return (
@@ -48,11 +42,11 @@ export function SavedPostCreatedBy({
 			]}
 		>
 			<UserBadge
+				userId={user.identifier}
 				avatarUrl={user.avatarUrl}
 				displayName={user.displayName}
 				handle={user.username}
 				onAvatarPressed={onAvatarPressed}
-				onDisplayNamePressed={onProfilePressed}
 				style={style}
 			/>
 		</View>
@@ -70,54 +64,21 @@ type OriginalPosterProps = {
  * the bottom-most post-item
  */
 function PostCreatedBy({ style, post }: OriginalPosterProps) {
-	const { show } = useAppBottomSheet();
-	const { toProfile } = useAppNavigator();
-	const { driver } = useAppApiClient();
+	const { openUserProfileSheet } = useSheetNavigation();
 
 	function onAvatarClicked() {
-		let ctx = null;
-		if (ActivityPubService.blueskyLike(driver)) {
-			ctx = {
-				$type: 'user-preview',
-				use: 'did',
-				did: post?.postedBy?.id,
-			};
-		} else {
-			ctx = {
-				$type: 'user-preview',
-				use: 'userId',
-				userId: post?.postedBy?.id,
-			};
-		}
-		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, ctx);
-
-		// UserDivRef.current.measureInWindow((x, y, width, height) => {
-		// 	appManager.storage.setUserPeekModalData(STATUS_DTO.postedBy.id, {
-		// 		x,
-		// 		y,
-		// 		width,
-		// 		height,
-		// 	});
-		// 	refresh();
-		// 	setTimeout(() => {
-		// 		show();
-		// 	}, 100);
-		// });
-	}
-
-	function onProfileClicked() {
-		toProfile(post?.postedBy?.id);
+		openUserProfileSheet(post?.postedBy?.id);
 	}
 
 	return (
 		<UserBadge
+			userId={post.postedBy.id}
 			avatarUrl={post.postedBy.avatarUrl}
 			displayName={post.postedBy.displayName}
 			parsedDisplayName={post.postedBy.parsedDisplayName}
 			handle={post.postedBy.handle}
 			emojiMap={post.calculated.emojis}
 			onAvatarPressed={onAvatarClicked}
-			onDisplayNamePressed={onProfileClicked}
 			style={style}
 		/>
 	);

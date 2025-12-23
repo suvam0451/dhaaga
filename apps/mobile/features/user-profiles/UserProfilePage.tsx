@@ -7,11 +7,12 @@ import UserArtGallery from '#/features/user-profiles/modules/UserArtGallery';
 import PagerView from 'react-native-pager-view';
 import UserProfilePostsView from '#/features/user-profiles/modules/UserProfilePostsView';
 import UserProfilePagerWidget from '#/features/user-profiles/components/UserProfilePagerWidget';
-import UserProfileMiscellaneous from '#/features/user-profiles/modules/UserProfileMiscellaneous';
+import UserProfileMiscView from '#/features/user-profiles/modules/UserProfileMiscView';
 import { DriverService } from '@dhaaga/bridge';
 import UserProfileRepliesView from '#/features/user-profiles/modules/UserProfileRepliesView';
 import useCollapsibleHeaderWithStickyPagerViewTabs from '#/ui/anim/useCollapsibleHeaderWithStickyPagerViewTabs';
 import UserProfileHeaderCard from '#/features/user-profiles/components/UserProfileHeaderCard';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 
 const TABS = ['gallery', 'pin-octicons', 'gallery', 'gallery'];
 
@@ -82,12 +83,13 @@ export function UserProfilePage() {
 				);
 			case 3:
 				return (
-					<UserProfileMiscellaneous
+					<UserProfileMiscView
 						forwardedRef={(ref: any) => {
 							listsRef.current[index] = ref;
 						}}
 						userId={profileId}
 						onScroll={onScroll}
+						headerHeight={headerHeight}
 					/>
 				);
 		}
@@ -99,12 +101,7 @@ export function UserProfilePage() {
 	if (!acct)
 		return <View style={{ flex: 1, backgroundColor: theme.background.a0 }} />;
 	return (
-		<View
-			style={{
-				backgroundColor: theme.background.a0,
-				flex: 1,
-			}}
-		>
+		<WithBackgroundSkin>
 			{/* DYNAMIC HEADER */}
 			<UserProfileHeaderCard
 				acct={acct}
@@ -131,7 +128,7 @@ export function UserProfilePage() {
 					</View>
 				))}
 			</PagerView>
-		</View>
+		</WithBackgroundSkin>
 	);
 }
 

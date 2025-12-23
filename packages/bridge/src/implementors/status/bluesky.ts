@@ -122,6 +122,20 @@ class AtprotoPostAdapter implements PostTargetInterface {
 	}
 
 	getRepostedStatusRaw(): any {
+		if (
+			this.post.uri ===
+				'at://did:plc:iqk7tmzyrrczk7rnhqds63l3/app.bsky.feed.post/3m47nor6wqk26' ||
+			this.post.uri ===
+				'at://did:plc:c5rh46ed6kpelxloeaycpsb7/app.bsky.feed.post/3m2tpa67rn22n'
+		) {
+			console.log(
+				'embed type for',
+				this.post?.uri,
+				'is',
+				this.post?.embed?.$type,
+			);
+		}
+
 		if (this.isShare()) {
 			/**
 			 * by returning only the post-record
@@ -140,6 +154,16 @@ class AtprotoPostAdapter implements PostTargetInterface {
 				}
 				case 'app.bsky.embed.record#view': {
 					const _embed = this.post.embed as AppBskyEmbedRecord.View;
+
+					if (
+						this.post.uri ===
+						'at://did:plc:iqk7tmzyrrczk7rnhqds63l3/app.bsky.feed.post/3m47nor6wqk26'
+					) {
+						console.log('returned post in question', _embed.record);
+						// console.log('post in question', this.post);
+						// console.log('embed in question', this.post.embed);
+					}
+
 					return { post: _embed.record };
 				}
 				default:
@@ -188,6 +212,8 @@ class AtprotoPostAdapter implements PostTargetInterface {
 		this.post.embed !== undefined &&
 		(this.post.embed.$type === 'app.bsky.embed.record#view' ||
 			this.post.embed.$type === 'app.bsky.embed.recordWithMedia#view');
+	// && '$type': 'app.bsky.feed.defs#postView';
+
 	isShare = () => this.reason?.$type === 'app.bsky.feed.defs#reasonRepost';
 
 	isReposted = () => this.isShare() || this.isQuote();

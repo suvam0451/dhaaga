@@ -130,6 +130,7 @@ class Parser {
 				sensitive: input.getIsSensitive(),
 				cw: input.getSpoilerText() || null,
 				isBoost: input.isReposted(),
+				isQuote: input.isReposted(),
 				isReply: input.isReply(),
 				mentions: input.getMentions(),
 				cid: input.getCid(),
@@ -192,6 +193,14 @@ class Parser {
 		let sharedFrom: z.infer<typeof ActivityPubStatusItemDto> | null = IS_SHARE
 			? Parser.parse(input.getRepostedStatusRaw(), driver, server)
 			: null;
+		if (
+			input.getUri() ===
+				'at://did:plc:iqk7tmzyrrczk7rnhqds63l3/app.bsky.feed.post/3m47nor6wqk26' ||
+			input.getUri() ===
+				'at://did:plc:c5rh46ed6kpelxloeaycpsb7/app.bsky.feed.post/3m2tpa67rn22n'
+		) {
+			console.log('shared from', sharedFrom);
+		}
 
 		// Null for Mastodon
 		let replyTo: z.infer<typeof ActivityPubStatusItemDto> | null = HAS_PARENT
@@ -223,9 +232,16 @@ class Parser {
 
 		const { data, error, success } = postObjectSchema.safeParse(dto);
 		if (!success) {
-			console.log('[ERROR]: status item dto validation failed', error);
+			// not expected to parse
+			console.log(input.getRaw() as any);
+			if (
+				(input.getRaw() as any)?.$type === 'app.bsky.embed.record#viewNotFound'
+			)
+				return null;
+
+			console.log('[ERROR]: status item dto validation failed', error, dto.id);
 			// console.log('[INFO]: generated object', dto);
-			// input.print();
+			input.print();
 			return null;
 		}
 		return data as PostObjectType;
@@ -300,8 +316,18 @@ class Inspector {
 			return input;
 		}
 		if (input.meta.isBoost && !input.boostedFrom) {
-			console.log('[WARN]: original object not available for a repost', input);
-			return input;
+			console.log(
+				'[WARN]: original object not available for a repost',
+				input.id,
+			);
+			// FIX: avoid trying to force render the boostedFrom object
+			return {
+				...input,
+				meta: {
+					...input.meta,
+					isBoost: false,
+				},
+			};
 		}
 		return input.meta.isBoost
 			? input.content.raw || input.content.media.length > 0

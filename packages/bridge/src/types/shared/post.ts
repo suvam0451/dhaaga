@@ -106,6 +106,7 @@ export const ActivityPubStatusItemDto = z.object({
 		sensitive: z.boolean(),
 		cw: z.string().nullable(),
 		isBoost: z.boolean(),
+		isQuote: z.boolean(),
 		isReply: z.boolean(),
 		mentions: z.array(
 			z.object({

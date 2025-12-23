@@ -44,9 +44,13 @@ function Generator({ showReplyIndicator }: Props) {
 		<View>
 			{showReplyIndicator ? <ReplyIndicatorOrnament /> : <View />}
 			<View style={timelineStyles.parentPostRootView}>
-				<PostCreatedByIconOnly dto={post} />
+				<PostCreatedByIconOnly
+					userId={post.postedBy.id}
+					avatarUrl={post.postedBy.avatarUrl}
+				/>
 				<View style={timelineStyles.parentPostContentView}>
 					<PostedByTextOneLine
+						postId={post.id}
 						parsedText={post.postedBy.parsedDisplayName}
 						altText={post.postedBy.handle}
 						driver={driver}
@@ -79,6 +83,11 @@ function Generator({ showReplyIndicator }: Props) {
 	);
 }
 
+/**
+ * @param post
+ * @param showReplyIndicator
+ * @constructor
+ */
 function ParentPostView({
 	post,
 	showReplyIndicator,

@@ -2,7 +2,7 @@ export const appDimensions = {
 	timelines: {
 		avatarIconSize: 40,
 		mediaPadding: 10,
-		sectionBottomMargin: 8,
+		sectionBottomMargin: 4,
 		actionButtonSize: 26,
 		moreOptionsButtonSize: 24,
 	},

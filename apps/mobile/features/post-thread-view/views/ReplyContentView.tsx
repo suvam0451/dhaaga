@@ -11,7 +11,6 @@ import { PostObjectType } from '@dhaaga/bridge';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
-import useAppNavigator from '#/states/useAppNavigator';
 import useSheetNavigation from '#/states/navigation/useSheetNavigation';
 import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import { useAppTheme } from '#/states/global/hooks';
@@ -23,7 +22,6 @@ type GeneratorProps = {
 
 function Generator({ setIsReplyThreadVisible, IsThreadShown }: GeneratorProps) {
 	const { dto } = withPostItemContext();
-	const { toProfile } = useAppNavigator();
 	const { openUserProfileSheet } = useSheetNavigation();
 	const { theme } = useAppTheme();
 
@@ -40,20 +38,16 @@ function Generator({ setIsReplyThreadVisible, IsThreadShown }: GeneratorProps) {
 		openUserProfileSheet(authorId);
 	}
 
-	function onProfileClicked() {
-		toProfile(authorId);
-	}
-
 	return (
 		<View style={{ backgroundColor: theme.background.a0, borderRadius: 12 }}>
 			<View style={[styles.root, {}]}>
 				<UserBadge
+					userId={authorId}
 					avatarUrl={dto.postedBy.avatarUrl}
 					displayName={dto.postedBy.displayName}
 					handle={dto.postedBy.handle}
 					style={{ marginBottom: 6 }}
 					onAvatarPressed={onAvatarClicked}
-					onDisplayNamePressed={onProfileClicked}
 				/>
 				<View
 					style={{
