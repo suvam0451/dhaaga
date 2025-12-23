@@ -7,9 +7,8 @@ import { ActivitypubStatusAdapter } from '../implementors/status/_adapters.js';
 import { PostTargetInterface } from '../implementors/index.js';
 import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 import AtprotoPostAdapter from '../implementors/status/bluesky.js';
-import { ActivitypubHelper, DriverUserFindQueryType } from '../index.js';
+import { ActivitypubHelper } from '../index.js';
 import {
-	PostMentionObjectType,
 	ActivityPubStatusItemDto,
 	postObjectSchema,
 	PostObjectType,
@@ -338,39 +337,4 @@ class Inspector {
 	}
 }
 
-class Resolver {
-	static mentionItemsToWebfinger(
-		handle: string,
-		items: PostMentionObjectType[],
-	): DriverUserFindQueryType | null {
-		const parts = handle.split('@').filter(Boolean); // Remove empty elements after splitting
-		if (parts.length === 1) {
-			/**
-			 * Mastodon has acct/url
-			 */
-			const match = items.find(
-				(o) => o.acct?.startsWith(parts[0]) && o.url?.endsWith(parts[0]),
-			);
-			if (match) {
-				return {
-					use: 'userId',
-					userId: match.id,
-				};
-			}
-		}
-		const match = items.find((o) => o.acct === `${parts[0]}@${parts[1]}`);
-		if (match) {
-			return {
-				use: 'userId',
-				userId: match.id,
-			};
-		}
-		return null;
-	}
-}
-
-export {
-	Parser as PostParser,
-	Inspector as PostInspector,
-	Resolver as PostResolver,
-};
+export { Parser as PostParser, Inspector as PostInspector };

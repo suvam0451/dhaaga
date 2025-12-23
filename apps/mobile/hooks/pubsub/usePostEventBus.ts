@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import type { PostObjectType } from '@dhaaga/bridge';
-import { useAppPublishers } from '#/states/global/hooks';
+import { PostObjectType, PostViewer } from '@dhaaga/bridge';
+import { useAppApiClient, useAppPublishers } from '#/states/global/hooks';
 import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
 import { EmojiDto } from '#/components/common/status/fragments/_shared.types';
+import * as Haptics from 'expo-haptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
+import { LinkingUtils } from '#/utils/linking.utils';
 
 /**
  * Registers and deregisters a post-object
@@ -56,22 +59,27 @@ export function usePostEventBusStore(input: string | PostObjectType) {
  * @param input id of the post on the bus
  */
 export function usePostEventBusActions(input: string) {
+	const { client } = useAppApiClient();
 	const { postEventBus } = useAppPublishers();
 
 	async function toggleBookmark(loader?: (flag: boolean) => void) {
 		await postEventBus.toggleBookmark(input, loader);
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
 	async function toggleLike(loader?: (flag: boolean) => void) {
 		await postEventBus.toggleLike(input, loader);
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
 	async function loadBookmarkState(loader?: (flag: boolean) => void) {
 		await postEventBus.loadBookmarkState(input, loader);
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
 	async function toggleShare(loader?: (flag: boolean) => void) {
 		await postEventBus.toggleShare(input, loader);
+		Haptics.impactAsync(ImpactFeedbackStyle.Medium);
 	}
 
 	async function addReaction(
@@ -88,6 +96,24 @@ export function usePostEventBusActions(input: string) {
 		await postEventBus.toggleReaction(input, reaction, loader);
 	}
 
+	async function shareLink() {
+		console.log(
+			PostViewer.generateShareableLink(client, postEventBus.read(input)),
+		);
+		LinkingUtils.shareUrl(
+			PostViewer.generateShareableLink(client, postEventBus.read(input)),
+		);
+	}
+
+	async function openInBrowser() {
+		console.log(
+			PostViewer.generateShareableLink(client, postEventBus.read(input)),
+		);
+		LinkingUtils.openURL(
+			PostViewer.generateShareableLink(client, postEventBus.read(input)),
+		);
+	}
+
 	return {
 		toggleBookmark,
 		toggleLike,
@@ -95,5 +121,7 @@ export function usePostEventBusActions(input: string) {
 		toggleShare,
 		toggleReaction,
 		addReaction,
+		shareLink,
+		openInBrowser,
 	};
 }

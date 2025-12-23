@@ -5,7 +5,6 @@ import { DriverService, PostInspector } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
 import { AppDividerSoft } from '#/ui/Divider';
-import { HapticsUtils } from '#/utils/haptics';
 import BottomSheetActionItem from '#/ui/BottomSheetActionItem';
 
 function MorePostActionsPresenter({
@@ -21,7 +20,6 @@ function MorePostActionsPresenter({
 
 	const IS_BOOKMARKED = _target?.interaction.bookmarked;
 	const IS_LIKED = PostInspector.isLiked(_target);
-	const IS_SHARED = PostInspector.isShared(_target);
 	const IS_REACTED = _target?.stats?.reactions?.every((o) => o.me === false);
 
 	let ReactionCta = 'Add Reaction';
@@ -33,12 +31,14 @@ function MorePostActionsPresenter({
 		}
 	}
 
-	const { toggleLike, toggleBookmark } = usePostEventBusActions(item.uuid);
-	function onClickAddReaction() {
+	const { toggleLike, toggleBookmark, toggleShare, shareLink, openInBrowser } =
+		usePostEventBusActions(item.uuid);
+
+	async function onClickAddReaction() {
 		setEditMode('emoji');
 	}
 
-	function onReply() {
+	async function onReply() {
 		show(APP_BOTTOM_SHEET_ENUM.STATUS_COMPOSER, true, {
 			$type: 'compose-reply',
 			parentPostId: _target.uuid,
@@ -53,9 +53,7 @@ function MorePostActionsPresenter({
 					label={IS_BOOKMARKED ? 'Remove Bookmark' : 'Bookmark'}
 					active={IS_BOOKMARKED}
 					desc={'Save this post for later'}
-					onPress={() => {
-						toggleBookmark(HapticsUtils.medium);
-					}}
+					onPress={toggleBookmark}
 				/>
 			)}
 			{DriverService.canLike(driver) && (
@@ -64,9 +62,7 @@ function MorePostActionsPresenter({
 					active={IS_LIKED}
 					label={IS_LIKED ? 'Remove Like' : 'Add Like'}
 					desc={'Your likes are visible to everyone'}
-					onPress={() => {
-						toggleLike(HapticsUtils.medium);
-					}}
+					onPress={toggleLike}
 				/>
 			)}
 			{DriverService.canReact(driver) && (
@@ -78,35 +74,31 @@ function MorePostActionsPresenter({
 			)}
 
 			<BottomSheetActionItem
-				iconId={'chatbox-ellipses'}
+				iconId={'chatbox-outline'}
 				label={'Reply'}
+				desc={'Respond to the post'}
 				onPress={onReply}
 			/>
 
 			<BottomSheetActionItem
 				iconId={'sync-outline'}
 				label={'Repost'}
-				onPress={() => {}}
+				desc={'Share the post with your friends'}
+				onPress={toggleShare}
 			/>
-			<AppDividerSoft
-				style={{ backgroundColor: '#323232', marginVertical: 4 }}
-			/>
+			<AppDividerSoft style={{ marginVertical: 4 }} />
 			<BottomSheetActionItem
 				iconId={'share'}
-				active={IS_SHARED}
+				active={false}
 				label={'Copy or Share Link'}
 				desc={'Opens the sharing sheet'}
-				onPress={() => {}}
-			/>
-
-			<AppDividerSoft
-				style={{ backgroundColor: '#323232', marginVertical: 4 }}
+				onPress={shareLink}
 			/>
 			<BottomSheetActionItem
 				iconId={'browser'}
 				label={'Open in Browser'}
 				desc={'View in external browser'}
-				onPress={() => {}}
+				onPress={openInBrowser}
 			/>
 		</Fragment>
 	);

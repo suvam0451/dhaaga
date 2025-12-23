@@ -4,7 +4,7 @@ import {
 	useAppBottomSheet,
 	useAppTheme,
 } from '#/states/global/hooks';
-import { PostResolver, TextParser } from '@dhaaga/bridge';
+import { PostViewer, TextParser } from '@dhaaga/bridge';
 import { Text } from 'react-native';
 import { ActivityPubService } from '@dhaaga/bridge';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
@@ -34,7 +34,7 @@ function MentionSegment({ value, mentions }: Props) {
 			ActivityPubService.mastodonLike(driver) ||
 			ActivityPubService.misskeyLike(driver)
 		) {
-			const ctx = PostResolver.mentionItemsToWebfinger(parsed?.text, mentions);
+			const ctx = PostViewer.mentionItemsToWebfinger(parsed?.text, mentions);
 			console.log(ctx, parsed?.text, mentions);
 			if (ctx) {
 				// FIXME: correct the typing
