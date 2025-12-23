@@ -1,18 +1,19 @@
 import { PostThreadCtx } from '@dhaaga/react';
 import { useAppTheme } from '#/states/global/hooks';
 import useApiBuildPostThread from '#/hooks/api/useApiBuildPostThread';
-import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import PostCommentThreadControls from '#/features/post-thread-view/views/PostCommentThreadControls';
 import { appDimensions } from '#/styles/dimensions';
 import { AppDividerSoft } from '#/ui/Divider';
 import NoMoreReplies from '#/features/post-thread-view/components/NoMoreReplies';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 import ThreadRootReplyView from '#/features/post-thread-view/views/ThreadRootReplyView';
+import { LegendList } from '@legendapp/list';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 function ContentView() {
 	const { theme } = useAppTheme();
@@ -22,7 +23,7 @@ function ContentView() {
 		id === 'uri' ? uri : id,
 	);
 
-	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
 	function onRefresh() {
 		setRefreshing(true);
@@ -39,7 +40,7 @@ function ContentView() {
 	return (
 		<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
 			<NavBar_Simple label={'Post Details'} animatedStyle={animatedStyle} />
-			<FlatList
+			<LegendList
 				onLayout={onLayout}
 				data={items}
 				renderItem={({ item }) => {

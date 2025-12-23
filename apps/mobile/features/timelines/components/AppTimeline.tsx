@@ -9,8 +9,8 @@ import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { View } from 'react-native';
 import NavBar_Explore from '#/features/navbar/views/NavBar_Explore';
 import NavBar_Inbox from '#/features/navbar/views/NavBar_Inbox';
-import { FlashList } from '@shopify/flash-list';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
+import { LegendList } from '@legendapp/list';
 
 const navbarConfigs: Record<
 	string,
@@ -126,7 +126,7 @@ function AppTimeline({
 			) : (
 				<View />
 			)}
-			<FlashList
+			<LegendList
 				onLayout={onLayout}
 				data={items}
 				renderItem={renderItem}
@@ -138,7 +138,7 @@ function AppTimeline({
 				scrollEventThrottle={16}
 				onRefresh={onRefresh}
 				refreshing={IsRefreshing}
-				progressViewOffset={52}
+				// progressViewOffset={52}
 				ListEmptyComponent={
 					<TimelineStateIndicator
 						queryResult={queryResult}
@@ -150,8 +150,9 @@ function AppTimeline({
 				ItemSeparatorComponent={() => (
 					<AppDividerSoft style={{ marginVertical: 6 }} themed />
 				)}
-				removeClippedSubviews={true}
 				keyExtractor={(item) => item.id}
+				recycleItems={true}
+				maintainVisibleContentPosition
 				key={flatListKey}
 			/>
 			<TimelineLoadingIndicator

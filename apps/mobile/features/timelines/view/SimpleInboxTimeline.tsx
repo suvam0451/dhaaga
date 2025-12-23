@@ -8,7 +8,7 @@ import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { AppDividerSoft } from '#/ui/Divider';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
-import { FlashList } from '@shopify/flash-list';
+import { LegendList } from '@legendapp/list';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;
@@ -48,14 +48,17 @@ function SimpleInboxTimeline({ queryResult, type, label, Wrapper }: Props) {
 	return (
 		<>
 			<NavBar_Inbox label={label} type={type} animatedStyle={animatedStyle} />
-			<FlashList
+			<LegendList
 				onScroll={scrollHandler}
+				keyExtractor={(item) => item.id}
+				recycleItems={true}
+				maintainVisibleContentPosition
 				onLayout={onLayout}
 				data={state.items}
 				renderItem={({ item }) => <Wrapper item={item} />}
 				onRefresh={_onRefresh}
 				refreshing={IsRefreshing}
-				progressViewOffset={appDimensions.topNavbar.hubVariantHeight}
+				// progressViewOffset={appDimensions.topNavbar.hubVariantHeight}
 				contentContainerStyle={{
 					paddingBottom: appDimensions.lists.paddingBottom,
 					paddingTop: appDimensions.topNavbar.hubVariantHeight + 12,
