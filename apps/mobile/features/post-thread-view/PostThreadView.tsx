@@ -50,7 +50,7 @@ function ContentView() {
 						case 'anchor':
 							return (
 								<>
-									<TimelinePostItemView post={item.post} showFullDetails />
+									<TimelinePostItemView post={item.post} />
 									<PostCommentThreadControls count={0} />
 								</>
 							);

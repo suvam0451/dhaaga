@@ -28,8 +28,8 @@ export function ToggleReplyVisibility({
 	const { theme } = useAppTheme();
 	if (!enabled) return <View />;
 
-	const EXPANDED_COLOR = AppThemingUtil.getThreadColorForDepth(0);
-	const COLLAPSED_COLOR = theme.complementary;
+	const EXPANDED_COLOR = theme.complementary;
+	const COLLAPSED_COLOR = theme.primary;
 
 	return (
 		<Pressable style={[styles.actionButton, style]} onPress={onPress}>
@@ -42,9 +42,7 @@ export function ToggleReplyVisibility({
 			</View>
 			<NativeTextMedium
 				style={{
-					color: expanded
-						? AppThemingUtil.getThreadColorForDepth(0)
-						: theme.complementary,
+					color: expanded ? theme.complementary : theme.primary,
 				}}
 			>
 				{count} replies
@@ -93,8 +91,6 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 8,
-		marginLeft: -10,
 		paddingBottom: 6,
 		borderRadius: 8,
 	},
