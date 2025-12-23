@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { SplashScreen, Tabs } from 'expo-router';
 import {
 	NavbarButtonDefault,
 	NavbarButtonDisabledOnSignOut,
@@ -13,6 +13,116 @@ import {
 import DhaagaSkinnedIcon, {
 	APP_ICON_IDENTIFIER,
 } from '#/features/skins/components/ThemedAppIcons';
+import { migrateDbIfNeeded } from '@dhaaga/db';
+import WithAppAssetsContext from '#/hooks/app/useAssets';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SQLiteProvider } from 'expo-sqlite';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+import polyfills from '#/utils/polyfills';
+import useAppSession from '#/states/useAppSession';
+import { useNativeKeyboardOffset } from '#/ui/hooks/useNativeKeyboardOffset';
+import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
+import ImageInspectModal from '#/components/modals/ImageInspectModal';
+import AppBottomSheet from '#/components/dhaaga-bottom-sheet/components/Core';
+import { AppDialog } from '#/components/lib/AppDialog';
+import { LogBox, StatusBar, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { enableMapSet } from 'immer';
+import React, { Fragment, useEffect, useState } from 'react';
+import Animated, {
+	configureReanimatedLogger,
+	ReanimatedLogLevel,
+	useAnimatedStyle,
+} from 'react-native-reanimated';
+import { usePathname } from 'expo-router';
+
+import '../../i18n/_loader';
+import 'fast-text-encoding';
+
+enableMapSet();
+polyfills();
+
+/**
+ * Suppress these warnings...
+ */
+const IGNORED_LOGS = [
+	'Found screens with the same name nested inside one another',
+	'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
+	'Text strings must be rendered within a <Text> component.',
+	"[Error: Call to function 'ExpoImage.loadAsync' has been rejected.\n" +
+		'→ Caused by: Failed to load the image: com.bumptech.glide.load.engine.GlideException: Received null model]',
+];
+LogBox.ignoreLogs(IGNORED_LOGS);
+LogBox.ignoreAllLogs(true);
+
+// This is the default configuration
+configureReanimatedLogger({
+	level: ReanimatedLogLevel.warn,
+	strict: false, // Reanimated runs in strict mode by default
+});
+
+function App() {
+	const { theme } = useAppTheme();
+	const pathname = usePathname();
+	const appReady = useAppSession();
+	const [IsRendered, setIsRendered] = useState(false);
+
+	/**
+	 * Wait for fonts and database to load
+	 */
+	useEffect(() => {
+		if (appReady && IsRendered) SplashScreen.hide();
+	}, [appReady, IsRendered]);
+
+	function onLayout() {
+		setIsRendered(true);
+	}
+
+	const { height } = useNativeKeyboardOffset(0, 0);
+	const fakeView = useAnimatedStyle(() => {
+		return {
+			height: height.value,
+			marginBottom: height.value > 0 ? 0 : 0,
+		};
+	}, []);
+
+	const HAS_NO_STICKY_MENU = ['/index', '/explore', '/inbox', '/profile'];
+	return (
+		<Fragment>
+			<SafeAreaView
+				edges={['top']}
+				style={{
+					flex: 0,
+					backgroundColor: HAS_NO_STICKY_MENU.includes(pathname)
+						? theme.background.a10
+						: theme.background.a10,
+				}}
+			/>
+			<SafeAreaView
+				edges={['left', 'right', 'bottom']}
+				style={{ flex: 1, backgroundColor: theme.background.a10 }}
+				onLayout={onLayout}
+			>
+				<StatusBar
+					barStyle={theme.barStyle}
+					backgroundColor={theme.background.a0}
+					translucent={true}
+				/>
+				<WithBackgroundSkin>
+					<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
+						<TabLayout />
+						{/* Globally shared components */}
+						<ImageInspectModal />
+						<AppBottomSheet />
+						<AppDialog />
+					</View>
+					<Animated.View style={fakeView} />
+				</WithBackgroundSkin>
+			</SafeAreaView>
+		</Fragment>
+	);
+}
 
 const BOTTOM_NAVBAR_HEIGHT = 50; // Range: 42 to 52
 const BOTTOM_NAVBAR_ICON_STYLE = {
@@ -25,14 +135,14 @@ const ICON_C_SIZE_OFFSET = 8;
 const ICON_D_SIZE_OFFSET = 6;
 const ICON_E_SIZE_OFFSET = 8;
 
-export default function TabLayout() {
+function TabLayout() {
 	const { theme } = useAppTheme();
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
 	return (
 		<Tabs
-			initialRouteName={'index'}
+			initialRouteName={'(hub)'}
 			detachInactiveScreens={true}
 			screenOptions={() => {
 				return {
@@ -51,7 +161,7 @@ export default function TabLayout() {
 			}}
 		>
 			<Tabs.Screen
-				name="index"
+				name="(hub)"
 				options={{
 					tabBarButton: NavbarButtonDefault,
 					tabBarIcon: ({ focused, color, size }) =>
@@ -71,7 +181,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name={'feed'}
+				name={'(feed)'}
 				options={{
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>
@@ -91,7 +201,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name={'explore'}
+				name={'(explore)'}
 				options={{
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>
@@ -112,7 +222,7 @@ export default function TabLayout() {
 			/>
 
 			<Tabs.Screen
-				name={'inbox'}
+				name={'(inbox)'}
 				options={{
 					tabBarButton: NavbarButtonDisabledOnSignOut,
 					tabBarIcon: ({ color, size, focused }) =>
@@ -132,7 +242,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name={'profile'}
+				name={'(profile)'}
 				options={{
 					tabBarBadge: session.state === 'invalid' ? 1 : undefined,
 					tabBarButton: ({ onPress, onLongPress, children }) => (
@@ -155,3 +265,24 @@ export default function TabLayout() {
 		</Tabs>
 	);
 }
+
+function Wrapper() {
+	const queryClient = new QueryClient();
+	return (
+		<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
+			{/* API Caching -- Tanstack */}
+			<QueryClientProvider client={queryClient}>
+				<GestureHandlerRootView>
+					<KeyboardProvider>
+						{/* Asset Loader */}
+						<WithAppAssetsContext>
+							<App />
+						</WithAppAssetsContext>
+					</KeyboardProvider>
+				</GestureHandlerRootView>
+			</QueryClientProvider>
+		</SQLiteProvider>
+	);
+}
+
+export default Wrapper;

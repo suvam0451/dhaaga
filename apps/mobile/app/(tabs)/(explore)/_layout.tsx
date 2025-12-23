@@ -14,7 +14,7 @@ function Layout() {
 
 	return (
 		<Stack
-			initialRouteName={'index'}
+			initialRouteName={'explore'}
 			screenOptions={{
 				headerShown: false,
 			}}

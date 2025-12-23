@@ -6,14 +6,14 @@ import {
 } from '#/states/global/hooks';
 import { Redirect } from 'expo-router';
 
-function DiscoverScreen() {
+function NotificationsScreen() {
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
 	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
 	return (
 		<Stack
-			initialRouteName={'index'}
+			initialRouteName={'inbox'}
 			screenOptions={{
 				headerShown: false,
 			}}
@@ -21,4 +21,4 @@ function DiscoverScreen() {
 	);
 }
 
-export default DiscoverScreen;
+export default NotificationsScreen;

@@ -22,7 +22,6 @@ import useApiMe from '#/hooks/useApiMe';
 import { useState } from 'react';
 import Animated from 'react-native-reanimated';
 import NavBar_Home from '#/features/navbar/views/NavBar_Home';
-import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import AccountHomeModuleItem from './components/AccountHomeModuleItem';
 import { useTranslation } from 'react-i18next';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
@@ -32,6 +31,7 @@ import MyAccountOverview from '#/features/home/components/MyAccountOverview';
 import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
 import RoutingUtils from '#/utils/routing.utils';
 import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
+import TimeOfDayGreeting from '#/features/hub/components/TimeOfDayGreeting';
 
 function Home() {
 	const { theme } = useAppTheme();
@@ -165,7 +165,6 @@ function Home() {
 }
 
 function MyHome() {
-	const { theme } = useAppTheme();
 	const { session } = useAppActiveSession();
 
 	const MENU_ITEMS = [

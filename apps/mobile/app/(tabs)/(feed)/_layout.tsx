@@ -6,14 +6,14 @@ import {
 } from '#/states/global/hooks';
 import { Redirect } from 'expo-router';
 
-function NotificationsScreen() {
+function DiscoverScreen() {
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
 	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
 	return (
 		<Stack
-			initialRouteName={'index'}
+			initialRouteName={'unified'}
 			screenOptions={{
 				headerShown: false,
 			}}
@@ -21,4 +21,4 @@ function NotificationsScreen() {
 	);
 }
 
-export default NotificationsScreen;
+export default DiscoverScreen;

@@ -1,6 +1,6 @@
 import MyHome from '#/features/home/MyHome';
 import { useAppActiveSession } from '#/states/global/hooks';
-import { AppAuthenticationPager } from '#/app/(tabs)/profile/onboard/add-account';
+import { AppAuthenticationPager } from '#/app/(tabs)/(profile)/onboard/add-account';
 
 function FifthTab() {
 	const { session } = useAppActiveSession();
