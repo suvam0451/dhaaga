@@ -117,7 +117,7 @@ function ActivityPub() {
 				clientSecret,
 			);
 
-			router.push({
+			router.navigate({
 				pathname: APP_ROUTING_ENUM.MASTODON_SIGNIN,
 				params: {
 					signInUrl: signInUrl,
@@ -163,7 +163,7 @@ function MiAuth() {
 
 			const { signInUrl, instance, software } = result.params;
 
-			router.push({
+			router.navigate({
 				pathname: APP_ROUTING_ENUM.MISSKEY_SIGNIN,
 				params: {
 					signInUrl: signInUrl,

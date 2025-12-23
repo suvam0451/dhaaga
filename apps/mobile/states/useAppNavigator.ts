@@ -113,6 +113,7 @@ function useAppNavigator() {
 		}
 	}
 
+	// TODO: implement <Link withAnchor /> behaviour
 	function toTimelineViaPin(pinId: number, pinType: 'feed' | 'user' | 'tag') {
 		// probably in the bottom sheet
 		if (!navigator || !navigator.getId) return;

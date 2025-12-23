@@ -33,7 +33,7 @@ export default function TabLayout() {
 	return (
 		<Tabs
 			initialRouteName={'index'}
-			detachInactiveScreens={false}
+			detachInactiveScreens={true}
 			screenOptions={() => {
 				return {
 					tabBarHideOnKeyboard: true,
