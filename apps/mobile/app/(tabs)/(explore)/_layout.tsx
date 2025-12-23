@@ -2,7 +2,6 @@ import { Stack } from 'expo-router/stack';
 import {
 	useActiveUserSession,
 	useAppActiveSession,
-	useAppTheme,
 } from '#/states/global/hooks';
 import { Redirect } from 'expo-router';
 
@@ -10,15 +9,20 @@ function Layout() {
 	const { acct } = useActiveUserSession();
 	const { session } = useAppActiveSession();
 
-	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
+	if (!acct || session.state !== 'valid')
+		return <Redirect withAnchor href={'/(hub)/central'} />;
 
 	return (
 		<Stack
-			initialRouteName={'explore'}
+			initialRouteName={'history'}
 			screenOptions={{
 				headerShown: false,
 			}}
-		/>
+		>
+			<Stack.Screen name={'history'} />
+			<Stack.Screen name={'search'} />
+			<Stack.Screen name={'user-guide'} />
+		</Stack>
 	);
 }
 

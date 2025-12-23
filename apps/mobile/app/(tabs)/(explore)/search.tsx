@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import { Redirect } from 'expo-router';
 import { useEffect, useMemo } from 'react';
 import {
 	DiscoverCtx,
@@ -7,11 +6,7 @@ import {
 	useDiscoverDispatch,
 	useDiscoverState,
 } from '@dhaaga/core';
-import {
-	useActiveUserSession,
-	useAppActiveSession,
-	useAppApiClient,
-} from '#/states/global/hooks';
+import { useAppApiClient } from '#/states/global/hooks';
 import { getSearchTabs } from '@dhaaga/db';
 import ZenExplorationWidget from '#/features/explore/components/ZenExplorationWidget';
 import ZenModeAnimations from '#/features/explore/components/ZenModeAnimations';
@@ -80,11 +75,6 @@ function Content() {
 }
 
 function Page() {
-	const { acct } = useActiveUserSession();
-	const { session } = useAppActiveSession();
-
-	if (!acct || session.state !== 'valid') return <Redirect href={'/'} />;
-
 	return (
 		<WithBackgroundSkin>
 			<DiscoverCtx>

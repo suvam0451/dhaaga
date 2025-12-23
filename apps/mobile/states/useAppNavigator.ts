@@ -118,24 +118,13 @@ function useAppNavigator() {
 		// probably in the bottom sheet
 		if (!navigator || !navigator.getId) return;
 
-		const _id = navigator.getId();
-		if (!_id || _id === '/(tabs)/index') {
-			router.navigate({
-				pathname: `/feed`,
-				params: {
-					pinId,
-					pinType,
-				},
-			});
-		} else {
-			router.navigate({
-				pathname: `${navigator.getId()}/timelines`,
-				params: {
-					pinId,
-					pinType,
-				},
-			});
-		}
+		router.navigate({
+			pathname: `(feed)/unified`,
+			params: {
+				pinId,
+				pinType,
+			},
+		});
 	}
 
 	/**

@@ -36,12 +36,15 @@ import Animated, {
 	useAnimatedStyle,
 } from 'react-native-reanimated';
 import { usePathname } from 'expo-router';
+import { enableFreeze, enableScreens } from 'react-native-screens';
 
 import '../../i18n/_loader';
 import 'fast-text-encoding';
 
 enableMapSet();
 polyfills();
+enableScreens(true);
+enableFreeze(true);
 
 /**
  * Suppress these warnings...
@@ -220,7 +223,6 @@ function TabLayout() {
 						),
 				}}
 			/>
-
 			<Tabs.Screen
 				name={'(inbox)'}
 				options={{

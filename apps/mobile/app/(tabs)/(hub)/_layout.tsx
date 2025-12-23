@@ -9,6 +9,8 @@ function Layout() {
 			}}
 		>
 			<Stack.Screen name={'central'} />
+			<Stack.Screen name={'skins'} />
+			<Stack.Screen name={'user-guide'} />
 		</Stack>
 	);
 }

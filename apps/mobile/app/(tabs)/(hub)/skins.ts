@@ -1,3 +1,3 @@
-import SkinSelectionPage from '#/features/timelines/SkinSelectionPage';
+import Page from '#/features/timelines/SkinSelectionPage';
 
-export default SkinSelectionPage;
+export default Page;
