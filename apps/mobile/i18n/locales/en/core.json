@@ -1,4 +1,22 @@
 {
+	"appHighlightFeatures": {
+		"funFirst": {
+			"label": "Fun-First",
+			"desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun."
+		},
+		"hub": {
+			"label": "Cozy Hub Area",
+			"desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer."
+		},
+		"profiles": {
+			"label": "Social Profiles",
+			"desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!"
+		},
+		"cleanInbox": {
+			"label": "Clean Inbox",
+			"desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!"
+		}
+	},
 	"feed": {
 		"subscribeOption": "Subscribe",
 		"unsubscribeOption": "Unsubscribe",
@@ -236,6 +254,14 @@
 		"quotedThisPost": "Quoted this Post",
 		"sharedThisLink": "Shared this Link"
 	},
+	"prompts": {
+		"getStarted": "Get Started",
+		"visitWebsite": "Visit Website",
+		"selectPlatform": "Select Platform",
+		"findMastodonServer": "Find one here",
+		"findMisskeyServer": "Find one here",
+		"findAtProtoServer": "Find one here"
+	},
 	"loaders": {
 		"loadingMoreIndicatorText": "Loading More...",
 		"nothingMoreToShow": "Nothing more to show"
@@ -247,5 +273,8 @@
 	},
 	"unspecced": {
 		"wipText": "This feature is being built \uD83D\uDEA7"
+	},
+	"placeholders": {
+		"atProtoUsername": "Username or email address"
 	}
 }

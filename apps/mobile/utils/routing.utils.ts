@@ -41,7 +41,7 @@ class RoutingUtils {
 	}
 
 	static toSelectAppLanguage() {
-		router.navigate(APP_ROUTING_ENUM.SETTINGS_GENERAL_APP_LANGUAGE);
+		router.navigate(APP_ROUTING_ENUM.SET_APP_LANGUAGE);
 	}
 
 	static toChatInbox() {

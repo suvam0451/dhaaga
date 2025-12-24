@@ -13,12 +13,15 @@ import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { AppAuthWebView } from '#/ui/WebView';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import RoutingUtils from '#/utils/routing.utils';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function MisskeySignInStack() {
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
 	const _subdomain: string = params['subdomain'] as string;
 	const _domain: string = params['domain'] as string;
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	const { theme } = useAppTheme();
 	const { db } = useAppDb();
@@ -52,7 +55,7 @@ function MisskeySignInStack() {
 
 	return (
 		<View style={{ backgroundColor: theme.background.a0, flex: 1 }}>
-			<NavBar_Simple label={'Misskey Sign-In'} />
+			<NavBar_Simple label={t(`topNav.secondary.misskeySignIn`)} />
 			<AppAuthWebView
 				uri={_signInUrl}
 				isBlurred={completed}

@@ -74,7 +74,7 @@ function AtProto() {
 			<AppFormTextInput
 				onChangeText={setUsername}
 				value={username!}
-				placeholder={'Username or email address'}
+				placeholder={t(`placeholders.atProtoUsername`)}
 				leftIcon={'person-outline'}
 			/>
 			<AppFormTextInput
@@ -277,9 +277,10 @@ export function AppAuthenticationPager() {
 }
 
 function Page() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	return (
 		<>
-			<NavBar_Simple label={'Add Account'} />
+			<NavBar_Simple label={t(`onboarding.addAccountButton`)} />
 			<AppAuthenticationPager />
 		</>
 	);

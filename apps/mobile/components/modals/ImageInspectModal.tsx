@@ -137,6 +137,7 @@ function ImageInspectPostMetrics({ imageUrl }: ImageInspectPostMetricsProps) {
 								imageUrl,
 								`${RandomUtil.nanoId()}_1.png`,
 							);
+
 							if (result.success) {
 								Alert.alert('Download Succeeded!');
 							} else {
@@ -175,6 +176,8 @@ function ImageInspectModal() {
 		Dimensions.get('window').width - 8,
 		Dimensions.get('window').height - 108,
 	);
+
+	function onLoad() {}
 
 	useEffect(() => {
 		if (!visible) return;
@@ -290,6 +293,7 @@ function ImageInspectModal() {
 								borderRadius: 8,
 							}}
 							contentFit={'contain'}
+							onLoad={onLoad}
 						/>
 					)}
 				</Animated.View>

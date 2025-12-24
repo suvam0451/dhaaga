@@ -58,7 +58,7 @@ function Page() {
 			<Pressable
 				style={styles.settingItemContainer}
 				onPress={() => {
-					router.navigate(APP_ROUTING_ENUM.SETTINGS_GENERAL_APP_LANGUAGE);
+					router.navigate(APP_ROUTING_ENUM.SET_APP_LANGUAGE);
 				}}
 			>
 				<NativeTextMedium style={{ fontSize: 18, color: theme.secondary.a10 }}>

@@ -1,10 +1,8 @@
 import { LocaleOptions } from '#/i18n/data';
 import { FlatList, Pressable, View } from 'react-native';
 import useAppSettings from '#/hooks/app/useAppSettings';
-import { AppText } from '#/components/lib/Text';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { useAppTheme } from '#/states/global/hooks';
-import { AppDivider } from '#/components/lib/Divider';
 import { APP_SETTING_KEY } from '#/services/settings.service';
 import { AppIcon } from '#/components/lib/Icon';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +19,8 @@ function AppLanguageView() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function onChangeLanguage(languageCode: string) {
-		i18n.changeLanguage(languageCode);
 		setAppLanguage(languageCode);
+		i18n.changeLanguage(languageCode);
 		router.back();
 	}
 

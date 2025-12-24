@@ -18,12 +18,15 @@ import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { NativeTextBold } from '#/ui/NativeText';
 import { useEffect } from 'react';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function MastodonSignInStack() {
 	const { theme } = useAppTheme();
 	const { appEventBus } = useAppPublishers();
 	const { db } = useAppDb();
 	const { loadAccounts } = useHub();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	const params = useLocalSearchParams();
 	const _signInUrl: string = params['signInUrl'] as string;
@@ -71,7 +74,7 @@ function MastodonSignInStack() {
 
 	return (
 		<View style={{ backgroundColor: theme.background.a0, flex: 1 }}>
-			<NavBar_Simple label={`Mastodon Sign-In`} />
+			<NavBar_Simple label={t(`topNav.secondary.mastodonSignIn`)} />
 			<AppAuthWebView
 				uri={_signInUrl}
 				isBlurred={!!code}

@@ -50,7 +50,7 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_TAB_ADVANCED = '/(profile)/settings/advanced',
 	SETTINGS_PLANS = '/(profile)/onboard/plans',
 
-	SETTINGS_GENERAL_APP_LANGUAGE = '/(profile)/settings/general/app-language',
+	SET_APP_LANGUAGE = '/app-language',
 	CHATROOM = '/(inbox)/chatroom',
 
 	PROFILES = '/(profile)/dhaaga/hub-profiles',

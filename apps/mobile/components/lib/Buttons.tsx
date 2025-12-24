@@ -17,6 +17,8 @@ import { AppText } from './Text';
 import { appDimensions } from '#/styles/dimensions';
 import appStyles from '#/styles/AppStyles';
 import { NativeTextBold } from '#/ui/NativeText';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 
 const BUTTON_KINDS = [
 	'primary',
@@ -45,9 +47,11 @@ type AppButtonVariantAProps = {
 	style?: StyleProp<ViewStyle>;
 	textStyle?: StyleProp<TextStyle>;
 	variant?: ButtonVariantEnum;
+	iconId?: string;
 };
 
 export function AppButtonVariantA({
+	iconId,
 	label,
 	loading,
 	onClick,
@@ -90,6 +94,15 @@ export function AppButtonVariantA({
 			disabled={disabled}
 		>
 			{loading && <ActivityIndicator size="small" color={'black'} />}
+			{iconId ? (
+				<AppIcon
+					id={iconId as any}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					containerStyle={{ marginRight: 6 }}
+				/>
+			) : (
+				<View />
+			)}
 			<NativeTextBold
 				style={[
 					{

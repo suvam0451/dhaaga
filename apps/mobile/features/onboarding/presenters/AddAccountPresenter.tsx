@@ -31,7 +31,7 @@ export function AddAccountLandingFragment({
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 				style={[styles.noAccountText]}
 			>
-				Select Platform
+				{t(`prompts.selectPlatform`)}
 			</NativeTextBold>
 			<ProtocolCards onSelectSetPagerId={onSelectSetPagerId} />
 			<View style={styles.tipContainer}>
