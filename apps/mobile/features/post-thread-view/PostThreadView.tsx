@@ -14,11 +14,14 @@ import TimelineStateIndicator from '#/features/timelines/components/TimelineStat
 import ThreadRootReplyView from '#/features/post-thread-view/views/ThreadRootReplyView';
 import { LegendList } from '@legendapp/list';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function ContentView() {
 	const { theme } = useAppTheme();
 	const [Refreshing, setRefreshing] = useState(false);
 	const { id, uri } = useLocalSearchParams<{ id: string; uri: string }>();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { refetch, error, isFetching, items } = useApiBuildPostThread(
 		id === 'uri' ? uri : id,
 	);
@@ -39,7 +42,10 @@ function ContentView() {
 
 	return (
 		<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
-			<NavBar_Simple label={'Post Details'} animatedStyle={animatedStyle} />
+			<NavBar_Simple
+				label={t(`topNav.secondary.postDetails`)}
+				animatedStyle={animatedStyle}
+			/>
 			<LegendList
 				onLayout={onLayout}
 				data={items}

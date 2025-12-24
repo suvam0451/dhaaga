@@ -6,10 +6,10 @@ import {
 } from '#/states/global/hooks';
 import { PostViewer, TextParser } from '@dhaaga/bridge';
 import { Text } from 'react-native';
-import { ActivityPubService } from '@dhaaga/bridge';
 import type { PostMentionObjectType } from '@dhaaga/bridge';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { NativeTextBold } from '#/ui/NativeText';
+import { DriverService } from '@dhaaga/bridge';
 
 type Props = {
 	value: string;
@@ -30,22 +30,16 @@ function MentionSegment({ value, mentions }: Props) {
 	);
 
 	function onPress() {
-		if (
-			ActivityPubService.mastodonLike(driver) ||
-			ActivityPubService.misskeyLike(driver)
-		) {
-			const ctx = PostViewer.mentionItemsToWebfinger(parsed?.text, mentions);
-			console.log(ctx, parsed?.text, mentions);
-			if (ctx) {
-				// FIXME: correct the typing
-				// setCtx({$type: "user-preview", userId:});
-			}
-		} else {
-			// setCtx({
-			// 	did: link,
-			// });
+		if (DriverService.supportsAtProto(driver)) {
+			show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, {
+				$type: 'user-preview',
+				use: 'handle',
+				handle: value,
+			});
 		}
-		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true);
+
+		const ctx = PostViewer.mentionItemsToWebfinger(parsed?.text, mentions);
+		if (ctx) show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, ctx);
 	}
 
 	return (

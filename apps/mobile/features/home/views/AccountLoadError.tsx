@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BearError from '#/components/svgs/BearError';
 import {
 	useAppActiveSession,
@@ -12,7 +12,7 @@ function AccountLoadError() {
 	const { restoreSession } = useAppGlobalStateActions();
 
 	return (
-		<View style={{ marginVertical: 'auto' }}>
+		<View style={styles.root}>
 			<ErrorPageBuilder
 				stickerArt={<BearError />}
 				errorMessage={'Failed to load account'}
@@ -24,16 +24,24 @@ function AccountLoadError() {
 					loading={session.state === 'loading'}
 					onClick={restoreSession}
 				/>
-				<AppButtonVariantA
-					style={{ marginTop: 8 }}
-					label={'Re-Login 🚧'}
-					loading={false}
-					variant={'secondary'}
-					onClick={() => {}}
-				/>
+				{/*<AppButtonVariantA*/}
+				{/*	style={{ marginTop: 8 }}*/}
+				{/*	label={'Re-Login 🚧'}*/}
+				{/*	loading={false}*/}
+				{/*	variant={'secondary'}*/}
+				{/*	onClick={() => {}}*/}
+				{/*/>*/}
 			</ErrorPageBuilder>
 		</View>
 	);
 }
 
 export default AccountLoadError;
+
+const styles = StyleSheet.create({
+	root: {
+		marginVertical: 'auto',
+		alignItems: 'center',
+		height: '100%',
+	},
+});

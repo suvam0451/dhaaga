@@ -31,7 +31,9 @@ import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
  */
 function Handle() {
 	const { theme } = useAppTheme();
+	const { visible } = useAppBottomSheet();
 
+	if (!visible) return <View />;
 	return (
 		<View style={styles.handleContainer}>
 			<View

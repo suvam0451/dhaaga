@@ -1,7 +1,8 @@
 import { NotificationUserGroupType } from '@dhaaga/bridge';
-import { FlatList, View } from 'react-native';
+import { View } from 'react-native';
 import Avatar from '#/ui/Avatar';
 import useSheetNavigation from '#/states/navigation/useSheetNavigation';
+import { LegendList } from '@legendapp/list';
 
 type Props = {
 	items: NotificationUserGroupType[];
@@ -16,12 +17,12 @@ function GroupedUsersItemView({ items, Header }: Props) {
 	}
 
 	return (
-		<FlatList
+		<LegendList
 			data={items}
 			horizontal={true}
 			renderItem={({ item }) => (
 				<Avatar
-					uri={item.item.avatarUrl}
+					avatarUrl={item.item.avatarUrl}
 					onPressed={() => {
 						onAvatarPress(item.item.id);
 					}}

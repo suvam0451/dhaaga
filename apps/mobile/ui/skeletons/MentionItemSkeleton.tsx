@@ -3,7 +3,7 @@ import { Skeleton } from '#/ui/Skeleton';
 import { memo } from 'react';
 
 /**
- * Height: 308
+ * Height: 140
  * @constructor
  */
 const Node = memo(() => {
@@ -17,12 +17,7 @@ const Node = memo(() => {
 					style={{ marginLeft: 8, flex: 1 }}
 				/>
 			</View>
-			<Skeleton height={200} width={'auto'} style={{ marginBottom: 8 }} />
-			<View style={{ flexDirection: 'row', marginBottom: 16 }}>
-				<Skeleton height={24} width={124} />
-				<View style={{ flex: 1 }} />
-				<Skeleton height={24} width={64} />
-			</View>
+			<Skeleton height={72} width={'auto'} style={{ marginBottom: 8 }} />
 		</View>
 	);
 });
@@ -31,8 +26,8 @@ type Props = {
 	containerHeight: number;
 };
 
-function PostSkeleton({ containerHeight }: Props) {
-	const NUM_NODES = containerHeight ? Math.floor(containerHeight / 310) : 0;
+function MentionItemSkeleton({ containerHeight }: Props) {
+	const NUM_NODES = containerHeight ? Math.floor(containerHeight / 140) : 0;
 
 	if (NUM_NODES === 0) return <View style={{ height: '100%' }} />;
 
@@ -47,4 +42,4 @@ function PostSkeleton({ containerHeight }: Props) {
 	);
 }
 
-export default PostSkeleton;
+export default MentionItemSkeleton;

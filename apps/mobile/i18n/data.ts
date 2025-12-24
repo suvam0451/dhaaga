@@ -1,10 +1,3 @@
-/**
- * The following language codes are
- * intended to be supported in Dhaaga
- *
- * For introducing extra languages/dialects,
- * please feel free to reach out to me!
- */
 export const LocaleOptions: {
 	enLabel: string;
 	nativeLabel: string;
@@ -21,6 +14,12 @@ export const LocaleOptions: {
 		enLabel: 'Bengali',
 		nativeLabel: 'বাংলা (Bāṅlā)',
 		code: 'bn',
+		progress: 0,
+	},
+	{
+		enLabel: 'Catalan',
+		nativeLabel: 'Català',
+		code: 'ca',
 		progress: 0,
 	},
 	{
@@ -51,6 +50,12 @@ export const LocaleOptions: {
 		enLabel: 'Filipino',
 		nativeLabel: 'Filipino',
 		code: 'tl',
+		progress: 0,
+	},
+	{
+		enLabel: 'Finnish',
+		nativeLabel: 'Suomi',
+		code: 'fi',
 		progress: 0,
 	},
 	{
@@ -98,7 +103,7 @@ export const LocaleOptions: {
 	{
 		enLabel: 'Japanese',
 		nativeLabel: '日本語 (Nihongo)',
-		code: 'jp',
+		code: 'ja',
 		progress: 0,
 	},
 	{
@@ -111,6 +116,12 @@ export const LocaleOptions: {
 		enLabel: 'Malay',
 		nativeLabel: 'Bahasa Melayu',
 		code: 'ms',
+		progress: 0,
+	},
+	{
+		enLabel: 'Norwegian (Bokmål)',
+		nativeLabel: 'Norsk Bokmål',
+		code: 'nb',
 		progress: 0,
 	},
 	{

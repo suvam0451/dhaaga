@@ -1,22 +1,37 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import APP_ICON_ENUM, { AppIcon } from '../../../components/lib/Icon';
+import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
 import { appDimensions } from '#/styles/dimensions';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import RoutingUtils from '#/utils/routing.utils';
+import { APP_ROUTING_ENUM } from '#/utils/route-list';
+import { router } from 'expo-router';
 
-type AccountGreetingNavbarProps = {
-	menuItems: {
-		iconId: APP_ICON_ENUM;
-		onPress?: () => void;
-		disabled?: boolean;
-	}[];
-};
+const MENU_ITEMS = [
+	{
+		iconId: 'language' as APP_ICON_ENUM,
+		onPress: RoutingUtils.toSelectAppLanguage,
+	},
+	{
+		iconId: 'person' as APP_ICON_ENUM,
+		onPress: RoutingUtils.toAccountManagement,
+	},
+	{
+		iconId: 'cog' as APP_ICON_ENUM,
+		onPress: RoutingUtils.toAppSettings,
+	},
+	{
+		iconId: 'user-guide' as APP_ICON_ENUM,
+		onPress: () => {
+			router.navigate(APP_ROUTING_ENUM.GUIDE_MY_PROFILE);
+		},
+	},
+];
 
-function NavBar_Home({ menuItems }: AccountGreetingNavbarProps) {
+function NavBar_Home() {
 	return (
 		<View style={[styles.root]}>
 			<View style={{ flexDirection: 'row' }}>
 				<View style={{ marginBottom: 0, flexGrow: 1 }}></View>
-				{menuItems.map(({ iconId, disabled, onPress }, i) => (
+				{MENU_ITEMS.map(({ iconId, onPress }, i) => (
 					<Pressable
 						key={i}
 						style={{
@@ -29,11 +44,7 @@ function NavBar_Home({ menuItems }: AccountGreetingNavbarProps) {
 					>
 						<AppIcon
 							id={iconId}
-							emphasis={
-								disabled
-									? APP_COLOR_PALETTE_EMPHASIS.A40
-									: APP_COLOR_PALETTE_EMPHASIS.A10
-							}
+							color={'rgba(236, 236, 236, 0.87)'}
 							onPress={onPress}
 							size={appDimensions.topNavbar.iconSize}
 						/>

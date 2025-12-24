@@ -100,6 +100,7 @@ export function UserProfilePage() {
 
 	if (!acct)
 		return <View style={{ flex: 1, backgroundColor: theme.background.a0 }} />;
+
 	return (
 		<WithBackgroundSkin>
 			{/* DYNAMIC HEADER */}

@@ -9,11 +9,15 @@ import { APP_SETTING_KEY } from '#/services/settings.service';
 import { AppIcon } from '#/components/lib/Icon';
 import { useTranslation } from 'react-i18next';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
+import { AppDividerHard } from '#/ui/Divider';
+import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 
-function AppLanguagePresenter() {
+function AppLanguageView() {
 	const { getValue, setAppLanguage } = useAppSettings();
 	const { theme } = useAppTheme();
 	const { i18n } = useTranslation();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function onChangeLanguage(languageCode: string) {
 		i18n.changeLanguage(languageCode);
@@ -23,7 +27,7 @@ function AppLanguagePresenter() {
 	const lang = getValue(APP_SETTING_KEY.APP_LANGUAGE);
 
 	return (
-		<SettingPageBuilder label={'App Language'}>
+		<SettingPageBuilder label={t(`topNav.secondary.appLanguage`)}>
 			<FlatList
 				data={LocaleOptions}
 				renderItem={({ item }) => (
@@ -35,7 +39,7 @@ function AppLanguagePresenter() {
 							}}
 						>
 							<View style={{ flex: 1 }}>
-								<AppText.Medium
+								<NativeTextBold
 									style={{
 										fontSize: 18,
 										color:
@@ -45,10 +49,10 @@ function AppLanguagePresenter() {
 									emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 								>
 									{item.nativeLabel}
-								</AppText.Medium>
-								<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
+								</NativeTextBold>
+								<NativeTextNormal emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
 									{item.enLabel}
-								</AppText.Normal>
+								</NativeTextNormal>
 							</View>
 							<View>
 								{item.code === lang && (
@@ -61,22 +65,23 @@ function AppLanguagePresenter() {
 								)}
 							</View>
 						</Pressable>
-						<AppDivider.Hard
-							style={{
-								marginVertical: 12,
-								backgroundColor: theme.background.a50,
-							}}
-						/>
 					</View>
 				)}
 				contentContainerStyle={{
 					paddingTop: 8,
-					paddingHorizontal: 10,
 					paddingBottom: 52,
 				}}
+				ItemSeparatorComponent={() => (
+					<AppDividerHard
+						style={{
+							marginVertical: 12,
+							backgroundColor: theme.background.a50,
+						}}
+					/>
+				)}
 			/>
 		</SettingPageBuilder>
 	);
 }
 
-export default AppLanguagePresenter;
+export default AppLanguageView;

@@ -6,13 +6,12 @@ import Avatar from '#/ui/Avatar';
 
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
-function ThemedMainAuthor({
-	uri,
-	onPress,
-}: {
-	uri: string;
+type Props = {
+	avatarUrl: string;
 	onPress: () => void;
-}) {
+};
+
+function ThemedMainAuthor({ avatarUrl, onPress }: Props) {
 	const { theme } = useAppTheme();
 	const Decoration = useMemo(() => {
 		switch (theme.id) {
@@ -43,7 +42,7 @@ function ThemedMainAuthor({
 	return (
 		<View style={{ position: 'relative' }}>
 			{Decoration}
-			<Avatar uri={uri} onPressed={onPress} />
+			<Avatar avatarUrl={avatarUrl} onPressed={onPress} />
 		</View>
 	);
 }

@@ -1,5 +1,4 @@
 import {
-	TouchableOpacity,
 	View,
 	StyleSheet,
 	StyleProp,
@@ -16,6 +15,8 @@ import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
 import ThemedMainAuthor from '#/features/skins/components/ThemedMainAuthor';
 import { Link } from 'expo-router';
+import useSheetNavigation from '#/states/navigation/useSheetNavigation';
+import { useCallback } from 'react';
 
 type Props = {
 	userId: string;
@@ -33,8 +34,6 @@ type Props = {
 	handle: string;
 	emojiMap?: Map<string, string>;
 	style?: StyleProp<ViewStyle>;
-
-	onAvatarPressed?: () => void;
 };
 
 function UserBadge({
@@ -45,10 +44,14 @@ function UserBadge({
 	handle,
 	emojiMap,
 	style,
-	onAvatarPressed,
 }: Props) {
 	const { driver } = useAppApiClient();
 	const { theme } = useAppTheme();
+	const { openUserProfileSheet } = useSheetNavigation();
+
+	const onAvatarPressed = useCallback(() => {
+		openUserProfileSheet(userId);
+	}, [userId]);
 
 	const USE_DISPLAY_NAME =
 		!parsedDisplayName || DriverService.supportsAtProto(driver);
@@ -56,7 +59,7 @@ function UserBadge({
 	const handleFallback = displayName === '' ? handle : displayName;
 	return (
 		<View style={[styles.root, style]}>
-			<ThemedMainAuthor uri={avatarUrl} onPress={onAvatarPressed} />
+			<ThemedMainAuthor avatarUrl={avatarUrl} onPress={onAvatarPressed} />
 			<Link href={`/user/${userId}`} asChild style={styles.displayNameArea}>
 				<Pressable>
 					{USE_DISPLAY_NAME ? (

@@ -233,9 +233,11 @@ class Parser {
 		const { data, error, success } = postObjectSchema.safeParse(dto);
 		if (!success) {
 			// not expected to parse
-			console.log(input.getRaw() as any);
 			if (
-				(input.getRaw() as any)?.$type === 'app.bsky.embed.record#viewNotFound'
+				[
+					'app.bsky.feed.defs#notFoundPost',
+					'app.bsky.embed.record#viewNotFound',
+				].includes((input.getRaw() as any)?.$type)
 			)
 				return null;
 

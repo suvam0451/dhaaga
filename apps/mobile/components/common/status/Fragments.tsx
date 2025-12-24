@@ -8,6 +8,7 @@ import type { AppParsedTextNodes } from '@dhaaga/bridge';
 import { useAppTheme } from '#/states/global/hooks';
 import TextAstRendererView from '#/ui/TextAstRendererView';
 import { PostMoreOptionsButton } from '#/components/common/status/_shared';
+import { NativeTextNormal } from '#/ui/NativeText';
 
 type Props = {
 	postId: string;
@@ -63,15 +64,15 @@ function PostedByTextOneLine({
 						emojiMap={new Map()}
 					/>
 				) : (
-					<AppText.Normal
+					<NativeTextNormal
 						style={{ fontSize: 13 }}
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
 					>
 						{altText}
-					</AppText.Normal>
+					</NativeTextNormal>
 				)}
 			</View>
-			<AppText.Normal
+			<NativeTextNormal
 				style={{
 					fontSize: 13,
 					marginRight: 6,
@@ -79,7 +80,7 @@ function PostedByTextOneLine({
 				emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
 			>
 				{DatetimeUtil.timeAgo(createdAt)}
-			</AppText.Normal>
+			</NativeTextNormal>
 		</View>
 	);
 }

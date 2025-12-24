@@ -26,15 +26,19 @@ export function userProfileQueryOpts(
 ) {
 	async function api() {
 		if (query.use === 'handle') {
-			const webfinger = ActivitypubHelper.splitHandle(
-				query.handle,
-				client.server!,
-			);
-			if (!webfinger)
-				throw new Error(
-					`failed to resolve webfinger from handle -> ${query.handle}`,
+			if (DriverService.supportsAtProto(client.driver)) {
+				query = { use: 'handle', handle: query.handle.replace(/^@/, '') };
+			} else {
+				const webfinger = ActivitypubHelper.splitHandle(
+					query.handle,
+					client.server!,
 				);
-			query = { use: 'webfinger', webfinger };
+				if (!webfinger)
+					throw new Error(
+						`failed to resolve webfinger from handle -> ${query.handle}`,
+					);
+				query = { use: 'webfinger', webfinger };
+			}
 		}
 		return unifiedUserLookup(client, query);
 	}

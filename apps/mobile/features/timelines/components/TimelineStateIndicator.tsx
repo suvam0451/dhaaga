@@ -3,6 +3,8 @@ import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import BearError from '#/components/svgs/BearError';
 import { useMemo } from 'react';
 import PostSkeleton from '#/ui/skeletons/PostSkeleton';
+import MentionItemSkeleton from '#/ui/skeletons/MentionItemSkeleton';
+import MessageItemSkeleton from '#/ui/skeletons/MessageItemSkeleton';
 
 type TimelineErrorViewProps = {
 	error: any;
@@ -71,6 +73,10 @@ function TimelineStateIndicator({
 		switch (itemType) {
 			case 'post':
 				return <PostSkeleton containerHeight={containerHeight} />;
+			case 'mention':
+				return <MentionItemSkeleton containerHeight={containerHeight} />;
+			case 'message':
+				return <MessageItemSkeleton containerHeight={containerHeight} />;
 			default:
 				return <PostSkeleton containerHeight={containerHeight} />;
 		}

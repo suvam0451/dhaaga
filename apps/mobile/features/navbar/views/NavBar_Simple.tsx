@@ -1,4 +1,10 @@
-import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	ViewStyle,
+	StyleProp,
+	Pressable,
+} from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { useAppTheme } from '#/states/global/hooks';
 import Animated from 'react-native-reanimated';
@@ -9,12 +15,14 @@ import { Link } from 'expo-router';
 
 function BackNavigationButton() {
 	return (
-		<Link style={styles.backButton} href="..">
-			<AppIcon
-				id={'back'}
-				size={25}
-				emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
-			/>
+		<Link asChild style={styles.backButton} href="..">
+			<Pressable>
+				<AppIcon
+					id={'back'}
+					size={25}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+				/>
+			</Pressable>
 		</Link>
 	);
 }
@@ -37,10 +45,6 @@ type Props = {
  */
 function NavBar_Simple({ label, animatedStyle }: Props) {
 	const { theme } = useAppTheme();
-
-	// function onLayout(event: any) {
-	// 	console.log('height', event.nativeEvent.layout.height);
-	// }
 
 	return (
 		<Animated.View style={[styles.root, animatedStyle]}>
@@ -91,6 +95,5 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'row',
 		paddingHorizontal: 8,
-		paddingVertical: 8,
 	},
 });

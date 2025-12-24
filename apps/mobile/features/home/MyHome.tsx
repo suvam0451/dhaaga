@@ -13,7 +13,6 @@ import {
 	useAppApiClient,
 	useAppTheme,
 } from '#/states/global/hooks';
-import APP_ICON_ENUM from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
 import { router } from 'expo-router';
@@ -29,7 +28,6 @@ import AccountLoadError from '#/features/home/views/AccountLoadError';
 import AccountMissingError from '#/features/home/views/AccountMissingError';
 import MyAccountOverview from '#/features/home/components/MyAccountOverview';
 import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
-import RoutingUtils from '#/utils/routing.utils';
 import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 import TimeOfDayGreeting from '#/features/hub/components/TimeOfDayGreeting';
 
@@ -167,23 +165,6 @@ function Home() {
 function MyHome() {
 	const { session } = useAppActiveSession();
 
-	const MENU_ITEMS = [
-		{
-			iconId: 'person' as APP_ICON_ENUM,
-			onPress: RoutingUtils.toAccountManagement,
-		},
-		{
-			iconId: 'cog' as APP_ICON_ENUM,
-			onPress: RoutingUtils.toAppSettings,
-		},
-		{
-			iconId: 'user-guide' as APP_ICON_ENUM,
-			onPress: () => {
-				router.navigate(APP_ROUTING_ENUM.GUIDE_MY_PROFILE);
-			},
-		},
-	];
-
 	const Component = useMemo(() => {
 		if (!session?.target) return <AccountMissingError />;
 		if (session.target && session.state !== 'valid')
@@ -193,13 +174,8 @@ function MyHome() {
 
 	return (
 		<WithBackgroundSkin>
-			<View
-				style={{
-					flex: 1,
-					// backgroundColor: theme.background.a0,
-				}}
-			>
-				<NavBar_Home menuItems={MENU_ITEMS} />
+			<View>
+				<NavBar_Home />
 				{Component}
 			</View>
 		</WithBackgroundSkin>

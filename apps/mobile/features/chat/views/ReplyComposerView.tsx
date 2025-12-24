@@ -7,10 +7,11 @@ import { RefObject, useRef, useState } from 'react';
 import { useAppTheme } from '#/states/global/hooks';
 import useSendMessage from '#/features/chat/hooks/useSendMessage';
 import { AppDividerSoft } from '#/ui/Divider';
+import { LegendListRef } from '@legendapp/list';
 
 type Props = {
 	roomId: string;
-	listRef: RefObject<FlatList<any>>;
+	listRef: RefObject<LegendListRef>;
 };
 
 function ReplyComposerView({ roomId, listRef }: Props) {

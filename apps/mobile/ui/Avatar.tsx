@@ -5,12 +5,12 @@ import { useAppTheme } from '#/states/global/hooks';
 const TIMELINE_PFP_SIZE = 40; // appDimensions.timelines.avatarIconSize;
 
 type Props = {
-	uri: string;
+	avatarUrl: string;
 	onPressed?: () => void;
 	onLongPressed?: () => void;
 };
 
-function Avatar({ uri, onPressed, onLongPressed }: Props) {
+function Avatar({ avatarUrl, onPressed, onLongPressed }: Props) {
 	const { theme } = useAppTheme();
 	return (
 		<TouchableOpacity
@@ -25,7 +25,7 @@ function Avatar({ uri, onPressed, onLongPressed }: Props) {
 					padding: 2,
 					borderRadius: TIMELINE_PFP_SIZE / 2,
 				}}
-				source={{ uri }}
+				source={{ uri: avatarUrl }}
 			/>
 		</TouchableOpacity>
 	);

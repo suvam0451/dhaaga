@@ -40,6 +40,10 @@ class RoutingUtils {
 		});
 	}
 
+	static toSelectAppLanguage() {
+		router.navigate(APP_ROUTING_ENUM.SETTINGS_GENERAL_APP_LANGUAGE);
+	}
+
 	static toChatInbox() {
 		router.navigate({
 			pathname: APP_ROUTING_ENUM.INBOX,
@@ -110,6 +114,19 @@ class RoutingUtils {
 	static toAppSettings() {
 		router.navigate({
 			pathname: APP_ROUTING_ENUM.SETTINGS_PAGE,
+		});
+	}
+
+	/**
+	 * Profile
+	 */
+	static browseFeed(uri: string, displayName: string) {
+		router.replace({
+			pathname: '/feed',
+			params: {
+				uri,
+				displayName,
+			},
 		});
 	}
 }

@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import BearError from '#/components/svgs/BearError';
 import { useAppActiveSession } from '#/states/global/hooks';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
@@ -9,7 +9,7 @@ function AccountMissingError() {
 	const { session } = useAppActiveSession();
 
 	return (
-		<View style={{ marginVertical: 'auto' }}>
+		<View style={styles.root}>
 			<ErrorPageBuilder
 				stickerArt={<BearError />}
 				errorMessage={'No Account Selected'}
@@ -29,3 +29,11 @@ function AccountMissingError() {
 }
 
 export default AccountMissingError;
+
+const styles = StyleSheet.create({
+	root: {
+		marginVertical: 'auto',
+		alignItems: 'center',
+		height: '100%',
+	},
+});

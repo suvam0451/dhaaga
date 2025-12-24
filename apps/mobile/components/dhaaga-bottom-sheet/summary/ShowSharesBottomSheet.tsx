@@ -4,9 +4,12 @@ import { UserTimelineCtx, useUserTimelineState } from '@dhaaga/core';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 import { UserTimelineView } from '#/features/timelines/view/UserTimelineView';
 import BottomSheetMenu from '#/components/dhaaga-bottom-sheet/components/BottomSheetMenu';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function Generator() {
 	const { ctx } = useAppBottomSheet();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SHEETS]);
 	const { post } = usePostEventBusStore(
 		ctx.$type === 'post-id' ? ctx.postId : null,
 	);
@@ -16,7 +19,7 @@ function Generator() {
 
 	return (
 		<>
-			<BottomSheetMenu title={'Shared By'} variant={'clear'} />
+			<BottomSheetMenu title={t(`sheetLabels.sharedBy`)} variant={'clear'} />
 			<UserTimelineView
 				label={null}
 				queryResult={queryResult}

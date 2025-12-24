@@ -53,7 +53,8 @@
 			"selectServer": "Select Server",
 			"mastodonSignIn": "Mastodon Sign-In",
 			"misskeySignIn": "Misskey Sign-In",
-			"pickPlatform": "Pick Platform"
+			"pickPlatform": "Pick Platform",
+			"appLanguage": "App Language"
 		}
 	},
 	"dialogs": {

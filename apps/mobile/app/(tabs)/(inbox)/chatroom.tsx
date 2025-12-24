@@ -1,4 +1,4 @@
-import { FlatList, View } from 'react-native';
+import { RefreshControl } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
@@ -19,6 +19,7 @@ import {
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 import ReplyComposerView from '#/features/chat/views/ReplyComposerView';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { LegendList, LegendListRef } from '@legendapp/list';
 
 type MessageProps = {
 	message: MessageObjectType;
@@ -29,6 +30,7 @@ function Message({ message }: MessageProps) {
 }
 
 function Generator() {
+	const [IsRefreshing, setIsRefreshing] = useState(false);
 	const { theme } = useAppTheme();
 	const params = useLocalSearchParams();
 	const roomId: string = params['roomId'] as string;
@@ -39,7 +41,12 @@ function Generator() {
 		error: chatRoomFetchError,
 	} = useApiGetChatroom(roomId);
 	const queryResult = useApiGetChatMessages(roomId, undefined);
-	const { data: nextMessages, fetchStatus, error } = queryResult;
+	const { data: nextMessages, fetchStatus, error, refetch } = queryResult;
+
+	function onRefresh() {
+		setIsRefreshing(true);
+		refetch().finally(() => setIsRefreshing(false));
+	}
 
 	const State = useChatroomState();
 	const dispatch = useChatroomDispatch();
@@ -75,12 +82,12 @@ function Generator() {
 
 	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
-	const listRef = useRef<FlatList>(null);
+	const listRef = useRef<LegendListRef>(null);
 
 	return (
-		<View style={{ flex: 1 }}>
+		<>
 			<NavBar_Simple label={'Chat'} animatedStyle={animatedStyle} />
-			<FlatList
+			<LegendList
 				ref={listRef}
 				onScroll={scrollHandler}
 				onLayout={onLayout}
@@ -90,6 +97,9 @@ function Generator() {
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
 					paddingBottom: appDimensions.bottomNav.secondMenuBarHeight + 4,
 				}}
+				refreshControl={
+					<RefreshControl refreshing={IsRefreshing} onRefresh={onRefresh} />
+				}
 				style={{ flex: 1, backgroundColor: theme.background.a0 }}
 				ListEmptyComponent={
 					<TimelineStateIndicator
@@ -101,7 +111,7 @@ function Generator() {
 				}
 			/>
 			<ReplyComposerView roomId={roomId} listRef={listRef} />
-		</View>
+		</>
 	);
 }
 

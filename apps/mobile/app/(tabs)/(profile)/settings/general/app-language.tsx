@@ -1,3 +1,3 @@
-import AppLanguagePresenter from '#/features/settings/presenter/AppLanguagePresenter';
+import Page from '#/features/settings/views/AppLanguageView';
 
-export default AppLanguagePresenter;
+export default Page;

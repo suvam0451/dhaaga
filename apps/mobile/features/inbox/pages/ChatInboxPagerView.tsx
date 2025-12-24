@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useApiGetChatUpdates } from '#/hooks/api/useNotifications';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { useAppApiClient } from '#/states/global/hooks';
 import { DriverService, KNOWN_SOFTWARE } from '@dhaaga/bridge';
 import NavBar_Inbox from '#/features/navbar/views/NavBar_Inbox';
@@ -9,6 +9,7 @@ import ChatRoomListItemView from '#/features/timelines/view/ChatRoomListItemView
 import { AppDividerSoft } from '#/ui/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { LegendList } from '@legendapp/list';
 
 function ChatInboxPagerView() {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
@@ -44,7 +45,7 @@ function ChatInboxPagerView() {
 				type={'chats'}
 				animatedStyle={animatedStyle}
 			/>
-			<FlatList
+			<LegendList
 				onScroll={scrollHandler}
 				data={data?.data ?? []}
 				renderItem={({ item }) => <ChatRoomListItemView room={item} />}

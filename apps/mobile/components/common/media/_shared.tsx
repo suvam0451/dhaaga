@@ -19,16 +19,10 @@ export function AppImageComponent({
 	parentContainerWidth,
 	parentContainerHeight,
 }: Props) {
+	// function onLoad(event: ImageLoadEventData) {}
+
 	return (
-		<View
-			style={{
-				alignItems: 'center',
-				justifyContent: 'center',
-				borderRadius: 8,
-				width: '100%',
-				flex: 1,
-			}}
-		>
+		<View style={styles.imageRoot}>
 			<Image
 				source={{ uri: url }}
 				style={{
@@ -39,6 +33,7 @@ export function AppImageComponent({
 					justifyContent: 'center',
 					flex: 1,
 				}}
+				cachePolicy={'disk'}
 			/>
 		</View>
 	);
@@ -215,6 +210,13 @@ export function CarousalIndicatorOverlay({
 }
 
 const styles = StyleSheet.create({
+	imageRoot: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: 8,
+		width: '100%',
+		flex: 1,
+	},
 	carousalIndexContainer: {
 		position: 'absolute',
 		right: 0,

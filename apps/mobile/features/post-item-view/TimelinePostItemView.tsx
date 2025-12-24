@@ -50,8 +50,6 @@ type StatusItemProps = {
 	// disables all interactions
 	isPreview?: boolean;
 	isPin?: boolean;
-	// for post-details page
-	showFullDetails?: boolean;
 	post: PostObjectType;
 };
 
@@ -59,87 +57,61 @@ type StatusItemProps = {
  * Renders a status/note
  * @constructor
  */
-const Generator = memo(
-	({ isPreview, isPin, showFullDetails }: StatusItemProps) => {
-		const { dto: _post } = withPostItemContext();
+const Generator = memo(({ isPreview, isPin }: StatusItemProps) => {
+	const { dto: _post } = withPostItemContext();
 
-		const Component = useMemo(() => {
-			if (!_post) return <View />;
+	const Component = useMemo(() => {
+		if (!_post) return <View />;
 
-			if (_post.meta.isBoost) {
-				// Quote Boost
-				if (!!_post.content.raw || _post.content.media.length > 0) {
+		if (_post.meta.isBoost) {
+			// Quote Boost
+			if (!!_post.content.raw || _post.content.media.length > 0) {
+				return <RootStatusView isPreview={isPreview} isPin={isPin} />;
+			} else {
+				// Normal Boost + Has Reply
+				if (_post.meta.isReply) {
 					return (
-						<RootStatusView
-							isPreview={isPreview}
-							isPin={isPin}
-							showFullDetails={showFullDetails}
-						/>
+						<>
+							<ShareIndicator
+								avatarUrl={_post.postedBy?.avatarUrl}
+								parsedDisplayName={_post.postedBy?.parsedDisplayName}
+								createdAt={_post.createdAt}
+							/>
+							<AncestorFragment />
+							<RootStatusView isPreview={isPreview} isPin={isPin} />
+						</>
 					);
 				} else {
-					// Normal Boost + Has Reply
-					if (_post.meta.isReply) {
-						return (
-							<>
-								<ShareIndicator
-									avatarUrl={_post.postedBy?.avatarUrl}
-									parsedDisplayName={_post.postedBy?.parsedDisplayName}
-									createdAt={_post.createdAt}
-								/>
-								<AncestorFragment />
-								<RootStatusView
-									isPreview={isPreview}
-									isPin={isPin}
-									showFullDetails={showFullDetails}
-								/>
-							</>
-						);
-					} else {
-						return (
-							<>
-								<ShareIndicator
-									avatarUrl={_post.postedBy?.avatarUrl}
-									parsedDisplayName={_post.postedBy?.parsedDisplayName}
-									createdAt={_post.createdAt}
-								/>
-								<RootStatusView
-									isPreview={isPreview}
-									isPin={isPin}
-									showFullDetails={showFullDetails}
-								/>
-							</>
-						);
-					}
+					return (
+						<>
+							<ShareIndicator
+								avatarUrl={_post.postedBy?.avatarUrl}
+								parsedDisplayName={_post.postedBy?.parsedDisplayName}
+								createdAt={_post.createdAt}
+							/>
+							<RootStatusView isPreview={isPreview} isPin={isPin} />
+						</>
+					);
 				}
-			} else if (_post.meta.isReply) {
-				return (
-					<>
-						<AncestorFragment />
-						<RootStatusView
-							isPreview={isPreview}
-							isPin={isPin}
-							showFullDetails={showFullDetails}
-						/>
-					</>
-				);
-			} else {
-				return (
-					<RootStatusView
-						isPreview={isPreview}
-						isPin={isPin}
-						showFullDetails={showFullDetails}
-					/>
-				);
 			}
-		}, [_post]);
+		} else if (_post.meta.isReply) {
+			return (
+				<>
+					<AncestorFragment />
+					<RootStatusView isPreview={isPreview} isPin={isPin} />
+				</>
+			);
+		} else {
+			return <RootStatusView isPreview={isPreview} isPin={isPin} />;
+		}
+	}, [_post]);
 
-		return (
-			<PostContainer>
-				<TimelineFilter_EmojiCrash>{Component}</TimelineFilter_EmojiCrash>
-			</PostContainer>
-		);
-	},
-);
+	return (
+		<PostContainer>
+			<TimelineFilter_EmojiCrash>{Component}</TimelineFilter_EmojiCrash>
+		</PostContainer>
+	);
+});
 
 function TimelinePostItemView(props: StatusItemProps) {
 	const { post: _post } = usePostEventBusStore(props.post);
