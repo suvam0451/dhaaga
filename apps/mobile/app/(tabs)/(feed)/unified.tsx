@@ -49,7 +49,7 @@ function TimelineIdle() {
 							label={'Go There'}
 							loading={false}
 							onClick={() => {
-								router.navigate('/(hub)/central');
+								router.navigate('/(hub)');
 							}}
 						/>
 					</View>
