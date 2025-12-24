@@ -13,11 +13,12 @@ const dir = __dirname;
  * metro bundler does not throw an error
  */
 function stripLicensedAssetUse() {
-	if (!['publish-apk', 'publish-aab'].includes(process.env.APP_VARIANT))
-		fs.renameSync(
-			path.join(dir, '../components/containers/WithBackgroundSkin.tsx'),
-			path.join(dir, '../components/containers/archived.bak'),
-		);
+	if (['publish-apk', 'publish-aab'].includes(process.env.APP_VARIANT)) return;
+
+	fs.renameSync(
+		path.join(dir, '../components/containers/WithBackgroundSkin.tsx'),
+		path.join(dir, '../components/containers/archived.bak'),
+	);
 
 	fs.renameSync(
 		path.join(dir, '../components/containers/WithBackgroundSkin.lite.tsx'),

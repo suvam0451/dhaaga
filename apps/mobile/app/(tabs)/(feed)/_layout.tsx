@@ -18,7 +18,10 @@ function DiscoverScreen() {
 			screenOptions={{
 				headerShown: false,
 			}}
-		/>
+		>
+			<Stack.Screen name={'unified'} />
+			<Stack.Screen name={'user-guide'} />
+		</Stack>
 	);
 }
 

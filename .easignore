@@ -1,0 +1,10 @@
+# Ignore native folders
+apps/mobile/android
+apps/mobile/ios
+
+# Ignore test coverage reports
+apps/mobile/coverage
+!apps/mobile/assets # do not ignore local assets
+
+# Unignore licensed assets for EAS
+!apps/_shared/assets/licensed

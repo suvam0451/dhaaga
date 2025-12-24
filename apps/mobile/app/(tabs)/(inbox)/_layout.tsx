@@ -18,7 +18,12 @@ function NotificationsScreen() {
 			screenOptions={{
 				headerShown: false,
 			}}
-		/>
+		>
+			<Stack.Screen name={'inbox'} />
+			<Stack.Screen name={'chatroom'} />
+			<Stack.Screen name={'manage-subs'} />
+			<Stack.Screen name={'user-guide'} />
+		</Stack>
 	);
 }
 

@@ -14,13 +14,13 @@ function Layout() {
 
 	return (
 		<Stack
-			initialRouteName={'history'}
+			initialRouteName={'search'}
 			screenOptions={{
 				headerShown: false,
 			}}
 		>
-			<Stack.Screen name={'history'} />
 			<Stack.Screen name={'search'} />
+			<Stack.Screen name={'history'} />
 			<Stack.Screen name={'user-guide'} />
 		</Stack>
 	);
