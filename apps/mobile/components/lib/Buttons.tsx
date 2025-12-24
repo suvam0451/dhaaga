@@ -75,7 +75,7 @@ export function AppButtonVariantA({
 	}
 
 	return (
-		<TouchableOpacity
+		<Pressable
 			style={[
 				appStyles.button,
 				{
@@ -105,7 +105,7 @@ export function AppButtonVariantA({
 			>
 				{label}
 			</NativeTextBold>
-		</TouchableOpacity>
+		</Pressable>
 	);
 }
 

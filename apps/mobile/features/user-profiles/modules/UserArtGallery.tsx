@@ -1,4 +1,10 @@
-import { View, Dimensions, FlatList, RefreshControl } from 'react-native';
+import {
+	View,
+	Dimensions,
+	FlatList,
+	RefreshControl,
+	Pressable,
+} from 'react-native';
 import {
 	UserMasonryGalleryCtx,
 	UserMasonryGalleryStateAction,
@@ -10,6 +16,49 @@ import { Image } from 'expo-image';
 import Animated, { ScrollHandlerProcessed } from 'react-native-reanimated';
 import { TimelineLoadingIndicator } from '#/ui/LoadingIndicator';
 import { useApiGetPostsWithMediaFromAuthor } from '#/features/user-profiles/api';
+import { useImageInspect } from '#/states/global/hooks';
+import type { PostObjectType } from '@dhaaga/bridge';
+
+type HalfListRendererProps = {
+	items: any;
+};
+
+function HalfListRenderer({ items }: HalfListRendererProps) {
+	const { showInspector, appSession } = useImageInspect();
+	const WIDTH = (Dimensions.get('window').width - 20) / 2;
+
+	function onPressMedia(item: PostObjectType) {
+		appSession.appManager.storage.setPostForMediaInspect(item);
+		showInspector(true);
+	}
+
+	return (
+		<View style={{ flex: 1, alignItems: 'center' }}>
+			<FlatList
+				data={items}
+				renderItem={({ item }) => (
+					<Pressable
+						onPress={() => {
+							onPressMedia(item.post);
+						}}
+					>
+						<Image
+							source={{
+								uri: item.media.url,
+							}}
+							style={{
+								width: WIDTH,
+								height: item.media.height * (WIDTH / item.media.width),
+								borderRadius: 8,
+							}}
+						/>
+					</Pressable>
+				)}
+				ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+			/>
+		</View>
+	);
+}
 
 type Props = {
 	forwardedRef: any;
@@ -18,9 +67,8 @@ type Props = {
 	headerHeight: number;
 };
 
-function Content({ forwardedRef, userId, onScroll, headerHeight }: Props) {
+function Generator({ forwardedRef, userId, onScroll, headerHeight }: Props) {
 	const [IsRefreshing, setIsRefreshing] = useState(false);
-
 	const State = useUserMasonryGalleryState();
 	const dispatch = useUserMasonryGalleryDispatch();
 
@@ -49,8 +97,6 @@ function Content({ forwardedRef, userId, onScroll, headerHeight }: Props) {
 		}
 	}, [data, fetchStatus]);
 
-	const WIDTH = (Dimensions.get('window').width - 20) / 2;
-
 	function onEndReached() {
 		if (State.items.length > 0 && fetchStatus !== 'fetching')
 			dispatch({
@@ -66,42 +112,8 @@ function Content({ forwardedRef, userId, onScroll, headerHeight }: Props) {
 				onScroll={onScroll}
 				renderItem={({ item }) => (
 					<View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-						<View style={{ flex: 1, alignItems: 'center' }}>
-							<FlatList
-								data={item.left}
-								renderItem={({ item }) => (
-									<Image
-										source={{
-											uri: item.media.url,
-										}}
-										style={{
-											width: WIDTH,
-											height: item.media.height * (WIDTH / item.media.width),
-											borderRadius: 8,
-										}}
-									/>
-								)}
-								ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-							/>
-						</View>
-						<View style={{ flex: 1, alignItems: 'center' }}>
-							<FlatList
-								data={item.right}
-								renderItem={({ item }) => (
-									<Image
-										source={{
-											uri: item.media.url,
-										}}
-										style={{
-											width: WIDTH,
-											height: item.media.height * (WIDTH / item.media.width),
-											borderRadius: 8,
-										}}
-									/>
-								)}
-								ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-							/>
-						</View>
+						<HalfListRenderer items={item.left} />
+						<HalfListRenderer items={item.right} />
 					</View>
 				)}
 				ListHeaderComponent={<View style={{ height: headerHeight }} />}
@@ -131,7 +143,7 @@ function UserArtGallery({
 }: Props) {
 	return (
 		<UserMasonryGalleryCtx>
-			<Content
+			<Generator
 				forwardedRef={forwardedRef}
 				userId={userId}
 				onScroll={onScroll}

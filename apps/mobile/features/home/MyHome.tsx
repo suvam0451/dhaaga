@@ -19,7 +19,6 @@ import { router } from 'expo-router';
 import DriverService, { AppModulesProps } from '#/services/driver.service';
 import useApiMe from '#/hooks/useApiMe';
 import { useState } from 'react';
-import Animated from 'react-native-reanimated';
 import NavBar_Home from '#/features/navbar/views/NavBar_Home';
 import AccountHomeModuleItem from './components/AccountHomeModuleItem';
 import { useTranslation } from 'react-i18next';
@@ -28,8 +27,31 @@ import AccountLoadError from '#/features/home/views/AccountLoadError';
 import AccountMissingError from '#/features/home/views/AccountMissingError';
 import MyAccountOverview from '#/features/home/components/MyAccountOverview';
 import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
-import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
 import TimeOfDayGreeting from '#/features/hub/components/TimeOfDayGreeting';
+
+/**
+ * Animations broken. Will be added in the future.
+ * @constructor
+ */
+function CurrentPlanIndicator() {
+	const { theme } = useAppTheme();
+	return (
+		<Pressable
+			style={{
+				borderWidth: 1.5,
+				borderRadius: 8,
+				backgroundColor: theme.background.a50,
+				paddingVertical: 6,
+				paddingHorizontal: 16,
+			}}
+			onPress={() => {
+				router.navigate(APP_ROUTING_ENUM.SETTINGS_PLANS);
+			}}
+		>
+			<NativeTextBold style={{}}>FREE</NativeTextBold>
+		</Pressable>
+	);
+}
 
 function Home() {
 	const { theme } = useAppTheme();
@@ -71,8 +93,8 @@ function Home() {
 			to: APP_ROUTING_ENUM.MY_DRAFTS,
 		},
 		{
-			label: 'Skins',
-			desc: 'Fun stuff',
+			label: t(`profile.appFeatures.skins.label`),
+			desc: t(`profile.appFeatures.skins.desc`),
 			iconId: 'layers-outline',
 			to: APP_ROUTING_ENUM.APP_SKINS,
 		},
@@ -87,9 +109,6 @@ function Home() {
 			refreshControl={
 				<RefreshControl refreshing={IsRefreshing} onRefresh={_refresh} />
 			}
-			style={{
-				backgroundColor: theme.background.a0,
-			}}
 		>
 			<MyAccountOverview user={data} />
 			<View style={{ marginVertical: 4 }} />
@@ -126,22 +145,8 @@ function Home() {
 				>
 					{t(`profile.appFeatures.sectionLabel`)}
 				</NativeTextSpecial>
-				<Pressable
-					style={{
-						borderWidth: 1.5,
-						borderRadius: 8,
-						backgroundColor: theme.background.a50,
-						paddingVertical: 6,
-						paddingHorizontal: 16,
-					}}
-					onPress={() => {
-						router.navigate(APP_ROUTING_ENUM.SETTINGS_PLANS);
-					}}
-				>
-					<NativeTextBold style={{}}>FREE</NativeTextBold>
-				</Pressable>
 			</View>
-			<Animated.FlatList
+			<FlatList
 				data={appModules}
 				numColumns={2}
 				renderItem={({ item }) => (
@@ -164,6 +169,7 @@ function Home() {
 
 function MyHome() {
 	const { session } = useAppActiveSession();
+	const { theme } = useAppTheme();
 
 	const Component = useMemo(() => {
 		if (!session?.target) return <AccountMissingError />;
@@ -173,12 +179,10 @@ function MyHome() {
 	}, [session]);
 
 	return (
-		<WithBackgroundSkin>
-			<View>
-				<NavBar_Home />
-				{Component}
-			</View>
-		</WithBackgroundSkin>
+		<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
+			<NavBar_Home />
+			{Component}
+		</View>
 	);
 }
 

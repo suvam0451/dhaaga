@@ -42,7 +42,9 @@
 			"updates": "Updates"
 		},
 		"secondary": {
+			"appSkins": "App Skins",
 			"addProfile": "Add Profile",
+			"manageSubscriptions": "Manage Subscriptions",
 			"myLikes": "My Likes",
 			"myBookmarks": "My Bookmarks",
 			"myAccount": "My Account",
@@ -50,12 +52,15 @@
 			"appSettings": "App Settings",
 			"manageAccounts": "Manage Accounts",
 			"blueskySignIn": "Bluesky Sign-In",
+			"allPosts": "All Posts",
 			"selectServer": "Select Server",
 			"mastodonSignIn": "Mastodon Sign-In",
 			"misskeySignIn": "Misskey Sign-In",
 			"pickPlatform": "Pick Platform",
 			"appLanguage": "App Language",
-			"postDetails": "Post Details"
+			"postDetails": "Post Details",
+			"manageHubProfiles": "Manage Hub Profiles",
+			"searchHistory": "Search History"
 		}
 	},
 	"dialogs": {
@@ -97,8 +102,8 @@
 				"desc": "My Lists"
 			},
 			"socialHub": {
-				"label": "Social Hub",
-				"desc": "Manage profiles"
+				"label": "Hub Profiles",
+				"desc": "Manage hub profiles"
 			},
 			"collections": {
 				"label": "Collections",
@@ -107,6 +112,10 @@
 			"drafts": {
 				"label": "Drafts",
 				"desc": "Lost letters"
+			},
+			"skins": {
+				"label": "App Skins",
+				"desc": "Matches your mood!"
 			}
 		}
 	},
@@ -222,5 +231,21 @@
 			"desc": "'For power users"
 		},
 		"footer": "Built with \uD83D\uDC9B by Debashish Patra"
+	},
+	"indicators": {
+		"quotedThisPost": "Quoted this Post",
+		"sharedThisLink": "Shared this Link"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "Loading More...",
+		"nothingMoreToShow": "Nothing more to show"
+	},
+	"errorReporting": {
+		"noTimelineSelectedLabel": "No Timeline Selected",
+		"noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
+		"noTimelineSelectedButtonCta": "Go There"
+	},
+	"unspecced": {
+		"wipText": "This feature is being built \uD83D\uDEA7"
 	}
 }

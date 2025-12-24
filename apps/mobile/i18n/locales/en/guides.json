@@ -118,10 +118,10 @@
 			"Consider this your account overview page.",
 			"You can access most of your server's features, as well as Dhaaga special features from here."
 		],
-		"qHowAddSwitchAccount": "How to switch accounts?",
-		"aHowAddSwitchAccount": [
-			"To switch, long press the 5th tab (works from anywhere).",
-			"To add, either use the above or go to Settings -> Accounts -> Add"
+		"qHowManageAccount": "How to add/switch accounts?",
+		"aHowManageAccount": [
+			"New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+			"Also, long pressing the profile tab (5th) brings up the account switcher :)"
 		],
 		"qHowEditAccountDetails": "Can I edit my account details?",
 		"aHowEditAccountDetails": [

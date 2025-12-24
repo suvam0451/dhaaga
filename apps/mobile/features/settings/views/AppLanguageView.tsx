@@ -12,6 +12,7 @@ import SettingPageBuilder from '#/ui/SettingPageBuilder';
 import { AppDividerHard } from '#/ui/Divider';
 import { NativeTextBold, NativeTextNormal } from '#/ui/NativeText';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { router } from 'expo-router';
 
 function AppLanguageView() {
 	const { getValue, setAppLanguage } = useAppSettings();
@@ -22,6 +23,7 @@ function AppLanguageView() {
 	function onChangeLanguage(languageCode: string) {
 		i18n.changeLanguage(languageCode);
 		setAppLanguage(languageCode);
+		router.back();
 	}
 
 	const lang = getValue(APP_SETTING_KEY.APP_LANGUAGE);

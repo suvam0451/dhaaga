@@ -23,8 +23,11 @@ import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import WithBackgroundSkin from '#/components/containers/WithBackgroundSkin';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function TimelineIdle() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { animatedStyle } = useScrollHandleAnimatedList();
 
 	return (
@@ -38,17 +41,15 @@ function TimelineIdle() {
 				<NavBar_Feed animatedStyle={animatedStyle} />
 				<ErrorPageBuilder
 					stickerArt={<BearError />}
-					errorMessage={'No Timeline Selected'}
-					errorDescription={
-						'You can pin and access various types of timelines from your personalised hub.'
-					}
+					errorMessage={t(`errorReporting.noTimelineSelectedLabel`)}
+					errorDescription={t(`errorReporting.noTimelineSelectedDesc`)}
 				>
 					<View style={{ marginTop: 32 }}>
 						<AppButtonVariantA
 							label={'Go There'}
 							loading={false}
 							onClick={() => {
-								router.navigate('/');
+								router.navigate('/(hub)/central');
 							}}
 						/>
 					</View>

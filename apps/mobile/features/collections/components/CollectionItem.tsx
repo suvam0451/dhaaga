@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import APP_ICON_ENUM, { AppIcon } from '#/components/lib/Icon';
 import { useAppTheme } from '#/states/global/hooks';
-import { AppText } from '#/components/lib/Text';
+import { NativeTextBold } from '#/ui/NativeText';
 
 type CollectionItemProps = {
 	active: boolean;
@@ -32,6 +32,7 @@ type CollectionItemProps = {
  * @param inactiveIconId
  * @param activeIconId
  * @param onPress
+ * @param style
  * @constructor
  */
 function CollectionItem({
@@ -59,40 +60,31 @@ function CollectionItem({
 			>
 				<AppIcon id={'albums-outline'} size={24} color={theme.secondary.a20} />
 			</View>
-			<View style={{ marginLeft: 16, justifyContent: 'center' }}>
-				<AppText.Medium
+			<View style={{ marginLeft: 16, justifyContent: 'center', flex: 1 }}>
+				<NativeTextBold
 					style={{
 						color: active ? theme.primary : theme.secondary.a10,
 						fontSize: 18,
 						marginBottom: 4,
 					}}
+					numberOfLines={1}
 				>
 					{label}
-				</AppText.Medium>
-				<AppText.Medium
+				</NativeTextBold>
+				<NativeTextBold
 					style={{
 						color: theme.secondary.a30,
 					}}
+					numberOfLines={1}
 				>
 					{desc}
-				</AppText.Medium>
+				</NativeTextBold>
 			</View>
-			<View style={{ flexGrow: 1 }} />
 			<Pressable onPress={onPress} style={{ padding: 8 }}>
 				{active ? (
-					<AppIcon
-						id={activeIconId}
-						size={32}
-						color={activeTint}
-						onPress={onPress}
-					/>
+					<AppIcon id={activeIconId} size={32} color={activeTint} />
 				) : (
-					<AppIcon
-						id={inactiveIconId}
-						size={32}
-						color={inactiveTint}
-						onPress={onPress}
-					/>
+					<AppIcon id={inactiveIconId} size={32} color={inactiveTint} />
 				)}
 			</Pressable>
 		</View>
@@ -106,5 +98,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingRight: 4,
+		flex: 1,
 	},
 });

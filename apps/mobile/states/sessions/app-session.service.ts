@@ -79,7 +79,7 @@ class Storage extends BaseStorageManager {
 		return this.setJson(APP_CACHE_KEY.USER_OBJECT_TARGET, obj);
 	}
 
-	setPostForMediaInspect(obj: UserObjectType) {
+	setPostForMediaInspect(obj: PostObjectType) {
 		return this.setJson(APP_CACHE_KEY.MEDIA_INSPECT_POST_TARGET, obj);
 	}
 

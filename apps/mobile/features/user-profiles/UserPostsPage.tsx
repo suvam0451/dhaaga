@@ -10,8 +10,11 @@ import PostTimelineView from '#/features/timelines/view/PostTimelineView';
 import { useActiveUserSession, useAppDb } from '#/states/global/hooks';
 import { useEffect } from 'react';
 import { View } from 'react-native';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function Generator() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { id } = useLocalSearchParams<{ id: string }>();
 	const { db } = useAppDb();
 	const { acct } = useActiveUserSession();
@@ -48,7 +51,7 @@ function Generator() {
 	if (!id) return <View />;
 	return (
 		<PostTimelineView
-			label={'All Posts'}
+			label={t(`topNav.secondary.allPosts`)}
 			queryResult={queryResult}
 			navbarType={'simple'}
 			flatListKey={'user/posts'}

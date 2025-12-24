@@ -13,27 +13,22 @@ function Page() {
 
 	const qa: { question: string; answers: string[] }[] = [
 		{
-			question: t(`myAccount.qPageIntro`, {
-				ns: LOCALIZATION_NAMESPACE.GUIDES,
-			}),
+			question: t(`myAccount.qPageIntro`),
 			answers: t(`myAccount.aPageIntro`, NS_OBJ) as unknown as string[],
 		},
 		{
-			question: 'How to add/switch accounts?',
-			answers: [
-				'New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.',
-				'Also, long pressing the profile tab (5th) brings up the account switcher :)',
-			],
+			question: t(`myAccount.qHowManageAccount`),
+			answers: t(`myAccount.aHowManageAccount`, NS_OBJ) as unknown as string[],
 		},
 		{
-			question: t(`myAccount.qHowEditAccountDetails`, NS),
+			question: t(`myAccount.qHowEditAccountDetails`),
 			answers: t(
 				`myAccount.aHowEditAccountDetails`,
 				NS_OBJ,
 			) as unknown as string[],
 		},
 		{
-			question: t(`myAccount.qProfileOutOfSync`, NS),
+			question: t(`myAccount.qProfileOutOfSync`),
 			answers: t(`myAccount.aProfileOutOfSync`, NS_OBJ) as unknown as string[],
 		},
 	];

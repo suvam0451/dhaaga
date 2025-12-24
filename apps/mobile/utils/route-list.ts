@@ -53,7 +53,7 @@ export enum APP_ROUTING_ENUM {
 	SETTINGS_GENERAL_APP_LANGUAGE = '/(profile)/settings/general/app-language',
 	CHATROOM = '/(inbox)/chatroom',
 
-	PROFILES = '/(profile)/profiles',
+	PROFILES = '/(profile)/dhaaga/hub-profiles',
 
 	MY_LIKES = '/(profile)/account/likes',
 	MY_BOOKMARKS = '/(profile)/account/bookmarks',

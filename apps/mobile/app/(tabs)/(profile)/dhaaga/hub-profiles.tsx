@@ -1,4 +1,4 @@
-import { Pressable, RefreshControl, ScrollView, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import {
 	useAppBottomSheet,
@@ -15,13 +15,13 @@ import { APP_EVENT_ENUM } from '#/states/event-bus/app.publisher';
 import { DialogFactory } from '#/utils/dialog-factory';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
-import {
-	NativeTextMedium,
-	NativeTextNormal,
-	NativeTextBold,
-} from '#/ui/NativeText';
+import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { AppAccountSelectionItem } from '#/features/accounts/views/AccountView';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
+import { LegendList } from '@legendapp/list';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 type ProfileFragmentProps = {
 	acct: Account;
@@ -131,6 +131,7 @@ function Page() {
 	const { theme } = useAppTheme();
 	const { show, stateId } = useAppBottomSheet();
 	const { appEventBus } = useAppPublishers();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	function init() {
 		setIsRefreshing(true);
@@ -156,64 +157,66 @@ function Page() {
 
 	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	return (
-		<>
-			<NavBar_Simple label={'Manage Profiles'} animatedStyle={animatedStyle} />
-			<ScrollView
+		<View
+			style={{
+				flex: 1,
+			}}
+		>
+			<NavBar_Simple
+				label={t(`topNav.secondary.manageHubProfiles`)}
+				animatedStyle={animatedStyle}
+			/>
+			<LegendList
+				key={'hub/profiles'}
+				onScroll={scrollHandler}
+				data={Data}
+				renderItem={({ item }) => (
+					<View>
+						{item.profiles!.map((o, k) => (
+							<ProfileFragment acct={item} profile={o} key={k} />
+						))}
+					</View>
+				)}
 				style={{
-					paddingTop: appDimensions.topNavbar.scrollViewTopPadding,
-					paddingHorizontal: 10,
+					flex: 1,
 					backgroundColor: theme.background.a0,
+				}}
+				contentContainerStyle={{
+					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 32,
+					paddingHorizontal: 10,
 				}}
 				refreshControl={
 					<RefreshControl refreshing={IsRefreshing} onRefresh={init} />
 				}
-				contentContainerStyle={{ paddingTop: 32, paddingBottom: 32 }}
-				onScroll={scrollHandler}
-			>
-				<View style={{ marginBottom: 24 }}>
-					<NativeTextMedium
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-						style={{ fontSize: 16, textAlign: 'center' }}
-					>
-						Add, remove and order your profiles.
-					</NativeTextMedium>
-					<NativeTextNormal
-						style={{ textAlign: 'center' }}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
-					>
-						May need an app restart to show up in the hub interface.
-					</NativeTextNormal>
-				</View>
-
-				{Data.map((acct, i) => (
-					<View key={i}>
-						{acct.profiles!.map((o, k) => (
-							<ProfileFragment acct={acct} profile={o} key={k} />
-						))}
-					</View>
-				))}
-				<Pressable
-					style={{ marginTop: 48, paddingBottom: 54 + 16 }}
-					onPress={onAddProfile}
-				>
-					<View
-						style={{
-							backgroundColor: theme.primary,
-							padding: 8,
-							borderRadius: 8,
-							maxWidth: 128,
-							alignSelf: 'center',
-						}}
-					>
-						<NativeTextBold
-							style={{ color: 'black', textAlign: 'center', fontSize: 18 }}
+				ListHeaderComponent={
+					<View style={{ marginBottom: 24 }}>
+						<NativeTextMedium
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+							style={{ fontSize: 16, textAlign: 'center' }}
 						>
-							Add Profile
-						</NativeTextBold>
+							Add, remove and order your profiles.
+						</NativeTextMedium>
+						<NativeTextNormal
+							style={{ textAlign: 'center' }}
+							emphasis={APP_COLOR_PALETTE_EMPHASIS.A30}
+						>
+							May need an app restart to show up in the hub interface.
+						</NativeTextNormal>
 					</View>
-				</Pressable>
-			</ScrollView>
-		</>
+				}
+				ListFooterComponent={
+					<AppButtonVariantA
+						label={'Add Profile'}
+						loading={false}
+						onClick={onAddProfile}
+						style={{
+							marginTop: 48,
+							marginBottom: 54 + 16,
+						}}
+					/>
+				}
+			/>
+		</View>
 	);
 }
 

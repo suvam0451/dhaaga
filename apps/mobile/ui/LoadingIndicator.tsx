@@ -9,6 +9,8 @@ import { useAppTheme } from '#/states/global/hooks';
 import useLoadingMoreIndicatorState from '../states/useLoadingMoreIndicatorState';
 import { FetchStatus } from '@tanstack/react-query';
 import { NativeTextBold } from '#/ui/NativeText';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 type LoadingMoreProps = {
 	numItems: number;
@@ -32,6 +34,7 @@ function TimelineLoadingIndicator({
 	style,
 	numItems,
 }: LoadingMoreProps) {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { visible, loading } = useLoadingMoreIndicatorState({
 		fetchStatus: networkFetchStatus,
 		additionalLoadingStates: isLoading,
@@ -57,7 +60,7 @@ function TimelineLoadingIndicator({
 							},
 						]}
 					>
-						{'Loading More...'}
+						{t(`loaders.loadingMoreIndicatorText`)}
 					</NativeTextBold>
 				</View>
 			</View>

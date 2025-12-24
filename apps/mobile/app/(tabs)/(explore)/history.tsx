@@ -1,18 +1,23 @@
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { useAppTheme } from '#/states/global/hooks';
-import BrowsingHistoryEmpty from '#/components/svgs/BrowsingHistoryEmpty';
-import ErrorPageBuilder from '#/ui/ErrorPageBuilder';
 import { appDimensions } from '#/styles/dimensions';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
+import { NativeTextBold } from '#/ui/NativeText';
 
 function Page() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const history = [];
 	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	const { theme } = useAppTheme();
 	return (
 		<>
-			<NavBar_Simple label={'Search History'} animatedStyle={animatedStyle} />
+			<NavBar_Simple
+				label={t(`topNav.secondary.searchHistory`)}
+				animatedStyle={animatedStyle}
+			/>
 			<FlatList
 				data={history}
 				onScroll={scrollHandler}
@@ -22,11 +27,15 @@ function Page() {
 					paddingTop: appDimensions.topNavbar.scrollViewTopPadding + 16,
 				}}
 				ListEmptyComponent={
-					<ErrorPageBuilder
-						stickerArt={<BrowsingHistoryEmpty />}
-						errorMessage={'Move Along'}
-						errorDescription={'Nothing to see here'}
-					/>
+					<View
+						style={{
+							alignItems: 'center',
+							justifyContent: 'center',
+							marginTop: 32,
+						}}
+					>
+						<NativeTextBold>{t(`unspecced.wipText`)}</NativeTextBold>
+					</View>
 				}
 			/>
 		</>
