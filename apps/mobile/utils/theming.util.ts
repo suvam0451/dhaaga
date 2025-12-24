@@ -23,7 +23,7 @@
  * Grab the opposite end of the color wheel and
  * shift the hue by +/- 30 to get this palette
  */
-import { StyleProp, TextStyle } from 'react-native';
+import { ColorValue, StyleProp, TextStyle } from 'react-native';
 import { commentThreadPalette } from '../styles/comment-threads';
 
 export enum APP_COLOR_PALETTE_EMPHASIS {
@@ -82,6 +82,33 @@ export enum AppTextVariant {
 }
 
 export class AppThemingUtil {
+	private static _hexToRgb(hex: string): { r: number; g: number; b: number } {
+		const cleaned = hex.replace('#', '');
+
+		const full =
+			cleaned.length === 3
+				? cleaned
+						.split('')
+						.map((c) => c + c)
+						.join('')
+				: cleaned;
+
+		const num = parseInt(full, 16);
+
+		return {
+			r: (num >> 16) & 255,
+			g: (num >> 8) & 255,
+			b: num & 255,
+		};
+	}
+
+	static generateSkeletonGradient(colorHex: string): ColorValue[] {
+		const { r, g, b } = AppThemingUtil._hexToRgb(colorHex);
+		const DEFAULT_ALPHAS = [0, 0.1, 0.4, 0.6, 0.7, 0.6, 0.4, 0.1, 0] as const;
+
+		return DEFAULT_ALPHAS.map((alpha) => `rgba(${r},${g},${b},${alpha})`);
+	}
+
 	static applyOpacity(colorHex: string, opacity: number) {
 		const cleaned = colorHex.replace('#', '');
 

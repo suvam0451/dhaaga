@@ -39,7 +39,7 @@
 		"masto": "^7.10.0",
 		"megalodon": "^10.2.0",
 		"mfm-js": "^0.25.0",
-		"misskey-js": "^2025.12.1",
+		"misskey-js": "^2025.12.2",
 		"zod": "^4.1.13"
 	},
 	"scripts": {
