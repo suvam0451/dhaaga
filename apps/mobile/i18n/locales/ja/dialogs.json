@@ -122,8 +122,7 @@
       "placeholder": "タグの名前",
       "successToast": "タグが正常に追加されました！"
     },
-    "tagRemove": {
-    },
+    "tagRemove": {},
     "tagEdit": {
       "title": "ピン留めしたタグの変更",
       "description": [

@@ -137,6 +137,11 @@
       "Wenn sich etwas nicht synchronisiert anfühlt (z.B. - Zähler, Avatar, Banner usw.),",
       "Versuchen Sie, diese Seite nach unten zu ziehen und zu aktualisieren. Dies ist darauf ausgelegt, die meisten Synchronisierungsprobleme zu beheben.",
       "Wenn das Problem weiterhin besteht, melden Sie es bitte dem Entwickler."
+    ],
+    "qHowManageAccount": "How to add/switch accounts?",
+    "aHowManageAccount": [
+      "New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+      "Also, long pressing the profile tab (5th) brings up the account switcher :)"
     ]
   },
   "settings": {

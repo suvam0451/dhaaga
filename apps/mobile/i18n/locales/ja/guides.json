@@ -137,6 +137,11 @@
       "何かが同期していないように感じる場合（例：カウンター、アバター、バナーなど）、",
       "このページを下に引っ張って更新を試みてください。これでほとんどの同期問題が解決されます。",
       "問題が解決しない場合は、開発者に報告してください。"
+    ],
+    "qHowManageAccount": "How to add/switch accounts?",
+    "aHowManageAccount": [
+      "New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+      "Also, long pressing the profile tab (5th) brings up the account switcher :)"
     ]
   },
   "settings": {

@@ -109,5 +109,11 @@
         "S_extraFilters": "Dodatkowe filtry"
       }
     }
+  },
+  "sheetLabels": {
+    "likedBy": "Liked By",
+    "sharedBy": "Shared By",
+    "quotedBy": "Quoted By",
+    "comments": "Comments"
   }
 }

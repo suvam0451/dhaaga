@@ -262,7 +262,7 @@ export function AppAuthenticationPager() {
 		>
 			<OnboardingSignInBanner
 				titleText={t(`onboarding.enterYourServer`)}
-				descText={'Find one here'}
+				descText={t(`prompts.findMastodonServer`)}
 				descExternalOnPress={LinkingUtils.openJoinMastodonHomepage}
 				softwareLogoAsset={assets[ContentIndex]}
 				platformSelected={IsPlatformSelected}

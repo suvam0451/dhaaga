@@ -137,6 +137,11 @@
       "Jeśli coś wydaje się być niezsynchronizowane (np. liczniki, avatar, baner itp.),",
       "Spróbuj pociągnąć w dół, aby odświeżyć tę stronę. Jest zaprojektowana, aby naprawić większość problemów z synchronizacją.",
       "Jeśli problem nadal występuje, zgłoś to do dewelopera."
+    ],
+    "qHowManageAccount": "How to add/switch accounts?",
+    "aHowManageAccount": [
+      "New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+      "Also, long pressing the profile tab (5th) brings up the account switcher :)"
     ]
   },
   "settings": {

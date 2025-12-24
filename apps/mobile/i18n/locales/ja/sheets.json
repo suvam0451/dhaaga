@@ -14,7 +14,7 @@
     "disclaimer": "⚠️ コレクションはこのデバイスにローカルで保存されています ⚠️"
   },
   "hubAddFeedSheet": {
-    "title": "申し訳ありません \uD83D\uDE14",
+    "title": "申し訳ありません 😔",
     "desc": [
       "この機能は今後拡張される予定です！",
       "デフォルトの宛先セットがあらかじめ設定されています。",
@@ -109,5 +109,11 @@
         "S_extraFilters": "追加のフィルター"
       }
     }
+  },
+  "sheetLabels": {
+    "likedBy": "Liked By",
+    "sharedBy": "Shared By",
+    "quotedBy": "Quoted By",
+    "comments": "Comments"
   }
 }
