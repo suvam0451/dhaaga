@@ -1,187 +1,187 @@
 {
-  "account": {
-    "moreActions": {
-      "title": "Tindakan Akun",
-      "description": [
-        "Sinkronkan data profil Anda (foto profil, nama, dll.) atau hapus akun Anda."
-      ],
-      "syncOption": "Sinkronkan (🚧)",
-      "removeOption": "Hapus Akun"
-    },
-    "confirmDelete": {
-      "title": "Konfirmasi Penghapusan",
-      "description": [
-        "Menghapus akun Anda akan menghapus semua profil hub, koleksi, dan data penjelajahan.",
-        "Konfirmasi dan Lanjutkan?"
-      ],
-      "confirmOption": "Konfirmasi & Hapus"
-    }
-  },
-  "collection": {
-    "moreOptions": {
-      "title": "Perbarui Koleksi",
-      "description": [
-        "Ganti nama, deskripsikan, atau hapus koleksi ini"
-      ],
-      "renameOption": "Ganti Nama",
-      "updateDescriptionOption": "Perbarui Deskripsi",
-      "removeOption": "Hapus"
-    },
-    "add": {
-      "title": "Tambah Koleksi",
-      "description": [
-        "Anda dapat mengelola koleksi dari ringkasan akun Anda (tab ke-5)."
-      ],
-      "placeholder": "Nama koleksi Anda"
-    },
-    "rename": {
-      "title": "Ganti Nama Koleksi",
-      "description": [
-        "Beri nama baru untuk koleksi ini."
-      ],
-      "placeholder": "Nama untuk koleksi Anda"
-    },
-    "describe": {
-      "title": "Deskripsikan Koleksi Ini",
-      "description": [
-        "Perbarui deskripsi Anda untuk koleksi ini",
-        "Kirim string kosong untuk mengatur ke default"
-      ],
-      "placeholder": "Deskripsikan koleksi Anda"
-    },
-    "delete": {
-      "title": "Konfirmasi Penghapusan",
-      "description": [
-        "Apakah Anda yakin ingin menghapus koleksi ini?",
-        "Postingan yang Anda simpan di bawah koleksi ini akan hilang."
-      ],
-      "deleteConfirmOption": "Konfirmasi dan Hapus"
-    }
-  },
-  "composer": {
-    "setAltText": {
-      "title": "Teks Alt",
-      "description": [
-        "Lihat teks alt untuk gambar ini.",
-        "Kirim string kosong untuk menghapus."
-      ],
-      "placeholder": "Masukkan teks alt baru"
-    },
-    "setVisibility": {
-      "title": "Atur Visibilitas",
-      "description": [
-        "Postingan \"Tidak Terdaftar\" Anda disembunyikan dari feed dan pencarian.",
-        "Pesan \"Langsung\" Anda tidak dienkripsi."
-      ],
-      "publicLabel": "Publik",
-      "unlistedLabel": "Tidak Terdaftar",
-      "followersOnlyLabel": "Pengikut",
-      "directLabel": "Langsung"
-    }
-  },
-  "hub": {
-    "profileAdd": {
-      "title": "Tambah Profil",
-      "description": [
-        "Profil membantu Anda menjaga pin dan tata letak pusat sosial Anda terorganisir berdasarkan minat."
-      ],
-      "placeholder": "Nama profil Anda",
-      "successToast": "Profil berhasil ditambahkan!"
-    },
-    "profileDelete": {
-      "title": "Konfirmasi Penghapusan",
-      "description": [
-        "Apakah Anda yakin ingin menghapus profil ini?",
-        "Semua pin dan tata letak yang disimpan akan hilang."
-      ],
-      "deleteConfirmOption": "Konfirmasi dan Hapus"
-    },
-    "profileEdit": {
-      "title": "Edit Profil",
-      "description": [
-        "Anda dapat mengganti nama atau menghapus profil ini."
-      ],
-      "descriptionAlt": [
-        "Anda hanya dapat mengganti nama profil default."
-      ],
-      "renameOption": "Ganti Nama",
-      "deleteOption": "Hapus"
-    },
-    "profileRename": {
-      "title": "Ganti Nama Profil",
-      "description": [
-        "Beri nama baru untuk profil ini."
-      ],
-      "placeholder": "Nama profil Anda"
-    },
-    "tagAdd": {
-      "title": "Tambah Hashtag",
-      "description": [
-        "Tag juga bisa ditambahkan saat menjelajah timeline (dengan menekan tag)."
-      ],
-      "placeholder": "Nama tag",
-      "successToast": "Tag berhasil ditambahkan!"
-    },
-    "tagRemove": {},
-    "tagEdit": {
-      "title": "Ubah Tag yang Dipin",
-      "description": [
-        "Anda dapat mengganti nama atau menghapus tag yang dipin ini."
-      ]
-    },
-    "tagRename": {
-      "title": "Ganti Nama Tag yang Dipin",
-      "description": [
-        "Ubah hashtag yang dituju oleh pin ini."
-      ],
-      "placeholder": "Perbarui tag Anda di sini"
-    },
-    "userEdit": {
-      "title": "Ubah Pengguna yang Dipin",
-      "description": [
-        "Anda dapat menghapus pin ini.",
-        "Penataan ulang akan didukung dalam pembaruan mendatang."
-      ]
-    }
-  },
-  "relationship": {
-    "notRelated": {
-      "title": "Tidak Terkait",
-      "description": [
-        "Anda saat ini tidak terkait dengan pengguna ini."
-      ],
-      "followOption": "Ikuti"
-    },
-    "follower": {
-      "title": "Pengikut",
-      "description": [
-        "Pengguna ini saat ini mengikuti Anda."
-      ],
-      "followBackOption": "Ikuti Kembali"
-    },
-    "following": {
-      "title": "Mengikuti",
-      "description": [
-        "Anda saat ini mengikuti pengguna ini."
-      ],
-      "unfollowOption": "Berhenti Mengikuti"
-    },
-    "friends": {
-      "title": "Teman",
-      "description": [
-        "Kalian saling mengikuti."
-      ],
-      "unfollowOption": "Berhenti Mengikuti"
-    },
-    "requestPending": {
-      "title": "Permintaan Tertunda",
-      "description": [
-        "Anda telah mengirim permintaan mengikuti kepada pengguna ini.",
-        "Namun, sepertinya permintaan tersebut belum diterima.",
-        "Anda dapat mencoba untuk memperbarui status atau menunggu."
-      ],
-      "refreshOption": "Perbarui",
-      "cancelOption": "Batal"
-    }
-  }
+	"account": {
+		"moreActions": {
+			"title": "Tindakan Akun",
+			"description": [
+				"Sinkronkan data profil Anda (foto profil, nama, dll.) atau hapus akun Anda."
+			],
+			"syncOption": "Sinkronkan (🚧)",
+			"removeOption": "Hapus Akun"
+		},
+		"confirmDelete": {
+			"title": "Konfirmasi Penghapusan",
+			"description": [
+				"Menghapus akun Anda akan menghapus semua profil hub, koleksi, dan data penjelajahan.",
+				"Konfirmasi dan Lanjutkan?"
+			],
+			"confirmOption": "Konfirmasi & Hapus"
+		}
+	},
+	"collection": {
+		"moreOptions": {
+			"title": "Perbarui Koleksi",
+			"description": [
+				"Ganti nama, deskripsikan, atau hapus koleksi ini"
+			],
+			"renameOption": "Ganti Nama",
+			"updateDescriptionOption": "Perbarui Deskripsi",
+			"removeOption": "Hapus"
+		},
+		"add": {
+			"title": "Tambah Koleksi",
+			"description": [
+				"Anda dapat mengelola koleksi dari ringkasan akun Anda (tab ke-5)."
+			],
+			"placeholder": "Nama koleksi Anda"
+		},
+		"rename": {
+			"title": "Ganti Nama Koleksi",
+			"description": [
+				"Beri nama baru untuk koleksi ini."
+			],
+			"placeholder": "Nama untuk koleksi Anda"
+		},
+		"describe": {
+			"title": "Deskripsikan Koleksi Ini",
+			"description": [
+				"Perbarui deskripsi Anda untuk koleksi ini",
+				"Kirim string kosong untuk mengatur ke default"
+			],
+			"placeholder": "Deskripsikan koleksi Anda"
+		},
+		"delete": {
+			"title": "Konfirmasi Penghapusan",
+			"description": [
+				"Apakah Anda yakin ingin menghapus koleksi ini?",
+				"Postingan yang Anda simpan di bawah koleksi ini akan hilang."
+			],
+			"deleteConfirmOption": "Konfirmasi dan Hapus"
+		}
+	},
+	"composer": {
+		"setAltText": {
+			"title": "Teks Alt",
+			"description": [
+				"Lihat teks alt untuk gambar ini.",
+				"Kirim string kosong untuk menghapus."
+			],
+			"placeholder": "Masukkan teks alt baru"
+		},
+		"setVisibility": {
+			"title": "Atur Visibilitas",
+			"description": [
+				"Postingan \"Tidak Terdaftar\" Anda disembunyikan dari feed dan pencarian.",
+				"Pesan \"Langsung\" Anda tidak dienkripsi."
+			],
+			"publicLabel": "Publik",
+			"unlistedLabel": "Tidak Terdaftar",
+			"followersOnlyLabel": "Pengikut",
+			"directLabel": "Langsung"
+		}
+	},
+	"hub": {
+		"profileAdd": {
+			"title": "Tambah Profil",
+			"description": [
+				"Profil membantu Anda menjaga pin dan tata letak pusat sosial Anda terorganisir berdasarkan minat."
+			],
+			"placeholder": "Nama profil Anda",
+			"successToast": "Profil berhasil ditambahkan!"
+		},
+		"profileDelete": {
+			"title": "Konfirmasi Penghapusan",
+			"description": [
+				"Apakah Anda yakin ingin menghapus profil ini?",
+				"Semua pin dan tata letak yang disimpan akan hilang."
+			],
+			"deleteConfirmOption": "Konfirmasi dan Hapus"
+		},
+		"profileEdit": {
+			"title": "Edit Profil",
+			"description": [
+				"Anda dapat mengganti nama atau menghapus profil ini."
+			],
+			"descriptionAlt": [
+				"Anda hanya dapat mengganti nama profil default."
+			],
+			"renameOption": "Ganti Nama",
+			"deleteOption": "Hapus"
+		},
+		"profileRename": {
+			"title": "Ganti Nama Profil",
+			"description": [
+				"Beri nama baru untuk profil ini."
+			],
+			"placeholder": "Nama profil Anda"
+		},
+		"tagAdd": {
+			"title": "Tambah Hashtag",
+			"description": [
+				"Tag juga bisa ditambahkan saat menjelajah timeline (dengan menekan tag)."
+			],
+			"placeholder": "Nama tag",
+			"successToast": "Tag berhasil ditambahkan!"
+		},
+		"tagRemove": {},
+		"tagEdit": {
+			"title": "Ubah Tag yang Dipin",
+			"description": [
+				"Anda dapat mengganti nama atau menghapus tag yang dipin ini."
+			]
+		},
+		"tagRename": {
+			"title": "Ganti Nama Tag yang Dipin",
+			"description": [
+				"Ubah hashtag yang dituju oleh pin ini."
+			],
+			"placeholder": "Perbarui tag Anda di sini"
+		},
+		"userEdit": {
+			"title": "Ubah Pengguna yang Dipin",
+			"description": [
+				"Anda dapat menghapus pin ini.",
+				"Penataan ulang akan didukung dalam pembaruan mendatang."
+			]
+		}
+	},
+	"relationship": {
+		"notRelated": {
+			"title": "Tidak Terkait",
+			"description": [
+				"Anda saat ini tidak terkait dengan pengguna ini."
+			],
+			"followOption": "Ikuti"
+		},
+		"follower": {
+			"title": "Pengikut",
+			"description": [
+				"Pengguna ini saat ini mengikuti Anda."
+			],
+			"followBackOption": "Ikuti Kembali"
+		},
+		"following": {
+			"title": "Mengikuti",
+			"description": [
+				"Anda saat ini mengikuti pengguna ini."
+			],
+			"unfollowOption": "Berhenti Mengikuti"
+		},
+		"friends": {
+			"title": "Teman",
+			"description": [
+				"Kalian saling mengikuti."
+			],
+			"unfollowOption": "Berhenti Mengikuti"
+		},
+		"requestPending": {
+			"title": "Permintaan Tertunda",
+			"description": [
+				"Anda telah mengirim permintaan mengikuti kepada pengguna ini.",
+				"Namun, sepertinya permintaan tersebut belum diterima.",
+				"Anda dapat mencoba untuk memperbarui status atau menunggu."
+			],
+			"refreshOption": "Perbarui",
+			"cancelOption": "Batal"
+		}
+	}
 }

@@ -1,209 +1,295 @@
 {
-  "appHighlightFeatures": {
-    "funFirst": {
-      "label": "楽しさ第一",
-      "desc": "Dhaagaは、ユーザーファーストのアプローチとシンプルさ、そして楽しさを重視し、インターネットを楽しく使えるようにします。"
-    },
-    "hub": {
-      "label": "心地よいハブエリア",
-      "desc": "ホームページを心ゆくまで飾りましょう。お気に入りの目的地を近くにピン留め。友達はさらに近くに。"
-    },
-    "profiles": {
-      "label": "ソーシャルプロフィール",
-      "desc": "興味やアイデアを個別のプロフィールに整理。各プロフィールは独立してパーソナライズ可能です！"
-    },
-    "cleanInbox": {
-      "label": "クリーンな受信トレイ",
-      "desc": "様々な種類の通知をきれいに分離し、それぞれに対応した専用のユーザーインターフェースを搭載！"
-    }
-  },
-  "feed": {
-    "subscribeOption": "購読する",
-    "unsubscribeOption": "購読解除",
-    "pinOption": "ピン留め",
-    "unpinOption": "ピン留め解除"
-  },
-  "features": {
-    "notAvailable": {
-      "title": "利用不可",
-      "desc": "この機能はDhaagaで実装されていないか、お使いのSNSプラットフォームでは利用できません。"
-    }
-  },
-  "errors": {
-    "errorLabel": "エラー",
-    "timelineErrorLabel": "タイムラインの読み込みに失敗しました。このエラーを開発者に報告してください。"
-  },
-  "onboarding": {
-    "addAccountButton": "アカウントを追加",
-    "accountCreationNotSupported": "アカウント作成はサポートされていません。",
-    "needBlueskyAccount": "Blueskyアカウントが必要です",
-    "createOneHere": "こちらで作成",
-    "loginButton": "サインイン",
-    "appPassword": "アプリパスワード",
-    "enterYourServer": "サーバーアドレスを入力",
-    "serverUrl": "インスタンスURLを入力",
-    "popularMastodon": "人気のMastodonサーバー",
-    "popularPleroma": "人気のPleromaサーバー",
-    "popularAkkoma": "人気のAkkomaサーバー"
-  },
-  "topNav": {
-    "primary": {
-      "hub": "ソーシャルハブ",
-      "discover": "見つける",
-      "compose": "投稿",
-      "account": "マイアカウント",
-      "setting": "アプリ設定",
-      "inbox": "受信トレイ",
-      "mentions": "メンション",
-      "chat": "チャット",
-      "social": "ソーシャル",
-      "updates": "アップデート"
-    },
-    "secondary": {
-      "appSkins": "アプリスキン",
-      "addProfile": "プロフィール追加",
-      "manageSubscriptions": "購読管理",
-      "myLikes": "いいね",
-      "myBookmarks": "ブックマーク",
-      "myAccount": "マイアカウント",
-      "myProfile": "マイプロフィール",
-      "appSettings": "アプリ設定",
-      "manageAccounts": "アカウント管理",
-      "blueskySignIn": "Blueskyログイン",
-      "allPosts": "すべての投稿",
-      "selectServer": "サーバー選択",
-      "mastodonSignIn": "Mastodonログイン",
-      "misskeySignIn": "Misskeyログイン",
-      "pickPlatform": "プラットフォーム選択",
-      "appLanguage": "アプリの言語",
-      "postDetails": "投稿の詳細",
-      "manageHubProfiles": "ハブプロフィールの管理",
-      "searchHistory": "検索履歴"
-    }
-  },
-  "dialogs": {
-    "renameOption": "名前変更",
-    "deleteOption": "削除",
-    "dismissOption": "閉じる",
-    "saveOption": "保存"
-  },
-  "discover": {
-    "moreSoon": {
-      "firstHalf": "さらなる機能が",
-      "secondHalf": "まもなく登場™"
-    },
-    "instructions": [
-      "1) 🔍を開いて検索語を入力",
-      "2) 実行(↵)して検索",
-      "3) 🔍を開いて検索語を変更",
-      "4) (✖️)でここに戻る"
-    ],
-    "welcome": "今日は何か新しいものを探索しましょう！"
-  },
-  "profile": {
-    "appFeatures": {
-      "sectionLabel": "アプリ機能",
-      "likes": {
-        "label": "いいね",
-        "desc": "いいねした投稿"
-      },
-      "bookmarks": {
-        "label": "ブックマーク",
-        "desc": "マイブックマーク"
-      },
-      "feeds": {
-        "label": "フィード",
-        "desc": "購読中のフィード"
-      },
-      "lists": {
-        "label": "リスト",
-        "desc": "マイリスト"
-      },
-      "socialHub": {
-        "label": "ソーシャルハブ",
-        "desc": "プロフィールの管理"
-      },
-      "collections": {
-        "label": "コレクション",
-        "desc": "ブックマーク++"
-      },
-      "drafts": {
-        "label": "下書き",
-        "desc": "失われたメッセージ"
-      }
-    },
-    "social": {
-      "posts": "投稿",
-      "following": "フォロー中",
-      "followers": "フォロワー"
-    },
-    "visibility": {
-      "public": "公開",
-      "unlisted": "ホーム",
-      "direct": "ダイレクト",
-      "private": "フォロワー"
-    },
-    "interactivity": {
-      "everybody": "全員",
-      "nobody": "自分のみ",
-      "Limited": "限定"
-    }
-  },
-  "chatroom": {
-    "sendInterfacePlaceholder": "メッセージを入力"
-  },
-  "setting": {
-    "accountModule": {
-      "title": "アカウント",
-      "desc": "アカウントの追加と管理"
-    },
-    "generalModule": {
-      "title": "一般",
-      "desc": "いつもの退屈な設定はこちら"
-    },
-    "appFeaturesModule": {
-      "title": "グッディ・ハット",
-      "desc": "Dhaaga独自の機能を調整"
-    },
-    "digitalWellbeingModule": {
-      "title": "デジタルウェルビーイング",
-      "desc": "自分自身と再接続するために切断する"
-    },
-    "advancedModule": {
-      "title": "高度な設定",
-      "desc": "パワーユーザー向け"
-    },
-    "footer": "Debashish Patraによって💛を込めて構築"
-  },
-  "indicators": {
-    "quotedThisPost": "この投稿を引用",
-    "sharedThisLink": "このリンクを共有"
-  },
-  "prompts": {
-    "getStarted": "はじめる",
-    "visitWebsite": "ウェブサイトを訪問",
-    "selectPlatform": "プラットフォームを選択",
-    "findMastodonServer": "ここで探す",
-    "findMisskeyServer": "ここで探す",
-    "findAtProtoServer": "ここで探す",
-    "mastodonConfirmAccount": "アカウントを確認",
-    "mastodonTokenDetected": "有効なトークンが検出されました。上記のアカウントを追加しますか？",
-    "signInConfirm": "進む",
-    "signInReset": "リセット"
-  },
-  "loaders": {
-    "loadingMoreIndicatorText": "読み込み中...",
-    "nothingMoreToShow": "これ以上表示するものはありません"
-  },
-  "errorReporting": {
-    "noTimelineSelectedLabel": "タイムラインが選択されていません",
-    "noTimelineSelectedDesc": "パーソナライズされたハブから様々な種類のタイムラインをピン留めしてアクセスできます。",
-    "noTimelineSelectedButtonCta": "ハブへ行く"
-  },
-  "unspecced": {
-    "wipText": "この機能は現在構築中です 🚧"
-  },
-  "placeholders": {
-    "atProtoUsername": "ユーザー名またはメールアドレス"
-  }
+	"appHighlightFeatures": {
+		"funFirst": {
+			"label": "楽しさ第一",
+			"desc": "Dhaagaは、ユーザーファーストのアプローチとシンプルさ、そして楽しさを重視し、インターネットを楽しく使えるようにします。"
+		},
+		"hub": {
+			"label": "心地よいハブエリア",
+			"desc": "ホームページを心ゆくまで飾りましょう。お気に入りの目的地を近くにピン留め。友達はさらに近くに。"
+		},
+		"profiles": {
+			"label": "ソーシャルプロフィール",
+			"desc": "興味やアイデアを個別のプロフィールに整理。各プロフィールは独立してパーソナライズ可能です！"
+		},
+		"cleanInbox": {
+			"label": "クリーンな受信トレイ",
+			"desc": "様々な種類の通知をきれいに分離し、それぞれに対応した専用のユーザーインターフェースを搭載！"
+		}
+	},
+	"feed": {
+		"subscribeOption": "購読する",
+		"unsubscribeOption": "購読解除",
+		"pinOption": "ピン留め",
+		"unpinOption": "ピン留め解除"
+	},
+	"features": {
+		"notAvailable": {
+			"title": "利用不可",
+			"desc": "この機能はDhaagaで実装されていないか、お使いのSNSプラットフォームでは利用できません。"
+		}
+	},
+	"errors": {
+		"errorLabel": "エラー",
+		"timelineErrorLabel": "タイムラインの読み込みに失敗しました。このエラーを開発者に報告してください。"
+	},
+	"onboarding": {
+		"addAccountButton": "アカウントを追加",
+		"accountCreationNotSupported": "アカウント作成はサポートされていません。",
+		"needBlueskyAccount": "Blueskyアカウントが必要です",
+		"createOneHere": "こちらで作成",
+		"loginButton": "サインイン",
+		"appPassword": "アプリパスワード",
+		"enterYourServer": "サーバーアドレスを入力",
+		"serverUrl": "インスタンスURLを入力",
+		"popularMastodon": "人気のMastodonサーバー",
+		"popularPleroma": "人気のPleromaサーバー",
+		"popularAkkoma": "人気のAkkomaサーバー"
+	},
+	"topNav": {
+		"primary": {
+			"hub": "ソーシャルハブ",
+			"discover": "見つける",
+			"compose": "投稿",
+			"account": "マイアカウント",
+			"setting": "アプリ設定",
+			"inbox": "受信トレイ",
+			"mentions": "メンション",
+			"chat": "チャット",
+			"social": "ソーシャル",
+			"updates": "アップデート"
+		},
+		"secondary": {
+			"appSkins": "アプリスキン",
+			"addProfile": "プロフィール追加",
+			"manageSubscriptions": "購読管理",
+			"myLikes": "いいね",
+			"myBookmarks": "ブックマーク",
+			"myAccount": "マイアカウント",
+			"myProfile": "マイプロフィール",
+			"appSettings": "アプリ設定",
+			"manageAccounts": "アカウント管理",
+			"blueskySignIn": "Blueskyログイン",
+			"allPosts": "すべての投稿",
+			"selectServer": "サーバー選択",
+			"mastodonSignIn": "Mastodonログイン",
+			"misskeySignIn": "Misskeyログイン",
+			"pickPlatform": "プラットフォーム選択",
+			"appLanguage": "アプリの言語",
+			"postDetails": "投稿の詳細",
+			"manageHubProfiles": "ハブプロフィールの管理",
+			"searchHistory": "検索履歴",
+			"collections": "コレクション",
+			"collection": "コレクション"
+		}
+	},
+	"dialogs": {
+		"renameOption": "名前変更",
+		"deleteOption": "削除",
+		"dismissOption": "閉じる",
+		"saveOption": "保存"
+	},
+	"discover": {
+		"moreSoon": {
+			"firstHalf": "さらなる機能が",
+			"secondHalf": "まもなく登場™"
+		},
+		"instructions": [
+			"1) 🔍を開いて検索語を入力",
+			"2) 実行(↵)して検索",
+			"3) 🔍を開いて検索語を変更",
+			"4) (✖️)でここに戻る"
+		],
+		"welcome": "今日は何か新しいものを探索しましょう！"
+	},
+	"profile": {
+		"appFeatures": {
+			"sectionLabel": "アプリ機能",
+			"likes": {
+				"label": "いいね",
+				"desc": "いいねした投稿"
+			},
+			"bookmarks": {
+				"label": "ブックマーク",
+				"desc": "マイブックマーク"
+			},
+			"feeds": {
+				"label": "フィード",
+				"desc": "購読中のフィード"
+			},
+			"lists": {
+				"label": "リスト",
+				"desc": "マイリスト"
+			},
+			"socialHub": {
+				"label": "ソーシャルハブ",
+				"desc": "プロフィールの管理"
+			},
+			"collections": {
+				"label": "コレクション",
+				"desc": "ブックマーク++"
+			},
+			"drafts": {
+				"label": "下書き",
+				"desc": "失われたメッセージ"
+			},
+			"skins": {
+				"label": "アッパースキン",
+				"desc": "あなたの気分に合わせます！"
+			}
+		}
+	},
+	"sheets": {
+		"backOption": "戻る"
+	},
+	"hub": {
+		"feeds": {
+			"global": "グローバル",
+			"local": "ローカル",
+			"social": "ソーシャル",
+			"home": "ホーム",
+			"bubble": "バブル"
+		},
+		"greetings": {
+			"goodMorning": "おはようございます",
+			"goodAfternoon": "こんにちは",
+			"goodEvening": "こんばんは",
+			"goodNight": "おやすみなさい"
+		},
+		"navbarLabel": "Dhaaga ハブ",
+		"section": {
+			"feeds": "フィード",
+			"users": "ユーザー",
+			"tags": "タグ",
+			"timelines": "タイムライン"
+		}
+	},
+	"inbox": {
+		"name": "受信トレイ",
+		"nav": {
+			"mentions": "メンション",
+			"chat": "チャット",
+			"social": "ソーシャル",
+			"updates": "アップデート"
+		},
+		"summary": {
+			"liked": "あなたの投稿にいいねしました",
+			"followRequestAccepted": "フォローリクエストを承認しました",
+			"followed": "あなたをフォローしました",
+			"shared": "あなたの投稿を共有しました",
+			"reacted": "あなたの投稿にリアクションしました",
+			"posted": "投稿しました",
+			"replied": "あなたに返信しました",
+			"mentioned": "あなたをメンションしました"
+		}
+	},
+	"collections": {
+		"name": "コレクション",
+		"addButton": "コレクションを追加",
+		"fallbackDesc": "説明はありません",
+		"emptyTitle": "コレクションは空です",
+		"emptyDesc": "このコレクションには保存された投稿はありません"
+	},
+	"composer": {
+		"pageTitle": "作成",
+		"quickPost": "クイックポスト",
+		"quickPostCta": "今何してる？",
+		"quickPostSubmit": "投稿",
+		"noAttachments": "添付ファイルはありません",
+		"landing": {
+			"tComposeFull": "投稿を作成",
+			"dComposeFull": [
+				"長文の投稿",
+				"その他のオプション"
+			],
+			"tComposePoll": "投票を作成",
+			"dComposePoll": [
+				"<未実装>"
+			],
+			"tViewScheduled": "公開済みの投稿を表示",
+			"dViewScheduled": [
+				"<未実装>"
+			],
+			"tViewDrafts": "下書きを表示",
+			"dViewDrafts": [
+				"<未実装>"
+			]
+		}
+	},
+	"quickPost": {
+		"name": "クイックポスト",
+		"spoilerPlaceholder": "ネタバレ / 閲覧注意",
+		"ctaPlaceholder": "今何してる？",
+		"postButton": "投稿",
+		"replyingTo": "返信先: ",
+		"quoting": "引用先: ",
+		"visibility": {
+			"public": "公開",
+			"unlisted": "ホーム",
+			"direct": "ダイレクト",
+			"private": "フォロワー限定"
+		},
+		"interactivity": {
+			"everybody": "全員",
+			"nobody": "自分のみ",
+			"Limited": "制限あり"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "メッセージを入力"
+	},
+	"setting": {
+		"accountModule": {
+			"title": "アカウント",
+			"desc": "アカウントの追加と管理"
+		},
+		"generalModule": {
+			"title": "一般",
+			"desc": "いつもの退屈な設定はこちら"
+		},
+		"appFeaturesModule": {
+			"title": "グッディ・ハット",
+			"desc": "Dhaaga独自の機能を調整"
+		},
+		"digitalWellbeingModule": {
+			"title": "デジタルウェルビーイング",
+			"desc": "自分自身と再接続するために切断する"
+		},
+		"advancedModule": {
+			"title": "高度な設定",
+			"desc": "パワーユーザー向け"
+		},
+		"footer": "Debashish Patraによって💛を込めて構築"
+	},
+	"indicators": {
+		"quotedThisPost": "この投稿を引用",
+		"sharedThisLink": "このリンクを共有"
+	},
+	"prompts": {
+		"getStarted": "はじめる",
+		"visitWebsite": "ウェブサイトを訪問",
+		"selectPlatform": "プラットフォームを選択",
+		"findMastodonServer": "ここで探す",
+		"findMisskeyServer": "ここで探す",
+		"findAtProtoServer": "ここで探す",
+		"mastodonConfirmAccount": "アカウントを確認",
+		"mastodonTokenDetected": "有効なトークンが検出されました。上記のアカウントを追加しますか？",
+		"signInConfirm": "進む",
+		"signInReset": "リセット"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "読み込み中...",
+		"nothingMoreToShow": "これ以上表示するものはありません"
+	},
+	"errorReporting": {
+		"noTimelineSelectedLabel": "タイムラインが選択されていません",
+		"noTimelineSelectedDesc": "パーソナライズされたハブから様々な種類のタイムラインをピン留めしてアクセスできます。",
+		"noTimelineSelectedButtonCta": "ハブへ行く"
+	},
+	"unspecced": {
+		"wipText": "この機能は現在構築中です 🚧"
+	},
+	"placeholders": {
+		"atProtoUsername": "ユーザー名またはメールアドレス"
+	}
 }

@@ -1,209 +1,295 @@
 {
-  "appHighlightFeatures": {
-    "funFirst": {
-      "label": "Spaß zuerst",
-      "desc": "Dhaaga macht das Internet unterhaltsam, mit einem benutzerzentrierten Ansatz und Schwerpunkt auf Einfachheit und Spaß."
-    },
-    "hub": {
-      "label": "Gemütlicher Hub-Bereich",
-      "desc": "Gestalten Sie Ihre Startseite nach Herzenslust. Heften Sie Ihre Lieblingsziele in der Nähe an. Heften Sie Ihre Freunde noch näher an."
-    },
-    "profiles": {
-      "label": "Soziale Profile",
-      "desc": "Organisieren Sie Ihre Interessen und Ideen in separaten Profilen. Jedes Profil kann unabhängig personalisiert werden!"
-    },
-    "cleanInbox": {
-      "label": "Sauberer Posteingang",
-      "desc": "Saubere Trennung verschiedener Benachrichtigungstypen mit spezialisierter Benutzeroberfläche zur Interaktion mit jedem einzelnen!"
-    }
-  },
-  "feed": {
-    "subscribeOption": "Abonnieren",
-    "unsubscribeOption": "Abbestellen",
-    "pinOption": "Anheften",
-    "unpinOption": "Lösen"
-  },
-  "features": {
-    "notAvailable": {
-      "title": "Nicht verfügbar",
-      "desc": "Dieses Feature ist entweder nicht von Dhaaga implementiert oder auf deiner SNS-Plattform nicht verfügbar."
-    }
-  },
-  "errors": {
-    "errorLabel": "Fehler",
-    "timelineErrorLabel": "Dhaaga konnte diese Zeitleiste nicht laden. Melden Sie diesen Fehler dem Entwickler."
-  },
-  "onboarding": {
-    "addAccountButton": "Konto hinzufügen",
-    "accountCreationNotSupported": "Die Kontenerstellung wird nicht unterstützt.",
-    "needBlueskyAccount": "Du benötigst ein Bluesky-Konto",
-    "createOneHere": "Erstelle eines hier",
-    "loginButton": "Anmelden",
-    "appPassword": "App-Passwort",
-    "enterYourServer": "Serveradresse eingeben",
-    "serverUrl": "Instanz-URL eingeben",
-    "popularMastodon": "Beliebte Mastodon-Server",
-    "popularPleroma": "Beliebte Pleroma-Server",
-    "popularAkkoma": "Beliebte Akkoma-Server"
-  },
-  "topNav": {
-    "primary": {
-      "hub": "Soziales Hub",
-      "discover": "Entdecken",
-      "compose": "Erstellen",
-      "account": "Mein Konto",
-      "setting": "App-Einstellungen",
-      "inbox": "Posteingang",
-      "mentions": "Erwähnungen",
-      "chat": "Chat",
-      "social": "Soziales",
-      "updates": "Updates"
-    },
-    "secondary": {
-      "appSkins": "App-Skins",
-      "addProfile": "Profil hinzufügen",
-      "manageSubscriptions": "Abonnements verwalten",
-      "myLikes": "Meine Likes",
-      "myBookmarks": "Meine Lesezeichen",
-      "myAccount": "Mein Konto",
-      "myProfile": "Mein Profil",
-      "appSettings": "App-Einstellungen",
-      "manageAccounts": "Konten verwalten",
-      "blueskySignIn": "Bluesky-Anmeldung",
-      "allPosts": "Alle Beiträge",
-      "selectServer": "Server auswählen",
-      "mastodonSignIn": "Mastodon-Anmeldung",
-      "misskeySignIn": "Misskey-Anmeldung",
-      "pickPlatform": "Plattform wählen",
-      "appLanguage": "App-Sprache",
-      "postDetails": "Beitragsdetails",
-      "manageHubProfiles": "Hub-Profile verwalten",
-      "searchHistory": "Suchverlauf"
-    }
-  },
-  "dialogs": {
-    "renameOption": "Umbenennen",
-    "deleteOption": "Löschen",
-    "dismissOption": "Verwerfen",
-    "saveOption": "Speichern"
-  },
-  "discover": {
-    "moreSoon": {
-      "firstHalf": "Mehr kommt",
-      "secondHalf": "bald™"
-    },
-    "instructions": [
-      "1) Öffne 🔍, um Suchbegriff einzugeben",
-      "2) Bestätige (↵) zum Suchen",
-      "3) Öffne 🔍, um Suchbegriff zu ändern",
-      "4) Nutze (✖️), um hierher zurückzukehren"
-    ],
-    "welcome": "Lass uns heute etwas Neues entdecken!"
-  },
-  "profile": {
-    "appFeatures": {
-      "sectionLabel": "App-Funktionen",
-      "likes": {
-        "label": "Gefällt mir",
-        "desc": "Beiträge, die mir gefallen"
-      },
-      "bookmarks": {
-        "label": "Lesezeichen",
-        "desc": "Meine Lesezeichen"
-      },
-      "feeds": {
-        "label": "Feeds",
-        "desc": "Abonnierte Feeds"
-      },
-      "lists": {
-        "label": "Listen",
-        "desc": "Meine Listen"
-      },
-      "socialHub": {
-        "label": "Social Hub",
-        "desc": "Profile verwalten"
-      },
-      "collections": {
-        "label": "Sammlungen",
-        "desc": "Lesezeichen++"
-      },
-      "drafts": {
-        "label": "Entwürfe",
-        "desc": "Verlorene Nachrichten"
-      }
-    },
-    "social": {
-      "posts": "Beiträge",
-      "following": "Folge ich",
-      "followers": "Follower"
-    },
-    "visibility": {
-      "public": "Öffentlich",
-      "unlisted": "Startseite",
-      "direct": "Direkt",
-      "private": "Follower"
-    },
-    "interactivity": {
-      "everybody": "Jeder",
-      "nobody": "Nur ich",
-      "Limited": "Eingeschränkt"
-    }
-  },
-  "chatroom": {
-    "sendInterfacePlaceholder": "Deine Nachricht"
-  },
-  "setting": {
-    "accountModule": {
-      "title": "Konten",
-      "desc": "Konten hinzufügen und verwalten"
-    },
-    "generalModule": {
-      "title": "Allgemein",
-      "desc": "Die üblichen langweiligen Einstellungen"
-    },
-    "appFeaturesModule": {
-      "title": "Goodie-Hütte",
-      "desc": "Einzigartige Dhaaga-Features anpassen"
-    },
-    "digitalWellbeingModule": {
-      "title": "Digitales Wohlbefinden",
-      "desc": "Abschalten, um sich wieder mit sich selbst zu verbinden"
-    },
-    "advancedModule": {
-      "title": "Erweitert",
-      "desc": "Für Power-User"
-    },
-    "footer": "Gebaut mit 💛 von Debashish Patra"
-  },
-  "indicators": {
-    "quotedThisPost": "Zitierte diesen Beitrag",
-    "sharedThisLink": "Teilte diesen Link"
-  },
-  "prompts": {
-    "getStarted": "Loslegen",
-    "visitWebsite": "Website besuchen",
-    "selectPlatform": "Plattform wählen",
-    "findMastodonServer": "Hier einen finden",
-    "findMisskeyServer": "Hier einen finden",
-    "findAtProtoServer": "Hier einen finden",
-    "mastodonConfirmAccount": "Konto bestätigen",
-    "mastodonTokenDetected": "Ein gültiger Token wurde erkannt. Mit dem oben gezeigten Konto fortfahren?",
-    "signInConfirm": "Fortfahren",
-    "signInReset": "Zurücksetzen"
-  },
-  "loaders": {
-    "loadingMoreIndicatorText": "Wird geladen...",
-    "nothingMoreToShow": "Nichts mehr anzuzeigen"
-  },
-  "errorReporting": {
-    "noTimelineSelectedLabel": "Keine Zeitleiste ausgewählt",
-    "noTimelineSelectedDesc": "Du kannst verschiedene Zeitleisten von deinem persönlichen Hub aus anheften und darauf zugreifen.",
-    "noTimelineSelectedButtonCta": "Dorthin gehen"
-  },
-  "unspecced": {
-    "wipText": "Dieses Feature wird gerade gebaut 🚧"
-  },
-  "placeholders": {
-    "atProtoUsername": "Benutzername oder E-Mail-Adresse"
-  }
+	"appHighlightFeatures": {
+		"funFirst": {
+			"label": "Spaß zuerst",
+			"desc": "Dhaaga macht das Internet unterhaltsam, mit einem benutzerzentrierten Ansatz und Schwerpunkt auf Einfachheit und Spaß."
+		},
+		"hub": {
+			"label": "Gemütlicher Hub-Bereich",
+			"desc": "Gestalten Sie Ihre Startseite nach Herzenslust. Heften Sie Ihre Lieblingsziele in der Nähe an. Heften Sie Ihre Freunde noch näher an."
+		},
+		"profiles": {
+			"label": "Soziale Profile",
+			"desc": "Organisieren Sie Ihre Interessen und Ideen in separaten Profilen. Jedes Profil kann unabhängig personalisiert werden!"
+		},
+		"cleanInbox": {
+			"label": "Sauberer Posteingang",
+			"desc": "Saubere Trennung verschiedener Benachrichtigungstypen mit spezialisierter Benutzeroberfläche zur Interaktion mit jedem einzelnen!"
+		}
+	},
+	"feed": {
+		"subscribeOption": "Abonnieren",
+		"unsubscribeOption": "Abbestellen",
+		"pinOption": "Anheften",
+		"unpinOption": "Lösen"
+	},
+	"features": {
+		"notAvailable": {
+			"title": "Nicht verfügbar",
+			"desc": "Dieses Feature ist entweder nicht von Dhaaga implementiert oder auf deiner SNS-Plattform nicht verfügbar."
+		}
+	},
+	"errors": {
+		"errorLabel": "Fehler",
+		"timelineErrorLabel": "Dhaaga konnte diese Zeitleiste nicht laden. Melden Sie diesen Fehler dem Entwickler."
+	},
+	"onboarding": {
+		"addAccountButton": "Konto hinzufügen",
+		"accountCreationNotSupported": "Die Kontenerstellung wird nicht unterstützt.",
+		"needBlueskyAccount": "Du benötigst ein Bluesky-Konto",
+		"createOneHere": "Erstelle eines hier",
+		"loginButton": "Anmelden",
+		"appPassword": "App-Passwort",
+		"enterYourServer": "Serveradresse eingeben",
+		"serverUrl": "Instanz-URL eingeben",
+		"popularMastodon": "Beliebte Mastodon-Server",
+		"popularPleroma": "Beliebte Pleroma-Server",
+		"popularAkkoma": "Beliebte Akkoma-Server"
+	},
+	"topNav": {
+		"primary": {
+			"hub": "Soziales Hub",
+			"discover": "Entdecken",
+			"compose": "Erstellen",
+			"account": "Mein Konto",
+			"setting": "App-Einstellungen",
+			"inbox": "Posteingang",
+			"mentions": "Erwähnungen",
+			"chat": "Chat",
+			"social": "Sozial",
+			"updates": "Updates"
+		},
+		"secondary": {
+			"appSkins": "App-Skins",
+			"addProfile": "Profil hinzufügen",
+			"manageSubscriptions": "Abonnements verwalten",
+			"myLikes": "Meine Likes",
+			"myBookmarks": "Meine Lesezeichen",
+			"myAccount": "Mein Konto",
+			"myProfile": "Mein Profil",
+			"appSettings": "App-Einstellungen",
+			"manageAccounts": "Konten verwalten",
+			"blueskySignIn": "Bluesky-Anmeldung",
+			"allPosts": "Alle Beiträge",
+			"selectServer": "Server auswählen",
+			"mastodonSignIn": "Mastodon-Anmeldung",
+			"misskeySignIn": "Misskey-Anmeldung",
+			"pickPlatform": "Plattform wählen",
+			"appLanguage": "App-Sprache",
+			"postDetails": "Beitragsdetails",
+			"manageHubProfiles": "Hub-Profile verwalten",
+			"searchHistory": "Suchverlauf",
+			"collections": "Sammlungen",
+			"collection": "Sammlung"
+		}
+	},
+	"dialogs": {
+		"renameOption": "Umbenennen",
+		"deleteOption": "Löschen",
+		"dismissOption": "Verwerfen",
+		"saveOption": "Speichern"
+	},
+	"discover": {
+		"moreSoon": {
+			"firstHalf": "Mehr kommt",
+			"secondHalf": "bald™"
+		},
+		"instructions": [
+			"1) Öffne 🔍, um Suchbegriff einzugeben",
+			"2) Bestätige (↵) zum Suchen",
+			"3) Öffne 🔍, um Suchbegriff zu ändern",
+			"4) Nutze (✖️), um hierher zurückzukehren"
+		],
+		"welcome": "Lass uns heute etwas Neues entdecken!"
+	},
+	"profile": {
+		"appFeatures": {
+			"sectionLabel": "App-Funktionen",
+			"likes": {
+				"label": "Gefällt mir",
+				"desc": "Beiträge, die mir gefallen"
+			},
+			"bookmarks": {
+				"label": "Lesezeichen",
+				"desc": "Meine Lesezeichen"
+			},
+			"feeds": {
+				"label": "Feeds",
+				"desc": "Abonnierte Feeds"
+			},
+			"lists": {
+				"label": "Listen",
+				"desc": "Meine Listen"
+			},
+			"socialHub": {
+				"label": "Social Hub",
+				"desc": "Profile verwalten"
+			},
+			"collections": {
+				"label": "Sammlungen",
+				"desc": "Lesezeichen++"
+			},
+			"drafts": {
+				"label": "Entwürfe",
+				"desc": "Verlorene Nachrichten"
+			},
+			"skins": {
+				"label": "App-Designs",
+				"desc": "Passt zu deiner Stimmung!"
+			}
+		}
+	},
+	"sheets": {
+		"backOption": "Zurück"
+	},
+	"hub": {
+		"feeds": {
+			"global": "Global",
+			"local": "Lokal",
+			"social": "Sozial",
+			"home": "Startseite",
+			"bubble": "Bubble"
+		},
+		"greetings": {
+			"goodMorning": "Guten Morgen",
+			"goodAfternoon": "Guten Tag",
+			"goodEvening": "Guten Abend",
+			"goodNight": "Gute Nacht"
+		},
+		"navbarLabel": "Dhaaga Hub",
+		"section": {
+			"feeds": "Feeds",
+			"users": "Benutzer",
+			"tags": "Tags",
+			"timelines": "Timelines"
+		}
+	},
+	"inbox": {
+		"name": "Posteingang",
+		"nav": {
+			"mentions": "Erwähnungen",
+			"chat": "Chat",
+			"social": "Sozial",
+			"updates": "Updates"
+		},
+		"summary": {
+			"liked": "hat deinen Beitrag geliked",
+			"followRequestAccepted": "hat deine Follow-Anfrage akzeptiert",
+			"followed": "folgt dir jetzt",
+			"shared": "hat deinen Beitrag geteilt",
+			"reacted": "hat auf deinen Beitrag reagiert",
+			"posted": "hat gepostet",
+			"replied": "hat dir geantwortet",
+			"mentioned": "hat dich erwähnt"
+		}
+	},
+	"collections": {
+		"name": "Sammlungen",
+		"addButton": "Sammlung hinzufügen",
+		"fallbackDesc": "Keine Beschreibung vorhanden",
+		"emptyTitle": "Sammlung leer",
+		"emptyDesc": "Diese Sammlung enthält keine gespeicherten Beiträge"
+	},
+	"composer": {
+		"pageTitle": "Verfassen",
+		"quickPost": "Quick Post",
+		"quickPostCta": "Was machst du gerade?",
+		"quickPostSubmit": "Posten",
+		"noAttachments": "Keine Anhänge hinzugefügt",
+		"landing": {
+			"tComposeFull": "Beitrag erstellen",
+			"dComposeFull": [
+				"Längere Beiträge",
+				"Mehr Optionen"
+			],
+			"tComposePoll": "Umfrage erstellen",
+			"dComposePoll": [
+				"<Nicht implementiert>"
+			],
+			"tViewScheduled": "Veröffentlichte Beiträge ansehen",
+			"dViewScheduled": [
+				"<Nicht implementiert>"
+			],
+			"tViewDrafts": "Entwürfe ansehen",
+			"dViewDrafts": [
+				"<Nicht implementiert>"
+			]
+		}
+	},
+	"quickPost": {
+		"name": "Quick Post",
+		"spoilerPlaceholder": "Spoiler / Inhaltswarnung",
+		"ctaPlaceholder": "Was machst du gerade?",
+		"postButton": "Posten",
+		"replyingTo": "Antwort an: ",
+		"quoting": "Zitieren von: ",
+		"visibility": {
+			"public": "Öffentlich",
+			"unlisted": "Startseite",
+			"direct": "Direkt",
+			"private": "Follower"
+		},
+		"interactivity": {
+			"everybody": "Alle",
+			"nobody": "Nur ich",
+			"Limited": "Eingeschränkt"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "Deine Nachricht"
+	},
+	"setting": {
+		"accountModule": {
+			"title": "Konten",
+			"desc": "Konten hinzufügen und verwalten"
+		},
+		"generalModule": {
+			"title": "Allgemein",
+			"desc": "Die üblichen langweiligen Einstellungen"
+		},
+		"appFeaturesModule": {
+			"title": "Goodie-Hütte",
+			"desc": "Einzigartige Dhaaga-Features anpassen"
+		},
+		"digitalWellbeingModule": {
+			"title": "Digitales Wohlbefinden",
+			"desc": "Abschalten, um sich wieder mit sich selbst zu verbinden"
+		},
+		"advancedModule": {
+			"title": "Erweitert",
+			"desc": "Für Power-User"
+		},
+		"footer": "Gebaut mit 💛 von Debashish Patra"
+	},
+	"indicators": {
+		"quotedThisPost": "Zitierte diesen Beitrag",
+		"sharedThisLink": "Teilte diesen Link"
+	},
+	"prompts": {
+		"getStarted": "Loslegen",
+		"visitWebsite": "Website besuchen",
+		"selectPlatform": "Plattform wählen",
+		"findMastodonServer": "Hier einen finden",
+		"findMisskeyServer": "Hier einen finden",
+		"findAtProtoServer": "Hier einen finden",
+		"mastodonConfirmAccount": "Konto bestätigen",
+		"mastodonTokenDetected": "Ein gültiger Token wurde erkannt. Mit dem oben gezeigten Konto fortfahren?",
+		"signInConfirm": "Fortfahren",
+		"signInReset": "Zurücksetzen"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "Wird geladen...",
+		"nothingMoreToShow": "Nichts mehr anzuzeigen"
+	},
+	"errorReporting": {
+		"noTimelineSelectedLabel": "Keine Zeitleiste ausgewählt",
+		"noTimelineSelectedDesc": "Du kannst verschiedene Zeitleisten von deinem persönlichen Hub aus anheften und darauf zugreifen.",
+		"noTimelineSelectedButtonCta": "Dorthin gehen"
+	},
+	"unspecced": {
+		"wipText": "Dieses Feature wird gerade gebaut 🚧"
+	},
+	"placeholders": {
+		"atProtoUsername": "Benutzername oder E-Mail-Adresse"
+	}
 }

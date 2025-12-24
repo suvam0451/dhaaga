@@ -1,293 +1,295 @@
 {
-  "feed": {
-    "subscribeOption": "Langganan",
-    "unsubscribeOption": "Berhenti Langganan",
-    "pinOption": "Pin",
-    "unpinOption": "Hapus Pin"
-  },
-  "features": {
-    "notAvailable": {
-      "title": "Tidak Tersedia",
-      "desc": "Fitur ini belum diimplementasikan oleh Dhaaga, atau tidak tersedia untuk platform SNS Anda."
-    }
-  },
-  "errors": {
-    "errorLabel": "Kesalahan",
-    "timelineErrorLabel": "Dhaaga gagal memuat timeline ini. Laporkan kesalahan ini ke pengembang."
-  },
-  "onboarding": {
-    "addAccountButton": "Tambah Akun",
-    "accountCreationNotSupported": "Pembuatan akun tidak didukung",
-    "needBlueskyAccount": "Anda memerlukan akun Bluesky",
-    "createOneHere": "Buat akun di sini",
-    "loginButton": "Masuk",
-    "appPassword": "Kata Sandi Aplikasi",
-    "enterYourServer": "Masukkan server Anda",
-    "serverUrl": "URL server Anda",
-    "popularMastodon": "Server Mastodon Populer",
-    "popularPleroma": "Server Pleroma Populer",
-    "popularAkkoma": "Server Akkoma Populer"
-  },
-  "topNav": {
-    "primary": {
-      "hub": "Pusat Sosial",
-      "discover": "Temukan",
-      "compose": "Buat",
-      "account": "Akun Saya",
-      "setting": "Pengaturan Aplikasi",
-      "inbox": "Kotak Masuk",
-      "mentions": "Sebutan",
-      "chat": "Obrolan",
-      "social": "Sosial",
-      "updates": "Pembaruan"
-    },
-    "secondary": {
-      "addProfile": "Tambah Profil",
-      "myLikes": "Suka Saya",
-      "myBookmarks": "Tandai Saya",
-      "myAccount": "Akun Saya",
-      "myProfile": "Profil Saya",
-      "appSettings": "Pengaturan Aplikasi",
-      "manageAccounts": "Kelola Akun",
-      "blueskySignIn": "Masuk Bluesky",
-      "selectServer": "Pilih Server",
-      "mastodonSignIn": "Masuk Mastodon",
-      "misskeySignIn": "Masuk Misskey",
-      "pickPlatform": "Pilih Platform",
-      "appSkins": "App Skins",
-      "manageSubscriptions": "Manage Subscriptions",
-      "allPosts": "All Posts",
-      "appLanguage": "App Language",
-      "postDetails": "Post Details",
-      "manageHubProfiles": "Manage Hub Profiles",
-      "searchHistory": "Search History"
-    }
-  },
-  "dialogs": {
-    "renameOption": "Ganti Nama",
-    "deleteOption": "Hapus",
-    "dismissOption": "Tutup",
-    "saveOption": "Simpan"
-  },
-  "discover": {
-    "moreSoon": {
-      "firstHalf": "Lebih banyak konten akan datang",
-      "secondHalf": "segera™"
-    },
-    "instructions": [
-      "1) Tekan 🔍 untuk mulai mencari",
-      "2) Kirim (↵) untuk mencari.",
-      "3) Tekan 🔍 lagi untuk menyembunyikan widget",
-      "4) Bersihkan (x) untuk kembali ke sini"
-    ],
-    "welcome": "Mari temukan sesuatu yang baru!"
-  },
-  "profile": {
-    "appFeatures": {
-      "sectionLabel": "Fitur Aplikasi",
-      "likes": {
-        "label": "Suka",
-        "desc": "Postingan yang saya sukai"
-      },
-      "bookmarks": {
-        "label": "Bookmark",
-        "desc": "Bookmark saya"
-      },
-      "feeds": {
-        "label": "Feeds",
-        "desc": "Feeds yang saya ikuti"
-      },
-      "lists": {
-        "label": "Daftar",
-        "desc": "Daftar saya"
-      },
-      "socialHub": {
-        "label": "Social Hub",
-        "desc": "Kelola profil"
-      },
-      "collections": {
-        "label": "Koleksi",
-        "desc": "Bookmark++"
-      },
-      "drafts": {
-        "label": "Draf",
-        "desc": "Pesan yang hilang"
-      },
-      "skins": {
-        "label": "App Skins",
-        "desc": "Matches your mood!"
-      }
-    }
-  },
-  "sheets": {
-    "backOption": "Kembali"
-  },
-  "hub": {
-    "feeds": {
-      "global": "Global",
-      "local": "Lokal",
-      "social": "Sosial",
-      "home": "Beranda",
-      "bubble": "Bubble"
-    },
-    "greetings": {
-      "goodMorning": "Selamat Pagi",
-      "goodAfternoon": "Selamat Siang",
-      "goodEvening": "Selamat Sore",
-      "goodNight": "Selamat Malam"
-    },
-    "navbarLabel": "Pusat Sosial",
-    "section": {
-      "feeds": "Feed",
-      "users": "Pengguna",
-      "tags": "Tag",
-      "timelines": "Garis Waktu"
-    }
-  },
-  "inbox": {
-    "name": "Kotak Masuk",
-    "nav": {
-      "mentions": "Sebutan",
-      "chat": "Obrolan",
-      "social": "Sosial",
-      "updates": "Pembaruan"
-    },
-    "summary": {
-      "liked": "Suka pada postingan Anda",
-      "followRequestAccepted": "Menerima permintaan mengikuti Anda",
-      "followed": "Mengikuti Anda",
-      "shared": "Membagikan postingan Anda",
-      "reacted": "Bereaksi terhadap postingan Anda",
-      "posted": "Diposting",
-      "replied": "Menjawab Anda",
-      "mentioned": "Menyebut Anda"
-    }
-  },
-  "collections": {
-    "name": "Koleksi",
-    "addButton": "Tambah Koleksi",
-    "fallbackDesc": "Tidak ada deskripsi yang diberikan",
-    "emptyTitle": "Koleksi Kosong",
-    "emptyDesc": "Koleksi ini tidak memiliki postingan yang disimpan"
-  },
-  "composer": {
-    "pageTitle": "Buat",
-    "quickPost": "Post Cepat",
-    "quickPostCta": "Apa yang ada di pikiran Anda?",
-    "quickPostSubmit": "Post",
-    "noAttachments": "Tidak ada lampiran yang ditambahkan",
-    "landing": {
-      "tComposeFull": "Buat Postingan",
-      "dComposeFull": [
-        "Postingan Lebih Panjang",
-        "Lebih Banyak Pilihan"
-      ],
-      "tComposePoll": "Buat Polling",
-      "dComposePoll": [
-        "<Belum Diimplementasikan>"
-      ],
-      "tViewScheduled": "Lihat Postingan yang Dijadwalkan",
-      "dViewScheduled": [
-        "<Belum Diimplementasikan>"
-      ],
-      "tViewDrafts": "Lihat Draf",
-      "dViewDrafts": [
-        "<Belum Diimplementasikan>"
-      ]
-    }
-  },
-  "quickPost": {
-    "name": "Post Cepat",
-    "spoilerPlaceholder": "Peringatan Spoiler / Konten",
-    "ctaPlaceholder": "Apa yang ada di pikiran Anda?",
-    "postButton": "Post",
-    "replyingTo": "Membalas: ",
-    "quoting": "Mengutip: ",
-    "visibility": {
-      "public": "Publik",
-      "unlisted": "Beranda",
-      "direct": "Langsung",
-      "private": "Pengikut"
-    },
-    "interactivity": {
-      "everybody": "Semua Orang",
-      "nobody": "Hanya Saya",
-      "Limited": "Terbatas"
-    }
-  },
-  "chatroom": {
-    "sendInterfacePlaceholder": "Pesan Anda"
-  },
-  "setting": {
-    "accountModule": {
-      "title": "Akun",
-      "desc": "Tambahkan dan Kelola Akun"
-    },
-    "generalModule": {
-      "title": "Umum",
-      "desc": "Pengaturan umum yang membosankan ada di sini"
-    },
-    "appFeaturesModule": {
-      "title": "Fitur Aplikasi",
-      "desc": "Sesuaikan fitur unik Dhaaga"
-    },
-    "digitalWellbeingModule": {
-      "title": "Kesejahteraan Digital",
-      "desc": "Putuskan untuk menyambung kembali dengan diri Anda sendiri"
-    },
-    "advancedModule": {
-      "title": "Lanjutan",
-      "desc": "'Untuk pengguna tingkat lanjut"
-    },
-    "footer": "Dibuat dengan 💛 oleh Debashish Patra"
-  },
-  "appHighlightFeatures": {
-    "funFirst": {
-      "label": "Fun-First",
-      "desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun."
-    },
-    "hub": {
-      "label": "Cozy Hub Area",
-      "desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer."
-    },
-    "profiles": {
-      "label": "Social Profiles",
-      "desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!"
-    },
-    "cleanInbox": {
-      "label": "Clean Inbox",
-      "desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!"
-    }
-  },
-  "indicators": {
-    "quotedThisPost": "Quoted this Post",
-    "sharedThisLink": "Shared this Link"
-  },
-  "prompts": {
-    "getStarted": "Get Started",
-    "visitWebsite": "Visit Website",
-    "selectPlatform": "Select Platform",
-    "findMastodonServer": "Find one here",
-    "findMisskeyServer": "Find one here",
-    "findAtProtoServer": "Find one here",
-    "mastodonConfirmAccount": "Confirm your account",
-    "mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
-    "signInConfirm": "Proceed",
-    "signInReset": "Reset"
-  },
-  "loaders": {
-    "loadingMoreIndicatorText": "Loading More...",
-    "nothingMoreToShow": "Nothing more to show"
-  },
-  "errorReporting": {
-    "noTimelineSelectedLabel": "No Timeline Selected",
-    "noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
-    "noTimelineSelectedButtonCta": "Go There"
-  },
-  "unspecced": {
-    "wipText": "This feature is being built 🚧"
-  },
-  "placeholders": {
-    "atProtoUsername": "Username or email address"
-  }
+	"appHighlightFeatures": {
+		"funFirst": {
+			"label": "Fun-First",
+			"desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun."
+		},
+		"hub": {
+			"label": "Cozy Hub Area",
+			"desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer."
+		},
+		"profiles": {
+			"label": "Social Profiles",
+			"desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!"
+		},
+		"cleanInbox": {
+			"label": "Clean Inbox",
+			"desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!"
+		}
+	},
+	"feed": {
+		"subscribeOption": "Langganan",
+		"unsubscribeOption": "Berhenti Langganan",
+		"pinOption": "Pin",
+		"unpinOption": "Hapus Pin"
+	},
+	"features": {
+		"notAvailable": {
+			"title": "Tidak Tersedia",
+			"desc": "Fitur ini belum diimplementasikan oleh Dhaaga, atau tidak tersedia untuk platform SNS Anda."
+		}
+	},
+	"errors": {
+		"errorLabel": "Kesalahan",
+		"timelineErrorLabel": "Dhaaga gagal memuat timeline ini. Laporkan kesalahan ini ke pengembang."
+	},
+	"onboarding": {
+		"addAccountButton": "Tambah Akun",
+		"accountCreationNotSupported": "Pembuatan akun tidak didukung",
+		"needBlueskyAccount": "Anda memerlukan akun Bluesky",
+		"createOneHere": "Buat akun di sini",
+		"loginButton": "Masuk",
+		"appPassword": "Kata Sandi Aplikasi",
+		"enterYourServer": "Masukkan server Anda",
+		"serverUrl": "URL server Anda",
+		"popularMastodon": "Server Mastodon Populer",
+		"popularPleroma": "Server Pleroma Populer",
+		"popularAkkoma": "Server Akkoma Populer"
+	},
+	"topNav": {
+		"primary": {
+			"hub": "Pusat Sosial",
+			"discover": "Temukan",
+			"compose": "Buat",
+			"account": "Akun Saya",
+			"setting": "Pengaturan Aplikasi",
+			"inbox": "Kotak Masuk",
+			"mentions": "Sebutan",
+			"chat": "Obrolan",
+			"social": "Sosial",
+			"updates": "Pembaruan"
+		},
+		"secondary": {
+			"appSkins": "App Skins",
+			"addProfile": "Tambah Profil",
+			"manageSubscriptions": "Manage Subscriptions",
+			"myLikes": "Suka Saya",
+			"myBookmarks": "Tandai Saya",
+			"myAccount": "Akun Saya",
+			"myProfile": "Profil Saya",
+			"appSettings": "Pengaturan Aplikasi",
+			"manageAccounts": "Kelola Akun",
+			"blueskySignIn": "Masuk Bluesky",
+			"allPosts": "All Posts",
+			"selectServer": "Pilih Server",
+			"mastodonSignIn": "Masuk Mastodon",
+			"misskeySignIn": "Masuk Misskey",
+			"pickPlatform": "Pilih Platform",
+			"appLanguage": "App Language",
+			"postDetails": "Post Details",
+			"manageHubProfiles": "Manage Hub Profiles",
+			"searchHistory": "Search History",
+			"collections": "Collections",
+			"collection": "Collection"
+		}
+	},
+	"dialogs": {
+		"renameOption": "Ganti Nama",
+		"deleteOption": "Hapus",
+		"dismissOption": "Tutup",
+		"saveOption": "Simpan"
+	},
+	"discover": {
+		"moreSoon": {
+			"firstHalf": "Lebih banyak konten akan datang",
+			"secondHalf": "segera™"
+		},
+		"instructions": [
+			"1) Tekan 🔍 untuk mulai mencari",
+			"2) Kirim (↵) untuk mencari.",
+			"3) Tekan 🔍 lagi untuk menyembunyikan widget",
+			"4) Bersihkan (x) untuk kembali ke sini"
+		],
+		"welcome": "Mari temukan sesuatu yang baru!"
+	},
+	"profile": {
+		"appFeatures": {
+			"sectionLabel": "Fitur Aplikasi",
+			"likes": {
+				"label": "Suka",
+				"desc": "Postingan yang saya sukai"
+			},
+			"bookmarks": {
+				"label": "Bookmark",
+				"desc": "Bookmark saya"
+			},
+			"feeds": {
+				"label": "Feeds",
+				"desc": "Feeds yang saya ikuti"
+			},
+			"lists": {
+				"label": "Daftar",
+				"desc": "Daftar saya"
+			},
+			"socialHub": {
+				"label": "Social Hub",
+				"desc": "Kelola profil"
+			},
+			"collections": {
+				"label": "Koleksi",
+				"desc": "Bookmark++"
+			},
+			"drafts": {
+				"label": "Draf",
+				"desc": "Pesan yang hilang"
+			},
+			"skins": {
+				"label": "App Skins",
+				"desc": "Matches your mood!"
+			}
+		}
+	},
+	"sheets": {
+		"backOption": "Kembali"
+	},
+	"hub": {
+		"feeds": {
+			"global": "Global",
+			"local": "Lokal",
+			"social": "Sosial",
+			"home": "Beranda",
+			"bubble": "Bubble"
+		},
+		"greetings": {
+			"goodMorning": "Selamat Pagi",
+			"goodAfternoon": "Selamat Siang",
+			"goodEvening": "Selamat Sore",
+			"goodNight": "Selamat Malam"
+		},
+		"navbarLabel": "Pusat Sosial",
+		"section": {
+			"feeds": "Feed",
+			"users": "Pengguna",
+			"tags": "Tag",
+			"timelines": "Garis Waktu"
+		}
+	},
+	"inbox": {
+		"name": "Kotak Masuk",
+		"nav": {
+			"mentions": "Sebutan",
+			"chat": "Obrolan",
+			"social": "Sosial",
+			"updates": "Pembaruan"
+		},
+		"summary": {
+			"liked": "Suka pada postingan Anda",
+			"followRequestAccepted": "Menerima permintaan mengikuti Anda",
+			"followed": "Mengikuti Anda",
+			"shared": "Membagikan postingan Anda",
+			"reacted": "Bereaksi terhadap postingan Anda",
+			"posted": "Diposting",
+			"replied": "Menjawab Anda",
+			"mentioned": "Menyebut Anda"
+		}
+	},
+	"collections": {
+		"name": "Koleksi",
+		"addButton": "Tambah Koleksi",
+		"fallbackDesc": "Tidak ada deskripsi yang diberikan",
+		"emptyTitle": "Koleksi Kosong",
+		"emptyDesc": "Koleksi ini tidak memiliki postingan yang disimpan"
+	},
+	"composer": {
+		"pageTitle": "Buat",
+		"quickPost": "Post Cepat",
+		"quickPostCta": "Apa yang ada di pikiran Anda?",
+		"quickPostSubmit": "Post",
+		"noAttachments": "Tidak ada lampiran yang ditambahkan",
+		"landing": {
+			"tComposeFull": "Buat Postingan",
+			"dComposeFull": [
+				"Postingan Lebih Panjang",
+				"Lebih Banyak Pilihan"
+			],
+			"tComposePoll": "Buat Polling",
+			"dComposePoll": [
+				"<Belum Diimplementasikan>"
+			],
+			"tViewScheduled": "Lihat Postingan yang Dijadwalkan",
+			"dViewScheduled": [
+				"<Belum Diimplementasikan>"
+			],
+			"tViewDrafts": "Lihat Draf",
+			"dViewDrafts": [
+				"<Belum Diimplementasikan>"
+			]
+		}
+	},
+	"quickPost": {
+		"name": "Post Cepat",
+		"spoilerPlaceholder": "Peringatan Spoiler / Konten",
+		"ctaPlaceholder": "Apa yang ada di pikiran Anda?",
+		"postButton": "Post",
+		"replyingTo": "Membalas: ",
+		"quoting": "Mengutip: ",
+		"visibility": {
+			"public": "Publik",
+			"unlisted": "Beranda",
+			"direct": "Langsung",
+			"private": "Pengikut"
+		},
+		"interactivity": {
+			"everybody": "Semua Orang",
+			"nobody": "Hanya Saya",
+			"Limited": "Terbatas"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "Pesan Anda"
+	},
+	"setting": {
+		"accountModule": {
+			"title": "Akun",
+			"desc": "Tambahkan dan Kelola Akun"
+		},
+		"generalModule": {
+			"title": "Umum",
+			"desc": "Pengaturan umum yang membosankan ada di sini"
+		},
+		"appFeaturesModule": {
+			"title": "Fitur Aplikasi",
+			"desc": "Sesuaikan fitur unik Dhaaga"
+		},
+		"digitalWellbeingModule": {
+			"title": "Kesejahteraan Digital",
+			"desc": "Putuskan untuk menyambung kembali dengan diri Anda sendiri"
+		},
+		"advancedModule": {
+			"title": "Lanjutan",
+			"desc": "'Untuk pengguna tingkat lanjut"
+		},
+		"footer": "Dibuat dengan 💛 oleh Debashish Patra"
+	},
+	"indicators": {
+		"quotedThisPost": "Quoted this Post",
+		"sharedThisLink": "Shared this Link"
+	},
+	"prompts": {
+		"getStarted": "Get Started",
+		"visitWebsite": "Visit Website",
+		"selectPlatform": "Select Platform",
+		"findMastodonServer": "Find one here",
+		"findMisskeyServer": "Find one here",
+		"findAtProtoServer": "Find one here",
+		"mastodonConfirmAccount": "Confirm your account",
+		"mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
+		"signInConfirm": "Proceed",
+		"signInReset": "Reset"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "Loading More...",
+		"nothingMoreToShow": "Nothing more to show"
+	},
+	"errorReporting": {
+		"noTimelineSelectedLabel": "No Timeline Selected",
+		"noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
+		"noTimelineSelectedButtonCta": "Go There"
+	},
+	"unspecced": {
+		"wipText": "This feature is being built 🚧"
+	},
+	"placeholders": {
+		"atProtoUsername": "Username or email address"
+	}
 }

@@ -78,7 +78,9 @@
 			"appLanguage": "App Language",
 			"postDetails": "Post Details",
 			"manageHubProfiles": "Manage Hub Profiles",
-			"searchHistory": "Search History"
+			"searchHistory": "Search History",
+			"collections": "Collections",
+			"collection": "Collection"
 		}
 	},
 	"dialogs": {

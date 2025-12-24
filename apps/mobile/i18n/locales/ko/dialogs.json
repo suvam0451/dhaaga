@@ -1,187 +1,187 @@
 {
-  "account": {
-    "moreActions": {
-      "title": "Account Actions",
-      "description": [
-        "If your user information is showing up outdated, refresh the home tab, instead."
-      ],
-      "syncOption": "Sync (🚧)",
-      "removeOption": "Remove Account"
-    },
-    "confirmDelete": {
-      "title": "Confirm Deletion",
-      "description": [
-        "Deleting your account removes all hub profiles, collections and browsing data",
-        "Confirm and Continue?"
-      ],
-      "confirmOption": "Confirm & Delete"
-    }
-  },
-  "collection": {
-    "moreOptions": {
-      "title": "Update Collection",
-      "description": [
-        "Rename, describe or remove this collection"
-      ],
-      "renameOption": "Rename",
-      "updateDescriptionOption": "Update Description",
-      "removeOption": "Remove"
-    },
-    "add": {
-      "title": "Add Collection",
-      "description": [
-        "You can manage collections from your account overview (5th tab)."
-      ],
-      "placeholder": "Name your collection"
-    },
-    "rename": {
-      "title": "Rename Collection",
-      "description": [
-        "Assign a new name for this collection."
-      ],
-      "placeholder": "Name for your collection"
-    },
-    "describe": {
-      "title": "Describe this Collection",
-      "description": [
-        "Update your description for this collection",
-        "Submit empty string to set default"
-      ],
-      "placeholder": "Describe your collection"
-    },
-    "delete": {
-      "title": "Confirm Deletion",
-      "description": [
-        "Are you sure you want to delete this collection?",
-        "Any posts you saved under this collection will be lost."
-      ],
-      "deleteConfirmOption": "Confirm and Delete"
-    }
-  },
-  "composer": {
-    "setAltText": {
-      "title": "Alt Text",
-      "description": [
-        "See alt text for this image.",
-        "Submit empty string to remove."
-      ],
-      "placeholder": "Enter new alt text"
-    },
-    "setVisibility": {
-      "title": "Set Visibility",
-      "description": [
-        "Your \"Unlisted\" posts are hidden from feeds and search.",
-        "Your \"Direct\" messages are not encrypted."
-      ],
-      "publicLabel": "Public",
-      "unlistedLabel": "Unlisted",
-      "followersOnlyLabel": "Followers",
-      "directLabel": "Direct"
-    }
-  },
-  "hub": {
-    "profileAdd": {
-      "title": "Add Profile",
-      "description": [
-        "Profiles help you keep your pins and hub layout organised based on interest."
-      ],
-      "placeholder": "Name your profile",
-      "successToast": "Profile added successfully!"
-    },
-    "profileDelete": {
-      "title": "Confirm Deletion",
-      "description": [
-        "Are you sure you want to delete this profile?",
-        "All pins and saved layout will be lost."
-      ],
-      "deleteConfirmOption": "Confirm and Delete"
-    },
-    "profileEdit": {
-      "title": "Edit Profile",
-      "description": [
-        "You can rename or delete this profile."
-      ],
-      "descriptionAlt": [
-        "You can only rename a default profile."
-      ],
-      "renameOption": "Rename",
-      "deleteOption": "Delete"
-    },
-    "profileRename": {
-      "title": "Rename Profile",
-      "description": [
-        "Assign a new name for this profile."
-      ],
-      "placeholder": "Name your profile"
-    },
-    "tagAdd": {
-      "title": "Add Hashtag",
-      "description": [
-        "Tags can also be added when browsing timelines (by pressing the tag)."
-      ],
-      "placeholder": "Name of the tag",
-      "successToast": "Tag added successfully!"
-    },
-    "tagRemove": {},
-    "tagEdit": {
-      "title": "Modify Pinned Tag",
-      "description": [
-        "You can rename or delete this pinned tag."
-      ]
-    },
-    "tagRename": {
-      "title": "Rename Pinned Tag",
-      "description": [
-        "Change which hashtag this pin takes you to."
-      ],
-      "placeholder": "Update your tag here"
-    },
-    "userEdit": {
-      "title": "Modify Pinned User",
-      "description": [
-        "You can remove this pin.",
-        "Re-ordering will be supported in a future update."
-      ]
-    }
-  },
-  "relationship": {
-    "notRelated": {
-      "title": "Not Related",
-      "description": [
-        "You are currently not related to this user."
-      ],
-      "followOption": "Follow"
-    },
-    "follower": {
-      "title": "Follower",
-      "description": [
-        "This user currently follows you."
-      ],
-      "followBackOption": "Follow Back"
-    },
-    "following": {
-      "title": "Following",
-      "description": [
-        "You currently follow this user."
-      ],
-      "unfollowOption": "Unfollow"
-    },
-    "friends": {
-      "title": "Friends",
-      "description": [
-        "You follow each other."
-      ],
-      "unfollowOption": "Unfollow"
-    },
-    "requestPending": {
-      "title": "Request Pending",
-      "description": [
-        "You have sent this user a follow request.",
-        "But, it seems to not have been accepted yet.",
-        "You can try to refresh the status or wait."
-      ],
-      "refreshOption": "Refresh",
-      "cancelOption": "Cancel"
-    }
-  }
+	"account": {
+		"moreActions": {
+			"title": "Account Actions",
+			"description": [
+				"If your user information is showing up outdated, refresh the home tab, instead."
+			],
+			"syncOption": "Sync (🚧)",
+			"removeOption": "Remove Account"
+		},
+		"confirmDelete": {
+			"title": "Confirm Deletion",
+			"description": [
+				"Deleting your account removes all hub profiles, collections and browsing data",
+				"Confirm and Continue?"
+			],
+			"confirmOption": "Confirm & Delete"
+		}
+	},
+	"collection": {
+		"moreOptions": {
+			"title": "Update Collection",
+			"description": [
+				"Rename, describe or remove this collection"
+			],
+			"renameOption": "Rename",
+			"updateDescriptionOption": "Update Description",
+			"removeOption": "Remove"
+		},
+		"add": {
+			"title": "Add Collection",
+			"description": [
+				"You can manage collections from your account overview (5th tab)."
+			],
+			"placeholder": "Name your collection"
+		},
+		"rename": {
+			"title": "Rename Collection",
+			"description": [
+				"Assign a new name for this collection."
+			],
+			"placeholder": "Name for your collection"
+		},
+		"describe": {
+			"title": "Describe this Collection",
+			"description": [
+				"Update your description for this collection",
+				"Submit empty string to set default"
+			],
+			"placeholder": "Describe your collection"
+		},
+		"delete": {
+			"title": "Confirm Deletion",
+			"description": [
+				"Are you sure you want to delete this collection?",
+				"Any posts you saved under this collection will be lost."
+			],
+			"deleteConfirmOption": "Confirm and Delete"
+		}
+	},
+	"composer": {
+		"setAltText": {
+			"title": "Alt Text",
+			"description": [
+				"See alt text for this image.",
+				"Submit empty string to remove."
+			],
+			"placeholder": "Enter new alt text"
+		},
+		"setVisibility": {
+			"title": "Set Visibility",
+			"description": [
+				"Your \"Unlisted\" posts are hidden from feeds and search.",
+				"Your \"Direct\" messages are not encrypted."
+			],
+			"publicLabel": "Public",
+			"unlistedLabel": "Unlisted",
+			"followersOnlyLabel": "Followers",
+			"directLabel": "Direct"
+		}
+	},
+	"hub": {
+		"profileAdd": {
+			"title": "Add Profile",
+			"description": [
+				"Profiles help you keep your pins and hub layout organised based on interest."
+			],
+			"placeholder": "Name your profile",
+			"successToast": "Profile added successfully!"
+		},
+		"profileDelete": {
+			"title": "Confirm Deletion",
+			"description": [
+				"Are you sure you want to delete this profile?",
+				"All pins and saved layout will be lost."
+			],
+			"deleteConfirmOption": "Confirm and Delete"
+		},
+		"profileEdit": {
+			"title": "Edit Profile",
+			"description": [
+				"You can rename or delete this profile."
+			],
+			"descriptionAlt": [
+				"You can only rename a default profile."
+			],
+			"renameOption": "Rename",
+			"deleteOption": "Delete"
+		},
+		"profileRename": {
+			"title": "Rename Profile",
+			"description": [
+				"Assign a new name for this profile."
+			],
+			"placeholder": "Name your profile"
+		},
+		"tagAdd": {
+			"title": "Add Hashtag",
+			"description": [
+				"Tags can also be added when browsing timelines (by pressing the tag)."
+			],
+			"placeholder": "Name of the tag",
+			"successToast": "Tag added successfully!"
+		},
+		"tagRemove": {},
+		"tagEdit": {
+			"title": "Modify Pinned Tag",
+			"description": [
+				"You can rename or delete this pinned tag."
+			]
+		},
+		"tagRename": {
+			"title": "Rename Pinned Tag",
+			"description": [
+				"Change which hashtag this pin takes you to."
+			],
+			"placeholder": "Update your tag here"
+		},
+		"userEdit": {
+			"title": "Modify Pinned User",
+			"description": [
+				"You can remove this pin.",
+				"Re-ordering will be supported in a future update."
+			]
+		}
+	},
+	"relationship": {
+		"notRelated": {
+			"title": "Not Related",
+			"description": [
+				"You are currently not related to this user."
+			],
+			"followOption": "Follow"
+		},
+		"follower": {
+			"title": "Follower",
+			"description": [
+				"This user currently follows you."
+			],
+			"followBackOption": "Follow Back"
+		},
+		"following": {
+			"title": "Following",
+			"description": [
+				"You currently follow this user."
+			],
+			"unfollowOption": "Unfollow"
+		},
+		"friends": {
+			"title": "Friends",
+			"description": [
+				"You follow each other."
+			],
+			"unfollowOption": "Unfollow"
+		},
+		"requestPending": {
+			"title": "Request Pending",
+			"description": [
+				"You have sent this user a follow request.",
+				"But, it seems to not have been accepted yet.",
+				"You can try to refresh the status or wait."
+			],
+			"refreshOption": "Refresh",
+			"cancelOption": "Cancel"
+		}
+	}
 }

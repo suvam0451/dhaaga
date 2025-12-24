@@ -1,31 +1,31 @@
 {
-  "noun": {
-    "post_one": "Publication",
-    "post_other": "Publications",
-    "user_one": "Utilisateur",
-    "user_other": "Utilisateurs",
-    "follower_one": "Abonné",
-    "follower_other": "Abonnés",
-    "following_one": "Abonnement",
-    "following_other": "Abonnements",
-    "like_one": "Mention J'aime",
-    "like_other": "Mentions J'aime",
-    "share_one": "Partage",
-    "share_other": "Partages",
-    "reply_one": "Réponse",
-    "reply_other": "Réponses",
-    "quote_one": "Citation",
-    "quote_other": "Citations"
-  },
-  "relationship": {
-    "friends": "Amis",
-    "following": "Abonnements"
-  },
-  "relationshipCta": {
-    "followBack": "S'abonner en retour",
-    "follow": "S'abonner"
-  },
-  "verb": {
-    "message": "Message"
-  }
+	"noun": {
+		"post_one": "Publication",
+		"post_other": "Publications",
+		"user_one": "Utilisateur",
+		"user_other": "Utilisateurs",
+		"follower_one": "Abonné",
+		"follower_other": "Abonnés",
+		"following_one": "Abonnement",
+		"following_other": "Abonnements",
+		"like_one": "Mention J'aime",
+		"like_other": "Mentions J'aime",
+		"share_one": "Partage",
+		"share_other": "Partages",
+		"reply_one": "Réponse",
+		"reply_other": "Réponses",
+		"quote_one": "Citation",
+		"quote_other": "Citations"
+	},
+	"relationship": {
+		"friends": "Amis",
+		"following": "Abonnements"
+	},
+	"relationshipCta": {
+		"followBack": "S'abonner en retour",
+		"follow": "S'abonner"
+	},
+	"verb": {
+		"message": "Message"
+	}
 }

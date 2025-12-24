@@ -1,187 +1,187 @@
 {
-  "account": {
-    "moreActions": {
-      "title": "Kontoaktionen",
-      "description": [
-        "Synchronisieren Sie Ihre Profildaten (Profilbild, Name usw.) oder entfernen Sie Ihr Konto."
-      ],
-      "syncOption": "Synchronisieren (🚧)",
-      "removeOption": "Konto entfernen"
-    },
-    "confirmDelete": {
-      "title": "Löschung bestätigen",
-      "description": [
-        "Das Löschen Ihres Kontos entfernt alle Hub-Profile, Sammlungen und Browserverläufe.",
-        "Bestätigen und fortfahren?"
-      ],
-      "confirmOption": "Bestätigen & Löschen"
-    }
-  },
-  "collection": {
-    "moreOptions": {
-      "title": "Sammlung aktualisieren",
-      "description": [
-        "Bennen Sie diese Sammlung um, beschreiben Sie sie oder entfernen Sie sie."
-      ],
-      "renameOption": "Umbenennen",
-      "updateDescriptionOption": "Beschreibung aktualisieren",
-      "removeOption": "Entfernen"
-    },
-    "add": {
-      "title": "Sammlung hinzufügen",
-      "description": [
-        "Sie können Sammlungen über Ihre Kontübersicht (5. Tab) verwalten."
-      ],
-      "placeholder": "Nennen Sie Ihre Sammlung"
-    },
-    "rename": {
-      "title": "Sammlung umbenennen",
-      "description": [
-        "Weisen Sie dieser Sammlung einen neuen Namen zu."
-      ],
-      "placeholder": "Name für Ihre Sammlung"
-    },
-    "describe": {
-      "title": "Diese Sammlung beschreiben",
-      "description": [
-        "Aktualisieren Sie Ihre Beschreibung für diese Sammlung",
-        "Leeren Sie das Feld, um die Standardbeschreibung festzulegen"
-      ],
-      "placeholder": "Beschreiben Sie Ihre Sammlung"
-    },
-    "delete": {
-      "title": "Löschung bestätigen",
-      "description": [
-        "Sind Sie sicher, dass Sie diese Sammlung löschen möchten?",
-        "Alle Beiträge, die Sie unter dieser Sammlung gespeichert haben, gehen verloren."
-      ],
-      "deleteConfirmOption": "Bestätigen und Löschen"
-    }
-  },
-  "composer": {
-    "setAltText": {
-      "title": "Alternativtext",
-      "description": [
-        "Siehe den Alternativtext für dieses Bild.",
-        "Senden Sie eine leere Zeichenkette, um zu entfernen."
-      ],
-      "placeholder": "Geben Sie neuen Alternativtext ein"
-    },
-    "setVisibility": {
-      "title": "Sichtbarkeit einstellen",
-      "description": [
-        "Ihre \"Nicht gelisteten\" Beiträge sind in Feeds und Suchen verborgen.",
-        "Ihre \"Direkten\" Nachrichten sind nicht verschlüsselt."
-      ],
-      "publicLabel": "Öffentlich",
-      "unlistedLabel": "Nicht gelistet",
-      "followersOnlyLabel": "Nur Follower",
-      "directLabel": "Direkt"
-    }
-  },
-  "hub": {
-    "profileAdd": {
-      "title": "Profil hinzufügen",
-      "description": [
-        "Profile helfen Ihnen, Ihre Pins und Hub-Layouts nach Interessen zu organisieren."
-      ],
-      "placeholder": "Benennen Sie Ihr Profil",
-      "successToast": "Profil erfolgreich hinzugefügt!"
-    },
-    "profileDelete": {
-      "title": "Löschung bestätigen",
-      "description": [
-        "Sind Sie sicher, dass Sie dieses Profil löschen möchten?",
-        "Alle Pins und gespeicherten Layouts gehen verloren."
-      ],
-      "deleteConfirmOption": "Bestätigen und Löschen"
-    },
-    "profileEdit": {
-      "title": "Profil bearbeiten",
-      "description": [
-        "Sie können dieses Profil umbenennen oder löschen."
-      ],
-      "descriptionAlt": [
-        "Sie können nur ein Standardprofil umbenennen."
-      ],
-      "renameOption": "Umbenennen",
-      "deleteOption": "Löschen"
-    },
-    "profileRename": {
-      "title": "Profil umbenennen",
-      "description": [
-        "Geben Sie diesem Profil einen neuen Namen."
-      ],
-      "placeholder": "Benennen Sie Ihr Profil"
-    },
-    "tagAdd": {
-      "title": "Hashtag hinzufügen",
-      "description": [
-        "Tags können auch beim Durchsuchen von Zeitleisten hinzugefügt werden (durch Drücken des Tags)."
-      ],
-      "placeholder": "Name des Tags",
-      "successToast": "Tag erfolgreich hinzugefügt!"
-    },
-    "tagRemove": {},
-    "tagEdit": {
-      "title": "Angehefteten Tag bearbeiten",
-      "description": [
-        "Sie können diesen angehefteten Tag umbenennen oder löschen."
-      ]
-    },
-    "tagRename": {
-      "title": "Angehefteten Tag umbenennen",
-      "description": [
-        "Ändern Sie, zu welchem Hashtag dieser Pin führt."
-      ],
-      "placeholder": "Aktualisieren Sie Ihren Tag hier"
-    },
-    "userEdit": {
-      "title": "Angehefteten Benutzer bearbeiten",
-      "description": [
-        "Sie können diesen Pin entfernen.",
-        "Das Neuordnen wird in einem zukünftigen Update unterstützt."
-      ]
-    }
-  },
-  "relationship": {
-    "notRelated": {
-      "title": "Nicht Verwandt",
-      "description": [
-        "Du bist derzeit nicht mit diesem Benutzer verbunden."
-      ],
-      "followOption": "Folgen"
-    },
-    "follower": {
-      "title": "Follower",
-      "description": [
-        "Dieser Benutzer folgt dir derzeit."
-      ],
-      "followBackOption": "Zurückfolgen"
-    },
-    "following": {
-      "title": "Folgend",
-      "description": [
-        "Du folgst diesem Benutzer derzeit."
-      ],
-      "unfollowOption": "Nicht mehr folgen"
-    },
-    "friends": {
-      "title": "Freunde",
-      "description": [
-        "Ihr folgt euch gegenseitig."
-      ],
-      "unfollowOption": "Nicht mehr folgen"
-    },
-    "requestPending": {
-      "title": "Anfrage Ausstehend",
-      "description": [
-        "Du hast diesem Benutzer eine Follow-Anfrage gesendet.",
-        "Es scheint jedoch, dass sie noch nicht akzeptiert wurde.",
-        "Du kannst versuchen, den Status zu aktualisieren oder warten."
-      ],
-      "refreshOption": "Aktualisieren",
-      "cancelOption": "Abbrechen"
-    }
-  }
+	"account": {
+		"moreActions": {
+			"title": "Kontoaktionen",
+			"description": [
+				"Synchronisieren Sie Ihre Profildaten (Profilbild, Name usw.) oder entfernen Sie Ihr Konto."
+			],
+			"syncOption": "Synchronisieren (🚧)",
+			"removeOption": "Konto entfernen"
+		},
+		"confirmDelete": {
+			"title": "Löschung bestätigen",
+			"description": [
+				"Das Löschen Ihres Kontos entfernt alle Hub-Profile, Sammlungen und Browserverläufe.",
+				"Bestätigen und fortfahren?"
+			],
+			"confirmOption": "Bestätigen & Löschen"
+		}
+	},
+	"collection": {
+		"moreOptions": {
+			"title": "Sammlung aktualisieren",
+			"description": [
+				"Bennen Sie diese Sammlung um, beschreiben Sie sie oder entfernen Sie sie."
+			],
+			"renameOption": "Umbenennen",
+			"updateDescriptionOption": "Beschreibung aktualisieren",
+			"removeOption": "Entfernen"
+		},
+		"add": {
+			"title": "Sammlung hinzufügen",
+			"description": [
+				"Sie können Sammlungen über Ihre Kontübersicht (5. Tab) verwalten."
+			],
+			"placeholder": "Nennen Sie Ihre Sammlung"
+		},
+		"rename": {
+			"title": "Sammlung umbenennen",
+			"description": [
+				"Weisen Sie dieser Sammlung einen neuen Namen zu."
+			],
+			"placeholder": "Name für Ihre Sammlung"
+		},
+		"describe": {
+			"title": "Diese Sammlung beschreiben",
+			"description": [
+				"Aktualisieren Sie Ihre Beschreibung für diese Sammlung",
+				"Leeren Sie das Feld, um die Standardbeschreibung festzulegen"
+			],
+			"placeholder": "Beschreiben Sie Ihre Sammlung"
+		},
+		"delete": {
+			"title": "Löschung bestätigen",
+			"description": [
+				"Sind Sie sicher, dass Sie diese Sammlung löschen möchten?",
+				"Alle Beiträge, die Sie unter dieser Sammlung gespeichert haben, gehen verloren."
+			],
+			"deleteConfirmOption": "Bestätigen und Löschen"
+		}
+	},
+	"composer": {
+		"setAltText": {
+			"title": "Alternativtext",
+			"description": [
+				"Siehe den Alternativtext für dieses Bild.",
+				"Senden Sie eine leere Zeichenkette, um zu entfernen."
+			],
+			"placeholder": "Geben Sie neuen Alternativtext ein"
+		},
+		"setVisibility": {
+			"title": "Sichtbarkeit einstellen",
+			"description": [
+				"Ihre \"Nicht gelisteten\" Beiträge sind in Feeds und Suchen verborgen.",
+				"Ihre \"Direkten\" Nachrichten sind nicht verschlüsselt."
+			],
+			"publicLabel": "Öffentlich",
+			"unlistedLabel": "Nicht gelistet",
+			"followersOnlyLabel": "Nur Follower",
+			"directLabel": "Direkt"
+		}
+	},
+	"hub": {
+		"profileAdd": {
+			"title": "Profil hinzufügen",
+			"description": [
+				"Profile helfen Ihnen, Ihre Pins und Hub-Layouts nach Interessen zu organisieren."
+			],
+			"placeholder": "Benennen Sie Ihr Profil",
+			"successToast": "Profil erfolgreich hinzugefügt!"
+		},
+		"profileDelete": {
+			"title": "Löschung bestätigen",
+			"description": [
+				"Sind Sie sicher, dass Sie dieses Profil löschen möchten?",
+				"Alle Pins und gespeicherten Layouts gehen verloren."
+			],
+			"deleteConfirmOption": "Bestätigen und Löschen"
+		},
+		"profileEdit": {
+			"title": "Profil bearbeiten",
+			"description": [
+				"Sie können dieses Profil umbenennen oder löschen."
+			],
+			"descriptionAlt": [
+				"Sie können nur ein Standardprofil umbenennen."
+			],
+			"renameOption": "Umbenennen",
+			"deleteOption": "Löschen"
+		},
+		"profileRename": {
+			"title": "Profil umbenennen",
+			"description": [
+				"Geben Sie diesem Profil einen neuen Namen."
+			],
+			"placeholder": "Benennen Sie Ihr Profil"
+		},
+		"tagAdd": {
+			"title": "Hashtag hinzufügen",
+			"description": [
+				"Tags können auch beim Durchsuchen von Zeitleisten hinzugefügt werden (durch Drücken des Tags)."
+			],
+			"placeholder": "Name des Tags",
+			"successToast": "Tag erfolgreich hinzugefügt!"
+		},
+		"tagRemove": {},
+		"tagEdit": {
+			"title": "Angehefteten Tag bearbeiten",
+			"description": [
+				"Sie können diesen angehefteten Tag umbenennen oder löschen."
+			]
+		},
+		"tagRename": {
+			"title": "Angehefteten Tag umbenennen",
+			"description": [
+				"Ändern Sie, zu welchem Hashtag dieser Pin führt."
+			],
+			"placeholder": "Aktualisieren Sie Ihren Tag hier"
+		},
+		"userEdit": {
+			"title": "Angehefteten Benutzer bearbeiten",
+			"description": [
+				"Sie können diesen Pin entfernen.",
+				"Das Neuordnen wird in einem zukünftigen Update unterstützt."
+			]
+		}
+	},
+	"relationship": {
+		"notRelated": {
+			"title": "Nicht Verwandt",
+			"description": [
+				"Du bist derzeit nicht mit diesem Benutzer verbunden."
+			],
+			"followOption": "Folgen"
+		},
+		"follower": {
+			"title": "Follower",
+			"description": [
+				"Dieser Benutzer folgt dir derzeit."
+			],
+			"followBackOption": "Zurückfolgen"
+		},
+		"following": {
+			"title": "Folgend",
+			"description": [
+				"Du folgst diesem Benutzer derzeit."
+			],
+			"unfollowOption": "Nicht mehr folgen"
+		},
+		"friends": {
+			"title": "Freunde",
+			"description": [
+				"Ihr folgt euch gegenseitig."
+			],
+			"unfollowOption": "Nicht mehr folgen"
+		},
+		"requestPending": {
+			"title": "Anfrage Ausstehend",
+			"description": [
+				"Du hast diesem Benutzer eine Follow-Anfrage gesendet.",
+				"Es scheint jedoch, dass sie noch nicht akzeptiert wurde.",
+				"Du kannst versuchen, den Status zu aktualisieren oder warten."
+			],
+			"refreshOption": "Aktualisieren",
+			"cancelOption": "Abbrechen"
+		}
+	}
 }
