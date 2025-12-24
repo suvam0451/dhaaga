@@ -260,7 +260,11 @@
 		"selectPlatform": "Select Platform",
 		"findMastodonServer": "Find one here",
 		"findMisskeyServer": "Find one here",
-		"findAtProtoServer": "Find one here"
+		"findAtProtoServer": "Find one here",
+		"mastodonConfirmAccount": "Confirm your account",
+		"mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
+		"signInConfirm": "Proceed",
+		"signInReset": "Reset"
 	},
 	"loaders": {
 		"loadingMoreIndicatorText": "Loading More...",

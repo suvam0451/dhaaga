@@ -5,6 +5,8 @@ import { AppText } from '#/components/lib/Text';
 import { Image } from 'expo-image';
 import { NativeTextBold } from '#/ui/NativeText';
 import SoftwareHeader from '#/features/accounts/components/SoftwareHeader';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 export type AccountCreationPreviewProps = {
 	avatar: string;
@@ -83,6 +85,7 @@ function AccountConfirmationPopup({
 	userData,
 }: Props) {
 	const { theme } = useAppTheme();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
 	return (
 		<View
@@ -101,7 +104,7 @@ function AccountConfirmationPopup({
 					fontSize: 20,
 				}}
 			>
-				Confirm your account
+				{t(`prompts.mastodonConfirmAccount`)}
 			</NativeTextBold>
 			<View
 				style={{
@@ -115,13 +118,12 @@ function AccountConfirmationPopup({
 						textAlign: 'center',
 					}}
 				>
-					A valid token was detected. Proceed with adding the account shown
-					below ?
+					{t(`prompts.mastodonTokenDetected`)}
 				</NativeTextBold>
 			</View>
 			{userData && <UserDataPreview {...userData} />}
 			<AppButtonVariantA
-				label={'Confirm'}
+				label={t(`prompts.signInConfirm`)}
 				loading={false}
 				onClick={onConfirm}
 				style={{

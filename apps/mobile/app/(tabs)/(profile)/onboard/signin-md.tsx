@@ -53,7 +53,7 @@ function MastodonSignInStack() {
 		if (authResponse === null) return;
 
 		const { userData, accessToken } = authResponse;
-		console.log(userData, accessToken);
+
 		const upsertResult = AccountDbService.upsertAccountCredentials(
 			db,
 			accessToken,
@@ -94,7 +94,7 @@ function MastodonSignInStack() {
 									fontSize: 16,
 								}}
 							>
-								Login and Confirm your account
+								{t(`prompts.mastodonConfirmAccount`)}
 							</NativeTextBold>
 							{code && (
 								<View>
@@ -105,8 +105,7 @@ function MastodonSignInStack() {
 											textAlign: 'center',
 										}}
 									>
-										A valid token was detected. Proceed with adding the account
-										shown above?
+										{t(`prompts.mastodonTokenDetected`)}
 									</NativeTextBold>
 								</View>
 							)}
@@ -128,7 +127,7 @@ function MastodonSignInStack() {
 											fontSize: 16,
 										}}
 									>
-										Proceed
+										{t(`prompts.signInConfirm`)}
 									</NativeTextBold>
 								</TouchableOpacity>
 								<TouchableOpacity
@@ -147,7 +146,7 @@ function MastodonSignInStack() {
 											fontSize: 16,
 										}}
 									>
-										Reset
+										{t(`prompts.signInReset`)}
 									</NativeTextBold>
 								</TouchableOpacity>
 							</View>
@@ -158,14 +157,13 @@ function MastodonSignInStack() {
 				<View style={{ marginHorizontal: 12 }}>
 					<View style={{ marginBottom: 36, paddingBottom: 16 }}>
 						<HideWhileKeyboardActive style={{ marginVertical: 16 }}>
-							<Text>Step 3: Confirm your account</Text>
+							<Text> {t(`prompts.mastodonConfirmAccount`)}</Text>
 						</HideWhileKeyboardActive>
 						<PleromaPasteToken domain={_domain} setCode={setCode} />
 						{code ? (
 							<View>
 								<Text style={{ marginBottom: 12 }}>
-									A valid token was detected. Proceed with adding the account
-									shown above?
+									<Text>{t(`prompts.mastodonTokenDetected`)}</Text>
 								</Text>
 							</View>
 						) : (
@@ -183,7 +181,7 @@ function MastodonSignInStack() {
 								]}
 								onPress={onPressConfirm}
 							>
-								Proceed
+								{t(`prompts.signInConfirm`)}
 							</TouchableOpacity>
 						</HideWhileKeyboardActive>
 					</View>
