@@ -1,4 +1,22 @@
 {
+	"appHighlightFeatures": {
+		"funFirst": {
+			"label": "Fun-First",
+			"desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun."
+		},
+		"hub": {
+			"label": "Cozy Hub Area",
+			"desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer."
+		},
+		"profiles": {
+			"label": "Social Profiles",
+			"desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!"
+		},
+		"cleanInbox": {
+			"label": "Clean Inbox",
+			"desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!"
+		}
+	},
 	"feed": {
 		"subscribeOption": "Subscribe",
 		"unsubscribeOption": "Unsubscribe",
@@ -42,7 +60,9 @@
 			"updates": "Updates"
 		},
 		"secondary": {
+			"appSkins": "App Skins",
 			"addProfile": "Add Profile",
+			"manageSubscriptions": "Manage Subscriptions",
 			"myLikes": "My Likes",
 			"myBookmarks": "My Bookmarks",
 			"myAccount": "My Account",
@@ -50,10 +70,15 @@
 			"appSettings": "App Settings",
 			"manageAccounts": "Manage Accounts",
 			"blueskySignIn": "Bluesky Sign-In",
+			"allPosts": "All Posts",
 			"selectServer": "Select Server",
 			"mastodonSignIn": "Mastodon Sign-In",
 			"misskeySignIn": "Misskey Sign-In",
-			"pickPlatform": "Pick Platform"
+			"pickPlatform": "Pick Platform",
+			"appLanguage": "App Language",
+			"postDetails": "Post Details",
+			"manageHubProfiles": "Manage Hub Profiles",
+			"searchHistory": "Search History"
 		}
 	},
 	"dialogs": {
@@ -95,8 +120,8 @@
 				"desc": "My Lists"
 			},
 			"socialHub": {
-				"label": "Social Hub",
-				"desc": "Manage profiles"
+				"label": "Hub Profiles",
+				"desc": "Manage hub profiles"
 			},
 			"collections": {
 				"label": "Collections",
@@ -105,6 +130,10 @@
 			"drafts": {
 				"label": "Drafts",
 				"desc": "Lost letters"
+			},
+			"skins": {
+				"label": "App Skins",
+				"desc": "Matches your mood!"
 			}
 		}
 	},
@@ -220,5 +249,36 @@
 			"desc": "'For power users"
 		},
 		"footer": "Built with \uD83D\uDC9B by Debashish Patra"
+	},
+	"indicators": {
+		"quotedThisPost": "Quoted this Post",
+		"sharedThisLink": "Shared this Link"
+	},
+	"prompts": {
+		"getStarted": "Get Started",
+		"visitWebsite": "Visit Website",
+		"selectPlatform": "Select Platform",
+		"findMastodonServer": "Find one here",
+		"findMisskeyServer": "Find one here",
+		"findAtProtoServer": "Find one here",
+		"mastodonConfirmAccount": "Confirm your account",
+		"mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
+		"signInConfirm": "Proceed",
+		"signInReset": "Reset"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "Loading More...",
+		"nothingMoreToShow": "Nothing more to show"
+	},
+	"errorReporting": {
+		"noTimelineSelectedLabel": "No Timeline Selected",
+		"noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
+		"noTimelineSelectedButtonCta": "Go There"
+	},
+	"unspecced": {
+		"wipText": "This feature is being built \uD83D\uDEA7"
+	},
+	"placeholders": {
+		"atProtoUsername": "Username or email address"
 	}
 }

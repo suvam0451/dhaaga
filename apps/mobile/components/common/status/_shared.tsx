@@ -10,9 +10,9 @@ import { AppIcon } from '../../lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
 import { Fragment } from 'react';
 import { DatetimeUtil } from '#/utils/datetime.utils';
-import { AppText } from '../../lib/Text';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { usePostEventBusActions } from '#/hooks/pubsub/usePostEventBus';
+import { NativeTextNormal } from '#/ui/NativeText';
 
 type PostMoreOptionsButtonProps = {
 	postId: string;
@@ -45,7 +45,7 @@ export function PostMoreOptionsButton({
 
 	return (
 		<Pressable style={styles.statusMoreOptionsContainer} onPress={onPress}>
-			<AppText.Normal
+			<NativeTextNormal
 				style={{
 					color: theme.secondary.a50,
 					fontSize: 13,
@@ -53,7 +53,7 @@ export function PostMoreOptionsButton({
 				}}
 			>
 				{DatetimeUtil.timeAgo(createdAt)}
-			</AppText.Normal>
+			</NativeTextNormal>
 			<View style={styles.statusMoreOptionsButton}>
 				<AppIcon
 					id={'more-options-vertical'}

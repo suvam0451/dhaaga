@@ -7,9 +7,8 @@ import { ActivitypubStatusAdapter } from '../implementors/status/_adapters.js';
 import { PostTargetInterface } from '../implementors/index.js';
 import { KNOWN_SOFTWARE } from '../client/utils/driver.js';
 import AtprotoPostAdapter from '../implementors/status/bluesky.js';
-import { ActivitypubHelper, DriverUserFindQueryType } from '../index.js';
+import { ActivitypubHelper } from '../index.js';
 import {
-	PostMentionObjectType,
 	ActivityPubStatusItemDto,
 	postObjectSchema,
 	PostObjectType,
@@ -131,6 +130,7 @@ class Parser {
 				sensitive: input.getIsSensitive(),
 				cw: input.getSpoilerText() || null,
 				isBoost: input.isReposted(),
+				isQuote: input.isReposted(),
 				isReply: input.isReply(),
 				mentions: input.getMentions(),
 				cid: input.getCid(),
@@ -193,6 +193,14 @@ class Parser {
 		let sharedFrom: z.infer<typeof ActivityPubStatusItemDto> | null = IS_SHARE
 			? Parser.parse(input.getRepostedStatusRaw(), driver, server)
 			: null;
+		if (
+			input.getUri() ===
+				'at://did:plc:iqk7tmzyrrczk7rnhqds63l3/app.bsky.feed.post/3m47nor6wqk26' ||
+			input.getUri() ===
+				'at://did:plc:c5rh46ed6kpelxloeaycpsb7/app.bsky.feed.post/3m2tpa67rn22n'
+		) {
+			console.log('shared from', sharedFrom);
+		}
 
 		// Null for Mastodon
 		let replyTo: z.infer<typeof ActivityPubStatusItemDto> | null = HAS_PARENT
@@ -224,9 +232,18 @@ class Parser {
 
 		const { data, error, success } = postObjectSchema.safeParse(dto);
 		if (!success) {
-			console.log('[ERROR]: status item dto validation failed', error);
+			// not expected to parse
+			if (
+				[
+					'app.bsky.feed.defs#notFoundPost',
+					'app.bsky.embed.record#viewNotFound',
+				].includes((input.getRaw() as any)?.$type)
+			)
+				return null;
+
+			console.log('[ERROR]: status item dto validation failed', error, dto.id);
 			// console.log('[INFO]: generated object', dto);
-			// input.print();
+			input.print();
 			return null;
 		}
 		return data as PostObjectType;
@@ -301,8 +318,18 @@ class Inspector {
 			return input;
 		}
 		if (input.meta.isBoost && !input.boostedFrom) {
-			console.log('[WARN]: original object not available for a repost', input);
-			return input;
+			console.log(
+				'[WARN]: original object not available for a repost',
+				input.id,
+			);
+			// FIX: avoid trying to force render the boostedFrom object
+			return {
+				...input,
+				meta: {
+					...input.meta,
+					isBoost: false,
+				},
+			};
 		}
 		return input.meta.isBoost
 			? input.content.raw || input.content.media.length > 0
@@ -338,39 +365,4 @@ class Inspector {
 	}
 }
 
-class Resolver {
-	static mentionItemsToWebfinger(
-		handle: string,
-		items: PostMentionObjectType[],
-	): DriverUserFindQueryType | null {
-		const parts = handle.split('@').filter(Boolean); // Remove empty elements after splitting
-		if (parts.length === 1) {
-			/**
-			 * Mastodon has acct/url
-			 */
-			const match = items.find(
-				(o) => o.acct?.startsWith(parts[0]) && o.url?.endsWith(parts[0]),
-			);
-			if (match) {
-				return {
-					use: 'userId',
-					userId: match.id,
-				};
-			}
-		}
-		const match = items.find((o) => o.acct === `${parts[0]}@${parts[1]}`);
-		if (match) {
-			return {
-				use: 'userId',
-				userId: match.id,
-			};
-		}
-		return null;
-	}
-}
-
-export {
-	Parser as PostParser,
-	Inspector as PostInspector,
-	Resolver as PostResolver,
-};
+export { Parser as PostParser, Inspector as PostInspector };

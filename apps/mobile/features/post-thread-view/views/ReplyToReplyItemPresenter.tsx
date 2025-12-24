@@ -9,9 +9,9 @@ import { usePostThreadState } from '@dhaaga/react';
 import { NativeTextNormal } from '#/ui/NativeText';
 import { AppIcon } from '#/components/lib/Icon';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { useAppTheme } from '#/states/global/hooks';
 
 type PostReplyToReplyProps = {
-	colors: string[];
 	postId: string;
 	depth: number;
 };
@@ -26,8 +26,6 @@ type PostReplyToReplyContentProps = {
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
-const INDICATOR_LINE_SPACING = 4;
-
 function PostReplyToReplyContent({
 	lookupId,
 	IsReplyThreadVisible,
@@ -39,7 +37,6 @@ function PostReplyToReplyContent({
 	const dto = data.lookup.get(lookupId);
 
 	const replyCount = dto.stats.replyCount;
-	const mediaCount = dto.content.media.length;
 
 	function toggleReplyVisibility() {
 		setIsReplyThreadVisible(!IsReplyThreadVisible);
@@ -92,12 +89,9 @@ function PostReplyToReplyContent({
 	);
 }
 
-function ReplyToReplyItemPresenter({
-	colors,
-	postId,
-	depth,
-}: PostReplyToReplyProps) {
+function ReplyToReplyItemPresenter({ postId, depth }: PostReplyToReplyProps) {
 	const data = usePostThreadState();
+	const { theme } = useAppTheme();
 	const children = (data.children.get(postId) ?? []).map((childId) =>
 		data.lookup.get(childId),
 	);
@@ -113,13 +107,13 @@ function ReplyToReplyItemPresenter({
 					},
 				]}
 			>
-				{colors.map((o, i) => (
+				{Array.from({ length: depth }).map((o, i) => (
 					<View
 						key={i}
 						style={[
 							styles.contextLine,
 							{
-								backgroundColor: o,
+								backgroundColor: theme.complementary,
 								left: i * 4,
 							},
 						]}
@@ -138,7 +132,6 @@ function ReplyToReplyItemPresenter({
 					{children.map((o, i) => (
 						<ReplyToReplyItemPresenter
 							key={i}
-							colors={[...colors, depthIndicator]}
 							postId={o.id}
 							depth={depth + 1}
 						/>

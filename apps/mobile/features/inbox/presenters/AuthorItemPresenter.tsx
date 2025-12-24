@@ -1,8 +1,4 @@
-import {
-	useAccountManager,
-	useAppBottomSheet,
-	useAppTheme,
-} from '#/states/global/hooks';
+import { useAccountManager, useAppTheme } from '#/states/global/hooks';
 import type { PostAuthorType, UserObjectType } from '@dhaaga/bridge';
 import { DriverNotificationType } from '@dhaaga/bridge';
 import { useMemo } from 'react';
@@ -16,7 +12,7 @@ import { AuthorItemView } from '../view/AuthorItemView';
 import { LocalizationService } from '#/services/localization.service';
 import { AppIcon } from '#/components/lib/Icon';
 import useAppNavigator from '#/states/useAppNavigator';
-import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
+import useSheetNavigation from '#/states/navigation/useSheetNavigation';
 
 type Props = {
 	user: PostAuthorType | UserObjectType;
@@ -36,10 +32,10 @@ function AuthorItemPresenter({
 	noIcon,
 }: Props) {
 	const { theme } = useAppTheme();
-	const { show } = useAppBottomSheet();
 	const { acctManager } = useAccountManager();
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { toProfile } = useAppNavigator();
+	const { openUserProfileSheet } = useSheetNavigation();
 
 	const desc = LocalizationService.notificationLabel(t, notificationType);
 
@@ -132,11 +128,7 @@ function AuthorItemPresenter({
 	}, [notificationType, extraData, acctManager]);
 
 	function onAvatarPressed() {
-		show(APP_BOTTOM_SHEET_ENUM.USER_PREVIEW, true, {
-			$type: 'user-preview',
-			use: 'userId',
-			userId: user.id,
-		});
+		openUserProfileSheet(user.id);
 	}
 
 	function onUserPressed() {

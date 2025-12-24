@@ -24,7 +24,7 @@ function Navbar({}: UserViewNavbarProps) {
 			>
 				<AppIcon
 					id={'chevron-left'}
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+					color={'rgba(236, 236, 236, 0.87)'}
 					onPress={onPressBack}
 					size={appDimensions.topNavbar.iconSize}
 				/>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 	backButtonContainer: {
 		padding: appDimensions.topNavbar.padding,
 		marginLeft: appDimensions.topNavbar.marginLeft,
-		backgroundColor: 'rgba(40, 40, 40, 0.64)',
+		backgroundColor: 'rgba(40, 40, 40, 0.6)',
 		borderRadius: '100%',
 	},
 });

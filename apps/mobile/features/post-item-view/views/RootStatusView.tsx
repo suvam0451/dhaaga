@@ -1,70 +1,38 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import useAppNavigator from '#/states/useAppNavigator';
 import { withPostItemContext } from '#/components/containers/WithPostItemContext';
 import { Pressable, View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
 import EmojiReactions from '#/components/common/status/fragments/EmojiReactions';
 import PostContentWarning from '../components/PostContentWarning';
-import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
 import { appDimensions } from '#/styles/dimensions';
-import { useAppTheme, useImageInspect } from '#/states/global/hooks';
+import { useImageInspect } from '#/states/global/hooks';
 import PostActionButtonRowView from '#/features/post-item-view/views/PostActionButtonRowView';
 import StatusQuoted from '#/features/post-item-view/views/StatusQuoted';
 import { PostMoreOptionsButton } from '#/components/common/status/_shared';
 import { PostInspector } from '@dhaaga/bridge';
-import type { PostObjectType } from '@dhaaga/bridge';
 import { PinOrnament } from '#/features/post-item-view/components/Ornaments';
 import TextAstRendererView from '#/ui/TextAstRendererView';
-import { NativeTextBold } from '#/ui/NativeText';
 import PostLinkAttachmentListView from '../components/PostLinkAttachmentListView';
 import ExplainOutput from '../components/ExplainOutput';
+import UserBadge from '#/ui/UserBadge';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
-/**
- * Mostly used to remove the border
- * radius and zero in marginTop
- */
-type StatusCoreProps = {
-	hasParent?: boolean;
-	hasBoost?: boolean;
-	isPreview?: boolean;
-	isPin?: boolean;
-	showFullDetails?: boolean;
-};
-
-type PostFullDetailsProps = {
-	dto: PostObjectType;
-};
-
-function PostFullDetails({ dto }: PostFullDetailsProps) {
-	const { theme } = useAppTheme();
-	const POST = PostInspector.getContentTarget(dto);
-
-	return (
-		<View
-			style={{
-				marginTop: appDimensions.timelines.sectionBottomMargin * 4,
-				marginHorizontal: 6,
-			}}
-		>
-			<NativeTextBold style={{ color: theme.complementary }}>
-				{new Date(POST.createdAt).toLocaleString()}
-			</NativeTextBold>
-		</View>
-	);
-}
-
-function HiddenByCw({
-	children,
-	visible,
-}: {
+type HiddenByCwProps = {
 	children: any;
 	visible: boolean;
-}) {
+};
+
+function HiddenByCw({ children, visible }: HiddenByCwProps) {
 	if (!visible) return <View />;
 	return <>{children}</>;
 }
+
+type Props = {
+	isPreview?: boolean;
+	isPin?: boolean;
+};
 
 /**
  * This is the root status against which most
@@ -72,14 +40,9 @@ function HiddenByCw({
  *
  * @param isPreview
  * @param isPin
- * @param showFullDetails
  * @constructor
  */
-function RootStatusView({
-	isPreview,
-	isPin,
-	showFullDetails,
-}: StatusCoreProps) {
+function RootStatusView({ isPreview, isPin }: Props) {
 	const { dto } = withPostItemContext();
 	const { toPost } = useAppNavigator();
 	const { showInspector, appSession } = useImageInspect();
@@ -100,7 +63,7 @@ function RootStatusView({
 	}
 
 	return (
-		<Fragment>
+		<>
 			<PinOrnament isPinned={isPin} />
 			<View
 				style={{
@@ -108,7 +71,14 @@ function RootStatusView({
 					marginBottom: SECTION_MARGIN_BOTTOM * 0.75,
 				}}
 			>
-				<PostCreatedBy post={_target} />
+				<UserBadge
+					userId={_target.postedBy.id}
+					avatarUrl={_target.postedBy.avatarUrl}
+					displayName={_target.postedBy.displayName}
+					parsedDisplayName={_target.postedBy.parsedDisplayName}
+					handle={_target.postedBy.handle}
+					emojiMap={_target.calculated.emojis}
+				/>
 				{!isPreview && (
 					<PostMoreOptionsButton
 						postId={_target.id}
@@ -177,8 +147,7 @@ function RootStatusView({
 			{/* Lock reactions for preview (to be refactored) */}
 			{isPreview ? <View /> : <EmojiReactions dto={_target} />}
 			{isPreview ? <View /> : <PostActionButtonRowView />}
-			{showFullDetails ? <PostFullDetails dto={dto} /> : <View />}
-		</Fragment>
+		</>
 	);
 }
 

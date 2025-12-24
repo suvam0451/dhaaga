@@ -5,10 +5,13 @@ import ChristmasMistleToe from '#/skins/christmas/ChristmasMistleToe';
 import { appDimensions } from '#/styles/dimensions';
 import { AppIcon } from '#/components/lib/Icon';
 import { NativeTextBold } from '#/ui/NativeText';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
 
 export function ThemedQuotedPostOrnament({ children }: { children: any }) {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { theme } = useAppTheme();
 	switch (theme.id) {
 		case 'christmas':
@@ -24,7 +27,7 @@ export function ThemedQuotedPostOrnament({ children }: { children: any }) {
 								marginLeft: 4,
 							}}
 						>
-							Quoted this Post
+							{t(`topNav.indicators.quotedThisPost`)}
 						</NativeTextBold>
 					</View>
 					<View style={styles.inner}>
@@ -46,7 +49,7 @@ export function ThemedQuotedPostOrnament({ children }: { children: any }) {
 								marginLeft: 4,
 							}}
 						>
-							Quoted this Post
+							{t(`topNav.indicators.quotedThisPost`)}
 						</NativeTextBold>
 					</View>
 					<View

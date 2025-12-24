@@ -21,7 +21,6 @@ import BookmarkBottomSheet from '#/components/dhaaga-bottom-sheet/modules/Bookma
 import FeedOptionsBottomSheet from '#/components/dhaaga-bottom-sheet/modules/FeedOptionsBottomSheet';
 import HubFeedAddBottomSheet from '#/components/dhaaga-bottom-sheet/hub/HubFeedAddBottomSheet';
 import AtProtoFeedMoreOptions from '#/components/dhaaga-bottom-sheet/AtProtoFeedMoreOptions';
-import { Fragment } from 'react';
 import ShowReactionDetailsBottomSheet from '#/components/dhaaga-bottom-sheet/summary/ShowReactionDetailsBottomSheet';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import { useAppBottomSheet, useAppTheme } from '#/states/global/hooks';
@@ -34,13 +33,13 @@ function Handle() {
 	const { theme } = useAppTheme();
 	const { visible } = useAppBottomSheet();
 
+	if (!visible) return <View />;
 	return (
 		<View style={styles.handleContainer}>
 			<View
 				style={[
 					styles.handleContent,
 					{
-						height: visible ? 3 : 0,
 						backgroundColor: theme.secondary.a50,
 					},
 				]}
@@ -52,7 +51,10 @@ function Handle() {
  * Responsible for generating content
  */
 function Factory() {
-	const { type } = useAppBottomSheet();
+	const { type, visible } = useAppBottomSheet();
+
+	// remove content while invisible
+	if (!visible) return <View />;
 
 	switch (type) {
 		/**
@@ -116,43 +118,46 @@ function AppBottomSheet() {
 	const { theme } = useAppTheme();
 
 	return (
-		<Fragment>
+		<>
 			<Pressable
-				style={{
-					position: 'absolute',
-					height: visible ? '100%' : 'auto',
-					width: '100%',
-					backgroundColor: theme.background.a0,
-					zIndex: appVerticalIndex.sheetBackdrop,
-					opacity: 0.42,
-				}}
+				style={[
+					styles.backdrop,
+					{
+						height: visible ? '100%' : 'auto',
+						backgroundColor: theme.background.a0,
+					},
+				]}
 				onPress={hide}
 			/>
-			<View
-				style={{
-					width: '100%',
-					position: 'absolute',
-					height: visible ? 'auto' : 0,
-					zIndex: appVerticalIndex.sheetContent,
-					bottom: 0,
-				}}
+			<Animated.View
+				style={[
+					styles.rootContainer,
+					{ backgroundColor: theme.background.a10 },
+					animStyle,
+				]}
 			>
-				<Animated.View
-					style={[
-						styles.rootContainer,
-						{ backgroundColor: theme.background.a10 },
-						animStyle,
-					]}
-				>
-					<Handle />
-					<Factory />
-				</Animated.View>
-			</View>
-		</Fragment>
+				<Handle />
+				<Factory />
+			</Animated.View>
+		</>
 	);
 }
 
 const styles = StyleSheet.create({
+	backdrop: {
+		position: 'absolute',
+		width: '100%',
+		zIndex: appVerticalIndex.sheetBackdrop,
+		opacity: 0.42,
+	},
+	rootContainer: {
+		width: '100%',
+		position: 'absolute',
+		zIndex: appVerticalIndex.sheetContent,
+		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
+		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
+		bottom: 0,
+	},
 	handleContainer: {
 		position: 'absolute',
 		alignItems: 'center',
@@ -166,13 +171,7 @@ const styles = StyleSheet.create({
 		width: 42,
 		marginBottom: 16,
 		borderRadius: 16,
-	},
-	rootContainer: {
-		bottom: 0,
-		width: '100%',
-		borderTopRightRadius: appDimensions.bottomSheet.borderRadius,
-		borderTopLeftRadius: appDimensions.bottomSheet.borderRadius,
-		zIndex: appVerticalIndex.sheetContent,
+		height: 3,
 	},
 });
 

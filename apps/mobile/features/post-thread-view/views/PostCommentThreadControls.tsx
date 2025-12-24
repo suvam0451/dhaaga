@@ -19,8 +19,8 @@ function PostCommentThreadControls({ count }: ReplyControlPresenterProps) {
 				paddingHorizontal: 16,
 				backgroundColor: theme.background.a40,
 				paddingVertical: 10,
-				marginBottom: 16,
-				borderRadius: 16,
+				marginVertical: 16,
+				borderRadius: 12,
 			}}
 		>
 			<View style={{ flex: 1 }}>
@@ -33,24 +33,24 @@ function PostCommentThreadControls({ count }: ReplyControlPresenterProps) {
 					{`${count} Replies`}
 				</AppText.SemiBold>
 			</View>
-			<View style={{ flexDirection: 'row' }}>
-				<TouchableOpacity style={{ paddingHorizontal: 8 }}>
-					<AppIcon
-						id={'funnel-outline'}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				</TouchableOpacity>
-				<TouchableOpacity style={{ paddingLeft: 8 }}>
-					<AppIcon
-						id={
-							AllExpanded
-								? 'chevron-collapse-outline'
-								: 'chevron-expand-outline'
-						}
-						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					/>
-				</TouchableOpacity>
-			</View>
+			{/*<View style={{ flexDirection: 'row' }}>*/}
+			{/*	<TouchableOpacity style={{ paddingHorizontal: 8 }}>*/}
+			{/*		<AppIcon*/}
+			{/*			id={'funnel-outline'}*/}
+			{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+			{/*		/>*/}
+			{/*	</TouchableOpacity>*/}
+			{/*	<TouchableOpacity style={{ paddingLeft: 8 }}>*/}
+			{/*		<AppIcon*/}
+			{/*			id={*/}
+			{/*				AllExpanded*/}
+			{/*					? 'chevron-collapse-outline'*/}
+			{/*					: 'chevron-expand-outline'*/}
+			{/*			}*/}
+			{/*			emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
+			{/*		/>*/}
+			{/*	</TouchableOpacity>*/}
+			{/*</View>*/}
 		</View>
 	);
 }

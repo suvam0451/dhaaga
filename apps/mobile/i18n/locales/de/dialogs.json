@@ -122,8 +122,7 @@
       "placeholder": "Name des Tags",
       "successToast": "Tag erfolgreich hinzugefügt!"
     },
-    "tagRemove": {
-    },
+    "tagRemove": {},
     "tagEdit": {
       "title": "Angehefteten Tag bearbeiten",
       "description": [

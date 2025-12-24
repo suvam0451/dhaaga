@@ -22,7 +22,8 @@ const appStyling = StyleSheet.create({
 		justifyContent: 'center',
 		marginLeft: 'auto',
 		marginRight: 'auto',
-		width: 148,
+		minWidth: 148,
+		maxWidth: 196,
 	},
 });
 

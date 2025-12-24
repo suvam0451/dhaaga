@@ -8,6 +8,8 @@ import { AppDividerSoft } from '#/ui/Divider';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppTheme } from '#/states/global/hooks';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 type SkinPreviewObjectType = {
 	id: string;
@@ -31,6 +33,7 @@ type SkinPreviewObjectType = {
 };
 
 function SkinSelectionPage() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	const { setSkin } = useAppTheme();
 
@@ -135,26 +138,26 @@ function SkinSelectionPage() {
 			hasIconPack: false,
 			hasWallpaper: true,
 		},
-		{
-			id: 'sunset',
-			name: 'Empire of Sun',
-			statusBar: 'light-content',
-			bg: '#fcfb9b',
-			bgFinal: '#eec665',
-			primary: '#32455b',
-			complementary: '#eabc7a',
-			text0: '#91954a', // #91954a, 56563c
-			text10: '#505138',
-			text20: '#4A4C34',
-			text30: '#44472F',
-			text40: '#3E4230',
-			text50: '#2f2e27',
-			isDarkMode: true,
-			hasCustomSkin: false,
-			hasTransparency: false,
-			hasIconPack: false,
-			hasWallpaper: true,
-		},
+		// {
+		// 	id: 'sunset',
+		// 	name: 'Empire of Sun',
+		// 	statusBar: 'light-content',
+		// 	bg: '#fcfb9b',
+		// 	bgFinal: '#eec665',
+		// 	primary: '#32455b',
+		// 	complementary: '#eabc7a',
+		// 	text0: '#91954a', // #91954a, 56563c
+		// 	text10: '#505138',
+		// 	text20: '#4A4C34',
+		// 	text30: '#44472F',
+		// 	text40: '#3E4230',
+		// 	text50: '#2f2e27',
+		// 	isDarkMode: true,
+		// 	hasCustomSkin: false,
+		// 	hasTransparency: false,
+		// 	hasIconPack: false,
+		// 	hasWallpaper: true,
+		// },
 		// {
 		// 	id: 'orange_castle',
 		// 	name: 'Sky Castle',
@@ -193,7 +196,10 @@ function SkinSelectionPage() {
 
 	return (
 		<WithBackgroundSkin>
-			<NavBar_Simple label={'App Skins'} animatedStyle={animatedStyle} />
+			<NavBar_Simple
+				label={t(`topNav.secondary.appSkins`)}
+				animatedStyle={animatedStyle}
+			/>
 			<FlatList
 				data={items}
 				renderItem={({ item }) => (

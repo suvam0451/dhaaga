@@ -20,6 +20,7 @@ import type {
 } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useAppTheme } from '../states/global/hooks';
+import { AppThemingUtil } from '#/utils/theming.util';
 
 /**
  * Constants
@@ -31,18 +32,6 @@ enum ANIMATION_DIRECTION {
 	topToBottom = 'topToBottom',
 	bottomToTop = 'bottomToTop',
 }
-
-const DEFAULT_GRADIENT = [
-	'rgba(48,48,48,0)',
-	'rgba(48,48,48,0.1)',
-	'rgba(48,48,48,0.4)',
-	'rgba(48,48,48,0.6)',
-	'rgba(48,48,48,0.7)',
-	'rgba(48,48,48,0.6)',
-	'rgba(48,48,48,0.4)',
-	'rgba(48,48,48,0.1)',
-	'rgba(48,48,48,0)',
-] as const;
 
 /**
  * Typings
@@ -258,6 +247,10 @@ const Skeleton = ({ height, width, style }: Props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [parentDimensions, gradientDimensions, direction, isXDirectionAnimation]);
 
+	const _gradientColors = useMemo(() => {
+		return AppThemingUtil.generateSkeletonGradient(theme.secondary.a50);
+	}, [theme]);
+
 	return (
 		<Animated.View
 			onLayout={onParentViewLayout}
@@ -277,7 +270,8 @@ const Skeleton = ({ height, width, style }: Props) => {
 				]}
 			>
 				<LinearGradient
-					colors={DEFAULT_GRADIENT}
+					// @ts-ignore-next-line
+					colors={_gradientColors}
 					style={styles.background}
 					start={coordinates.start}
 					end={coordinates.end}
@@ -301,6 +295,7 @@ const styles = StyleSheet.create({
 	// },
 	itemParent: {
 		overflow: 'hidden',
+		borderRadius: 8,
 	},
 	background: {
 		height: '100%',

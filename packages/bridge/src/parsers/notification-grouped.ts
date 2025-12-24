@@ -341,10 +341,6 @@ class Parser {
 				}
 			}
 
-			if (item.reason === 'like') {
-				console.log('like object', item.record);
-			}
-
 			results.push({
 				id: ['like', 'repost'].includes(item.reason)
 					? (item as any).record.subject.uri

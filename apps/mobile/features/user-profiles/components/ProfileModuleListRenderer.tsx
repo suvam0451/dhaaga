@@ -51,7 +51,7 @@ function ProfileModuleListRenderer({
 				ListHeaderComponent={<View style={{ height: headerHeight }} />}
 				contentContainerStyle={{ paddingTop: 16 }}
 				ItemSeparatorComponent={() => (
-					<AppDividerSoft style={{ marginVertical: 10 }} />
+					<AppDividerSoft themed style={{ marginVertical: 6 }} />
 				)}
 				keyExtractor={(item) => item.id}
 				removeClippedSubviews={true}

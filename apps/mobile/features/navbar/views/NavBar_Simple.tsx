@@ -1,9 +1,31 @@
-import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
+import {
+	View,
+	StyleSheet,
+	ViewStyle,
+	StyleProp,
+	Pressable,
+} from 'react-native';
 import { appDimensions } from '#/styles/dimensions';
 import { useAppTheme } from '#/states/global/hooks';
 import Animated from 'react-native-reanimated';
-import BackNavigationButton from '#/features/navbar/components/BackNavigationButton';
 import { NativeTextBold } from '#/ui/NativeText';
+import { AppIcon } from '#/components/lib/Icon';
+import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { Link } from 'expo-router';
+
+function BackNavigationButton() {
+	return (
+		<Link asChild style={styles.backButton} href="..">
+			<Pressable>
+				<AppIcon
+					id={'back'}
+					size={25}
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+				/>
+			</Pressable>
+		</Link>
+	);
+}
 
 type Props = {
 	label: string;
@@ -24,21 +46,8 @@ type Props = {
 function NavBar_Simple({ label, animatedStyle }: Props) {
 	const { theme } = useAppTheme();
 
-	function onLayout(event: any) {
-		console.log('height', event.nativeEvent.layout.height);
-	}
-
 	return (
-		<Animated.View
-			onLayout={onLayout}
-			style={[
-				{
-					position: 'absolute',
-					zIndex: 1,
-				},
-				animatedStyle,
-			]}
-		>
+		<Animated.View style={[styles.root, animatedStyle]}>
 			<View
 				style={[styles.subHeader, { backgroundColor: theme.background.a10 }]}
 			>
@@ -62,6 +71,10 @@ function NavBar_Simple({ label, animatedStyle }: Props) {
 export default NavBar_Simple;
 
 const styles = StyleSheet.create({
+	root: {
+		position: 'absolute',
+		zIndex: 1,
+	},
 	subHeader: {
 		width: '100%',
 		flexDirection: 'row',
@@ -75,5 +88,12 @@ const styles = StyleSheet.create({
 	},
 	navbarTitle: {
 		fontSize: 16,
+	},
+	backButton: {
+		height: '100%',
+		display: 'flex',
+		alignItems: 'center',
+		flexDirection: 'row',
+		paddingHorizontal: 8,
 	},
 });

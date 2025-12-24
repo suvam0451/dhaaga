@@ -30,7 +30,7 @@ function GroupedPostInteractionPresenter({
 					marginBottom: appDimensions.timelines.sectionBottomMargin * 1.25,
 				}}
 			>
-				<View style={{ flex: 1, flexDirection: 'row' }}>
+				<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
 					<AppIcon
 						id="heart-outline"
 						size={NOTIFICATION_TYPE_ICON_SIZE}

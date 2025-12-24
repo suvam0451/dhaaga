@@ -9,8 +9,11 @@ import {
 import { useAppApiClient } from '#/states/global/hooks';
 import AppTimeline from '#/features/timelines/components/AppTimeline';
 import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function Generator() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { client } = useAppApiClient();
 	const State = useSubscriptionGalleryState();
 	const dispatch = useSubscriptionGalleryDispatch();
@@ -59,7 +62,7 @@ function Generator() {
 			fnLoadNextPage={fnLoadNextPage}
 			fnLoadMore={fnLoadMore}
 			fnReset={fnReset}
-			label={'Updates'}
+			label={t(`inbox.nav.updates`)}
 			navbarType={'updates'}
 			flatListKey={'inbox/subscriptions'}
 			skipTimelineInit={true}

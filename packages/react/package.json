@@ -10,7 +10,7 @@
 	"peerDependencies": {
 		"@dhaaga/bridge": "*",
 		"@tanstack/react-query": "*",
-		"immer": "*",
+		"immer": "^11.1.0",
 		"react": "*"
 	},
 	"devDependencies": {

@@ -1,13 +1,11 @@
 import { Pressable, View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
-import PostCreatedBy from '#/components/common/status/fragments/PostCreatedBy';
-import { appDimensions } from '#/styles/dimensions';
 import { PostObjectType } from '@dhaaga/bridge';
 import useAppNavigator from '#/states/useAppNavigator';
 import TextAstRendererView from '#/ui/TextAstRendererView';
 import { QuotedPostOrnament } from '#/features/post-item-view/components/Ornaments';
-
-const SECTION_MARGIN_BOTTOM = appDimensions.timelines.sectionBottomMargin;
+import UserBadge from '#/ui/UserBadge';
+import { appDimensions } from '#/styles/dimensions';
 
 type Props = {
 	post: PostObjectType;
@@ -31,9 +29,13 @@ function StatusQuoted({ post }: Props) {
 	return (
 		<Pressable onPress={onPressPost}>
 			<QuotedPostOrnament>
-				<PostCreatedBy
-					style={{ marginBottom: SECTION_MARGIN_BOTTOM }}
-					post={post}
+				<UserBadge
+					userId={post.postedBy.id}
+					avatarUrl={post.postedBy.avatarUrl}
+					displayName={post.postedBy.displayName}
+					handle={post.postedBy.handle}
+					parsedDisplayName={post.postedBy.parsedDisplayName}
+					style={{ marginBottom: appDimensions.timelines.sectionBottomMargin }}
 				/>
 				<MediaItem
 					attachments={post.content.media}

@@ -48,7 +48,7 @@ export function unifiedPostFeedQueryOptions(
 		maxId,
 		minId,
 		sessionId,
-		limit = 15,
+		limit = 30,
 	}: PostFeedQueryParams,
 ) {
 	const _id = query?.id;
@@ -97,7 +97,7 @@ export function unifiedPostFeedQueryOptions(
 			return data.length > 0 ? (data[data.length - 1].id ?? null) : null;
 		}
 
-		// ResultPage with data array (fallback)
+		// ResultPage with a data array (fallback)
 		if (Array.isArray(data.data)) {
 			return data.data.length > 0
 				? (data.data[data.data.length - 1].id ?? null)

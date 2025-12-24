@@ -97,7 +97,7 @@ export * from './viewers/index.js';
 export * from './mutators/index.js';
 
 // post services
-export { PostInspector, PostResolver } from './parsers/post.js';
+export { PostInspector } from './parsers/post.js';
 export type { AppParsedTextNodes, NodeContent } from './parsers/text-nodes.js';
 
 export { AtprotoUtils } from './utils/atproto.js';

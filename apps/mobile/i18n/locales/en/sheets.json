@@ -29,6 +29,12 @@
 		"menu_openInBrowser_label": "Open in Browser",
 		"menu_openInBrowser_desc": "External browser will be opened"
 	},
+	"sheetLabels": {
+		"likedBy": "Liked By",
+		"sharedBy": "Shared By",
+		"quotedBy": "Quoted By",
+		"comments": "Comments"
+	},
 	"timelines": {
 		"infoSheet": {
 			"infoHome": {

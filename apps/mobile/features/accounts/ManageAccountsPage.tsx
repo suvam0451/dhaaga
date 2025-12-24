@@ -33,7 +33,7 @@ function ManageAccountsPage() {
 
 	return (
 		<>
-			<NavBar_Simple label={'Manage Accounts'} />
+			<NavBar_Simple label={t(`topNav.secondary.manageAccounts`)} />
 			<FlatList
 				data={SOFTWARE_ARRAY}
 				renderItem={({ item }) => (

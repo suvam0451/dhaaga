@@ -7,6 +7,8 @@ import { AppIcon } from '#/components/lib/Icon';
 import { useAppTheme } from '#/states/global/hooks';
 import type { NotificationObjectType } from '@dhaaga/bridge';
 import SimpleInboxTimeline from '#/features/timelines/view/SimpleInboxTimeline';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function Wrapper({ item }: { item: NotificationObjectType }) {
 	const { theme } = useAppTheme();
@@ -46,6 +48,7 @@ function Wrapper({ item }: { item: NotificationObjectType }) {
 }
 
 function MentionInboxPagerView() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { maxId } = useNotificationStore(10);
 	const queryResult = useApiGetMentionUpdates(maxId);
 
@@ -54,7 +57,7 @@ function MentionInboxPagerView() {
 			queryResult={queryResult}
 			Wrapper={({ item }) => <Wrapper item={item} />}
 			type={'mentions'}
-			label={'Mentions'}
+			label={t(`inbox.nav.mentions`)}
 		/>
 	);
 }

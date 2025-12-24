@@ -14,7 +14,7 @@
     "disclaimer": "⚠️ Sammlungen werden lokal auf diesem Gerät gespeichert ⚠️"
   },
   "hubAddFeedSheet": {
-    "title": "Entschuldigung \uD83D\uDE14",
+    "title": "Entschuldigung 😔",
     "desc": [
       "Diese Funktion wird in Zukunft erweitert!",
       "Ein Standardsatz von Zielen wurde für Sie vorbelegt.",
@@ -109,5 +109,11 @@
         "S_extraFilters": "Zusätzliche Filter"
       }
     }
+  },
+  "sheetLabels": {
+    "likedBy": "Liked By",
+    "sharedBy": "Shared By",
+    "quotedBy": "Quoted By",
+    "comments": "Comments"
   }
 }

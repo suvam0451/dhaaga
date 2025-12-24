@@ -4,10 +4,9 @@ import { AppIcon } from '../../../lib/Icon';
 import { DatetimeUtil } from '#/utils/datetime.utils';
 import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
-import { AppText } from '../../../lib/Text';
 import type { AppParsedTextNodes } from '@dhaaga/bridge';
-import SantaWaveFromSleigh from '#/skins/christmas/decorators/SantaWaveFromSleigh';
 import TextAstRendererView from '#/ui/TextAstRendererView';
+import { NativeTextNormal } from '#/ui/NativeText';
 
 type Props = {
 	avatarUrl: string;
@@ -62,16 +61,16 @@ function ShareIndicator({ avatarUrl, parsedDisplayName, createdAt }: Props) {
 					{/*	<SantaWaveFromSleigh size={20} />*/}
 					{/*</View>*/}
 				</View>
-				<AppText.Normal
+				<NativeTextNormal
 					style={{
-						color: theme.secondary.a20,
+						color: theme.secondary.a50,
 						fontSize: 13,
 						marginLeft: 6,
 						marginRight: 8,
 					}}
 				>
 					{DatetimeUtil.timeAgo(createdAt)}
-				</AppText.Normal>
+				</NativeTextNormal>
 			</View>
 		</View>
 	);

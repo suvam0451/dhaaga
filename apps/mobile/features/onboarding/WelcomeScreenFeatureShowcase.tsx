@@ -18,32 +18,37 @@ import {
 	Gesture,
 	GestureDetector,
 } from 'react-native-gesture-handler';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 const AUTOPLAY_INTERVAL = 10000;
 
-const DISPLAY_ITEMS = [
-	{
-		title: 'A Focus on Fun',
-		desc: 'Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun.',
-		art: <PartyPopperArt />,
-	},
-	{
-		title: 'Cozy Home Page',
-		desc: "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer.",
-		art: <BearRoadSign />,
-	},
-	{
-		title: 'Hub Profiles',
-		desc: 'Organise your interests and ideas into separate profiles. Each profile can be personalised independently!',
-		art: <BearRoadSign />,
-	},
-	{
-		title: 'A Cleaner Inbox',
-		desc: 'Clean separation of various types of notifications, with specialised user interface to interact with each of them!',
-		art: <MailArt />,
-	},
-];
 function WelcomeScreenFeatureShowcase() {
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
+
+	const DISPLAY_ITEMS = [
+		{
+			title: t(`appHighlightFeatures.funFirst.label`),
+			desc: t(`appHighlightFeatures.funFirst.desc`),
+			art: <PartyPopperArt />,
+		},
+		{
+			title: t(`appHighlightFeatures.hub.label`),
+			desc: t(`appHighlightFeatures.hub.desc`),
+			art: <BearRoadSign />,
+		},
+		{
+			title: t(`appHighlightFeatures.profiles.label`),
+			desc: t(`appHighlightFeatures.profiles.desc`),
+			art: <BearRoadSign />,
+		},
+		{
+			title: t(`appHighlightFeatures.cleanInbox.label`),
+			desc: t(`appHighlightFeatures.cleanInbox.desc`),
+			art: <MailArt />,
+		},
+	];
+
 	const intervalRef = useRef<number | null>(null);
 	const { theme } = useAppTheme();
 	const [Index, setIndex] = useState(0);

@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import type { UserObjectType } from '@dhaaga/bridge';
 import { useAppTheme } from '#/states/global/hooks';
 import { appDimensions } from '#/styles/dimensions';
@@ -31,6 +31,7 @@ function UserPartialListItemView({ user }: Props) {
 				}}
 			>
 				<UserBadge
+					userId={user.id}
 					avatarUrl={user.avatarUrl}
 					displayName={user.displayName}
 					parsedDisplayName={user.parsedDisplayName}

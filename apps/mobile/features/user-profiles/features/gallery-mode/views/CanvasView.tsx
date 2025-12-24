@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { FlingGesture, GestureDetector } from 'react-native-gesture-handler';
 import { useMemo } from 'react';
-import MediaService from '../../../../../services/media.service';
+import MediaService from '#/services/media.service';
 
 type Props = {
 	src: string;
@@ -28,7 +28,6 @@ function CanvasView({ src, height, width, gesture, maxW, maxH }: Props) {
 		<View style={{ flex: 1 }}>
 			<GestureDetector gesture={gesture}>
 				<View style={styles.rootView}>
-					{/*@ts-ignore-next-line*/}
 					<Image
 						source={{ uri: src }}
 						style={{

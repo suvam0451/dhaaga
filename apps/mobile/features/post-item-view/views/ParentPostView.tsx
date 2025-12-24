@@ -2,7 +2,6 @@ import { Pressable, View } from 'react-native';
 import MediaItem from '#/ui/media/MediaItem';
 import PostInteractionStatsRow from '#/features/post-item-view/views/PostInteractionStatsRow';
 import StatusQuoted from '#/features/post-item-view/views/StatusQuoted';
-import PostCreatedByIconOnly from '#/components/common/status/fragments/PostCreatedByIconOnly';
 import { useAppApiClient } from '#/states/global/hooks';
 import {
 	PostedByTextOneLine,
@@ -20,6 +19,9 @@ import WithAppStatusItemContext, {
 } from '#/components/containers/WithPostItemContext';
 import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 import { PostObjectType } from '@dhaaga/bridge';
+import Avatar from '#/ui/Avatar';
+import useSheetNavigation from '#/states/navigation/useSheetNavigation';
+import { Link } from 'expo-router';
 
 type Props = {
 	showReplyIndicator: boolean;
@@ -29,12 +31,15 @@ function Generator({ showReplyIndicator }: Props) {
 	const { dto: post } = withPostItemContext();
 	const { driver } = useAppApiClient();
 	const { toPost } = useAppNavigator();
+	const { openUserProfileSheet } = useSheetNavigation();
 
 	function onPressBody() {
 		toPost(post.id);
 	}
 
-	function onPressImage() {}
+	function onPressImage() {
+		openUserProfileSheet(post.postedBy.id);
+	}
 
 	if (!post) return <View />;
 
@@ -44,14 +49,20 @@ function Generator({ showReplyIndicator }: Props) {
 		<View>
 			{showReplyIndicator ? <ReplyIndicatorOrnament /> : <View />}
 			<View style={timelineStyles.parentPostRootView}>
-				<PostCreatedByIconOnly dto={post} />
+				<Avatar avatarUrl={post.postedBy.avatarUrl} onPressed={onPressImage} />
 				<View style={timelineStyles.parentPostContentView}>
-					<PostedByTextOneLine
-						parsedText={post.postedBy.parsedDisplayName}
-						altText={post.postedBy.handle}
-						driver={driver}
-						createdAt={post.createdAt}
-					/>
+					<Link href={`/user/${post.postedBy.id}`} asChild>
+						<Pressable>
+							<PostedByTextOneLine
+								postId={post.id}
+								parsedText={post.postedBy.parsedDisplayName}
+								altText={post.postedBy.handle}
+								driver={driver}
+								createdAt={post.createdAt}
+							/>
+						</Pressable>
+					</Link>
+
 					<MediaItem
 						attachments={post.content.media}
 						calculatedHeight={post.calculated.mediaContainerHeight}
@@ -79,6 +90,11 @@ function Generator({ showReplyIndicator }: Props) {
 	);
 }
 
+/**
+ * @param post
+ * @param showReplyIndicator
+ * @constructor
+ */
 function ParentPostView({
 	post,
 	showReplyIndicator,

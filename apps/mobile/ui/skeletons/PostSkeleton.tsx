@@ -1,11 +1,12 @@
 import { View } from 'react-native';
 import { Skeleton } from '#/ui/Skeleton';
+import { memo } from 'react';
 
 /**
  * Height: 308
  * @constructor
  */
-function Node() {
+const Node = memo(() => {
 	return (
 		<View style={{ paddingHorizontal: 10 }}>
 			<View style={{ flexDirection: 'row', marginVertical: 10 }}>
@@ -24,9 +25,13 @@ function Node() {
 			</View>
 		</View>
 	);
-}
+});
 
-function PostSkeleton({ containerHeight }: { containerHeight: number }) {
+type Props = {
+	containerHeight: number;
+};
+
+function PostSkeleton({ containerHeight }: Props) {
 	const NUM_NODES = containerHeight ? Math.floor(containerHeight / 310) : 0;
 
 	if (NUM_NODES === 0) return <View style={{ height: '100%' }} />;

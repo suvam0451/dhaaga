@@ -1,28 +1,32 @@
 import { PostThreadCtx } from '@dhaaga/react';
 import { useAppTheme } from '#/states/global/hooks';
 import useApiBuildPostThread from '#/hooks/api/useApiBuildPostThread';
-import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import PostCommentThreadControls from '#/features/post-thread-view/views/PostCommentThreadControls';
 import { appDimensions } from '#/styles/dimensions';
 import { AppDividerSoft } from '#/ui/Divider';
 import NoMoreReplies from '#/features/post-thread-view/components/NoMoreReplies';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 import ThreadRootReplyView from '#/features/post-thread-view/views/ThreadRootReplyView';
+import { LegendList } from '@legendapp/list';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function ContentView() {
 	const { theme } = useAppTheme();
 	const [Refreshing, setRefreshing] = useState(false);
 	const { id, uri } = useLocalSearchParams<{ id: string; uri: string }>();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 	const { refetch, error, isFetching, items } = useApiBuildPostThread(
 		id === 'uri' ? uri : id,
 	);
 
-	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
 	function onRefresh() {
 		setRefreshing(true);
@@ -38,8 +42,11 @@ function ContentView() {
 
 	return (
 		<View style={{ flex: 1, backgroundColor: theme.background.a0 }}>
-			<NavBar_Simple label={'Post Details'} animatedStyle={animatedStyle} />
-			<FlatList
+			<NavBar_Simple
+				label={t(`topNav.secondary.postDetails`)}
+				animatedStyle={animatedStyle}
+			/>
+			<LegendList
 				onLayout={onLayout}
 				data={items}
 				renderItem={({ item }) => {
@@ -49,7 +56,7 @@ function ContentView() {
 						case 'anchor':
 							return (
 								<>
-									<TimelinePostItemView post={item.post} showFullDetails />
+									<TimelinePostItemView post={item.post} />
 									<PostCommentThreadControls count={0} />
 								</>
 							);

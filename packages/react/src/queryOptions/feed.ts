@@ -3,17 +3,11 @@ import {
 	AtprotoApiAdapter,
 	AtprotoFeedService,
 	FeedParser,
-	KNOWN_SOFTWARE,
 } from '@dhaaga/bridge';
 import type { FeedObjectType } from '@dhaaga/bridge';
 import { queryOptions } from '@tanstack/react-query';
 
-export function getMyFeedListQueryOpts(
-	client: ApiTargetInterface,
-	driver: KNOWN_SOFTWARE,
-	server: string,
-	acctIdentifier: string,
-) {
+export function getMyFeedListQueryOpts(client: ApiTargetInterface) {
 	async function api() {
 		const _client = client as AtprotoApiAdapter;
 		const result = await _client.me.getPreferences();
@@ -24,12 +18,12 @@ export function getMyFeedListQueryOpts(
 
 		// FIXME: they are not actual feeds. just the meta
 		return feedGens.map((o) =>
-			FeedParser.parse<unknown>(o as any, driver, server),
+			FeedParser.parse<unknown>(o as any, client.driver, client.server!),
 		);
 	}
 
 	return queryOptions<FeedObjectType[]>({
-		queryKey: ['dhaaga/my/feeds', acctIdentifier],
+		queryKey: ['dhaaga/my/feeds', client?.key],
 		queryFn: api,
 		enabled: client !== null,
 	});

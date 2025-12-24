@@ -14,7 +14,7 @@
     "disclaimer": "⚠️ Koleksi disimpan secara lokal di perangkat ini ⚠️"
   },
   "hubAddFeedSheet": {
-    "title": "Maaf \uD83D\uDE14",
+    "title": "Maaf 😔",
     "desc": [
       "Fitur ini akan diperluas di masa depan!",
       "Sekelompok tujuan default telah dipilih untuk Anda.",
@@ -109,5 +109,11 @@
         "S_extraFilters": "Filter Ekstra"
       }
     }
+  },
+  "sheetLabels": {
+    "likedBy": "Liked By",
+    "sharedBy": "Shared By",
+    "quotedBy": "Quoted By",
+    "comments": "Comments"
   }
 }

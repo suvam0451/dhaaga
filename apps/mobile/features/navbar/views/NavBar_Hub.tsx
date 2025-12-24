@@ -1,5 +1,4 @@
 import { Account } from '@dhaaga/db';
-import { TimeOfDayGreeting } from '#/app/(tabs)/index';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useHub } from '#/states/global/hooks';
@@ -13,6 +12,7 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { NativeTextH1 } from '#/ui/NativeText';
 import NavBarFactory from '#/features/navbar/components/NavBarFactory';
 import RoutingUtils from '#/utils/routing.utils';
+import TimeOfDayGreeting from '#/features/hub/components/TimeOfDayGreeting';
 
 type Props = {
 	acct?: Account;

@@ -137,6 +137,11 @@
       "Jika ada yang terasa tidak sinkron (misalnya - penghitung, avatar, banner dll),",
       "Cobalah untuk menarik turun dan menyegarkan halaman ini. Ini dirancang untuk memperbaiki sebagian besar masalah sinkronisasi.",
       "Jika masalah tetap ada, harap laporkan ke pengembang."
+    ],
+    "qHowManageAccount": "How to add/switch accounts?",
+    "aHowManageAccount": [
+      "New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+      "Also, long pressing the profile tab (5th) brings up the account switcher :)"
     ]
   },
   "settings": {

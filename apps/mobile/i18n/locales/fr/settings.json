@@ -1,40 +1,40 @@
 {
-	"accounts": {
-		"mainMenu_Label": "Accounts",
-		"mainMenu_Desc": "Add and manage accounts"
-	},
-	"general": {
-		"mainMenu_Label": "General",
-		"mainMenu_Desc": "Most usual boring settings are here",
-		"navbar_Label": "General Settings",
-		"language": {
-			"S_Language": "Language",
-			"L_appLanguage": "App Language",
-			"L_contentLanguages": "Content Languages",
-			"L_translatorMode": "Translator Mode",
-			"D_translatorMode": "This will add a button to every page, which will let you quickly switch languages to test translations.",
-			"L_translationLanguages": "Translation Languages"
-		},
-		"timelines": {
-			"S_Timelines": "Timelines",
-			"L_lurkerMode": "Lurker Mode",
-			"D_lurkerMode": "Hides interactive buttons",
-			"L_contentWarnings": "Content Warnings"
-		}
-	},
-	"dhaaga": {
-		"mainMenu_Label": "Dhaaga",
-		"mainMenu_Desc": "Customize Dhaaga features",
-		"navbar_Label": "Customize Dhaaga"
-	},
-	"wellbeing": {
-		"mainMenu_Label": "Wellbeing Tools",
-		"mainMenu_Desc": "A healthy internet begins with you.",
-		"navbar_Label": "Wellbeing Settings"
-	},
-	"advanced": {
-		"mainMenu_Label": "Advanced",
-		"mainMenu_Desc": "For power users and debugging",
-		"navbar_Label": "Advanced Settings"
-	}
+  "accounts": {
+    "mainMenu_Label": "Accounts",
+    "mainMenu_Desc": "Add and manage accounts"
+  },
+  "general": {
+    "mainMenu_Label": "General",
+    "mainMenu_Desc": "Most usual boring settings are here",
+    "navbar_Label": "General Settings",
+    "language": {
+      "S_Language": "Language",
+      "L_appLanguage": "App Language",
+      "L_contentLanguages": "Content Languages",
+      "L_translatorMode": "Translator Mode",
+      "D_translatorMode": "This will add a button to every page, which will let you quickly switch languages to test translations.",
+      "L_translationLanguages": "Translation Languages"
+    },
+    "timelines": {
+      "S_Timelines": "Timelines",
+      "L_lurkerMode": "Lurker Mode",
+      "D_lurkerMode": "Hides interactive buttons",
+      "L_contentWarnings": "Content Warnings"
+    }
+  },
+  "dhaaga": {
+    "mainMenu_Label": "Dhaaga",
+    "mainMenu_Desc": "Customize Dhaaga features",
+    "navbar_Label": "Customize Dhaaga"
+  },
+  "wellbeing": {
+    "mainMenu_Label": "Wellbeing Tools",
+    "mainMenu_Desc": "A healthy internet begins with you.",
+    "navbar_Label": "Wellbeing Settings"
+  },
+  "advanced": {
+    "mainMenu_Label": "Advanced",
+    "mainMenu_Desc": "For power users and debugging",
+    "navbar_Label": "Advanced Settings"
+  }
 }

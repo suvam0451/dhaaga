@@ -9,13 +9,13 @@ import enGlossary from './locales/en/glossary.json';
 import enGuides from './locales/en/guides.json';
 import enSettings from './locales/en/settings.json';
 import enSheets from './locales/en/sheets.json';
-// jp
-import jpCore from './locales/jp/core.json';
-import jpDialogs from './locales/jp/dialogs.json';
-import jpGlossary from './locales/jp/glossary.json';
-import jpGuides from './locales/jp/guides.json';
-import jpSettings from './locales/jp/settings.json';
-import jpSheets from './locales/jp/sheets.json';
+// ja
+import jaCore from './locales/ja/core.json';
+import jaDialogs from './locales/ja/dialogs.json';
+import jaGlossary from './locales/ja/glossary.json';
+import jaGuides from './locales/ja/guides.json';
+import jaSettings from './locales/ja/settings.json';
+import jaSheets from './locales/ja/sheets.json';
 // de
 import deCore from './locales/de/core.json';
 import deDialogs from './locales/de/dialogs.json';
@@ -69,13 +69,13 @@ const resources = {
 		sheets: idSheets,
 		settings: idSettings,
 	},
-	jp: {
-		core: jpCore,
-		dialogs: jpDialogs,
-		glossary: jpGlossary,
-		guides: jpGuides,
-		sheets: jpSheets,
-		settings: jpSettings,
+	ja: {
+		core: jaCore,
+		dialogs: jaDialogs,
+		glossary: jaGlossary,
+		guides: jaGuides,
+		sheets: jaSheets,
+		settings: jaSettings,
 	},
 	de: {
 		core: deCore,

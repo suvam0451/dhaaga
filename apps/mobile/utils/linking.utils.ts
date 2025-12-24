@@ -8,6 +8,7 @@ import {
 	BaseUrlNormalizationService,
 	DriverService,
 	ApiTargetInterface,
+	PostObjectType,
 } from '@dhaaga/bridge';
 import type { PostTimelineStateType } from '@dhaaga/core';
 
@@ -19,9 +20,11 @@ export class LinkingUtils {
 	static shareUrl(url: string) {
 		Share.share({
 			url,
+			message: url,
 			title: 'Share this link with your friends',
 		});
 	}
+
 	static openURL(url: string) {
 		try {
 			Linking.openURL(url).then((success) => {
@@ -134,6 +137,8 @@ export class LinkingUtils {
 			console.log(e);
 		}
 	}
+
+	static shareOrOpenPost(post: PostObjectType) {}
 
 	static async shareFeed(
 		client: ApiTargetInterface,

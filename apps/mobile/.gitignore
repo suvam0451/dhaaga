@@ -6,3 +6,4 @@ ios/**
 .expo/
 assets
 features/skins/svgs
+#i18n/locales/*

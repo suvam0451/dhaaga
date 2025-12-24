@@ -1,8 +1,8 @@
 import { useAppTheme } from '#/states/global/hooks';
-import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { appDimensions } from '#/styles/dimensions';
 import { ScrollView } from 'react-native';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 
 type Props = {
 	label: string;
@@ -11,14 +11,14 @@ type Props = {
 
 function SettingPageBuilder({ label, children }: Props) {
 	const { theme } = useAppTheme();
-	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 
 	return (
 		<>
 			<NavBar_Simple label={label} animatedStyle={animatedStyle} />
 			<ScrollView
 				style={{
-					paddingHorizontal: 16,
+					paddingHorizontal: 10,
 					backgroundColor: theme.background.a0,
 				}}
 				contentContainerStyle={{

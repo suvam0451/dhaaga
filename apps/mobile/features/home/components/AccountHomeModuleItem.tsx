@@ -21,7 +21,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 				style={[
 					styles.appModuleContent,
 					{
-						backgroundColor: theme.background.a40, // '#282828',
+						backgroundColor: theme.background.a40,
 					},
 				]}
 				onPress={onPress}
@@ -37,6 +37,7 @@ function AccountHomeModuleItem({ label, desc, iconId, onPress }: Props) {
 				<NativeTextH6
 					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 					color={theme.complementary}
+					numberOfLines={1}
 				>
 					{label}
 				</NativeTextH6>

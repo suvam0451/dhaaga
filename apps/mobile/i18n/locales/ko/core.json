@@ -1,0 +1,209 @@
+{
+  "appHighlightFeatures": {
+    "funFirst": {
+      "label": "재미 우선",
+      "desc": "Dhaaga는 사용자 중심의 접근 방식과 단순함, 그리고 재미를 강조하여 인터넷을 즐겁게 사용할 수 있도록 만듭니다."
+    },
+    "hub": {
+      "label": "아늑한 허브 영역",
+      "desc": "홈 페이지를 마음껏 꾸며보세요. 즐겨찾는 목적지를 가까이 고정하세요. 친구들을 더 가까이 고정하세요."
+    },
+    "profiles": {
+      "label": "소셜 프로필",
+      "desc": "관심사와 아이디어를 별도의 프로필로 정리하세요. 각 프로필은 독립적으로 개인화할 수 있습니다!"
+    },
+    "cleanInbox": {
+      "label": "깔끔한 수신함",
+      "desc": "다양한 유형의 알림을 깔끔하게 분리하고, 각각에 최적화된 사용자 인터페이스를 제공합니다!"
+    }
+  },
+  "feed": {
+    "subscribeOption": "구독",
+    "unsubscribeOption": "구독 해제",
+    "pinOption": "고정",
+    "unpinOption": "고정 해제"
+  },
+  "features": {
+    "notAvailable": {
+      "title": "사용 불가",
+      "desc": "이 기능은 Dhaaga에서 구현되지 않았거나 사용 중인 SNS 플랫폼에서 지원하지 않습니다."
+    }
+  },
+  "errors": {
+    "errorLabel": "오류",
+    "timelineErrorLabel": "타임라인을 불러오는 데 실패했습니다. 개발자에게 이 오류를 보고해 주세요."
+  },
+  "onboarding": {
+    "addAccountButton": "계정 추가",
+    "accountCreationNotSupported": "계정 생성은 지원되지 않습니다.",
+    "needBlueskyAccount": "Bluesky 계정이 필요합니다",
+    "createOneHere": "여기에서 생성",
+    "loginButton": "로그인",
+    "appPassword": "앱 비밀번호",
+    "enterYourServer": "서버 주소 입력",
+    "serverUrl": "인스턴스 URL 입력",
+    "popularMastodon": "인기 Mastodon 서버",
+    "popularPleroma": "인기 Pleroma 서버",
+    "popularAkkoma": "인기 Akkoma 서버"
+  },
+  "topNav": {
+    "primary": {
+      "hub": "소셜 허브",
+      "discover": "탐색",
+      "compose": "작성",
+      "account": "내 계정",
+      "setting": "앱 설정",
+      "inbox": "수신함",
+      "mentions": "멘션",
+      "chat": "채팅",
+      "social": "소셜",
+      "updates": "업데이트"
+    },
+    "secondary": {
+      "appSkins": "앱 스킨",
+      "addProfile": "프로필 추가",
+      "manageSubscriptions": "구독 관리",
+      "myLikes": "좋아요",
+      "myBookmarks": "북마크",
+      "myAccount": "내 계정",
+      "myProfile": "내 프로필",
+      "appSettings": "앱 설정",
+      "manageAccounts": "계정 관리",
+      "blueskySignIn": "Bluesky 로그인",
+      "allPosts": "모든 포스트",
+      "selectServer": "서버 선택",
+      "mastodonSignIn": "Mastodon 로그인",
+      "misskeySignIn": "Misskey 로그인",
+      "pickPlatform": "플랫폼 선택",
+      "appLanguage": "앱 언어",
+      "postDetails": "포스트 상세",
+      "manageHubProfiles": "허브 프로필 관리",
+      "searchHistory": "검색 기록"
+    }
+  },
+  "dialogs": {
+    "renameOption": "이름 변경",
+    "deleteOption": "삭제",
+    "dismissOption": "닫기",
+    "saveOption": "저장"
+  },
+  "discover": {
+    "moreSoon": {
+      "firstHalf": "더 많은 기능이",
+      "secondHalf": "곧 추가됩니다™"
+    },
+    "instructions": [
+      "1) 🔍를 열어 검색어 입력",
+      "2) 제출(↵)하여 검색",
+      "3) 🔍를 열어 검색어 변경",
+      "4) (✖️)를 사용하여 여기로 돌아오기"
+    ],
+    "welcome": "오늘 새로운 것을 탐험해 보세요!"
+  },
+  "profile": {
+    "appFeatures": {
+      "sectionLabel": "앱 기능",
+      "likes": {
+        "label": "좋아요",
+        "desc": "내가 좋아요 표시한 포스트"
+      },
+      "bookmarks": {
+        "label": "북마크",
+        "desc": "내 북마크"
+      },
+      "feeds": {
+        "label": "피드",
+        "desc": "구독 중인 피드"
+      },
+      "lists": {
+        "label": "리스트",
+        "desc": "내 리스트"
+      },
+      "socialHub": {
+        "label": "소셜 허브",
+        "desc": "프로필 관리"
+      },
+      "collections": {
+        "label": "컬렉션",
+        "desc": "북마크++"
+      },
+      "drafts": {
+        "label": "임시 저장",
+        "desc": "잃어버린 메시지"
+      }
+    },
+    "social": {
+      "posts": "포스트",
+      "following": "팔로잉",
+      "followers": "팔로워"
+    },
+    "visibility": {
+      "public": "공개",
+      "unlisted": "홈",
+      "direct": "다이렉트",
+      "private": "팔로워"
+    },
+    "interactivity": {
+      "everybody": "모두",
+      "nobody": "나만",
+      "Limited": "제한됨"
+    }
+  },
+  "chatroom": {
+    "sendInterfacePlaceholder": "메시지 입력"
+  },
+  "setting": {
+    "accountModule": {
+      "title": "계정",
+      "desc": "계정 추가 및 관리"
+    },
+    "generalModule": {
+      "title": "일반",
+      "desc": "가장 일반적인 지루한 설정들"
+    },
+    "appFeaturesModule": {
+      "title": "구디 헛",
+      "desc": "Dhaaga만의 독특한 기능 조정"
+    },
+    "digitalWellbeingModule": {
+      "title": "디지털 웰빙",
+      "desc": "자신과 재연결하기 위해 연결 끊기"
+    },
+    "advancedModule": {
+      "title": "고급",
+      "desc": "파워 유저용"
+    },
+    "footer": "Debashish Patra가 💛로 제작"
+  },
+  "indicators": {
+    "quotedThisPost": "이 포스트를 인용함",
+    "sharedThisLink": "이 링크를 공유함"
+  },
+  "prompts": {
+    "getStarted": "시작하기",
+    "visitWebsite": "웹사이트 방문",
+    "selectPlatform": "플랫폼 선택",
+    "findMastodonServer": "여기에서 찾기",
+    "findMisskeyServer": "여기에서 찾기",
+    "findAtProtoServer": "여기에서 찾기",
+    "mastodonConfirmAccount": "계정 확인",
+    "mastodonTokenDetected": "유효한 토큰이 감지되었습니다. 위 계정을 추가하시겠습니까?",
+    "signInConfirm": "계속",
+    "signInReset": "초기화"
+  },
+  "loaders": {
+    "loadingMoreIndicatorText": "불러오는 중...",
+    "nothingMoreToShow": "더 이상 표시할 내용이 없습니다"
+  },
+  "errorReporting": {
+    "noTimelineSelectedLabel": "선택된 타임라인 없음",
+    "noTimelineSelectedDesc": "개인화된 허브에서 다양한 유형의 타임라인을 고정하고 액세스할 수 있습니다.",
+    "noTimelineSelectedButtonCta": "이동하기"
+  },
+  "unspecced": {
+    "wipText": "이 기능은 현재 제작 중입니다 🚧"
+  },
+  "placeholders": {
+    "atProtoUsername": "사용자 이름 또는 이메일 주소"
+  }
+}

@@ -42,7 +42,7 @@ export function AuthorItemView({
 
 	return (
 		<View style={styles.root}>
-			<Avatar uri={avatarUrl} onPressed={onAvatarPressed} />
+			<Avatar avatarUrl={avatarUrl} onPressed={onAvatarPressed} />
 			<Pressable style={{ marginLeft: 8, flex: 1 }} onPress={onUserPressed}>
 				{parsedDisplayName.length > 0 ? (
 					<TextAstRendererView
