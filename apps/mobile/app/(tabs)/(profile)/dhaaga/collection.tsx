@@ -6,17 +6,23 @@ import { appDimensions } from '#/styles/dimensions';
 import { SavedPostItemView } from '#/features/collections/SavedPostItemView';
 import { FlatList, RefreshControl } from 'react-native';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
-import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { useAppTheme } from '#/states/global/hooks';
+import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
+import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 function Content() {
 	const { theme } = useAppTheme();
 	const { state, onRefresh, IsRefreshing } = useCollectionDetailInteractor();
+	const { t } = useTranslation([LOCALIZATION_NAMESPACE.CORE]);
 
-	const { scrollHandler, animatedStyle } = useScrollHandleAnimatedList();
+	const { scrollHandler, animatedStyle } = useScrollHandleFlatList();
 	return (
 		<>
-			<NavBar_Simple label={'Collection'} animatedStyle={animatedStyle} />
+			<NavBar_Simple
+				label={t(`topNav.secondary.collection`)}
+				animatedStyle={animatedStyle}
+			/>
 			<FlatList
 				style={{ backgroundColor: theme.background.a0 }}
 				contentContainerStyle={{

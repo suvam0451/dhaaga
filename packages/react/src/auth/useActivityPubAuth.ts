@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
 	exchangeCodeForAccessToken,
 	verifyCredentialsActivitypub,
-} from '@dhaaga/bridge/auth';
+} from '@dhaaga/bridge';
 
 /**
  * The auth processor hooks are separated

@@ -12,6 +12,7 @@ import { HapticsUtils } from '#/utils/haptics';
 const WIDGET_MIN_WIDTH = 52;
 
 type Props = {
+	visible: boolean;
 	isOpen: boolean;
 	/**
 	 * Draws on top when the
@@ -28,15 +29,19 @@ type Props = {
 	activeIcon: string;
 
 	onWidgetPress: () => void;
+
+	occupyFullWidth?: boolean;
 };
 
 function AppWidget({
+	visible,
 	isOpen,
 	BackgroundSlot,
 	ForegroundSlot,
 	inactiveIcon,
 	activeIcon,
 	onWidgetPress,
+	occupyFullWidth,
 }: Props) {
 	const { theme } = useAppTheme();
 	const { show } = useAppDialog();
@@ -81,21 +86,27 @@ function AppWidget({
 	 * Animations
 	 */
 
+	const SHOULD_EXPAND = isOpen && visible;
+
 	const widgetStyle = useAnimatedStyle(() => {
 		return {
-			width: withTiming(isOpen ? MAX_WIDTH : WIDGET_MIN_WIDTH, {
+			width: withTiming(SHOULD_EXPAND ? MAX_WIDTH : WIDGET_MIN_WIDTH, {
 				duration: 200,
 			}),
-			borderTopStartRadius: isOpen ? 6 : BORDER_TOP_START_RADIUS_CLOSED,
-			borderTopEndRadius: isOpen ? 6 : BORDER_TOP_END_RADIUS_CLOSED,
-			borderBottomStartRadius: isOpen ? 6 : BORDER_BOTTOM_START_RADIUS_CLOSED,
-			borderBottomEndRadius: isOpen ? 6 : BORDER_BOTTOM_END_RADIUS_CLOSED,
+			borderTopStartRadius: SHOULD_EXPAND ? 6 : BORDER_TOP_START_RADIUS_CLOSED,
+			borderTopEndRadius: SHOULD_EXPAND ? 6 : BORDER_TOP_END_RADIUS_CLOSED,
+			borderBottomStartRadius: SHOULD_EXPAND
+				? 6
+				: BORDER_BOTTOM_START_RADIUS_CLOSED,
+			borderBottomEndRadius: SHOULD_EXPAND
+				? 6
+				: BORDER_BOTTOM_END_RADIUS_CLOSED,
 		};
 	});
 
 	return (
 		<>
-			<View style={{ display: isOpen ? 'none' : 'flex' }}>
+			<View style={{ display: SHOULD_EXPAND ? 'none' : 'flex' }}>
 				{BackgroundSlot}
 			</View>
 			<Animated.View
@@ -105,9 +116,10 @@ function AppWidget({
 						zIndex: 10,
 						bottom: 0,
 						right: 0,
-						height: appDimensions.bottomNav.secondMenuBarHeight,
+						minHeight: appDimensions.bottomNav.secondMenuBarHeight,
 						backgroundColor: theme.primary,
 						flexDirection: 'row',
+						overflow: 'visible',
 					},
 					widgetStyle,
 				]}
@@ -116,8 +128,9 @@ function AppWidget({
 					style={{
 						flex: 1,
 						alignItems: 'center',
-						display: isOpen ? 'flex' : 'none',
-						marginRight: 72,
+						display: SHOULD_EXPAND ? 'flex' : 'none',
+						marginRight: occupyFullWidth ? 0 : 72,
+						overflow: 'visible',
 					}}
 				>
 					{ForegroundSlot}

@@ -6,6 +6,7 @@ import {
 	useCollectionDetailState,
 } from '../contexts/CollectionDetailCtx';
 import { CollectionViewActionType } from '../reducers/collection-detail.reducer';
+import { useActiveUserSession } from '#/states/global/hooks';
 
 function useCollectionDetailInteractor() {
 	const params = useLocalSearchParams();
@@ -14,6 +15,16 @@ function useCollectionDetailInteractor() {
 	const { data, refetch } = useDbGetSavedPostsForCollection(id);
 	const dispatch = useCollectionDetailDispatch();
 	const state = useCollectionDetailState();
+	const { acct } = useActiveUserSession();
+
+	useEffect(() => {
+		dispatch({
+			type: CollectionViewActionType.INIT,
+			payload: {
+				acct: acct,
+			},
+		});
+	}, []);
 
 	useEffect(() => {
 		dispatch({

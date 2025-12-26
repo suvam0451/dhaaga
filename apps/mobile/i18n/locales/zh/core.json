@@ -1,209 +1,295 @@
 {
-  "appHighlightFeatures": {
-    "funFirst": {
-      "label": "娱乐至上",
-      "desc": "Dhaaga 以用户为中心，强调简单和乐趣，让互联网变得好玩。"
-    },
-    "hub": {
-      "label": "舒适中心区",
-      "desc": "随心所欲装饰您的主页。固定您喜欢的目的地。把朋友固定得更近。"
-    },
-    "profiles": {
-      "label": "社交资料",
-      "desc": "将您的兴趣和想法整理到不同的个人资料中。每个资料都可以独立个性化！"
-    },
-    "cleanInbox": {
-      "label": "整洁的收件箱",
-      "desc": "各类通知清晰分离，配有专门的交互界面！"
-    }
-  },
-  "feed": {
-    "subscribeOption": "订阅",
-    "unsubscribeOption": "取消订阅",
-    "pinOption": "固定",
-    "unpinOption": "取消固定"
-  },
-  "features": {
-    "notAvailable": {
-      "title": "不可用",
-      "desc": "此功能尚未由 Dhaaga 实现，或在您的 SNS 平台上不可用。"
-    }
-  },
-  "errors": {
-    "errorLabel": "错误",
-    "timelineErrorLabel": "Dhaaga 无法加载此时间线。请向开发人员报告此错误。"
-  },
-  "onboarding": {
-    "addAccountButton": "添加账号",
-    "accountCreationNotSupported": "不支持创建账号。",
-    "needBlueskyAccount": "您需要一个 Bluesky 账号",
-    "createOneHere": "在此创建",
-    "loginButton": "登录",
-    "appPassword": "应用密码",
-    "enterYourServer": "输入您的服务器地址",
-    "serverUrl": "输入您的实例 URL",
-    "popularMastodon": "热门 Mastodon 服务器",
-    "popularPleroma": "热门 Pleroma 服务器",
-    "popularAkkoma": "热门 Akkoma 服务器"
-  },
-  "topNav": {
-    "primary": {
-      "hub": "社交中心",
-      "discover": "发现",
-      "compose": "发布",
-      "account": "我的账号",
-      "setting": "应用设置",
-      "inbox": "收件箱",
-      "mentions": "提及",
-      "chat": "聊天",
-      "social": "社交",
-      "updates": "更新"
-    },
-    "secondary": {
-      "appSkins": "应用皮肤",
-      "addProfile": "添加资料",
-      "manageSubscriptions": "管理订阅",
-      "myLikes": "我的点赞",
-      "myBookmarks": "我的书签",
-      "myAccount": "我的账号",
-      "myProfile": "我的个人资料",
-      "appSettings": "应用设置",
-      "manageAccounts": "管理账号",
-      "blueskySignIn": "Bluesky 登录",
-      "allPosts": "所有帖子",
-      "selectServer": "选择服务器",
-      "mastodonSignIn": "Mastodon 登录",
-      "misskeySignIn": "Misskey 登录",
-      "pickPlatform": "选择平台",
-      "appLanguage": "应用语言",
-      "postDetails": "帖子详情",
-      "manageHubProfiles": "管理中心资料",
-      "searchHistory": "搜索历史"
-    }
-  },
-  "dialogs": {
-    "renameOption": "重命名",
-    "deleteOption": "删除",
-    "dismissOption": "忽略",
-    "saveOption": "保存"
-  },
-  "discover": {
-    "moreSoon": {
-      "firstHalf": "更多功能",
-      "secondHalf": "即将推出™"
-    },
-    "instructions": [
-      "1) 打开 🔍 输入搜索词",
-      "2) 提交 (↵) 进行搜索",
-      "3) 打开 🔍 更改搜索词",
-      "4) 使用 (✖️) 返回此处"
-    ],
-    "welcome": "今天让我们探索一些新事物！"
-  },
-  "profile": {
-    "appFeatures": {
-      "sectionLabel": "应用功能",
-      "likes": {
-        "label": "点赞",
-        "desc": "我点赞过的帖子"
-      },
-      "bookmarks": {
-        "label": "书签",
-        "desc": "我的书签"
-      },
-      "feeds": {
-        "label": "信息流",
-        "desc": "已订阅的信息流"
-      },
-      "lists": {
-        "label": "列表",
-        "desc": "我的列表"
-      },
-      "socialHub": {
-        "label": "社交中心",
-        "desc": "管理个人资料"
-      },
-      "collections": {
-        "label": "集合",
-        "desc": "书签++"
-      },
-      "drafts": {
-        "label": "草稿",
-        "desc": "丢失的消息"
-      }
-    },
-    "social": {
-      "posts": "帖子",
-      "following": "正在关注",
-      "followers": "粉丝"
-    },
-    "visibility": {
-      "public": "公开",
-      "unlisted": "首页",
-      "direct": "私信",
-      "private": "仅粉丝"
-    },
-    "interactivity": {
-      "everybody": "所有人",
-      "nobody": "仅限自己",
-      "Limited": "受限"
-    }
-  },
-  "chatroom": {
-    "sendInterfacePlaceholder": "输入消息"
-  },
-  "setting": {
-    "accountModule": {
-      "title": "账号",
-      "desc": "添加和管理账号"
-    },
-    "generalModule": {
-      "title": "常规",
-      "desc": "最平常的设置都在这里"
-    },
-    "appFeaturesModule": {
-      "title": "百宝箱",
-      "desc": "调整 Dhaaga 的独特功能"
-    },
-    "digitalWellbeingModule": {
-      "title": "数字健康",
-      "desc": "断开连接以重新找回自我"
-    },
-    "advancedModule": {
-      "title": "高级",
-      "desc": "供高级用户使用"
-    },
-    "footer": "由 Debashish Patra 用 💛 制作"
-  },
-  "indicators": {
-    "quotedThisPost": "引用了此帖",
-    "sharedThisLink": "分享了此链接"
-  },
-  "prompts": {
-    "getStarted": "开始使用",
-    "visitWebsite": "访问网站",
-    "selectPlatform": "选择平台",
-    "findMastodonServer": "在此处查找",
-    "findMisskeyServer": "在此处查找",
-    "findAtProtoServer": "在此处查找",
-    "mastodonConfirmAccount": "确认您的账号",
-    "mastodonTokenDetected": "检测到有效令牌。是否继续添加上方显示的账号？",
-    "signInConfirm": "继续",
-    "signInReset": "重置"
-  },
-  "loaders": {
-    "loadingMoreIndicatorText": "正在加载...",
-    "nothingMoreToShow": "没有更多内容了"
-  },
-  "errorReporting": {
-    "noTimelineSelectedLabel": "未选择时间线",
-    "noTimelineSelectedDesc": "您可以从个性化中心固定和访问各种类型的时间线。",
-    "noTimelineSelectedButtonCta": "前往"
-  },
-  "unspecced": {
-    "wipText": "此功能正在开发中 🚧"
-  },
-  "placeholders": {
-    "atProtoUsername": "用户名或电子邮箱地址"
-  }
+	"appHighlightFeatures": {
+		"cleanInbox": {
+			"desc": "各类通知清晰分离，配有专门的交互界面！",
+			"label": "整洁的收件箱"
+		},
+		"funFirst": {
+			"desc": "Dhaaga 以用户为中心，强调简单和乐趣，让互联网变得好玩。",
+			"label": "娱乐至上"
+		},
+		"hub": {
+			"desc": "随心所欲装饰您的主页。固定您喜欢的目的地。把朋友固定得更近。",
+			"label": "舒适中心区"
+		},
+		"profiles": {
+			"desc": "将您的兴趣和想法整理到不同的个人资料中。每个资料都可以独立个性化！",
+			"label": "社交资料"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "输入消息"
+	},
+	"collections": {
+		"addButton": "添加收藏集",
+		"emptyDesc": "此收藏集没有保存的帖子",
+		"emptyTitle": "收藏集为空",
+		"fallbackDesc": "未提供描述",
+		"name": "收藏集"
+	},
+	"composer": {
+		"landing": {
+			"dComposeFull": [
+				"更长的帖子",
+				"更多选项"
+			],
+			"dComposePoll": [
+				"<未实现>"
+			],
+			"dViewDrafts": [
+				"<未实现>"
+			],
+			"dViewScheduled": [
+				"<未实现>"
+			],
+			"tComposeFull": "创建帖子",
+			"tComposePoll": "创建投票",
+			"tViewDrafts": "查看草稿",
+			"tViewScheduled": "查看已发布的帖子"
+		},
+		"noAttachments": "未添加附件",
+		"pageTitle": "撰写",
+		"quickPost": "快速发布",
+		"quickPostCta": "在想什么？",
+		"quickPostSubmit": "发布"
+	},
+	"dialogs": {
+		"deleteOption": "删除",
+		"dismissOption": "忽略",
+		"renameOption": "重命名",
+		"saveOption": "保存"
+	},
+	"discover": {
+		"instructions": [
+			"1) 打开 🔍 输入搜索词",
+			"2) 提交 (↵) 进行搜索",
+			"3) 打开 🔍 更改搜索词",
+			"4) 使用 (✖️) 返回此处"
+		],
+		"moreSoon": {
+			"firstHalf": "更多功能",
+			"secondHalf": "即将推出™"
+		},
+		"welcome": "今天让我们探索一些新事物！"
+	},
+	"errorReporting": {
+		"noTimelineSelectedButtonCta": "前往",
+		"noTimelineSelectedDesc": "您可以从个性化中心固定和访问各种类型的时间线。",
+		"noTimelineSelectedLabel": "未选择时间线"
+	},
+	"errors": {
+		"errorLabel": "错误",
+		"timelineErrorLabel": "Dhaaga 无法加载此时间线。请向开发人员报告此错误。"
+	},
+	"features": {
+		"notAvailable": {
+			"desc": "此功能尚未由 Dhaaga 实现，或在您的 SNS 平台上不可用。",
+			"title": "不可用"
+		}
+	},
+	"feed": {
+		"pinOption": "固定",
+		"subscribeOption": "订阅",
+		"unpinOption": "取消固定",
+		"unsubscribeOption": "取消订阅"
+	},
+	"hub": {
+		"feeds": {
+			"bubble": "气泡",
+			"global": "全局",
+			"home": "主页",
+			"local": "本地",
+			"social": "社交"
+		},
+		"greetings": {
+			"goodAfternoon": "下午好",
+			"goodEvening": "晚上好",
+			"goodMorning": "早上好",
+			"goodNight": "晚安"
+		},
+		"navbarLabel": "Dhaaga 中心",
+		"section": {
+			"feeds": "馈送",
+			"tags": "标签",
+			"timelines": "时间轴",
+			"users": "用户"
+		}
+	},
+	"inbox": {
+		"name": "收件箱",
+		"nav": {
+			"chat": "聊天",
+			"mentions": "提到",
+			"social": "社交",
+			"updates": "更新"
+		},
+		"summary": {
+			"followRequestAccepted": "接受了您的关注请求",
+			"followed": "关注了您",
+			"liked": "赞了您的帖子",
+			"mentioned": "提到了您",
+			"posted": "发布了",
+			"reacted": "对您的帖子做出了回应",
+			"replied": "回复了您",
+			"shared": "分享了您的帖子"
+		}
+	},
+	"indicators": {
+		"quotedThisPost": "引用了此帖",
+		"sharedThisLink": "分享了此链接"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "正在加载...",
+		"nothingMoreToShow": "没有更多内容了"
+	},
+	"onboarding": {
+		"accountCreationNotSupported": "不支持创建账号。",
+		"addAccountButton": "添加账号",
+		"appPassword": "应用密码",
+		"createOneHere": "在此创建",
+		"enterYourServer": "输入您的服务器地址",
+		"loginButton": "登录",
+		"needBlueskyAccount": "您需要一个 Bluesky 账号",
+		"popularAkkoma": "热门 Akkoma 服务器",
+		"popularMastodon": "热门 Mastodon 服务器",
+		"popularPleroma": "热门 Pleroma 服务器",
+		"serverUrl": "输入您的实例 URL"
+	},
+	"placeholders": {
+		"atProtoUsername": "用户名或电子邮箱地址"
+	},
+	"profile": {
+		"appFeatures": {
+			"bookmarks": {
+				"desc": "我的书签",
+				"label": "书签"
+			},
+			"collections": {
+				"desc": "书签++",
+				"label": "集合"
+			},
+			"drafts": {
+				"desc": "丢失的消息",
+				"label": "草稿"
+			},
+			"feeds": {
+				"desc": "已订阅的信息流",
+				"label": "信息流"
+			},
+			"likes": {
+				"desc": "我点赞过的帖子",
+				"label": "点赞"
+			},
+			"lists": {
+				"desc": "我的列表",
+				"label": "列表"
+			},
+			"sectionLabel": "应用功能",
+			"skins": {
+				"desc": "匹配您的心情！",
+				"label": "应用皮肤"
+			},
+			"socialHub": {
+				"desc": "管理个人资料",
+				"label": "社交中心"
+			}
+		}
+	},
+	"prompts": {
+		"findAtProtoServer": "在此处查找",
+		"findMastodonServer": "在此处查找",
+		"findMisskeyServer": "在此处查找",
+		"getStarted": "开始使用",
+		"mastodonConfirmAccount": "确认您的账号",
+		"mastodonTokenDetected": "检测到有效令牌。是否继续添加上方显示的账号？",
+		"selectPlatform": "选择平台",
+		"signInConfirm": "继续",
+		"signInReset": "重置",
+		"visitWebsite": "访问网站"
+	},
+	"quickPost": {
+		"ctaPlaceholder": "在想什么？",
+		"interactivity": {
+			"Limited": "受限",
+			"everybody": "所有人",
+			"nobody": "仅限自己"
+		},
+		"name": "快速发布",
+		"postButton": "发布",
+		"quoting": "引用：",
+		"replyingTo": "回复：",
+		"spoilerPlaceholder": "剧透 / 内容警告",
+		"visibility": {
+			"direct": "直达",
+			"private": "关注者",
+			"public": "公开",
+			"unlisted": "主页"
+		}
+	},
+	"setting": {
+		"accountModule": {
+			"desc": "添加和管理账号",
+			"title": "账号"
+		},
+		"advancedModule": {
+			"desc": "供高级用户使用",
+			"title": "高级"
+		},
+		"appFeaturesModule": {
+			"desc": "调整 Dhaaga 的独特功能",
+			"title": "百宝箱"
+		},
+		"digitalWellbeingModule": {
+			"desc": "断开连接以重新找回自我",
+			"title": "数字健康"
+		},
+		"footer": "由 Debashish Patra 用 💛 制作",
+		"generalModule": {
+			"desc": "最平常的设置都在这里",
+			"title": "常规"
+		}
+	},
+	"sheets": {
+		"backOption": "返回"
+	},
+	"topNav": {
+		"primary": {
+			"account": "我的账号",
+			"chat": "聊天",
+			"compose": "发布",
+			"discover": "发现",
+			"hub": "社交中心",
+			"inbox": "收件箱",
+			"mentions": "提及",
+			"setting": "应用设置",
+			"social": "社交",
+			"updates": "更新"
+		},
+		"secondary": {
+			"addProfile": "添加资料",
+			"allPosts": "所有帖子",
+			"appLanguage": "应用语言",
+			"appSettings": "应用设置",
+			"appSkins": "应用皮肤",
+			"blueskySignIn": "Bluesky 登录",
+			"collection": "收藏",
+			"collections": "收藏",
+			"manageAccounts": "管理账号",
+			"manageHubProfiles": "管理中心资料",
+			"manageSubscriptions": "管理订阅",
+			"mastodonSignIn": "Mastodon 登录",
+			"misskeySignIn": "Misskey 登录",
+			"myAccount": "我的账号",
+			"myBookmarks": "我的书签",
+			"myLikes": "我的点赞",
+			"myProfile": "我的个人资料",
+			"pickPlatform": "选择平台",
+			"postDetails": "帖子详情",
+			"searchHistory": "搜索历史",
+			"selectServer": "选择服务器"
+		}
+	},
+	"unspecced": {
+		"wipText": "此功能正在开发中 🚧"
+	}
 }

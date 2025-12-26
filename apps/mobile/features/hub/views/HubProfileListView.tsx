@@ -39,6 +39,7 @@ function HubProfileListView({
 
 	return (
 		<AppWidget
+			visible={true}
 			isOpen={false}
 			inactiveIcon={'create'}
 			activeIcon={'create'}

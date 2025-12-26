@@ -1,293 +1,295 @@
 {
-  "appHighlightFeatures": {
-    "funFirst": {
-      "label": "Fun-First",
-      "desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun."
-    },
-    "hub": {
-      "label": "Cozy Hub Area",
-      "desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer."
-    },
-    "profiles": {
-      "label": "Social Profiles",
-      "desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!"
-    },
-    "cleanInbox": {
-      "label": "Clean Inbox",
-      "desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!"
-    }
-  },
-  "feed": {
-    "subscribeOption": "Subscribe",
-    "unsubscribeOption": "Unsubscribe",
-    "pinOption": "Pin",
-    "unpinOption": "Unpin"
-  },
-  "features": {
-    "notAvailable": {
-      "title": "Not Available",
-      "desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
-    }
-  },
-  "errors": {
-    "errorLabel": "Error",
-    "timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
-  },
-  "onboarding": {
-    "addAccountButton": "Add Account",
-    "accountCreationNotSupported": "Account creation is not supported.",
-    "needBlueskyAccount": "You need a Bluesky account",
-    "createOneHere": "Create one here",
-    "loginButton": "Sign In",
-    "appPassword": "App Password",
-    "enterYourServer": "Enter your server address",
-    "serverUrl": "Enter your instance url",
-    "popularMastodon": "Popular Mastodon Servers",
-    "popularPleroma": "Popular Pleroma Servers",
-    "popularAkkoma": "Popular Akkoma Servers"
-  },
-  "topNav": {
-    "primary": {
-      "hub": "Social Hub",
-      "discover": "Discover",
-      "compose": "Compose",
-      "account": "My Account",
-      "setting": "App Settings",
-      "inbox": "Inbox",
-      "mentions": "Mentions",
-      "chat": "Chat",
-      "social": "Social",
-      "updates": "Updates"
-    },
-    "secondary": {
-      "appSkins": "App Skins",
-      "addProfile": "Add Profile",
-      "manageSubscriptions": "Manage Subscriptions",
-      "myLikes": "My Likes",
-      "myBookmarks": "My Bookmarks",
-      "myAccount": "My Account",
-      "myProfile": "My Profile",
-      "appSettings": "App Settings",
-      "manageAccounts": "Manage Accounts",
-      "blueskySignIn": "Bluesky Sign-In",
-      "allPosts": "All Posts",
-      "selectServer": "Select Server",
-      "mastodonSignIn": "Mastodon Sign-In",
-      "misskeySignIn": "Misskey Sign-In",
-      "pickPlatform": "Pick Platform",
-      "appLanguage": "App Language",
-      "postDetails": "Post Details",
-      "manageHubProfiles": "Manage Hub Profiles",
-      "searchHistory": "Search History"
-    }
-  },
-  "dialogs": {
-    "renameOption": "Rename",
-    "deleteOption": "Delete",
-    "dismissOption": "Dismiss",
-    "saveOption": "Save"
-  },
-  "discover": {
-    "moreSoon": {
-      "firstHalf": "More stuff coming",
-      "secondHalf": "soon™"
-    },
-    "instructions": [
-      "1) Open 🔍 to enter search term",
-      "2) Submit (↵) to search",
-      "3) Open 🔍 to change search term",
-      "4) Use (✖️) to come back here"
-    ],
-    "welcome": "Let's explore something new today!"
-  },
-  "profile": {
-    "appFeatures": {
-      "sectionLabel": "App Features",
-      "likes": {
-        "label": "Likes",
-        "desc": "Posts I've Liked"
-      },
-      "bookmarks": {
-        "label": "Bookmarks",
-        "desc": "My Bookmarks"
-      },
-      "feeds": {
-        "label": "Feeds",
-        "desc": "Subscribed Feeds"
-      },
-      "lists": {
-        "label": "Lists",
-        "desc": "My Lists"
-      },
-      "socialHub": {
-        "label": "Hub Profiles",
-        "desc": "Manage hub profiles"
-      },
-      "collections": {
-        "label": "Collections",
-        "desc": "Bookmark++"
-      },
-      "drafts": {
-        "label": "Drafts",
-        "desc": "Lost letters"
-      },
-      "skins": {
-        "label": "App Skins",
-        "desc": "Matches your mood!"
-      }
-    }
-  },
-  "sheets": {
-    "backOption": "Back"
-  },
-  "hub": {
-    "feeds": {
-      "global": "Global",
-      "local": "Local",
-      "social": "Social",
-      "home": "Home",
-      "bubble": "Bubble"
-    },
-    "greetings": {
-      "goodMorning": "Good Morning",
-      "goodAfternoon": "Good Afternoon",
-      "goodEvening": "Good Evening",
-      "goodNight": "Good Night"
-    },
-    "navbarLabel": "Dhaaga Hub",
-    "section": {
-      "feeds": "Feeds",
-      "users": "Users",
-      "tags": "Tags",
-      "timelines": "Timelines"
-    }
-  },
-  "inbox": {
-    "name": "Inbox",
-    "nav": {
-      "mentions": "Mentions",
-      "chat": "Chat",
-      "social": "Social",
-      "updates": "Updates"
-    },
-    "summary": {
-      "liked": "Liked your post",
-      "followRequestAccepted": "Accepted your follow request",
-      "followed": "Followed You",
-      "shared": "Shared your post",
-      "reacted": "Reacted to your post",
-      "posted": "Posted",
-      "replied": "Replied to you",
-      "mentioned": "Mentioned you"
-    }
-  },
-  "collections": {
-    "name": "Collections",
-    "addButton": "Add Collection",
-    "fallbackDesc": "No Description Provided",
-    "emptyTitle": "Collection Empty",
-    "emptyDesc": "This collection has no saved posts"
-  },
-  "composer": {
-    "pageTitle": "Compose",
-    "quickPost": "Quick Post",
-    "quickPostCta": "What's on your mind?",
-    "quickPostSubmit": "Post",
-    "noAttachments": "No attachments added",
-    "landing": {
-      "tComposeFull": "Create a Post",
-      "dComposeFull": [
-        "Longer Posts",
-        "More Options"
-      ],
-      "tComposePoll": "Create a Poll",
-      "dComposePoll": [
-        "<Not Implemented>"
-      ],
-      "tViewScheduled": "View Published Posts",
-      "dViewScheduled": [
-        "<Not Implemented>"
-      ],
-      "tViewDrafts": "View Drafts",
-      "dViewDrafts": [
-        "<Not Implemented>"
-      ]
-    }
-  },
-  "quickPost": {
-    "name": "Quick Post",
-    "spoilerPlaceholder": "Spoiler / Content Warning",
-    "ctaPlaceholder": "What's on your mind?",
-    "postButton": "Post",
-    "replyingTo": "Replying to: ",
-    "quoting": "Quoting: ",
-    "visibility": {
-      "public": "Public",
-      "unlisted": "Home",
-      "direct": "Direct",
-      "private": "Followers"
-    },
-    "interactivity": {
-      "everybody": "Everyone",
-      "nobody": "Only Me",
-      "Limited": "Limited"
-    }
-  },
-  "chatroom": {
-    "sendInterfacePlaceholder": "Your Message"
-  },
-  "setting": {
-    "accountModule": {
-      "title": "Accounts",
-      "desc": "Add and Manage Accounts"
-    },
-    "generalModule": {
-      "title": "General",
-      "desc": "Most usual boring settings are here"
-    },
-    "appFeaturesModule": {
-      "title": "Goodie Hut",
-      "desc": "Tweak unique features of Dhaaga"
-    },
-    "digitalWellbeingModule": {
-      "title": "Digital Wellbeing",
-      "desc": "Disconnect to reconnect with yourself"
-    },
-    "advancedModule": {
-      "title": "Advanced",
-      "desc": "'For power users"
-    },
-    "footer": "Built with 💛 by Debashish Patra"
-  },
-  "indicators": {
-    "quotedThisPost": "Quoted this Post",
-    "sharedThisLink": "Shared this Link"
-  },
-  "prompts": {
-    "getStarted": "Get Started",
-    "visitWebsite": "Visit Website",
-    "selectPlatform": "Select Platform",
-    "findMastodonServer": "Find one here",
-    "findMisskeyServer": "Find one here",
-    "findAtProtoServer": "Find one here",
-    "mastodonConfirmAccount": "Confirm your account",
-    "mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
-    "signInConfirm": "Proceed",
-    "signInReset": "Reset"
-  },
-  "loaders": {
-    "loadingMoreIndicatorText": "Loading More...",
-    "nothingMoreToShow": "Nothing more to show"
-  },
-  "errorReporting": {
-    "noTimelineSelectedLabel": "No Timeline Selected",
-    "noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
-    "noTimelineSelectedButtonCta": "Go There"
-  },
-  "unspecced": {
-    "wipText": "This feature is being built 🚧"
-  },
-  "placeholders": {
-    "atProtoUsername": "Username or email address"
-  }
+	"appHighlightFeatures": {
+		"cleanInbox": {
+			"desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!",
+			"label": "Clean Inbox"
+		},
+		"funFirst": {
+			"desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun.",
+			"label": "Fun-First"
+		},
+		"hub": {
+			"desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer.",
+			"label": "Cozy Hub Area"
+		},
+		"profiles": {
+			"desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!",
+			"label": "Social Profiles"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "Your Message"
+	},
+	"collections": {
+		"addButton": "Tambah Koleksi",
+		"emptyDesc": "Koleksi ini tidak mempunyai siaran yang disimpan",
+		"emptyTitle": "Koleksi Kosong",
+		"fallbackDesc": "Tiada Deskripsi Diberikan",
+		"name": "Koleksi"
+	},
+	"composer": {
+		"landing": {
+			"dComposeFull": [
+				"Siaran Lebih Panjang",
+				"Lebih Banyak Pilihan"
+			],
+			"dComposePoll": [
+				"<Belum Dilaksanakan>"
+			],
+			"dViewDrafts": [
+				"<Belum Dilaksanakan>"
+			],
+			"dViewScheduled": [
+				"<Belum Dilaksanakan>"
+			],
+			"tComposeFull": "Cipta Siaran",
+			"tComposePoll": "Cipta Undian",
+			"tViewDrafts": "Lihat Draf",
+			"tViewScheduled": "Lihat Siaran Diterbitkan"
+		},
+		"noAttachments": "Tiada lampiran ditambah",
+		"pageTitle": "Karang",
+		"quickPost": "Siaran Pantas",
+		"quickPostCta": "Apa dalam fikiran anda?",
+		"quickPostSubmit": "Siarkan"
+	},
+	"dialogs": {
+		"deleteOption": "Delete",
+		"dismissOption": "Dismiss",
+		"renameOption": "Rename",
+		"saveOption": "Save"
+	},
+	"discover": {
+		"instructions": [
+			"1) Open 🔍 to enter search term",
+			"2) Submit (↵) to search",
+			"3) Open 🔍 to change search term",
+			"4) Use (✖️) to come back here"
+		],
+		"moreSoon": {
+			"firstHalf": "More stuff coming",
+			"secondHalf": "soon™"
+		},
+		"welcome": "Let's explore something new today!"
+	},
+	"errorReporting": {
+		"noTimelineSelectedButtonCta": "Go There",
+		"noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
+		"noTimelineSelectedLabel": "No Timeline Selected"
+	},
+	"errors": {
+		"errorLabel": "Error",
+		"timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
+	},
+	"features": {
+		"notAvailable": {
+			"desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform.",
+			"title": "Not Available"
+		}
+	},
+	"feed": {
+		"pinOption": "Pin",
+		"subscribeOption": "Subscribe",
+		"unpinOption": "Unpin",
+		"unsubscribeOption": "Unsubscribe"
+	},
+	"hub": {
+		"feeds": {
+			"bubble": "Buih",
+			"global": "Global",
+			"home": "Utama",
+			"local": "Tempatan",
+			"social": "Sosial"
+		},
+		"greetings": {
+			"goodAfternoon": "Selamat Tengah Hari",
+			"goodEvening": "Selamat Petang",
+			"goodMorning": "Selamat Pagi",
+			"goodNight": "Selamat Malam"
+		},
+		"navbarLabel": "Hab Dhaaga",
+		"section": {
+			"feeds": "Suapan",
+			"tags": "Tag",
+			"timelines": "Garis Masa",
+			"users": "Pengguna"
+		}
+	},
+	"inbox": {
+		"name": "Peti Masuk",
+		"nav": {
+			"chat": "Sembang",
+			"mentions": "Sebutan",
+			"social": "Sosial",
+			"updates": "Kemas Kini"
+		},
+		"summary": {
+			"followRequestAccepted": "menerima permintaan ikuti anda",
+			"followed": "mengikuti anda",
+			"liked": "menyukai siaran anda",
+			"mentioned": "menyebut anda",
+			"posted": "telah bersiar",
+			"reacted": "memberi reaksi pada siaran anda",
+			"replied": "membalas kepada anda",
+			"shared": "berkongsi siaran anda"
+		}
+	},
+	"indicators": {
+		"quotedThisPost": "Quoted this Post",
+		"sharedThisLink": "Shared this Link"
+	},
+	"loaders": {
+		"loadingMoreIndicatorText": "Loading More...",
+		"nothingMoreToShow": "Nothing more to show"
+	},
+	"onboarding": {
+		"accountCreationNotSupported": "Account creation is not supported.",
+		"addAccountButton": "Add Account",
+		"appPassword": "App Password",
+		"createOneHere": "Create one here",
+		"enterYourServer": "Enter your server address",
+		"loginButton": "Sign In",
+		"needBlueskyAccount": "You need a Bluesky account",
+		"popularAkkoma": "Popular Akkoma Servers",
+		"popularMastodon": "Popular Mastodon Servers",
+		"popularPleroma": "Popular Pleroma Servers",
+		"serverUrl": "Enter your instance url"
+	},
+	"placeholders": {
+		"atProtoUsername": "Username or email address"
+	},
+	"profile": {
+		"appFeatures": {
+			"bookmarks": {
+				"desc": "My Bookmarks",
+				"label": "Bookmarks"
+			},
+			"collections": {
+				"desc": "Bookmark++",
+				"label": "Collections"
+			},
+			"drafts": {
+				"desc": "Lost letters",
+				"label": "Drafts"
+			},
+			"feeds": {
+				"desc": "Subscribed Feeds",
+				"label": "Feeds"
+			},
+			"likes": {
+				"desc": "Posts I've Liked",
+				"label": "Likes"
+			},
+			"lists": {
+				"desc": "My Lists",
+				"label": "Lists"
+			},
+			"sectionLabel": "App Features",
+			"skins": {
+				"desc": "Sesuai dengan mood anda!",
+				"label": "Skin Aplikasi"
+			},
+			"socialHub": {
+				"desc": "Manage hub profiles",
+				"label": "Hub Profiles"
+			}
+		}
+	},
+	"prompts": {
+		"findAtProtoServer": "Find one here",
+		"findMastodonServer": "Find one here",
+		"findMisskeyServer": "Find one here",
+		"getStarted": "Get Started",
+		"mastodonConfirmAccount": "Confirm your account",
+		"mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
+		"selectPlatform": "Select Platform",
+		"signInConfirm": "Proceed",
+		"signInReset": "Reset",
+		"visitWebsite": "Visit Website"
+	},
+	"quickPost": {
+		"ctaPlaceholder": "Apa dalam fikiran anda?",
+		"interactivity": {
+			"Limited": "Terhad",
+			"everybody": "Semua Orang",
+			"nobody": "Hanya Saya"
+		},
+		"name": "Siaran Pantas",
+		"postButton": "Siarkan",
+		"quoting": "Memetik: ",
+		"replyingTo": "Membalas kepada: ",
+		"spoilerPlaceholder": "Spoiler / Amaran Kandungan",
+		"visibility": {
+			"direct": "Terus",
+			"private": "Pengikut",
+			"public": "Awam",
+			"unlisted": "Utama"
+		}
+	},
+	"setting": {
+		"accountModule": {
+			"desc": "Add and Manage Accounts",
+			"title": "Accounts"
+		},
+		"advancedModule": {
+			"desc": "'For power users",
+			"title": "Advanced"
+		},
+		"appFeaturesModule": {
+			"desc": "Tweak unique features of Dhaaga",
+			"title": "Goodie Hut"
+		},
+		"digitalWellbeingModule": {
+			"desc": "Disconnect to reconnect with yourself",
+			"title": "Digital Wellbeing"
+		},
+		"footer": "Built with 💛 by Debashish Patra",
+		"generalModule": {
+			"desc": "Most usual boring settings are here",
+			"title": "General"
+		}
+	},
+	"sheets": {
+		"backOption": "Kembali"
+	},
+	"topNav": {
+		"primary": {
+			"account": "My Account",
+			"chat": "Chat",
+			"compose": "Compose",
+			"discover": "Discover",
+			"hub": "Social Hub",
+			"inbox": "Inbox",
+			"mentions": "Mentions",
+			"setting": "App Settings",
+			"social": "Social",
+			"updates": "Updates"
+		},
+		"secondary": {
+			"addProfile": "Add Profile",
+			"allPosts": "All Posts",
+			"appLanguage": "App Language",
+			"appSettings": "App Settings",
+			"appSkins": "App Skins",
+			"blueskySignIn": "Bluesky Sign-In",
+			"collection": "Koleksi",
+			"collections": "Koleksi",
+			"manageAccounts": "Manage Accounts",
+			"manageHubProfiles": "Manage Hub Profiles",
+			"manageSubscriptions": "Manage Subscriptions",
+			"mastodonSignIn": "Mastodon Sign-In",
+			"misskeySignIn": "Misskey Sign-In",
+			"myAccount": "My Account",
+			"myBookmarks": "My Bookmarks",
+			"myLikes": "My Likes",
+			"myProfile": "My Profile",
+			"pickPlatform": "Pick Platform",
+			"postDetails": "Post Details",
+			"searchHistory": "Search History",
+			"selectServer": "Select Server"
+		}
+	},
+	"unspecced": {
+		"wipText": "This feature is being built 🚧"
+	}
 }

@@ -19,7 +19,7 @@ import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import useScrollHandleAnimatedList from '#/hooks/anim/useScrollHandleAnimatedList';
 import { AppIcon } from '#/components/lib/Icon';
 import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
-import { AppCtaButton } from '#/components/lib/Buttons';
+import { AppButtonVariantA } from '#/components/lib/Buttons';
 import { appDimensions } from '#/styles/dimensions';
 import { NativeTextNormal, NativeTextBold } from '#/ui/NativeText';
 
@@ -122,7 +122,11 @@ function ListView({
 					paddingHorizontal: 10,
 				}}
 				ListFooterComponent={
-					<AppCtaButton label={t(`collections.addButton`)} onPress={onAdd} />
+					<AppButtonVariantA
+						label={t(`collections.addButton`)}
+						onClick={onAdd}
+						loading={false}
+					/>
 				}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={refresh} />

@@ -29,7 +29,6 @@ type State = {
 	widgetDimmed: boolean;
 	all: boolean;
 	none: boolean;
-	refetch: () => void;
 };
 
 const DEFAULT: State = {
@@ -41,7 +40,6 @@ const DEFAULT: State = {
 	widgetDimmed: false,
 	all: true,
 	none: false,
-	refetch: undefined,
 };
 
 enum ACTION {
@@ -58,7 +56,6 @@ type Actions =
 	| {
 			type: ACTION.INIT;
 			payload: {
-				refetch: () => void;
 				acct: Account;
 			};
 	  }
@@ -89,6 +86,11 @@ type Actions =
 
 function reducer(state: State, action: Actions): State {
 	switch (action.type) {
+		case ACTION.INIT: {
+			return produce(state, (draft) => {
+				draft.acct = action.payload.acct;
+			});
+		}
 		case ACTION.SET_DATA: {
 			let users: Map<
 				string,
@@ -113,7 +115,7 @@ function reducer(state: State, action: Actions): State {
 					return {
 						item: o,
 						parsedTextContent: TextNodeParser.parse(
-							state.acct.driver,
+							state?.acct?.driver,
 							o.textContent,
 						),
 					};

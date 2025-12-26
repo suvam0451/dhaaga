@@ -95,6 +95,7 @@ export * from './utils/index.js';
 export * from './parsers/index.js';
 export * from './viewers/index.js';
 export * from './mutators/index.js';
+export * from './auth/index.js';
 
 // post services
 export { PostInspector } from './parsers/post.js';

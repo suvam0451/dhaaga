@@ -62,9 +62,6 @@ function Page() {
 					labels={tabLabels}
 					showBottomNav
 					scrollEnabled={false}
-					RightWidget={(index) => (
-						<SubscriptionGalleryWidget pagerIndex={index} />
-					)}
 				/>
 			</WithBackgroundSkin>
 		</SubscriptionGalleryCtx>
