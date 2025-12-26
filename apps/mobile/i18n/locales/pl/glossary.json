@@ -1,29 +1,29 @@
 {
 	"noun": {
-		"post_one": "Post",
-		"post_other": "Posty",
-		"user_one": "Użytkownik",
-		"user_other": "Użytkownicy",
 		"follower_one": "Obserwujący",
 		"follower_other": "Obserwujący",
 		"following_one": "Obserwujesz",
 		"following_other": "Obserwujesz",
 		"like_one": "Polubienie",
 		"like_other": "Polubienia",
-		"share_one": "Udostępnienie",
-		"share_other": "Udostępnione",
+		"post_one": "Post",
+		"post_other": "Posty",
+		"quote_one": "Cytat",
+		"quote_other": "Cytaty",
 		"reply_one": "Odpowiedź",
 		"reply_other": "Odpowiedzi",
-		"quote_one": "Cytat",
-		"quote_other": "Cytaty"
+		"share_one": "Udostępnienie",
+		"share_other": "Udostępnione",
+		"user_one": "Użytkownik",
+		"user_other": "Użytkownicy"
 	},
 	"relationship": {
-		"friends": "Przyjaciele",
-		"following": "Obserwujesz"
+		"following": "Obserwujesz",
+		"friends": "Przyjaciele"
 	},
 	"relationshipCta": {
-		"followBack": "Obserwuj z powrotem",
-		"follow": "Obserwuj"
+		"follow": "Obserwuj",
+		"followBack": "Obserwuj z powrotem"
 	},
 	"verb": {
 		"message": "Wiadomość 🚧"

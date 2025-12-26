@@ -1,40 +1,40 @@
 {
 	"accounts": {
-		"mainMenu_Label": "Akun",
-		"mainMenu_Desc": "Tambahkan dan kelola akun"
-	},
-	"general": {
-		"mainMenu_Label": "Umum",
-		"mainMenu_Desc": "Pengaturan yang paling umum dan membosankan ada di sini",
-		"navbar_Label": "Pengaturan Umum",
-		"language": {
-			"S_Language": "Bahasa",
-			"L_appLanguage": "Bahasa Aplikasi",
-			"L_contentLanguages": "Bahasa Konten",
-			"L_translatorMode": "Mode Penerjemah",
-			"D_translatorMode": "Ini akan menambahkan tombol di setiap halaman, yang memungkinkan Anda untuk dengan cepat beralih bahasa untuk menguji terjemahan.",
-			"L_translationLanguages": "Bahasa Terjemahan"
-		},
-		"timelines": {
-			"S_Timelines": "Waktu Linimasa",
-			"L_lurkerMode": "Mode Lurker",
-			"D_lurkerMode": "Menyembunyikan tombol interaktif",
-			"L_contentWarnings": "Peringatan Konten"
-		}
-	},
-	"dhaaga": {
-		"mainMenu_Label": "Dhaaga",
-		"mainMenu_Desc": "Kustomisasi fitur unik dari Dhaaga",
-		"navbar_Label": "Kustomisasi Dhaaga"
-	},
-	"wellbeing": {
-		"mainMenu_Label": "Kesejahteraan",
-		"mainMenu_Desc": "Internet yang lebih sehat dan Anda.",
-		"navbar_Label": "Pengaturan Kesejahteraan"
+		"mainMenu_Desc": "Tambahkan dan kelola akun",
+		"mainMenu_Label": "Akun"
 	},
 	"advanced": {
-		"mainMenu_Label": "Lanjutan",
 		"mainMenu_Desc": "Untuk pengguna power dan debugging",
+		"mainMenu_Label": "Lanjutan",
 		"navbar_Label": "Pengaturan Lanjutan"
+	},
+	"dhaaga": {
+		"mainMenu_Desc": "Kustomisasi fitur unik dari Dhaaga",
+		"mainMenu_Label": "Dhaaga",
+		"navbar_Label": "Kustomisasi Dhaaga"
+	},
+	"general": {
+		"language": {
+			"D_translatorMode": "Ini akan menambahkan tombol di setiap halaman, yang memungkinkan Anda untuk dengan cepat beralih bahasa untuk menguji terjemahan.",
+			"L_appLanguage": "Bahasa Aplikasi",
+			"L_contentLanguages": "Bahasa Konten",
+			"L_translationLanguages": "Bahasa Terjemahan",
+			"L_translatorMode": "Mode Penerjemah",
+			"S_Language": "Bahasa"
+		},
+		"mainMenu_Desc": "Pengaturan yang paling umum dan membosankan ada di sini",
+		"mainMenu_Label": "Umum",
+		"navbar_Label": "Pengaturan Umum",
+		"timelines": {
+			"D_lurkerMode": "Menyembunyikan tombol interaktif",
+			"L_contentWarnings": "Peringatan Konten",
+			"L_lurkerMode": "Mode Lurker",
+			"S_Timelines": "Waktu Linimasa"
+		}
+	},
+	"wellbeing": {
+		"mainMenu_Desc": "Internet yang lebih sehat dan Anda.",
+		"mainMenu_Label": "Kesejahteraan",
+		"navbar_Label": "Pengaturan Kesejahteraan"
 	}
 }

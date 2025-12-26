@@ -1,40 +1,40 @@
 {
 	"accounts": {
-		"mainMenu_Label": "Konta",
-		"mainMenu_Desc": "Dodaj i zarządzaj kontami"
-	},
-	"general": {
-		"mainMenu_Label": "Ogólne",
-		"mainMenu_Desc": "Tutaj znajdują się najbardziej standardowe, nudne ustawienia",
-		"navbar_Label": "Ustawienia ogólne",
-		"language": {
-			"S_Language": "Język",
-			"L_appLanguage": "Język aplikacji",
-			"L_contentLanguages": "Języki treści",
-			"L_translatorMode": "Tryb tłumacza",
-			"D_translatorMode": "To doda przycisk na każdej stronie, który umożliwi szybkie przełączanie języków w celu testowania tłumaczeń.",
-			"L_translationLanguages": "Języki tłumaczeń"
-		},
-		"timelines": {
-			"S_Timelines": "Oś czasu",
-			"L_lurkerMode": "Tryb obserwatora",
-			"D_lurkerMode": "Ukrywa interaktywne przyciski",
-			"L_contentWarnings": "Ostrzeżenia o treści"
-		}
-	},
-	"dhaaga": {
-		"mainMenu_Label": "Dhaaga",
-		"mainMenu_Desc": "Dostosuj funkcje Dhaaga",
-		"navbar_Label": "Dostosuj Dhaaga"
-	},
-	"wellbeing": {
-		"mainMenu_Label": "Wellbeing",
-		"mainMenu_Desc": "Zdrowszy internet i Ty.",
-		"navbar_Label": "Ustawienia dobrostanu"
+		"mainMenu_Desc": "Dodaj i zarządzaj kontami",
+		"mainMenu_Label": "Konta"
 	},
 	"advanced": {
-		"mainMenu_Label": "Zaawansowane",
 		"mainMenu_Desc": "Dla zaawansowanych użytkowników i debugowania",
+		"mainMenu_Label": "Zaawansowane",
 		"navbar_Label": "Ustawienia zaawansowane"
+	},
+	"dhaaga": {
+		"mainMenu_Desc": "Dostosuj funkcje Dhaaga",
+		"mainMenu_Label": "Dhaaga",
+		"navbar_Label": "Dostosuj Dhaaga"
+	},
+	"general": {
+		"language": {
+			"D_translatorMode": "To doda przycisk na każdej stronie, który umożliwi szybkie przełączanie języków w celu testowania tłumaczeń.",
+			"L_appLanguage": "Język aplikacji",
+			"L_contentLanguages": "Języki treści",
+			"L_translationLanguages": "Języki tłumaczeń",
+			"L_translatorMode": "Tryb tłumacza",
+			"S_Language": "Język"
+		},
+		"mainMenu_Desc": "Tutaj znajdują się najbardziej standardowe, nudne ustawienia",
+		"mainMenu_Label": "Ogólne",
+		"navbar_Label": "Ustawienia ogólne",
+		"timelines": {
+			"D_lurkerMode": "Ukrywa interaktywne przyciski",
+			"L_contentWarnings": "Ostrzeżenia o treści",
+			"L_lurkerMode": "Tryb obserwatora",
+			"S_Timelines": "Oś czasu"
+		}
+	},
+	"wellbeing": {
+		"mainMenu_Desc": "Zdrowszy internet i Ty.",
+		"mainMenu_Label": "Wellbeing",
+		"navbar_Label": "Ustawienia dobrostanu"
 	}
 }

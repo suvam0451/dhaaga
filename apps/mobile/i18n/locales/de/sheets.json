@@ -1,26 +1,26 @@
 {
 	"collections": {
-		"noBookmarkSupport": "Ihre Plattform unterstützt keine Lesezeichen.",
-		"noBookmarkRecommend": "Sammlungen erzielen einen ähnlichen Effekt.",
-		"collections": "Sammlungen",
 		"bookmark": "Lesezeichen",
+		"bookmarkDesc": "Mit Ihrem Server synchronisiert",
 		"bookmarkFeatures": [
 			"Plattformfunktion",
 			"Synchronisiert"
 		],
-		"newCollection": "Neue Sammlung",
+		"collections": "Sammlungen",
+		"disclaimer": "⚠️ Sammlungen werden lokal auf diesem Gerät gespeichert ⚠️",
 		"fallbackDesc": "Beschreibung nicht verfügbar",
-		"bookmarkDesc": "Mit Ihrem Server synchronisiert",
-		"disclaimer": "⚠️ Sammlungen werden lokal auf diesem Gerät gespeichert ⚠️"
+		"newCollection": "Neue Sammlung",
+		"noBookmarkRecommend": "Sammlungen erzielen einen ähnlichen Effekt.",
+		"noBookmarkSupport": "Ihre Plattform unterstützt keine Lesezeichen."
 	},
 	"hubAddFeedSheet": {
-		"title": "Entschuldigung 😔",
 		"desc": [
 			"Diese Funktion wird in Zukunft erweitert!",
 			"Ein Standardsatz von Zielen wurde für Sie vorbelegt.",
 			"Bluesky-Benutzer können ihre Feeds vorerst über ihr Profil (5. Registerkarte) aufrufen."
 		],
-		"searchPlaceholder": "Suche nach Feeds zum Anheften"
+		"searchPlaceholder": "Suche nach Feeds zum Anheften",
+		"title": "Entschuldigung 😔"
 	},
 	"hubAddUserSheet": {
 		"searchPlaceholder": "Suche nach Benutzern zum Anheften"
@@ -29,90 +29,90 @@
 		"failedStateLabel": "Fehler beim Parsen dieser URL",
 		"menuLabel_copyLink": "Link kopieren",
 		"menuLabel_retry": "Erneut versuchen",
-		"menu_openInBrowser_label": "Im Browser öffnen",
-		"menu_openInBrowser_desc": "Ein externer Browser wird geöffnet"
+		"menu_openInBrowser_desc": "Ein externer Browser wird geöffnet",
+		"menu_openInBrowser_label": "Im Browser öffnen"
 	},
 	"sheetLabels": {
+		"comments": "Kommentare",
 		"likedBy": "Geliked von",
-		"sharedBy": "Geteilt von",
 		"quotedBy": "Zitiert von",
-		"comments": "Kommentare"
+		"sharedBy": "Geteilt von"
 	},
 	"timelines": {
 		"infoSheet": {
-			"infoHome": {
-				"label": "Start-Timeline",
-				"description": [
-					"Dies ist deine Start-Timeline.",
-					"Hier kannst du Beiträge von dir selbst und allen, denen du folgst, sehen."
-				]
+			"_controlItems": {
+				"O_feedOptions_All": "Alle",
+				"O_feedOptions_MediaOnly": "Nur Medien",
+				"S_extraFilters": "Zusätzliche Filter",
+				"S_feedOptions": "Feed-Optionen"
 			},
-			"infoLocal": {
-				"label": "Lokale Timeline",
-				"description": [
-					"Dies ist die lokale Timeline deines Servers.",
-					"Sie zeigt Beiträge von dir und anderen Nutzern deines Servers."
-				]
-			},
-			"infoHashtag": {
-				"label": "Hashtag-Timeline",
-				"description": [
-					"Dies ist eine Hashtag-Timeline.",
-					"Sie zeigt eine Liste aller Beiträge, die diesen Hashtag enthalten."
-				]
-			},
-			"infoUser": {
-				"label": "Benutzer-Timeline",
-				"description": [
-					"Dies ist der Feed eines Benutzers.",
-					"Du kannst hier Beiträge, Shares und Antworten des ausgewählten Benutzers ansehen."
-				]
-			},
-			"infoPublic": {
-				"label": "Öffentliche Timeline",
-				"description": [
-					"Diese Timeline zeigt alle Beiträge, die für deinen Server sichtbar sind.",
-					"Dazu gehören Beiträge von deinem Server sowie von anderen Servern, mit denen dein Server kommunizieren kann."
-				]
+			"_menuItems": {
+				"D_openInBrowser": "Im externen Browser anzeigen",
+				"L_openInBrowser": "Im Browser öffnen"
 			},
 			"infoBubble": {
-				"label": "Bubble-Timeline",
 				"description": [
 					"Diese Timeline zeigt alle Beiträge von Nutzern in einer Liste von Servern, die von deinem Server-Administrator kuratiert wurden.",
 					"Diese Liste der Server findest du als \"Bekanntes Netzwerk\" in der Dokumentation deines Servers."
-				]
-			},
-			"infoSocial": {
-				"label": "Soziale Timeline",
-				"description": [
-					"Diese Timeline ist eine Kombination aus deiner Start-Timeline und lokalen Timeline.",
-					"Sie zeigt Beiträge von dir, deinen Freunden und lokalen Beiträgen von Nutzern in deinem Server."
-				]
-			},
-			"infoList": {
-				"label": "Listen-Timeline",
-				"description": [
-					"Diese Timeline zeigt Beiträge, die in deiner ausgewählten Liste gespeichert sind.",
-					"Du kannst bearbeiten, was in dieser Liste von der Web-Oberfläche deines Servers gespeichert wird!"
-				]
+				],
+				"label": "Bubble-Timeline"
 			},
 			"infoFeed": {
-				"label": "Feed-Zeitleiste",
 				"description": [
 					"Dies ist eine benutzerdefinierte Feed-Zeitleiste.",
 					"Benutzerdefinierte Feeds sind Dienste, die den Nutzern benutzerdefinierte Algorithmen über das AT-Protokoll bereitstellen.",
 					"Dies ermöglicht es den Nutzern, ihre eigenen Zeitleisten auszuwählen."
-				]
+				],
+				"label": "Feed-Zeitleiste"
 			},
-			"_menuItems": {
-				"L_openInBrowser": "Im Browser öffnen",
-				"D_openInBrowser": "Im externen Browser anzeigen"
+			"infoHashtag": {
+				"description": [
+					"Dies ist eine Hashtag-Timeline.",
+					"Sie zeigt eine Liste aller Beiträge, die diesen Hashtag enthalten."
+				],
+				"label": "Hashtag-Timeline"
 			},
-			"_controlItems": {
-				"S_feedOptions": "Feed-Optionen",
-				"O_feedOptions_All": "Alle",
-				"O_feedOptions_MediaOnly": "Nur Medien",
-				"S_extraFilters": "Zusätzliche Filter"
+			"infoHome": {
+				"description": [
+					"Dies ist deine Start-Timeline.",
+					"Hier kannst du Beiträge von dir selbst und allen, denen du folgst, sehen."
+				],
+				"label": "Start-Timeline"
+			},
+			"infoList": {
+				"description": [
+					"Diese Timeline zeigt Beiträge, die in deiner ausgewählten Liste gespeichert sind.",
+					"Du kannst bearbeiten, was in dieser Liste von der Web-Oberfläche deines Servers gespeichert wird!"
+				],
+				"label": "Listen-Timeline"
+			},
+			"infoLocal": {
+				"description": [
+					"Dies ist die lokale Timeline deines Servers.",
+					"Sie zeigt Beiträge von dir und anderen Nutzern deines Servers."
+				],
+				"label": "Lokale Timeline"
+			},
+			"infoPublic": {
+				"description": [
+					"Diese Timeline zeigt alle Beiträge, die für deinen Server sichtbar sind.",
+					"Dazu gehören Beiträge von deinem Server sowie von anderen Servern, mit denen dein Server kommunizieren kann."
+				],
+				"label": "Öffentliche Timeline"
+			},
+			"infoSocial": {
+				"description": [
+					"Diese Timeline ist eine Kombination aus deiner Start-Timeline und lokalen Timeline.",
+					"Sie zeigt Beiträge von dir, deinen Freunden und lokalen Beiträgen von Nutzern in deinem Server."
+				],
+				"label": "Soziale Timeline"
+			},
+			"infoUser": {
+				"description": [
+					"Dies ist der Feed eines Benutzers.",
+					"Du kannst hier Beiträge, Shares und Antworten des ausgewählten Benutzers ansehen."
+				],
+				"label": "Benutzer-Timeline"
 			}
 		}
 	}

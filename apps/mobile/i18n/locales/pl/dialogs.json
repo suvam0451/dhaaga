@@ -1,103 +1,103 @@
 {
 	"account": {
-		"moreActions": {
-			"title": "Akcje Konta",
-			"description": [
-				"Synchronizuj dane swojego profilu (zdjęcie, nazwa itp.) lub usuń swoje konto."
-			],
-			"syncOption": "Synchronizuj (🚧)",
-			"removeOption": "Usuń konto"
-		},
 		"confirmDelete": {
-			"title": "Potwierdź usunięcie",
+			"confirmOption": "Potwierdź i usuń",
 			"description": [
 				"Usunięcie konta spowoduje usunięcie wszystkich profili na hubie, kolekcji i danych przeglądania",
 				"Potwierdź i kontynuuj?"
 			],
-			"confirmOption": "Potwierdź i usuń"
+			"title": "Potwierdź usunięcie"
+		},
+		"moreActions": {
+			"description": [
+				"Synchronizuj dane swojego profilu (zdjęcie, nazwa itp.) lub usuń swoje konto."
+			],
+			"removeOption": "Usuń konto",
+			"syncOption": "Synchronizuj (🚧)",
+			"title": "Akcje Konta"
 		}
 	},
 	"collection": {
-		"moreOptions": {
-			"title": "Zaktualizuj kolekcję",
-			"description": [
-				"Zmień nazwę, opisz lub usuń tę kolekcję"
-			],
-			"renameOption": "Zmień nazwę",
-			"updateDescriptionOption": "Zaktualizuj opis",
-			"removeOption": "Usuń"
-		},
 		"add": {
-			"title": "Dodaj kolekcję",
 			"description": [
 				"Możesz zarządzać kolekcjami z przeglądu swojego konta (5. zakładka)."
 			],
-			"placeholder": "Nazwij swoją kolekcję"
-		},
-		"rename": {
-			"title": "Zmień nazwę kolekcji",
-			"description": [
-				"Nadaj nową nazwę tej kolekcji."
-			],
-			"placeholder": "Nazwa Twojej kolekcji"
-		},
-		"describe": {
-			"title": "Opisz tę kolekcję",
-			"description": [
-				"Zaktualizuj opis tej kolekcji",
-				"Wpisz pusty ciąg, aby ustawić domyślny"
-			],
-			"placeholder": "Opisz swoją kolekcję"
+			"placeholder": "Nazwij swoją kolekcję",
+			"title": "Dodaj kolekcję"
 		},
 		"delete": {
-			"title": "Potwierdź usunięcie",
+			"deleteConfirmOption": "Potwierdź i usuń",
 			"description": [
 				"Czy na pewno chcesz usunąć tę kolekcję?",
 				"Wszystkie posty zapisane w tej kolekcji zostaną utracone."
 			],
-			"deleteConfirmOption": "Potwierdź i usuń"
+			"title": "Potwierdź usunięcie"
+		},
+		"describe": {
+			"description": [
+				"Zaktualizuj opis tej kolekcji",
+				"Wpisz pusty ciąg, aby ustawić domyślny"
+			],
+			"placeholder": "Opisz swoją kolekcję",
+			"title": "Opisz tę kolekcję"
+		},
+		"moreOptions": {
+			"description": [
+				"Zmień nazwę, opisz lub usuń tę kolekcję"
+			],
+			"removeOption": "Usuń",
+			"renameOption": "Zmień nazwę",
+			"title": "Zaktualizuj kolekcję",
+			"updateDescriptionOption": "Zaktualizuj opis"
+		},
+		"rename": {
+			"description": [
+				"Nadaj nową nazwę tej kolekcji."
+			],
+			"placeholder": "Nazwa Twojej kolekcji",
+			"title": "Zmień nazwę kolekcji"
 		}
 	},
 	"composer": {
 		"setAltText": {
-			"title": "Tekst alternatywny",
 			"description": [
 				"Zobacz tekst alternatywny dla tego obrazu.",
 				"Wpisz pusty ciąg, aby usunąć."
 			],
-			"placeholder": "Wprowadź nowy tekst alternatywny"
+			"placeholder": "Wprowadź nowy tekst alternatywny",
+			"title": "Tekst alternatywny"
 		},
 		"setVisibility": {
-			"title": "Ustaw widoczność",
 			"description": [
 				"Twoje posty \"Niewymienione\" są ukryte przed kanałami i wyszukiwaniem.",
 				"Twoje wiadomości \"Bezpośrednie\" nie są szyfrowane."
 			],
-			"publicLabel": "Publiczny",
-			"unlistedLabel": "Niewymieniony",
+			"directLabel": "Bezpośredni",
 			"followersOnlyLabel": "Tylko dla obserwujących",
-			"directLabel": "Bezpośredni"
+			"publicLabel": "Publiczny",
+			"title": "Ustaw widoczność",
+			"unlistedLabel": "Niewymieniony"
 		}
 	},
 	"hub": {
 		"profileAdd": {
-			"title": "Dodaj profil",
 			"description": [
 				"Profile pomagają w organizowaniu Twoich przypięć i układu hubu według zainteresowań."
 			],
 			"placeholder": "Nazwij swój profil",
-			"successToast": "Profil został pomyślnie dodany!"
+			"successToast": "Profil został pomyślnie dodany!",
+			"title": "Dodaj profil"
 		},
 		"profileDelete": {
-			"title": "Potwierdź usunięcie",
+			"deleteConfirmOption": "Potwierdź i usuń",
 			"description": [
 				"Czy na pewno chcesz usunąć ten profil?",
 				"Wszystkie przypięcia i zapisany układ zostaną utracone."
 			],
-			"deleteConfirmOption": "Potwierdź i usuń"
+			"title": "Potwierdź usunięcie"
 		},
 		"profileEdit": {
-			"title": "Edytuj profil",
+			"deleteOption": "Usuń",
 			"description": [
 				"Możesz zmienić nazwę lub usunąć ten profil."
 			],
@@ -105,83 +105,83 @@
 				"Możesz zmienić nazwę tylko w domyślnym profilu."
 			],
 			"renameOption": "Zmień nazwę",
-			"deleteOption": "Usuń"
+			"title": "Edytuj profil"
 		},
 		"profileRename": {
-			"title": "Zmień nazwę profilu",
 			"description": [
 				"Nadaj nową nazwę temu profilowi."
 			],
-			"placeholder": "Nazwij swój profil"
+			"placeholder": "Nazwij swój profil",
+			"title": "Zmień nazwę profilu"
 		},
 		"tagAdd": {
-			"title": "Dodaj hashtag",
 			"description": [
 				"Tagi można również dodać podczas przeglądania osi czasu (naciskając tag)."
 			],
 			"placeholder": "Nazwa tagu",
-			"successToast": "Tag został pomyślnie dodany!"
+			"successToast": "Tag został pomyślnie dodany!",
+			"title": "Dodaj hashtag"
 		},
-		"tagRemove": {},
 		"tagEdit": {
-			"title": "Zmień przypięty tag",
 			"description": [
 				"Możesz zmienić nazwę lub usunąć ten przypięty tag."
-			]
+			],
+			"title": "Zmień przypięty tag"
 		},
+		"tagRemove": {},
 		"tagRename": {
-			"title": "Zmień nazwę przypiętego tagu",
 			"description": [
 				"Zmień hashtag, do którego prowadzi ten pin."
 			],
-			"placeholder": "Zaktualizuj swój tag tutaj"
+			"placeholder": "Zaktualizuj swój tag tutaj",
+			"title": "Zmień nazwę przypiętego tagu"
 		},
 		"userEdit": {
-			"title": "Zmień przypiętego użytkownika",
 			"description": [
 				"Możesz usunąć to przypięcie.",
 				"Przestawianie będzie obsługiwane w przyszłej aktualizacji."
-			]
+			],
+			"title": "Zmień przypiętego użytkownika"
 		}
 	},
 	"relationship": {
-		"notRelated": {
-			"title": "Brak powiązania",
-			"description": [
-				"Aktualnie nie jesteś powiązany z tym użytkownikiem."
-			],
-			"followOption": "Obserwuj"
-		},
 		"follower": {
-			"title": "Obserwujący",
 			"description": [
 				"Ten użytkownik aktualnie Cię obserwuje."
 			],
-			"followBackOption": "Obserwuj z powrotem"
+			"followBackOption": "Obserwuj z powrotem",
+			"title": "Obserwujący"
 		},
 		"following": {
-			"title": "Obserwujesz",
 			"description": [
 				"Aktualnie obserwujesz tego użytkownika."
 			],
+			"title": "Obserwujesz",
 			"unfollowOption": "Zrezygnuj z obserwowania"
 		},
 		"friends": {
-			"title": "Przyjaciele",
 			"description": [
 				"Oboje się obserwujecie."
 			],
+			"title": "Przyjaciele",
 			"unfollowOption": "Zrezygnuj z obserwowania"
 		},
+		"notRelated": {
+			"description": [
+				"Aktualnie nie jesteś powiązany z tym użytkownikiem."
+			],
+			"followOption": "Obserwuj",
+			"title": "Brak powiązania"
+		},
 		"requestPending": {
-			"title": "Wniosek w toku",
+			"cancelOption": "Anuluj",
 			"description": [
 				"Wysłałeś temu użytkownikowi prośbę o obserwowanie.",
 				"Wygląda na to, że nie została jeszcze zaakceptowana.",
 				"Możesz spróbować odświeżyć status lub poczekać."
 			],
 			"refreshOption": "Odśwież",
-			"cancelOption": "Anuluj"
+			"title": "Wniosek w toku"
 		}
 	}
 }

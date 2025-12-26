@@ -1,40 +1,40 @@
 {
 	"accounts": {
-		"mainMenu_Label": "Konten",
-		"mainMenu_Desc": "Konten hinzufügen und verwalten"
-	},
-	"general": {
-		"mainMenu_Label": "Allgemein",
-		"mainMenu_Desc": "Die meisten üblichen, langweiligen Einstellungen befinden sich hier",
-		"navbar_Label": "Allgemeine Einstellungen",
-		"language": {
-			"S_Language": "Sprache",
-			"L_appLanguage": "App-Sprache",
-			"L_contentLanguages": "Inhalts-Sprachen",
-			"L_translatorMode": "Übersetzermodus",
-			"D_translatorMode": "Dies fügt jeder Seite eine Schaltfläche hinzu, mit der du schnell zwischen Sprachen wechseln kannst, um Übersetzungen zu testen.",
-			"L_translationLanguages": "Übersetzungssprachen"
-		},
-		"timelines": {
-			"S_Timelines": "Zeitlinien",
-			"L_lurkerMode": "Lurker-Modus",
-			"D_lurkerMode": "Versteckt interaktive Schaltflächen",
-			"L_contentWarnings": "Inhaltswarnungen"
-		}
-	},
-	"dhaaga": {
-		"mainMenu_Label": "Dhaaga",
-		"mainMenu_Desc": "Dhaaga-Funktionen anpassen",
-		"navbar_Label": "Dhaaga anpassen"
-	},
-	"wellbeing": {
-		"mainMenu_Label": "Wohlergehen",
-		"mainMenu_Desc": "Gesünderes Internet und Sie.",
-		"navbar_Label": "Wohlergehen-Einstellungen"
+		"mainMenu_Desc": "Konten hinzufügen und verwalten",
+		"mainMenu_Label": "Konten"
 	},
 	"advanced": {
-		"mainMenu_Label": "Erweitert",
 		"mainMenu_Desc": "Für Power-User und Debugging",
+		"mainMenu_Label": "Erweitert",
 		"navbar_Label": "Erweiterte Einstellungen"
+	},
+	"dhaaga": {
+		"mainMenu_Desc": "Dhaaga-Funktionen anpassen",
+		"mainMenu_Label": "Dhaaga",
+		"navbar_Label": "Dhaaga anpassen"
+	},
+	"general": {
+		"language": {
+			"D_translatorMode": "Dies fügt jeder Seite eine Schaltfläche hinzu, mit der du schnell zwischen Sprachen wechseln kannst, um Übersetzungen zu testen.",
+			"L_appLanguage": "App-Sprache",
+			"L_contentLanguages": "Inhalts-Sprachen",
+			"L_translationLanguages": "Übersetzungssprachen",
+			"L_translatorMode": "Übersetzermodus",
+			"S_Language": "Sprache"
+		},
+		"mainMenu_Desc": "Die meisten üblichen, langweiligen Einstellungen befinden sich hier",
+		"mainMenu_Label": "Allgemein",
+		"navbar_Label": "Allgemeine Einstellungen",
+		"timelines": {
+			"D_lurkerMode": "Versteckt interaktive Schaltflächen",
+			"L_contentWarnings": "Inhaltswarnungen",
+			"L_lurkerMode": "Lurker-Modus",
+			"S_Timelines": "Zeitlinien"
+		}
+	},
+	"wellbeing": {
+		"mainMenu_Desc": "Gesünderes Internet und Sie.",
+		"mainMenu_Label": "Wohlergehen",
+		"navbar_Label": "Wohlergehen-Einstellungen"
 	}
 }

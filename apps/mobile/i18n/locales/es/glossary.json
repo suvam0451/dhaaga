@@ -1,29 +1,29 @@
 {
 	"noun": {
-		"post_one": "Publicación",
-		"post_other": "Publicaciones",
-		"user_one": "Usuario",
-		"user_other": "Usuarios",
 		"follower_one": "Seguidor",
 		"follower_other": "Seguidores",
 		"following_one": "Seguido",
 		"following_other": "Seguidos",
 		"like_one": "Me gusta",
 		"like_other": "Me gusta",
-		"share_one": "Compartir",
-		"share_other": "Compartido",
+		"post_one": "Publicación",
+		"post_other": "Publicaciones",
+		"quote_one": "Cita",
+		"quote_other": "Citas",
 		"reply_one": "Respuesta",
 		"reply_other": "Respuestas",
-		"quote_one": "Cita",
-		"quote_other": "Citas"
+		"share_one": "Compartir",
+		"share_other": "Compartido",
+		"user_one": "Usuario",
+		"user_other": "Usuarios"
 	},
 	"relationship": {
-		"friends": "Amigos",
-		"following": "Siguiendo"
+		"following": "Siguiendo",
+		"friends": "Amigos"
 	},
 	"relationshipCta": {
-		"followBack": "Seguir también",
-		"follow": "Seguir"
+		"follow": "Seguir",
+		"followBack": "Seguir también"
 	},
 	"verb": {
 		"message": "Mensaje"

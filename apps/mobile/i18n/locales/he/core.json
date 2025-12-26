@@ -1,295 +1,295 @@
 {
 	"appHighlightFeatures": {
+		"cleanInbox": {
+			"desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!",
+			"label": "Clean Inbox"
+		},
 		"funFirst": {
-			"label": "Fun-First",
-			"desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun."
+			"desc": "Dhaaga makes the internet fun to use, with a user-first approach and emphasis on simplicity and fun.",
+			"label": "Fun-First"
 		},
 		"hub": {
-			"label": "Cozy Hub Area",
-			"desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer."
+			"desc": "Decorate your home page to your heart's content. Pin your favourite destinations close. Pin your friends even closer.",
+			"label": "Cozy Hub Area"
 		},
 		"profiles": {
-			"label": "Social Profiles",
-			"desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!"
+			"desc": "Organise your interests and ideas into separate profiles. Each profile can be personalised independently!",
+			"label": "Social Profiles"
+		}
+	},
+	"chatroom": {
+		"sendInterfacePlaceholder": "Your Message"
+	},
+	"collections": {
+		"addButton": "הוסף אוסף",
+		"emptyDesc": "באוסף זה אין פוסטים שמורים",
+		"emptyTitle": "האוסף ריק",
+		"fallbackDesc": "לא סופק תיאור",
+		"name": "אוספים"
+	},
+	"composer": {
+		"landing": {
+			"dComposeFull": [
+				"פוסטים ארוכים יותר",
+				"אפשרויות נוספות"
+			],
+			"dComposePoll": [
+				"<לא מיושם>"
+			],
+			"dViewDrafts": [
+				"<לא מיושם>"
+			],
+			"dViewScheduled": [
+				"<לא מיושם>"
+			],
+			"tComposeFull": "צור פוסט",
+			"tComposePoll": "צור סקר",
+			"tViewDrafts": "צפה בטיוטות",
+			"tViewScheduled": "צפה בפוסטים שפורסמו"
 		},
-		"cleanInbox": {
-			"label": "Clean Inbox",
-			"desc": "Clean separation of various types of notifications, with specialised user interface to interact with each of them!"
-		}
-	},
-	"feed": {
-		"subscribeOption": "Subscribe",
-		"unsubscribeOption": "Unsubscribe",
-		"pinOption": "Pin",
-		"unpinOption": "Unpin"
-	},
-	"features": {
-		"notAvailable": {
-			"title": "Not Available",
-			"desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform."
-		}
-	},
-	"errors": {
-		"errorLabel": "Error",
-		"timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
-	},
-	"onboarding": {
-		"addAccountButton": "Add Account",
-		"accountCreationNotSupported": "Account creation is not supported.",
-		"needBlueskyAccount": "You need a Bluesky account",
-		"createOneHere": "Create one here",
-		"loginButton": "Sign In",
-		"appPassword": "App Password",
-		"enterYourServer": "Enter your server address",
-		"serverUrl": "Enter your instance url",
-		"popularMastodon": "Popular Mastodon Servers",
-		"popularPleroma": "Popular Pleroma Servers",
-		"popularAkkoma": "Popular Akkoma Servers"
-	},
-	"topNav": {
-		"primary": {
-			"hub": "Social Hub",
-			"discover": "Discover",
-			"compose": "Compose",
-			"account": "My Account",
-			"setting": "App Settings",
-			"inbox": "Inbox",
-			"mentions": "Mentions",
-			"chat": "Chat",
-			"social": "Social",
-			"updates": "Updates"
-		},
-		"secondary": {
-			"appSkins": "App Skins",
-			"addProfile": "Add Profile",
-			"manageSubscriptions": "Manage Subscriptions",
-			"myLikes": "My Likes",
-			"myBookmarks": "My Bookmarks",
-			"myAccount": "My Account",
-			"myProfile": "My Profile",
-			"appSettings": "App Settings",
-			"manageAccounts": "Manage Accounts",
-			"blueskySignIn": "Bluesky Sign-In",
-			"allPosts": "All Posts",
-			"selectServer": "Select Server",
-			"mastodonSignIn": "Mastodon Sign-In",
-			"misskeySignIn": "Misskey Sign-In",
-			"pickPlatform": "Pick Platform",
-			"appLanguage": "App Language",
-			"postDetails": "Post Details",
-			"manageHubProfiles": "Manage Hub Profiles",
-			"searchHistory": "Search History",
-			"collections": "אוספים",
-			"collection": "אוסף"
-		}
+		"noAttachments": "לא נוספו קבצים מצורפים",
+		"pageTitle": "צור",
+		"quickPost": "פוסט מהיר",
+		"quickPostCta": "מה עובר לך בראש?",
+		"quickPostSubmit": "פרסם"
 	},
 	"dialogs": {
-		"renameOption": "Rename",
 		"deleteOption": "Delete",
 		"dismissOption": "Dismiss",
+		"renameOption": "Rename",
 		"saveOption": "Save"
 	},
 	"discover": {
-		"moreSoon": {
-			"firstHalf": "More stuff coming",
-			"secondHalf": "soon™"
-		},
 		"instructions": [
 			"1) Open 🔍 to enter search term",
 			"2) Submit (↵) to search",
 			"3) Open 🔍 to change search term",
 			"4) Use (✖️) to come back here"
 		],
+		"moreSoon": {
+			"firstHalf": "More stuff coming",
+			"secondHalf": "soon™"
+		},
 		"welcome": "Let's explore something new today!"
 	},
-	"profile": {
-		"appFeatures": {
-			"sectionLabel": "App Features",
-			"likes": {
-				"label": "Likes",
-				"desc": "Posts I've Liked"
-			},
-			"bookmarks": {
-				"label": "Bookmarks",
-				"desc": "My Bookmarks"
-			},
-			"feeds": {
-				"label": "Feeds",
-				"desc": "Subscribed Feeds"
-			},
-			"lists": {
-				"label": "Lists",
-				"desc": "My Lists"
-			},
-			"socialHub": {
-				"label": "Hub Profiles",
-				"desc": "Manage hub profiles"
-			},
-			"collections": {
-				"label": "Collections",
-				"desc": "Bookmark++"
-			},
-			"drafts": {
-				"label": "Drafts",
-				"desc": "Lost letters"
-			},
-			"skins": {
-				"label": "ערכות נושא",
-				"desc": "מתאים למצב הרוח שלך!"
-			}
+	"errorReporting": {
+		"noTimelineSelectedButtonCta": "Go There",
+		"noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
+		"noTimelineSelectedLabel": "No Timeline Selected"
+	},
+	"errors": {
+		"errorLabel": "Error",
+		"timelineErrorLabel": "Dhaaga failed to load this timeline. Report this error to the developer."
+	},
+	"features": {
+		"notAvailable": {
+			"desc": "This feature is either not implemented by Dhaaga, or not available for your SNS platform.",
+			"title": "Not Available"
 		}
 	},
-	"sheets": {
-		"backOption": "חזור"
+	"feed": {
+		"pinOption": "Pin",
+		"subscribeOption": "Subscribe",
+		"unpinOption": "Unpin",
+		"unsubscribeOption": "Unsubscribe"
 	},
 	"hub": {
 		"feeds": {
+			"bubble": "בועה",
 			"global": "גלובלי",
-			"local": "מקומי",
-			"social": "חברתי",
 			"home": "בית",
-			"bubble": "בועה"
+			"local": "מקומי",
+			"social": "חברתי"
 		},
 		"greetings": {
-			"goodMorning": "בוקר טוב",
 			"goodAfternoon": "צהריים טובים",
 			"goodEvening": "ערב טוב",
+			"goodMorning": "בוקר טוב",
 			"goodNight": "לילה טוב"
 		},
 		"navbarLabel": "מרכז Dhaaga",
 		"section": {
 			"feeds": "פידים",
-			"users": "משתמשים",
 			"tags": "תגיות",
-			"timelines": "צירי זמן"
+			"timelines": "צירי זמן",
+			"users": "משתמשים"
 		}
 	},
 	"inbox": {
 		"name": "תיבת דואר נכנס",
 		"nav": {
-			"mentions": "אזכורים",
 			"chat": "צ'אט",
+			"mentions": "אזכורים",
 			"social": "חברתי",
 			"updates": "עדכונים"
 		},
 		"summary": {
-			"liked": "אהב את הפוסט שלך",
 			"followRequestAccepted": "אישר את בקשת המעקב שלך",
 			"followed": "עוקב אחריך",
-			"shared": "שיתף את הפוסט שלך",
-			"reacted": "הגיב לפוסט שלך",
+			"liked": "אהב את הפוסט שלך",
+			"mentioned": "אזכר אותך",
 			"posted": "פרסם",
+			"reacted": "הגיב לפוסט שלך",
 			"replied": "ענה לך",
-			"mentioned": "אזכר אותך"
+			"shared": "שיתף את הפוסט שלך"
 		}
-	},
-	"collections": {
-		"name": "אוספים",
-		"addButton": "הוסף אוסף",
-		"fallbackDesc": "לא סופק תיאור",
-		"emptyTitle": "האוסף ריק",
-		"emptyDesc": "באוסף זה אין פוסטים שמורים"
-	},
-	"composer": {
-		"pageTitle": "צור",
-		"quickPost": "פוסט מהיר",
-		"quickPostCta": "מה עובר לך בראש?",
-		"quickPostSubmit": "פרסם",
-		"noAttachments": "לא נוספו קבצים מצורפים",
-		"landing": {
-			"tComposeFull": "צור פוסט",
-			"dComposeFull": [
-				"פוסטים ארוכים יותר",
-				"אפשרויות נוספות"
-			],
-			"tComposePoll": "צור סקר",
-			"dComposePoll": [
-				"<לא מיושם>"
-			],
-			"tViewScheduled": "צפה בפוסטים שפורסמו",
-			"dViewScheduled": [
-				"<לא מיושם>"
-			],
-			"tViewDrafts": "צפה בטיוטות",
-			"dViewDrafts": [
-				"<לא מיושם>"
-			]
-		}
-	},
-	"quickPost": {
-		"name": "פוסט מהיר",
-		"spoilerPlaceholder": "ספוילר / אזהרת תוכן",
-		"ctaPlaceholder": "מה עובר לך בראש?",
-		"postButton": "פרסם",
-		"replyingTo": "מגיב ל: ",
-		"quoting": "מצטט: ",
-		"visibility": {
-			"public": "ציבורי",
-			"unlisted": "בית",
-			"direct": "ישיר",
-			"private": "עוקבים"
-		},
-		"interactivity": {
-			"everybody": "כולם",
-			"nobody": "רק אני",
-			"Limited": "מוגבל"
-		}
-	},
-	"chatroom": {
-		"sendInterfacePlaceholder": "Your Message"
-	},
-	"setting": {
-		"accountModule": {
-			"title": "Accounts",
-			"desc": "Add and Manage Accounts"
-		},
-		"generalModule": {
-			"title": "General",
-			"desc": "Most usual boring settings are here"
-		},
-		"appFeaturesModule": {
-			"title": "Goodie Hut",
-			"desc": "Tweak unique features of Dhaaga"
-		},
-		"digitalWellbeingModule": {
-			"title": "Digital Wellbeing",
-			"desc": "Disconnect to reconnect with yourself"
-		},
-		"advancedModule": {
-			"title": "Advanced",
-			"desc": "'For power users"
-		},
-		"footer": "Built with 💛 by Debashish Patra"
 	},
 	"indicators": {
 		"quotedThisPost": "Quoted this Post",
 		"sharedThisLink": "Shared this Link"
 	},
-	"prompts": {
-		"getStarted": "Get Started",
-		"visitWebsite": "Visit Website",
-		"selectPlatform": "Select Platform",
-		"findMastodonServer": "Find one here",
-		"findMisskeyServer": "Find one here",
-		"findAtProtoServer": "Find one here",
-		"mastodonConfirmAccount": "Confirm your account",
-		"mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
-		"signInConfirm": "Proceed",
-		"signInReset": "Reset"
-	},
 	"loaders": {
 		"loadingMoreIndicatorText": "Loading More...",
 		"nothingMoreToShow": "Nothing more to show"
 	},
-	"errorReporting": {
-		"noTimelineSelectedLabel": "No Timeline Selected",
-		"noTimelineSelectedDesc": "You can pin and access various types of timelines from your personalised hub.",
-		"noTimelineSelectedButtonCta": "Go There"
-	},
-	"unspecced": {
-		"wipText": "This feature is being built 🚧"
+	"onboarding": {
+		"accountCreationNotSupported": "Account creation is not supported.",
+		"addAccountButton": "Add Account",
+		"appPassword": "App Password",
+		"createOneHere": "Create one here",
+		"enterYourServer": "Enter your server address",
+		"loginButton": "Sign In",
+		"needBlueskyAccount": "You need a Bluesky account",
+		"popularAkkoma": "Popular Akkoma Servers",
+		"popularMastodon": "Popular Mastodon Servers",
+		"popularPleroma": "Popular Pleroma Servers",
+		"serverUrl": "Enter your instance url"
 	},
 	"placeholders": {
 		"atProtoUsername": "Username or email address"
+	},
+	"profile": {
+		"appFeatures": {
+			"bookmarks": {
+				"desc": "My Bookmarks",
+				"label": "Bookmarks"
+			},
+			"collections": {
+				"desc": "Bookmark++",
+				"label": "Collections"
+			},
+			"drafts": {
+				"desc": "Lost letters",
+				"label": "Drafts"
+			},
+			"feeds": {
+				"desc": "Subscribed Feeds",
+				"label": "Feeds"
+			},
+			"likes": {
+				"desc": "Posts I've Liked",
+				"label": "Likes"
+			},
+			"lists": {
+				"desc": "My Lists",
+				"label": "Lists"
+			},
+			"sectionLabel": "App Features",
+			"skins": {
+				"desc": "מתאים למצב הרוח שלך!",
+				"label": "ערכות נושא"
+			},
+			"socialHub": {
+				"desc": "Manage hub profiles",
+				"label": "Hub Profiles"
+			}
+		}
+	},
+	"prompts": {
+		"findAtProtoServer": "Find one here",
+		"findMastodonServer": "Find one here",
+		"findMisskeyServer": "Find one here",
+		"getStarted": "Get Started",
+		"mastodonConfirmAccount": "Confirm your account",
+		"mastodonTokenDetected": "A valid token was detected. Proceed with adding the account shown above?",
+		"selectPlatform": "Select Platform",
+		"signInConfirm": "Proceed",
+		"signInReset": "Reset",
+		"visitWebsite": "Visit Website"
+	},
+	"quickPost": {
+		"ctaPlaceholder": "מה עובר לך בראש?",
+		"interactivity": {
+			"Limited": "מוגבל",
+			"everybody": "כולם",
+			"nobody": "רק אני"
+		},
+		"name": "פוסט מהיר",
+		"postButton": "פרסם",
+		"quoting": "מצטט: ",
+		"replyingTo": "מגיב ל: ",
+		"spoilerPlaceholder": "ספוילר / אזהרת תוכן",
+		"visibility": {
+			"direct": "ישיר",
+			"private": "עוקבים",
+			"public": "ציבורי",
+			"unlisted": "בית"
+		}
+	},
+	"setting": {
+		"accountModule": {
+			"desc": "Add and Manage Accounts",
+			"title": "Accounts"
+		},
+		"advancedModule": {
+			"desc": "'For power users",
+			"title": "Advanced"
+		},
+		"appFeaturesModule": {
+			"desc": "Tweak unique features of Dhaaga",
+			"title": "Goodie Hut"
+		},
+		"digitalWellbeingModule": {
+			"desc": "Disconnect to reconnect with yourself",
+			"title": "Digital Wellbeing"
+		},
+		"footer": "Built with 💛 by Debashish Patra",
+		"generalModule": {
+			"desc": "Most usual boring settings are here",
+			"title": "General"
+		}
+	},
+	"sheets": {
+		"backOption": "חזור"
+	},
+	"topNav": {
+		"primary": {
+			"account": "My Account",
+			"chat": "Chat",
+			"compose": "Compose",
+			"discover": "Discover",
+			"hub": "Social Hub",
+			"inbox": "Inbox",
+			"mentions": "Mentions",
+			"setting": "App Settings",
+			"social": "Social",
+			"updates": "Updates"
+		},
+		"secondary": {
+			"addProfile": "Add Profile",
+			"allPosts": "All Posts",
+			"appLanguage": "App Language",
+			"appSettings": "App Settings",
+			"appSkins": "App Skins",
+			"blueskySignIn": "Bluesky Sign-In",
+			"collection": "אוסף",
+			"collections": "אוספים",
+			"manageAccounts": "Manage Accounts",
+			"manageHubProfiles": "Manage Hub Profiles",
+			"manageSubscriptions": "Manage Subscriptions",
+			"mastodonSignIn": "Mastodon Sign-In",
+			"misskeySignIn": "Misskey Sign-In",
+			"myAccount": "My Account",
+			"myBookmarks": "My Bookmarks",
+			"myLikes": "My Likes",
+			"myProfile": "My Profile",
+			"pickPlatform": "Pick Platform",
+			"postDetails": "Post Details",
+			"searchHistory": "Search History",
+			"selectServer": "Select Server"
+		}
+	},
+	"unspecced": {
+		"wipText": "This feature is being built 🚧"
 	}
 }

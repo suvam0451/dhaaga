@@ -1,26 +1,26 @@
 {
 	"collections": {
-		"noBookmarkSupport": "Twoja platforma nie obsługuje zakładek.",
-		"noBookmarkRecommend": "Kolekcje osiągają podobny efekt.",
-		"collections": "Kolekcje",
 		"bookmark": "Zakładka",
+		"bookmarkDesc": "Synchronizowane z twoim serwerem",
 		"bookmarkFeatures": [
 			"Funkcja platformy",
 			"Synchronizowane"
 		],
-		"newCollection": "Nowa kolekcja",
+		"collections": "Kolekcje",
+		"disclaimer": "⚠️ Kolekcje są przechowywane lokalnie na tym urządzeniu ⚠️",
 		"fallbackDesc": "Brak opisu",
-		"bookmarkDesc": "Synchronizowane z twoim serwerem",
-		"disclaimer": "⚠️ Kolekcje są przechowywane lokalnie na tym urządzeniu ⚠️"
+		"newCollection": "Nowa kolekcja",
+		"noBookmarkRecommend": "Kolekcje osiągają podobny efekt.",
+		"noBookmarkSupport": "Twoja platforma nie obsługuje zakładek."
 	},
 	"hubAddFeedSheet": {
-		"title": "Przepraszamy 😔",
 		"desc": [
 			"Ta funkcja zostanie rozszerzona w przyszłości!",
 			"Domyślny zestaw lokalizacji został dla Ciebie wstępnie ustawiony.",
 			"Użytkownicy Bluesky mogą uzyskać dostęp do swoich kanałów z profilu (5. zakładka), na razie."
 		],
-		"searchPlaceholder": "Wyszukaj kanały do przypięcia"
+		"searchPlaceholder": "Wyszukaj kanały do przypięcia",
+		"title": "Przepraszamy 😔"
 	},
 	"hubAddUserSheet": {
 		"searchPlaceholder": "Wyszukaj użytkowników do przypięcia"
@@ -29,90 +29,90 @@
 		"failedStateLabel": "Nie udało się przetworzyć tego URL",
 		"menuLabel_copyLink": "Skopiuj link",
 		"menuLabel_retry": "Spróbuj ponownie",
-		"menu_openInBrowser_label": "Otwórz w przeglądarce",
-		"menu_openInBrowser_desc": "Zostanie otwarta zewnętrzna przeglądarka"
+		"menu_openInBrowser_desc": "Zostanie otwarta zewnętrzna przeglądarka",
+		"menu_openInBrowser_label": "Otwórz w przeglądarce"
 	},
 	"sheetLabels": {
+		"comments": "Komentarze",
 		"likedBy": "Polubione przez",
-		"sharedBy": "Udostępnione przez",
 		"quotedBy": "Cytowane przez",
-		"comments": "Komentarze"
+		"sharedBy": "Udostępnione przez"
 	},
 	"timelines": {
 		"infoSheet": {
-			"infoHome": {
-				"label": "Oś czasu główna",
-				"description": [
-					"To jest twoja główna oś czasu.",
-					"Zobaczysz tu posty od siebie i wszystkich, których obserwujesz."
-				]
+			"_controlItems": {
+				"O_feedOptions_All": "Wszystko",
+				"O_feedOptions_MediaOnly": "Tylko media",
+				"S_extraFilters": "Dodatkowe filtry",
+				"S_feedOptions": "Opcje kanału"
 			},
-			"infoLocal": {
-				"label": "Oś czasu lokalna",
-				"description": [
-					"To jest lokalna oś czasu twojego serwera.",
-					"Wyświetla posty od ciebie oraz innych użytkowników na twoim serwerze."
-				]
-			},
-			"infoHashtag": {
-				"label": "Oś czasu Hashtag",
-				"description": [
-					"To jest oś czasu z hashtagami.",
-					"Wyświetla listę wszystkich postów zawierających ten hashtag."
-				]
-			},
-			"infoUser": {
-				"label": "Oś czasu użytkownika",
-				"description": [
-					"To jest feed użytkownika.",
-					"Możesz tu zobaczyć posty, udostępnienia i odpowiedzi od wybranego użytkownika."
-				]
-			},
-			"infoPublic": {
-				"label": "Oś czasu publiczna",
-				"description": [
-					"Ta oś czasu wyświetla wszystkie posty widoczne dla twojego serwera.",
-					"Zawiera posty z twojego serwera, jak również z innych serwerów, z którymi twój serwer może się komunikować."
-				]
+			"_menuItems": {
+				"D_openInBrowser": "Zobacz w zewnętrznej przeglądarce",
+				"L_openInBrowser": "Otwórz w przeglądarce"
 			},
 			"infoBubble": {
-				"label": "Oś czasu Bubbles",
 				"description": [
 					"Ta oś czasu wyświetla wszystkie posty utworzone przez użytkowników na liście serwerów przygotowanej przez administratora twojego serwera.",
 					"Możesz znaleźć tę listę serwerów jako \"Znana Sieć\" w dokumentacji swojego serwera."
-				]
-			},
-			"infoSocial": {
-				"label": "Oś czasu społeczna",
-				"description": [
-					"Ta oś czasu to połączenie twojej głównej osi czasu i lokalnej osi czasu.",
-					"Pokazuje posty od ciebie, twoich przyjaciół oraz lokalne posty użytkowników twojego serwera."
-				]
-			},
-			"infoList": {
-				"label": "Oś czasu listy",
-				"description": [
-					"Ta oś czasu wyświetla posty zapisane w twojej wybranej liście.",
-					"Możesz edytować, co zostanie zapisane na tej liście z interfejsu internetowego twojego serwera!"
-				]
+				],
+				"label": "Oś czasu Bubbles"
 			},
 			"infoFeed": {
-				"label": "Oś czasu feeda",
 				"description": [
 					"To jest niestandardowa oś czasu feeda.",
 					"Niestandardowe feedy to usługi, które oferują użytkownikom niestandardowe algorytmy za pośrednictwem protokołu AT.",
 					"Dzięki temu użytkownicy mogą wybierać własne osie czasu."
-				]
+				],
+				"label": "Oś czasu feeda"
 			},
-			"_menuItems": {
-				"L_openInBrowser": "Otwórz w przeglądarce",
-				"D_openInBrowser": "Zobacz w zewnętrznej przeglądarce"
+			"infoHashtag": {
+				"description": [
+					"To jest oś czasu z hashtagami.",
+					"Wyświetla listę wszystkich postów zawierających ten hashtag."
+				],
+				"label": "Oś czasu Hashtag"
 			},
-			"_controlItems": {
-				"S_feedOptions": "Opcje kanału",
-				"O_feedOptions_All": "Wszystko",
-				"O_feedOptions_MediaOnly": "Tylko media",
-				"S_extraFilters": "Dodatkowe filtry"
+			"infoHome": {
+				"description": [
+					"To jest twoja główna oś czasu.",
+					"Zobaczysz tu posty od siebie i wszystkich, których obserwujesz."
+				],
+				"label": "Oś czasu główna"
+			},
+			"infoList": {
+				"description": [
+					"Ta oś czasu wyświetla posty zapisane w twojej wybranej liście.",
+					"Możesz edytować, co zostanie zapisane na tej liście z interfejsu internetowego twojego serwera!"
+				],
+				"label": "Oś czasu listy"
+			},
+			"infoLocal": {
+				"description": [
+					"To jest lokalna oś czasu twojego serwera.",
+					"Wyświetla posty od ciebie oraz innych użytkowników na twoim serwerze."
+				],
+				"label": "Oś czasu lokalna"
+			},
+			"infoPublic": {
+				"description": [
+					"Ta oś czasu wyświetla wszystkie posty widoczne dla twojego serwera.",
+					"Zawiera posty z twojego serwera, jak również z innych serwerów, z którymi twój serwer może się komunikować."
+				],
+				"label": "Oś czasu publiczna"
+			},
+			"infoSocial": {
+				"description": [
+					"Ta oś czasu to połączenie twojej głównej osi czasu i lokalnej osi czasu.",
+					"Pokazuje posty od ciebie, twoich przyjaciół oraz lokalne posty użytkowników twojego serwera."
+				],
+				"label": "Oś czasu społeczna"
+			},
+			"infoUser": {
+				"description": [
+					"To jest feed użytkownika.",
+					"Możesz tu zobaczyć posty, udostępnienia i odpowiedzi od wybranego użytkownika."
+				],
+				"label": "Oś czasu użytkownika"
 			}
 		}
 	}
