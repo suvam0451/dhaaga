@@ -50,7 +50,6 @@ switching apps or websites.
 - 🏕️ Powerful offline capabilities
 - 🦉 Dark mode by default
 - 👌 Tuned Out-of-the-box for one-handed operation
-- 🥳 Fun, Free (💰) and FOSS
 
 > [!TIP]
 >
