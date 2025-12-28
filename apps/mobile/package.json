@@ -80,12 +80,5 @@
 	"imports": {
 		"#": "./",
 		"#/*": "./*"
-	},
-	"expo": {
-		"install": {
-			"exclude": [
-				"@types/react"
-			]
-		}
 	}
 }

@@ -11,7 +11,7 @@ style="margin-right:8px"/>
 
 **Dhaaga** is an SNS app designed to enhance your social networking experience.
 By retrofitting the core SNS features, it brings you useful tools to easily
-keep up-to date, discover new topics and connect with your friends—without
+keep up-to date, discover new topics, and connect with your friends—without
 switching apps or websites.
 
 <div align="center">
@@ -43,7 +43,7 @@ switching apps or websites.
 - ☂️ Supports your favourite SNS platform
 - 🗞️ Easily keep up-to-date with the **Social Hub™**
 - 📍 Browse posts/bookmarks offline as **Collections™**
-- 📩 Custom layouts for mentions, chats and updates
+- 📩 Custom layouts for mentions, chats, and updates
 - 🖼️ Instagram mode for art/photography/blog profiles
 - 📰 Aesthetic™ timelines
 - 💬 Ergonomic post/reply composer
@@ -54,10 +54,22 @@ switching apps or websites.
 
 > [!TIP]
 >
-> Dhaaga is designed for day-to-day SNS activities only.</br>
-> Some platform-specific features *(e.g. - admin tools, granular settings)* 
-> may be missing.</br>
-> For more details, see [compatibility](https://suvam.io/dhaaga/compatibility)
+> The **Pocket/Web Editions** are soft forks with a simpler UI and extra services.
+> If you are new to the fediverse, I recommend you start there!
+>
+> The **Standard/Lite Editions** are feature-packed for veteran users and 
+> advanced use cases alike.
+> 
+> | Pocket/Web Editions  | Standard/Lite Editions                         |
+> |----------------------|------------------------------------------------|
+> | Push Notifications   | Social Hub (Organize Pins/Follow privately)    |
+> | Custom App Skins     | Collections (Save/Browse/Search posts Offline) |
+> | DeepL Translation    | FLOSS + No NonFreeNet                          |
+> | Device/Timeline Sync | Zero app permissions (VIBRATE and INTERNET)    |
+> | Free + Paid Services | Free + Buy me a coffee ☕️                      |
+> 
+> Anything not listed above is available in all editions, with no ads or 
+> paywalls 🙂
 
 ## 💁 About
 
@@ -71,7 +83,7 @@ I wanted to create an SNS app that is:
 With the powerful and extensible `@dhaaga/bridge` library at its heart, 
 I proudly present Dhaaga as an ergonomic and feature-rich SNS client 
 with rich, first-class support for various SNS platforms, as well as unique
-client-side features like Social Hub™, Collections™ and Inbox Categories™.
+client-side features like Social Hub™, Collections™, and Inbox Categories™.
 
 And above all else, after months of effort, I can proudly say that it has 
 earned my "fun to use" seal of approval 🙂
