@@ -4,17 +4,17 @@ labels: [ "enhancement" ]
 body:
   - type: markdown
     attributes:
-      value: "## Request a new feature"
+      value: "## Just Ask Away!"
   - type: markdown
     attributes:
-      value: |      
-        Just ask away! No need to duplicate issues first. Also, welcome :)
+      value: |
+        Don't worry about existing/duplicate issues. Just tell me what you 
+        would like to see in the app and I'll make it happen.
         
-        Design Principle:
-        ---
-        "Less is more" | A great experience beats any feature list, all the time.
+        Roadmap *(good to browse first)*
+        --> https://suvam.io/dhaaga/roadmap
         
-        Roadmap (good to browse first) --> https://suvam.io/dhaaga/roadmap
+        Also, welcome to the project :)
 
   - type: textarea
     id: description

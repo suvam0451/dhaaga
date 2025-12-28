@@ -18,25 +18,17 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: version
-    attributes:
-      label: App Version
-      description: App version can be seen in the settings screen
-      placeholder: "v0.15.3"
-    validations:
-      required: true
   - type: dropdown
     id: source
     attributes:
-      label: Install Source
-      description: From where did you install the app?
+      label: App Edition
+      description: Which flavor of the app this bug is present in?
       multiple: false
       options:
-        - Play Store
-        - GitHub (Lite)
-        - IzzyOnDroid (Lite)
-        - Self-Compiled
+        - Pocket Edition (Play Store)
+        - Standard Edition (Play Store)
+        - Lite Edition (F-Droid/IzzyOnDroid)
+        - Web Edition (On the Web)
     validations:
       required: true
 
@@ -44,16 +36,14 @@ body:
     id: reproduction
     attributes:
       label: Reproduction Steps
-      description: Is the issue reproducible by following certain steps?
+      description: Are there any specific steps I can take to reproduce this issue?
       placeholder: |
-        1. Go to home tab. And open a profile
-        2. Try clicking the follow button.
-        3. Notice the crash
+        Are there any specific steps I can take to reproduce this issue?
     validations:
       required: false
   - type: textarea
     id: extra
     attributes:
-      label: Screenshots and Videos
-      description: |
+      label: Screenshots & Videos
+      placeholder: |
         Adding screenshots and videos helps a lot!
