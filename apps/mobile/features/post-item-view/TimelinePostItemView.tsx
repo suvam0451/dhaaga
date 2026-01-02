@@ -8,7 +8,6 @@ import ParentPostView from '#/features/post-item-view/views/ParentPostView';
 import { PostContainer } from '#/components/common/status/_shared';
 import { View } from 'react-native';
 import { PostObjectType } from '@dhaaga/bridge';
-import { usePostEventBusStore } from '#/hooks/pubsub/usePostEventBus';
 import { TimelineFilter_EmojiCrash } from '#/features/timelines/components/TimelineFilter_EmojiCrash';
 import { ReplyIndicatorOrnament } from '#/features/post-item-view/components/Ornaments';
 
@@ -114,10 +113,8 @@ const Generator = memo(({ isPreview, isPin }: StatusItemProps) => {
 });
 
 function TimelinePostItemView(props: StatusItemProps) {
-	const { post: _post } = usePostEventBusStore(props.post);
-
 	return (
-		<WithAppStatusItemContext dto={_post}>
+		<WithAppStatusItemContext dto={props.post}>
 			<Generator {...props} />
 		</WithAppStatusItemContext>
 	);

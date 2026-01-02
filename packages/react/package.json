@@ -9,7 +9,7 @@
 	"types": "dist/index.d.ts",
 	"peerDependencies": {
 		"@dhaaga/bridge": "*",
-		"@tanstack/react-query": "*",
+		"@tanstack/query-core": "*",
 		"immer": "^11.1.0",
 		"react": "*"
 	},

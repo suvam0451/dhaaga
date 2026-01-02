@@ -57,7 +57,8 @@
 	},
 	"private": true,
 	"scripts": {
-		"dev": "expo start --dev-client -c",
+		"dev": "EXPO_UNSTABLE_ATLAS=true expo start --dev-client",
+		"start": "expo start --no-dev --minify",
 		"apk": "eas build -p android --profile publish-apk",
 		"aab": "eas build -p android --profile publish-aab",
 		"dev-client:android": "eas build -p android --profile dev",
@@ -73,6 +74,7 @@
 	"type": "module",
 	"devDependencies": {
 		"@types/react": "^19.2.7",
+		"expo-atlas": "^0.4.0",
 		"typescript": "~5.9.2"
 	},
 	"imports": {
