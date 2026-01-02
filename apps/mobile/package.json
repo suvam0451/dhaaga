@@ -73,7 +73,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@types/react": "~19.1.10",
+    "@types/react": "^19.2.7",
     "typescript": "~5.9.2"
   },
   "imports": {
