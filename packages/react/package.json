@@ -9,14 +9,14 @@
 	"types": "dist/index.d.ts",
 	"peerDependencies": {
 		"@dhaaga/bridge": "*",
-		"@tanstack/query-core": "*",
+		"@tanstack/query-core": "^5.90.16",
 		"immer": "^11.1.0",
 		"react": "*"
 	},
 	"devDependencies": {
 		"@testing-library/react": "^16.3.0",
 		"@vitejs/plugin-react": "^5.1.2",
-		"jsdom": "^27.3.0",
+		"jsdom": "^27.4.0",
 		"vitest": "^4.0.15"
 	},
 	"scripts": {
