@@ -1,5 +1,4 @@
 import ActivityPubService from './activitypub.service.js';
-import { Dispatch, SetStateAction } from 'react';
 import { z } from 'zod';
 import activitypubService from './activitypub.service.js';
 import {
@@ -315,7 +314,7 @@ class ActivityPubReactionsService {
 		postId: string,
 		reactionId: string,
 		domain: string,
-		setLoading: Dispatch<SetStateAction<boolean>>,
+		setLoading: (state: boolean) => void,
 	): Promise<ActivityPubReactionStateType> {
 		setLoading(true);
 		if (ActivityPubService.pleromaLike(domain)) {
