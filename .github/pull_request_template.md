@@ -2,14 +2,15 @@
 
 <What does this PR do?>
 
-### 📝 License Disclaimer
+### 📝 Dual License Disclaimer
 
-This project accepts contributions under MIT license only.
+One of my derivatives projects (i.e. - PebbleTalk) benefits from
+Dhaaga's bridge framework and is currently not open source.
 
-This lets me add and bundle purchased/licensed art assets outside the 
-codebase, while benefitting from sublicensed copyleft protection as an indie 
-publisher.
+Therefore, for license compatibility, I can accept incoming 
+contributions here under the MIT license only, unfortunately.
 
-I value your hard work. So, I want to make sure you are okay with this arrangement 😄
+I value your time and effort. So, I am obliged to disclose this
+and make sure you are comfortable with this arrangement 😄
 
 - [ ] I allow my contributions to be licensed under the MIT license.

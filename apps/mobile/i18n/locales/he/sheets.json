@@ -1,119 +1,119 @@
 {
-  "collections": {
-    "noBookmarkSupport": "Your platform does not support bookmarks.",
-    "noBookmarkRecommend": "Collections achieve a similar effect.",
-    "collections": "Collections",
-    "bookmark": "Bookmark",
-    "bookmarkFeatures": [
-      "Platform Feature",
-      "Synced"
-    ],
-    "newCollection": "New Collection",
-    "fallbackDesc": "No Description Provided",
-    "bookmarkDesc": "Synced with your server",
-    "disclaimer": "⚠️ Collections are not synced with your server ⚠️"
-  },
-  "hubAddFeedSheet": {
-    "title": "Sorry 😔",
-    "desc": [
-      "This feature will be expanded in the future!",
-      "A default set of destinations has been populated for you.",
-      "Bluesky users can access their feeds from their profile (5th tab), for now."
-    ],
-    "searchPlaceholder": "Search for feeds to pin"
-  },
-  "hubAddUserSheet": {
-    "searchPlaceholder": "Search for users to pin"
-  },
-  "linkPreview": {
-    "failedStateLabel": "Failed to parse this url",
-    "menuLabel_copyLink": "Copy Link",
-    "menuLabel_retry": "Retry",
-    "menu_openInBrowser_label": "Open in Browser",
-    "menu_openInBrowser_desc": "External browser will be opened"
-  },
-  "sheetLabels": {
-    "likedBy": "Liked By",
-    "sharedBy": "Shared By",
-    "quotedBy": "Quoted By",
-    "comments": "Comments"
-  },
-  "timelines": {
-    "infoSheet": {
-      "infoHome": {
-        "label": "Home Timeline",
-        "description": [
-          "This is your home timeline.",
-          "You can see posts from yourself and everyone you follow here."
-        ]
-      },
-      "infoLocal": {
-        "label": "Local Timeline",
-        "description": [
-          "This is your server's local timeline.",
-          "It displays posts from you and other users in your server."
-        ]
-      },
-      "infoHashtag": {
-        "label": "Hashtag Timeline",
-        "description": [
-          "This ia a hashtag timeline.",
-          "It displays a list of all posts containing this hashtag."
-        ]
-      },
-      "infoUser": {
-        "label": "User Timeline",
-        "description": [
-          "This is a user feed.",
-          "You can view posts, shares and replies from the selected user here."
-        ]
-      },
-      "infoPublic": {
-        "label": "Public Timeline",
-        "description": [
-          "This timeline displays every posts visible to your server.",
-          "This includes posts from your server, as well as other servers your server can talk with."
-        ]
-      },
-      "infoBubble": {
-        "label": "Bubble Timeline",
-        "description": [
-          "This timeline displays all posts made by users in a list of servers curated by your server admin.",
-          "You can find this list of servers as \"Known Network\", from your server's documentation."
-        ]
-      },
-      "infoSocial": {
-        "label": "Social Timeline",
-        "description": [
-          "This timeline is a combination of your home and local timelines.",
-          "So, it shows posts from you, your friends and local posts from users in your server."
-        ]
-      },
-      "infoList": {
-        "label": "List Timeline",
-        "description": [
-          "This timeline displays posts saved inside your selected list.",
-          "You can edit what gets saved to this list from your server's web interface!"
-        ]
-      },
-      "infoFeed": {
-        "label": "Feed Timeline",
-        "description": [
-          "This is a custom feed timeline.",
-          "Custom feeds are services that provide custom algorithms to users through the AT Protocol.",
-          "This allows users to choose their own timelines."
-        ]
-      },
-      "_menuItems": {
-        "L_openInBrowser": "Open in Browser",
-        "D_openInBrowser": "View in external browser"
-      },
-      "_controlItems": {
-        "S_feedOptions": "Feed Options",
-        "O_feedOptions_All": "All",
-        "O_feedOptions_MediaOnly": "Media Only",
-        "S_extraFilters": "Extra Filters"
-      }
-    }
-  }
+	"collections": {
+		"bookmark": "Bookmark",
+		"bookmarkDesc": "Synced with your server",
+		"bookmarkFeatures": [
+			"Platform Feature",
+			"Synced"
+		],
+		"collections": "Collections",
+		"disclaimer": "⚠️ Collections are not synced with your server ⚠️",
+		"fallbackDesc": "No Description Provided",
+		"newCollection": "New Collection",
+		"noBookmarkRecommend": "Collections achieve a similar effect.",
+		"noBookmarkSupport": "Your platform does not support bookmarks."
+	},
+	"hubAddFeedSheet": {
+		"desc": [
+			"This feature will be expanded in the future!",
+			"A default set of destinations has been populated for you.",
+			"Bluesky users can access their feeds from their profile (5th tab), for now."
+		],
+		"searchPlaceholder": "Search for feeds to pin",
+		"title": "Sorry 😔"
+	},
+	"hubAddUserSheet": {
+		"searchPlaceholder": "Search for users to pin"
+	},
+	"linkPreview": {
+		"failedStateLabel": "Failed to parse this url",
+		"menuLabel_copyLink": "Copy Link",
+		"menuLabel_retry": "Retry",
+		"menu_openInBrowser_desc": "External browser will be opened",
+		"menu_openInBrowser_label": "Open in Browser"
+	},
+	"sheetLabels": {
+		"comments": "תגובות",
+		"likedBy": "אהבו",
+		"quotedBy": "ציטטו",
+		"sharedBy": "שיתפו"
+	},
+	"timelines": {
+		"infoSheet": {
+			"_controlItems": {
+				"O_feedOptions_All": "All",
+				"O_feedOptions_MediaOnly": "Media Only",
+				"S_extraFilters": "Extra Filters",
+				"S_feedOptions": "Feed Options"
+			},
+			"_menuItems": {
+				"D_openInBrowser": "View in external browser",
+				"L_openInBrowser": "Open in Browser"
+			},
+			"infoBubble": {
+				"description": [
+					"This timeline displays all posts made by users in a list of servers curated by your server admin.",
+					"You can find this list of servers as \"Known Network\", from your server's documentation."
+				],
+				"label": "Bubble Timeline"
+			},
+			"infoFeed": {
+				"description": [
+					"This is a custom feed timeline.",
+					"Custom feeds are services that provide custom algorithms to users through the AT Protocol.",
+					"This allows users to choose their own timelines."
+				],
+				"label": "Feed Timeline"
+			},
+			"infoHashtag": {
+				"description": [
+					"This ia a hashtag timeline.",
+					"It displays a list of all posts containing this hashtag."
+				],
+				"label": "Hashtag Timeline"
+			},
+			"infoHome": {
+				"description": [
+					"This is your home timeline.",
+					"You can see posts from yourself and everyone you follow here."
+				],
+				"label": "Home Timeline"
+			},
+			"infoList": {
+				"description": [
+					"This timeline displays posts saved inside your selected list.",
+					"You can edit what gets saved to this list from your server's web interface!"
+				],
+				"label": "List Timeline"
+			},
+			"infoLocal": {
+				"description": [
+					"This is your server's local timeline.",
+					"It displays posts from you and other users in your server."
+				],
+				"label": "Local Timeline"
+			},
+			"infoPublic": {
+				"description": [
+					"This timeline displays every posts visible to your server.",
+					"This includes posts from your server, as well as other servers your server can talk with."
+				],
+				"label": "Public Timeline"
+			},
+			"infoSocial": {
+				"description": [
+					"This timeline is a combination of your home and local timelines.",
+					"So, it shows posts from you, your friends and local posts from users in your server."
+				],
+				"label": "Social Timeline"
+			},
+			"infoUser": {
+				"description": [
+					"This is a user feed.",
+					"You can view posts, shares and replies from the selected user here."
+				],
+				"label": "User Timeline"
+			}
+		}
+	}
 }

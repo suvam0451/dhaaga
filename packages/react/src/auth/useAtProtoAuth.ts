@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AtProtoAuthService } from '@dhaaga/bridge/auth';
+import { AtProtoAuthService } from '@dhaaga/bridge';
 import {
 	Agent,
 	type AppBskyActorGetProfile,

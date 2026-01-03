@@ -8,12 +8,10 @@ import { useAppApiClient, useAppTheme } from '#/states/global/hooks';
 import { AppIcon } from '#/components/lib/Icon';
 import { useRef, useState } from 'react';
 import { Pressable, TextInput, View, StyleSheet } from 'react-native';
-import Animated from 'react-native-reanimated';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 import AppSegmentedControl from '#/ui/AppSegmentedControl';
 import AppWidget from '#/features/widgets/AppWidget';
-import { AppThemingUtil } from '#/utils/theming.util';
 
 function ZenExplorationWidget() {
 	const { driver } = useAppApiClient();
@@ -75,12 +73,13 @@ function ZenExplorationWidget() {
 	return (
 		<>
 			<AppWidget
+				visible={true}
 				isOpen={WidgetOpen}
 				activeIcon={'search'}
 				inactiveIcon={'search'}
 				onWidgetPress={onWidgetOpen}
 				ForegroundSlot={
-					<Animated.View
+					<View
 						style={[
 							{
 								marginVertical: 'auto',
@@ -117,7 +116,7 @@ function ZenExplorationWidget() {
 								color: theme.primaryText,
 							}}
 						/>
-					</Animated.View>
+					</View>
 				}
 				BackgroundSlot={
 					<AppSegmentedControl

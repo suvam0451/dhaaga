@@ -1,40 +1,40 @@
 {
-  "accounts": {
-    "mainMenu_Label": "アカウント",
-    "mainMenu_Desc": "アカウントを追加および管理"
-  },
-  "general": {
-    "mainMenu_Label": "一般",
-    "mainMenu_Desc": "最も一般的で退屈な設定がここにあります",
-    "navbar_Label": "一般設定",
-    "language": {
-      "S_Language": "言語",
-      "L_appLanguage": "アプリの言語",
-      "L_contentLanguages": "コンテンツの言語",
-      "L_translatorMode": "翻訳者モード",
-      "D_translatorMode": "これにより、すべてのページにボタンが追加され、翻訳をテストするために言語を簡単に切り替えることができます。",
-      "L_translationLanguages": "翻訳言語"
-    },
-    "timelines": {
-      "S_Timelines": "タイムライン",
-      "L_lurkerMode": "隠れモード",
-      "D_lurkerMode": "インタラクティブなボタンを隠す",
-      "L_contentWarnings": "コンテンツ警告"
-    }
-  },
-  "dhaaga": {
-    "mainMenu_Label": "ダハーガ",
-    "mainMenu_Desc": "ダハーガの機能をカスタマイズ",
-    "navbar_Label": "ダハーガをカスタマイズ"
-  },
-  "wellbeing": {
-    "mainMenu_Label": "ウェルビーイング",
-    "mainMenu_Desc": "健康的なインターネットとあなた。",
-    "navbar_Label": "ウェルビーイング設定"
-  },
-  "advanced": {
-    "mainMenu_Label": "詳細設定",
-    "mainMenu_Desc": "パワーユーザーおよびデバッグ用",
-    "navbar_Label": "詳細設定"
-  }
+	"accounts": {
+		"mainMenu_Desc": "アカウントを追加および管理",
+		"mainMenu_Label": "アカウント"
+	},
+	"advanced": {
+		"mainMenu_Desc": "パワーユーザーおよびデバッグ用",
+		"mainMenu_Label": "詳細設定",
+		"navbar_Label": "詳細設定"
+	},
+	"dhaaga": {
+		"mainMenu_Desc": "ダハーガの機能をカスタマイズ",
+		"mainMenu_Label": "ダハーガ",
+		"navbar_Label": "ダハーガをカスタマイズ"
+	},
+	"general": {
+		"language": {
+			"D_translatorMode": "これにより、すべてのページにボタンが追加され、翻訳をテストするために言語を簡単に切り替えることができます。",
+			"L_appLanguage": "アプリの言語",
+			"L_contentLanguages": "コンテンツの言語",
+			"L_translationLanguages": "翻訳言語",
+			"L_translatorMode": "翻訳者モード",
+			"S_Language": "言語"
+		},
+		"mainMenu_Desc": "最も一般的で退屈な設定がここにあります",
+		"mainMenu_Label": "一般",
+		"navbar_Label": "一般設定",
+		"timelines": {
+			"D_lurkerMode": "インタラクティブなボタンを隠す",
+			"L_contentWarnings": "コンテンツ警告",
+			"L_lurkerMode": "隠れモード",
+			"S_Timelines": "タイムライン"
+		}
+	},
+	"wellbeing": {
+		"mainMenu_Desc": "健康的なインターネットとあなた。",
+		"mainMenu_Label": "ウェルビーイング",
+		"navbar_Label": "ウェルビーイング設定"
+	}
 }

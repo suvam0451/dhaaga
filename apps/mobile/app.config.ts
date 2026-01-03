@@ -4,23 +4,6 @@ const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
 const APP_SCHEME = process.env.APP_SCHEME ?? 'dhaaga-lite';
 
-const NONFREE_DEPS: ([] | [string] | [string, any])[] =
-	BUNDLE_ID === 'io.suvam.dhaaga.lite'
-		? []
-		: [
-				[
-					'expo-notifications',
-					{
-						icon: './assets/dhaaga/icon.png',
-						color: '#e6cf8b',
-						defaultChannel: 'default',
-						sounds: [],
-						enableBackgroundRemoteNotifications: false,
-					},
-				],
-				['expo-iap'],
-			];
-
 const NONFREE_PERMS_WHITELIST =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
 		? []
@@ -33,7 +16,7 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',
-	version: '0.19.2',
+	version: '0.19.3',
 	orientation: 'portrait',
 	icon: './assets/dhaaga/icon.png',
 	userInterfaceStyle: 'dark',
@@ -48,8 +31,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 	},
 	android: {
 		package: BUNDLE_ID,
-		version: 'v0.19.2',
-		versionCode: 39,
+		version: 'v0.19.3',
+		versionCode: 40,
 		predictiveBackGestureEnabled: true,
 		permissions: [
 			'android.permission.INTERNET',
@@ -173,7 +156,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				],
 			},
 		],
-		...NONFREE_DEPS,
 	],
 });
 

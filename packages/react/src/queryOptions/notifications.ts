@@ -6,7 +6,7 @@ import {
 	DriverService,
 } from '@dhaaga/bridge';
 import type { NotificationObjectType, ResultPage } from '@dhaaga/bridge';
-import { queryOptions } from '@tanstack/react-query';
+import { QueryOptions } from '@tanstack/query-core';
 import type { ChatRoomObjectType } from '@dhaaga/bridge';
 
 const NOTIFICATION_PAGE_SIZE = 20;
@@ -59,11 +59,11 @@ function getMentionNotificationsQueryOpts(
 		}
 	}
 
-	return queryOptions<NotificationPage>({
+	return {
 		queryKey: ['dhaaga/inbox/mentions', client?.key, maxId],
 		queryFn: api,
 		enabled: client !== null,
-	});
+	} as QueryOptions<NotificationPage>;
 }
 
 /**
@@ -80,11 +80,11 @@ function getChatNotificationsQueryOpts(client: ApiTargetInterface) {
 	}
 
 	// Queries
-	return queryOptions<ResultPage<ChatRoomObjectType[]>>({
+	return {
 		queryKey: ['dhaaga/inbox/chat', client?.key],
 		queryFn: api,
 		enabled: !!client,
-	});
+	} as QueryOptions<ResultPage<ChatRoomObjectType[]>>;
 }
 
 /**
@@ -135,11 +135,11 @@ function getSocialNotificationsQueryOpts(
 		}
 	}
 
-	return queryOptions<NotificationPage>({
+	return {
 		queryKey: ['dhaaga/inbox/social', client?.key, maxId],
 		queryFn: api,
 		enabled: !!client,
-	});
+	} as QueryOptions<NotificationPage>;
 }
 
 /**
@@ -185,11 +185,11 @@ function getSubscriptionNotificationsQueryOpts(
 			throw new Error(`unsupported driver ${client.driver}`);
 		}
 	}
-	return queryOptions<NotificationPage>({
+	return {
 		queryKey: ['dhaaga/inbox/updates', client?.key, maxId],
 		queryFn: api,
 		enabled: !!client,
-	});
+	} as QueryOptions<NotificationPage>;
 }
 
 export {

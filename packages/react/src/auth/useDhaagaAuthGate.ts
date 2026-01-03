@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { generateDhaagaAuthStrategy } from '@dhaaga/bridge/auth';
+import { generateDhaagaAuthStrategy } from '@dhaaga/bridge';
 
 type ReturnType =
 	| {

@@ -16,21 +16,13 @@
 		".": {
 			"import": "./dist/index.js",
 			"types": "./dist/index.d.ts"
-		},
-		"./auth": {
-			"import": "./dist/auth.js",
-			"types": "./dist/auth.d.ts"
-		},
-		"./post-process": {
-			"import": "./dist/post-process.js",
-			"types": "./dist/post-process.d.ts"
 		}
 	},
 	"imports": {
 		"#/*": "./dist/*"
 	},
 	"dependencies": {
-		"@atproto/api": "^0.18.8",
+		"@atproto/api": "^0.18.9",
 		"dom-serializer": "^2.0.0",
 		"domhandler": "^5.0.3",
 		"html-entities": "^2.6.0",
@@ -40,7 +32,7 @@
 		"megalodon": "^10.2.0",
 		"mfm-js": "^0.25.0",
 		"misskey-js": "^2025.12.2",
-		"zod": "^4.1.13"
+		"zod": "^4.3.4"
 	},
 	"scripts": {
 		"build": "rm -rf ./dist && tsgo -p ./tsconfig.json",

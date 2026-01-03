@@ -1,166 +1,162 @@
 {
-  "composer": {
-    "label": "Leitfaden (Erstellen)",
-    "qPageIntro": "Was macht diese Seite?",
-    "aPageIntro": [
-      "Diese Seite ermöglicht es Ihnen, Beiträge zu erstellen.",
-      "In Zukunft können Sie auch Umfragen erstellen und Ihre veröffentlichten Inhalte verfolgen."
-    ],
-    "qSuchLayoutsMuchWow": "Warum so viele Layouts?",
-    "aSuchLayoutsMuchWow": [
-      "Dhaaga hat drei einzigartige Ersteller-Layouts! Puh!",
-      "Das kleinste erscheint beim Antworten auf Direktnachrichten und Beiträge. Schnell und einfach!",
-      "Das mittelgroße Layout (auch \"Quick Post\" genannt) erscheint beim Veröffentlichen von Original-Beiträgen. Es hat die meisten Optionen, ist aber etwas eng für längere Beiträge.",
-      "Der vollständige Ersteller (noch nicht implementiert) wird alle Optionen bieten, um Ihre Kreativität auszudrücken!"
-    ],
-    "qHowConfigureLayout": "Wie konfiguriere ich Standard-Layouts?",
-    "aHowConfigureLayout": [
-      "Mini-Layouts können eng sein, ich weiß! Aber bitte geben Sie Tipps, wie sie verbessert werden können, anstatt sie zu ersetzen.",
-      "Wenn Sie müssen, werden zukünftige Updates Optionen enthalten, um größere Layouts zu erzwingen."
-    ],
-    "qGrayedOut": "Warum sind einige Optionen ausgegraut?",
-    "aGrayedOut": [
-      "Sie sind entweder noch nicht implementiert oder Ihr Server unterstützt sie noch nicht."
-    ],
-    "qOneMoreThing": "Noch eine Sache...",
-    "aOneMoreThing": [
-      "Sie können jederzeit vom Mini-Layout zu \"Quick Post\" wechseln, indem Sie die Schaltfläche auf der linken Seite drücken."
-    ]
-  },
-  "discover": {
-    "label": "Leitfaden (Entdecken)",
-    "qPageIntro": "Was macht diese Seite?",
-    "aPageIntro": [
-      "Dies ist das Entdeckungsportal von Dhaaga.",
-      "Es ist momentan nur eine Such- und Historientab 😅.",
-      "Aber in Zukunft werden weitere unterhaltsame Möglichkeiten hinzugefügt, um deine Freunde und Communities zu finden."
-    ],
-    "qStuckCannotReset": "Wie komme ich zurück zum Anfang?",
-    "aStuckCannotReset": [
-      "Öffne das Such-Widget und drücke (x), um die Suche zu löschen.",
-      "Dadurch wirst du zurück zur Startseite geschickt."
-    ],
-    "qNoRecommendations": "Wo sind meine empfohlenen und trendigen Tabs?",
-    "aNoRecommendations": [
-      "Dhaaga blendet standardmäßig Nachrichten und Trendthemen aus.",
-      "In Zukunft werden sie als optionale Tab-Ziele eingeführt."
-    ]
-  },
-  "hub": {
-    "label": "Leitfaden (Hub)",
-    "qPageIntro": "Was macht diese Seite?",
-    "aPageIntro": [
-      "Der \"Social Hub\" ist eine leistungsstarke Profilverwaltungs- und Hub-Anpassungserfahrung, die einzigartig für Dhaaga ist.",
-      "Organisieren und verfolgen Sie Ihre Interessen einfach.",
-      "Keine Notwendigkeit, durch algorithmische Feeds zu scrollen!"
-    ],
-    "qHowToUse": "Wie benutze ich den Hub?",
-    "aHowToUse": [
-      "Wischen Sie nach links/rechts, um zwischen Konten zu wechseln.",
-      "Drücken Sie (+), um weitere Feeds/Benutzer/Tags anzuheften."
-    ],
-    "qExplainProfiles": "Was sind Profile?",
-    "aExplainProfiles": [
-      "Sie können mehrere Profile für jedes Konto haben.",
-      "Eine schöne Möglichkeit, die Hub-Pins nach Interesse zu gestalten."
-    ],
-    "qHowToDeletePins": "Wie lösche ich Pins?",
-    "aHowToDeletePins": [
-      "Halten Sie einen beliebigen Pin lange gedrückt, um weitere Optionen anzuzeigen!"
-    ],
-    "qHowToArrangePins": "Wie ordne ich Pins neu an?",
-    "aHowToArrangePins": [
-      "Noch nicht verfügbar."
-    ],
-    "qOneMoreThing": "Noch eine Sache...",
-    "aOneMoreThing": [
-      "Sie können hier frei zwischen Konten wechseln,",
-      "aber das ändert nicht, welches Konto überall sonst in der App aktiv ist.",
-      "Wenn Sie versuchen, einen Pin für ein inaktives Konto zu öffnen, hilft Ihnen ein Dialogfeld beim Wechseln und Fortfahren."
-    ]
-  },
-  "inbox": {
-    "label": "Leitfaden (Posteingang)",
-    "qPageIntro": "Was macht diese Seite?",
-    "aPageIntro": [
-      "In Dhaaga sind Ihre Benachrichtigungen in vier Registerkarten unterteilt. Diese Funktion wird auch \"Posteingang-Kategorien\" genannt.",
-      "Jede Registerkarte präsentiert die Informationen in einem Format, das besser zu dieser Kategorie passt."
-    ],
-    "qTabMention": "Was zeigt die Erwähnungen-Registerkarte?",
-    "aTabMention": [
-      "Die \"Erwähnungen\"-Registerkarte zeigt Antworten/Zitate auf Ihre Beiträge. Sie zeigt auch Beiträge, in denen Sie erwähnt werden."
-    ],
-    "qTabChat": "Was zeigt die Chat-Registerkarte?",
-    "aTabChat": [
-      "Die \"Chat\"-Registerkarte zeigt alle Gespräche, an denen Sie teilnehmen.",
-      "P.S. - Nur Bluesky hat dedizierte Chat-Funktionen. Die Fediverse-Implementierung variiert je nach Software."
-    ],
-    "qTabSocial": "Was zeigt die Sozial-Registerkarte?",
-    "aTabSocial": [
-      "Die \"Sozial\"-Registerkarte zeigt Personen, die Ihre Beiträge geliked/geteilt haben, sowie Follower-/Following-Änderungen."
-    ],
-    "qTabUpdates": "Was zeigt die Updates-Registerkarte?",
-    "aTabUpdates": [
-      "Die \"Updates\"-Oberfläche zeigt Beiträge von Benutzern, die Sie abonniert haben.",
-      "P.S. - Das Abonnieren von Konto-Updates ist von Bluesky noch nicht implementiert. Daher ist die Registerkarte leer."
-    ],
-    "qWhyFewSettings": "Wie passe ich meine Benachrichtigungen an?",
-    "aWhyFewSettings": [
-      "Zusätzliche Einstellungen und Funktionen werden noch entwickelt."
-    ],
-    "qOneMoreThing": "Noch eine Sache...",
-    "aOneMoreThing": [
-      "Ok, zwei Dinge :)",
-      "1) Alle Schaltflächen in Dhaaga sind unten ausgerichtet, um die einhändige Bedienung zu erleichtern.",
-      "2) Das Wischen zwischen Registerkarten wurde deaktiviert, um das Wischen von Medien-Karussells zu erleichtern (und natürlich Reisekrankheit zu vermeiden)."
-    ]
-  },
-  "myAccount": {
-    "label": "Leitfaden (Mein Konto)",
-    "qPageIntro": "Was macht diese Seite?",
-    "aPageIntro": [
-      "Dies ist Ihre Kontoübersicht!",
-      "Sie können auf die meisten Funktionen Ihres Servers sowie auf spezielle Dhaaga-Funktionen zugreifen."
-    ],
-    "qHowAddSwitchAccount": "Wie kann ich ein Konto hinzufügen/wechseln?",
-    "aHowAddSwitchAccount": [
-      "Zum Wechseln halten Sie die 5. Registerkarte lange gedrückt (funktioniert überall).",
-      "Zum Hinzufügen verwenden Sie das obige oder gehen Sie zu Einstellungen -> Konten -> Hinzufügen"
-    ],
-    "qHowEditAccountDetails": "Wie kann ich meine Kontodetails bearbeiten?",
-    "aHowEditAccountDetails": [
-      "Das Bearbeiten von Avatar und Banner usw. muss (vorerst) über Websites erfolgen.",
-      "Da Dhaaga sich auf Durchsuchen und Chat-Nutzung konzentriert, werden solche Funktionen langsam hinzugefügt."
-    ],
-    "qProfileOutOfSync": "Mein Profil ist nicht synchronisiert",
-    "aProfileOutOfSync": [
-      "Wenn sich etwas nicht synchronisiert anfühlt (z.B. - Zähler, Avatar, Banner usw.),",
-      "Versuchen Sie, diese Seite nach unten zu ziehen und zu aktualisieren. Dies ist darauf ausgelegt, die meisten Synchronisierungsprobleme zu beheben.",
-      "Wenn das Problem weiterhin besteht, melden Sie es bitte dem Entwickler."
-    ],
-    "qHowManageAccount": "How to add/switch accounts?",
-    "aHowManageAccount": [
-      "New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
-      "Also, long pressing the profile tab (5th) brings up the account switcher :)"
-    ]
-  },
-  "settings": {
-    "label": "Leitfaden (Einstellungen)",
-    "qWhereAmI": "Wo bin ich?",
-    "aWhereAmI": [
-      "Von hier aus können Sie verschiedene Einstellungen anpassen, die Ihre Erfahrung in der gesamten App und zusätzliche Goodie-Funktionen von Dhaaga beeinflussen."
-    ],
-    "qServerSettingMismatch": "Warum werden meine Servereinstellungen nicht importiert?",
-    "aServerSettingMismatch": [
-      "Dhaaga ist ein Multi-Protokoll-Client, der viele SNS-Software unterstützt.",
-      "Daher müssen diese Einstellungen lokal festgelegt werden.",
-      "Aber sobald sie eingerichtet sind, werden sie auf alle Ihre SNS-Konten angewendet!"
-    ],
-    "qSupportHow": "Wie kann ich Sie unterstützen?",
-    "aSupportHow": [
-      "Wow, vielen Dank 💛.",
-      "Als Indie-Entwickler würde ich Ihr Feedback, Ihre Ermutigung und Unterstützung sehr schätzen.",
-      "Kommen Sie gerne vorbei und sagen Sie Hallo 👋: \nHat es Ihnen nicht gefallen? Sagen Sie mir, was ich verbessern kann!\nHat es Ihnen gefallen? Vielleicht teilen Sie es mit Ihren Freunden!\nLieben Sie es? Erwägen Sie, ein Trinkgeld zu hinterlassen!"
-    ]
-  }
+	"composer": {
+		"aGrayedOut": [
+			"Sie sind entweder noch nicht implementiert oder Ihr Server unterstützt sie noch nicht."
+		],
+		"aHowConfigureLayout": [
+			"Mini-Layouts können eng sein, ich weiß! Aber bitte geben Sie Tipps, wie sie verbessert werden können, anstatt sie zu ersetzen.",
+			"Wenn Sie müssen, werden zukünftige Updates Optionen enthalten, um größere Layouts zu erzwingen."
+		],
+		"aOneMoreThing": [
+			"Sie können jederzeit vom Mini-Layout zu \"Quick Post\" wechseln, indem Sie die Schaltfläche auf der linken Seite drücken."
+		],
+		"aPageIntro": [
+			"Diese Seite ermöglicht es Ihnen, Beiträge zu erstellen.",
+			"In Zukunft können Sie auch Umfragen erstellen und Ihre veröffentlichten Inhalte verfolgen."
+		],
+		"aSuchLayoutsMuchWow": [
+			"Dhaaga hat drei einzigartige Ersteller-Layouts! Puh!",
+			"Das kleinste erscheint beim Antworten auf Direktnachrichten und Beiträge. Schnell und einfach!",
+			"Das mittelgroße Layout (auch \"Quick Post\" genannt) erscheint beim Veröffentlichen von Original-Beiträgen. Es hat die meisten Optionen, ist aber etwas eng für längere Beiträge.",
+			"Der vollständige Ersteller (noch nicht implementiert) wird alle Optionen bieten, um Ihre Kreativität auszudrücken!"
+		],
+		"label": "Leitfaden (Erstellen)",
+		"qGrayedOut": "Warum sind einige Optionen ausgegraut?",
+		"qHowConfigureLayout": "Wie konfiguriere ich Standard-Layouts?",
+		"qOneMoreThing": "Noch eine Sache...",
+		"qPageIntro": "Was macht diese Seite?",
+		"qSuchLayoutsMuchWow": "Warum so viele Layouts?"
+	},
+	"discover": {
+		"aNoRecommendations": [
+			"Dhaaga blendet standardmäßig Nachrichten und Trendthemen aus.",
+			"In Zukunft werden sie als optionale Tab-Ziele eingeführt."
+		],
+		"aPageIntro": [
+			"Dies ist das Entdeckungsportal von Dhaaga.",
+			"Es ist momentan nur eine Such- und Historientab 😅.",
+			"Aber in Zukunft werden weitere unterhaltsame Möglichkeiten hinzugefügt, um deine Freunde und Communities zu finden."
+		],
+		"aStuckCannotReset": [
+			"Öffne das Such-Widget und drücke (x), um die Suche zu löschen.",
+			"Dadurch wirst du zurück zur Startseite geschickt.",
+			"You can enable recommendations using the quick settings below."
+		],
+		"label": "Leitfaden (Entdecken)",
+		"qNoRecommendations": "Wo sind meine empfohlenen und trendigen Tabs?",
+		"qPageIntro": "Was macht diese Seite?",
+		"qStuckCannotReset": "Wie komme ich zurück zum Anfang?"
+	},
+	"hub": {
+		"aExplainProfiles": [
+			"Sie können mehrere Profile für jedes Konto haben.",
+			"Eine schöne Möglichkeit, die Hub-Pins nach Interesse zu gestalten."
+		],
+		"aHowToArrangePins": [
+			"Noch nicht verfügbar."
+		],
+		"aHowToDeletePins": [
+			"Halten Sie einen beliebigen Pin lange gedrückt, um weitere Optionen anzuzeigen!"
+		],
+		"aHowToUse": [
+			"Wischen Sie nach links/rechts, um zwischen Konten zu wechseln.",
+			"Drücken Sie (+), um weitere Feeds/Benutzer/Tags anzuheften."
+		],
+		"aOneMoreThing": [
+			"Sie können hier frei zwischen Konten wechseln,",
+			"aber das ändert nicht, welches Konto überall sonst in der App aktiv ist.",
+			"Wenn Sie versuchen, einen Pin für ein inaktives Konto zu öffnen, hilft Ihnen ein Dialogfeld beim Wechseln und Fortfahren."
+		],
+		"aPageIntro": [
+			"Der \"Social Hub\" ist eine leistungsstarke Profilverwaltungs- und Hub-Anpassungserfahrung, die einzigartig für Dhaaga ist.",
+			"Organisieren und verfolgen Sie Ihre Interessen einfach.",
+			"Keine Notwendigkeit, durch algorithmische Feeds zu scrollen!"
+		],
+		"label": "Leitfaden (Hub)",
+		"qExplainProfiles": "Was sind Profile?",
+		"qHowToArrangePins": "Wie ordne ich Pins neu an?",
+		"qHowToDeletePins": "Wie lösche ich Pins?",
+		"qHowToUse": "Wie benutze ich den Hub?",
+		"qOneMoreThing": "Noch eine Sache...",
+		"qPageIntro": "Was macht diese Seite?"
+	},
+	"inbox": {
+		"aOneMoreThing": [
+			"Ok, zwei Dinge :)",
+			"1) Alle Schaltflächen in Dhaaga sind unten ausgerichtet, um die einhändige Bedienung zu erleichtern.",
+			"2) Das Wischen zwischen Registerkarten wurde deaktiviert, um das Wischen von Medien-Karussells zu erleichtern (und natürlich Reisekrankheit zu vermeiden)."
+		],
+		"aPageIntro": [
+			"In Dhaaga sind Ihre Benachrichtigungen in vier Registerkarten unterteilt. Diese Funktion wird auch \"Posteingang-Kategorien\" genannt.",
+			"Jede Registerkarte präsentiert die Informationen in einem Format, das besser zu dieser Kategorie passt."
+		],
+		"aTabChat": [
+			"Die \"Chat\"-Registerkarte zeigt alle Gespräche, an denen Sie teilnehmen.",
+			"P.S. - Nur Bluesky hat dedizierte Chat-Funktionen. Die Fediverse-Implementierung variiert je nach Software."
+		],
+		"aTabMention": [
+			"Die \"Erwähnungen\"-Registerkarte zeigt Antworten/Zitate auf Ihre Beiträge. Sie zeigt auch Beiträge, in denen Sie erwähnt werden."
+		],
+		"aTabSocial": [
+			"Die \"Sozial\"-Registerkarte zeigt Personen, die Ihre Beiträge geliked/geteilt haben, sowie Follower-/Following-Änderungen."
+		],
+		"aTabUpdates": [
+			"Die \"Updates\"-Oberfläche zeigt Beiträge von Benutzern, die Sie abonniert haben.",
+			"P.S. - Das Abonnieren von Konto-Updates ist von Bluesky noch nicht implementiert. Daher ist die Registerkarte leer."
+		],
+		"aWhyFewSettings": [
+			"Zusätzliche Einstellungen und Funktionen werden noch entwickelt."
+		],
+		"label": "Leitfaden (Posteingang)",
+		"qOneMoreThing": "Noch eine Sache...",
+		"qPageIntro": "Was macht diese Seite?",
+		"qTabChat": "Was zeigt die Chat-Registerkarte?",
+		"qTabMention": "Was zeigt die Erwähnungen-Registerkarte?",
+		"qTabSocial": "Was zeigt die Sozial-Registerkarte?",
+		"qTabUpdates": "Was zeigt die Updates-Registerkarte?",
+		"qWhyFewSettings": "Wie passe ich meine Benachrichtigungen an?"
+	},
+	"myAccount": {
+		"aHowEditAccountDetails": [
+			"Das Bearbeiten von Avatar und Banner usw. muss (vorerst) über Websites erfolgen.",
+			"Da Dhaaga sich auf Durchsuchen und Chat-Nutzung konzentriert, werden solche Funktionen langsam hinzugefügt."
+		],
+		"aHowManageAccount": [
+			"New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+			"Also, long pressing the profile tab (5th) brings up the account switcher :)"
+		],
+		"aPageIntro": [
+			"Dies ist Ihre Kontoübersicht!",
+			"Sie können auf die meisten Funktionen Ihres Servers sowie auf spezielle Dhaaga-Funktionen zugreifen."
+		],
+		"aProfileOutOfSync": [
+			"Wenn sich etwas nicht synchronisiert anfühlt (z.B. - Zähler, Avatar, Banner usw.),",
+			"Versuchen Sie, diese Seite nach unten zu ziehen und zu aktualisieren. Dies ist darauf ausgelegt, die meisten Synchronisierungsprobleme zu beheben.",
+			"Wenn das Problem weiterhin besteht, melden Sie es bitte dem Entwickler."
+		],
+		"label": "Leitfaden (Mein Konto)",
+		"qHowEditAccountDetails": "Wie kann ich meine Kontodetails bearbeiten?",
+		"qHowManageAccount": "How to add/switch accounts?",
+		"qPageIntro": "Was macht diese Seite?",
+		"qProfileOutOfSync": "Mein Profil ist nicht synchronisiert"
+	},
+	"settings": {
+		"aServerSettingMismatch": [
+			"Dhaaga ist ein Multi-Protokoll-Client, der viele SNS-Software unterstützt.",
+			"Daher müssen diese Einstellungen lokal festgelegt werden.",
+			"Aber sobald sie eingerichtet sind, werden sie auf alle Ihre SNS-Konten angewendet!"
+		],
+		"aSupportHow": [
+			"Wow, vielen Dank 💛.",
+			"Als Indie-Entwickler würde ich Ihr Feedback, Ihre Ermutigung und Unterstützung sehr schätzen.",
+			"Kommen Sie gerne vorbei und sagen Sie Hallo 👋: \nHat es Ihnen nicht gefallen? Sagen Sie mir, was ich verbessern kann!\nHat es Ihnen gefallen? Vielleicht teilen Sie es mit Ihren Freunden!\nLieben Sie es? Erwägen Sie, ein Trinkgeld zu hinterlassen!"
+		],
+		"aWhereAmI": [
+			"Von hier aus können Sie verschiedene Einstellungen anpassen, die Ihre Erfahrung in der gesamten App und zusätzliche Goodie-Funktionen von Dhaaga beeinflussen."
+		],
+		"label": "Leitfaden (Einstellungen)",
+		"qServerSettingMismatch": "Warum werden meine Servereinstellungen nicht importiert?",
+		"qSupportHow": "Wie kann ich Sie unterstützen?",
+		"qWhereAmI": "Wo bin ich?"
+	}
 }

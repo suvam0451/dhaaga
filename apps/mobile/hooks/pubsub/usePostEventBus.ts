@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { PostObjectType, PostViewer } from '@dhaaga/bridge';
 import { useAppApiClient, useAppPublishers } from '#/states/global/hooks';
 import { Emoji } from '#/components/dhaaga-bottom-sheet/modules/emoji-picker/emojiPickerReducer';
@@ -11,43 +11,41 @@ import { LinkingUtils } from '#/utils/linking.utils';
  * Registers and deregisters a post-object
  * on the event bus.
  *
- * NOTE: Only use this hook once per context or
- * isolated UI element, as it creates
- * copies of the post in memory (useState)
+ * Uses React 18's useSyncExternalStore for optimized
+ * subscriptions without copying post data to local state.
  *
  * @param input
  */
 export function usePostEventBusStore(input: string | PostObjectType) {
 	const { postEventBus } = useAppPublishers();
-	const [Post, setPost] = useState<PostObjectType>(
-		postEventBus.read(typeof input === 'string' ? input : null),
+	const uuid = typeof input === 'string' ? input : input?.uuid;
+
+	// Write the initial post-object to the event bus if provided
+	useEffect(() => {
+		if (typeof input !== 'string' && uuid) {
+			postEventBus.write(uuid, input);
+		}
+	}, [uuid]);
+
+	// Subscribe to the event bus using useSyncExternalStore
+	const post = useSyncExternalStore(
+		(callback) => {
+			if (!uuid) return () => {};
+
+			function update() {
+				callback();
+			}
+
+			postEventBus.subscribe(uuid, update);
+			return () => {
+				postEventBus.unsubscribe(uuid, update);
+			};
+		},
+		() => postEventBus.read(uuid),
+		() => postEventBus.read(uuid),
 	);
 
-	/**
-	 * Subscribe to updates on the post-object
-	 * via the event bus.
-	 */
-	useEffect(() => {
-		if (!input) return;
-		const uuid = typeof input === 'string' ? input : input?.uuid;
-		if (!uuid) return;
-
-		function update({ uuid }: { uuid: string }) {
-			setPost(postEventBus.read(uuid));
-		}
-
-		if (typeof input !== 'string') {
-			setPost(postEventBus.write(uuid, input));
-		} else {
-			update({ uuid });
-		}
-		postEventBus.subscribe(uuid, update);
-		return () => {
-			postEventBus.unsubscribe(uuid, update);
-		};
-	}, [input]);
-
-	return { post: Post };
+	return { post };
 }
 
 /**

@@ -17,11 +17,11 @@ import {
 	DriverService,
 	KNOWN_SOFTWARE,
 	UserParser,
+	AtProtoAuthService,
 } from '@dhaaga/bridge';
 import type { AppBskyActorGetPreferences, AtpSessionData } from '@atproto/api';
 import type { UserObjectType, CustomEmojiObjectType } from '@dhaaga/bridge';
 import { SearchHistoryItemType } from '#/states/sessions/app-session.service';
-import { AtProtoAuthService } from '@dhaaga/bridge/auth';
 import AccountMetadataDbService from '#/services/db/account-metadata-db.service';
 
 enum KEY {

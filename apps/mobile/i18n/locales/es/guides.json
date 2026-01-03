@@ -1,165 +1,160 @@
 {
-  "composer": {
-    "label": "Guide (Composer)",
-    "qPageIntro": "What does this page do?",
-    "aPageIntro": [
-      "This page lets you compose posts.",
-      "In the future, you will also be able to create polls and track your published content."
-    ],
-    "qSuchLayoutsMuchWow": "Why so many layouts?",
-    "aSuchLayoutsMuchWow": [
-      "Dhaaga has three unique composer layouts! Phew!",
-      "The smallest one appears when replying to direct messages and posts. Quick and easy!",
-      "The medium sized one (a.k.a. - \"Quick Post\") appears when publishing original posts. It has most options, but a bit cramped for longer posts.",
-      "The full sized composer (not implemented yet) will have every option to express your creativity!"
-    ],
-    "qHowConfigureLayout": "How to configure default layouts?",
-    "aHowConfigureLayout": [
-      "Mini layouts can get cramped, I know! But, please advise on how they can be improved, instead of replacing them.",
-      "If you must, then future updates will include options to force larger layouts."
-    ],
-    "qGrayedOut": "Why are some options grayed out?",
-    "aGrayedOut": [
-      "They are either implemented yet, or your server does not support them yet."
-    ],
-    "qOneMoreThing": "One more thing...",
-    "aOneMoreThing": [
-      "You can switch from the mini layout to \"Quick Post\" anytime, by pressing the button on the left."
-    ]
-  },
-  "discover": {
-    "label": "Guide (Discover)",
-    "qPageIntro": "What does this page do?",
-    "aPageIntro": [
-      "This is your discovery hub and exploration diary for the internet.",
-      "Go find topics that excite you and find awesome communities you find a sense of belonging with :)"
-    ],
-    "qStuckCannotReset": "What is zen mode?",
-    "aStuckCannotReset": [
-      "The Dhaaga project cares about the digital wellbeing of it's users. Recommendations are off by default.",
-      "Tools have been designed to help you organically discover content and communities you care about.",
-      "You can enable recommendations using the quick settings below."
-    ],
-    "qNoRecommendations": "Where is XYZ search tab?",
-    "aNoRecommendations": [
-      "If it is neither in the navigation bar dropdown, nor appears in the Explore tab with recommendations on, it is not implemented yet.",
-      "Ping me sometime and I'll look into it ;)"
-    ]
-  },
-  "hub": {
-    "label": "Guide (Hub)",
-    "qPageIntro": "What does this page do?",
-    "aPageIntro": [
-      "The \"Social Hub\" is a powerful profile management and hub customization experience unique to Dhaaga.",
-      "Easily organise and keep track of your interests.",
-      "No need to trawl through algorithmic feeds!"
-    ],
-    "qHowToUse": "How to use the hub?",
-    "aHowToUse": [
-      "Swipe left/right to switch accounts.",
-      "Press (+) to pin more feeds/users/tags."
-    ],
-    "qExplainProfiles": "What are profiles?",
-    "aExplainProfiles": [
-      "You can have multiple profiles for every account.",
-      "A nice way to decorate the hub pins by interest."
-    ],
-    "qHowToDeletePins": "How to delete pins?",
-    "aHowToDeletePins": [
-      "Long press any pin to show more options!"
-    ],
-    "qHowToArrangePins": "How to rearrange pins?",
-    "aHowToArrangePins": [
-      "Not available yet."
-    ],
-    "qOneMoreThing": "One more thing...",
-    "aOneMoreThing": [
-      "You can freely switch between accounts here,",
-      "But, it does not change which account is active everywhere else in the app.",
-      "If you try to open a pin for an inactive account, a dialog box will help you switch and continue."
-    ]
-  },
-  "inbox": {
-    "label": "Guide (Inbox)",
-    "qPageIntro": "What does this page do?",
-    "aPageIntro": [
-      "In Dhaaga, your notifications are split into four tabs. This feature is also called \"Inbox Categories\".",
-      "Each tab presents the information in a format more suited for that category."
-    ],
-    "qTabMention": "What does the mentions tab show?",
-    "aTabMention": [
-      "The \"Mentions\" tab shows replies/quotes to your posts. It also shows posts where you are mentioned."
-    ],
-    "qTabChat": "What does the chat tab show?",
-    "aTabChat": [
-      "The \"Chat\" tab shows all conversations you are a participant in.",
-      "p.s. - Only Bluesky has dedicated chat features. Fediverse implementation will vary between software."
-    ],
-    "qTabSocial": "What does the social tab show?",
-    "aTabSocial": [
-      "The \"Social\" tab shows people who liked/shared your posts, as well as follower/following changes."
-    ],
-    "qTabUpdates": "What does the updates tab show?",
-    "aTabUpdates": [
-      "The \"Updates\" interface shows posts from users you are subscribed to.",
-      "p.s. - Subscribing to account updates is not implemented by Bluesky yet. So, the tab will be empty."
-    ],
-    "qWhyFewSettings": "How to customize my notifications?",
-    "aWhyFewSettings": [
-      "Additional settings and features are still being worked on."
-    ],
-    "qOneMoreThing": "One more thing...",
-    "aOneMoreThing": [
-      "Ok, two more things :)",
-      "1) All the buttons in Dhaaga are bottom aligned for easy one-handed use.",
-      "2) Swiping between tabs was disabled to make it easy to swipe media carousels (and motion sickness, obviously)."
-    ]
-  },
-  "myAccount": {
-    "label": "Guide (Home)",
-    "qPageIntro": "What does this page do?",
-    "aPageIntro": [
-      "Consider this your account overview page.",
-      "You can access most of your server's features, as well as Dhaaga special features from here."
-    ],
-    "qHowAddSwitchAccount": "How to switch accounts?",
-    "aHowAddSwitchAccount": [
-      "To switch, long press the 5th tab (works from anywhere).",
-      "To add, either use the above or go to Settings -> Accounts -> Add"
-    ],
-    "qHowEditAccountDetails": "Can I edit my account details?",
-    "aHowEditAccountDetails": [
-      "You would have to use your SNS websites for that.",
-      "Dhaaga supports tens of platforms. Implementing infrequently accessed features will slow down development and increase maintenance efforts."
-    ],
-    "qProfileOutOfSync": "My information is out of sync",
-    "aProfileOutOfSync": [
-      "Just pull down and refresh your account overview (home) page. Dhaaga is designed to be a highly network efficient and offline first client.",
-      "This applies to most account information (i.e. - counters, avatar, banner etc). Also applies to some other server side settings (e.g.- NSFW, filters etc.)."
-    ],
-    "qHowManageAccount": "How to add/switch accounts?",
-    "aHowManageAccount": [
-      "New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
-      "Also, long pressing the profile tab (5th) brings up the account switcher :)"
-    ]
-  },
-  "settings": {
-    "label": "Guide (Settings)",
-    "qWhereAmI": "Where am I?",
-    "aWhereAmI": [
-      "From here, you can tweak various settings that affect your experience throughout the app and extra goodie features offered by Dhaaga."
-    ],
-    "qServerSettingMismatch": "Why are my server settings not imported?",
-    "aServerSettingMismatch": [
-      "Dhaaga is a multi-protocol client supporting many SNS software.",
-      "So, these settings have to be set-up locally.",
-      "But, once done, they will then be applied to all your SNS accounts!"
-    ],
-    "qSupportHow": "For real though, How can I support you ?",
-    "aSupportHow": [
-      "Wow, gee. Thanks 💛.",
-      "As an indie developer, I'd really appreciate your feedback, encouragement and support.",
-      "Feel free to drop by and say hello 👋: \nHated it ? Tell me what I can improve!\nLiked it ? maybe share it with your friends!\nLoved it ? consider leaving a tip!"
-    ]
-  }
+	"composer": {
+		"aGrayedOut": [
+			"They are either implemented yet, or your server does not support them yet."
+		],
+		"aHowConfigureLayout": [
+			"Mini layouts can get cramped, I know! But, please advise on how they can be improved, instead of replacing them.",
+			"If you must, then future updates will include options to force larger layouts."
+		],
+		"aOneMoreThing": [
+			"You can switch from the mini layout to \"Quick Post\" anytime, by pressing the button on the left."
+		],
+		"aPageIntro": [
+			"This page lets you compose posts.",
+			"In the future, you will also be able to create polls and track your published content."
+		],
+		"aSuchLayoutsMuchWow": [
+			"Dhaaga has three unique composer layouts! Phew!",
+			"The smallest one appears when replying to direct messages and posts. Quick and easy!",
+			"The medium sized one (a.k.a. - \"Quick Post\") appears when publishing original posts. It has most options, but a bit cramped for longer posts.",
+			"The full sized composer (not implemented yet) will have every option to express your creativity!"
+		],
+		"label": "Guide (Composer)",
+		"qGrayedOut": "Why are some options grayed out?",
+		"qHowConfigureLayout": "How to configure default layouts?",
+		"qOneMoreThing": "One more thing...",
+		"qPageIntro": "What does this page do?",
+		"qSuchLayoutsMuchWow": "Why so many layouts?"
+	},
+	"discover": {
+		"aNoRecommendations": [
+			"If it is neither in the navigation bar dropdown, nor appears in the Explore tab with recommendations on, it is not implemented yet.",
+			"Ping me sometime and I'll look into it ;)"
+		],
+		"aPageIntro": [
+			"This is your discovery hub and exploration diary for the internet.",
+			"Go find topics that excite you and find awesome communities you find a sense of belonging with :)"
+		],
+		"aStuckCannotReset": [
+			"The Dhaaga project cares about the digital wellbeing of it's users. Recommendations are off by default.",
+			"Tools have been designed to help you organically discover content and communities you care about.",
+			"You can enable recommendations using the quick settings below."
+		],
+		"label": "Guide (Discover)",
+		"qNoRecommendations": "Where is XYZ search tab?",
+		"qPageIntro": "What does this page do?",
+		"qStuckCannotReset": "What is zen mode?"
+	},
+	"hub": {
+		"aExplainProfiles": [
+			"You can have multiple profiles for every account.",
+			"A nice way to decorate the hub pins by interest."
+		],
+		"aHowToArrangePins": [
+			"Not available yet."
+		],
+		"aHowToDeletePins": [
+			"Long press any pin to show more options!"
+		],
+		"aHowToUse": [
+			"Swipe left/right to switch accounts.",
+			"Press (+) to pin more feeds/users/tags."
+		],
+		"aOneMoreThing": [
+			"You can freely switch between accounts here,",
+			"But, it does not change which account is active everywhere else in the app.",
+			"If you try to open a pin for an inactive account, a dialog box will help you switch and continue."
+		],
+		"aPageIntro": [
+			"The \"Social Hub\" is a powerful profile management and hub customization experience unique to Dhaaga.",
+			"Easily organise and keep track of your interests.",
+			"No need to trawl through algorithmic feeds!"
+		],
+		"label": "Guide (Hub)",
+		"qExplainProfiles": "What are profiles?",
+		"qHowToArrangePins": "How to rearrange pins?",
+		"qHowToDeletePins": "How to delete pins?",
+		"qHowToUse": "How to use the hub?",
+		"qOneMoreThing": "One more thing...",
+		"qPageIntro": "What does this page do?"
+	},
+	"inbox": {
+		"aOneMoreThing": [
+			"Ok, two more things :)",
+			"1) All the buttons in Dhaaga are bottom aligned for easy one-handed use.",
+			"2) Swiping between tabs was disabled to make it easy to swipe media carousels (and motion sickness, obviously)."
+		],
+		"aPageIntro": [
+			"In Dhaaga, your notifications are split into four tabs. This feature is also called \"Inbox Categories\".",
+			"Each tab presents the information in a format more suited for that category."
+		],
+		"aTabChat": [
+			"The \"Chat\" tab shows all conversations you are a participant in.",
+			"p.s. - Only Bluesky has dedicated chat features. Fediverse implementation will vary between software."
+		],
+		"aTabMention": [
+			"The \"Mentions\" tab shows replies/quotes to your posts. It also shows posts where you are mentioned."
+		],
+		"aTabSocial": [
+			"The \"Social\" tab shows people who liked/shared your posts, as well as follower/following changes."
+		],
+		"aTabUpdates": [
+			"The \"Updates\" interface shows posts from users you are subscribed to.",
+			"p.s. - Subscribing to account updates is not implemented by Bluesky yet. So, the tab will be empty."
+		],
+		"aWhyFewSettings": [
+			"Additional settings and features are still being worked on."
+		],
+		"label": "Guide (Inbox)",
+		"qOneMoreThing": "One more thing...",
+		"qPageIntro": "What does this page do?",
+		"qTabChat": "What does the chat tab show?",
+		"qTabMention": "What does the mentions tab show?",
+		"qTabSocial": "What does the social tab show?",
+		"qTabUpdates": "What does the updates tab show?",
+		"qWhyFewSettings": "How to customize my notifications?"
+	},
+	"myAccount": {
+		"aHowEditAccountDetails": [
+			"You would have to use your SNS websites for that.",
+			"Dhaaga supports tens of platforms. Implementing infrequently accessed features will slow down development and increase maintenance efforts."
+		],
+		"aHowManageAccount": [
+			"New accounts can be onboarded from the account management page. Access it from the navbar of your home interface.",
+			"Also, long pressing the profile tab (5th) brings up the account switcher :)"
+		],
+		"aPageIntro": [
+			"Consider this your account overview page.",
+			"You can access most of your server's features, as well as Dhaaga special features from here."
+		],
+		"aProfileOutOfSync": [
+			"Just pull down and refresh your account overview (home) page. Dhaaga is designed to be a highly network efficient and offline first client.",
+			"This applies to most account information (i.e. - counters, avatar, banner etc). Also applies to some other server side settings (e.g.- NSFW, filters etc.)."
+		],
+		"label": "Guide (Home)",
+		"qHowEditAccountDetails": "Can I edit my account details?",
+		"qHowManageAccount": "How to add/switch accounts?",
+		"qPageIntro": "What does this page do?",
+		"qProfileOutOfSync": "My information is out of sync"
+	},
+	"settings": {
+		"aServerSettingMismatch": [
+			"Dhaaga is a multi-protocol client supporting many SNS software.",
+			"So, these settings have to be set-up locally.",
+			"But, once done, they will then be applied to all your SNS accounts!"
+		],
+		"aSupportHow": [
+			"Wow, gee. Thanks 💛.",
+			"As an indie developer, I'd really appreciate your feedback, encouragement and support.",
+			"Feel free to drop by and say hello 👋: \nHated it ? Tell me what I can improve!\nLiked it ? maybe share it with your friends!\nLoved it ? consider leaving a tip!"
+		],
+		"aWhereAmI": [
+			"From here, you can tweak various settings that affect your experience throughout the app and extra goodie features offered by Dhaaga."
+		],
+		"label": "Guide (Settings)",
+		"qServerSettingMismatch": "Why are my server settings not imported?",
+		"qSupportHow": "For real though, How can I support you ?",
+		"qWhereAmI": "Where am I?"
+	}
 }
