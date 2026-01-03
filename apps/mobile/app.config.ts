@@ -4,23 +4,6 @@ const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
 const APP_SCHEME = process.env.APP_SCHEME ?? 'dhaaga-lite';
 
-const NONFREE_DEPS: ([] | [string] | [string, any])[] =
-	BUNDLE_ID === 'io.suvam.dhaaga.lite'
-		? []
-		: [
-				[
-					'expo-notifications',
-					{
-						icon: './assets/dhaaga/icon.png',
-						color: '#e6cf8b',
-						defaultChannel: 'default',
-						sounds: [],
-						enableBackgroundRemoteNotifications: false,
-					},
-				],
-				['expo-iap'],
-			];
-
 const NONFREE_PERMS_WHITELIST =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite'
 		? []
@@ -173,7 +156,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 				],
 			},
 		],
-		...NONFREE_DEPS,
 	],
 });
 
