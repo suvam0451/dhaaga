@@ -10,9 +10,6 @@ frontend/.env
 frontend/.env.**
 .yarn/*
 apps/mobile/.env.development
-apps/mobile/assets/licensed/**
-apps/web/public/assets/**
-
 # Yarn
 .yarn/cache
 !.yarn/releases
@@ -25,5 +22,3 @@ apps/web/public/assets/**
 packages/**/dist/**
 packages/**/tsconfig.tsbuildinfo
 apps/web/public/docs/**
-apps/_shared/assets/licensed
-!apps/_shared/assets/licensed/README.md

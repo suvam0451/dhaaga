@@ -4,6 +4,6 @@ android/**
 ios/**
 .expo/**
 .expo/
-assets
+# assets
 features/skins/svgs
 #i18n/locales/*
