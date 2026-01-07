@@ -12,7 +12,7 @@
 	},
 	"peerDependencies": {
 		"@atproto/api": "*",
-		"react": ">=19.0.0"
+		"react": "*"
 	},
 	"scripts": {
 		"build": "tsgo -p ./tsconfig.json"

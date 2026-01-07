@@ -12,7 +12,7 @@
     "@legendapp/list": "^2.0.19",
     "@react-native-masked-view/masked-view": "0.3.2",
     "@tanstack/react-query": "^5.90.16",
-    "expo": "~54.0.30",
+    "expo": "~54.0.31",
     "expo-asset": "~12.0.9",
     "expo-audio": "~1.1.1",
     "expo-auth-session": "~7.0.10",
@@ -73,7 +73,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@types/react": "^19.2.7",
+    "@types/react": "~19.1.10",
     "typescript": "~5.9.2"
   },
   "imports": {
