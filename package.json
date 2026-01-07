@@ -29,6 +29,7 @@
 		"useTabs": true
 	},
 	"devDependencies": {
+		"@typescript/native-preview": "^7.0.0-dev.20260106.1",
 		"prettier": "^3.7.4"
 	},
 	"type": "module"
