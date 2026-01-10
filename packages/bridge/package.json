@@ -22,7 +22,7 @@
 		"#/*": "./dist/*"
 	},
 	"dependencies": {
-		"@atproto/api": "^0.18.10",
+		"@atproto/api": "^0.18.13",
 		"dom-serializer": "^2.0.0",
 		"domhandler": "^5.0.3",
 		"html-entities": "^2.6.0",
