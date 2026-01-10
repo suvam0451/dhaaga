@@ -1,0 +1,6 @@
+# Ignore native folders
+android
+ios
+
+# Ignore test coverage reports
+coverage
