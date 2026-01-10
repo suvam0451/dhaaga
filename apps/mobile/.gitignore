@@ -7,3 +7,6 @@ ios/**
 # assets
 features/skins/svgs
 #i18n/locales/*
+
+assets/licensed/backdrops/*
+!assets/licensed/backdrops/README.md
