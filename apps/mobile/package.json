@@ -30,7 +30,7 @@
     "expo-linear-gradient": "~55.0.2",
     "expo-linking": "~55.0.3",
     "expo-localization": "~55.0.2",
-    "expo-router": "~55.0.0-beta.3",
+    "expo-router": "55.0.0-beta.4",
     "expo-sharing": "~55.0.3",
     "expo-splash-screen": "~55.0.2",
     "expo-sqlite": "~55.0.2",
@@ -73,7 +73,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@types/react": "~19.2.2",
+    "@types/react": "~19.2.4",
     "typescript": "~5.9.2"
   },
   "imports": {

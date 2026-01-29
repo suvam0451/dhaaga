@@ -29,8 +29,11 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20260126.1",
+		"@typescript/native-preview": "^7.0.0-dev.20260128.1",
 		"prettier": "^3.8.1"
+	},
+	"overrides": {
+		"react": "19.2.0"
 	},
 	"type": "module"
 }
