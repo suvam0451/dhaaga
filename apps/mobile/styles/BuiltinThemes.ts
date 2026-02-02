@@ -178,4 +178,34 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			highlight: '#f8d3e4',
 		},
 	},
+	{
+		// -- Catppuccin Macchiato --
+		id: 'ctp-macchiato',
+		name: 'Catppuccin Macchiato',
+		barStyle: 'light-content',
+		background: {
+			a0: '#181926', // Crust
+			a10: '#1e2030', // Mantle
+			a20: '#24273a', // Base
+			a30: '#363a4f', // Surface 0
+			a40: '#494d64', // Surface 1
+			a50: '#5b6078', // Surface 2
+		},
+		reactions: {
+			active: '#a6da95', // Green
+			inactive: '#f5bde6', // Pink
+			highlight: '#d3ac6c', // Red
+		},
+		primary: '#b7bdf8', // Lavender
+		primaryText: '#cad3f5', // Text
+		complementary: '#91d7e3', // Sky
+		secondary: { // TODO: Theme
+			a0: '#f5f5f5',
+			a10: '#d7d7d7',
+			a20: '#b9b9b9',
+			a30: '#9c9c9c',
+			a40: '#808080',
+			a50: '#656565',
+		},
+	},
 ];
