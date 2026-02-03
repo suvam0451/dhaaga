@@ -179,8 +179,68 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 		},
 	},
 	{
+		// -- Catppuccin Latte --
+		id: 'ctp_latte',
+		name: 'Catppuccin Latte',
+		barStyle: 'dark-content',
+		background: {
+			a0: '#dce0e8', // Crust
+			a10: '#e6e9ef', // Mantle
+			a20: '#eff1f5', // Base
+			a30: '#ccd0da', // Surface 0
+			a40: '#bcc0cc', // Surface 1
+			a50: '#acb0be', // Surface 2
+		},
+		reactions: {
+			active: '#40a02b', // Green
+			inactive: '#ea76cb', // Pink
+			highlight: '#d20f39', // Red
+		},
+		primary: '#7287fd', // Lavender
+		primaryText: '#eff1f5', // Base
+		complementary: '#209fb5', // Sapphire
+		secondary: {
+			a0: '#4c4f69', // Text
+			a10: '#5c5f77', // Subtext 1
+			a20: '#6c6f85', // Subtext 0
+			a30: '#7c7f93', // Overlay 2
+			a40: '#8c8fa1', // Overlay 1
+			a50: '#9ca0b0', // Overlay 0
+		},
+	},
+	{
+		// -- Catppuccin Frappé --
+		id: 'ctp_frappe',
+		name: 'Catppuccin Frappé',
+		barStyle: 'light-content',
+		background: {
+			a0: '#232634', // Crust
+			a10: '#292c3c', // Mantle
+			a20: '#303446', // Base
+			a30: '#414559', // Surface 0
+			a40: '#51576d', // Surface 1
+			a50: '#626880', // Surface 2
+		},
+		reactions: {
+			active: '#a6d189', // Green
+			inactive: '#f4b8e4', // Pink
+			highlight: '#f4b8e4', // Red
+		},
+		primary: '#babbf1', // Lavender
+		primaryText: '#303446', // Base
+		complementary: '#85c1dc', // Sapphire
+		secondary: {
+			a0: '#c6d0f5', // Text
+			a10: '#b5bfe2', // Subtext 1
+			a20: '#a5adce', // Subtext 0
+			a30: '#949cbb', // Overlay 2
+			a40: '#838ba7', // Overlay 1
+			a50: '#737994', // Overlay 0
+		},
+	},
+	{
 		// -- Catppuccin Macchiato --
-		id: 'ctp-macchiato',
+		id: 'ctp_macchiato',
 		name: 'Catppuccin Macchiato',
 		barStyle: 'light-content',
 		background: {
@@ -197,15 +257,45 @@ export const APP_BUILT_IN_THEMES: AppColorSchemeType[] = [
 			highlight: '#d3ac6c', // Red
 		},
 		primary: '#b7bdf8', // Lavender
-		primaryText: '#cad3f5', // Text
-		complementary: '#91d7e3', // Sky
-		secondary: { // TODO: Theme
-			a0: '#f5f5f5',
-			a10: '#d7d7d7',
-			a20: '#b9b9b9',
-			a30: '#9c9c9c',
-			a40: '#808080',
-			a50: '#656565',
+		primaryText: '#24273a', // Base
+		complementary: '#7dc4e4', // Sapphire
+		secondary: {
+			a0: '#cad3f5', // Text
+			a10: '#b8c0e0', // Subtext 1
+			a20: '#a5adcb', // Subtext 0
+			a30: '#939ab7', // Overlay 2
+			a40: '#8087a2', // Overlay 1
+			a50: '#6e738d', // Overlay 0
+		},
+	},
+	{
+		// -- Catppuccin Mocha --
+		id: 'ctp_mocha',
+		name: 'Catppuccin Mocha',
+		barStyle: 'light-content',
+		background: {
+			a0: '#11111b', // Crust
+			a10: '#181825', // Mantle
+			a20: '#1e1e2e', // Base
+			a30: '#313244', // Surface 0
+			a40: '#45475a', // Surface 1
+			a50: '#585b70', // Surface 2
+		},
+		reactions: {
+			active: '#a6e3a1', // Green
+			inactive: '#f5c2e7', // Pink
+			highlight: '#f38ba8', // Red
+		},
+		primary: '#b4befe', // Lavender
+		primaryText: '#1e1e2e', // Base
+		complementary: '#74c7ec', // Sapphire
+		secondary: {
+			a0: '#cdd6f4', // Text
+			a10: '#bac2de', // Subtext 1
+			a20: '#a6adc8', // Subtext 0
+			a30: '#9399b2', // Overlay 2
+			a40: '#7f849c', // Overlay 1
+			a50: '#6c7086', // Overlay 0
 		},
 	},
 ];
