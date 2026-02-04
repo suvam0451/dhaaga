@@ -107,6 +107,8 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		'expo-localization',
 		'expo-video',
 		'expo-router',
+		'expo-image',
+		'expo-sharing',
 		[
 			'expo-build-properties',
 			{
