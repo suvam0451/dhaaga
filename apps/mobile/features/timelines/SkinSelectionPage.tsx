@@ -138,6 +138,86 @@ function SkinSelectionPage() {
 			hasIconPack: false,
 			hasWallpaper: true,
 		},
+		{
+			id: 'ctp_latte',
+			name: 'Catppuccin Latte',
+			statusBar: 'dark-content',
+			bg: '#eff1f5', // Base
+			bgFinal: '#dce0e8', // Crust
+			primary: '#7287fd', // Lavender
+			complementary: '#209fb5', // Sapphire
+			text0: '#4c4f69', // Text
+			text10: '#5c5f77', // Subtext 1
+			text20: '#6c6f85', // Subtext 0
+			text30: '#7c7f93', // Overlay 2
+			text40: '#8c8fa1', // Overlay 1
+			text50: '#9ca0b0', // Overlay 0
+			isDarkMode: false,
+			hasCustomSkin: true,
+			hasTransparency: false,
+			hasIconPack: false,
+			hasWallpaper: false,
+		},
+		{
+			id: 'ctp_frappe',
+			name: 'Catppuccin Frappé',
+			statusBar: 'light-content',
+			bg: '#303446', // Base
+			bgFinal: '#232634', // Crust
+			primary: '#babbf1', // Lavender
+			complementary: '#85c1dc', // Sapphire
+			text0: '#c6d0f5', // Text
+			text10: '#b5bfe2', // Subtext 1
+			text20: '#a5adce', // Subtext 0
+			text30: '#949cbb', // Overlay 2
+			text40: '#838ba7', // Overlay 1
+			text50: '#737994', // Overlay 0
+			isDarkMode: true,
+			hasCustomSkin: true,
+			hasTransparency: false,
+			hasIconPack: false,
+			hasWallpaper: false,
+		},
+		{
+			id: 'ctp_macchiato',
+			name: 'Catppuccin Macchiato',
+			statusBar: 'light-content',
+			bg: '#24273a', // Base
+			bgFinal: '#181926', // Crust
+			primary: '#b7bdf8', // Lavender
+			complementary: '#7dc4e4', // Sapphire
+			text0: '#cad3f5', // Text
+			text10: '#b8c0e0', // Subtext 1
+			text20: '#a5adcb', // Subtext 0
+			text30: '#939ab7', // Overlay 2
+			text40: '#8087a2', // Overlay 1
+			text50: '#6e738d', // Overlay 0
+			isDarkMode: true,
+			hasCustomSkin: true,
+			hasTransparency: false,
+			hasIconPack: false,
+			hasWallpaper: false,
+		},
+		{
+			id: 'ctp_mocha',
+			name: 'Catppuccin Mocha',
+			statusBar: 'light-content',
+			bg: '#1e1e2e', // Base
+			bgFinal: '#11111b', // Crust
+			primary: '#b4befe', // Lavender
+			complementary: '#74c7ec', // Sapphire
+			text0: '#cdd6f4', // Text
+			text10: '#bac2de', // Subtext 1
+			text20: '#a6adc8', // Subtext 0
+			text30: '#9399b2', // Overlay 2
+			text40: '#7f849c', // Overlay 1
+			text50: '#6c7086', // Overlay 0
+			isDarkMode: true,
+			hasCustomSkin: true,
+			hasTransparency: false,
+			hasIconPack: false,
+			hasWallpaper: false,
+		},
 		// {
 		// 	id: 'sunset',
 		// 	name: 'Empire of Sun',
