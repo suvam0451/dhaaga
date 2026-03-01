@@ -8,7 +8,7 @@
 	"dependencies": {
 		"@dhaaga/bridge": "*",
 		"@dhaaga/db": "*",
-		"immer": "^11.0.1"
+		"immer": "^11.1.4"
 	},
 	"peerDependencies": {
 		"@atproto/api": "*",
