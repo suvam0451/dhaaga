@@ -14,8 +14,8 @@
 		"react": "*"
 	},
 	"devDependencies": {
-		"@vitejs/plugin-react": "^5.1.2",
-		"jsdom": "^27.4.0",
+		"@vitejs/plugin-react": "^5.1.4",
+		"jsdom": "^28.1.0",
 		"vitest": "^4.0.15"
 	},
 	"scripts": {
