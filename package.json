@@ -34,7 +34,8 @@
 	},
 	"overrides": {
 		"react": "19.2.0",
-		"@types/react": "19.2.0"
+		"@types/react": "19.2.0",
+		"react-native-screens": "4.23.0"
 	},
 	"type": "module"
 }
