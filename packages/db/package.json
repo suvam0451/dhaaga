@@ -1,19 +1,19 @@
 {
-  "name": "@dhaaga/db",
-  "description": "Native sqlite database column definitions",
-  "license": "AGPL-3.0-or-later",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "dependencies": {
-    "@dhaaga/bridge": "*",
-    "@dhaaga/orm": "*",
-    "zod": "^4.1.13"
-  },
-  "peerDependencies": {
-    "expo-sqlite": ">=16.0.0"
-  },
-  "scripts": {
-    "build": "tsgo -p ./tsconfig.json"
-  },
-  "type": "module"
+	"name": "@dhaaga/db",
+	"description": "Native sqlite database column definitions",
+	"license": "AGPL-3.0-or-later",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"dependencies": {
+		"@dhaaga/bridge": "*",
+		"@dhaaga/orm": "*",
+		"zod": "^4.4.3"
+	},
+	"peerDependencies": {
+		"expo-sqlite": ">=55.0.0"
+	},
+	"scripts": {
+		"build": "tsgo -p ./tsconfig.json"
+	},
+	"type": "module"
 }
