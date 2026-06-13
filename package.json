@@ -29,13 +29,12 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20260507.1",
-		"prettier": "^3.8.1"
+		"@typescript/native-preview": "^7.0.0-dev.20260613.1",
+		"prettier": "^3.8.4"
 	},
 	"overrides": {
-		"react": "19.2.0",
-		"@types/react": "19.2.0",
-		"react-native-screens": "4.23.0"
+		"react": "19.2.3",
+		"@types/react": "19.2.14"
 	},
 	"type": "module"
 }
