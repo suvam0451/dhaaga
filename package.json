@@ -14,7 +14,8 @@
 		"build:orm": "npm run build --workspace=@dhaaga/orm",
 		"build:react": "npm run build --workspace=@dhaaga/react",
 		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
-		"build-deps": "npm run build:all"
+		"build-deps": "npm run build:all",
+		"check-env": "node scripts/check-env.js"
 	},
 	"workspaces": [
 		"packages/*",

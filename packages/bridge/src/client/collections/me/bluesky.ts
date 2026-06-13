@@ -3,6 +3,7 @@ import {
 	AppBskyActorGetPreferences,
 	AppBskyActorGetProfile,
 	AtpAgent,
+	ComAtprotoServerGetSession,
 } from '@atproto/api';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
@@ -51,7 +52,7 @@ export class BlueskyMeRouter implements MeRoute {
 	 *
 	 * NOTE: unused and not tested
 	 */
-	async getSession() {
+	async getSession(): Promise<ComAtprotoServerGetSession.OutputSchema> {
 		const data = await this.xrpc.com.atproto.server.getSession();
 		return data.data;
 	}
