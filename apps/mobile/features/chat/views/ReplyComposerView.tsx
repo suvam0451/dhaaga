@@ -1,13 +1,11 @@
-import { FlatList, StyleSheet, TextInput, View } from 'react-native';
-import { AppIcon } from '#/components/lib/Icon';
-import { APP_COLOR_PALETTE_EMPHASIS } from '#/utils/theming.util';
+import { StyleSheet, TextInput, View } from 'react-native';
 import InputView from '#/features/chat/components/InputView';
 import SendButtonView from '#/features/chat/components/SendButtonView';
 import { RefObject, useRef, useState } from 'react';
 import { useAppTheme } from '#/states/global/hooks';
 import useSendMessage from '#/features/chat/hooks/useSendMessage';
 import { AppDividerSoft } from '#/ui/Divider';
-import { LegendListRef } from '@legendapp/list';
+import { LegendListRef } from '@legendapp/list/react-native';
 
 type Props = {
 	roomId: string;

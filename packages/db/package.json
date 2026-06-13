@@ -10,7 +10,7 @@
 		"zod": "^4.4.3"
 	},
 	"peerDependencies": {
-		"expo-sqlite": ">=55.0.0"
+		"expo-sqlite": ">=56.0.0"
 	},
 	"scripts": {
 		"build": "tsgo -p ./tsconfig.json"

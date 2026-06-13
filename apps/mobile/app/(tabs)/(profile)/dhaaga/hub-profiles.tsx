@@ -19,7 +19,7 @@ import { NativeTextMedium, NativeTextNormal } from '#/ui/NativeText';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { AppAccountSelectionItem } from '#/features/accounts/views/AccountView';
 import { AppButtonVariantA } from '#/components/lib/Buttons';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 

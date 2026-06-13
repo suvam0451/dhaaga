@@ -8,7 +8,7 @@ import { useAppTheme } from '#/states/global/hooks';
 import NavBar_Simple from '#/features/navbar/views/NavBar_Simple';
 import { useState } from 'react';
 import { NativeTextBold, NativeTextSpecial } from '#/ui/NativeText';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { AppDividerHard } from '#/ui/Divider';
 import RoutingUtils from '#/utils/routing.utils';

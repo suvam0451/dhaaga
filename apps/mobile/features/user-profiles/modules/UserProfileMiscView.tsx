@@ -1,4 +1,4 @@
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 import React from 'react';
 import { View } from 'react-native';
 import { NativeTextBold } from '#/ui/NativeText';

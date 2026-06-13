@@ -19,7 +19,7 @@ import {
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 import ReplyComposerView from '#/features/chat/views/ReplyComposerView';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
-import { LegendList, LegendListRef } from '@legendapp/list';
+import { LegendList, LegendListRef } from '@legendapp/list/react-native';
 
 type MessageProps = {
 	message: MessageObjectType;

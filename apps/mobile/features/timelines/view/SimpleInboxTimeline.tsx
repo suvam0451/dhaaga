@@ -8,7 +8,7 @@ import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { AppDividerSoft } from '#/ui/Divider';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 
 type Props = {
 	queryResult: UseQueryResult<ResultPage<NotificationObjectType[]>, Error>;

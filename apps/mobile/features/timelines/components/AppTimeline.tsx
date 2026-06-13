@@ -10,7 +10,7 @@ import { View } from 'react-native';
 import NavBar_Explore from '#/features/navbar/views/NavBar_Explore';
 import NavBar_Inbox from '#/features/navbar/views/NavBar_Inbox';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 
 const navbarConfigs: Record<
 	string,
