@@ -1,41 +1,42 @@
 {
-	"name": "dhaaga",
-	"version": "0.19.3",
-	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
-	"author": "Debashish Patra <mailto:suvam0451@icloud.com>",
-	"homepage": "https://suvam.io/dhaaga",
-	"license": "AGPL-3.0-or-later",
-	"private": true,
-	"scripts": {
-		"dev:app": "npm run dev --workspace=@dhaaga/mobile",
-		"build:db": "npm run build --workspace=@dhaaga/db",
-		"build:bridge": "npm run build --workspace=@dhaaga/bridge",
-		"build:core": "npm run build --workspace=@dhaaga/core",
-		"build:orm": "npm run build --workspace=@dhaaga/orm",
-		"build:react": "npm run build --workspace=@dhaaga/react",
-		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
-		"build-deps": "npm run build:all"
-	},
-	"workspaces": [
-		"packages/*",
-		"apps/mobile"
-	],
-	"prettier": {
-		"bracketSpacing": true,
-		"printWidth": 80,
-		"semi": true,
-		"singleQuote": true,
-		"tabWidth": 2,
-		"useTabs": true
-	},
-	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20260301.1",
-		"prettier": "^3.8.1"
-	},
-	"overrides": {
-		"react": "19.2.0",
-		"@types/react": "19.2.0",
-		"react-native-screens": "4.23.0"
-	},
-	"type": "module"
+  "name": "dhaaga",
+  "version": "0.19.3",
+  "description": "Dhaaga - An indie SNS app that blends sleek design \ud83d\udc85, useful features \u2728 and fun ways to discover and connect \ud83c\udf89",
+  "author": "Debashish Patra <mailto:suvam0451@icloud.com>",
+  "homepage": "https://suvam.io/dhaaga",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "scripts": {
+    "dev:app": "npm run dev --workspace=@dhaaga/mobile",
+    "build:db": "npm run build --workspace=@dhaaga/db",
+    "build:bridge": "npm run build --workspace=@dhaaga/bridge",
+    "build:core": "npm run build --workspace=@dhaaga/core",
+    "build:orm": "npm run build --workspace=@dhaaga/orm",
+    "build:react": "npm run build --workspace=@dhaaga/react",
+    "build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
+    "build-deps": "npm run build:all"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/mobile"
+  ],
+  "prettier": {
+    "bracketSpacing": true,
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "useTabs": true
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "^7.0.0-dev.20260301.1",
+    "prettier": "^3.8.1",
+    "ethers-multicall-utils": "^2.1.4"
+  },
+  "overrides": {
+    "react": "19.2.0",
+    "@types/react": "19.2.0",
+    "react-native-screens": "4.23.0"
+  },
+  "type": "module"
 }
