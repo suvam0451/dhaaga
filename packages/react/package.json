@@ -14,8 +14,7 @@
 		"react": "*"
 	},
 	"scripts": {
-		"build": "tsgo -p ./tsconfig.json",
-		"tsc": "tsc -p ./tsconfig.json",
+		"build": "tsc -p ./tsconfig.json",
 		"test": "vitest run"
 	},
 	"type": "module"

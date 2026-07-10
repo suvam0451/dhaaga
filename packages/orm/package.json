@@ -28,6 +28,6 @@
 		"expo-sqlite": ">=56.0.0"
 	},
 	"scripts": {
-		"build": "tsgo -p ./tsconfig.json"
+		"build": "tsc -p ./tsconfig.json"
 	}
 }

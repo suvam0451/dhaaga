@@ -35,7 +35,7 @@
 		"zod": "^4.3.6"
 	},
 	"scripts": {
-		"build": "rm -rf ./dist && tsgo -p ./tsconfig.json",
+		"build": "rm -rf ./dist && tsc -p ./tsconfig.json",
 		"test": "vitest run"
 	},
 	"type": "module",
