@@ -30,7 +30,6 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20260613.1",
 		"prettier": "^3.8.4"
 	},
 	"overrides": {

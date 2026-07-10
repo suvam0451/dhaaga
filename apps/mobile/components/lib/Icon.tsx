@@ -28,6 +28,7 @@ import {
 } from '#/states/global/hooks';
 import { APP_BOTTOM_SHEET_ENUM } from '#/states/global/slices/createBottomSheetSlice';
 import RoutingUtils from '#/utils/routing.utils';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 type APP_ICON_ENUM =
 	| 'add'
@@ -79,6 +80,7 @@ type APP_ICON_ENUM =
 	| 'flash'
 	| 'funnel-outline'
 	| 'gallery'
+	| 'gesture-tap'
 	| 'globe'
 	| 'grid-outline'
 	| 'heart'
@@ -797,6 +799,15 @@ export function AppIcon({
 				return (
 					<Ionicons
 						name="logo-instagram"
+						size={_size}
+						color={_color}
+						style={iconStyle}
+					/>
+				);
+			case 'gesture-tap':
+				return (
+					<MaterialCommunityIcons
+						name="gesture-tap"
 						size={_size}
 						color={_color}
 						style={iconStyle}

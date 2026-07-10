@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { AppText } from '#/components/lib/Text';
 import { AppIcon } from '#/components/lib/Icon';
@@ -15,6 +15,12 @@ import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import SettingPageBuilder from '#/ui/SettingPageBuilder';
 import { NativeTextBold, NativeTextMedium } from '#/ui/NativeText';
 import AppSettingBooleanToggle from '#/features/settings/components/AppSettingBooleanToggle';
+import TapActionSettings from '#/features/settings/views/TapActionSettings';
+import TimelineSettings from '#/features/settings/views/TimelineSettings';
+import { APP_VERSION } from '#/utils/default-settings';
+import { useAssets } from 'expo-asset';
+import { Image } from 'expo-image';
+import SettingsFooter from '#/features/settings/components/SettingsFooter';
 
 function Divider() {
 	const { theme } = useAppTheme();
@@ -42,8 +48,40 @@ function Page() {
 	const lang = getValue(APP_SETTING_KEY.APP_LANGUAGE);
 	const selectedLocale = LocaleOptions.find((o) => o.code === lang);
 
+	const LOGO_DIMENSION = 84;
+
+	const [assets, error] = useAssets([require('#/assets/dhaaga/icon.png')]);
+
+	if (error || !assets) return <View />;
+
 	return (
 		<SettingPageBuilder label={t(`general.navbar_Label`)}>
+			<View
+				style={{
+					alignItems: 'center',
+					marginVertical: 32,
+				}}
+			>
+				<Image
+					source={{ uri: assets[0].uri }}
+					style={{
+						width: LOGO_DIMENSION,
+						height: LOGO_DIMENSION,
+						borderRadius: 16,
+					}}
+				/>
+				<NativeTextBold
+					style={{
+						color: theme.secondary.a30,
+						textAlign: 'center',
+						fontSize: 14,
+						marginTop: 8,
+					}}
+				>
+					{APP_VERSION}
+				</NativeTextBold>
+			</View>
+
 			<View
 				style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
 			>
@@ -78,20 +116,9 @@ function Page() {
 				<View style={{ flex: 1 }} />
 				<AppIcon id={'chevron-right'} size={28} />
 			</View>
-			{/*<View style={styles.settingItemContainer}>*/}
-			{/*	<NativeTextMedium*/}
-			{/*		emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}*/}
-			{/*		style={{ fontSize: 18 }}*/}
-			{/*	>*/}
-			{/*		{t(`general.language.L_translatorMode`)}*/}
-			{/*	</NativeTextMedium>*/}
-			{/*	<View style={{ flex: 1 }} />*/}
-			{/*	<AppIcon id={'info'} color={theme.complementary} size={28} />*/}
-			{/*	<AppSettingBooleanToggle*/}
-			{/*		isChecked={IsChecked}*/}
-			{/*		onPress={toggleCheck}*/}
-			{/*	/>*/}
-			{/*</View>*/}
+
+			<TimelineSettings />
+			<TapActionSettings />
 
 			<View
 				style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
@@ -100,7 +127,19 @@ function Page() {
 				<NativeTextMedium
 					style={{ fontSize: 18, color: theme.primary, marginLeft: 6 }}
 				>
-					{t(`general.timelines.S_Timelines`)}
+					Long Press Actions
+				</NativeTextMedium>
+			</View>
+			<Divider />
+
+			<View
+				style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16 }}
+			>
+				<AppIcon id={'language'} size={28} color={theme.primary} />
+				<NativeTextMedium
+					style={{ fontSize: 18, color: theme.primary, marginLeft: 6 }}
+				>
+					Offline Capabilities
 				</NativeTextMedium>
 			</View>
 			<Divider />
@@ -110,10 +149,14 @@ function Page() {
 						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
 						style={{ fontSize: 18 }}
 					>
-						{t(`general.timelines.L_lurkerMode`)}
+						Sync my Posts
 					</NativeTextMedium>
-					<AppText.Normal emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
-						{t(`general.timelines.D_lurkerMode`)}
+					<AppText.Normal
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+						numberOfLines={2}
+						style={{ maxWidth: Dimensions.get('window').width - 100 }}
+					>
+						Browse your posts offline (sync is not guaranteed).
 					</AppText.Normal>
 				</View>
 
@@ -122,34 +165,38 @@ function Page() {
 			</View>
 
 			<View style={styles.settingItemContainer}>
-				<NativeTextMedium
-					emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
-					style={{ fontSize: 18 }}
-				>
-					{t(`general.timelines.L_contentWarnings`)}
-				</NativeTextMedium>
+				<View>
+					<NativeTextMedium
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A10}
+						style={{ fontSize: 18 }}
+					>
+						Sync my Bookmarks
+					</NativeTextMedium>
+					<AppText.Normal
+						emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}
+						numberOfLines={2}
+						style={{ maxWidth: Dimensions.get('window').width - 100 }}
+					>
+						Browse bookmarked posts offline (sync is not guaranteed).
+					</AppText.Normal>
+				</View>
+
 				<View style={{ flex: 1 }} />
-				<AppIcon
-					id={'flash'}
-					containerStyle={{ marginLeft: 6 }}
-					color={theme.complementary}
-				/>
-				<NativeTextMedium emphasis={APP_COLOR_PALETTE_EMPHASIS.A20}>
-					Hide
-				</NativeTextMedium>
-				<AppIcon id={'chevron-right'} size={28} />
+				<AppSettingBooleanToggle isChecked={IsChecked} onPress={toggleCheck} />
 			</View>
 
-			<NativeTextBold style={[styles.text, { color: theme.secondary.a20 }]}>
-				{t(`discover.moreSoon.firstHalf`, {
-					ns: LOCALIZATION_NAMESPACE.CORE,
-				})}
-				<Text style={{ color: theme.complementary }}>
-					{t(`discover.moreSoon.secondHalf`, {
-						ns: LOCALIZATION_NAMESPACE.CORE,
-					})}
-				</Text>
-			</NativeTextBold>
+			<View style={{ marginTop: 6 }}>
+				<NativeTextMedium
+					emphasis={APP_COLOR_PALETTE_EMPHASIS.A40}
+					color={theme.complementary}
+					style={{ fontSize: 14 }}
+				>
+					NOTE: As of v0.19.3, syncing media is not supported. You will need to
+					be online to view any media attachments.
+				</NativeTextMedium>
+			</View>
+
+			<SettingsFooter />
 		</SettingPageBuilder>
 	);
 }
