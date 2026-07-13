@@ -4,9 +4,9 @@ import {
 	Status,
 	PostTargetInterface,
 } from './_interface.js';
-import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import type { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
 import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
+import { AppBskyFeedDefs } from '@atproto/api';
 
 class PostAdapterBase implements PostTargetInterface {
 	getCid(): string | null {
@@ -21,7 +21,7 @@ class PostAdapterBase implements PostTargetInterface {
 	hasParentAvailable() {
 		return false;
 	}
-	getParentRaw(): Status | PostView | null {
+	getParentRaw(): Status | AppBskyFeedDefs.PostView | null {
 		return null;
 	}
 	hasRootAvailable() {
@@ -33,7 +33,7 @@ class PostAdapterBase implements PostTargetInterface {
 	hasQuoteAvailable(): boolean {
 		return false;
 	}
-	getQuoteRaw(): PostView | undefined | null {
+	getQuoteRaw(): AppBskyFeedDefs.PostView | undefined | null {
 		return null;
 	}
 

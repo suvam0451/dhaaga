@@ -1,5 +1,4 @@
 import { AppBskyActorDefs, AppBskyActorGetPreferences } from '@atproto/api';
-import { ViewerState } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { type ApiTargetInterface, AtprotoApiAdapter } from '../client/index.js';
 
 export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
@@ -12,7 +11,7 @@ class AtprotoPostService {
 		client: ApiTargetInterface,
 		uri: string,
 		cid: string,
-		viewer: ViewerState,
+		viewer: any,
 	) {
 		const _client = client as AtprotoApiAdapter;
 		if (viewer.like === undefined) return _client.posts.atProtoLike(uri, cid);
