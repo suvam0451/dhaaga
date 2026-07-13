@@ -6,7 +6,7 @@ export type AppSavedPrefDate = AppBskyActorGetPreferences.OutputSchema;
 
 class AtprotoPostService {
 	/**
-	 * toggle like for an at proto post object
+	 * toggle like for an at proto post-object
 	 */
 	static async toggleLike(
 		client: ApiTargetInterface,

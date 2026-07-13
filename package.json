@@ -2,7 +2,7 @@
 	"name": "dhaaga",
 	"version": "0.19.3",
 	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
-	"author": "Debashish Patra <mailto:suvam0451@icloud.com>",
+	"author": "Debashish Patra <mailto:suvam0451@protonmail.com>",
 	"homepage": "https://suvam.io/dhaaga",
 	"license": "AGPL-3.0-or-later",
 	"private": true,
@@ -30,12 +30,7 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"prettier": "^3.8.4",
-		"typescript": "^7.0.2"
-	},
-	"overrides": {
-		"react": "19.2.3",
-		"@types/react": "19.2.14"
+		"prettier": "^3.8.4"
 	},
 	"type": "module"
 }
