@@ -3,7 +3,6 @@ import type {
 	AppBskyActorGetProfile,
 	AppBskyBookmarkDefs,
 	AppBskyFeedDefs,
-	AppBskyFeedGetActorLikes,
 	AppBskyGraphDefs,
 	ComAtprotoIdentityResolveHandle,
 } from '@atproto/api';
@@ -26,7 +25,6 @@ import {
 import { MegaRelationship } from '#/types/megalodon.types.js';
 import { MissUserDetailed } from '#/types/misskey-js.types.js';
 import { AppAtpSessionData } from '#/types/atproto.js';
-import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
 import { DriverWebfingerType } from '#/types/query.types.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { errorBuilder } from '#/types/index.js';
@@ -211,7 +209,7 @@ class BlueskyAccountsRouter implements AccountRoute {
 	 * Fetch at max 10 posts pinned by this user
 	 * @param did
 	 */
-	async getPinnedPosts(did: string): Promise<FeedViewPost[]> {
+	async getPinnedPosts(did: string): Promise<AppBskyFeedDefs.FeedViewPost[]> {
 		const agent = getXrpcAgent(this.dto);
 		try {
 			const data = await agent.getAuthorFeed({

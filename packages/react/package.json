@@ -9,18 +9,12 @@
 	"types": "dist/index.d.ts",
 	"peerDependencies": {
 		"@dhaaga/bridge": "*",
-		"@tanstack/query-core": "^5.90.16",
-		"immer": "^11.1.0",
+		"@tanstack/query-core": "^5.100.9",
+		"immer": "^11.1.7",
 		"react": "*"
 	},
-	"devDependencies": {
-		"@vitejs/plugin-react": "^5.1.4",
-		"jsdom": "^28.1.0",
-		"vitest": "^4.0.15"
-	},
 	"scripts": {
-		"build": "tsgo -p ./tsconfig.json",
-		"tsc": "tsc -p ./tsconfig.json",
+		"build": "tsc -p ./tsconfig.json",
 		"test": "vitest run"
 	},
 	"type": "module"

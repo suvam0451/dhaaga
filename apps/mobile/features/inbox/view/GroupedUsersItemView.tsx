@@ -2,7 +2,7 @@ import { NotificationUserGroupType } from '@dhaaga/bridge';
 import { View } from 'react-native';
 import Avatar from '#/ui/Avatar';
 import useSheetNavigation from '#/states/navigation/useSheetNavigation';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 
 type Props = {
 	items: NotificationUserGroupType[];

@@ -1,21 +1,8 @@
 import { ReactElement, useEffect, useRef, useState } from 'react';
 import PagerView from 'react-native-pager-view';
-import {
-	FlatList,
-	StyleProp,
-	View,
-	ViewStyle,
-	StyleSheet,
-	Dimensions,
-} from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '#/states/global/hooks';
 import { useLocalSearchParams } from 'expo-router';
-import AppSegmentedControl from '#/ui/AppSegmentedControl';
-import { NativeTextMedium } from '#/ui/NativeText';
-import AppWidget from '#/features/widgets/AppWidget';
-import { useSubscriptionGalleryState } from '@dhaaga/react';
-import { Image } from 'expo-image';
-import { appDimensions } from '#/styles/dimensions';
 import SubscriptionGalleryWidget from '#/features/inbox/widgets/SubscriptionGalleryWidget';
 
 type AppPagerViewProps = {

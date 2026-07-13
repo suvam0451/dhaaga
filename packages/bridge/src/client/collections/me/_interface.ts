@@ -1,5 +1,8 @@
 import { Endpoints } from 'misskey-js';
-import { AppBskyActorGetProfile } from '@atproto/api';
+import {
+	AppBskyActorGetProfile,
+	ComAtprotoServerGetSession,
+} from '@atproto/api';
 import { MastoAccountCredentials } from '#/types/mastojs.types.js';
 
 export interface MeRoute {
@@ -9,6 +12,7 @@ export interface MeRoute {
 	getMe(): Promise<
 		| MastoAccountCredentials
 		| Endpoints['i']['res']
+		| ComAtprotoServerGetSession.OutputSchema
 		| AppBskyActorGetProfile.OutputSchema
 	>;
 }

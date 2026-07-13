@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { MessageParser } from '@dhaaga/bridge';
 import { ChatroomStateAction, useChatroomDispatch } from '@dhaaga/react';
 import { TextInput } from 'react-native';
-import { LegendListRef } from '@legendapp/list';
+import { LegendListRef } from '@legendapp/list/react-native';
 
 function useSendMessage(
 	roomId: string,

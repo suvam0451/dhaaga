@@ -1,0 +1,19 @@
+name: 'I18n Check'
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  check-i18n:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: latest
+          cache: "npm"
+      - run: npm install
+      - run: node scripts/check-i18n.js

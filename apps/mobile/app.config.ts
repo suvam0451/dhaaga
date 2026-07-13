@@ -91,11 +91,6 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		backgroundColor: '#e6cf8b',
 		translucent: true,
 	},
-	splash: {
-		image: './assets/dhaaga/icon.png',
-		resizeMode: 'contain',
-		backgroundColor: '#e6cf8b',
-	},
 	extra: {
 		eas: {
 			projectId: '6a318c01-ca78-440f-840f-64c54ddc94fe',
@@ -109,6 +104,14 @@ const expo = ({ config }: ConfigContext): ExpoConfig => ({
 		'expo-router',
 		'expo-image',
 		'expo-sharing',
+		[
+			'expo-splash-screen',
+			{
+				image: './assets/dhaaga/icon.png',
+				resizeMode: 'contain',
+				backgroundColor: '#e6cf8b',
+			},
+		],
 		[
 			'expo-build-properties',
 			{

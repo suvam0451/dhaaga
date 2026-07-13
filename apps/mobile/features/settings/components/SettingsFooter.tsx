@@ -4,11 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import { LinkingUtils } from '#/utils/linking.utils';
-import { APP_VERSION } from '#/utils/default-settings';
 import { NativeTextBold } from '#/ui/NativeText';
 import { CoffeeIconOnly } from '#/features/settings/components/Coffee';
-import { useAssets } from 'expo-asset';
-import { Image } from 'expo-image';
 
 function SettingsFooter() {
 	const { theme } = useAppTheme();
@@ -16,32 +13,8 @@ function SettingsFooter() {
 	const ICON_COLOR = theme.complementary;
 	const ICON_SIZE = 32;
 
-	const [assets, error] = useAssets([require('#/assets/dhaaga/icon.png')]);
-
-	if (error || !assets) return <View />;
-
-	const LOGO_DIMENSION = 84;
-
 	return (
 		<View style={styles.root}>
-			<Image
-				source={{ uri: assets[0].uri }}
-				style={{
-					width: LOGO_DIMENSION,
-					height: LOGO_DIMENSION,
-					borderRadius: 16,
-				}}
-			/>
-			<NativeTextBold
-				style={{
-					color: theme.secondary.a30,
-					textAlign: 'center',
-					fontSize: 14,
-					marginTop: 8,
-				}}
-			>
-				{APP_VERSION}
-			</NativeTextBold>
 			<View style={styles.linkRow}>
 				<Ionicons
 					name={'share-social'}
@@ -98,7 +71,7 @@ export default SettingsFooter;
 
 const styles = StyleSheet.create({
 	root: {
-		marginTop: 64,
+		marginBottom: 32,
 		alignItems: 'center',
 	},
 	linkRow: {

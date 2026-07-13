@@ -9,7 +9,6 @@ import {
 } from '@atproto/api';
 import { getXrpcAgent } from '#/utils/atproto.js';
 import { notImplementedErrorBuilder } from '#/types/api-response.js';
-import { SavedFeedsPrefV2 } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import {
 	PinStatusUpdateResult,
 	SubscriptionUpdateResult,
@@ -38,9 +37,9 @@ class BlueskyFeedRouter {
 		const i = pref.preferences.findIndex(AppBskyActorDefs.isSavedFeedsPrefV2);
 		if (i === -1) return [-1, -1];
 
-		const j = (pref.preferences[i] as SavedFeedsPrefV2).items.findIndex(
-			(o) => o.value === uri,
-		);
+		const j = (
+			pref.preferences[i] as AppBskyActorDefs.SavedFeedsPrefV2
+		).items.findIndex((o) => o.value === uri);
 		return [i, j];
 	}
 
@@ -89,7 +88,7 @@ class BlueskyFeedRouter {
 		if (i === -1) return { success: false, subscribed: false };
 		if (j !== -1) return { success: true, subscribed: true };
 
-		(pref.preferences[i] as SavedFeedsPrefV2).items.push({
+		(pref.preferences[i] as AppBskyActorDefs.SavedFeedsPrefV2).items.push({
 			value: uri,
 			pinned: true,
 			type: 'feed',
@@ -108,7 +107,10 @@ class BlueskyFeedRouter {
 		const [i, j] = this.findFeedPref(pref, uri);
 		if (i === -1 || j === -1) return { success: false, subscribed: false };
 
-		(pref.preferences[i] as SavedFeedsPrefV2).items.splice(j, 1);
+		(pref.preferences[i] as AppBskyActorDefs.SavedFeedsPrefV2).items.splice(
+			j,
+			1,
+		);
 
 		const result = await this.xrpc.app.bsky.actor.putPreferences(pref);
 		return { success: result.success, subscribed: false };
@@ -119,7 +121,8 @@ class BlueskyFeedRouter {
 		const [i, j] = this.findFeedPref(pref, uri);
 		if (i === -1 || j === -1) return { success: false, pinned: false };
 
-		(pref.preferences[i] as SavedFeedsPrefV2).items[j].pinned = true;
+		(pref.preferences[i] as AppBskyActorDefs.SavedFeedsPrefV2).items[j].pinned =
+			true;
 		const result = await this.xrpc.app.bsky.actor.putPreferences(pref);
 		return { success: result.success, pinned: true };
 	}
@@ -133,7 +136,8 @@ class BlueskyFeedRouter {
 		const [i, j] = this.findFeedPref(pref, uri);
 		if (i === -1 || j === -1) return { success: false, pinned: false };
 
-		(pref.preferences[i] as SavedFeedsPrefV2).items[j].pinned = false;
+		(pref.preferences[i] as AppBskyActorDefs.SavedFeedsPrefV2).items[j].pinned =
+			false;
 		const result = await this.xrpc.app.bsky.actor.putPreferences(pref);
 		return { success: result.success, pinned: false };
 	}

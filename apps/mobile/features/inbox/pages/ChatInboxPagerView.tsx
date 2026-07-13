@@ -9,7 +9,7 @@ import ChatRoomListItemView from '#/features/timelines/view/ChatRoomListItemView
 import { AppDividerSoft } from '#/ui/Divider';
 import { appDimensions } from '#/styles/dimensions';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';
 

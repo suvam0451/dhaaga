@@ -7,10 +7,6 @@ import { router } from 'expo-router';
 
 const MENU_ITEMS = [
 	{
-		iconId: 'language' as APP_ICON_ENUM,
-		onPress: RoutingUtils.toSelectAppLanguage,
-	},
-	{
 		iconId: 'person' as APP_ICON_ENUM,
 		onPress: RoutingUtils.toAccountManagement,
 	},

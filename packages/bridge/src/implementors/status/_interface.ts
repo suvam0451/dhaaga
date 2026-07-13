@@ -1,10 +1,8 @@
 import { MediaAttachmentTargetInterface } from '../media-attachment/_interface.js';
 import { Note } from 'misskey-js/autogen/models.js';
 import type { mastodon } from 'masto';
-import { PostView } from '@atproto/api/dist/client/types/app/bsky/feed/defs.js';
-import { ProfileViewBasic } from '@atproto/api/dist/client/types/app/bsky/actor/defs.js';
 import { PostLinkAttachmentObjectType } from '#/types/shared/link-attachments.js';
-import { AppBskyFeedDefs } from '@atproto/api';
+import { AppBskyActorDefs, AppBskyFeedDefs } from '@atproto/api';
 
 export type Status = mastodon.v1.Status | Note | null | undefined;
 export type StatusArray = Status[];
@@ -29,7 +27,7 @@ export type AppBlueskyAuthor = {
 };
 
 interface PostTargetInterface {
-	getRaw(): Status | PostView;
+	getRaw(): Status | AppBskyFeedDefs.PostView;
 
 	getId(): string;
 
@@ -58,15 +56,15 @@ interface PostTargetInterface {
 	 */
 	hasParentAvailable(): boolean;
 
-	getParentRaw(): Status | PostView;
+	getParentRaw(): Status | AppBskyFeedDefs.PostView;
 
 	hasRootAvailable(): boolean;
 
-	getRootRaw(): PostView | undefined | null;
+	getRootRaw(): AppBskyFeedDefs.PostView | undefined | null;
 
 	hasQuoteAvailable(): boolean;
 
-	getQuoteRaw(): PostView | undefined | null;
+	getQuoteRaw(): AppBskyFeedDefs.PostView | undefined | null;
 
 	/**
 	 * --- Post Hierarchy | END ---
@@ -78,7 +76,7 @@ interface PostTargetInterface {
 
 	getFacets(): any[];
 
-	getUser(): any | ProfileViewBasic | null;
+	getUser(): any | AppBskyActorDefs.ProfileViewBasic | null;
 
 	isReposted(): boolean;
 

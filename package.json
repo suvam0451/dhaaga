@@ -2,7 +2,7 @@
 	"name": "dhaaga",
 	"version": "0.19.3",
 	"description": "Dhaaga - An indie SNS app that blends sleek design 💅, useful features ✨ and fun ways to discover and connect 🎉",
-	"author": "Debashish Patra <mailto:suvam0451@icloud.com>",
+	"author": "Debashish Patra <mailto:suvam0451@protonmail.com>",
 	"homepage": "https://suvam.io/dhaaga",
 	"license": "AGPL-3.0-or-later",
 	"private": true,
@@ -14,7 +14,8 @@
 		"build:orm": "npm run build --workspace=@dhaaga/orm",
 		"build:react": "npm run build --workspace=@dhaaga/react",
 		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
-		"build-deps": "npm run build:all"
+		"build-deps": "npm run build:all",
+		"check-env": "node scripts/check-env.js"
 	},
 	"workspaces": [
 		"packages/*",
@@ -29,13 +30,7 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"@typescript/native-preview": "^7.0.0-dev.20260301.1",
-		"prettier": "^3.8.1"
-	},
-	"overrides": {
-		"react": "19.2.0",
-		"@types/react": "19.2.0",
-		"react-native-screens": "4.23.0"
+		"prettier": "^3.8.4"
 	},
 	"type": "module"
 }

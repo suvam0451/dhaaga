@@ -12,7 +12,7 @@ import { useState } from 'react';
 import TimelinePostItemView from '#/features/post-item-view/TimelinePostItemView';
 import TimelineStateIndicator from '#/features/timelines/components/TimelineStateIndicator';
 import ThreadRootReplyView from '#/features/post-thread-view/views/ThreadRootReplyView';
-import { LegendList } from '@legendapp/list';
+import { LegendList } from '@legendapp/list/react-native';
 import useScrollHandleFlatList from '#/hooks/anim/useScrollHandleFlatList';
 import { LOCALIZATION_NAMESPACE } from '#/types/app.types';
 import { useTranslation } from 'react-i18next';

@@ -1,5 +1,9 @@
 import { DriverTimelineGetApiResponse, TimelinesRoute } from './_interface.js';
-import type { AppBskyFeedDefs } from '@atproto/api';
+import {
+	AppBskyFeedDefs,
+	AppBskyFeedGetFeedGenerator,
+	AppBskyFeedGetFeedGenerators,
+} from '@atproto/api';
 import { AppAtpSessionData } from '#/types/atproto.js';
 import { getBskyAgent, getXrpcAgent } from '#/utils/atproto.js';
 import { PaginatedPromise } from '#/types/api-response.js';
@@ -84,7 +88,9 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	 * Get details for a single feed
 	 * @param uri uri of the feed
 	 */
-	async getFeedGenerator(uri: string) {
+	async getFeedGenerator(
+		uri: string,
+	): Promise<AppBskyFeedGetFeedGenerator.Response> {
 		const agent = getXrpcAgent(this.dto);
 		return agent.app.bsky.feed.getFeedGenerator({ feed: uri });
 	}
@@ -93,7 +99,9 @@ class BlueskyTimelinesRouter implements TimelinesRoute {
 	 * Get details for multiple feeds
 	 * @param uriList list of feed uris
 	 */
-	async getFeedGenerators(uriList: string[]) {
+	async getFeedGenerators(
+		uriList: string[],
+	): Promise<AppBskyFeedGetFeedGenerators.Response> {
 		const agent = getXrpcAgent(this.dto);
 		return agent.app.bsky.feed.getFeedGenerators({ feeds: uriList });
 	}

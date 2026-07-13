@@ -6,7 +6,6 @@ import {
 	FlatList,
 } from 'react-native';
 import { router } from 'expo-router';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { APP_ROUTING_ENUM } from '#/utils/route-list';
@@ -82,18 +81,6 @@ function SettingCategoryList() {
 	const { t } = useTranslation([LOCALIZATION_NAMESPACE.SETTINGS]);
 
 	const items = [
-		// {
-		// 	label: t(`accounts.mainMenu_Label`),
-		// 	desc: t(`accounts.mainMenu_Desc`),
-		// 	Icon: (
-		// 		<MaterialIcons
-		// 			name="manage-accounts"
-		// 			size={26}
-		// 			color={SETTING_CATEGORY_ICON_COLOR}
-		// 		/>
-		// 	),
-		// 	to: APP_ROUTING_ENUM.SETTINGS_TAB_ACCOUNTS,
-		// },
 		{
 			label: t(`general.mainMenu_Label`),
 			desc: t(`general.mainMenu_Desc`),
@@ -105,38 +92,6 @@ function SettingCategoryList() {
 				/>
 			),
 			to: APP_ROUTING_ENUM.SETTINGS_TAB_GENERAL,
-		},
-		{
-			label: t(`dhaaga.mainMenu_Label`),
-			desc: t(`dhaaga.mainMenu_Desc`),
-			Icon: (
-				<Ionicons name="flash" size={24} color={SETTING_CATEGORY_ICON_COLOR} />
-			),
-			to: APP_ROUTING_ENUM.SETTINGS_TAB_GOODIE_HUT,
-		},
-		{
-			label: t(`wellbeing.mainMenu_Label`),
-			desc: t(`wellbeing.mainMenu_Desc`),
-			Icon: (
-				<FontAwesome6
-					name="hand-holding-heart"
-					size={24}
-					color={SETTING_CATEGORY_ICON_COLOR}
-				/>
-			),
-			to: APP_ROUTING_ENUM.SETTINGS_TAB_DIGITAL_WELLBEING,
-		},
-		{
-			label: t(`advanced.mainMenu_Label`),
-			desc: t(`advanced.mainMenu_Desc`),
-			Icon: (
-				<Ionicons
-					name="construct"
-					size={24}
-					color={SETTING_CATEGORY_ICON_COLOR}
-				/>
-			),
-			to: APP_ROUTING_ENUM.SETTINGS_TAB_ADVANCED,
 		},
 	];
 
