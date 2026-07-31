@@ -16,4 +16,4 @@ jobs:
           node-version: latest
           cache: "npm"
       - run: npm install
-      - run: node scripts/check-i18n.js
+      - run: node packages/scripts/check-i18n.js
