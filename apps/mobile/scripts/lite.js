@@ -4,7 +4,7 @@ import stripLicensedAssetUse from './strip-licensed-asset-use.js';
 
 // ----------------------
 function switchToLiteEdition() {
-	const TARGET = './app.config.ts';
+	const TARGET = './app.config.js';
 	let content = fs.readFileSync(TARGET, 'utf8');
 
 	content = content.replace(
