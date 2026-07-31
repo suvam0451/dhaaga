@@ -30,7 +30,7 @@ switching apps or websites.
   <a href="https://play.google.com/store/apps/details?id=io.suvam.dhaaga" target="_blank">    
     <img src="./.github/badges/google_play.svg" height="48px"/>
   </a>
-  <a href="https://f-droid.org/packages/io.suvam.dhaaga.lite" target="_blank">
+  <a href="https://f-droid.org/en/packages/io.suvam.dhaaga.lite" target="_blank">
     <img src="./.github/badges/f_droid.svg" height="48px"/>
   </a>
   <a href="https://dhaaga.app" target="_blank">
