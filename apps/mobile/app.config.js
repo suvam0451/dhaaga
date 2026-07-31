@@ -1,5 +1,3 @@
-import { ExpoConfig, ConfigContext } from '@expo/config';
-
 const APP_NAME = process.env.APP_NAME ?? 'Dhaaga (Lite)';
 const BUNDLE_ID = process.env.BUNDLE_IDENTIFIER ?? 'io.suvam.dhaaga.lite';
 const APP_SCHEME = process.env.APP_SCHEME ?? 'dhaaga-lite';
@@ -12,7 +10,7 @@ const NONFREE_PERMS_WHITELIST =
 const NONFREE_PERMS_BLACKLIST =
 	BUNDLE_ID === 'io.suvam.dhaaga.lite' ? ['android.permission.BILLING'] : [];
 
-const expo = ({ config }: ConfigContext): ExpoConfig => ({
+const expo = ({ config }) => ({
 	...config,
 	name: APP_NAME,
 	slug: 'dhaaga',

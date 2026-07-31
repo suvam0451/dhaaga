@@ -61,34 +61,8 @@ class Parser {
 		const seenPost = new Map();
 		let counter = 0;
 		const results: NotificationObjectType[] = [];
-		for (const group of input.data.notificationGroups) {
-			const _group: MastoApiGroupedNotificationType = group as any;
-
-			// handles groups that have no post-association
-			if (_group.statusId === undefined) {
-				results.push({
-					id: group.groupKey,
-					type: group.type,
-					post: null,
-					users: (group.sampleAccountIds as unknown as string[]).map(
-						(o: string) => ({
-							item: UserParser.parse<unknown>(
-								acctList.find((x: any) => x.id === o),
-								driver,
-								server,
-							),
-							types: [group.type],
-							extraData: {},
-						}),
-					),
-					read: true,
-					createdAt: group.latestPageNotificationAt
-						? new Date(group.latestPageNotificationAt)
-						: new Date(),
-					extraData: {},
-				});
-				counter++;
-			} else if (!seenPost.has(_group.statusId)) {
+		for (const group of input.data.notificationGroups as any as MastoApiGroupedNotificationType[]) {
+			if (!seenPost.has(group.statusId)) {
 				const post = PostParser.parse<unknown>(
 					postList.find((x: any) => x.id === group.statusId),
 					driver,

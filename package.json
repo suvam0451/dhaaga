@@ -15,7 +15,7 @@
 		"build:react": "npm run build --workspace=@dhaaga/react",
 		"build:all": "npm run build:bridge && npm run build:orm && npm run build:db && npm run build:core && npm run build:react ",
 		"build-deps": "npm run build:all",
-		"check-env": "node scripts/check-env.js"
+		"check-env": "node packages/scripts/check-env.js"
 	},
 	"workspaces": [
 		"packages/*",
@@ -30,7 +30,9 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"prettier": "^3.8.4"
+		"@types/node": "^26.1.2",
+		"prettier": "^3.8.4",
+		"typescript": "^7.0.2"
 	},
 	"type": "module"
 }

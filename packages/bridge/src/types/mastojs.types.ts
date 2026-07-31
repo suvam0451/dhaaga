@@ -8,7 +8,7 @@ import type { mastodon } from 'masto';
  */
 export type MastoStatus = mastodon.v1.Status;
 export type MastoList = mastodon.v1.List;
-export type MastoAccountCredentials = mastodon.v1.AccountCredentials;
+export type MastoAccountCredentials = mastodon.v1.CredentialAccount;
 export type MastoConversation = mastodon.v1.Conversation;
 export type MastoContext = mastodon.v1.Context;
 export type MastoRelationship = mastodon.v1.Relationship;
