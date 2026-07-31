@@ -34,5 +34,10 @@
 		"prettier": "^3.8.4",
 		"typescript": "^7.0.2"
 	},
+	"overrides": {
+		"react": "19.2.3",
+		"react-dom": "19.2.3",
+		"@types/react": "19.2.14"
+	},
 	"type": "module"
 }

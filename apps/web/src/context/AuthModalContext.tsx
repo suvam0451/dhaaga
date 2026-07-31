@@ -1,5 +1,11 @@
-import { createContext } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import {
+	createContext,
+	useContext,
+	useState,
+	ReactNode,
+	useMemo,
+	useCallback,
+} from 'react';
 
 interface AuthModalContextType {
 	isOpen: boolean;
@@ -7,16 +13,20 @@ interface AuthModalContextType {
 	close: () => void;
 }
 
-const AuthModalContext = createContext<AuthModalContextType | undefined>(undefined);
+const AuthModalContext = createContext<AuthModalContextType | undefined>(
+	undefined,
+);
 
-export function AuthModalProvider({ children }) {
+export function AuthModalProvider({ children }: { children: ReactNode }) {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const open = () => setIsOpen(true);
-	const close = () => setIsOpen(false);
+	const open = useCallback(() => setIsOpen(true), []);
+	const close = useCallback(() => setIsOpen(false), []);
+
+	const value = useMemo(() => ({ isOpen, open, close }), [isOpen, open, close]);
 
 	return (
-		<AuthModalContext.Provider value={{ isOpen, open, close }}>
+		<AuthModalContext.Provider value={value}>
 			{children}
 		</AuthModalContext.Provider>
 	);

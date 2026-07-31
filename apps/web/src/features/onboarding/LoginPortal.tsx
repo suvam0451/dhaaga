@@ -1,5 +1,14 @@
-import { useState } from 'preact/hooks';
-import { LogIn, Sparkles, Cloud, AtSign, Key, Globe } from 'lucide-react';
+import { useState } from 'react';
+import {
+	LogIn,
+	Sparkles,
+	Cloud,
+	AtSign,
+	Key,
+	Globe,
+	ExternalLink,
+	Loader2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -11,7 +20,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { generateDhaagaAuthStrategy } from '@dhaaga/bridge';
+import { useAuth } from '@/store/hooks';
+import { AuthService } from '@/services/auth.service';
 
 interface LoginPortalProps {
 	isOpen: boolean;
@@ -26,6 +36,65 @@ export function LoginPortal({ isOpen, onClose }: LoginPortalProps) {
 	const [blueskyAuthType, setBlueskyAuthType] =
 		useState<BlueskyAuthType>('oauth');
 
+	const {
+		status,
+		error,
+		setAuthStatus,
+		setTempAuthData,
+		tempAuthData,
+		setToken,
+		setActiveAccount,
+	} = useAuth();
+
+	const [instanceUrl, setInstanceUrl] = useState('');
+	const [authCode, setAuthCode] = useState('');
+
+	const handleMastodonSignIn = async () => {
+		console.log('logging you in...');
+		if (!instanceUrl) return;
+
+		setAuthStatus('loading');
+		try {
+			const strategy = await AuthService.initiateMastodonAuth(instanceUrl);
+			setTempAuthData({
+				instanceUrl,
+				clientId: strategy.clientId!,
+				clientSecret: strategy.clientSecret!,
+				loginUrl: strategy.loginUrl,
+			});
+			setAuthStatus('idle');
+			// Open the login URL in a new tab
+			window.open(strategy.loginUrl, '_blank');
+		} catch (e: any) {
+			setAuthStatus('error', e.message);
+		}
+	};
+
+	const handleCompleteMastodonAuth = async () => {
+		if (!authCode || !tempAuthData) return;
+
+		setAuthStatus('loading');
+		try {
+			const { accessToken, user } = await AuthService.completeMastodonAuth(
+				tempAuthData.instanceUrl,
+				authCode,
+				tempAuthData.clientId,
+				tempAuthData.clientSecret,
+			);
+
+			const accountId = `${tempAuthData.instanceUrl}:${user.handle}`;
+			setToken(accountId, {
+				accessToken,
+				user,
+				server: tempAuthData.instanceUrl,
+			});
+			setActiveAccount(accountId);
+			onClose();
+		} catch (e: any) {
+			setAuthStatus('error', e.message);
+		}
+	};
+
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="sm:max-w-[480px] border-none p-8">
@@ -34,7 +103,11 @@ export function LoginPortal({ isOpen, onClose }: LoginPortalProps) {
 						Add Account
 					</DialogTitle>
 					<DialogDescription className="text-muted-foreground text-center">
-						Choose your preferred network to continue
+						{error ? (
+							<span className="text-destructive font-medium">{error}</span>
+						) : (
+							'Choose your preferred network to continue'
+						)}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -159,26 +232,70 @@ export function LoginPortal({ isOpen, onClose }: LoginPortalProps) {
 							<TabsContent value="mastodon" className="mt-0 space-y-6">
 								<div className="flex flex-col items-center gap-3">
 									<Label className="text-lg font-medium block text-center">
-										Enter Instance URL
+										{tempAuthData
+											? 'Enter Authorization Code'
+											: 'Enter Instance URL'}
 									</Label>
 								</div>
-								<div className="flex items-center bg-accent/50 rounded-lg h-14 px-4">
-									<div className="text-muted-foreground shrink-0">
-										<svg
-											viewBox="0 0 24 24"
-											className="w-5 h-5 fill-current opacity-50"
-										>
-											<path d="M21.32 9.55c0-4.03-2.5-5.27-2.5-5.27C17.2 3.63 14.6 3.5 14.6 3.5h-.02s-2.6.13-4.22.78c0 0-2.5 1.24-2.5 5.27 0 0-.03 2.7.07 5.42.1 3 .67 5.4 1.1 6.54.5 1.17 2.03 2.45 3.37 2.45 1.34 0 2.22-.5 2.22-.5l.1-2.28c-2.32.2-4.44-.6-4.86-3.04 0 0-.1-1.17-.1-1.55 0 0 2.42.6 5.13.53 2.7-.07 5.1-.73 5.1-.73s-.03-.43-.03-.92c0-3.66 0-10.42 0-10.42zm-3.35 10c-.35.1-.7.17-1.05.23-.35.05-.72.08-1.07.1-.35.03-.7.04-1.07.03-3.1-.03-5.3-.9-5.3-.9v-1.1c.3.1.6.2.9.27.3.07.6.14.9.18.3.04.6.07 1 .08 2.7.1 4.7-.6 4.7-.6v1.2z" />
-										</svg>
+								{!tempAuthData ? (
+									<div className="flex items-center bg-accent/50 rounded-lg h-14 px-4">
+										<div className="text-muted-foreground shrink-0">
+											<svg
+												viewBox="0 0 24 24"
+												className="w-5 h-5 fill-current opacity-50"
+											>
+												<path d="M21.32 9.55c0-4.03-2.5-5.27-2.5-5.27C17.2 3.63 14.6 3.5 14.6 3.5h-.02s-2.6.13-4.22.78c0 0-2.5 1.24-2.5 5.27 0 0-.03 2.7.07 5.42.1 3 .67 5.4 1.1 6.54.5 1.17 2.03 2.45 3.37 2.45 1.34 0 2.22-.5 2.22-.5l.1-2.28c-2.32.2-4.44-.6-4.86-3.04 0 0-.1-1.17-.1-1.55 0 0 2.42.6 5.13.53 2.7-.07 5.1-.73 5.1-.73s-.03-.43-.03-.92c0-3.66 0-10.42 0-10.42zm-3.35 10c-.35.1-.7.17-1.05.23-.35.05-.72.08-1.07.1-.35.03-.7.04-1.07.03-3.1-.03-5.3-.9-5.3-.9v-1.1c.3.1.6.2.9.27.3.07.6.14.9.18.3.04.6.07 1 .08 2.7.1 4.7-.6 4.7-.6v1.2z" />
+											</svg>
+										</div>
+										<span className="text-lg text-muted-foreground ml-2 shrink-0 select-none">
+											https://
+										</span>
+										<Input
+											placeholder="mastodon.social"
+											className="bg-transparent border-none h-full text-lg pl-1 pr-0 focus-visible:ring-0 flex-1"
+											value={instanceUrl}
+											onChange={(e) =>
+												setInstanceUrl((e.target as HTMLInputElement).value)
+											}
+										/>
 									</div>
-									<span className="text-lg text-muted-foreground ml-2 shrink-0 select-none">
-										https://
-									</span>
-									<Input
-										placeholder="mastodon.social"
-										className="bg-transparent border-none h-full text-lg pl-1 pr-0 focus-visible:ring-0 flex-1"
-									/>
-								</div>
+								) : (
+									<div className="space-y-4">
+										<div className="flex items-center bg-accent/50 rounded-lg h-14 px-4">
+											<Key className="w-5 h-5 text-muted-foreground opacity-50 shrink-0" />
+											<Input
+												placeholder="Enter the code from Mastodon"
+												className="bg-transparent border-none h-full text-lg pl-3 pr-0 focus-visible:ring-0 flex-1"
+												value={authCode}
+												onChange={(e) =>
+													setAuthCode((e.target as HTMLInputElement).value)
+												}
+											/>
+										</div>
+										<div className="flex flex-col gap-2">
+											<Button
+												variant="link"
+												className="text-sm text-muted-foreground w-full flex items-center gap-1"
+												onClick={() =>
+													window.open(tempAuthData.loginUrl, '_blank')
+												}
+											>
+												<ExternalLink className="w-4 h-4" />
+												Open login page again
+											</Button>
+											<Button
+												variant="ghost"
+												className="text-sm text-muted-foreground w-full"
+												onClick={() => {
+													setTempAuthData(null);
+													setAuthStatus('idle');
+												}}
+											>
+												Start over
+											</Button>
+										</div>
+									</div>
+								)}
 							</TabsContent>
 
 							<TabsContent value="misskey" className="mt-0 space-y-6">
@@ -216,9 +333,23 @@ export function LoginPortal({ isOpen, onClose }: LoginPortalProps) {
 					</div>
 
 					<div className="flex justify-center pt-6">
-						<Button className="h-12 px-8 rounded-lg flex items-center gap-2 text-lg min-w-[160px]">
-							<LogIn className="w-5 h-5" />
-							Sign in
+						<Button
+							className="h-12 px-8 rounded-lg flex items-center gap-2 text-lg min-w-[160px]"
+							disabled={status === 'loading'}
+							onClick={
+								provider === 'mastodon'
+									? tempAuthData
+										? handleCompleteMastodonAuth
+										: handleMastodonSignIn
+									: undefined
+							}
+						>
+							{status === 'loading' ? (
+								<Loader2 className="w-5 h-5 animate-spin" />
+							) : (
+								<LogIn className="w-5 h-5" />
+							)}
+							{tempAuthData ? 'Verify Code' : 'Sign in'}
 						</Button>
 					</div>
 				</div>

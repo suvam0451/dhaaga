@@ -1,5 +1,11 @@
-import { createContext } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import {
+	createContext,
+	useContext,
+	useEffect,
+	useState,
+	ReactNode,
+	useMemo,
+} from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -10,7 +16,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }) {
+export function ThemeProvider({ children }: { children: ReactNode }) {
 	const [theme, setTheme] = useState<Theme>(() => {
 		if (typeof window !== 'undefined') {
 			return (localStorage.getItem('theme') as Theme) || 'system';
@@ -20,11 +26,12 @@ export function ThemeProvider({ children }) {
 
 	useEffect(() => {
 		const root = window.document.documentElement;
-		
+
 		const applyTheme = (t: Theme) => {
 			root.classList.remove('light', 'dark');
 			if (t === 'system') {
-				const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+				const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+					.matches
 					? 'dark'
 					: 'light';
 				root.classList.add(systemTheme);
@@ -44,10 +51,10 @@ export function ThemeProvider({ children }) {
 		}
 	}, [theme]);
 
+	const value = useMemo(() => ({ theme, setTheme }), [theme]);
+
 	return (
-		<ThemeContext.Provider value={{ theme, setTheme }}>
-			{children}
-		</ThemeContext.Provider>
+		<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 	);
 }
 

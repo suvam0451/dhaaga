@@ -1,15 +1,10 @@
-import {
-	LocationProvider,
-	Router,
-	Route,
-	hydrate,
-	prerender as ssr,
-} from 'preact-iso';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Sidebar } from './components/layout/Sidebar';
 import { Feed } from './components/layout/Feed';
 import { RightPanel } from './components/layout/RightPanel';
-import { NotFound } from './pages/_404.jsx';
+import { NotFound } from './pages/_404';
 import { AuthModalProvider, useAuthModal } from './context/AuthModalContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LoginPortal } from './features/onboarding/LoginPortal';
@@ -22,10 +17,10 @@ function AppContent() {
 			<div className="flex w-full max-w-300">
 				<Sidebar />
 				<main className="flex flex-1">
-					<Router>
-						<Route path="/" component={Feed} />
-						<Route default component={NotFound} />
-					</Router>
+					<Routes>
+						<Route path="/" element={<Feed />} />
+						<Route path="*" element={<NotFound />} />
+					</Routes>
 					<RightPanel />
 				</main>
 			</div>
@@ -36,20 +31,18 @@ function AppContent() {
 
 export function App() {
 	return (
-		<LocationProvider>
+		<BrowserRouter>
 			<ThemeProvider>
 				<AuthModalProvider>
 					<AppContent />
 				</AuthModalProvider>
 			</ThemeProvider>
-		</LocationProvider>
+		</BrowserRouter>
 	);
 }
 
-if (typeof window !== 'undefined') {
-	hydrate(<App />, document.getElementById('app'));
-}
-
-export async function prerender(data) {
-	return await ssr(<App {...data} />);
+const container = document.getElementById('app');
+if (container) {
+	const root = createRoot(container);
+	root.render(<App />);
 }
