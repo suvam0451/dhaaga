@@ -37,6 +37,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { usePathname } from 'expo-router';
 import { enableFreeze, enableScreens } from 'react-native-screens';
+import { PaperProvider } from 'react-native-paper';
 
 import '../../i18n/_loader';
 import 'fast-text-encoding';
@@ -274,14 +275,16 @@ function Wrapper() {
 		<SQLiteProvider databaseName="app.db" onInit={migrateDbIfNeeded}>
 			{/* API Caching -- Tanstack */}
 			<QueryClientProvider client={queryClient}>
-				<GestureHandlerRootView>
-					<KeyboardProvider>
-						{/* Asset Loader */}
-						<WithAppAssetsContext>
-							<App />
-						</WithAppAssetsContext>
-					</KeyboardProvider>
-				</GestureHandlerRootView>
+				<PaperProvider>
+					<GestureHandlerRootView>
+						<KeyboardProvider>
+							{/* Asset Loader */}
+							<WithAppAssetsContext>
+								<App />
+							</WithAppAssetsContext>
+						</KeyboardProvider>
+					</GestureHandlerRootView>
+				</PaperProvider>
 			</QueryClientProvider>
 		</SQLiteProvider>
 	);
