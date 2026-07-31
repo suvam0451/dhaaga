@@ -19,7 +19,7 @@
 	},
 	"workspaces": [
 		"packages/*",
-		"apps/mobile"
+		"apps/*"
 	],
 	"prettier": {
 		"bracketSpacing": true,
